@@ -33,7 +33,7 @@ RECREATIONS_ROOT = REPO_ROOT / "LeanWorkspace/LeanWorkspace/Recreations"
 DEFAULT_SOURCE = MATHLIB_ROOT / "LinearAlgebra/AffineSpace"
 
 DECL_START_RE = re.compile(
-    r"^(?P<kind>noncomputable def|protected theorem|theorem|lemma|def|instance)\s+"
+    r"^(?P<kind>private noncomputable def|private theorem|private lemma|private def|noncomputable def|protected theorem|theorem|lemma|def|instance)\s+"
     r"(?P<name>[^\s(:{]+)"
 )
 
@@ -137,8 +137,16 @@ class Decl:
         return self.kind in THEOREM_KINDS
 
     @property
+    def is_private(self) -> bool:
+        return self.kind.startswith("private ")
+
+    @property
+    def is_private_support(self) -> bool:
+        return self.is_private and self.kind != "private instance"
+
+    @property
     def is_referencable(self) -> bool:
-        return self.kind != "instance"
+        return self.kind != "instance" and not self.is_private
 
     @property
     def full_name(self) -> str:
@@ -148,6 +156,7 @@ class Decl:
 
 
 def normalize_theorem_keyword(text: str) -> str:
+    text = re.sub(r"^private\s+lemma\b", "private theorem", text, count=1, flags=re.MULTILINE)
     text = re.sub(r"^protected\s+theorem\b", "theorem", text, count=1, flags=re.MULTILINE)
     text = re.sub(r"^lemma\b", "theorem", text, count=1, flags=re.MULTILINE)
     return text
@@ -222,7 +231,12 @@ def skip_comment(lines: list[str], start: int) -> int:
 
 
 def current_namespace_path(scope_stack: list[tuple[str, str]]) -> tuple[str, ...]:
-    return tuple(name for kind, name in scope_stack if kind == "namespace")
+    flattened: list[str] = []
+    for kind, name in scope_stack:
+        if kind != "namespace":
+            continue
+        flattened.extend(part for part in name.split(".") if part)
+    return tuple(flattened)
 
 
 def ordered_unique_var_blocks(blocks: list[VarBlock]) -> list[VarBlock]:
@@ -472,6 +486,11 @@ def output_text_for_theorem(target: Decl, previous_decls: list[Decl]) -> str:
         parts.append("\n")
     if NAMESPACE_FORMALIZATION:
         parts.append("namespace Formalization\n\n")
+    private_supports = [decl for decl in previous_decls if decl.is_private_support]
+    for support in private_supports:
+        support_previous = [decl for decl in previous_decls if decl.order < support.order]
+        parts.append(rewrite_decl_text(support, support_previous))
+        parts.append("\n\n")
     parts.append(rewrite_decl_text(target, previous_decls))
     parts.append("\n")
     if NAMESPACE_FORMALIZATION:
