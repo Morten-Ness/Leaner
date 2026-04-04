@@ -61,7 +61,7 @@ theorem exists_affineCombination_eq_smul_eq {p : ι → P} (hp : AffineIndepende
     convert hp' i using 4
     simp_rw [fsx, wx]
     exact (Finset.affineCombination_indicator_subset _ _ (by simp)).symm
-  obtain ⟨w', fs', h⟩ := hp.exists_affineCombination_eq_smul_eq_aux hs hfsx hwx hp'x
+  obtain ⟨w', fs', h⟩ := exists_affineCombination_eq_smul_eq_aux hp hs hfsx hwx hp'x
   refine ⟨w', fs', h.1, h.2.1, fun i ↦ ?_⟩
   obtain ⟨r, hr⟩ := h.2.2 i
   refine ⟨r, fun j ↦ ?_⟩
@@ -69,4 +69,3 @@ theorem exists_affineCombination_eq_smul_eq {p : ι → P} (hp : AffineIndepende
   simp only [Set.indicator_apply, Set.mem_diff, SetLike.mem_coe, Set.mem_singleton_iff,
     Finset.coe_insert, Set.insert_diff_of_mem, fsx, wx]
   grind
-

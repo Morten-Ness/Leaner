@@ -50,7 +50,8 @@ theorem exists_affineCombination_eq_smul_eq_of_fintype [Fintype ι] {p : ι → 
       ∀ i : s, ∃ r, ∀ j, r * Set.indicator {(i : ι)}ᶜ (w i) j =
         Set.indicator {(i : ι)}ᶜ w' j := by
   classical
-  obtain ⟨w'', fs'', hw'', hw''p', hi⟩ := hp.exists_affineCombination_eq_smul_eq hs hw hp'
+  obtain ⟨w'', fs'', hw'', hw''p', hi⟩ :=
+    AffineIndependent.exists_affineCombination_eq_smul_eq hp hs hw hp'
   refine ⟨Set.indicator fs'' w'', ?_, ?_, ?_⟩
   · rw [← hw'']
     exact Finset.sum_indicator_subset _ (by simp)
@@ -62,4 +63,3 @@ theorem exists_affineCombination_eq_smul_eq_of_fintype [Fintype ι] {p : ι → 
     convert hr j using 1
     · simp [Set.indicator_apply]
     · by_cases hj : j = (i : ι) <;> simp [Set.indicator_apply, hj]
-

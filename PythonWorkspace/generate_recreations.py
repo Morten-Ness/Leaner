@@ -72,6 +72,10 @@ COLLIDING_THEOREM_NAMES = {
 # Generated names that often appear bare inside theorem statements/proofs.
 STATIC_NAMESPACE_NAMES = {"mk", "toEquiv"}
 
+IDENT_CHARS = r"\w'₀₁₂₃₄₅₆₇₈₉ₗ"
+LOWER_IDENT_RE = rf"[a-z_][{IDENT_CHARS}]*"
+RECEIVER_RE = rf"{LOWER_IDENT_RE}(?:\.(?:[A-Za-z_][{IDENT_CHARS}]*|[0-9]+))*"
+
 # If a proof body starts with `by`, these can appear as tactic commands and
 # should not be namespace-prefixed when they are the first token on a line.
 TACTIC_COMMANDS = {
@@ -143,6 +147,10 @@ class Decl:
     @property
     def is_private_support(self) -> bool:
         return self.is_private and self.kind != "private instance"
+
+    @property
+    def is_theorem_support(self) -> bool:
+        return self.is_theorem_like or self.kind in {"private theorem", "private lemma"}
 
     @property
     def is_referencable(self) -> bool:
@@ -384,9 +392,59 @@ def choose_best_decl_name(
     return replacements
 
 
+def choose_method_targets(
+    previous_decls: list[Decl],
+    current_decl: Decl,
+) -> dict[str, str]:
+    chosen: dict[str, Decl] = {}
+    for decl in previous_decls:
+        if not decl.is_theorem_support:
+            continue
+        bare = decl.name
+        current = chosen.get(bare)
+        if current is None:
+            chosen[bare] = decl
+            continue
+        if decl.is_private_support and not current.is_private_support:
+            chosen[bare] = decl
+            continue
+        current_same_ns = current.namespace_path == current_decl.namespace_path
+        candidate_same_ns = decl.namespace_path == current_decl.namespace_path
+        if candidate_same_ns and not current_same_ns:
+            chosen[bare] = decl
+            continue
+
+    targets: dict[str, str] = {}
+    for bare, decl in chosen.items():
+        if decl.is_private_support:
+            targets[bare] = decl.name
+        elif bare != decl.full_name:
+            targets[bare] = decl.full_name
+        else:
+            targets[bare] = decl.name
+    return targets
+
+
 def prefixed_names(previous_decls: list[Decl], current_decl: Decl) -> list[tuple[str, str]]:
     replacements = choose_best_decl_name(previous_decls, current_decl)
     return sorted(replacements.items(), key=lambda item: len(item[0]), reverse=True)
+
+
+def method_targets(previous_decls: list[Decl], current_decl: Decl) -> list[tuple[str, str]]:
+    targets = choose_method_targets(previous_decls, current_decl)
+    return sorted(targets.items(), key=lambda item: len(item[0]), reverse=True)
+
+
+def rewrite_method_calls(fragment: str, targets: list[tuple[str, str]]) -> str:
+    for bare, target in targets:
+        pattern = re.compile(
+            rf"(?<![\w'])"
+            rf"(?P<recv>{RECEIVER_RE})"
+            rf"\.{re.escape(bare)}"
+            rf"(?![\w'])"
+        )
+        fragment = pattern.sub(lambda match: f"{target} {match.group('recv')}", fragment)
+    return fragment
 
 
 def prefix_names_in_fragment(
@@ -442,6 +500,8 @@ def rewrite_decl_text(decl: Decl, previous_decls: list[Decl]) -> str:
     text = normalize_theorem_keyword(decl.text)
     statement, body = split_statement_and_body(text)
     replacements = prefixed_names(previous_decls, decl)
+    method_rewrites = method_targets(previous_decls, decl)
+    statement = rewrite_method_calls(statement, method_rewrites)
     statement = qualify_common_names(statement)
     match = DECL_START_RE.match(statement)
     if match is not None:
@@ -456,6 +516,7 @@ def rewrite_decl_text(decl: Decl, previous_decls: list[Decl]) -> str:
         statement = prefix_names_in_fragment(statement, replacements, skip_first_tactic_token=False)
     if not body:
         return statement
+    body = rewrite_method_calls(body, method_rewrites)
     return f"{statement} := {rewrite_body(body, replacements)}"
 
 
