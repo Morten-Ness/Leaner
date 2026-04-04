@@ -15,9 +15,13 @@ variable (P₁)
 
 variable {P₁}
 
+namespace Formalization
+
 theorem injective_pointReflection_left_of_module [Invertible (2 : k)] :
     ∀ y, Function.Injective fun x : P₁ => AffineEquiv.pointReflection k x y := AffineEquiv.injective_pointReflection_left_of_injective_two_nsmul k fun x y h => by
     dsimp at h
     rwa [two_nsmul, two_nsmul, ← two_smul k x, ← two_smul k y,
       (isUnit_of_invertible (2 : k)).smul_left_cancel] at h
 
+
+end Formalization

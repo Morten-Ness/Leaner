@@ -15,6 +15,10 @@ variable (P₁)
 
 variable {P₁}
 
+namespace Formalization
+
 theorem toEquiv_pointReflection (x : P₁) :
     (AffineEquiv.pointReflection k x).toEquiv = Equiv.pointReflection x := rfl
 
+
+end Formalization

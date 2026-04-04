@@ -9,5 +9,9 @@ variable (k P₁)
 
 variable {k P₁}
 
+namespace Formalization
+
 theorem self_trans_symm (e : P₁ ≃ᵃ[k] P₂) : e.trans e.symm = AffineEquiv.refl k P₁ := AffineEquiv.ext e.symm_apply_apply
 
+
+end Formalization

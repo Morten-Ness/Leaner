@@ -15,5 +15,9 @@ variable (P₁)
 
 variable {P₁}
 
+namespace Formalization
+
 theorem pointReflection_self (x : P₁) : AffineEquiv.pointReflection k x x = x := vsub_vadd _ _
 
+
+end Formalization

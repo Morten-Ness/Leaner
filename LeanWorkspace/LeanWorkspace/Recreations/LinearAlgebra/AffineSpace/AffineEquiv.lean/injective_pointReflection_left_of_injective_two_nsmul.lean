@@ -15,7 +15,11 @@ variable (P₁)
 
 variable {P₁}
 
+namespace Formalization
+
 theorem injective_pointReflection_left_of_injective_two_nsmul
     (h : Function.Injective (2 • · : V₁ → V₁)) (y : P₁) :
     Function.Injective fun x : P₁ => AffineEquiv.pointReflection k x y := Equiv.injective_pointReflection_left_of_injective_two_nsmul h y
 
+
+end Formalization

@@ -15,5 +15,9 @@ variable (P₁)
 
 variable {P₁}
 
+namespace Formalization
+
 theorem pointReflection_apply (x y : P₁) : AffineEquiv.pointReflection k x y = (x -ᵥ y) +ᵥ x := rfl
 
+
+end Formalization

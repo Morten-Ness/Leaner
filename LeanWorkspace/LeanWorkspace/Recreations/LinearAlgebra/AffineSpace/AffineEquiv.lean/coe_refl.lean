@@ -7,5 +7,9 @@ variable {k P₁ P₂ P₃ P₄ V₁ V₂ V₃ V₄ : Type*} [Ring k]
 
 variable (k P₁)
 
+namespace Formalization
+
 theorem coe_refl : ⇑(AffineEquiv.refl k P₁) = id := rfl
 
+
+end Formalization

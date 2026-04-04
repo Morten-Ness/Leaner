@@ -9,5 +9,9 @@ variable (k P₁)
 
 variable {k P₁}
 
+namespace Formalization
+
 theorem coe_mul (e e' : P₁ ≃ᵃ[k] P₁) : ⇑(e * e') = e ∘ e' := rfl
 
+
+end Formalization

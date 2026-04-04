@@ -11,5 +11,9 @@ variable {k P₁}
 
 variable (k)
 
+namespace Formalization
+
 theorem coe_constVSub (p : P₁) : ⇑(AffineEquiv.constVSub k p) = (p -ᵥ ·) := rfl
 
+
+end Formalization

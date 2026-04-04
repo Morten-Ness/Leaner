@@ -9,5 +9,10 @@ variable (k P₁)
 
 variable {k P₁}
 
+namespace Formalization
+
 theorem coe_trans_to_affineMap (e : P₁ ≃ᵃ[k] P₂) (e' : P₂ ≃ᵃ[k] P₃) :
     (e.trans e' : P₁ →ᵃ[k] P₃) = (e' : P₂ →ᵃ[k] P₃).comp e := rfl
+
+
+end Formalization

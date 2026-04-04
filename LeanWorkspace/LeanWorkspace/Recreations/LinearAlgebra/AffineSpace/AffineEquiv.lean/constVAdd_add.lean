@@ -13,6 +13,10 @@ variable (k)
 
 variable (P₁)
 
+namespace Formalization
+
 theorem constVAdd_add (v w : V₁) :
     AffineEquiv.constVAdd k P₁ (v + w) = (AffineEquiv.constVAdd k P₁ w).trans (AffineEquiv.constVAdd k P₁ v) := AffineEquiv.ext <| add_vadd _ _
 
+
+end Formalization

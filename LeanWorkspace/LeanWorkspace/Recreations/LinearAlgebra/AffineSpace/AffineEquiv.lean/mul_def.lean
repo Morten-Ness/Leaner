@@ -9,5 +9,9 @@ variable (k P₁)
 
 variable {k P₁}
 
+namespace Formalization
+
 theorem mul_def (e e' : P₁ ≃ᵃ[k] P₁) : e * e' = e'.trans e := rfl
 
+
+end Formalization

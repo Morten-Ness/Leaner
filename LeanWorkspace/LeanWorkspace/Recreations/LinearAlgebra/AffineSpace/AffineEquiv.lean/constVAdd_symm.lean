@@ -13,5 +13,9 @@ variable (k)
 
 variable (P₁)
 
+namespace Formalization
+
 theorem constVAdd_symm (v : V₁) : (AffineEquiv.constVAdd k P₁ v).symm = AffineEquiv.constVAdd k P₁ (-v) := AffineEquiv.ext fun _ => rfl
 
+
+end Formalization

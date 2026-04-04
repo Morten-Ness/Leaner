@@ -9,8 +9,12 @@ variable {k V P : Type*}
 
 variable [Ring k] [AddCommGroup V] [Module k V] [AddTorsor V P]
 
+namespace Formalization
+
 theorem ofLinearEquiv_refl (p : P) :
     AffineEquiv.ofLinearEquiv (.refl k V) p p = .refl k P := by
   ext x
   simp [AffineEquiv.ofLinearEquiv_apply]
 
+
+end Formalization

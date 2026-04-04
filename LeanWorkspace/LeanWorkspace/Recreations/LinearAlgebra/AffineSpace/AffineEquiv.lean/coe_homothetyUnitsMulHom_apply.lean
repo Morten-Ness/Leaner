@@ -15,6 +15,10 @@ variable (P₁)
 
 variable {R V P : Type*} [CommRing R] [AddCommGroup V] [Module R V] [AddTorsor V P]
 
+namespace Formalization
+
 theorem coe_homothetyUnitsMulHom_apply (p : P) (t : Rˣ) :
     (AffineEquiv.homothetyUnitsMulHom p t : P → P) = AffineMap.homothety p (t : R) := rfl
 
+
+end Formalization

@@ -9,6 +9,10 @@ variable {R : Type*} [CommRing R] [Module R V₁] [Module R V₂] [Module R V₃
 
 variable (e₁ : P₁ ≃ᵃ[R] P₂) (e₂ : V₃ ≃ₗ[R] V₄)
 
+namespace Formalization
+
 theorem arrowCongrₗ_apply (f : P₁ →ᵃ[R] V₃) (x : P₂) :
     e₁.arrowCongrₗ e₂ f x = e₂ (f (e₁.symm x)) := rfl
 
+
+end Formalization

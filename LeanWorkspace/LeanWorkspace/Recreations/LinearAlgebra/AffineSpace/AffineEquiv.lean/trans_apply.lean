@@ -9,5 +9,9 @@ variable (k P₁)
 
 variable {k P₁}
 
+namespace Formalization
+
 theorem trans_apply (e : P₁ ≃ᵃ[k] P₂) (e' : P₂ ≃ᵃ[k] P₃) (p : P₁) : e.trans e' p = e' (e p) := rfl
 
+
+end Formalization

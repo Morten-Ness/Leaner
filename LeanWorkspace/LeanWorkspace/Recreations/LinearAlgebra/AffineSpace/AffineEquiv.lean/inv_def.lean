@@ -9,5 +9,9 @@ variable (k P₁)
 
 variable {k P₁}
 
+namespace Formalization
+
 theorem inv_def (e : P₁ ≃ᵃ[k] P₁) : e⁻¹ = e.symm := rfl
 
+
+end Formalization

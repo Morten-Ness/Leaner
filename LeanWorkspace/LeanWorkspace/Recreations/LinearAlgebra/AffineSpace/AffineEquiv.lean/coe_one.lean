@@ -9,5 +9,9 @@ variable (k P₁)
 
 variable {k P₁}
 
+namespace Formalization
+
 theorem coe_one : ⇑(1 : P₁ ≃ᵃ[k] P₁) = id := rfl
 
+
+end Formalization

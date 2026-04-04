@@ -15,5 +15,9 @@ variable (P₁)
 
 variable {P₁}
 
+namespace Formalization
+
 theorem pointReflection_symm (x : P₁) : (AffineEquiv.pointReflection k x).symm = AffineEquiv.pointReflection k x := AffineEquiv.toEquiv_injective <| Equiv.pointReflection_symm x
 
+
+end Formalization

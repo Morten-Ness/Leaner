@@ -13,5 +13,9 @@ variable (k)
 
 variable (P₁)
 
+namespace Formalization
+
 theorem constVAdd_nsmul (n : ℕ) (v : V₁) : AffineEquiv.constVAdd k P₁ (n • v) = AffineEquiv.constVAdd k P₁ v ^ n := (AffineEquiv.constVAddHom k P₁).map_pow _ _
 
+
+end Formalization

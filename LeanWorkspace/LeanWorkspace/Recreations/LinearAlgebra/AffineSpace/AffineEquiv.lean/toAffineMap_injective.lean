@@ -11,4 +11,5 @@ theorem toAffineMap_injective : Function.Injective (AffineEquiv.toAffineMap : (P
   rintro ⟨e, el, h⟩ ⟨e', el', h'⟩ H
   simp_all
 
+
 end Formalization

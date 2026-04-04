@@ -9,4 +9,5 @@ namespace Formalization
 
 theorem map_vadd (e : P₁ ≃ᵃ[k] P₂) (p : P₁) (v : V₁) : e (v +ᵥ p) = e.linear v +ᵥ e p := e.map_vadd' p v
 
+
 end Formalization
