@@ -7,6 +7,5 @@ variable {k P₁ P₂ P₃ P₄ V₁ V₂ V₃ V₄ : Type*} [Ring k]
 
 variable {R' : Type*} [CommRing R'] [Module R' V₁]
 
-theorem homothety_neg_one_apply (c p : P₁) : homothety c (-1 : R') p = AffineEquiv.pointReflection R' c p := by
-  simp [homothety_apply, Equiv.pointReflection_apply]
-
+theorem homothety_neg_one_apply (c p : P₁) : AffineMap.homothety c (-1 : R') p = AffineEquiv.pointReflection R' c p := by
+  simp [AffineMap.homothety_apply, Equiv.pointReflection_apply]

@@ -12,7 +12,7 @@ theorem affineSpan_range_medial [CharZero k] (s : Affine.Simplex k P n) :
   have hmem1 : s.medial.points 0 ∈ affineSpan k (Set.range s.medial.points) :=
     mem_affineSpan _ (by simp)
   have hmem2 : s.medial.points 0 ∈ affineSpan k (Set.range s.points) := by
-    apply Set.mem_of_mem_of_subset (s.faceOppositeCentroid_mem_affineSpan_face 0)
+    apply Set.mem_of_mem_of_subset (Affine.Simplex.faceOppositeCentroid_mem_affineSpan_face s 0)
     exact affineSpan_mono k (by simp)
   rw [eq_iff_direction_eq_of_mem hmem1 hmem2]
   simp_rw [direction_affineSpan, vectorSpan_def]

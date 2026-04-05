@@ -16,5 +16,5 @@ theorem sum_smul_vsub_eq_affineCombination_vsub (w : ι → k) (p₁ p₂ : ι �
     (∑ i ∈ s, w i • (p₁ i -ᵥ p₂ i)) =
       s.affineCombination k p₁ w -ᵥ s.affineCombination k p₂ w := by
   simp_rw [Finset.affineCombination_apply, vadd_vsub_vadd_cancel_right]
-  exact s.sum_smul_vsub_eq_weightedVSubOfPoint_sub _ _ _ _
+  exact Finset.sum_smul_vsub_eq_weightedVSubOfPoint_sub s _ _ _ _
 

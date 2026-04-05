@@ -10,7 +10,7 @@ theorem setInterior_restrict (I : Set k) {n : ℕ} (s : Affine.Simplex k P n) {S
     (s.restrict S hS).setInterior I = S.subtype ⁻¹' (s.setInterior I) := by
   letI := Nonempty.map (AffineSubspace.inclusion hS) inferInstance
   rw [← S.subtype_injective.image_injective.eq_iff,
-    Set.image_preimage_eq_of_subset (s.setInterior_subset_affineSpan.trans (by simpa using hS)),
+    Set.image_preimage_eq_of_subset (Affine.Simplex.setInterior_subset_affineSpan s.trans (by simpa using hS)),
     ← (s.restrict S hS).setInterior_map I S.subtype_injective]
   rfl
 

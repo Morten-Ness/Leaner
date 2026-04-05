@@ -15,5 +15,5 @@ variable {k}
 
 variable (k) in
 
-theorem fst_lineMap (p₀ p₁ : P1 × P2) (c : k) : (AffineMap.lineMap p₀ p₁ c).1 = AffineMap.lineMap p₀.1 p₁.1 c := AffineMap.fst.apply_lineMap p₀ p₁ c
+theorem fst_lineMap (p₀ p₁ : P1 × P2) (c : k) : (AffineMap.lineMap p₀ p₁ c).1 = AffineMap.lineMap p₀.1 p₁.1 c := AffineMap.apply_lineMap AffineMap.fst p₀ p₁ c
 

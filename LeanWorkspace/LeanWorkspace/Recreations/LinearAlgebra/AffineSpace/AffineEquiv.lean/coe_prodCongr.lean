@@ -11,10 +11,6 @@ variable {k P₁}
 
 variable (e₁ : P₁ ≃ᵃ[k] P₂) (e₂ : P₃ ≃ᵃ[k] P₄)
 
-namespace Formalization
-
 theorem coe_prodCongr :
     (e₁.prodCongr e₂ : P₁ × P₃ →ᵃ[k] P₂ × P₄) = (e₁ : P₁ →ᵃ[k] P₂).prodMap (e₂ : P₃ →ᵃ[k] P₄) := rfl
 
-
-end Formalization

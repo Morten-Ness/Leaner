@@ -16,7 +16,7 @@ theorem face_restrict {n : ℕ} (s : Affine.Simplex k P n) {S : AffineSubspace k
     (hS : affineSpan k (Set.range s.points) ≤ S) {fs : Finset (Fin (n + 1))} {m : ℕ}
     (h : #fs = m + 1) :
     letI := Nonempty.map (AffineSubspace.inclusion hS) inferInstance
-    (s.restrict S hS).face h = (s.face h).restrict S ((s.affineSpan_face_le h).trans hS) := by
+    (s.restrict S hS).face h = (s.face h).restrict S ((Affine.Simplex.affineSpan_face_le s h).trans hS) := by
   letI := Nonempty.map (AffineSubspace.inclusion hS) inferInstance
   Affine.Simplex.ext i
   rw [restrict_points_coe]

@@ -10,8 +10,8 @@ variable (b b₂ : AffineBasis ι k P)
 
 theorem toMatrix_inv_vecMul_toMatrix (x : P) :
     b.coords x ᵥ* (b.toMatrix b₂)⁻¹ = b₂.coords x := by
-  have hu := b.isUnit_toMatrix b₂
+  have hu := AffineBasis.isUnit_toMatrix b b₂
   rw [Matrix.isUnit_iff_isUnit_det] at hu
-  rw [← b.toMatrix_vecMul_coords b₂, Matrix.vecMul_vecMul, Matrix.mul_nonsing_inv _ hu,
+  rw [← AffineBasis.toMatrix_vecMul_coords b b₂, Matrix.vecMul_vecMul, Matrix.mul_nonsing_inv _ hu,
     Matrix.vecMul_one]
 

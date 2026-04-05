@@ -29,7 +29,7 @@ theorem eq_affineCombination_of_mem_affineSpan {p1 : P} {p : ι → P}
       simp only [Function.const_apply, Finset.sum_const_zero,
         add_zero]
     have hw0s : s'.affineCombination k p w0 = p i0 :=
-      s'.affineCombination_of_eq_one_of_eq_zero w0 p (Finset.mem_insert_self _ _)
+      Finset.affineCombination_of_eq_one_of_eq_zero s' w0 p (Finset.mem_insert_self _ _)
         (Function.update_self ..) fun _ _ hne => Function.update_of_ne hne _ _
     refine ⟨s', w0 + w', ?_, ?_⟩
     · simp [Pi.add_apply, Finset.sum_add_distrib, hw0, h']

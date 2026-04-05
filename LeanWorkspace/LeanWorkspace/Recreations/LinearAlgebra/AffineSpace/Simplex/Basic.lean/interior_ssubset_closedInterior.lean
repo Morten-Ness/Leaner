@@ -9,6 +9,6 @@ variable [PartialOrder k]
 theorem interior_ssubset_closedInterior [ZeroLEOneClass k] {n : ℕ} (s : Affine.Simplex k P n) :
     s.interior ⊂ s.closedInterior := by
   rw [Set.ssubset_iff_exists]
-  exact ⟨s.interior_subset_closedInterior, s.points 0, s.point_mem_closedInterior 0,
-    s.point_notMem_interior 0⟩
+  exact ⟨Affine.Simplex.interior_subset_closedInterior s, s.points 0, Affine.Simplex.point_mem_closedInterior s 0,
+    Affine.Simplex.point_notMem_interior s 0⟩
 

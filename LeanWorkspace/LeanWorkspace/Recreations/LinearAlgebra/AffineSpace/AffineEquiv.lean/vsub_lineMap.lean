@@ -6,5 +6,4 @@ variable {k P₁ P₂ P₃ P₄ V₁ V₂ V₃ V₄ : Type*} [Ring k]
   [AddTorsor V₁ P₁] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃] [AddTorsor V₄ P₄]
 
 theorem vsub_lineMap (p₁ p₂ p₃ : P₁) (c : k) :
-    p₁ -ᵥ lineMap p₂ p₃ c = lineMap (p₁ -ᵥ p₂) (p₁ -ᵥ p₃) c := (AffineEquiv.constVSub k p₁).apply_lineMap p₂ p₃ c
-
+    p₁ -ᵥ AffineMap.lineMap p₂ p₃ c = AffineMap.lineMap (p₁ -ᵥ p₂) (p₁ -ᵥ p₃) c := AffineEquiv.apply_lineMap (AffineEquiv.constVSub k p₁) p₂ p₃ c

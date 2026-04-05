@@ -10,11 +10,11 @@ theorem coe_coord_of_subsingleton_eq_one [Subsingleton ι] (i : ι) : (b.coord i
     rw [← image_univ]
     apply Subsingleton.image
     apply subsingleton_of_subsingleton
-  haveI := AffineSubspace.subsingleton_of_subsingleton_span_eq_top hp b.tot
+  haveI := AffineSubspace.subsingleton_of_subsingleton_span_eq_top hp AffineBasis.tot b
   let s : Finset ι := {i}
   have hi : i ∈ s := by simp [s]
   have hw : s.sum (Function.const ι (1 : k)) = 1 := by simp [s]
   have hq : q = s.affineCombination k b (Function.const ι (1 : k)) := by
     simp [eq_iff_true_of_subsingleton]
-  rw [Pi.one_apply, hq, b.coord_apply_combination_of_mem hi hw, Function.const_apply]
+  rw [Pi.one_apply, hq, AffineBasis.coord_apply_combination_of_mem b hi hw, Function.const_apply]
 

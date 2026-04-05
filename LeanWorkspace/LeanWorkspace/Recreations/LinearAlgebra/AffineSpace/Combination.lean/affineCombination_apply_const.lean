@@ -14,5 +14,5 @@ variable {k}
 
 theorem affineCombination_apply_const (w : ι → k) (p : P) (h : ∑ i ∈ s, w i = 1) :
     s.affineCombination k (fun _ => p) w = p := by
-  rw [Finset.affineCombination_apply, s.weightedVSubOfPoint_apply_const, h, one_smul, vsub_vadd]
+  rw [Finset.affineCombination_apply, Finset.weightedVSubOfPoint_apply_const s, h, one_smul, vsub_vadd]
 

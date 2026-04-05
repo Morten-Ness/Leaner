@@ -12,5 +12,5 @@ theorem weightedVSubOfPoint_sdiff_sub [DecidableEq ι] {s₂ : Finset ι} (h : s
     (p : ι → P) (b : P) :
     (s \ s₂).weightedVSubOfPoint p b w - s₂.weightedVSubOfPoint p b (-w) =
       s.weightedVSubOfPoint p b w := by
-  rw [map_neg, sub_neg_eq_add, s.weightedVSubOfPoint_sdiff h]
+  rw [map_neg, sub_neg_eq_add, Finset.weightedVSubOfPoint_sdiff s h]
 

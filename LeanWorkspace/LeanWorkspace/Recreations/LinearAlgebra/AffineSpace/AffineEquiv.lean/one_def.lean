@@ -9,9 +9,5 @@ variable (k P₁)
 
 variable {k P₁}
 
-namespace Formalization
-
 theorem one_def : (1 : P₁ ≃ᵃ[k] P₁) = AffineEquiv.refl k P₁ := rfl
 
-
-end Formalization

@@ -11,9 +11,5 @@ variable {k P₁}
 
 variable (k P₁ P₂ P₃)
 
-namespace Formalization
-
 theorem prodComm_symm : (AffineEquiv.prodComm k P₁ P₂).symm = AffineEquiv.prodComm k P₂ P₁ := rfl
 
-
-end Formalization

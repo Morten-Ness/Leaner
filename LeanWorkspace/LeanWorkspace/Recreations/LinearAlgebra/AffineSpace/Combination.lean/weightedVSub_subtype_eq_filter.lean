@@ -11,5 +11,5 @@ variable {ι₂ : Type*} (s₂ : Finset ι₂)
 theorem weightedVSub_subtype_eq_filter (w : ι → k) (p : ι → P) (pred : ι → Prop)
     [DecidablePred pred] :
     ((s.subtype pred).weightedVSub (fun i => p i) fun i => w i) =
-      {x ∈ s | pred x}.weightedVSub p w := s.weightedVSubOfPoint_subtype_eq_filter _ _ _ _
+      {x ∈ s | pred x}.weightedVSub p w := Finset.weightedVSubOfPoint_subtype_eq_filter s _ _ _ _
 

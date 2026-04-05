@@ -55,7 +55,7 @@ theorem prod_eq_prod_one_sub_of_mem_line_point_lineMap {t : Affine.Triangle k P}
       p' ∈ line[k, t.points i, Finset.univ.affineCombination k t.points (w i)] := by
     simpa [w] using hp'
   obtain ⟨w', hw', rfl, h⟩ :=
-    t.independent.exists_affineCombination_eq_smul_eq_of_fintype (by simp) hw hp'w
+    AffineIndependent.exists_affineCombination_eq_smul_eq_of_fintype t.independent (by simp) hw hp'w
   have h' : ∀ i : Fin 3, ∃ c : k, ∀ j ≠ i, c * w ⟨i, by simp⟩ j = w' j := by
     intro i
     obtain ⟨c, hc⟩ := h ⟨i, by simp⟩

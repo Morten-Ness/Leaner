@@ -9,10 +9,6 @@ variable {k V P : Type*}
 
 variable [Ring k] [AddCommGroup V] [Module k V] [AddTorsor V P]
 
-namespace Formalization
-
 theorem ofLinearEquiv_apply (A : V ≃ₗ[k] V) (p₀ p₁ : P) (x : P) :
     AffineEquiv.ofLinearEquiv A p₀ p₁ x = A (x -ᵥ p₀) +ᵥ p₁ := rfl
 
-
-end Formalization

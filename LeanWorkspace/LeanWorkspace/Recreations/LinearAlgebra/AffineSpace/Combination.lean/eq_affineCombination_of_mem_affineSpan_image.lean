@@ -14,5 +14,5 @@ theorem eq_affineCombination_of_mem_affineSpan_image {p₁ : P} {p : ι → P} {
   refine ⟨fs'.map (Function.Embedding.subtype _), fun i ↦ if hi : i ∈ s then w' ⟨i, hi⟩ else 0,
     (by simp), (by simp [hw']), ?_⟩
   simp only [Finset.affineCombination_map, Function.Embedding.coe_subtype]
-  exact fs'.affineCombination_congr (by simp) (by simp)
+  exact Finset.affineCombination_congr fs' (by simp) (by simp)
 

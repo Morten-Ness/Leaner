@@ -9,10 +9,6 @@ variable (k P₁)
 
 variable {k P₁}
 
-namespace Formalization
-
 theorem apply_lineMap (e : P₁ ≃ᵃ[k] P₂) (a b : P₁) (c : k) :
     e (AffineMap.lineMap a b c) = AffineMap.lineMap (e a) (e b) c := e.toAffineMap.apply_lineMap a b c
 
-
-end Formalization

@@ -17,6 +17,6 @@ theorem image_vsub_image {s t : Set P1} (f : P1 →ᵃ[k] P2) :
     f '' s -ᵥ f '' t = f.linear '' (s -ᵥ t) := by
   ext v
   simp only [Set.mem_vsub, Set.mem_image,
-    exists_exists_and_eq_and, ← f.linearMap_vsub]
+    exists_exists_and_eq_and, ← AffineMap.linearMap_vsub f]
   grind
 

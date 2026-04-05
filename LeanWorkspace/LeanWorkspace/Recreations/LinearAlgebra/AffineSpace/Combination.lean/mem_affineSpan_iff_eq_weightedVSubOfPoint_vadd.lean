@@ -12,7 +12,7 @@ theorem mem_affineSpan_iff_eq_weightedVSubOfPoint_vadd [Nontrivial k] (p : ι �
   constructor
   · intro hq
     obtain ⟨s, w, hw, rfl⟩ := eq_affineCombination_of_mem_affineSpan hq
-    exact ⟨s, w, s.affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one w p hw (p j)⟩
+    exact ⟨s, w, Finset.affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one s w p hw (p j)⟩
   · rintro ⟨s, w, rfl⟩
     classical
       let w' : ι → k := Function.update w j (1 - (s \ {j}).sum w)
@@ -24,8 +24,8 @@ theorem mem_affineSpan_iff_eq_weightedVSubOfPoint_vadd [Nontrivial k] (p : ι �
       have hww : ∀ i, i ≠ j → w i = w' i := by
         intro i hij
         simp [w', hij]
-      rw [s.weightedVSubOfPoint_eq_of_weights_eq p j w w' hww, ←
-        s.weightedVSubOfPoint_insert w' p j, ←
+      rw [Finset.weightedVSubOfPoint_eq_of_weights_eq s p j w w' hww, ←
+        Finset.weightedVSubOfPoint_insert s w' p j, ←
         (insert j s).affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one w' p h₁ (p j)]
       exact affineCombination_mem_affineSpan h₁ p
 

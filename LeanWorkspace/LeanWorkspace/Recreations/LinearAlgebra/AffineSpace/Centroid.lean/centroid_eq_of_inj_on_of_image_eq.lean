@@ -10,6 +10,6 @@ theorem centroid_eq_of_inj_on_of_image_eq {p : ι → P}
     (hi : ∀ i ∈ s, ∀ j ∈ s, p i = p j → i = j) {p₂ : ι₂ → P}
     (hi₂ : ∀ i ∈ s₂, ∀ j ∈ s₂, p₂ i = p₂ j → i = j) (he : p '' ↑s = p₂ '' ↑s₂) :
     s.centroid k p = s₂.centroid k p₂ := by
-  classical rw [s.centroid_eq_centroid_image_of_inj_on k hi rfl,
-      s₂.centroid_eq_centroid_image_of_inj_on k hi₂ he]
+  classical rw [Finset.centroid_eq_centroid_image_of_inj_on s k hi rfl,
+      Finset.centroid_eq_centroid_image_of_inj_on s₂ k hi₂ he]
 

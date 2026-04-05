@@ -14,5 +14,5 @@ variable {k}
 
 theorem affineCombination_eq_linear_combination (s : Finset ι) (p : ι → V) (w : ι → k)
     (hw : ∑ i ∈ s, w i = 1) : s.affineCombination k p w = ∑ i ∈ s, w i • p i := by
-  simp [s.affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one w p hw 0]
+  simp [Finset.affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one s w p hw 0]
 

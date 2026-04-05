@@ -9,5 +9,5 @@ variable {k} in
 theorem sum_centroidWeightsIndicator_eq_one_of_nonempty [CharZero k] [Fintype ι] (h : s.Nonempty) :
     ∑ i, s.centroidWeightsIndicator k i = 1 := by
   rw [Finset.sum_centroidWeightsIndicator]
-  exact s.sum_centroidWeights_eq_one_of_nonempty k h
+  exact Finset.sum_centroidWeights_eq_one_of_nonempty s k h
 

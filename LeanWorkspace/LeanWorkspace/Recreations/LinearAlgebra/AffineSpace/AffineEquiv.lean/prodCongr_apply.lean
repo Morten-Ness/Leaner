@@ -11,9 +11,5 @@ variable {k P₁}
 
 variable (e₁ : P₁ ≃ᵃ[k] P₂) (e₂ : P₃ ≃ᵃ[k] P₄)
 
-namespace Formalization
-
 theorem prodCongr_apply (p : P₁ × P₃) : e₁.prodCongr e₂ p = (e₁ p.1, e₂ p.2) := rfl
 
-
-end Formalization

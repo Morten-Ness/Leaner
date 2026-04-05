@@ -10,5 +10,5 @@ theorem closedInterior_restrict {n : ℕ} (s : Affine.Simplex k P n) {S : Affine
     (hS : affineSpan k (Set.range s.points) ≤ S) :
     letI := Nonempty.map (AffineSubspace.inclusion hS) inferInstance
     (s.restrict S hS).closedInterior = S.subtype ⁻¹' s.closedInterior :=
-  s.setInterior_restrict _ hS
+  Affine.Simplex.setInterior_restrict s _ hS
 

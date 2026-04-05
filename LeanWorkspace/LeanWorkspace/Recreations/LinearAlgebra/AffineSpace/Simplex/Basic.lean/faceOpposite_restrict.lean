@@ -16,6 +16,6 @@ theorem faceOpposite_restrict {n : ℕ} [NeZero n] (s : Affine.Simplex k P n) {S
     (hS : affineSpan k (Set.range s.points) ≤ S) (i : Fin (n + 1)) :
     letI := Nonempty.map (AffineSubspace.inclusion hS) inferInstance
     (s.restrict S hS).faceOpposite i = (s.faceOpposite i).restrict S
-      ((s.affineSpan_faceOpposite_le i).trans hS) :=
-  s.face_restrict hS _
+      ((Affine.Simplex.affineSpan_faceOpposite_le s i).trans hS) :=
+  Affine.Simplex.face_restrict s hS _
 

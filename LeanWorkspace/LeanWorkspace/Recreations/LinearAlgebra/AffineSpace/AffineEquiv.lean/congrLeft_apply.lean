@@ -10,9 +10,5 @@ variable (R W : Type*) [Ring R] [AddCommGroup W] [Module k W] [Module R W] [SMul
 
 variable {W} (Q : Type*) [AddTorsor W Q]
 
-namespace Formalization
-
 theorem congrLeft_apply (f : P₁ →ᵃ[k] Q) (x : P₂) : e.congrLeft R Q f x = f (e.symm x) := rfl
 
-
-end Formalization

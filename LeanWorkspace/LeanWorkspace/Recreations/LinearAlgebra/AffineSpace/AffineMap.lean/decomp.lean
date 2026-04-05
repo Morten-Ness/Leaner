@@ -18,6 +18,6 @@ variable (k) in
 theorem decomp (f : V1 →ᵃ[k] V2) : (f : V1 → V2) = ⇑f.linear + fun _ => f 0 := by
   ext x
   calc
-    f x = f.linear x +ᵥ f 0 := by rw [← f.map_vadd, vadd_eq_add, add_zero]
+    f x = f.linear x +ᵥ f 0 := by rw [← AffineMap.map_vadd f, vadd_eq_add, add_zero]
     _ = (f.linear + fun _ : V1 => f 0) x := rfl
 

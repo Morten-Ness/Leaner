@@ -15,9 +15,5 @@ variable (P₁)
 
 variable {P₁}
 
-namespace Formalization
-
 theorem pointReflection_involutive (x : P₁) : Function.Involutive (AffineEquiv.pointReflection k x : P₁ → P₁) := Equiv.pointReflection_involutive x
 
-
-end Formalization

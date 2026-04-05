@@ -15,10 +15,6 @@ variable (P₁)
 
 variable {P₁}
 
-namespace Formalization
-
 theorem pointReflection_fixed_iff_of_module [Invertible (2 : k)] {x y : P₁} :
     AffineEquiv.pointReflection k x y = y ↔ y = x := ((AffineEquiv.injective_pointReflection_left_of_module k y).eq_iff' (AffineEquiv.pointReflection_self k y)).trans eq_comm
 
-
-end Formalization

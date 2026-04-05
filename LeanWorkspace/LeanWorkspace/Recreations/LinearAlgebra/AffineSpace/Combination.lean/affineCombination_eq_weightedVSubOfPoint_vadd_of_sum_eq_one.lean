@@ -14,5 +14,5 @@ variable {k}
 
 theorem affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one (w : ι → k) (p : ι → P)
     (h : ∑ i ∈ s, w i = 1) (b : P) :
-    s.affineCombination k p w = s.weightedVSubOfPoint p b w +ᵥ b := s.weightedVSubOfPoint_vadd_eq_of_sum_eq_one w p h _ _
+    s.affineCombination k p w = s.weightedVSubOfPoint p b w +ᵥ b := Finset.weightedVSubOfPoint_vadd_eq_of_sum_eq_one s w p h _ _
 

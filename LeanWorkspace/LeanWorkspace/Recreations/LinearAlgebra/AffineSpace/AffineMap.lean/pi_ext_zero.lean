@@ -20,8 +20,8 @@ theorem pi_ext_zero (h : ∀ i x, f (Pi.single i x) = g (Pi.single i x)) (h₂ :
   · apply LinearMap.pi_ext
     intro i x
     have s₁ := h i x
-    have s₂ := f.map_vadd 0 (Pi.single i x)
-    have s₃ := g.map_vadd 0 (Pi.single i x)
+    have s₂ := AffineMap.map_vadd f 0 (Pi.single i x)
+    have s₃ := AffineMap.map_vadd g 0 (Pi.single i x)
     rw [vadd_eq_add, add_zero] at s₂ s₃
     replace h₂ := h i 0
     simp only [Pi.single_zero] at h₂

@@ -16,5 +16,5 @@ theorem affineCombination_sdiff_sub [DecidableEq ι] {s₂ : Finset ι} (h : s�
     (p : ι → P) :
     (s \ s₂).affineCombination k p w -ᵥ s₂.affineCombination k p (-w) = s.weightedVSub p w := by
   simp_rw [Finset.affineCombination_apply, vadd_vsub_vadd_cancel_right]
-  exact s.weightedVSub_sdiff_sub h _ _
+  exact Finset.weightedVSub_sdiff_sub s h _ _
 

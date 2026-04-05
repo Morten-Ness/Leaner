@@ -15,6 +15,6 @@ variable {k}
 theorem points_mem_affineSpan_faceOpposite [Nontrivial k] {n : ℕ} [NeZero n] (s : Affine.Simplex k P n)
     {i j : Fin (n + 1)} :
     s.points j ∈ affineSpan k (Set.range (s.faceOpposite i).points) ↔ j ≠ i := by
-  rw [Affine.Simplex.faceOpposite, s.points_mem_affineSpan_face]
+  rw [Affine.Simplex.faceOpposite, Affine.Simplex.points_mem_affineSpan_face s]
   simp
 

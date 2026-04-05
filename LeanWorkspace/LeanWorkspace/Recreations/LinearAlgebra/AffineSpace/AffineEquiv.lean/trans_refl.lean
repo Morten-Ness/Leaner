@@ -9,9 +9,5 @@ variable (k P₁)
 
 variable {k P₁}
 
-namespace Formalization
-
 theorem trans_refl (e : P₁ ≃ᵃ[k] P₂) : e.trans (AffineEquiv.refl k P₂) = e := AffineEquiv.ext fun _ => rfl
 
-
-end Formalization

@@ -19,5 +19,5 @@ theorem setInterior_map (I : Set k) {n : ℕ} (s : Affine.Simplex k P n) {f : P 
     · contrapose! hp
       obtain ⟨q, hq, hqp⟩ := hp
       rw [s.map_points, Set.range_comp, ← AffineSubspace.map_span, AffineSubspace.mem_map]
-      exact ⟨q, (Set.mem_of_mem_of_subset hq s.setInterior_subset_affineSpan), hqp⟩
+      exact ⟨q, (Set.mem_of_mem_of_subset hq Affine.Simplex.setInterior_subset_affineSpan s), hqp⟩
 

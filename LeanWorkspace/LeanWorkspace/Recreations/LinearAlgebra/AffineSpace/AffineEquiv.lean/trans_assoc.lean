@@ -9,10 +9,6 @@ variable (k P₁)
 
 variable {k P₁}
 
-namespace Formalization
-
 theorem trans_assoc (e₁ : P₁ ≃ᵃ[k] P₂) (e₂ : P₂ ≃ᵃ[k] P₃) (e₃ : P₃ ≃ᵃ[k] P₄) :
     (e₁.trans e₂).trans e₃ = e₁.trans (e₂.trans e₃) := AffineEquiv.ext fun _ => rfl
 
-
-end Formalization

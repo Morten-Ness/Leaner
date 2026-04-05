@@ -18,6 +18,6 @@ theorem linear_injective_iff (f : P1 →ᵃ[k] P2) :
   obtain ⟨p⟩ := (inferInstance : Nonempty P1)
   have h : ⇑f.linear = (Equiv.vaddConst (f p)).symm ∘ f ∘ Equiv.vaddConst p := by
     ext v
-    simp [f.map_vadd]
+    simp [AffineMap.map_vadd f]
   rw [h, Equiv.comp_injective, Equiv.injective_comp]
 

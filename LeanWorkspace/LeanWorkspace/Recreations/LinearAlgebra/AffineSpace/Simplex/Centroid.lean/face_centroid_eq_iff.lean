@@ -10,5 +10,5 @@ theorem face_centroid_eq_iff [CharZero k] {n : ℕ} (s : Affine.Simplex k P n)
     Finset.univ.centroid k (s.face h₁).points = Finset.univ.centroid k (s.face h₂).points ↔
       fs₁ = fs₂ := by
   rw [Affine.Simplex.face_centroid_eq_centroid, Affine.Simplex.face_centroid_eq_centroid]
-  exact s.centroid_eq_iff h₁ h₂
+  exact Affine.Simplex.centroid_eq_iff s h₁ h₂
 

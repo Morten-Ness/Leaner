@@ -9,7 +9,7 @@ variable {ι : Type*} (s : Finset ι)
 variable {ι₂ : Type*} (s₂ : Finset ι₂)
 
 theorem weightedVSub_const_smul (w : ι → k) (p : ι → P) (c : k) :
-    s.weightedVSub p (c • w) = c • s.weightedVSub p w := s.weightedVSubOfPoint_const_smul _ _ _ _
+    s.weightedVSub p (c • w) = c • s.weightedVSub p w := Finset.weightedVSubOfPoint_const_smul s _ _ _ _
 
 instance : AddTorsor (ι → k) (ι → k) := Pi.instAddTorsor
 

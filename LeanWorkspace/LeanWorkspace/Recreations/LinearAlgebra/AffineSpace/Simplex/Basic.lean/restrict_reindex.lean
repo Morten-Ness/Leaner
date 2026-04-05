@@ -15,6 +15,6 @@ variable {k}
 theorem restrict_reindex {m n : ℕ} (s : Affine.Simplex k P n) (e : Fin (n + 1) ≃ Fin (m + 1))
     {S : AffineSubspace k P} (hS : affineSpan k (Set.range s.points) ≤ S) :
     letI := Nonempty.map (AffineSubspace.inclusion hS) inferInstance
-    (s.reindex e).restrict S (s.reindex_range_points e ▸ hS) = (s.restrict S hS).reindex e :=
+    (s.reindex e).restrict S (Affine.Simplex.reindex_range_points s e ▸ hS) = (s.restrict S hS).reindex e :=
   rfl
 

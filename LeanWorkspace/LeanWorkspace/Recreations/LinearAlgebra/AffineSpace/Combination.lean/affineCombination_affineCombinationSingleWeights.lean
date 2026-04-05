@@ -18,7 +18,7 @@ variable {k V}
 
 theorem affineCombination_affineCombinationSingleWeights [DecidableEq ι] (p : ι → P) {i : ι}
     (hi : i ∈ s) : s.affineCombination k p (Finset.affineCombinationSingleWeights k i) = p i := by
-  refine s.affineCombination_of_eq_one_of_eq_zero _ _ hi (by simp) ?_
+  refine Finset.affineCombination_of_eq_one_of_eq_zero s _ _ hi (by simp) ?_
   rintro j - hj
   simp [hj]
 

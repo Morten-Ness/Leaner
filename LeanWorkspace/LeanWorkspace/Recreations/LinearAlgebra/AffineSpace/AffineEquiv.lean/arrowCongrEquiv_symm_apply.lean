@@ -7,10 +7,6 @@ variable {k P₁ P₂ P₃ P₄ V₁ V₂ V₃ V₄ : Type*} [Ring k]
 
 variable (e₁ : P₁ ≃ᵃ[k] P₂) (e₂ : P₃ ≃ᵃ[k] P₄)
 
-namespace Formalization
-
 theorem arrowCongrEquiv_symm_apply (f : P₂ →ᵃ[k] P₄) (x : P₁) :
     (e₁.arrowCongrEquiv e₂).symm f x = e₂.symm (f (e₁ x)) := rfl
 
-
-end Formalization

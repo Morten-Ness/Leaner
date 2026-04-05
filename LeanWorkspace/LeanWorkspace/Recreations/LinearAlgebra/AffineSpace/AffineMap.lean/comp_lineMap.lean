@@ -16,5 +16,5 @@ variable {k}
 variable (k) in
 
 theorem comp_lineMap (f : P1 →ᵃ[k] P2) (p₀ p₁ : P1) :
-    f.comp (AffineMap.lineMap p₀ p₁) = AffineMap.lineMap (f p₀) (f p₁) := AffineMap.ext <| f.apply_lineMap p₀ p₁
+    f.comp (AffineMap.lineMap p₀ p₁) = AffineMap.lineMap (f p₀) (f p₁) := AffineMap.ext <| AffineMap.apply_lineMap f p₀ p₁
 

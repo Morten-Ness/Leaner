@@ -7,5 +7,5 @@ variable [AddCommGroup V₂] [Module k V₂] [AddTorsor V₂ P₂]
 variable [PartialOrder k]
 
 theorem closedInterior_map {n : ℕ} (s : Affine.Simplex k P n) {f : P →ᵃ[k] P₂} (hf : Function.Injective f) :
-    (s.map f hf).closedInterior = f '' s.closedInterior := s.setInterior_map _ hf
+    (s.map f hf).closedInterior = f '' s.closedInterior := Affine.Simplex.setInterior_map s _ hf
 

@@ -17,3 +17,4 @@ theorem ext {n : ℕ} {s1 s2 : Affine.Simplex k P n} (h : ∀ i, s1.points i = s
   cases s2
   congr with i
   exact h i
+

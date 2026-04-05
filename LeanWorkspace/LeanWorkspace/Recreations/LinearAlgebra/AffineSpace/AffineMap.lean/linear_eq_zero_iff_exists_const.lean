@@ -14,7 +14,7 @@ theorem linear_eq_zero_iff_exists_const (f : P1 →ᵃ[k] P2) :
   refine ⟨fun h => ?_, fun h => ?_⟩
   · use f (Classical.arbitrary P1)
     ext
-    rw [AffineMap.coe_const, Function.const_apply, ← @vsub_eq_zero_iff_eq V2, ← f.linearMap_vsub, h,
+    rw [AffineMap.coe_const, Function.const_apply, ← @vsub_eq_zero_iff_eq V2, ← AffineMap.linearMap_vsub f, h,
       LinearMap.zero_apply]
   · rcases h with ⟨q, rfl⟩
     exact AffineMap.const_linear k P1 q

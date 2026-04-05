@@ -14,5 +14,5 @@ variable {k}
 
 theorem affineCombination_congr {w₁ w₂ : ι → k} (hw : ∀ i ∈ s, w₁ i = w₂ i) {p₁ p₂ : ι → P}
     (hp : ∀ i ∈ s, p₁ i = p₂ i) : s.affineCombination k p₁ w₁ = s.affineCombination k p₂ w₂ := by
-  simp_rw [Finset.affineCombination_apply, s.weightedVSubOfPoint_congr hw hp]
+  simp_rw [Finset.affineCombination_apply, Finset.weightedVSubOfPoint_congr s hw hp]
 

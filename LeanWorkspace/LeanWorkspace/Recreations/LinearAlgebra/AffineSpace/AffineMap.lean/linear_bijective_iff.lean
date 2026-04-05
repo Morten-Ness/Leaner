@@ -14,5 +14,5 @@ variable {P1}
 variable {k}
 
 theorem linear_bijective_iff (f : P1 →ᵃ[k] P2) :
-    Function.Bijective f.linear ↔ Function.Bijective f := and_congr f.linear_injective_iff f.linear_surjective_iff
+    Function.Bijective f.linear ↔ Function.Bijective f := and_congr AffineMap.linear_injective_iff f AffineMap.linear_surjective_iff f
 

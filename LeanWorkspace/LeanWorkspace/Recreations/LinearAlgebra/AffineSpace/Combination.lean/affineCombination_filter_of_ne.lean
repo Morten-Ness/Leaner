@@ -16,5 +16,5 @@ theorem affineCombination_filter_of_ne (w : ι → k) (p : ι → P) {pred : ι 
     [DecidablePred pred] (h : ∀ i ∈ s, w i ≠ 0 → pred i) :
     {x ∈ s | pred x}.affineCombination k p w = s.affineCombination k p w := by
   rw [Finset.affineCombination_apply, Finset.affineCombination_apply,
-    s.weightedVSubOfPoint_filter_of_ne _ _ _ h]
+    Finset.weightedVSubOfPoint_filter_of_ne s _ _ _ h]
 

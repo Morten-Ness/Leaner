@@ -20,7 +20,7 @@ theorem affineCombination_apply_eq_lineMap_sum [DecidableEq ι] (w : ι → k) (
     (p₁ p₂ : P) (s' : Finset ι) (h : ∑ i ∈ s, w i = 1) (hp₂ : ∀ i ∈ s ∩ s', p i = p₂)
     (hp₁ : ∀ i ∈ s \ s', p i = p₁) :
     s.affineCombination k p w = AffineMap.lineMap p₁ p₂ (∑ i ∈ s ∩ s', w i) := by
-  rw [s.affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one w p h p₁,
+  rw [Finset.affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one s w p h p₁,
     Finset.weightedVSubOfPoint_apply, ← s.sum_inter_add_sum_diff s', AffineMap.lineMap_apply,
     vadd_right_cancel_iff, sum_smul]
   convert add_zero _ with i hi

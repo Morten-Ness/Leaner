@@ -13,9 +13,5 @@ variable (k)
 
 variable (P₁)
 
-namespace Formalization
-
 theorem constVAdd_zero : AffineEquiv.constVAdd k P₁ 0 = AffineEquiv.refl _ _ := AffineEquiv.ext <| zero_vadd _
 
-
-end Formalization

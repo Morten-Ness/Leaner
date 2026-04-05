@@ -9,9 +9,5 @@ variable (k P₁)
 
 variable {k P₁}
 
-namespace Formalization
-
 theorem coe_trans (e : P₁ ≃ᵃ[k] P₂) (e' : P₂ ≃ᵃ[k] P₃) : ⇑(e.trans e') = e' ∘ e := rfl
 
-
-end Formalization

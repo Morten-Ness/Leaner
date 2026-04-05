@@ -48,6 +48,12 @@ QUALIFY_MAP = {
 }
 
 OPEN_QUALIFY_MAP = {
+    "AffineEquiv": {
+        "constVAdd": "AffineEquiv.constVAdd",
+        "constVSub": "AffineEquiv.constVSub",
+        "pointReflection": "AffineEquiv.pointReflection",
+        "vaddConst": "AffineEquiv.vaddConst",
+    },
     "Finset": {
         "affineCombination": "Finset.affineCombination",
         "centroidWeights": "Finset.centroidWeights",
@@ -56,6 +62,15 @@ OPEN_QUALIFY_MAP = {
     "Set": {
         "range": "Set.range",
         "univ": "Set.univ",
+    },
+}
+
+CURRENT_NAMESPACE_QUALIFY_MAP = {
+    "AffineMap": {
+        "homothety": "AffineMap.homothety",
+        "homothety_apply": "AffineMap.homothety_apply",
+        "id": "AffineMap.id",
+        "lineMap": "AffineMap.lineMap",
     },
 }
 
@@ -74,7 +89,11 @@ STATIC_NAMESPACE_NAMES = {"mk", "toEquiv"}
 
 IDENT_CHARS = r"\w'₀₁₂₃₄₅₆₇₈₉ₗ"
 LOWER_IDENT_RE = rf"[a-z_][{IDENT_CHARS}]*"
-RECEIVER_RE = rf"{LOWER_IDENT_RE}(?:\.(?:[A-Za-z_][{IDENT_CHARS}]*|[0-9]+))*"
+SIMPLE_PAREN_RE = r"\([^()\n]+\)"
+RECEIVER_RE = (
+    rf"(?:{LOWER_IDENT_RE}|{SIMPLE_PAREN_RE})"
+    rf"(?:\.(?:[A-Za-z_][{IDENT_CHARS}]*|[0-9]+))*"
+)
 
 # If a proof body starts with `by`, these can appear as tactic commands and
 # should not be namespace-prefixed when they are the first token on a line.
@@ -258,6 +277,16 @@ def ordered_unique_var_blocks(blocks: list[VarBlock]) -> list[VarBlock]:
     return ordered
 
 
+def should_emit_var_block(block: VarBlock) -> bool:
+    text = block.text.strip()
+    if not text.startswith("variable "):
+        return True
+    normalized = " ".join(line.strip() for line in block.text.splitlines())
+    if normalized.endswith(" in"):
+        return False
+    return ":" in normalized or "[" in normalized
+
+
 def parse_open_namespaces(stripped: str) -> tuple[str, ...]:
     if not stripped.startswith("open ") or stripped.startswith("open scoped"):
         return ()
@@ -387,6 +416,7 @@ def choose_best_decl_name(
         replacements[current_decl.namespace_path[-1]] = prefix
         for name in STATIC_NAMESPACE_NAMES:
             replacements[name] = f"{prefix}.{name}"
+        replacements.update(CURRENT_NAMESPACE_QUALIFY_MAP.get(current_decl.namespace_path[-1], {}))
     for namespace in current_decl.open_namespaces:
         replacements.update(OPEN_QUALIFY_MAP.get(namespace, {}))
     return replacements
@@ -543,6 +573,8 @@ def iter_target_theorems(decls: list[Decl]) -> list[Decl]:
 def output_text_for_theorem(target: Decl, previous_decls: list[Decl]) -> str:
     parts = ["import Mathlib\n\n"]
     for block in ordered_unique_var_blocks(target.var_blocks):
+        if not should_emit_var_block(block):
+            continue
         parts.append(rewrite_var_block(block))
         parts.append("\n")
     if NAMESPACE_FORMALIZATION:

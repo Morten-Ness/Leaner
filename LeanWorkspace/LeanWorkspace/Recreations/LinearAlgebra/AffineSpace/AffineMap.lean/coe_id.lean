@@ -5,9 +5,4 @@ variable {k : Type*} {V1 : Type*} {P1 : Type*} {V2 : Type*} {P2 : Type*} {V3 : T
   [AddTorsor V1 P1] [AddCommGroup V2] [Module k V2] [AddTorsor V2 P2] [AddCommGroup V3]
   [Module k V3] [AddTorsor V3 P3] [AddCommGroup V4] [Module k V4] [AddTorsor V4 P4]
 
-variable (k P1)
-
-variable {k P1}
-
-theorem coe_id : ⇑(id k P1) = _root_.id := rfl
-
+theorem coe_id : ⇑(AffineMap.id k P1) = _root_.id := rfl

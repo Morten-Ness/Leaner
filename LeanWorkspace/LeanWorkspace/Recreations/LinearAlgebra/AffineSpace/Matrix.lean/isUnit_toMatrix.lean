@@ -14,6 +14,6 @@ variable [DecidableEq ι]
 
 theorem isUnit_toMatrix : IsUnit (b.toMatrix b₂) := ⟨{  val := b.toMatrix b₂
       inv := b₂.toMatrix b
-      val_inv := b.toMatrix_mul_toMatrix b₂
-      inv_val := b₂.toMatrix_mul_toMatrix b }, rfl⟩
+      val_inv := AffineBasis.toMatrix_mul_toMatrix b b₂
+      inv_val := AffineBasis.toMatrix_mul_toMatrix b₂ b }, rfl⟩
 

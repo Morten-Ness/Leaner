@@ -15,5 +15,5 @@ variable {k}
 
 variable (k) in
 
-theorem snd_lineMap (p₀ p₁ : P1 × P2) (c : k) : (AffineMap.lineMap p₀ p₁ c).2 = AffineMap.lineMap p₀.2 p₁.2 c := AffineMap.snd.apply_lineMap p₀ p₁ c
+theorem snd_lineMap (p₀ p₁ : P1 × P2) (c : k) : (AffineMap.lineMap p₀ p₁ c).2 = AffineMap.lineMap p₀.2 p₁.2 c := AffineMap.apply_lineMap AffineMap.snd p₀ p₁ c
 

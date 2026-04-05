@@ -11,9 +11,5 @@ variable {k P₁}
 
 variable (k)
 
-namespace Formalization
-
 theorem coe_constVSub_symm (p : P₁) : ⇑(AffineEquiv.constVSub k p).symm = fun v : V₁ => -v +ᵥ p := rfl
 
-
-end Formalization

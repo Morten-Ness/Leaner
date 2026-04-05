@@ -13,5 +13,5 @@ variable {P P₂ P₃}
 variable {k}
 
 theorem affineSpan_faceOpposite_le {n : ℕ} [NeZero n] (s : Affine.Simplex k P n) (i : Fin (n + 1)) :
-    affineSpan k (Set.range (s.faceOpposite i).points) ≤ affineSpan k (Set.range s.points) := s.affineSpan_face_le _
+    affineSpan k (Set.range (s.faceOpposite i).points) ≤ affineSpan k (Set.range s.points) := Affine.Simplex.affineSpan_face_le s _
 

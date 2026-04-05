@@ -15,10 +15,6 @@ variable (P₁)
 
 variable {P₁}
 
-namespace Formalization
-
 theorem pointReflection_fixed_iff_of_injective_two_nsmul {x y : P₁}
     (h : Function.Injective (2 • · : V₁ → V₁)) : AffineEquiv.pointReflection k x y = y ↔ y = x := Equiv.pointReflection_fixed_iff_of_injective_two_nsmul h
 
-
-end Formalization

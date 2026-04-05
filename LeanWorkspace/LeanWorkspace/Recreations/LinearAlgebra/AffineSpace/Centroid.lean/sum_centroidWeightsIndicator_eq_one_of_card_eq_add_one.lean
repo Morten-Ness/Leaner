@@ -9,5 +9,5 @@ variable {k} in
 theorem sum_centroidWeightsIndicator_eq_one_of_card_eq_add_one [CharZero k] [Fintype ι] {n : ℕ}
     (h : #s = n + 1) : ∑ i, s.centroidWeightsIndicator k i = 1 := by
   rw [Finset.sum_centroidWeightsIndicator]
-  exact s.sum_centroidWeights_eq_one_of_card_eq_add_one k h
+  exact Finset.sum_centroidWeights_eq_one_of_card_eq_add_one s k h
 

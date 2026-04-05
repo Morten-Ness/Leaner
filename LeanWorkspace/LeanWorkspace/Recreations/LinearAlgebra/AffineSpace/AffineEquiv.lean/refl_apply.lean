@@ -7,9 +7,5 @@ variable {k P₁ P₂ P₃ P₄ V₁ V₂ V₃ V₄ : Type*} [Ring k]
 
 variable (k P₁)
 
-namespace Formalization
-
 theorem refl_apply (x : P₁) : AffineEquiv.refl k P₁ x = x := rfl
 
-
-end Formalization

@@ -69,3 +69,4 @@ theorem exists_affineCombination_eq_smul_eq {p : ι → P} (hp : AffineIndepende
   simp only [Set.indicator_apply, Set.mem_diff, SetLike.mem_coe, Set.mem_singleton_iff,
     Finset.coe_insert, Set.insert_diff_of_mem, fsx, wx]
   grind
+

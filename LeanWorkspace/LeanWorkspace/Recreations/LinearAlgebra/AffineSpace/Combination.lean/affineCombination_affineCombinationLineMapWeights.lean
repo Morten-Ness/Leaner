@@ -21,6 +21,6 @@ theorem affineCombination_affineCombinationLineMapWeights [DecidableEq ι] (p : 
     s.affineCombination k p (Finset.affineCombinationLineMapWeights i j c) =
       AffineMap.lineMap (p i) (p j) c := by
   rw [Finset.affineCombinationLineMapWeights, ← Finset.weightedVSub_vadd_affineCombination,
-    Finset.weightedVSub_const_smul, s.affineCombination_affineCombinationSingleWeights k p hi,
-    s.weightedVSub_weightedVSubVSubWeights k p hj hi, AffineMap.lineMap_apply]
+    Finset.weightedVSub_const_smul, Finset.affineCombination_affineCombinationSingleWeights s k p hi,
+    Finset.weightedVSub_weightedVSubVSubWeights s k p hj hi, AffineMap.lineMap_apply]
 
