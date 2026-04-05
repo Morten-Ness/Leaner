@@ -1,0 +1,219 @@
+FILE: Basic.affineSpan_faceOpposite_le.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.affineSpan_faceOpposite_le.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable (k : Type*) {V V₂ V₃ : Type*} (P P₂ P₃ : Type*)
+
+variable [Ring k] [AddCommGroup V] [AddCommGroup V₂] [AddCommGroup V₃]
+
+variable [Module k V] [Module k V₂] [Module k V₃]
+
+variable [AddTorsor V P] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃]
+
+variable {P P₂ P₃}
+
+variable {k}
+
+theorem affineSpan_faceOpposite_le {n : ℕ} [NeZero n] (s : Affine.Simplex k P n) (i : Fin (n + 1)) :
+    affineSpan k (Set.range (s.faceOpposite i).points) ≤ affineSpan k (Set.range s.points) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (k : Type*) {V V₂ V₃ : Type*} (P P₂ P₃ : Type*)
+
+variable [Ring k] [AddCommGroup V] [AddCommGroup V₂] [AddCommGroup V₃]
+
+variable [Module k V] [Module k V₂] [Module k V₃]
+
+variable [AddTorsor V P] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃]
+
+variable {P P₂ P₃}
+
+variable {k}
+
+theorem affineSpan_faceOpposite_le {n : ℕ} [NeZero n] (s : Affine.Simplex k P n) (i : Fin (n + 1)) :
+    affineSpan k (Set.range (s.faceOpposite i).points) ≤ affineSpan k (Set.range s.points) := by
+  rw [Affine.affineSpan_le]
+  intro p hp
+  rcases hp with ⟨j, rfl⟩
+  rcases j with ⟨j, hj⟩
+  rw [Affine.Simplex.faceOpposite_points]
+  exact Affine.subset_affineSpan k ⟨Fin.succAbove i j, rfl⟩
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:17:7-17:27
+Unknown identifier `Affine.affineSpan_le`
+Source line 17:
+  rw [Affine.affineSpan_le]
+      ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Affine.affineSpan_le
+
+ERROR .LspCheck.lean:16:95-17:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_5
+inst✝⁴ : Ring k
+inst✝³ : AddCommGroup V
+inst✝² : Module k V
+inst✝¹ : AddTorsor V P
+n : ℕ
+inst✝ : NeZero n
+s : Affine.Simplex k P n
+i : Fin (n + 1)
+⊢ affineSpan k (Set.range (s.faceOpposite i).points) ≤ affineSpan k (Set.range s.points)
+Source line 16:
+    affineSpan k (Set.range (s.faceOpposite i).points) ≤ affineSpan k (Set.range s.points) := by
+                                                                                              ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:17:7-17:27
+Unknown identifier `Affine.affineSpan_le`
+Source line 17:
+  rw [Affine.affineSpan_le]
+      ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Affine.affineSpan_le
+
+ERROR .LspCheck.lean:16:95-17:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_5
+inst✝⁴ : Ring k
+inst✝³ : AddCommGroup V
+inst✝² : Module k V
+inst✝¹ : AddTorsor V P
+n : ℕ
+inst✝ : NeZero n
+s : Affine.Simplex k P n
+i : Fin (n + 1)
+⊢ affineSpan k (Set.range (s.faceOpposite i).points) ≤ affineSpan k (Set.range s.points)
+Source line 16:
+    affineSpan k (Set.range (s.faceOpposite i).points) ≤ affineSpan k (Set.range s.points) := by
+                                                                                              ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (k : Type*) {V V₂ V₃ : Type*} (P P₂ P₃ : Type*)
+
+variable [Ring k] [AddCommGroup V] [AddCommGroup V₂] [AddCommGroup V₃]
+
+variable [Module k V] [Module k V₂] [Module k V₃]
+
+variable [AddTorsor V P] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃]
+
+variable {P P₂ P₃}
+
+variable {k}
+
+theorem affineSpan_faceOpposite_le {n : ℕ} [NeZero n] (s : Affine.Simplex k P n) (i : Fin (n + 1)) :
+    affineSpan k (Set.range (s.faceOpposite i).points) ≤ affineSpan k (Set.range s.points) := by
+  refine affineSpan_mono ?_
+  intro p hp
+  rcases hp with ⟨j, rfl⟩
+  refine ⟨Fin.succAbove i j, ?_⟩
+  simp [Affine.Simplex.faceOpposite]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:17:10-17:28
+typeclass instance problem is stuck
+  AddTorsor ?m.68 ?m.69
+
+Note: Lean will not try to resolve this typeclass instance problem because the second and third type arguments to `AddTorsor` contain metavariables. These arguments must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+Source line 17:
+  refine affineSpan_mono ?_
+         ^^^^^^^^^^^^^^^^^^
+Highlighted span: affineSpan_mono ?_
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:17:10-17:28
+typeclass instance problem is stuck
+  AddTorsor ?m.68 ?m.69
+
+Note: Lean will not try to resolve this typeclass instance problem because the second and third type arguments to `AddTorsor` contain metavariables. These arguments must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+Source line 17:
+  refine affineSpan_mono ?_
+         ^^^^^^^^^^^^^^^^^^
+Highlighted span: affineSpan_mono ?_
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (k : Type*) {V V₂ V₃ : Type*} (P P₂ P₃ : Type*)
+
+variable [Ring k] [AddCommGroup V] [AddCommGroup V₂] [AddCommGroup V₃]
+
+variable [Module k V] [Module k V₂] [Module k V₃]
+
+variable [AddTorsor V P] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃]
+
+variable {P P₂ P₃}
+
+variable {k}
+
+theorem affineSpan_faceOpposite_le {n : ℕ} [NeZero n] (s : Affine.Simplex k P n) (i : Fin (n + 1)) :
+    affineSpan k (Set.range (s.faceOpposite i).points) ≤ affineSpan k (Set.range s.points) := by
+  exact
+    AffineSubspace.spanPoints_mono k
+      (show Set.range (s.faceOpposite i).points ⊆ Set.range s.points by
+        intro p hp
+        rcases hp with ⟨j, rfl⟩
+        refine ⟨Fin.succAbove i j, ?_⟩
+        simp [Affine.Simplex.faceOpposite])
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:18:5-18:35
+Unknown constant `AffineSubspace.spanPoints_mono`
+Source line 18:
+    AffineSubspace.spanPoints_mono k
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.spanPoints_mono
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:18:5-18:35
+Unknown constant `AffineSubspace.spanPoints_mono`
+Source line 18:
+    AffineSubspace.spanPoints_mono k
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.spanPoints_mono

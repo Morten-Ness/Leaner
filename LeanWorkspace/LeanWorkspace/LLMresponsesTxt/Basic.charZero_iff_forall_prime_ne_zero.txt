@@ -1,0 +1,602 @@
+FILE: Basic.charZero_iff_forall_prime_ne_zero.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.charZero_iff_forall_prime_ne_zero.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable (R : Type*)
+
+theorem charZero_iff_forall_prime_ne_zero [NonAssocRing R] [NoZeroDivisors R] [Nontrivial R] :
+    CharZero R ↔ ∀ p : ℕ, p.Prime → (p : R) ≠ 0 := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (R : Type*)
+
+theorem charZero_iff_forall_prime_ne_zero [NonAssocRing R] [NoZeroDivisors R] [Nontrivial R] :
+    CharZero R ↔ ∀ p : ℕ, p.Prime → (p : R) ≠ 0 := by
+  constructor
+  · intro h p hp
+    exact_mod_cast Nat.Prime.ne_zero hp
+  · intro h
+    by_cases h0 : (0 : R) = (1 : R)
+    · exfalso
+      exact zero_ne_one h0
+    · letI : Nat.AtLeastTwo R := ⟨h0⟩
+      rw [charZero_iff]
+      intro m n hmn
+      by_contra hne
+      wlog hlt : m < n
+      · exact this n m hmn.symm (by omega) (Ne.symm hne)
+      have hsub : ((n - m : ℕ) : R) = 0 := by
+        rw [Nat.cast_sub hlt.le]
+        simpa [hmn]
+      have hnm : n - m ≠ 0 := by omega
+      obtain ⟨p, hpprime, hpdvd⟩ := Nat.exists_prime_and_dvd hnm
+      have hpzero : (p : R) = 0 := by
+        apply eq_zero_of_dvd_of_zero hsub
+        exact_mod_cast hpdvd
+      exact h p hpprime hpzero
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:29-14:30
+Application type mismatch: The argument
+  R
+has type
+  Type u_1
+of sort `Type (u_1 + 1)` but is expected to have type
+  ℕ
+of sort `Type` in the application
+  Nat.AtLeastTwo R
+Source line 14:
+    · letI : Nat.AtLeastTwo R := ⟨h0⟩
+                            ^
+Highlighted span: R
+
+ERROR .LspCheck.lean:15:11-15:23
+Unknown identifier `charZero_iff`
+Source line 15:
+      rw [charZero_iff]
+          ^^^^^^^^^^^^
+Highlighted span: charZero_iff
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:29-14:30
+Application type mismatch: The argument
+  R
+has type
+  Type u_1
+of sort `Type (u_1 + 1)` but is expected to have type
+  ℕ
+of sort `Type` in the application
+  Nat.AtLeastTwo R
+Source line 14:
+    · letI : Nat.AtLeastTwo R := ⟨h0⟩
+                            ^
+Highlighted span: R
+
+ERROR .LspCheck.lean:15:11-15:23
+Unknown identifier `charZero_iff`
+Source line 15:
+      rw [charZero_iff]
+          ^^^^^^^^^^^^
+Highlighted span: charZero_iff
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (R : Type*)
+
+theorem charZero_iff_forall_prime_ne_zero [NonAssocRing R] [NoZeroDivisors R] [Nontrivial R] :
+    CharZero R ↔ ∀ p : ℕ, p.Prime → (p : R) ≠ 0 := by
+  constructor
+  · intro h p hp hp0
+    have := (Nat.cast_inj (R := R)).mp hp0
+    exact hp.ne_zero this
+  · intro h
+    refine ⟨?_⟩
+    intro m n hmn
+    by_contra hne
+    wlog hlt : m < n generalizing m n with H
+    · exact H n m hmn.symm (lt_of_not_ge hne) hne.symm
+    have hsub : ((n - m : ℕ) : R) = 0 := by
+      rw [Nat.cast_sub hlt.le]
+      simpa [hmn]
+    have hnm : n - m ≠ 0 := by
+      omega
+    obtain ⟨p, hpprime, hpdvd⟩ := Nat.exists_prime_and_dvd hnm
+    have hpcastdvd : (p : R) ∣ ((n - m : ℕ) : R) := by
+      rcases hpdvd with ⟨k, rfl⟩
+      refine ⟨(k : R), ?_⟩
+      simp [Nat.cast_mul]
+    have hp0 : (p : R) = 0 := by
+      exact eq_zero_of_dvd_of_zero hpcastdvd hsub
+    exact h p hpprime hp0
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:9:40-9:43
+Application type mismatch: The argument
+  hp0
+has type
+  ↑p = 0
+but is expected to have type
+  ↑?m.23 = ↑?m.24
+in the application
+  Nat.cast_inj.mp hp0
+Source line 9:
+    have := (Nat.cast_inj (R := R)).mp hp0
+                                       ^^^
+Highlighted span: hp0
+
+ERROR .LspCheck.lean:16:15-16:16
+Application type mismatch: The argument
+  n
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  ↑?m.74 = ↑?m.75
+of sort `Prop` in the application
+  H n
+Source line 16:
+    · exact H n m hmn.symm (lt_of_not_ge hne) hne.symm
+              ^
+Highlighted span: n
+
+WARNING .LspCheck.lean:19:7-19:18
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 19:
+      simpa [hmn]
+      ^^^^^^^^^^^
+Highlighted span: simpa [hmn]
+
+ERROR .LspCheck.lean:22:60-22:63
+Application type mismatch: The argument
+  hnm
+has type
+  n - m ≠ 0
+but is expected to have type
+  ?m.113 ≠ 1
+in the application
+  Nat.exists_prime_and_dvd hnm
+Source line 22:
+    obtain ⟨p, hpprime, hpdvd⟩ := Nat.exists_prime_and_dvd hnm
+                                                           ^^^
+Highlighted span: hnm
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:9:40-9:43
+Application type mismatch: The argument
+  hp0
+has type
+  ↑p = 0
+but is expected to have type
+  ↑?m.23 = ↑?m.24
+in the application
+  Nat.cast_inj.mp hp0
+Source line 9:
+    have := (Nat.cast_inj (R := R)).mp hp0
+                                       ^^^
+Highlighted span: hp0
+
+ERROR .LspCheck.lean:16:15-16:16
+Application type mismatch: The argument
+  n
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  ↑?m.74 = ↑?m.75
+of sort `Prop` in the application
+  H n
+Source line 16:
+    · exact H n m hmn.symm (lt_of_not_ge hne) hne.symm
+              ^
+Highlighted span: n
+
+WARNING .LspCheck.lean:19:7-19:18
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 19:
+      simpa [hmn]
+      ^^^^^^^^^^^
+Highlighted span: simpa [hmn]
+
+ERROR .LspCheck.lean:22:60-22:63
+Application type mismatch: The argument
+  hnm
+has type
+  n - m ≠ 0
+but is expected to have type
+  ?m.113 ≠ 1
+in the application
+  Nat.exists_prime_and_dvd hnm
+Source line 22:
+    obtain ⟨p, hpprime, hpdvd⟩ := Nat.exists_prime_and_dvd hnm
+                                                           ^^^
+Highlighted span: hnm
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (R : Type*)
+
+theorem charZero_iff_forall_prime_ne_zero [NonAssocRing R] [NoZeroDivisors R] [Nontrivial R] :
+    CharZero R ↔ ∀ p : ℕ, p.Prime → (p : R) ≠ 0 := by
+  constructor
+  · intro _ p hp
+    exact_mod_cast hp.ne_zero
+  · intro h
+    refine ⟨?_⟩
+    intro m n hmn
+    by_cases hm : m = n
+    · exact hm
+    · have hlt_or_gt : m < n ∨ n < m := lt_or_gt_of_ne hm
+      cases hlt_or_gt with
+      | inl hlt =>
+          have hsub : ((n - m : ℕ) : R) = 0 := by
+            rw [Nat.cast_sub hlt.le]
+            simpa [hmn]
+          have hnm2 : 2 ≤ n - m := by
+            omega
+          obtain ⟨p, hpprime, hpdvd⟩ := Nat.exists_prime_and_dvd hnm2
+          have hpcastdvd : (p : R) ∣ ((n - m : ℕ) : R) := by
+            rcases hpdvd with ⟨k, rfl⟩
+            refine ⟨(k : R), by simp [Nat.cast_mul, mul_comm, mul_left_comm, mul_assoc]⟩
+          have hp0 : (p : R) = 0 := eq_zero_of_dvd_of_zero hpcastdvd hsub
+          exact (h p hpprime hp0).elim
+      | inr hgt =>
+          have hsub : ((m - n : ℕ) : R) = 0 := by
+            rw [Nat.cast_sub hgt.le]
+            simpa [hmn]
+          have hmn2 : 2 ≤ m - n := by
+            omega
+          obtain ⟨p, hpprime, hpdvd⟩ := Nat.exists_prime_and_dvd hmn2
+          have hpcastdvd : (p : R) ∣ ((m - n : ℕ) : R) := by
+            rcases hpdvd with ⟨k, rfl⟩
+            refine ⟨(k : R), by simp [Nat.cast_mul, mul_comm, mul_left_comm, mul_assoc]⟩
+          have hp0 : (p : R) = 0 := eq_zero_of_dvd_of_zero hpcastdvd hsub
+          exact (h p hpprime hp0).elim
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+WARNING .LspCheck.lean:20:13-20:24
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 20:
+            simpa [hmn]
+            ^^^^^^^^^^^
+Highlighted span: simpa [hmn]
+
+ERROR .LspCheck.lean:22:13-22:18
+omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  a ≥ 0
+  a ≥ -1
+where
+ a := ↑m
+Source line 22:
+            omega
+            ^^^^^
+Highlighted span: omega
+
+ERROR .LspCheck.lean:23:66-23:70
+Application type mismatch: The argument
+  hnm2
+has type
+  2 ≤ n - m
+but is expected to have type
+  ?m.109 ≠ 1
+in the application
+  Nat.exists_prime_and_dvd hnm2
+Source line 23:
+          obtain ⟨p, hpprime, hpdvd⟩ := Nat.exists_prime_and_dvd hnm2
+                                                                 ^^^^
+Highlighted span: hnm2
+
+ERROR .LspCheck.lean:24:28-24:55
+failed to synthesize instance of type class
+  Dvd R
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 24:
+          have hpcastdvd : (p : R) ∣ ((n - m : ℕ) : R) := by
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (p : R) ∣ ((n - m : ℕ) : R)
+
+ERROR .LspCheck.lean:25:35-25:38
+Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  ?m.109 = p * k
+
+R : Type u_1
+inst✝² : NonAssocRing R
+inst✝¹ : NoZeroDivisors R
+inst✝ : Nontrivial R
+h : ∀ (p : ℕ), Nat.Prime p → ↑p ≠ 0
+m n : ℕ
+hmn : ↑m = ↑n
+hm : ¬m = n
+hlt : m < n
+hsub : ↑(n - m) = 0
+hnm2 : 2 ≤ n - m
+p : ℕ
+hpprime : Nat.Prime p
+k : ℕ
+h✝ : ?m.109 = p * k
+⊢ sorry
+Source line 25:
+            rcases hpdvd with ⟨k, rfl⟩
+                                  ^^^
+Highlighted span: rfl
+
+ERROR .LspCheck.lean:27:37-27:59
+Unknown identifier `eq_zero_of_dvd_of_zero`
+Source line 27:
+          have hp0 : (p : R) = 0 := eq_zero_of_dvd_of_zero hpcastdvd hsub
+                                    ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: eq_zero_of_dvd_of_zero
+
+WARNING .LspCheck.lean:32:13-32:24
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 32:
+            simpa [hmn]
+            ^^^^^^^^^^^
+Highlighted span: simpa [hmn]
+
+ERROR .LspCheck.lean:34:13-34:18
+omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  a ≥ 0
+  a ≥ -1
+where
+ a := ↑n
+Source line 34:
+            omega
+            ^^^^^
+Highlighted span: omega
+
+ERROR .LspCheck.lean:35:66-35:70
+Application type mismatch: The argument
+  hmn2
+has type
+  2 ≤ m - n
+but is expected to have type
+  ?m.195 ≠ 1
+in the application
+  Nat.exists_prime_and_dvd hmn2
+Source line 35:
+          obtain ⟨p, hpprime, hpdvd⟩ := Nat.exists_prime_and_dvd hmn2
+                                                                 ^^^^
+Highlighted span: hmn2
+
+ERROR .LspCheck.lean:36:28-36:55
+failed to synthesize instance of type class
+  Dvd R
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 36:
+          have hpcastdvd : (p : R) ∣ ((m - n : ℕ) : R) := by
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (p : R) ∣ ((m - n : ℕ) : R)
+
+ERROR .LspCheck.lean:37:35-37:38
+Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  ?m.195 = p * k
+
+R : Type u_1
+inst✝² : NonAssocRing R
+inst✝¹ : NoZeroDivisors R
+inst✝ : Nontrivial R
+h : ∀ (p : ℕ), Nat.Prime p → ↑p ≠ 0
+m n : ℕ
+hmn : ↑m = ↑n
+hm : ¬m = n
+hgt : n < m
+hsub : ↑(m - n) = 0
+hmn2 : 2 ≤ m - n
+p : ℕ
+hpprime : Nat.Prime p
+k : ℕ
+h✝ : ?m.195 = p * k
+⊢ sorry
+Source line 37:
+            rcases hpdvd with ⟨k, rfl⟩
+                                  ^^^
+Highlighted span: rfl
+
+ERROR .LspCheck.lean:39:37-39:59
+Unknown identifier `eq_zero_of_dvd_of_zero`
+Source line 39:
+          have hp0 : (p : R) = 0 := eq_zero_of_dvd_of_zero hpcastdvd hsub
+                                    ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: eq_zero_of_dvd_of_zero
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+WARNING .LspCheck.lean:20:13-20:24
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 20:
+            simpa [hmn]
+            ^^^^^^^^^^^
+Highlighted span: simpa [hmn]
+
+ERROR .LspCheck.lean:22:13-22:18
+omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  a ≥ 0
+  a ≥ -1
+where
+ a := ↑m
+Source line 22:
+            omega
+            ^^^^^
+Highlighted span: omega
+
+ERROR .LspCheck.lean:23:66-23:70
+Application type mismatch: The argument
+  hnm2
+has type
+  2 ≤ n - m
+but is expected to have type
+  ?m.109 ≠ 1
+in the application
+  Nat.exists_prime_and_dvd hnm2
+Source line 23:
+          obtain ⟨p, hpprime, hpdvd⟩ := Nat.exists_prime_and_dvd hnm2
+                                                                 ^^^^
+Highlighted span: hnm2
+
+ERROR .LspCheck.lean:24:28-24:55
+failed to synthesize instance of type class
+  Dvd R
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 24:
+          have hpcastdvd : (p : R) ∣ ((n - m : ℕ) : R) := by
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (p : R) ∣ ((n - m : ℕ) : R)
+
+ERROR .LspCheck.lean:25:35-25:38
+Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  ?m.109 = p * k
+
+R : Type u_1
+inst✝² : NonAssocRing R
+inst✝¹ : NoZeroDivisors R
+inst✝ : Nontrivial R
+h : ∀ (p : ℕ), Nat.Prime p → ↑p ≠ 0
+m n : ℕ
+hmn : ↑m = ↑n
+hm : ¬m = n
+hlt : m < n
+hsub : ↑(n - m) = 0
+hnm2 : 2 ≤ n - m
+p : ℕ
+hpprime : Nat.Prime p
+k : ℕ
+h✝ : ?m.109 = p * k
+⊢ sorry
+Source line 25:
+            rcases hpdvd with ⟨k, rfl⟩
+                                  ^^^
+Highlighted span: rfl
+
+ERROR .LspCheck.lean:27:37-27:59
+Unknown identifier `eq_zero_of_dvd_of_zero`
+Source line 27:
+          have hp0 : (p : R) = 0 := eq_zero_of_dvd_of_zero hpcastdvd hsub
+                                    ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: eq_zero_of_dvd_of_zero
+
+WARNING .LspCheck.lean:32:13-32:24
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 32:
+            simpa [hmn]
+            ^^^^^^^^^^^
+Highlighted span: simpa [hmn]
+
+ERROR .LspCheck.lean:34:13-34:18
+omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  a ≥ 0
+  a ≥ -1
+where
+ a := ↑n
+Source line 34:
+            omega
+            ^^^^^
+Highlighted span: omega
+
+ERROR .LspCheck.lean:35:66-35:70
+Application type mismatch: The argument
+  hmn2
+has type
+  2 ≤ m - n
+but is expected to have type
+  ?m.195 ≠ 1
+in the application
+  Nat.exists_prime_and_dvd hmn2
+Source line 35:
+          obtain ⟨p, hpprime, hpdvd⟩ := Nat.exists_prime_and_dvd hmn2
+                                                                 ^^^^
+Highlighted span: hmn2
+
+ERROR .LspCheck.lean:36:28-36:55
+failed to synthesize instance of type class
+  Dvd R
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 36:
+          have hpcastdvd : (p : R) ∣ ((m - n : ℕ) : R) := by
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (p : R) ∣ ((m - n : ℕ) : R)
+
+ERROR .LspCheck.lean:37:35-37:38
+Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  ?m.195 = p * k
+
+R : Type u_1
+inst✝² : NonAssocRing R
+inst✝¹ : NoZeroDivisors R
+inst✝ : Nontrivial R
+h : ∀ (p : ℕ), Nat.Prime p → ↑p ≠ 0
+m n : ℕ
+hmn : ↑m = ↑n
+hm : ¬m = n
+hgt : n < m
+hsub : ↑(m - n) = 0
+hmn2 : 2 ≤ m - n
+p : ℕ
+hpprime : Nat.Prime p
+k : ℕ
+h✝ : ?m.195 = p * k
+⊢ sorry
+Source line 37:
+            rcases hpdvd with ⟨k, rfl⟩
+                                  ^^^
+Highlighted span: rfl
+
+ERROR .LspCheck.lean:39:37-39:59
+Unknown identifier `eq_zero_of_dvd_of_zero`
+Source line 39:
+          have hp0 : (p : R) = 0 := eq_zero_of_dvd_of_zero hpcastdvd hsub
+                                    ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: eq_zero_of_dvd_of_zero

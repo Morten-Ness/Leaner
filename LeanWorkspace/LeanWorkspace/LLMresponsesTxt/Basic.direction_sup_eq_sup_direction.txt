@@ -1,0 +1,221 @@
+FILE: Basic.direction_sup_eq_sup_direction.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.direction_sup_eq_sup_direction.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+theorem direction_sup_eq_sup_direction {s₁ s₂ : AffineSubspace k P} {p : P} (hp₁ : p ∈ s₁)
+    (hp₂ : p ∈ s₂) : (s₁ ⊔ s₂).direction = s₁.direction ⊔ s₂.direction := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+theorem direction_sup_eq_sup_direction {s₁ s₂ : AffineSubspace k P} {p : P} (hp₁ : p ∈ s₁)
+    (hp₂ : p ∈ s₂) : (s₁ ⊔ s₂).direction = s₁.direction ⊔ s₂.direction := by
+  simpa [AffineSubspace.direction_sup_of_mem hp₁ hp₂]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:8:10-8:45
+Unknown constant `AffineSubspace.direction_sup_of_mem`
+Source line 8:
+  simpa [AffineSubspace.direction_sup_of_mem hp₁ hp₂]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.direction_sup_of_mem
+
+ERROR .LspCheck.lean:8:3-8:54
+Tactic `assumption` failed
+
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+inst✝ : AddTorsor V P
+s₁ s₂ : AffineSubspace k P
+p : P
+hp₁ : p ∈ s₁
+hp₂ : p ∈ s₂
+⊢ (s₁ ⊔ s₂).direction = s₁.direction ⊔ s₂.direction
+Source line 8:
+  simpa [AffineSubspace.direction_sup_of_mem hp₁ hp₂]
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [AffineSubspace.direction_sup_of_mem hp₁ hp₂]
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:8:10-8:45
+Unknown constant `AffineSubspace.direction_sup_of_mem`
+Source line 8:
+  simpa [AffineSubspace.direction_sup_of_mem hp₁ hp₂]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.direction_sup_of_mem
+
+ERROR .LspCheck.lean:8:3-8:54
+Tactic `assumption` failed
+
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+inst✝ : AddTorsor V P
+s₁ s₂ : AffineSubspace k P
+p : P
+hp₁ : p ∈ s₁
+hp₂ : p ∈ s₂
+⊢ (s₁ ⊔ s₂).direction = s₁.direction ⊔ s₂.direction
+Source line 8:
+  simpa [AffineSubspace.direction_sup_of_mem hp₁ hp₂]
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [AffineSubspace.direction_sup_of_mem hp₁ hp₂]
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+theorem direction_sup_eq_sup_direction {s₁ s₂ : AffineSubspace k P} {p : P} (hp₁ : p ∈ s₁)
+    (hp₂ : p ∈ s₂) : (s₁ ⊔ s₂).direction = s₁.direction ⊔ s₂.direction := by
+  ext v
+  constructor
+  · intro hv
+    rcases hv with ⟨p1, hp1, p2, hp2, hpdir⟩
+    rcases hp1 with hp1 | hp1
+    · left
+      rw [← vsub_left_cancel p p2 p1]
+      rw [hpdir]
+      exact s₁.vsub_mem_direction hp₁ hp1
+    · right
+      rw [← vsub_left_cancel p p2 p1]
+      rw [hpdir]
+      exact s₂.vsub_mem_direction hp₂ hp1
+  · intro hv
+    rcases hv with hv | hv
+    · rcases s₁.exists_eq_vadd_of_mem_of_mem_direction hp₁ hv with ⟨q, hq, rfl⟩
+      refine ⟨p, Or.inl hp₁, q, ?_, by simp⟩
+      exact Or.inl hq
+    · rcases s₂.exists_eq_vadd_of_mem_of_mem_direction hp₂ hv with ⟨q, hq, rfl⟩
+      refine ⟨p, Or.inr hp₂, q, ?_, by simp⟩
+      exact Or.inr hq
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:20-11:45
+Tactic `rcases` failed: `hv : ∀ t ∈ Set.range fun s ↦ ⋂ (_ : s ∈ {p | ↑(s₁ ⊔ s₂) -ᵥ ↑(s₁ ⊔ s₂) ⊆ ↑p}), ↑s,
+  v ∈ t` is not an inductive datatype
+Source line 11:
+    rcases hv with ⟨p1, hp1, p2, hp2, hpdir⟩
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ⟨p1, hp1, p2, hp2, hpdir⟩
+
+ERROR .LspCheck.lean:22:20-22:27
+Tactic `rcases` failed: `hv : ∀ t ∈ Set.range fun s ↦ ⋂ (_ : s ∈ {x | s₁.direction ≤ x ∧ s₂.direction ≤ x}), ↑s,
+  v ∈ t` is not an inductive datatype
+Source line 22:
+    rcases hv with hv | hv
+                   ^^^^^^^
+Highlighted span: hv | hv
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:20-11:45
+Tactic `rcases` failed: `hv : ∀ t ∈ Set.range fun s ↦ ⋂ (_ : s ∈ {p | ↑(s₁ ⊔ s₂) -ᵥ ↑(s₁ ⊔ s₂) ⊆ ↑p}), ↑s,
+  v ∈ t` is not an inductive datatype
+Source line 11:
+    rcases hv with ⟨p1, hp1, p2, hp2, hpdir⟩
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ⟨p1, hp1, p2, hp2, hpdir⟩
+
+ERROR .LspCheck.lean:22:20-22:27
+Tactic `rcases` failed: `hv : ∀ t ∈ Set.range fun s ↦ ⋂ (_ : s ∈ {x | s₁.direction ≤ x ∧ s₂.direction ≤ x}), ↑s,
+  v ∈ t` is not an inductive datatype
+Source line 22:
+    rcases hv with hv | hv
+                   ^^^^^^^
+Highlighted span: hv | hv
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+theorem direction_sup_eq_sup_direction {s₁ s₂ : AffineSubspace k P} {p : P} (hp₁ : p ∈ s₁)
+    (hp₂ : p ∈ s₂) : (s₁ ⊔ s₂).direction = s₁.direction ⊔ s₂.direction := by
+  let e : AffineSubspace k P ≃o Submodule k V := AffineSubspace.comap p
+  have hs1 : e s₁ = s₁.direction := by
+    ext v
+    simp [e, hp₁, AffineSubspace.mem_comap]
+  have hs2 : e s₂ = s₂.direction := by
+    ext v
+    simp [e, hp₂, AffineSubspace.mem_comap]
+  have hsup : e (s₁ ⊔ s₂) = s₁.direction ⊔ s₂.direction := by
+    rw [OrderIso.map_sup, hs1, hs2]
+  have hp : p ∈ s₁ ⊔ s₂ := by exact Or.inl hp₁
+  have hsdir : e (s₁ ⊔ s₂) = (s₁ ⊔ s₂).direction := by
+    ext v
+    simp [e, hp, AffineSubspace.mem_comap]
+  rw [← hsdir, hsup]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:8:50-8:72
+Type mismatch
+  AffineSubspace.comap ?m.69
+has type
+  AffineSubspace ?m.57 ?m.61 → AffineSubspace ?m.57 ?m.59
+but is expected to have type
+  AffineSubspace k P ≃o Submodule k V
+Source line 8:
+  let e : AffineSubspace k P ≃o Submodule k V := AffineSubspace.comap p
+                                                 ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.comap p
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:8:50-8:72
+Type mismatch
+  AffineSubspace.comap ?m.69
+has type
+  AffineSubspace ?m.57 ?m.61 → AffineSubspace ?m.57 ?m.59
+but is expected to have type
+  AffineSubspace k P ≃o Submodule k V
+Source line 8:
+  let e : AffineSubspace k P ≃o Submodule k V := AffineSubspace.comap p
+                                                 ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.comap p

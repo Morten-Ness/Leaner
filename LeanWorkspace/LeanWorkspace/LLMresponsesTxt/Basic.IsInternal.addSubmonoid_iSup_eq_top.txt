@@ -1,0 +1,316 @@
+FILE: Basic.IsInternal.addSubmonoid_iSup_eq_top.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.IsInternal.addSubmonoid_iSup_eq_top.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable (ι : Type v) (β : ι → Type w)
+
+variable [∀ i, AddCommMonoid (β i)]
+
+theorem IsInternal.addSubmonoid_iSup_eq_top {M : Type*} [DecidableEq ι] [AddCommMonoid M]
+    (A : ι → AddSubmonoid M) (h : DirectSum.IsInternal A) : iSup A = ⊤ := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (ι : Type v) (β : ι → Type w)
+
+variable [∀ i, AddCommMonoid (β i)]
+
+theorem IsInternal.addSubmonoid_iSup_eq_top {M : Type*} [DecidableEq ι] [AddCommMonoid M]
+    (A : ι → AddSubmonoid M) (h : DirectSum.IsInternal A) : iSup A = ⊤ := by
+  rw [top_le_iff]
+  intro x hx
+  rw [AddSubmonoid.mem_iSup]
+  exact h.subtype.range_eq_top ▸ trivial
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:9:7-9:17
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ⊤ ≤ ?m.20
+in the target expression
+  iSup A = ⊤
+
+ι : Type v
+M : Type u_1
+inst✝¹ : DecidableEq ι
+inst✝ : AddCommMonoid M
+A : ι → AddSubmonoid M
+h : DirectSum.IsInternal A
+⊢ iSup A = ⊤
+Source line 9:
+  rw [top_le_iff]
+      ^^^^^^^^^^
+Highlighted span: top_le_iff
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:9:7-9:17
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ⊤ ≤ ?m.20
+in the target expression
+  iSup A = ⊤
+
+ι : Type v
+M : Type u_1
+inst✝¹ : DecidableEq ι
+inst✝ : AddCommMonoid M
+A : ι → AddSubmonoid M
+h : DirectSum.IsInternal A
+⊢ iSup A = ⊤
+Source line 9:
+  rw [top_le_iff]
+      ^^^^^^^^^^
+Highlighted span: top_le_iff
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (ι : Type v) (β : ι → Type w)
+
+variable [∀ i, AddCommMonoid (β i)]
+
+theorem IsInternal.addSubmonoid_iSup_eq_top {M : Type*} [DecidableEq ι] [AddCommMonoid M]
+    (A : ι → AddSubmonoid M) (h : DirectSum.IsInternal A) : iSup A = ⊤ := by
+  ext x
+  constructor
+  · intro hx
+    trivial
+  · intro hx
+    rw [AddSubmonoid.mem_iSup]
+    let y : ⨁ i, A i := h.subtypeEquiv.symm x
+    refine DirectSum.induction_on y ?hzero ?hsingle ?hadd
+    · simp
+    · intro i xi
+      exact ⟨i, by simpa using xi.2⟩
+    · intro a b ha hb
+      rcases ha with ⟨i, hi⟩
+      rcases hb with ⟨j, hj⟩
+      by_cases hij : i = j
+      · subst hij
+        exact ⟨j, by
+          simpa using (A j).add_mem hi hj⟩
+      · exact ⟨i, by
+          have hia : (DirectSum.lof ι A i a : M) ∈ iSup A := by
+            rw [AddSubmonoid.mem_iSup]
+            exact ⟨i, by simpa using hi⟩
+          have hjb : (DirectSum.lof ι A j b : M) ∈ iSup A := by
+            rw [AddSubmonoid.mem_iSup]
+            exact ⟨j, by simpa using hj⟩
+          simpa [DirectSum.lof_eq_of, hij] using (iSup A).add_mem hia hjb⟩
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:15-15:16
+Unknown identifier `i`
+Source line 15:
+    let y : ⨁ i, A i := h.subtypeEquiv.symm x
+              ^
+Highlighted span: i
+
+ERROR .LspCheck.lean:15:13-15:16
+failed to synthesize instance of type class
+  CategoryTheory.Limits.HasZeroMorphisms (Type ?u.2104.1728)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 15:
+    let y : ⨁ i, A i := h.subtypeEquiv.symm x
+            ^^^
+Highlighted span: ⨁ i
+
+ERROR .LspCheck.lean:13:3-14:1
+unsolved goals
+case y
+ι : Type v
+M : Type u_1
+inst✝¹ : DecidableEq ι
+inst✝ : AddCommMonoid M
+A : ι → AddSubmonoid M
+h : DirectSum.IsInternal A
+x : M
+hx : x ∈ ⊤
+⊢ sorry
+
+case h.mpr
+ι : Type v
+M : Type u_1
+inst✝¹ : DecidableEq ι
+inst✝ : AddCommMonoid M
+A : ι → AddSubmonoid M
+h : DirectSum.IsInternal A
+x : M
+hx : x ∈ ⊤
+y : sorry := ?y
+⊢ ∀ (N : AddSubmonoid M), (∀ (i : ι), A i ≤ N) → x ∈ N
+Source line 13:
+  · intro hx
+  ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:15:16-15:17
+unexpected token ','; expected command
+Source line 15:
+    let y : ⨁ i, A i := h.subtypeEquiv.symm x
+               ^
+Highlighted span: ,
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:15-15:16
+Unknown identifier `i`
+Source line 15:
+    let y : ⨁ i, A i := h.subtypeEquiv.symm x
+              ^
+Highlighted span: i
+
+ERROR .LspCheck.lean:15:13-15:16
+failed to synthesize instance of type class
+  CategoryTheory.Limits.HasZeroMorphisms (Type ?u.2104.1728)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 15:
+    let y : ⨁ i, A i := h.subtypeEquiv.symm x
+            ^^^
+Highlighted span: ⨁ i
+
+ERROR .LspCheck.lean:13:3-14:1
+unsolved goals
+case y
+ι : Type v
+M : Type u_1
+inst✝¹ : DecidableEq ι
+inst✝ : AddCommMonoid M
+A : ι → AddSubmonoid M
+h : DirectSum.IsInternal A
+x : M
+hx : x ∈ ⊤
+⊢ sorry
+
+case h.mpr
+ι : Type v
+M : Type u_1
+inst✝¹ : DecidableEq ι
+inst✝ : AddCommMonoid M
+A : ι → AddSubmonoid M
+h : DirectSum.IsInternal A
+x : M
+hx : x ∈ ⊤
+y : sorry := ?y
+⊢ ∀ (N : AddSubmonoid M), (∀ (i : ι), A i ≤ N) → x ∈ N
+Source line 13:
+  · intro hx
+  ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:15:16-15:17
+unexpected token ','; expected command
+Source line 15:
+    let y : ⨁ i, A i := h.subtypeEquiv.symm x
+               ^
+Highlighted span: ,
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (ι : Type v) (β : ι → Type w)
+
+variable [∀ i, AddCommMonoid (β i)]
+
+theorem IsInternal.addSubmonoid_iSup_eq_top {M : Type*} [DecidableEq ι] [AddCommMonoid M]
+    (A : ι → AddSubmonoid M) (h : DirectSum.IsInternal A) : iSup A = ⊤ := by
+  refine top_unique ?_
+  intro x hx
+  let y := h.subtypeEquiv.symm x
+  change x ∈ iSup A
+  rw [← h.subtypeEquiv.apply_symm_apply x]
+  clear hx x
+  refine DirectSum.induction_on y ?_ ?_ ?_
+  · simp [y]
+  · intro i xi
+    rw [AddSubmonoid.mem_iSup]
+    exact ⟨i, xi.2⟩
+  · intro a b ha hb
+    exact (iSup A).add_mem ha hb
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:14-11:26
+Invalid field `subtypeEquiv`: The environment does not contain `And.subtypeEquiv`, so it is not possible to project the field `subtypeEquiv` from an expression
+  h
+of type
+  Function.Injective ⇑(DirectSum.coeAddMonoidHom A) ∧ Function.Surjective ⇑(DirectSum.coeAddMonoidHom A)
+Source line 11:
+  let y := h.subtypeEquiv.symm x
+             ^^^^^^^^^^^^
+Highlighted span: subtypeEquiv
+
+ERROR .LspCheck.lean:8:75-9:1
+unsolved goals
+ι : Type v
+M : Type u_1
+inst✝¹ : DecidableEq ι
+inst✝ : AddCommMonoid M
+A : ι → AddSubmonoid M
+h : DirectSum.IsInternal A
+x : M
+hx : x ∈ ⊤
+⊢ x ∈ iSup A
+Source line 8:
+    (A : ι → AddSubmonoid M) (h : DirectSum.IsInternal A) : iSup A = ⊤ := by
+                                                                          ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:14-11:26
+Invalid field `subtypeEquiv`: The environment does not contain `And.subtypeEquiv`, so it is not possible to project the field `subtypeEquiv` from an expression
+  h
+of type
+  Function.Injective ⇑(DirectSum.coeAddMonoidHom A) ∧ Function.Surjective ⇑(DirectSum.coeAddMonoidHom A)
+Source line 11:
+  let y := h.subtypeEquiv.symm x
+             ^^^^^^^^^^^^
+Highlighted span: subtypeEquiv
+
+ERROR .LspCheck.lean:8:75-9:1
+unsolved goals
+ι : Type v
+M : Type u_1
+inst✝¹ : DecidableEq ι
+inst✝ : AddCommMonoid M
+A : ι → AddSubmonoid M
+h : DirectSum.IsInternal A
+x : M
+hx : x ∈ ⊤
+⊢ x ∈ iSup A
+Source line 8:
+    (A : ι → AddSubmonoid M) (h : DirectSum.IsInternal A) : iSup A = ⊤ := by
+                                                                          ^
+Highlighted span: b

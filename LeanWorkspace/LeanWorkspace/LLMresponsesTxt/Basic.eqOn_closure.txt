@@ -1,0 +1,475 @@
+FILE: Basic.eqOn_closure.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.eqOn_closure.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {M : Type*} {N : Type*}
+
+variable [Mul M] {s : Set M}
+
+variable [Mul N]
+
+theorem eqOn_closure {f g : M →ₙ* N} {s : Set M} (h : Set.EqOn f g s) :
+    Set.EqOn f g (Subsemigroup.closure s) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M : Type*} {N : Type*}
+
+variable [Mul M] {s : Set M}
+
+variable [Mul N]
+
+theorem eqOn_closure {f g : M →ₙ* N} {s : Set M} (h : Set.EqOn f g s) :
+    Set.EqOn f g (Subsemigroup.closure s) := by
+  intro x hx
+  refine Subsemigroup.closure_induction hx ?_ ?_
+  · intro y hy
+    exact h hy
+  · simp_all [map_mul]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:41-12:43
+Type mismatch
+  hx
+has type
+  x ∈ ↑(Subsemigroup.closure s)
+but is expected to have type
+  ∀ x_1 ∈ ?m.22, f x = g x
+Source line 12:
+  refine Subsemigroup.closure_induction hx ?_ ?_
+                                        ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:13:11-13:12
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case refine_1
+M : Type u_1
+N : Type u_2
+inst✝¹ : Mul M
+inst✝ : Mul N
+f g : M →ₙ* N
+s : Set M
+h : Set.EqOn (⇑f) (⇑g) s
+x : M
+hx : x ∈ ↑(Subsemigroup.closure s)
+⊢ Type ?u.572.17
+Source line 13:
+  · intro y hy
+          ^
+Highlighted span: y
+
+ERROR .LspCheck.lean:15:3-15:23
+unsolved goals
+case refine_2
+M : Type u_1
+N : Type u_2
+inst✝¹ : Mul M
+inst✝ : Mul N
+f g : M →ₙ* N
+s : Set M
+h : Set.EqOn (⇑f) (⇑g) s
+x : M
+hx : x ∈ Subsemigroup.closure s
+⊢ Mul sorry
+Source line 15:
+  · simp_all [map_mul]
+  ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simp_all [map_mul]
+
+ERROR .LspCheck.lean:10:46-11:1
+unsolved goals
+case refine_3
+M : Type u_1
+N : Type u_2
+inst✝¹ : Mul M
+inst✝ : Mul N
+f g : M →ₙ* N
+s : Set M
+h : Set.EqOn (⇑f) (⇑g) s
+x : M
+hx : x ∈ ↑(Subsemigroup.closure s)
+⊢ Set sorry
+
+case refine_4
+M : Type u_1
+N : Type u_2
+inst✝¹ : Mul M
+inst✝ : Mul N
+f g : M →ₙ* N
+s : Set M
+h : Set.EqOn (⇑f) (⇑g) s
+x : M
+hx : x ∈ ↑(Subsemigroup.closure s)
+⊢ ∀ x_1 ∈ ?refine_3, f x = g x
+
+case refine_5
+M : Type u_1
+N : Type u_2
+inst✝¹ : Mul M
+inst✝ : Mul N
+f g : M →ₙ* N
+s : Set M
+h : Set.EqOn (⇑f) (⇑g) s
+x : M
+hx : x ∈ ↑(Subsemigroup.closure s)
+⊢ sorry
+
+case refine_6
+M : Type u_1
+N : Type u_2
+inst✝¹ : Mul M
+inst✝ : Mul N
+f g : M →ₙ* N
+s : Set M
+h : Set.EqOn (⇑f) (⇑g) s
+x : M
+hx : x ∈ ↑(Subsemigroup.closure s)
+⊢ ?refine_5 ∈ Subsemigroup.closure ?refine_3
+
+case refine_7
+M : Type u_1
+N : Type u_2
+inst✝¹ : Mul M
+inst✝ : Mul N
+f g : M →ₙ* N
+s : Set M
+h : Set.EqOn (⇑f) (⇑g) s
+x : M
+hx : x ∈ ↑(Subsemigroup.closure s)
+⊢ ∀ (x_1 y : sorry),
+    x_1 ∈ Subsemigroup.closure ?refine_3 → y ∈ Subsemigroup.closure ?refine_3 → f x = g x → f x = g x → f x = g x
+Source line 10:
+    Set.EqOn f g (Subsemigroup.closure s) := by
+                                             ^
+Highlighted span: b
+
+WARNING .LspCheck.lean:15:15-15:22
+This simp argument is unused:
+  map_mul
+
+Hint: Omit it from the simp argument list.
+  simp_all ̵[̵m̵a̵p̵_̵m̵u̵l̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 15:
+  · simp_all [map_mul]
+              ^^^^^^^
+Highlighted span: map_mul
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:41-12:43
+Type mismatch
+  hx
+has type
+  x ∈ ↑(Subsemigroup.closure s)
+but is expected to have type
+  ∀ x_1 ∈ ?m.22, f x = g x
+Source line 12:
+  refine Subsemigroup.closure_induction hx ?_ ?_
+                                        ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:13:11-13:12
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case refine_1
+M : Type u_1
+N : Type u_2
+inst✝¹ : Mul M
+inst✝ : Mul N
+f g : M →ₙ* N
+s : Set M
+h : Set.EqOn (⇑f) (⇑g) s
+x : M
+hx : x ∈ ↑(Subsemigroup.closure s)
+⊢ Type ?u.572.17
+Source line 13:
+  · intro y hy
+          ^
+Highlighted span: y
+
+ERROR .LspCheck.lean:15:3-15:23
+unsolved goals
+case refine_2
+M : Type u_1
+N : Type u_2
+inst✝¹ : Mul M
+inst✝ : Mul N
+f g : M →ₙ* N
+s : Set M
+h : Set.EqOn (⇑f) (⇑g) s
+x : M
+hx : x ∈ Subsemigroup.closure s
+⊢ Mul sorry
+Source line 15:
+  · simp_all [map_mul]
+  ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simp_all [map_mul]
+
+ERROR .LspCheck.lean:10:46-11:1
+unsolved goals
+case refine_3
+M : Type u_1
+N : Type u_2
+inst✝¹ : Mul M
+inst✝ : Mul N
+f g : M →ₙ* N
+s : Set M
+h : Set.EqOn (⇑f) (⇑g) s
+x : M
+hx : x ∈ ↑(Subsemigroup.closure s)
+⊢ Set sorry
+
+case refine_4
+M : Type u_1
+N : Type u_2
+inst✝¹ : Mul M
+inst✝ : Mul N
+f g : M →ₙ* N
+s : Set M
+h : Set.EqOn (⇑f) (⇑g) s
+x : M
+hx : x ∈ ↑(Subsemigroup.closure s)
+⊢ ∀ x_1 ∈ ?refine_3, f x = g x
+
+case refine_5
+M : Type u_1
+N : Type u_2
+inst✝¹ : Mul M
+inst✝ : Mul N
+f g : M →ₙ* N
+s : Set M
+h : Set.EqOn (⇑f) (⇑g) s
+x : M
+hx : x ∈ ↑(Subsemigroup.closure s)
+⊢ sorry
+
+case refine_6
+M : Type u_1
+N : Type u_2
+inst✝¹ : Mul M
+inst✝ : Mul N
+f g : M →ₙ* N
+s : Set M
+h : Set.EqOn (⇑f) (⇑g) s
+x : M
+hx : x ∈ ↑(Subsemigroup.closure s)
+⊢ ?refine_5 ∈ Subsemigroup.closure ?refine_3
+
+case refine_7
+M : Type u_1
+N : Type u_2
+inst✝¹ : Mul M
+inst✝ : Mul N
+f g : M →ₙ* N
+s : Set M
+h : Set.EqOn (⇑f) (⇑g) s
+x : M
+hx : x ∈ ↑(Subsemigroup.closure s)
+⊢ ∀ (x_1 y : sorry),
+    x_1 ∈ Subsemigroup.closure ?refine_3 → y ∈ Subsemigroup.closure ?refine_3 → f x = g x → f x = g x → f x = g x
+Source line 10:
+    Set.EqOn f g (Subsemigroup.closure s) := by
+                                             ^
+Highlighted span: b
+
+WARNING .LspCheck.lean:15:15-15:22
+This simp argument is unused:
+  map_mul
+
+Hint: Omit it from the simp argument list.
+  simp_all ̵[̵m̵a̵p̵_̵m̵u̵l̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 15:
+  · simp_all [map_mul]
+              ^^^^^^^
+Highlighted span: map_mul
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M : Type*} {N : Type*}
+
+variable [Mul M] {s : Set M}
+
+variable [Mul N]
+
+theorem eqOn_closure {f g : M →ₙ* N} {s : Set M} (h : Set.EqOn f g s) :
+    Set.EqOn f g (Subsemigroup.closure s) := by
+  intro x hx
+  refine Subsemigroup.closure_induction (s := s) (p := fun x => f x = g x) hx ?_ ?_
+  · intro y hy
+    exact h hy
+  · intro a b ha hb
+    simp [map_mul, ha, hb]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:65-12:74
+Type mismatch
+  f x = g x
+has type
+  Prop
+but is expected to have type
+  x ∈ Subsemigroup.closure s → Prop
+Source line 12:
+  refine Subsemigroup.closure_induction (s := s) (p := fun x => f x = g x) hx ?_ ?_
+                                                                ^^^^^^^^^
+Highlighted span: f x = g x
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:65-12:74
+Type mismatch
+  f x = g x
+has type
+  Prop
+but is expected to have type
+  x ∈ Subsemigroup.closure s → Prop
+Source line 12:
+  refine Subsemigroup.closure_induction (s := s) (p := fun x => f x = g x) hx ?_ ?_
+                                                                ^^^^^^^^^
+Highlighted span: f x = g x
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M : Type*} {N : Type*}
+
+variable [Mul M] {s : Set M}
+
+variable [Mul N]
+
+theorem eqOn_closure {f g : M →ₙ* N} {s : Set M} (h : Set.EqOn f g s) :
+    Set.EqOn f g (Subsemigroup.closure s) := by
+  intro x hx
+  let S : Subsemigroup M := Subsemigroup.mk (Set.EqOn f g (Subsemigroup.closure s)) ?_
+  · exact S.property hx
+  · intro a ha b hb
+    simp only [Set.mem_setOf_eq] at ha hb ⊢
+    rw [f.map_mul, g.map_mul, ha, hb]
+  · refine Subsemigroup.closure_le.2 ?_
+    intro y hy
+    exact h hy
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:45-12:84
+Application type mismatch: The argument
+  Set.EqOn ⇑f ⇑g ↑(Subsemigroup.closure s)
+has type
+  Prop
+of sort `Type` but is expected to have type
+  Set M
+of sort `Type u_1` in the application
+  Subsemigroup.mk (Set.EqOn ⇑f ⇑g ↑(Subsemigroup.closure s))
+Source line 12:
+  let S : Subsemigroup M := Subsemigroup.mk (Set.EqOn f g (Subsemigroup.closure s)) ?_
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (Set.EqOn f g (Subsemigroup.closure s))
+
+ERROR .LspCheck.lean:13:13-13:21
+Invalid field `property`: The environment does not contain `Subsemigroup.property`, so it is not possible to project the field `property` from an expression
+  S
+of type `Subsemigroup M`
+Source line 13:
+  · exact S.property hx
+            ^^^^^^^^
+Highlighted span: property
+
+ERROR .LspCheck.lean:17:3-18:1
+No goals to be solved
+Source line 17:
+  · refine Subsemigroup.closure_le.2 ?_
+  ^
+Highlighted span: ·
+
+WARNING .LspCheck.lean:15:16-15:32
+This simp argument is unused:
+  Set.mem_setOf_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵e̵t̵.̵m̵e̵m̵_̵s̵e̵t̵O̵f̵_̵e̵q̵]̵ ̵at ha hb ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 15:
+    simp only [Set.mem_setOf_eq] at ha hb ⊢
+               ^^^^^^^^^^^^^^^^
+Highlighted span: Set.mem_setOf_eq
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:45-12:84
+Application type mismatch: The argument
+  Set.EqOn ⇑f ⇑g ↑(Subsemigroup.closure s)
+has type
+  Prop
+of sort `Type` but is expected to have type
+  Set M
+of sort `Type u_1` in the application
+  Subsemigroup.mk (Set.EqOn ⇑f ⇑g ↑(Subsemigroup.closure s))
+Source line 12:
+  let S : Subsemigroup M := Subsemigroup.mk (Set.EqOn f g (Subsemigroup.closure s)) ?_
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (Set.EqOn f g (Subsemigroup.closure s))
+
+ERROR .LspCheck.lean:13:13-13:21
+Invalid field `property`: The environment does not contain `Subsemigroup.property`, so it is not possible to project the field `property` from an expression
+  S
+of type `Subsemigroup M`
+Source line 13:
+  · exact S.property hx
+            ^^^^^^^^
+Highlighted span: property
+
+ERROR .LspCheck.lean:17:3-18:1
+No goals to be solved
+Source line 17:
+  · refine Subsemigroup.closure_le.2 ?_
+  ^
+Highlighted span: ·
+
+WARNING .LspCheck.lean:15:16-15:32
+This simp argument is unused:
+  Set.mem_setOf_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵e̵t̵.̵m̵e̵m̵_̵s̵e̵t̵O̵f̵_̵e̵q̵]̵ ̵at ha hb ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 15:
+    simp only [Set.mem_setOf_eq] at ha hb ⊢
+               ^^^^^^^^^^^^^^^^
+Highlighted span: Set.mem_setOf_eq

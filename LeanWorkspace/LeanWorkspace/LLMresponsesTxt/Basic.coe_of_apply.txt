@@ -1,0 +1,376 @@
+FILE: Basic.coe_of_apply.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.coe_of_apply.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable (ι : Type v) (β : ι → Type w)
+
+variable [∀ i, AddCommMonoid (β i)]
+
+theorem coe_of_apply {M S : Type*} [DecidableEq ι] [AddCommMonoid M] [SetLike S M]
+    [AddSubmonoidClass S M] {A : ι → S} (i j : ι) (x : A i) :
+    (DirectSum.of (fun i ↦ {x // x ∈ A i}) i x j : M) = if i = j then x else 0 := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (ι : Type v) (β : ι → Type w)
+
+variable [∀ i, AddCommMonoid (β i)]
+
+theorem coe_of_apply {M S : Type*} [DecidableEq ι] [AddCommMonoid M] [SetLike S M]
+    [AddSubmonoidClass S M] {A : ι → S} (i j : ι) (x : A i) :
+    (DirectSum.of (fun i ↦ {x // x ∈ A i}) i x j : M) = if i = j then x else 0 := by
+  by_cases h : i = j
+  · subst h
+    simp [DirectSum.of]
+  · simp [DirectSum.of, h]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:3-12:1
+unsolved goals
+case pos
+ι : Type v
+M : Type u_1
+S : Type u_2
+inst✝³ : DecidableEq ι
+inst✝² : AddCommMonoid M
+inst✝¹ : SetLike S M
+inst✝ : AddSubmonoidClass S M
+A : ι → S
+i : ι
+x : ↥(A i)
+⊢ ((DFinsupp.singleAddHom (fun i ↦ ↥(A i)) i) x) i = x
+Source line 11:
+  · subst h
+  ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:13:3-13:27
+unsolved goals
+case neg
+ι : Type v
+M : Type u_1
+S : Type u_2
+inst✝³ : DecidableEq ι
+inst✝² : AddCommMonoid M
+inst✝¹ : SetLike S M
+inst✝ : AddSubmonoidClass S M
+A : ι → S
+i j : ι
+x : ↥(A i)
+h : ¬i = j
+⊢ ((DFinsupp.singleAddHom (fun i ↦ ↥(A i)) i) x) j = 0
+Source line 13:
+  · simp [DirectSum.of, h]
+  ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simp [DirectSum.of, h]
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:3-12:1
+unsolved goals
+case pos
+ι : Type v
+M : Type u_1
+S : Type u_2
+inst✝³ : DecidableEq ι
+inst✝² : AddCommMonoid M
+inst✝¹ : SetLike S M
+inst✝ : AddSubmonoidClass S M
+A : ι → S
+i : ι
+x : ↥(A i)
+⊢ ((DFinsupp.singleAddHom (fun i ↦ ↥(A i)) i) x) i = x
+Source line 11:
+  · subst h
+  ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:13:3-13:27
+unsolved goals
+case neg
+ι : Type v
+M : Type u_1
+S : Type u_2
+inst✝³ : DecidableEq ι
+inst✝² : AddCommMonoid M
+inst✝¹ : SetLike S M
+inst✝ : AddSubmonoidClass S M
+A : ι → S
+i j : ι
+x : ↥(A i)
+h : ¬i = j
+⊢ ((DFinsupp.singleAddHom (fun i ↦ ↥(A i)) i) x) j = 0
+Source line 13:
+  · simp [DirectSum.of, h]
+  ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simp [DirectSum.of, h]
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (ι : Type v) (β : ι → Type w)
+
+variable [∀ i, AddCommMonoid (β i)]
+
+theorem coe_of_apply {M S : Type*} [DecidableEq ι] [AddCommMonoid M] [SetLike S M]
+    [AddSubmonoidClass S M] {A : ι → S} (i j : ι) (x : A i) :
+    (DirectSum.of (fun i ↦ {x // x ∈ A i}) i x j : M) = if i = j then x else 0 := by
+  by_cases h : i = j
+  · subst h
+    rw [DirectSum.of_eq_same]
+    rfl
+  · rw [DirectSum.of_eq_of_ne h]
+    simp [h]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:5-13:8
+Tactic `rfl` failed: The left-hand side
+  ↑x
+is not definitionally equal to the right-hand side
+  ↑(if i = i then x else 0)
+
+case pos
+ι : Type v
+M : Type u_1
+S : Type u_2
+inst✝³ : DecidableEq ι
+inst✝² : AddCommMonoid M
+inst✝¹ : SetLike S M
+inst✝ : AddSubmonoidClass S M
+A : ι → S
+i : ι
+x : ↥(A i)
+⊢ ↑x = ↑(if i = i then x else 0)
+Source line 13:
+    rfl
+    ^^^
+Highlighted span: rfl
+
+ERROR .LspCheck.lean:14:9-14:32
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ((DirectSum.of ?m.48 ?m.51) ?x) ?j
+in the target expression
+  ↑(((DirectSum.of (fun i ↦ ↥(A i)) i) x) j) = ↑(if i = j then x else 0)
+
+case neg
+ι : Type v
+M : Type u_1
+S : Type u_2
+inst✝³ : DecidableEq ι
+inst✝² : AddCommMonoid M
+inst✝¹ : SetLike S M
+inst✝ : AddSubmonoidClass S M
+A : ι → S
+i j : ι
+x : ↥(A i)
+h : ¬i = j
+⊢ ↑(((DirectSum.of (fun i ↦ ↥(A i)) i) x) j) = ↑(if i = j then x else 0)
+Source line 14:
+  · rw [DirectSum.of_eq_of_ne h]
+        ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: DirectSum.of_eq_of_ne h
+
+ERROR .LspCheck.lean:14:31-14:32
+Application type mismatch: The argument
+  h
+has type
+  ¬i = j
+of sort `Prop` but is expected to have type
+  ?m.47
+of sort `Type ?u.31283.29152` in the application
+  DirectSum.of_eq_of_ne h
+Source line 14:
+  · rw [DirectSum.of_eq_of_ne h]
+                              ^
+Highlighted span: h
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:5-13:8
+Tactic `rfl` failed: The left-hand side
+  ↑x
+is not definitionally equal to the right-hand side
+  ↑(if i = i then x else 0)
+
+case pos
+ι : Type v
+M : Type u_1
+S : Type u_2
+inst✝³ : DecidableEq ι
+inst✝² : AddCommMonoid M
+inst✝¹ : SetLike S M
+inst✝ : AddSubmonoidClass S M
+A : ι → S
+i : ι
+x : ↥(A i)
+⊢ ↑x = ↑(if i = i then x else 0)
+Source line 13:
+    rfl
+    ^^^
+Highlighted span: rfl
+
+ERROR .LspCheck.lean:14:9-14:32
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ((DirectSum.of ?m.48 ?m.51) ?x) ?j
+in the target expression
+  ↑(((DirectSum.of (fun i ↦ ↥(A i)) i) x) j) = ↑(if i = j then x else 0)
+
+case neg
+ι : Type v
+M : Type u_1
+S : Type u_2
+inst✝³ : DecidableEq ι
+inst✝² : AddCommMonoid M
+inst✝¹ : SetLike S M
+inst✝ : AddSubmonoidClass S M
+A : ι → S
+i j : ι
+x : ↥(A i)
+h : ¬i = j
+⊢ ↑(((DirectSum.of (fun i ↦ ↥(A i)) i) x) j) = ↑(if i = j then x else 0)
+Source line 14:
+  · rw [DirectSum.of_eq_of_ne h]
+        ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: DirectSum.of_eq_of_ne h
+
+ERROR .LspCheck.lean:14:31-14:32
+Application type mismatch: The argument
+  h
+has type
+  ¬i = j
+of sort `Prop` but is expected to have type
+  ?m.47
+of sort `Type ?u.31283.29152` in the application
+  DirectSum.of_eq_of_ne h
+Source line 14:
+  · rw [DirectSum.of_eq_of_ne h]
+                              ^
+Highlighted span: h
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (ι : Type v) (β : ι → Type w)
+
+variable [∀ i, AddCommMonoid (β i)]
+
+theorem coe_of_apply {M S : Type*} [DecidableEq ι] [AddCommMonoid M] [SetLike S M]
+    [AddSubmonoidClass S M] {A : ι → S} (i j : ι) (x : A i) :
+    (DirectSum.of (fun i ↦ {x // x ∈ A i}) i x j : M) = if i = j then x else 0 := by
+  classical
+  by_cases h : i = j
+  · subst h
+    simp [DirectSum.of]
+  · simp [DirectSum.of, h]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:3-13:1
+unsolved goals
+case pos
+ι : Type v
+M : Type u_1
+S : Type u_2
+inst✝³ : DecidableEq ι
+inst✝² : AddCommMonoid M
+inst✝¹ : SetLike S M
+inst✝ : AddSubmonoidClass S M
+A : ι → S
+i : ι
+x : ↥(A i)
+⊢ ((DFinsupp.singleAddHom (fun i ↦ ↥(A i)) i) x) i = x
+Source line 12:
+  · subst h
+  ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:14:3-14:27
+unsolved goals
+case neg
+ι : Type v
+M : Type u_1
+S : Type u_2
+inst✝³ : DecidableEq ι
+inst✝² : AddCommMonoid M
+inst✝¹ : SetLike S M
+inst✝ : AddSubmonoidClass S M
+A : ι → S
+i j : ι
+x : ↥(A i)
+h : ¬i = j
+⊢ ((DFinsupp.singleAddHom (fun i ↦ ↥(A i)) i) x) j = 0
+Source line 14:
+  · simp [DirectSum.of, h]
+  ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simp [DirectSum.of, h]
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:3-13:1
+unsolved goals
+case pos
+ι : Type v
+M : Type u_1
+S : Type u_2
+inst✝³ : DecidableEq ι
+inst✝² : AddCommMonoid M
+inst✝¹ : SetLike S M
+inst✝ : AddSubmonoidClass S M
+A : ι → S
+i : ι
+x : ↥(A i)
+⊢ ((DFinsupp.singleAddHom (fun i ↦ ↥(A i)) i) x) i = x
+Source line 12:
+  · subst h
+  ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:14:3-14:27
+unsolved goals
+case neg
+ι : Type v
+M : Type u_1
+S : Type u_2
+inst✝³ : DecidableEq ι
+inst✝² : AddCommMonoid M
+inst✝¹ : SetLike S M
+inst✝ : AddSubmonoidClass S M
+A : ι → S
+i j : ι
+x : ↥(A i)
+h : ¬i = j
+⊢ ((DFinsupp.singleAddHom (fun i ↦ ↥(A i)) i) x) j = 0
+Source line 14:
+  · simp [DirectSum.of, h]
+  ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simp [DirectSum.of, h]

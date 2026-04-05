@@ -12,6 +12,7 @@ import tempfile
 import urllib.error
 import urllib.request
 from pathlib import Path
+from urllib.parse import unquote, urlparse
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -309,32 +310,273 @@ def format_lean_output(raw_output: str, source_path: Path) -> str:
     return "\n".join(formatted).rstrip()
 
 
-def compile_candidate(content: str, filename: str) -> tuple[bool, str]:
-    LLM_SOLUTIONS_ROOT.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile(
-        "w",
-        encoding="utf-8",
-        suffix=f".{filename}",
-        prefix=".tmp_",
-        dir=LLM_SOLUTIONS_ROOT,
-        delete=False,
-    ) as handle:
-        handle.write(content)
-        temp_path = Path(handle.name)
+def path_to_file_uri(path: Path) -> str:
+    return path.resolve().as_uri()
 
-    try:
-        relative_path = temp_path.relative_to(LEAN_WORKSPACE_ROOT)
-        result = subprocess.run(
-            ["lake", "env", "lean", "--json", str(relative_path)],
-            cwd=LEAN_WORKSPACE_ROOT,
-            capture_output=True,
-            text=True,
+
+def file_uri_to_path(uri: str) -> Path:
+    parsed = urlparse(uri)
+    if parsed.scheme != "file":
+        raise ValueError(f"Expected file URI, got: {uri}")
+    return Path(unquote(parsed.path))
+
+
+class LeanServerClient:
+    def __init__(self, workspace_root: Path, check_file: Path):
+        self.workspace_root = workspace_root.resolve()
+        self.check_file = check_file.resolve()
+        self.uri = path_to_file_uri(self.check_file)
+        self.version = 0
+        self.next_id = 1
+        self.is_open = False
+
+        self.check_file.parent.mkdir(parents=True, exist_ok=True)
+        self.check_file.write_text("", encoding="utf-8")
+
+        self.proc = subprocess.Popen(
+            ["lake", "env", "lean", "--server"],
+            cwd=self.workspace_root,
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
         )
-        raw_output = ((result.stdout or "") + (result.stderr or "")).strip()
-        output = format_lean_output(raw_output, temp_path)
-        return result.returncode == 0, output
-    finally:
-        temp_path.unlink(missing_ok=True)
+        if self.proc.stdin is None or self.proc.stdout is None:
+            raise RuntimeError("Failed to start Lean server with stdio pipes.")
+
+        self._initialize()
+
+    def close(self) -> None:
+        if self.proc.poll() is None:
+            try:
+                if self.is_open:
+                    self._send_notification(
+                        "textDocument/didClose",
+                        {"textDocument": {"uri": self.uri}},
+                    )
+                shutdown_id = self._next_id()
+                self._send_request(shutdown_id, "shutdown", None)
+                self._read_until_response(shutdown_id)
+                self._send_notification("exit", None)
+            except Exception:
+                pass
+            try:
+                self.proc.kill()
+            except Exception:
+                pass
+        self.check_file.unlink(missing_ok=True)
+
+    def check_content(self, content: str) -> tuple[bool, str]:
+        self.version += 1
+        self.check_file.write_text(content, encoding="utf-8")
+
+        if not self.is_open:
+            self._send_notification(
+                "textDocument/didOpen",
+                {
+                    "textDocument": {
+                        "uri": self.uri,
+                        "languageId": "lean",
+                        "version": self.version,
+                        "text": content,
+                    }
+                },
+            )
+            self.is_open = True
+        else:
+            self._send_notification(
+                "textDocument/didChange",
+                {
+                    "textDocument": {
+                        "uri": self.uri,
+                        "version": self.version,
+                    },
+                    "contentChanges": [{"text": content}],
+                },
+            )
+
+        wait_id = self._next_id()
+        self._send_request(
+            wait_id,
+            "textDocument/waitForDiagnostics",
+            {"uri": self.uri, "version": self.version},
+        )
+        last_diagnostics = self._read_until_response(wait_id)
+        diagnostics = []
+        if isinstance(last_diagnostics, dict):
+            diagnostics = list(last_diagnostics.get("diagnostics", []))
+
+        output = self._format_diagnostics(diagnostics, content, self.check_file.name)
+        has_error = any(self._is_error_diagnostic(diagnostic) for diagnostic in diagnostics)
+        return not has_error, output
+
+    def _initialize(self) -> None:
+        init_id = self._next_id()
+        self._send_request(
+            init_id,
+            "initialize",
+            {
+                "processId": None,
+                "rootUri": path_to_file_uri(self.workspace_root),
+                "capabilities": {
+                    "textDocument": {},
+                    "workspace": {},
+                    "lean": {"silentDiagnosticSupport": True},
+                },
+                "initializationOptions": {
+                    "hasWidgets": False,
+                },
+            },
+        )
+        self._read_until_response(init_id)
+        self._send_notification("initialized", {})
+
+    def _next_id(self) -> int:
+        current = self.next_id
+        self.next_id += 1
+        return current
+
+    def _send_request(self, request_id: int, method: str, params: object) -> None:
+        payload = {"jsonrpc": "2.0", "id": request_id, "method": method}
+        if params is not None:
+            payload["params"] = params
+        self._send_message(payload)
+
+    def _send_notification(self, method: str, params: object) -> None:
+        payload = {"jsonrpc": "2.0", "method": method}
+        if params is not None:
+            payload["params"] = params
+        self._send_message(payload)
+
+    def _send_response(self, request_id: object, result: object) -> None:
+        self._send_message({"jsonrpc": "2.0", "id": request_id, "result": result})
+
+    def _send_message(self, payload: dict[str, object]) -> None:
+        raw = json.dumps(payload).encode("utf-8")
+        header = f"Content-Length: {len(raw)}\r\n\r\n".encode("ascii")
+        assert self.proc.stdin is not None
+        self.proc.stdin.write(header)
+        self.proc.stdin.write(raw)
+        self.proc.stdin.flush()
+
+    def _read_message(self) -> dict[str, object]:
+        assert self.proc.stdout is not None
+        headers: dict[str, str] = {}
+        while True:
+            line = self.proc.stdout.readline()
+            if not line:
+                raise RuntimeError("Lean server closed its stdout unexpectedly.")
+            if line in (b"\r\n", b"\n"):
+                break
+            header_line = line.decode("utf-8").strip()
+            if ":" in header_line:
+                key, value = header_line.split(":", 1)
+                headers[key.strip().lower()] = value.strip()
+
+        content_length = int(headers.get("content-length", "0"))
+        body = self.proc.stdout.read(content_length)
+        if len(body) != content_length:
+            raise RuntimeError("Lean server returned a truncated message body.")
+        payload = json.loads(body.decode("utf-8"))
+        if not isinstance(payload, dict):
+            raise RuntimeError(f"Unexpected Lean server payload: {payload}")
+        return payload
+
+    def _read_until_response(self, request_id: int) -> dict[str, object] | None:
+        diagnostics_by_key: dict[str, object] = {}
+        last_publish_meta: dict[str, object] | None = None
+        while True:
+            message = self._read_message()
+            if "method" in message:
+                method = message["method"]
+                if message.get("id") is not None:
+                    self._send_response(message["id"], None)
+                    continue
+                if method == "textDocument/publishDiagnostics":
+                    params = message.get("params")
+                    if isinstance(params, dict) and params.get("uri") == self.uri:
+                        last_publish_meta = params
+                        for diagnostic in params.get("diagnostics", []):
+                            diagnostics_by_key[json.dumps(diagnostic, sort_keys=True)] = diagnostic
+                    continue
+                continue
+
+            if message.get("id") == request_id:
+                if "error" in message:
+                    raise RuntimeError(f"Lean server request failed: {message['error']}")
+                if last_publish_meta is None:
+                    return None
+                merged = dict(last_publish_meta)
+                merged["diagnostics"] = list(diagnostics_by_key.values())
+                return merged
+
+    @staticmethod
+    def _is_error_diagnostic(diagnostic: object) -> bool:
+        if not isinstance(diagnostic, dict):
+            return False
+        severity = diagnostic.get("severity")
+        return severity == 1 or severity == "error"
+
+    @staticmethod
+    def _severity_name(severity: object) -> str:
+        if severity == 1:
+            return "ERROR"
+        if severity == 2:
+            return "WARNING"
+        if severity == 3:
+            return "INFORMATION"
+        if severity == 4:
+            return "HINT"
+        return str(severity).upper() if severity is not None else "UNKNOWN"
+
+    def _format_diagnostics(
+        self, diagnostics: list[object], content: str, display_name: str
+    ) -> str:
+        if not diagnostics:
+            return ""
+
+        lines = content.splitlines()
+        formatted: list[str] = []
+        for diagnostic in diagnostics:
+            if not isinstance(diagnostic, dict):
+                continue
+            range_info = diagnostic.get("range")
+            if not isinstance(range_info, dict):
+                continue
+            start = range_info.get("start")
+            end = range_info.get("end")
+            if not isinstance(start, dict) or not isinstance(end, dict):
+                continue
+
+            line_no = int(start.get("line", 0)) + 1
+            col_no = int(start.get("character", 0)) + 1
+            end_line = int(end.get("line", start.get("line", 0))) + 1
+            end_col = int(end.get("character", start.get("character", 0))) + 1
+            severity = self._severity_name(diagnostic.get("severity"))
+            message = str(diagnostic.get("message", "")).rstrip()
+            formatted.extend(
+                [
+                    f"{severity} {display_name}:{line_no}:{col_no}-{end_line}:{end_col}",
+                    message,
+                ]
+            )
+
+            if 1 <= line_no <= len(lines):
+                line = lines[line_no - 1]
+                start_idx = max(col_no - 1, 0)
+                end_idx = max(end_col - 1, start_idx + 1)
+                excerpt = line[start_idx:end_idx] or line[start_idx : start_idx + 1]
+                underline = " " * start_idx + "^" * max(len(excerpt), 1)
+                formatted.extend(
+                    [
+                        f"Source line {line_no}:",
+                        line,
+                        underline,
+                        f"Highlighted span: {excerpt}",
+                    ]
+                )
+            formatted.append("")
+
+        return "\n".join(formatted).rstrip()
 
 
 def final_output_for_failure(content: str) -> str:
@@ -362,7 +604,9 @@ def save_results_log(results: dict[str, dict[str, object]]) -> None:
     )
 
 
-def solve_file(target_file: Path, *, api_key: str) -> tuple[str, str, int, str]:
+def solve_file(
+    target_file: Path, *, api_key: str, lean_client: LeanServerClient
+) -> tuple[str, str, int, str]:
     theorem_text = theorem_with_sorry(target_file.read_text(encoding="utf-8"))
     last_candidate = ""
     last_error = ""
@@ -383,7 +627,7 @@ def solve_file(target_file: Path, *, api_key: str) -> tuple[str, str, int, str]:
         candidate = extract_lean_file_text(raw_response)
         conversation.append(make_message("assistant", candidate))
         transcript_parts.append(format_message_for_transcript("assistant", candidate))
-        ok, lean_output = compile_candidate(candidate, target_file.name)
+        ok, lean_output = lean_client.check_content(candidate)
         if ok:
             print(f"{attempt}. ATTEMPT PASS")
             transcript_parts.extend(
@@ -431,39 +675,48 @@ def main() -> int:
     LLM_RESPONSES_TXT_ROOT.mkdir(parents=True, exist_ok=True)
     results_log = load_results_log()
     targets = verified_target_files(source)
+    lean_client = LeanServerClient(
+        LEAN_WORKSPACE_ROOT,
+        LLM_SOLUTIONS_ROOT / ".LspCheck.lean",
+    )
 
     completed = 0
     skipped = 0
 
-    for target_file in targets:
-        if PARAM_MAX_SOLUTIONS is not None and completed >= PARAM_MAX_SOLUTIONS:
-            print(f"STOPPED reached PARAM_MAX_SOLUTIONS={PARAM_MAX_SOLUTIONS}")
-            break
+    try:
+        for target_file in targets:
+            if PARAM_MAX_SOLUTIONS is not None and completed >= PARAM_MAX_SOLUTIONS:
+                print(f"STOPPED reached PARAM_MAX_SOLUTIONS={PARAM_MAX_SOLUTIONS}")
+                break
 
-        destination = LLM_SOLUTIONS_ROOT / target_file.name
-        if destination.exists():
-            skipped += 1
-            print(f"SKIPPED {target_file.name}")
-            continue
+            destination = LLM_SOLUTIONS_ROOT / target_file.name
+            if destination.exists():
+                skipped += 1
+                print(f"SKIPPED {target_file.name}")
+                continue
 
-        print(f"SOLVING {target_file.name}")
-        try:
-            final_content, status, attempts, transcript = solve_file(
-                target_file, api_key=api_key
-            )
-        except Exception as exc:
-            print(f"ERROR {target_file.name}: {exc}", file=sys.stderr)
-            raise
+            print(f"SOLVING {target_file.name}")
+            try:
+                final_content, status, attempts, transcript = solve_file(
+                    target_file,
+                    api_key=api_key,
+                    lean_client=lean_client,
+                )
+            except Exception as exc:
+                print(f"ERROR {target_file.name}: {exc}", file=sys.stderr)
+                raise
 
-        destination.write_text(final_content, encoding="utf-8")
-        transcript_path_for(target_file).write_text(transcript, encoding="utf-8")
-        results_log[target_file.name] = {
-            "filename": target_file.name,
-            "status": status,
-            "attempts": attempts,
-        }
-        save_results_log(results_log)
-        completed += 1
+            destination.write_text(final_content, encoding="utf-8")
+            transcript_path_for(target_file).write_text(transcript, encoding="utf-8")
+            results_log[target_file.name] = {
+                "filename": target_file.name,
+                "status": status,
+                "attempts": attempts,
+            }
+            save_results_log(results_log)
+            completed += 1
+    finally:
+        lean_client.close()
 
     print(
         f"Processed {len(targets)} file(s); completed {completed}; skipped {skipped}."

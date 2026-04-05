@@ -1,0 +1,108 @@
+FILE: Basic.add_mul_div_left.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.add_mul_div_left.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R : Type u}
+
+variable [EuclideanDomain R]
+
+set_option backward.privateInPublic true in
+private def P (a b : R) : R × R × R → Prop
+  | (r, s, t) => (r : R) = a * s + b * t
+
+theorem add_mul_div_left (x y z : R) (h1 : y ≠ 0) (h2 : y ∣ x) : (x + y * z) / y = x / y + z := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type u}
+
+variable [EuclideanDomain R]
+
+set_option backward.privateInPublic true in
+private def P (a b : R) : R × R × R → Prop
+  | (r, s, t) => (r : R) = a * s + b * t
+
+theorem add_mul_div_left (x y z : R) (h1 : y ≠ 0) (h2 : y ∣ x) : (x + y * z) / y = x / y + z := by
+  rcases h2 with ⟨w, rfl⟩
+  rw [mul_add_div_right _ _ h1]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:7-13:24
+Unknown identifier `mul_add_div_right`
+Source line 13:
+  rw [mul_add_div_right _ _ h1]
+      ^^^^^^^^^^^^^^^^^
+Highlighted span: mul_add_div_right
+
+ERROR .LspCheck.lean:11:97-12:1
+unsolved goals
+R : Type u
+inst✝ : EuclideanDomain R
+y z : R
+h1 : y ≠ 0
+w : R
+⊢ (y * w + y * z) / y = y * w / y + z
+Source line 11:
+theorem add_mul_div_left (x y z : R) (h1 : y ≠ 0) (h2 : y ∣ x) : (x + y * z) / y = x / y + z := by
+                                                                                                ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:7-13:24
+Unknown identifier `mul_add_div_right`
+Source line 13:
+  rw [mul_add_div_right _ _ h1]
+      ^^^^^^^^^^^^^^^^^
+Highlighted span: mul_add_div_right
+
+ERROR .LspCheck.lean:11:97-12:1
+unsolved goals
+R : Type u
+inst✝ : EuclideanDomain R
+y z : R
+h1 : y ≠ 0
+w : R
+⊢ (y * w + y * z) / y = y * w / y + z
+Source line 11:
+theorem add_mul_div_left (x y z : R) (h1 : y ≠ 0) (h2 : y ∣ x) : (x + y * z) / y = x / y + z := by
+                                                                                                ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type u}
+
+variable [EuclideanDomain R]
+
+set_option backward.privateInPublic true in
+private def P (a b : R) : R × R × R → Prop
+  | (r, s, t) => (r : R) = a * s + b * t
+
+theorem add_mul_div_left (x y z : R) (h1 : y ≠ 0) (h2 : y ∣ x) : (x + y * z) / y = x / y + z := by
+  rcases h2 with ⟨w, rfl⟩
+  rw [← mul_add]
+  simp [h1]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

@@ -1,0 +1,46 @@
+FILE: Basic.Nontrivial.mul_right.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.Nontrivial.mul_right.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Pointwise
+
+variable {F α β γ : Type*}
+
+variable [Mul α] [IsRightCancelMul α] [DecidableEq α] {s t : Finset α} {a : α}
+
+theorem Nontrivial.mul_right : s.Nontrivial → t.Nonempty → (s * t).Nontrivial := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise
+
+variable {F α β γ : Type*}
+
+variable [Mul α] [IsRightCancelMul α] [DecidableEq α] {s t : Finset α} {a : α}
+
+theorem Nontrivial.mul_right : s.Nontrivial → t.Nonempty → (s * t).Nontrivial := by
+  intro hs ht
+  rcases hs with ⟨x, hx, y, hy, hxy⟩
+  rcases ht with ⟨z, hz⟩
+  refine ⟨x * z, ?_, y * z, ?_, ?_⟩
+  · exact Finset.mem_mul.mpr ⟨x, hx, z, hz, rfl⟩
+  · exact Finset.mem_mul.mpr ⟨y, hy, z, hz, rfl⟩
+  · intro h
+    apply hxy
+    exact mul_right_cancel h
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+PASS

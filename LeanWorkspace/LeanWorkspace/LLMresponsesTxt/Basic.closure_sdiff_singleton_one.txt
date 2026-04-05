@@ -1,0 +1,133 @@
+FILE: Basic.closure_sdiff_singleton_one.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.closure_sdiff_singleton_one.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {M : Type*} {N : Type*}
+
+variable {A : Type*}
+
+variable [MulOneClass M] {s : Set M}
+
+variable [AddZeroClass A] {t : Set A}
+
+variable (S : Submonoid M)
+
+variable {t : Set M}
+
+theorem closure_sdiff_singleton_one (s : Set M) : Submonoid.closure (s \ {1}) = Submonoid.closure s := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M : Type*} {N : Type*}
+
+variable {A : Type*}
+
+variable [MulOneClass M] {s : Set M}
+
+variable [AddZeroClass A] {t : Set A}
+
+variable (S : Submonoid M)
+
+variable {t : Set M}
+
+theorem closure_sdiff_singleton_one (s : Set M) : Submonoid.closure (s \ {1}) = Submonoid.closure s := by
+  rw [Submonoid.closure_eq]
+  ext x
+  constructor
+  · intro hx
+    exact SetLike.mem_coe.mp <| Submonoid.subset_closure <| by
+      exact hx
+  · intro hx
+    rcases Submonoid.closure_induction hx (fun y hy => ?_) ?_ ?_ with hx'
+    · exact hx'
+    · exact Submonoid.one_mem _
+    · intro a b ha hb
+      exact Submonoid.mul_mem _ ha hb
+  · by_cases h : y = 1
+    · subst h
+      exact Submonoid.one_mem _
+    · exact Submonoid.subset_closure <| by
+        refine ⟨hy, ?_⟩
+        simpa [Set.mem_singleton_iff] using h
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:7-16:27
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Submonoid.closure ↑?S
+in the target expression
+  Submonoid.closure (s \ {1}) = Submonoid.closure s
+
+M : Type u_1
+inst✝ : MulOneClass M
+s : Set M
+⊢ Submonoid.closure (s \ {1}) = Submonoid.closure s
+Source line 16:
+  rw [Submonoid.closure_eq]
+      ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submonoid.closure_eq
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:7-16:27
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Submonoid.closure ↑?S
+in the target expression
+  Submonoid.closure (s \ {1}) = Submonoid.closure s
+
+M : Type u_1
+inst✝ : MulOneClass M
+s : Set M
+⊢ Submonoid.closure (s \ {1}) = Submonoid.closure s
+Source line 16:
+  rw [Submonoid.closure_eq]
+      ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submonoid.closure_eq
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M : Type*} {N : Type*}
+
+variable {A : Type*}
+
+variable [MulOneClass M] {s : Set M}
+
+variable [AddZeroClass A] {t : Set A}
+
+variable (S : Submonoid M)
+
+variable {t : Set M}
+
+theorem closure_sdiff_singleton_one (s : Set M) : Submonoid.closure (s \ {1}) = Submonoid.closure s := by
+  apply le_antisymm
+  · exact Submonoid.closure_mono (by
+      intro x hx
+      exact hx.1)
+  · refine Submonoid.closure_le.2 ?_
+    intro x hx
+    by_cases h : x = 1
+    · subst h
+      exact Submonoid.one_mem _
+    · exact Submonoid.subset_closure ⟨hx, by simpa [Set.mem_singleton_iff] using h⟩
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

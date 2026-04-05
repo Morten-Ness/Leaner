@@ -1,0 +1,321 @@
+FILE: Basic.characteristic_iff_le_comap.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.characteristic_iff_le_comap.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {H K : Subgroup G}
+
+theorem characteristic_iff_le_comap : H.Characteristic ↔ ∀ ϕ : G ≃* G, H ≤ H.comap ϕ.toMonoidHom := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {H K : Subgroup G}
+
+theorem characteristic_iff_le_comap : H.Characteristic ↔ ∀ ϕ : G ≃* G, H ≤ H.comap ϕ.toMonoidHom := by
+  constructor
+  · intro h ϕ
+    intro x hx
+    change ϕ x ∈ H
+    exact h ϕ hx
+  · intro h
+    constructor
+    intro ϕ x hx
+    have hx' : x ∈ H.comap ((ϕ.symm).toMonoidHom) := h ϕ.symm hx
+    change ϕ.symm x ∈ H at hx'
+    simpa using hx'
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:11-16:17
+Function expected at
+  h
+but this term has type
+  H.Characteristic
+
+Note: Expected a function because this term is being applied to the argument
+  ϕ
+Source line 16:
+    exact h ϕ hx
+          ^^^^^^
+Highlighted span: h ϕ hx
+
+ERROR .LspCheck.lean:19:13-19:14
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case mpr.fixed
+G : Type u_1
+inst✝ : Group G
+H : Subgroup G
+h : ∀ (ϕ : G ≃* G), H ≤ Subgroup.comap ϕ.toMonoidHom H
+ϕ : G ≃* G
+⊢ Subgroup.comap ϕ.toMonoidHom H = H
+Source line 19:
+    intro ϕ x hx
+            ^
+Highlighted span: x
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:11-16:17
+Function expected at
+  h
+but this term has type
+  H.Characteristic
+
+Note: Expected a function because this term is being applied to the argument
+  ϕ
+Source line 16:
+    exact h ϕ hx
+          ^^^^^^
+Highlighted span: h ϕ hx
+
+ERROR .LspCheck.lean:19:13-19:14
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case mpr.fixed
+G : Type u_1
+inst✝ : Group G
+H : Subgroup G
+h : ∀ (ϕ : G ≃* G), H ≤ Subgroup.comap ϕ.toMonoidHom H
+ϕ : G ≃* G
+⊢ Subgroup.comap ϕ.toMonoidHom H = H
+Source line 19:
+    intro ϕ x hx
+            ^
+Highlighted span: x
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {H K : Subgroup G}
+
+theorem characteristic_iff_le_comap : H.Characteristic ↔ ∀ ϕ : G ≃* G, H ≤ H.comap ϕ.toMonoidHom := by
+  constructor
+  · intro h ϕ x hx
+    exact h.mem_map_iff.mp <| show ϕ x ∈ H.map ϕ.toMonoidHom by
+      exact Subgroup.mem_map_of_mem _ hx
+  · intro h
+    refine Subgroup.characteristic_iff_comap_eq.mp ?_
+    intro ϕ
+    apply le_antisymm
+    · exact h ϕ
+    · intro x hx
+      have : ϕ x ∈ H := hx
+      have hsymm : ϕ x ∈ H.comap (ϕ.symm.toMonoidHom) := h ϕ.symm this
+      simpa using hsymm
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:13-14:24
+Invalid field `mem_map_iff`: The environment does not contain `Subgroup.Characteristic.mem_map_iff`, so it is not possible to project the field `mem_map_iff` from an expression
+  h
+of type `H.Characteristic`
+Source line 14:
+    exact h.mem_map_iff.mp <| show ϕ x ∈ H.map ϕ.toMonoidHom by
+            ^^^^^^^^^^^
+Highlighted span: mem_map_iff
+
+ERROR .LspCheck.lean:17:5-17:54
+Type mismatch
+  Subgroup.characteristic_iff_comap_eq.mp ?m.37
+has type
+  ∀ (ϕ : ?m.32 ≃* ?m.32), Subgroup.comap ϕ.toMonoidHom ?m.34 = ?m.34
+but is expected to have type
+  H.Characteristic
+Source line 17:
+    refine Subgroup.characteristic_iff_comap_eq.mp ?_
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: refine Subgroup.characteristic_iff_comap_eq.mp ?_
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:13-14:24
+Invalid field `mem_map_iff`: The environment does not contain `Subgroup.Characteristic.mem_map_iff`, so it is not possible to project the field `mem_map_iff` from an expression
+  h
+of type `H.Characteristic`
+Source line 14:
+    exact h.mem_map_iff.mp <| show ϕ x ∈ H.map ϕ.toMonoidHom by
+            ^^^^^^^^^^^
+Highlighted span: mem_map_iff
+
+ERROR .LspCheck.lean:17:5-17:54
+Type mismatch
+  Subgroup.characteristic_iff_comap_eq.mp ?m.37
+has type
+  ∀ (ϕ : ?m.32 ≃* ?m.32), Subgroup.comap ϕ.toMonoidHom ?m.34 = ?m.34
+but is expected to have type
+  H.Characteristic
+Source line 17:
+    refine Subgroup.characteristic_iff_comap_eq.mp ?_
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: refine Subgroup.characteristic_iff_comap_eq.mp ?_
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {H K : Subgroup G}
+
+theorem characteristic_iff_le_comap : H.Characteristic ↔ ∀ ϕ : G ≃* G, H ≤ H.comap ϕ.toMonoidHom := by
+  rw [Subgroup.characteristic_iff_comap_eq]
+  constructor
+  · intro h ϕ
+    rw [← h ϕ]
+    exact le_rfl
+  · intro h ϕ
+    apply le_antisymm
+    · exact h ϕ
+    · intro x hx
+      have hx' : ϕ x ∈ H := hx
+      have hsymm := h ϕ.symm hx'
+      simpa using hsymm
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:11-16:17
+typeclass instance problem is stuck
+  Preorder ?m.31
+
+Note: Lean will not try to resolve this typeclass instance problem because the type argument to `Preorder` is a metavariable. This argument must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+Source line 16:
+    exact le_rfl
+          ^^^^^^
+Highlighted span: le_rfl
+
+ERROR .LspCheck.lean:19:7-19:16
+Type mismatch
+  h ϕ
+has type
+  H ≤ Subgroup.comap ϕ.toMonoidHom H
+but is expected to have type
+  Subgroup.comap ϕ.toMonoidHom H ≤ H
+Source line 19:
+    · exact h ϕ
+      ^^^^^^^^^
+Highlighted span: exact h ϕ
+
+ERROR .LspCheck.lean:21:29-21:31
+Type mismatch
+  hx
+has type
+  x ∈ H
+but is expected to have type
+  ϕ x ∈ H
+Source line 21:
+      have hx' : ϕ x ∈ H := hx
+                            ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:23:7-23:24
+Type mismatch: After simplification, term
+  hsymm
+ has type
+  x ∈ H
+but is expected to have type
+  ϕ x ∈ H
+Source line 23:
+      simpa using hsymm
+      ^^^^^^^^^^^^^^^^^
+Highlighted span: simpa using hsymm
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:11-16:17
+typeclass instance problem is stuck
+  Preorder ?m.31
+
+Note: Lean will not try to resolve this typeclass instance problem because the type argument to `Preorder` is a metavariable. This argument must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+Source line 16:
+    exact le_rfl
+          ^^^^^^
+Highlighted span: le_rfl
+
+ERROR .LspCheck.lean:19:7-19:16
+Type mismatch
+  h ϕ
+has type
+  H ≤ Subgroup.comap ϕ.toMonoidHom H
+but is expected to have type
+  Subgroup.comap ϕ.toMonoidHom H ≤ H
+Source line 19:
+    · exact h ϕ
+      ^^^^^^^^^
+Highlighted span: exact h ϕ
+
+ERROR .LspCheck.lean:21:29-21:31
+Type mismatch
+  hx
+has type
+  x ∈ H
+but is expected to have type
+  ϕ x ∈ H
+Source line 21:
+      have hx' : ϕ x ∈ H := hx
+                            ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:23:7-23:24
+Type mismatch: After simplification, term
+  hsymm
+ has type
+  x ∈ H
+but is expected to have type
+  ϕ x ∈ H
+Source line 23:
+      simpa using hsymm
+      ^^^^^^^^^^^^^^^^^
+Highlighted span: simpa using hsymm

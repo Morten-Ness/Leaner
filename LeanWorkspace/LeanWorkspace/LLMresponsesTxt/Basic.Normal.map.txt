@@ -1,0 +1,364 @@
+FILE: Basic.Normal.map.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.Normal.map.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N] (H : Subgroup G)
+
+theorem Normal.map {H : Subgroup G} (h : H.Normal) (f : G →* N) (hf : Function.Surjective f) :
+    (H.map f).Normal := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N] (H : Subgroup G)
+
+theorem Normal.map {H : Subgroup G} (h : H.Normal) (f : G →* N) (hf : Function.Surjective f) :
+    (H.map f).Normal := by
+  rw [Subgroup.normal_iff]
+  intro a ha b
+  rcases hf b with ⟨c, rfl⟩
+  rw [Subgroup.mem_map]
+  rcases ha with ⟨a', ha', rfl⟩
+  refine ⟨c * a' * c⁻¹, ?_, ?_⟩
+  · exact h.conj_mem a' ha' c
+  · simp [map_mul]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:7-13:26
+Unknown constant `Subgroup.normal_iff`
+Source line 13:
+  rw [Subgroup.normal_iff]
+      ^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subgroup.normal_iff
+
+ERROR .LspCheck.lean:12:25-13:1
+unsolved goals
+G : Type u_1
+inst✝¹ : Group G
+N : Type u_5
+inst✝ : Group N
+H : Subgroup G
+h : H.Normal
+f : G →* N
+hf : Function.Surjective ⇑f
+⊢ (Subgroup.map f H).Normal
+Source line 12:
+    (H.map f).Normal := by
+                        ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:7-13:26
+Unknown constant `Subgroup.normal_iff`
+Source line 13:
+  rw [Subgroup.normal_iff]
+      ^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subgroup.normal_iff
+
+ERROR .LspCheck.lean:12:25-13:1
+unsolved goals
+G : Type u_1
+inst✝¹ : Group G
+N : Type u_5
+inst✝ : Group N
+H : Subgroup G
+h : H.Normal
+f : G →* N
+hf : Function.Surjective ⇑f
+⊢ (Subgroup.map f H).Normal
+Source line 12:
+    (H.map f).Normal := by
+                        ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N] (H : Subgroup G)
+
+theorem Normal.map {H : Subgroup G} (h : H.Normal) (f : G →* N) (hf : Function.Surjective f) :
+    (H.map f).Normal := by
+  classical
+  refine Subgroup.normal_of_eq_bot_or_top_of_comm ?_
+  intro a ha b hb
+  rcases hf a with ⟨a', rfl⟩
+  rcases hf b with ⟨b', rfl⟩
+  rw [Subgroup.mem_map] at ha hb ⊢
+  rcases ha with ⟨x, hx, rfl⟩
+  rcases hb with ⟨y, hy, rfl⟩
+  refine ⟨x * y * x⁻¹, h.conj_mem y hy x, ?_⟩
+  simp [map_mul]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:10-14:50
+Unknown constant `Subgroup.normal_of_eq_bot_or_top_of_comm`
+Source line 14:
+  refine Subgroup.normal_of_eq_bot_or_top_of_comm ?_
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subgroup.normal_of_eq_bot_or_top_of_comm
+
+ERROR .LspCheck.lean:15:9-15:10
+No goals to be solved
+Source line 15:
+  intro a ha b hb
+        ^
+Highlighted span: a
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:10-14:50
+Unknown constant `Subgroup.normal_of_eq_bot_or_top_of_comm`
+Source line 14:
+  refine Subgroup.normal_of_eq_bot_or_top_of_comm ?_
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subgroup.normal_of_eq_bot_or_top_of_comm
+
+ERROR .LspCheck.lean:15:9-15:10
+No goals to be solved
+Source line 15:
+  intro a ha b hb
+        ^
+Highlighted span: a
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N] (H : Subgroup G)
+
+theorem Normal.map {H : Subgroup G} (h : H.Normal) (f : G →* N) (hf : Function.Surjective f) :
+    (H.map f).Normal := by
+  classical
+  let e : G ⧸ H ≃* N ⧸ H.map f :=
+    QuotientGroup.quotientMulEquivOfSurjective f hf (by
+      intro x
+      constructor
+      · intro hx
+        exact ⟨x, hx, rfl⟩
+      · intro hx
+        rcases hx with ⟨y, hy, hxy⟩
+        rwa [← hxy] at hy)
+  let φ : N →* N ⧸ H.map f := QuotientGroup.mk' (H.map f)
+  have hker : φ.ker = H.map f := by
+    ext x
+    simp [φ]
+  have hsurj : Function.Surjective φ := QuotientGroup.mk'_surjective (H.map f)
+  rw [← hker]
+  exact MonoidHom.normal_ker φ
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:11-14:31
+failed to synthesize instance of type class
+  Mul (N ⧸ Subgroup.map f H)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 14:
+  let e : G ⧸ H ≃* N ⧸ H.map f :=
+          ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: G ⧸ H ≃* N ⧸ H.map f
+
+ERROR .LspCheck.lean:15:5-15:47
+Unknown identifier `QuotientGroup.quotientMulEquivOfSurjective`
+Source line 15:
+    QuotientGroup.quotientMulEquivOfSurjective f hf (by
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: QuotientGroup.quotientMulEquivOfSurjective
+
+ERROR .LspCheck.lean:23:11-23:27
+failed to synthesize instance of type class
+  MulOne (N ⧸ Subgroup.map f H)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 23:
+  let φ : N →* N ⧸ H.map f := QuotientGroup.mk' (H.map f)
+          ^^^^^^^^^^^^^^^^
+Highlighted span: N →* N ⧸ H.map f
+
+ERROR .LspCheck.lean:23:31-23:58
+failed to synthesize instance of type class
+  (Subgroup.map f H).Normal
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 23:
+  let φ : N →* N ⧸ H.map f := QuotientGroup.mk' (H.map f)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: QuotientGroup.mk' (H.map f)
+
+ERROR .LspCheck.lean:24:34-25:1
+unsolved goals
+case h
+G : Type u_1
+inst✝¹ : Group G
+N : Type u_5
+inst✝ : Group N
+H : Subgroup G
+h : H.Normal
+f : G →* N
+hf : Function.Surjective ⇑f
+e : sorry := sorry
+φ : sorry := sorry
+x : N
+⊢ x ∈ sorry () ↔ ∃ x_1 ∈ H, f x_1 = x
+Source line 24:
+  have hker : φ.ker = H.map f := by
+                                 ^
+Highlighted span: b
+
+ERROR .LspCheck.lean:27:41-27:79
+failed to synthesize instance of type class
+  (Subgroup.map f H).Normal
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 27:
+  have hsurj : Function.Surjective φ := QuotientGroup.mk'_surjective (H.map f)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: QuotientGroup.mk'_surjective (H.map f)
+
+WARNING .LspCheck.lean:26:11-26:12
+This simp argument is unused:
+  φ
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵φ̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 26:
+    simp [φ]
+          ^
+Highlighted span: φ
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:11-14:31
+failed to synthesize instance of type class
+  Mul (N ⧸ Subgroup.map f H)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 14:
+  let e : G ⧸ H ≃* N ⧸ H.map f :=
+          ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: G ⧸ H ≃* N ⧸ H.map f
+
+ERROR .LspCheck.lean:15:5-15:47
+Unknown identifier `QuotientGroup.quotientMulEquivOfSurjective`
+Source line 15:
+    QuotientGroup.quotientMulEquivOfSurjective f hf (by
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: QuotientGroup.quotientMulEquivOfSurjective
+
+ERROR .LspCheck.lean:23:11-23:27
+failed to synthesize instance of type class
+  MulOne (N ⧸ Subgroup.map f H)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 23:
+  let φ : N →* N ⧸ H.map f := QuotientGroup.mk' (H.map f)
+          ^^^^^^^^^^^^^^^^
+Highlighted span: N →* N ⧸ H.map f
+
+ERROR .LspCheck.lean:23:31-23:58
+failed to synthesize instance of type class
+  (Subgroup.map f H).Normal
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 23:
+  let φ : N →* N ⧸ H.map f := QuotientGroup.mk' (H.map f)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: QuotientGroup.mk' (H.map f)
+
+ERROR .LspCheck.lean:24:34-25:1
+unsolved goals
+case h
+G : Type u_1
+inst✝¹ : Group G
+N : Type u_5
+inst✝ : Group N
+H : Subgroup G
+h : H.Normal
+f : G →* N
+hf : Function.Surjective ⇑f
+e : sorry := sorry
+φ : sorry := sorry
+x : N
+⊢ x ∈ sorry () ↔ ∃ x_1 ∈ H, f x_1 = x
+Source line 24:
+  have hker : φ.ker = H.map f := by
+                                 ^
+Highlighted span: b
+
+ERROR .LspCheck.lean:27:41-27:79
+failed to synthesize instance of type class
+  (Subgroup.map f H).Normal
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 27:
+  have hsurj : Function.Surjective φ := QuotientGroup.mk'_surjective (H.map f)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: QuotientGroup.mk'_surjective (H.map f)
+
+WARNING .LspCheck.lean:26:11-26:12
+This simp argument is unused:
+  φ
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵φ̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 26:
+    simp [φ]
+          ^
+Highlighted span: φ

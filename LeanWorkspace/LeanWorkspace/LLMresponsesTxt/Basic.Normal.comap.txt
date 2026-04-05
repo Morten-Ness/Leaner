@@ -1,0 +1,169 @@
+FILE: Basic.Normal.comap.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.Normal.comap.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N]
+
+theorem Normal.comap {H : Subgroup N} (hH : H.Normal) (f : G →* N) : (H.comap f).Normal := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N]
+
+theorem Normal.comap {H : Subgroup N} (hH : H.Normal) (f : G →* N) : (H.comap f).Normal := by
+  intro a ha b
+  change f (b * a * b⁻¹) ∈ H
+  simpa [map_mul] using hH.conj_mem ha (f b)
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:9-12:10
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+G : Type u_1
+inst✝¹ : Group G
+N : Type u_5
+inst✝ : Group N
+H : Subgroup N
+hH : H.Normal
+f : G →* N
+⊢ (Subgroup.comap f H).Normal
+Source line 12:
+  intro a ha b
+        ^
+Highlighted span: a
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:9-12:10
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+G : Type u_1
+inst✝¹ : Group G
+N : Type u_5
+inst✝ : Group N
+H : Subgroup N
+hH : H.Normal
+f : G →* N
+⊢ (Subgroup.comap f H).Normal
+Source line 12:
+  intro a ha b
+        ^
+Highlighted span: a
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N]
+
+theorem Normal.comap {H : Subgroup N} (hH : H.Normal) (f : G →* N) : (H.comap f).Normal := by
+  rw [Subgroup.normal_iff]
+  intro a ha b
+  change f (b * a * b⁻¹) ∈ H
+  simpa [map_mul] using hH.conj_mem ha (f b)
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:7-12:26
+Unknown constant `Subgroup.normal_iff`
+Source line 12:
+  rw [Subgroup.normal_iff]
+      ^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subgroup.normal_iff
+
+ERROR .LspCheck.lean:11:92-12:1
+unsolved goals
+G : Type u_1
+inst✝¹ : Group G
+N : Type u_5
+inst✝ : Group N
+H : Subgroup N
+hH : H.Normal
+f : G →* N
+⊢ (Subgroup.comap f H).Normal
+Source line 11:
+theorem Normal.comap {H : Subgroup N} (hH : H.Normal) (f : G →* N) : (H.comap f).Normal := by
+                                                                                           ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:7-12:26
+Unknown constant `Subgroup.normal_iff`
+Source line 12:
+  rw [Subgroup.normal_iff]
+      ^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subgroup.normal_iff
+
+ERROR .LspCheck.lean:11:92-12:1
+unsolved goals
+G : Type u_1
+inst✝¹ : Group G
+N : Type u_5
+inst✝ : Group N
+H : Subgroup N
+hH : H.Normal
+f : G →* N
+⊢ (Subgroup.comap f H).Normal
+Source line 11:
+theorem Normal.comap {H : Subgroup N} (hH : H.Normal) (f : G →* N) : (H.comap f).Normal := by
+                                                                                           ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N]
+
+theorem Normal.comap {H : Subgroup N} (hH : H.Normal) (f : G →* N) : (H.comap f).Normal :=
+  hH.comap f
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

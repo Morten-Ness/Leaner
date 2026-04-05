@@ -1,0 +1,172 @@
+FILE: Associated.prod_ne_zero_of_prime.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Associated.prod_ne_zero_of_prime.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {ι M M₀ : Type*}
+
+theorem prod_ne_zero_of_prime [CommMonoidWithZero M₀] [NoZeroDivisors M₀] [Nontrivial M₀]
+    (s : Multiset M₀) (h : ∀ x ∈ s, Prime x) : s.prod ≠ 0 := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι M M₀ : Type*}
+
+theorem prod_ne_zero_of_prime [CommMonoidWithZero M₀] [NoZeroDivisors M₀] [Nontrivial M₀]
+    (s : Multiset M₀) (h : ∀ x ∈ s, Prime x) : s.prod ≠ 0 := by
+  classical
+  refine Multiset.induction_on s ?h_nil ?h_cons
+  · simp
+  · intro a s ih hs
+    have ha : Prime a := hs a (by simp)
+    have hs' : ∀ x ∈ s, Prime x := by
+      intro x hx
+      exact hs x (by simp [hx])
+    rw [Multiset.prod_cons]
+    exact mul_ne_zero ha.ne_zero (ih hs')
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .tmp_l5e3fcq7.Associated.prod_ne_zero_of_prime.lean:11:25-11:39
+Function expected at
+  hs
+but this term has type
+  (a ::ₘ s).prod = 0
+
+Note: Expected a function because this term is being applied to the argument
+  a
+Source line 11:
+    have ha : Prime a := hs a (by simp)
+                        ^^^^^^^^^^^^^^
+Highlighted span:  hs a (by simp
+
+ERROR .tmp_l5e3fcq7.Associated.prod_ne_zero_of_prime.lean:14:12-14:31
+Function expected at
+  hs
+but this term has type
+  (a ::ₘ s).prod = 0
+
+Note: Expected a function because this term is being applied to the argument
+  x
+Source line 14:
+      exact hs x (by simp [hx])
+           ^^^^^^^^^^^^^^^^^^^
+Highlighted span:  hs x (by simp [hx]
+
+ERROR .tmp_l5e3fcq7.Associated.prod_ne_zero_of_prime.lean:15:8-15:26
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (?a ::ₘ ?s).prod
+in the target expression
+  False
+
+case h_cons
+M₀ : Type u_3
+inst✝² : CommMonoidWithZero M₀
+inst✝¹ : NoZeroDivisors M₀
+inst✝ : Nontrivial M₀
+s✝ : Multiset M₀
+h : ∀ x ∈ s✝, Prime x
+a : M₀
+s : Multiset M₀
+ih : s.prod ≠ 0
+hs : (a ::ₘ s).prod = 0
+ha : Prime a
+hs' : ∀ x ∈ s, Prime x
+⊢ False
+Source line 15:
+    rw [Multiset.prod_cons]
+       ^^^^^^^^^^^^^^^^^^
+Highlighted span: [Multiset.prod_con
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .tmp_l5e3fcq7.Associated.prod_ne_zero_of_prime.lean:11:25-11:39
+Function expected at
+  hs
+but this term has type
+  (a ::ₘ s).prod = 0
+
+Note: Expected a function because this term is being applied to the argument
+  a
+Source line 11:
+    have ha : Prime a := hs a (by simp)
+                        ^^^^^^^^^^^^^^
+Highlighted span:  hs a (by simp
+
+ERROR .tmp_l5e3fcq7.Associated.prod_ne_zero_of_prime.lean:14:12-14:31
+Function expected at
+  hs
+but this term has type
+  (a ::ₘ s).prod = 0
+
+Note: Expected a function because this term is being applied to the argument
+  x
+Source line 14:
+      exact hs x (by simp [hx])
+           ^^^^^^^^^^^^^^^^^^^
+Highlighted span:  hs x (by simp [hx]
+
+ERROR .tmp_l5e3fcq7.Associated.prod_ne_zero_of_prime.lean:15:8-15:26
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (?a ::ₘ ?s).prod
+in the target expression
+  False
+
+case h_cons
+M₀ : Type u_3
+inst✝² : CommMonoidWithZero M₀
+inst✝¹ : NoZeroDivisors M₀
+inst✝ : Nontrivial M₀
+s✝ : Multiset M₀
+h : ∀ x ∈ s✝, Prime x
+a : M₀
+s : Multiset M₀
+ih : s.prod ≠ 0
+hs : (a ::ₘ s).prod = 0
+ha : Prime a
+hs' : ∀ x ∈ s, Prime x
+⊢ False
+Source line 15:
+    rw [Multiset.prod_cons]
+       ^^^^^^^^^^^^^^^^^^
+Highlighted span: [Multiset.prod_con
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι M M₀ : Type*}
+
+theorem prod_ne_zero_of_prime [CommMonoidWithZero M₀] [NoZeroDivisors M₀] [Nontrivial M₀]
+    (s : Multiset M₀) (h : ∀ x ∈ s, Prime x) : s.prod ≠ 0 := by
+  classical
+  induction s using Multiset.induction_on with
+  | empty =>
+      simp
+  | @cons a s ih =>
+      have ha : Prime a := h a (by simp)
+      have hs : ∀ x ∈ s, Prime x := by
+        intro x hx
+        exact h x (by simp [hx])
+      intro hprod
+      rw [Multiset.prod_cons] at hprod
+      exact (ha.ne_zero <| eq_zero_or_eq_zero_of_mul_eq_zero hprod |>.elim id (fun hs0 => False.elim (ih hs hs0)))
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

@@ -1,0 +1,275 @@
+FILE: Basic.algebraMap_eq_zero_iff.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.algebraMap_eq_zero_iff.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Algebra
+
+variable (R A : Type*) [CommSemiring R] [Semiring A] [Algebra R A]
+
+variable [FaithfulSMul R A]
+
+theorem algebraMap_eq_zero_iff {r : R} : algebraMap R A r = 0 ↔ r = 0 := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Algebra
+
+variable (R A : Type*) [CommSemiring R] [Semiring A] [Algebra R A]
+
+variable [FaithfulSMul R A]
+
+theorem algebraMap_eq_zero_iff {r : R} : algebraMap R A r = 0 ↔ r = 0 := by
+  simpa [Algebra.algebraMap_eq_smul_one] using (smul_eq_zero_iff_left (A := A) (show (1 : A) ≠ 0 by simp))
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:71-10:79
+Invalid argument name `A` for function `smul_eq_zero_iff_left`
+
+Hint: Perhaps you meant one of the following parameter names:
+  • `R`: A̵R̲
+  • `M`: A̵M̲
+  • `r`: A̵r̲
+  • `m`: A̵m̲
+  • `hm`: A̵h̲m̲
+Source line 10:
+  simpa [Algebra.algebraMap_eq_smul_one] using (smul_eq_zero_iff_left (A := A) (show (1 : A) ≠ 0 by simp))
+                                                                      ^^^^^^^^
+Highlighted span: (A := A)
+
+ERROR .LspCheck.lean:10:81-10:105
+unsolved goals
+R : Type u_1
+A : Type u_2
+inst✝³ : CommSemiring R
+inst✝² : Semiring A
+inst✝¹ : Algebra R A
+inst✝ : FaithfulSMul R A
+r : R
+⊢ ¬1 = 0
+Source line 10:
+  simpa [Algebra.algebraMap_eq_smul_one] using (smul_eq_zero_iff_left (A := A) (show (1 : A) ≠ 0 by simp))
+                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: show (1 : A) ≠ 0 by simp
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:71-10:79
+Invalid argument name `A` for function `smul_eq_zero_iff_left`
+
+Hint: Perhaps you meant one of the following parameter names:
+  • `R`: A̵R̲
+  • `M`: A̵M̲
+  • `r`: A̵r̲
+  • `m`: A̵m̲
+  • `hm`: A̵h̲m̲
+Source line 10:
+  simpa [Algebra.algebraMap_eq_smul_one] using (smul_eq_zero_iff_left (A := A) (show (1 : A) ≠ 0 by simp))
+                                                                      ^^^^^^^^
+Highlighted span: (A := A)
+
+ERROR .LspCheck.lean:10:81-10:105
+unsolved goals
+R : Type u_1
+A : Type u_2
+inst✝³ : CommSemiring R
+inst✝² : Semiring A
+inst✝¹ : Algebra R A
+inst✝ : FaithfulSMul R A
+r : R
+⊢ ¬1 = 0
+Source line 10:
+  simpa [Algebra.algebraMap_eq_smul_one] using (smul_eq_zero_iff_left (A := A) (show (1 : A) ≠ 0 by simp))
+                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: show (1 : A) ≠ 0 by simp
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Algebra
+
+variable (R A : Type*) [CommSemiring R] [Semiring A] [Algebra R A]
+
+variable [FaithfulSMul R A]
+
+theorem algebraMap_eq_zero_iff {r : R} : algebraMap R A r = 0 ↔ r = 0 := by
+  constructor
+  · intro h
+    apply smul_right_injective (R := R) (m := (1 : A))
+    simpa [Algebra.algebraMap_eq_smul_one, h]
+  · intro h
+    simpa [h]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:41-12:55
+Invalid argument name `m` for function `smul_right_injective`
+
+Hint: Perhaps you meant one of the following parameter names:
+  • `M`: m̵M̲
+  • `r`: m̵r̲
+  • `hr`: m̵h̲r̲
+  • `a₁`: m̵a̲₁̲
+  • `a₂`: m̵a̲₂̲
+Source line 12:
+    apply smul_right_injective (R := R) (m := (1 : A))
+                                        ^^^^^^^^^^^^^^
+Highlighted span: (m := (1 : A))
+
+ERROR .LspCheck.lean:13:5-13:46
+No goals to be solved
+Source line 13:
+    simpa [Algebra.algebraMap_eq_smul_one, h]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [Algebra.algebraMap_eq_smul_one, h]
+
+WARNING .LspCheck.lean:15:5-15:14
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 15:
+    simpa [h]
+    ^^^^^^^^^
+Highlighted span: simpa [h]
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:41-12:55
+Invalid argument name `m` for function `smul_right_injective`
+
+Hint: Perhaps you meant one of the following parameter names:
+  • `M`: m̵M̲
+  • `r`: m̵r̲
+  • `hr`: m̵h̲r̲
+  • `a₁`: m̵a̲₁̲
+  • `a₂`: m̵a̲₂̲
+Source line 12:
+    apply smul_right_injective (R := R) (m := (1 : A))
+                                        ^^^^^^^^^^^^^^
+Highlighted span: (m := (1 : A))
+
+ERROR .LspCheck.lean:13:5-13:46
+No goals to be solved
+Source line 13:
+    simpa [Algebra.algebraMap_eq_smul_one, h]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [Algebra.algebraMap_eq_smul_one, h]
+
+WARNING .LspCheck.lean:15:5-15:14
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 15:
+    simpa [h]
+    ^^^^^^^^^
+Highlighted span: simpa [h]
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Algebra
+
+variable (R A : Type*) [CommSemiring R] [Semiring A] [Algebra R A]
+
+variable [FaithfulSMul R A]
+
+theorem algebraMap_eq_zero_iff {r : R} : algebraMap R A r = 0 ↔ r = 0 := by
+  constructor
+  · intro h
+    have h' : r • (1 : A) = 0 := by
+      simpa [Algebra.algebraMap_eq_smul_one] using h
+    exact (smul_eq_zero.mp h').resolve_right one_ne_zero
+  · intro h
+    simp [h]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:46-14:57
+failed to synthesize instance of type class
+  NeZero 1
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 14:
+    exact (smul_eq_zero.mp h').resolve_right one_ne_zero
+                                             ^^^^^^^^^^^
+Highlighted span: one_ne_zero
+
+ERROR .LspCheck.lean:14:12-14:30
+failed to synthesize instance of type class
+  Module.IsTorsionFree R A
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 14:
+    exact (smul_eq_zero.mp h').resolve_right one_ne_zero
+           ^^^^^^^^^^^^^^^^^^
+Highlighted span: smul_eq_zero.mp h'
+
+ERROR .LspCheck.lean:14:12-14:30
+failed to synthesize instance of type class
+  IsCancelMulZero R
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 14:
+    exact (smul_eq_zero.mp h').resolve_right one_ne_zero
+           ^^^^^^^^^^^^^^^^^^
+Highlighted span: smul_eq_zero.mp h'
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:46-14:57
+failed to synthesize instance of type class
+  NeZero 1
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 14:
+    exact (smul_eq_zero.mp h').resolve_right one_ne_zero
+                                             ^^^^^^^^^^^
+Highlighted span: one_ne_zero
+
+ERROR .LspCheck.lean:14:12-14:30
+failed to synthesize instance of type class
+  Module.IsTorsionFree R A
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 14:
+    exact (smul_eq_zero.mp h').resolve_right one_ne_zero
+           ^^^^^^^^^^^^^^^^^^
+Highlighted span: smul_eq_zero.mp h'
+
+ERROR .LspCheck.lean:14:12-14:30
+failed to synthesize instance of type class
+  IsCancelMulZero R
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 14:
+    exact (smul_eq_zero.mp h').resolve_right one_ne_zero
+           ^^^^^^^^^^^^^^^^^^
+Highlighted span: smul_eq_zero.mp h'

@@ -1,0 +1,321 @@
+FILE: Basic.Normal.of_map_injective.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.Normal.of_map_injective.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N]
+
+theorem Normal.of_map_injective {G H : Type*} [Group G] [Group H] {φ : G →* H}
+    (hφ : Function.Injective φ) {L : Subgroup G} (n : (L.map φ).Normal) : L.Normal := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N]
+
+theorem Normal.of_map_injective {G H : Type*} [Group G] [Group H] {φ : G →* H}
+    (hφ : Function.Injective φ) {L : Subgroup G} (n : (L.map φ).Normal) : L.Normal := by
+  rw [Subgroup.normal_iff]
+  intro g x hx
+  have hx' : φ x ∈ L.map φ := ⟨x, hx, rfl⟩
+  have hconj : φ g * φ x * (φ g)⁻¹ ∈ L.map φ := by
+    simpa [map_mul, map_inv] using n.conj_mem hx' (φ g)
+  rcases hconj with ⟨y, hy, hy_eq⟩
+  apply hφ
+  calc
+    φ (g * x * g⁻¹) = φ g * φ x * (φ g)⁻¹ := by simp [map_mul, map_inv]
+    _ = φ y := hy_eq
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:7-13:26
+Unknown constant `Subgroup.normal_iff`
+Source line 13:
+  rw [Subgroup.normal_iff]
+      ^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subgroup.normal_iff
+
+ERROR .LspCheck.lean:12:87-13:1
+unsolved goals
+G : Type u_6
+H : Type u_7
+inst✝¹ : Group G
+inst✝ : Group H
+φ : G →* H
+hφ : Function.Injective ⇑φ
+L : Subgroup G
+n : (Subgroup.map φ L).Normal
+⊢ L.Normal
+Source line 12:
+    (hφ : Function.Injective φ) {L : Subgroup G} (n : (L.map φ).Normal) : L.Normal := by
+                                                                                      ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:7-13:26
+Unknown constant `Subgroup.normal_iff`
+Source line 13:
+  rw [Subgroup.normal_iff]
+      ^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subgroup.normal_iff
+
+ERROR .LspCheck.lean:12:87-13:1
+unsolved goals
+G : Type u_6
+H : Type u_7
+inst✝¹ : Group G
+inst✝ : Group H
+φ : G →* H
+hφ : Function.Injective ⇑φ
+L : Subgroup G
+n : (Subgroup.map φ L).Normal
+⊢ L.Normal
+Source line 12:
+    (hφ : Function.Injective φ) {L : Subgroup G} (n : (L.map φ).Normal) : L.Normal := by
+                                                                                      ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N]
+
+theorem Normal.of_map_injective {G H : Type*} [Group G] [Group H] {φ : G →* H}
+    (hφ : Function.Injective φ) {L : Subgroup G} (n : (L.map φ).Normal) : L.Normal where
+  conj_mem := by
+    intro a x hx
+    have hx' : φ x ∈ L.map φ := ⟨x, hx, rfl⟩
+    have hconj : φ (a * x * a⁻¹) ∈ L.map φ := by
+      simpa [map_mul, map_inv] using n.conj_mem hx' (φ a)
+    rcases hconj with ⟨y, hy, hy_eq⟩
+    apply hφ
+    calc
+      φ (a * x * a⁻¹) = φ y := hy_eq
+_
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:23:1-23:1
+unexpected end of input; expected ':='
+
+ERROR .LspCheck.lean:15:18-15:19
+Application type mismatch: The argument
+  x
+has type
+  a ∈ L
+of sort `Prop` but is expected to have type
+  G
+of sort `Type u_6` in the application
+  φ x
+Source line 15:
+    have hx' : φ x ∈ L.map φ := ⟨x, hx, rfl⟩
+                 ^
+Highlighted span: x
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:23:1-23:1
+unexpected end of input; expected ':='
+
+ERROR .LspCheck.lean:15:18-15:19
+Application type mismatch: The argument
+  x
+has type
+  a ∈ L
+of sort `Prop` but is expected to have type
+  G
+of sort `Type u_6` in the application
+  φ x
+Source line 15:
+    have hx' : φ x ∈ L.map φ := ⟨x, hx, rfl⟩
+                 ^
+Highlighted span: x
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N]
+
+theorem Normal.of_map_injective {G H : Type*} [Group G] [Group H] {φ : G →* H}
+    (hφ : Function.Injective φ) {L : Subgroup G} (n : (L.map φ).Normal) : L.Normal where
+  conj_mem := by
+    intro a x hx
+    have hx' : φ x ∈ L.map φ := ⟨x, hx, rfl⟩
+    have hconj : φ a * φ x * (φ a)⁻¹ ∈ L.map φ := by
+      simpa [map_mul, map_inv] using n.conj_mem hx' (φ a)
+    rcases hconj with ⟨y, hy, hy_eq⟩
+    apply hφ
+    calc
+      φ (a * x * a⁻¹) = φ a * φ x * (φ a)⁻¹ := by simp [map_mul, map_inv]
+      _ = φ y := hy_eq
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:18-15:19
+Application type mismatch: The argument
+  x
+has type
+  a ∈ L
+of sort `Prop` but is expected to have type
+  G
+of sort `Type u_6` in the application
+  φ x
+Source line 15:
+    have hx' : φ x ∈ L.map φ := ⟨x, hx, rfl⟩
+                 ^
+Highlighted span: x
+
+ERROR .LspCheck.lean:16:26-16:27
+Application type mismatch: The argument
+  x
+has type
+  a ∈ L
+of sort `Prop` but is expected to have type
+  G
+of sort `Type u_6` in the application
+  φ x
+Source line 16:
+    have hconj : φ a * φ x * (φ a)⁻¹ ∈ L.map φ := by
+                         ^
+Highlighted span: x
+
+ERROR .LspCheck.lean:19:5-19:13
+Tactic `apply` failed: could not unify the conclusion of `hφ`
+  ?a₁ = ?a₂
+with the goal
+  hx * a * hx⁻¹ ∈ L
+
+Note: The full type of `hφ` is
+  Function.Injective ⇑φ
+
+G : Type u_6
+H : Type u_7
+inst✝¹ : Group G
+inst✝ : Group H
+φ : G →* H
+hφ : Function.Injective ⇑φ
+L : Subgroup G
+n : (Subgroup.map φ L).Normal
+a : G
+x : a ∈ L
+hx : G
+hx' : φ sorry ∈ Subgroup.map φ L
+y : G
+hy : y ∈ ↑L
+hy_eq : φ y = φ a * φ sorry * (φ a)⁻¹
+⊢ hx * a * hx⁻¹ ∈ L
+Source line 19:
+    apply hφ
+    ^^^^^^^^
+Highlighted span: apply hφ
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:18-15:19
+Application type mismatch: The argument
+  x
+has type
+  a ∈ L
+of sort `Prop` but is expected to have type
+  G
+of sort `Type u_6` in the application
+  φ x
+Source line 15:
+    have hx' : φ x ∈ L.map φ := ⟨x, hx, rfl⟩
+                 ^
+Highlighted span: x
+
+ERROR .LspCheck.lean:16:26-16:27
+Application type mismatch: The argument
+  x
+has type
+  a ∈ L
+of sort `Prop` but is expected to have type
+  G
+of sort `Type u_6` in the application
+  φ x
+Source line 16:
+    have hconj : φ a * φ x * (φ a)⁻¹ ∈ L.map φ := by
+                         ^
+Highlighted span: x
+
+ERROR .LspCheck.lean:19:5-19:13
+Tactic `apply` failed: could not unify the conclusion of `hφ`
+  ?a₁ = ?a₂
+with the goal
+  hx * a * hx⁻¹ ∈ L
+
+Note: The full type of `hφ` is
+  Function.Injective ⇑φ
+
+G : Type u_6
+H : Type u_7
+inst✝¹ : Group G
+inst✝ : Group H
+φ : G →* H
+hφ : Function.Injective ⇑φ
+L : Subgroup G
+n : (Subgroup.map φ L).Normal
+a : G
+x : a ∈ L
+hx : G
+hx' : φ sorry ∈ Subgroup.map φ L
+y : G
+hy : y ∈ ↑L
+hy_eq : φ y = φ a * φ sorry * (φ a)⁻¹
+⊢ hx * a * hx⁻¹ ∈ L
+Source line 19:
+    apply hφ
+    ^^^^^^^^
+Highlighted span: apply hφ

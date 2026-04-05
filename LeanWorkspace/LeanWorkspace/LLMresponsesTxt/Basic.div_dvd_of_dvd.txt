@@ -1,0 +1,77 @@
+FILE: Basic.div_dvd_of_dvd.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.div_dvd_of_dvd.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R : Type u}
+
+variable [EuclideanDomain R]
+
+theorem div_dvd_of_dvd {p q : R} (hpq : q ∣ p) : p / q ∣ p := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type u}
+
+variable [EuclideanDomain R]
+
+theorem div_dvd_of_dvd {p q : R} (hpq : q ∣ p) : p / q ∣ p := by
+  rcases hpq with ⟨r, rfl⟩
+  by_cases hq : q = 0
+  · subst hq
+    simp
+  · use q
+    rw [EuclideanDomain.mul_div_cancel _ hq]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:9-13:39
+Unknown constant `EuclideanDomain.mul_div_cancel`
+Source line 13:
+    rw [EuclideanDomain.mul_div_cancel _ hq]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: EuclideanDomain.mul_div_cancel
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:9-13:39
+Unknown constant `EuclideanDomain.mul_div_cancel`
+Source line 13:
+    rw [EuclideanDomain.mul_div_cancel _ hq]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: EuclideanDomain.mul_div_cancel
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type u}
+
+variable [EuclideanDomain R]
+
+theorem div_dvd_of_dvd {p q : R} (hpq : q ∣ p) : p / q ∣ p := by
+  rcases hpq with ⟨r, rfl⟩
+  by_cases hq : q = 0
+  · subst hq
+    simp
+  · refine ⟨q, ?_⟩
+    simp [hq, mul_comm]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

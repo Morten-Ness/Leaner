@@ -1,0 +1,56 @@
+FILE: Basic.elim_mulSingle_one.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.elim_mulSingle_one.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {I : Type u}
+
+variable {α β γ : Type*}
+
+variable {f : I → Type v₁} {g : I → Type v₂} {h : I → Type v₃}
+
+variable (x y : ∀ i, f i) (i : I)
+
+variable (a a' : α → γ) (b b' : β → γ)
+
+theorem elim_mulSingle_one [DecidableEq α] [DecidableEq β] [One γ] (i : α) (c : γ) :
+    Sum.elim (Pi.mulSingle i c) (1 : β → γ) = Pi.mulSingle (Sum.inl i) c := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {I : Type u}
+
+variable {α β γ : Type*}
+
+variable {f : I → Type v₁} {g : I → Type v₂} {h : I → Type v₃}
+
+variable (x y : ∀ i, f i) (i : I)
+
+variable (a a' : α → γ) (b b' : β → γ)
+
+theorem elim_mulSingle_one [DecidableEq α] [DecidableEq β] [One γ] (i : α) (c : γ) :
+    Sum.elim (Pi.mulSingle i c) (1 : β → γ) = Pi.mulSingle (Sum.inl i) c := by
+  ext x
+  cases x with
+  | inl j =>
+      by_cases h : j = i
+      · subst h
+        simp [Pi.mulSingle]
+      · simp [Pi.mulSingle, h]
+  | inr j =>
+      simp [Pi.mulSingle]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+PASS

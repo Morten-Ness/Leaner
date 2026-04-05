@@ -1,0 +1,300 @@
+FILE: Basic.characteristic_iff_comap_le.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.characteristic_iff_comap_le.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {H K : Subgroup G}
+
+theorem characteristic_iff_comap_le : H.Characteristic ↔ ∀ ϕ : G ≃* G, H.comap ϕ.toMonoidHom ≤ H := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {H K : Subgroup G}
+
+theorem characteristic_iff_comap_le : H.Characteristic ↔ ∀ ϕ : G ≃* G, H.comap ϕ.toMonoidHom ≤ H := by
+  constructor
+  · intro h ϕ
+    simpa [Subgroup.Characteristic] using h ϕ
+  · intro h
+    rw [Subgroup.characteristic_iff_comap_eq]
+    intro ϕ
+    apply le_antisymm
+    · exact h ϕ
+    · simpa using h ϕ.symm
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:43-14:46
+Function expected at
+  h
+but this term has type
+  H.Characteristic
+
+Note: Expected a function because this term is being applied to the argument
+  ϕ
+Source line 14:
+    simpa [Subgroup.Characteristic] using h ϕ
+                                          ^^^
+Highlighted span: h ϕ
+
+ERROR .LspCheck.lean:20:7-20:27
+Type mismatch: After simplification, term
+  h ϕ.symm
+ has type
+  Subgroup.comap (↑ϕ.symm) H ≤ H
+but is expected to have type
+  H ≤ Subgroup.comap (↑ϕ) H
+Source line 20:
+    · simpa using h ϕ.symm
+      ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa using h ϕ.symm
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:43-14:46
+Function expected at
+  h
+but this term has type
+  H.Characteristic
+
+Note: Expected a function because this term is being applied to the argument
+  ϕ
+Source line 14:
+    simpa [Subgroup.Characteristic] using h ϕ
+                                          ^^^
+Highlighted span: h ϕ
+
+ERROR .LspCheck.lean:20:7-20:27
+Type mismatch: After simplification, term
+  h ϕ.symm
+ has type
+  Subgroup.comap (↑ϕ.symm) H ≤ H
+but is expected to have type
+  H ≤ Subgroup.comap (↑ϕ) H
+Source line 20:
+    · simpa using h ϕ.symm
+      ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa using h ϕ.symm
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {H K : Subgroup G}
+
+theorem characteristic_iff_comap_le : H.Characteristic ↔ ∀ ϕ : G ≃* G, H.comap ϕ.toMonoidHom ≤ H := by
+  constructor
+  · intro h ϕ
+    simpa [Subgroup.characteristic_iff_comap_eq.mp h ϕ] using
+      (Subgroup.characteristic_iff_comap_eq.mp h ϕ).le
+  · intro h
+    rw [Subgroup.characteristic_iff_comap_eq]
+    intro ϕ
+    apply le_antisymm
+    · exact h ϕ
+    · intro x hx
+      have hx' : ϕ x ∈ H := hx
+      have hsymm := h ϕ.symm
+      exact hsymm hx'
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:22:29-22:31
+Type mismatch
+  hx
+has type
+  x ∈ H
+but is expected to have type
+  ϕ x ∈ H
+Source line 22:
+      have hx' : ϕ x ∈ H := hx
+                            ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:24:19-24:22
+Application type mismatch: The argument
+  hx'
+has type
+  ϕ x ∈ H
+but is expected to have type
+  ϕ.toMonoidHom x ∈ Subgroup.comap ϕ.symm.toMonoidHom H
+in the application
+  hsymm hx'
+Source line 24:
+      exact hsymm hx'
+                  ^^^
+Highlighted span: hx'
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:22:29-22:31
+Type mismatch
+  hx
+has type
+  x ∈ H
+but is expected to have type
+  ϕ x ∈ H
+Source line 22:
+      have hx' : ϕ x ∈ H := hx
+                            ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:24:19-24:22
+Application type mismatch: The argument
+  hx'
+has type
+  ϕ x ∈ H
+but is expected to have type
+  ϕ.toMonoidHom x ∈ Subgroup.comap ϕ.symm.toMonoidHom H
+in the application
+  hsymm hx'
+Source line 24:
+      exact hsymm hx'
+                  ^^^
+Highlighted span: hx'
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {H K : Subgroup G}
+
+theorem characteristic_iff_comap_le : H.Characteristic ↔ ∀ ϕ : G ≃* G, H.comap ϕ.toMonoidHom ≤ H := by
+  constructor
+  · intro h ϕ
+    rw [Subgroup.characteristic_iff_comap_eq] at h
+    simpa [h ϕ] using (le_rfl : H ≤ H)
+  · intro h
+    rw [Subgroup.characteristic_iff_comap_eq]
+    intro ϕ
+    apply le_antisymm
+    · exact h ϕ
+    · intro x hx
+      have hx' : ϕ x ∈ H := by
+        exact h ϕ.symm (show x ∈ H.comap ϕ.symm.toMonoidHom from hx)
+      simpa using hx'
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:5-15:39
+Type mismatch: After simplification, term
+  le_rfl
+ has type
+  True
+but is expected to have type
+  Subgroup.comap (↑ϕ) H ≤ H
+Source line 15:
+    simpa [h ϕ] using (le_rfl : H ≤ H)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [h ϕ] using (le_rfl : H ≤ H)
+
+ERROR .LspCheck.lean:23:66-23:68
+Type mismatch
+  hx
+has type
+  x ∈ H
+but is expected to have type
+  x ∈ Subgroup.comap ϕ.symm.toMonoidHom H
+Source line 23:
+        exact h ϕ.symm (show x ∈ H.comap ϕ.symm.toMonoidHom from hx)
+                                                                 ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:23:25-23:68
+Type mismatch
+  this
+has type
+  x ∈ Subgroup.comap ϕ.symm.toMonoidHom H
+but is expected to have type
+  ϕ x ∈ Subgroup.comap ϕ.symm.toMonoidHom H
+Source line 23:
+        exact h ϕ.symm (show x ∈ H.comap ϕ.symm.toMonoidHom from hx)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: show x ∈ H.comap ϕ.symm.toMonoidHom from hx
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:5-15:39
+Type mismatch: After simplification, term
+  le_rfl
+ has type
+  True
+but is expected to have type
+  Subgroup.comap (↑ϕ) H ≤ H
+Source line 15:
+    simpa [h ϕ] using (le_rfl : H ≤ H)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [h ϕ] using (le_rfl : H ≤ H)
+
+ERROR .LspCheck.lean:23:66-23:68
+Type mismatch
+  hx
+has type
+  x ∈ H
+but is expected to have type
+  x ∈ Subgroup.comap ϕ.symm.toMonoidHom H
+Source line 23:
+        exact h ϕ.symm (show x ∈ H.comap ϕ.symm.toMonoidHom from hx)
+                                                                 ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:23:25-23:68
+Type mismatch
+  this
+has type
+  x ∈ Subgroup.comap ϕ.symm.toMonoidHom H
+but is expected to have type
+  ϕ x ∈ Subgroup.comap ϕ.symm.toMonoidHom H
+Source line 23:
+        exact h ϕ.symm (show x ∈ H.comap ϕ.symm.toMonoidHom from hx)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: show x ∈ H.comap ϕ.symm.toMonoidHom from hx

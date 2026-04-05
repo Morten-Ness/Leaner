@@ -1,0 +1,230 @@
+FILE: Basic.coeAddMonoidHom_eq_dfinsuppSum.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.coeAddMonoidHom_eq_dfinsuppSum.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable (ι : Type v) (β : ι → Type w)
+
+variable [∀ i, AddCommMonoid (β i)]
+
+theorem coeAddMonoidHom_eq_dfinsuppSum [DecidableEq ι]
+    {M S : Type*} [DecidableEq M] [AddCommMonoid M]
+    [SetLike S M] [AddSubmonoidClass S M] (A : ι → S) (x : DirectSum ι fun i => A i) :
+    DirectSum.coeAddMonoidHom A x = DFinsupp.sum x fun i => (fun x : A i => ↑x) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (ι : Type v) (β : ι → Type w)
+
+variable [∀ i, AddCommMonoid (β i)]
+
+theorem coeAddMonoidHom_eq_dfinsuppSum [DecidableEq ι]
+    {M S : Type*} [DecidableEq M] [AddCommMonoid M]
+    [SetLike S M] [AddSubmonoidClass S M] (A : ι → S) (x : DirectSum ι fun i => A i) :
+    DirectSum.coeAddMonoidHom A x = DFinsupp.sum x fun i => (fun x : A i => ↑x) := by
+  classical
+  rw [DirectSum.coeAddMonoidHom_apply]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:7-12:38
+Unknown constant `DirectSum.coeAddMonoidHom_apply`
+Source line 12:
+  rw [DirectSum.coeAddMonoidHom_apply]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: DirectSum.coeAddMonoidHom_apply
+
+ERROR .LspCheck.lean:10:84-11:1
+unsolved goals
+ι : Type v
+inst✝⁴ : DecidableEq ι
+M : Type u_1
+S : Type u_2
+inst✝³ : DecidableEq M
+inst✝² : AddCommMonoid M
+inst✝¹ : SetLike S M
+inst✝ : AddSubmonoidClass S M
+A : ι → S
+x : DirectSum ι fun i ↦ ↥(A i)
+⊢ (DirectSum.coeAddMonoidHom A) x = DFinsupp.sum x fun i x ↦ ↑x
+Source line 10:
+    DirectSum.coeAddMonoidHom A x = DFinsupp.sum x fun i => (fun x : A i => ↑x) := by
+                                                                                   ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:7-12:38
+Unknown constant `DirectSum.coeAddMonoidHom_apply`
+Source line 12:
+  rw [DirectSum.coeAddMonoidHom_apply]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: DirectSum.coeAddMonoidHom_apply
+
+ERROR .LspCheck.lean:10:84-11:1
+unsolved goals
+ι : Type v
+inst✝⁴ : DecidableEq ι
+M : Type u_1
+S : Type u_2
+inst✝³ : DecidableEq M
+inst✝² : AddCommMonoid M
+inst✝¹ : SetLike S M
+inst✝ : AddSubmonoidClass S M
+A : ι → S
+x : DirectSum ι fun i ↦ ↥(A i)
+⊢ (DirectSum.coeAddMonoidHom A) x = DFinsupp.sum x fun i x ↦ ↑x
+Source line 10:
+    DirectSum.coeAddMonoidHom A x = DFinsupp.sum x fun i => (fun x : A i => ↑x) := by
+                                                                                   ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (ι : Type v) (β : ι → Type w)
+
+variable [∀ i, AddCommMonoid (β i)]
+
+theorem coeAddMonoidHom_eq_dfinsuppSum [DecidableEq ι]
+    {M S : Type*} [DecidableEq M] [AddCommMonoid M]
+    [SetLike S M] [AddSubmonoidClass S M] (A : ι → S) (x : DirectSum ι fun i => A i) :
+    DirectSum.coeAddMonoidHom A x = DFinsupp.sum x fun i => (fun x : A i => ↑x) := by
+  classical
+  refine DFinsupp.induction ?h0 ?hadd x
+  · simp [DirectSum.coeAddMonoidHom]
+  · intro i xi x hix hrec
+    simp only [DFinsupp.sum_add_index, zero_add, add_zero, Pi.zero_apply, forall_const] at hrec ⊢
+    rw [map_add, hrec]
+    simp [DFinsupp.sum_add_index, hix]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:39-12:40
+Application type mismatch: The argument
+  x
+has type
+  DirectSum ι fun i ↦ ↥(A i)
+of sort `Type (max u_1 v)` but is expected to have type
+  ∀ (i : ?m.30) (b : ?m.31 i) (f : Π₀ (i : ?m.30), ?m.31 i), f i = 0 → b ≠ 0 → ?m.34 f → ?m.34 ((fun₀ | i => b) + f)
+of sort `Prop` in the application
+  DFinsupp.induction ?h0 ?hadd x
+Source line 12:
+  refine DFinsupp.induction ?h0 ?hadd x
+                                      ^
+Highlighted span: x
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:39-12:40
+Application type mismatch: The argument
+  x
+has type
+  DirectSum ι fun i ↦ ↥(A i)
+of sort `Type (max u_1 v)` but is expected to have type
+  ∀ (i : ?m.30) (b : ?m.31 i) (f : Π₀ (i : ?m.30), ?m.31 i), f i = 0 → b ≠ 0 → ?m.34 f → ?m.34 ((fun₀ | i => b) + f)
+of sort `Prop` in the application
+  DFinsupp.induction ?h0 ?hadd x
+Source line 12:
+  refine DFinsupp.induction ?h0 ?hadd x
+                                      ^
+Highlighted span: x
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (ι : Type v) (β : ι → Type w)
+
+variable [∀ i, AddCommMonoid (β i)]
+
+theorem coeAddMonoidHom_eq_dfinsuppSum [DecidableEq ι]
+    {M S : Type*} [DecidableEq M] [AddCommMonoid M]
+    [SetLike S M] [AddSubmonoidClass S M] (A : ι → S) (x : DirectSum ι fun i => A i) :
+    DirectSum.coeAddMonoidHom A x = DFinsupp.sum x fun i => (fun x : A i => ↑x) := by
+  classical
+  exact DirectSum.toAddMonoid _ (fun i => AddMonoidHom.id (A i)) x
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:9-12:67
+Function expected at
+  (DirectSum.toAddMonoid ?m.36) ?m.40
+but this term has type
+  ?m.34
+
+Note: Expected a function because this term is being applied to the argument
+  x
+Source line 12:
+  exact DirectSum.toAddMonoid _ (fun i => AddMonoidHom.id (A i)) x
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: DirectSum.toAddMonoid _ (fun i => AddMonoidHom.id (A i)) x
+
+ERROR .LspCheck.lean:12:33-12:65
+Application type mismatch: The argument
+  fun i ↦ AddMonoidHom.id ↥(A i)
+has type
+  (i : ι) → ↥(A i) →+ ↥(A i)
+but is expected to have type
+  DirectSum ?m.30 fun i ↦ ?m.31 i
+in the application
+  (DirectSum.toAddMonoid ?m.36) fun i ↦ AddMonoidHom.id ↥(A i)
+Source line 12:
+  exact DirectSum.toAddMonoid _ (fun i => AddMonoidHom.id (A i)) x
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (fun i => AddMonoidHom.id (A i))
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:9-12:67
+Function expected at
+  (DirectSum.toAddMonoid ?m.36) ?m.40
+but this term has type
+  ?m.34
+
+Note: Expected a function because this term is being applied to the argument
+  x
+Source line 12:
+  exact DirectSum.toAddMonoid _ (fun i => AddMonoidHom.id (A i)) x
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: DirectSum.toAddMonoid _ (fun i => AddMonoidHom.id (A i)) x
+
+ERROR .LspCheck.lean:12:33-12:65
+Application type mismatch: The argument
+  fun i ↦ AddMonoidHom.id ↥(A i)
+has type
+  (i : ι) → ↥(A i) →+ ↥(A i)
+but is expected to have type
+  DirectSum ?m.30 fun i ↦ ?m.31 i
+in the application
+  (DirectSum.toAddMonoid ?m.36) fun i ↦ AddMonoidHom.id ↥(A i)
+Source line 12:
+  exact DirectSum.toAddMonoid _ (fun i => AddMonoidHom.id (A i)) x
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (fun i => AddMonoidHom.id (A i))

@@ -1,0 +1,312 @@
+FILE: Basic.eqOn_closureM.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.eqOn_closureM.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {M : Type*} {N : Type*}
+
+variable {A : Type*}
+
+variable [MulOneClass M] {s : Set M}
+
+variable [AddZeroClass A] {t : Set A}
+
+variable [MulOneClass N]
+
+theorem eqOn_closureM {f g : M →* N} {s : Set M} (h : Set.EqOn f g s) : Set.EqOn f g (Submonoid.closure s) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M : Type*} {N : Type*}
+
+variable {A : Type*}
+
+variable [MulOneClass M] {s : Set M}
+
+variable [AddZeroClass A] {t : Set A}
+
+variable [MulOneClass N]
+
+theorem eqOn_closureM {f g : M →* N} {s : Set M} (h : Set.EqOn f g s) : Set.EqOn f g (Submonoid.closure s) := by
+  intro x hx
+  exact Submonoid.closure_induction hx h (by simp) (by
+    intro a b ha hb
+    simp [map_mul, ha, hb])
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:37-15:39
+Type mismatch
+  hx
+has type
+  x ∈ ↑(Submonoid.closure s)
+but is expected to have type
+  ∀ x_1 ∈ ?m.22, f x = g x
+Source line 15:
+  exact Submonoid.closure_induction hx h (by simp) (by
+                                    ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:15:40-15:41
+Type mismatch
+  h
+has type
+  Set.EqOn (⇑f) (⇑g) s
+but is expected to have type
+  f x = g x
+Source line 15:
+  exact Submonoid.closure_induction hx h (by simp) (by
+                                       ^
+Highlighted span: h
+
+ERROR .LspCheck.lean:16:15-16:17
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+M : Type u_1
+N : Type u_2
+inst✝¹ : MulOneClass M
+inst✝ : MulOneClass N
+f g : M →* N
+s : Set M
+h : Set.EqOn (⇑f) (⇑g) s
+x : M
+hx : x ∈ ↑(Submonoid.closure s)
+a : Set ?m.20
+b : a ∈ Set.range fun t ↦ ⋂ (_ : t ∈ {S | ?m.22 ⊆ ↑S}), ↑t
+⊢ ?m.27 ∈ a
+Source line 16:
+    intro a b ha hb
+              ^^
+Highlighted span: ha
+
+ERROR .LspCheck.lean:13:9-13:22
+(kernel) declaration has metavariables 'eqOn_closureM'
+Source line 13:
+theorem eqOn_closureM {f g : M →* N} {s : Set M} (h : Set.EqOn f g s) : Set.EqOn f g (Submonoid.closure s) := by
+        ^^^^^^^^^^^^^
+Highlighted span: eqOn_closureM
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:37-15:39
+Type mismatch
+  hx
+has type
+  x ∈ ↑(Submonoid.closure s)
+but is expected to have type
+  ∀ x_1 ∈ ?m.22, f x = g x
+Source line 15:
+  exact Submonoid.closure_induction hx h (by simp) (by
+                                    ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:15:40-15:41
+Type mismatch
+  h
+has type
+  Set.EqOn (⇑f) (⇑g) s
+but is expected to have type
+  f x = g x
+Source line 15:
+  exact Submonoid.closure_induction hx h (by simp) (by
+                                       ^
+Highlighted span: h
+
+ERROR .LspCheck.lean:16:15-16:17
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+M : Type u_1
+N : Type u_2
+inst✝¹ : MulOneClass M
+inst✝ : MulOneClass N
+f g : M →* N
+s : Set M
+h : Set.EqOn (⇑f) (⇑g) s
+x : M
+hx : x ∈ ↑(Submonoid.closure s)
+a : Set ?m.20
+b : a ∈ Set.range fun t ↦ ⋂ (_ : t ∈ {S | ?m.22 ⊆ ↑S}), ↑t
+⊢ ?m.27 ∈ a
+Source line 16:
+    intro a b ha hb
+              ^^
+Highlighted span: ha
+
+ERROR .LspCheck.lean:13:9-13:22
+(kernel) declaration has metavariables 'eqOn_closureM'
+Source line 13:
+theorem eqOn_closureM {f g : M →* N} {s : Set M} (h : Set.EqOn f g s) : Set.EqOn f g (Submonoid.closure s) := by
+        ^^^^^^^^^^^^^
+Highlighted span: eqOn_closureM
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M : Type*} {N : Type*}
+
+variable {A : Type*}
+
+variable [MulOneClass M] {s : Set M}
+
+variable [AddZeroClass A] {t : Set A}
+
+variable [MulOneClass N]
+
+theorem eqOn_closureM {f g : M →* N} {s : Set M} (h : Set.EqOn f g s) : Set.EqOn f g (Submonoid.closure s) := by
+  let S : Submonoid M :=
+    { carrier := {x | f x = g x}
+      one_mem' := by simp
+      mul_mem' := by
+        intro a b ha hb
+        simp [ha, hb] }
+  have hs : s ⊆ S := by
+    intro x hx
+    exact h hx
+  have hclosure : Submonoid.closure s ≤ S := Submonoid.closure_le.2 hs
+  intro x hx
+  exact hclosure hx
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:17:19-18:1
+unsolved goals
+M : Type u_1
+N : Type u_2
+inst✝¹ : MulOneClass M
+inst✝ : MulOneClass N
+f g : M →* N
+s : Set M
+h : Set.EqOn (⇑f) (⇑g) s
+a b : M
+ha : a ∈ {x | f x = g x}
+hb : b ∈ {x | f x = g x}
+⊢ f a * f b = g a * g b
+Source line 17:
+      mul_mem' := by
+                  ^
+Highlighted span: b
+
+WARNING .LspCheck.lean:19:15-19:17
+This simp argument is unused:
+  ha
+
+Hint: Omit it from the simp argument list.
+  simp [ha̵,̵ ̵h̵b]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 19:
+        simp [ha, hb] }
+              ^^
+Highlighted span: ha
+
+WARNING .LspCheck.lean:19:19-19:21
+This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  simp [ha,̵ ̵h̵b̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 19:
+        simp [ha, hb] }
+                  ^^
+Highlighted span: hb
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:17:19-18:1
+unsolved goals
+M : Type u_1
+N : Type u_2
+inst✝¹ : MulOneClass M
+inst✝ : MulOneClass N
+f g : M →* N
+s : Set M
+h : Set.EqOn (⇑f) (⇑g) s
+a b : M
+ha : a ∈ {x | f x = g x}
+hb : b ∈ {x | f x = g x}
+⊢ f a * f b = g a * g b
+Source line 17:
+      mul_mem' := by
+                  ^
+Highlighted span: b
+
+WARNING .LspCheck.lean:19:15-19:17
+This simp argument is unused:
+  ha
+
+Hint: Omit it from the simp argument list.
+  simp [ha̵,̵ ̵h̵b]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 19:
+        simp [ha, hb] }
+              ^^
+Highlighted span: ha
+
+WARNING .LspCheck.lean:19:19-19:21
+This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  simp [ha,̵ ̵h̵b̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 19:
+        simp [ha, hb] }
+                  ^^
+Highlighted span: hb
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M : Type*} {N : Type*}
+
+variable {A : Type*}
+
+variable [MulOneClass M] {s : Set M}
+
+variable [AddZeroClass A] {t : Set A}
+
+variable [MulOneClass N]
+
+theorem eqOn_closureM {f g : M →* N} {s : Set M} (h : Set.EqOn f g s) : Set.EqOn f g (Submonoid.closure s) := by
+  let S : Submonoid M :=
+    { carrier := {x | f x = g x}
+      one_mem' := by simp
+      mul_mem' := by
+        intro a b ha hb
+        change f (a * b) = g (a * b)
+        rw [map_mul, map_mul, ha, hb] }
+  have hs : s ⊆ S := by
+    intro x hx
+    exact h hx
+  have hclosure : Submonoid.closure s ≤ S := Submonoid.closure_le.2 hs
+  intro x hx
+  exact hclosure hx
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

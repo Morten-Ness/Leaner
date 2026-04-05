@@ -1,0 +1,195 @@
+FILE: Basic.charpoly_sub_scalar.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.charpoly_sub_scalar.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R S : Type*} [CommRing R] [CommRing S]
+
+variable {m n : Type*} [DecidableEq m] [DecidableEq n] [Fintype m] [Fintype n]
+
+variable (M₁₁ : Matrix m m R) (M₁₂ : Matrix m n R) (M₂₁ : Matrix n m R) (M₂₂ M : Matrix n n R)
+
+variable (i j : n)
+
+set_option backward.isDefEq.respectTransparency false in
+theorem charpoly_sub_scalar (M : Matrix n n R) (μ : R) :
+    (M - Matrix.scalar n μ).charpoly = M.charpoly.comp (Polynomial.X + Polynomial.C μ) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R S : Type*} [CommRing R] [CommRing S]
+
+variable {m n : Type*} [DecidableEq m] [DecidableEq n] [Fintype m] [Fintype n]
+
+variable (M₁₁ : Matrix m m R) (M₁₂ : Matrix m n R) (M₂₁ : Matrix n m R) (M₂₂ M : Matrix n n R)
+
+variable (i j : n)
+
+set_option backward.isDefEq.respectTransparency false in
+theorem charpoly_sub_scalar (M : Matrix n n R) (μ : R) :
+    (M - Matrix.scalar n μ).charpoly = M.charpoly.comp (Polynomial.X + Polynomial.C μ) := by
+  simpa [sub_eq_add_neg, add_comm, add_left_comm, add_assoc] using
+    Matrix.charpoly_sub_eq_charpoly_add (M := M) (-μ)
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:5-15:40
+Unknown constant `Matrix.charpoly_sub_eq_charpoly_add`
+Source line 15:
+    Matrix.charpoly_sub_eq_charpoly_add (M := M) (-μ)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Matrix.charpoly_sub_eq_charpoly_add
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:5-15:40
+Unknown constant `Matrix.charpoly_sub_eq_charpoly_add`
+Source line 15:
+    Matrix.charpoly_sub_eq_charpoly_add (M := M) (-μ)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Matrix.charpoly_sub_eq_charpoly_add
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R S : Type*} [CommRing R] [CommRing S]
+
+variable {m n : Type*} [DecidableEq m] [DecidableEq n] [Fintype m] [Fintype n]
+
+variable (M₁₁ : Matrix m m R) (M₁₂ : Matrix m n R) (M₂₁ : Matrix n m R) (M₂₂ M : Matrix n n R)
+
+variable (i j : n)
+
+set_option backward.isDefEq.respectTransparency false in
+theorem charpoly_sub_scalar (M : Matrix n n R) (μ : R) :
+    (M - Matrix.scalar n μ).charpoly = M.charpoly.comp (Polynomial.X + Polynomial.C μ) := by
+  simpa [sub_eq_add_neg, Matrix.scalar_add, add_comm, add_left_comm, add_assoc] using
+    Matrix.charpoly_add_scalar (M := M) (-μ)
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:26-14:43
+Unknown constant `Matrix.scalar_add`
+Source line 14:
+  simpa [sub_eq_add_neg, Matrix.scalar_add, add_comm, add_left_comm, add_assoc] using
+                         ^^^^^^^^^^^^^^^^^
+Highlighted span: Matrix.scalar_add
+
+ERROR .LspCheck.lean:15:5-15:31
+Unknown constant `Matrix.charpoly_add_scalar`
+Source line 15:
+    Matrix.charpoly_add_scalar (M := M) (-μ)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Matrix.charpoly_add_scalar
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:26-14:43
+Unknown constant `Matrix.scalar_add`
+Source line 14:
+  simpa [sub_eq_add_neg, Matrix.scalar_add, add_comm, add_left_comm, add_assoc] using
+                         ^^^^^^^^^^^^^^^^^
+Highlighted span: Matrix.scalar_add
+
+ERROR .LspCheck.lean:15:5-15:31
+Unknown constant `Matrix.charpoly_add_scalar`
+Source line 15:
+    Matrix.charpoly_add_scalar (M := M) (-μ)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Matrix.charpoly_add_scalar
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R S : Type*} [CommRing R] [CommRing S]
+
+variable {m n : Type*} [DecidableEq m] [DecidableEq n] [Fintype m] [Fintype n]
+
+variable (M₁₁ : Matrix m m R) (M₁₂ : Matrix m n R) (M₂₁ : Matrix n m R) (M₂₂ M : Matrix n n R)
+
+variable (i j : n)
+
+set_option backward.isDefEq.respectTransparency false in
+theorem charpoly_sub_scalar (M : Matrix n n R) (μ : R) :
+    (M - Matrix.scalar n μ).charpoly = M.charpoly.comp (Polynomial.X + Polynomial.C μ) := by
+  classical
+  rw [Matrix.charpoly, Matrix.charpoly]
+  simp_rw [Matrix.sub_apply, Matrix.scalar_apply]
+  rw [show M.map Polynomial.C - Matrix.scalar n (Polynomial.C μ) =
+      M.map Polynomial.C + diagonal (fun _ => -Polynomial.C μ) by
+        ext a b
+        by_cases h : a = b
+        · subst h
+          simp
+        · simp [Matrix.diagonal, h]]
+  rw [Matrix.det_eq_det_finset]
+  rw [Matrix.det_eq_det_finset]
+  let A : Matrix n n R[X] := M.map Polynomial.C + Polynomial.X • 1
+  have hA :
+      M.map Polynomial.C + (Polynomial.X + Polynomial.C μ) • (1 : Matrix n n R[X]) =
+        A + Polynomial.C μ • (1 : Matrix n n R[X]) := by
+    ext a b
+    by_cases h : a = b
+    · subst h
+      simp [A, add_assoc, add_left_comm, add_comm]
+    · simp [A, h]
+  rw [← hA]
+  let e := Matrix.detMonoidHom n (R := R[X])
+  change e (A + Polynomial.C μ • (1 : Matrix n n R[X])) = _
+  rw [show M.charpoly.comp (Polynomial.X + Polynomial.C μ) =
+      Polynomial.eval₂RingHom (Polynomial.C) (Polynomial.X + Polynomial.C μ) M.charpoly by
+        rfl]
+  rw [Matrix.charpoly]
+  simp only [Polynomial.comp]
+  rw [← RingHom.map_det]
+  congr 1
+  ext a b
+  by_cases h : a = b
+  · subst h
+    simp [A, add_assoc, add_left_comm, add_comm]
+  · simp [A, h]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:12-16:28
+`simp` made no progress
+Source line 16:
+  simp_rw [Matrix.sub_apply, Matrix.scalar_apply]
+           ^^^^^^^^^^^^^^^^
+Highlighted span: Matrix.sub_apply
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:12-16:28
+`simp` made no progress
+Source line 16:
+  simp_rw [Matrix.sub_apply, Matrix.scalar_apply]
+           ^^^^^^^^^^^^^^^^
+Highlighted span: Matrix.sub_apply

@@ -1,0 +1,144 @@
+FILE: Basic.charmatrix_map.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.charmatrix_map.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R S : Type*} [CommRing R] [CommRing S]
+
+variable {m n : Type*} [DecidableEq m] [DecidableEq n] [Fintype m] [Fintype n]
+
+variable (M₁₁ : Matrix m m R) (M₁₂ : Matrix m n R) (M₂₁ : Matrix n m R) (M₂₂ M : Matrix n n R)
+
+variable (i j : n)
+
+theorem charmatrix_map (M : Matrix n n R) (f : R →+* S) :
+    Matrix.charmatrix (M.map f) = (Matrix.charmatrix M).map (Polynomial.map f) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R S : Type*} [CommRing R] [CommRing S]
+
+variable {m n : Type*} [DecidableEq m] [DecidableEq n] [Fintype m] [Fintype n]
+
+variable (M₁₁ : Matrix m m R) (M₁₂ : Matrix m n R) (M₂₁ : Matrix n m R) (M₂₂ M : Matrix n n R)
+
+variable (i j : n)
+
+theorem charmatrix_map (M : Matrix n n R) (f : R →+* S) :
+    Matrix.charmatrix (M.map f) = (Matrix.charmatrix M).map (Polynomial.map f) := by
+  ext i j
+  simp [Matrix.charmatrix, Matrix.map_apply, Polynomial.map_sub, Polynomial.map_C,
+    Polynomial.map_X, RingHom.mapMatrix_apply]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:83-13:1
+unsolved goals
+case a.a
+R : Type u_1
+S : Type u_2
+inst✝³ : CommRing R
+inst✝² : CommRing S
+n : Type u_4
+inst✝¹ : DecidableEq n
+inst✝ : Fintype n
+M : Matrix n n R
+f : R →+* S
+i j : n
+n✝ : ℕ
+⊢ (Matrix.diagonal (fun x ↦ Polynomial.X) i j).coeff n✝ = f ((Matrix.diagonal (fun x ↦ Polynomial.X) i j).coeff n✝)
+Source line 12:
+    Matrix.charmatrix (M.map f) = (Matrix.charmatrix M).map (Polynomial.map f) := by
+                                                                                  ^
+Highlighted span: b
+
+WARNING .LspCheck.lean:15:5-15:21
+This simp argument is unused:
+  Polynomial.map_X
+
+Hint: Omit it from the simp argument list.
+  simp [Matrix.charmatrix, Matrix.map_apply, Polynomial.map_sub, Polynomial.map_C,
+      P̵o̵l̵y̵n̵o̵m̵i̵a̵l̵.̵m̵a̵p̵_̵X̵,̵ ̵RingHom.mapMatrix_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 15:
+    Polynomial.map_X, RingHom.mapMatrix_apply]
+    ^^^^^^^^^^^^^^^^
+Highlighted span: Polynomial.map_X
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:83-13:1
+unsolved goals
+case a.a
+R : Type u_1
+S : Type u_2
+inst✝³ : CommRing R
+inst✝² : CommRing S
+n : Type u_4
+inst✝¹ : DecidableEq n
+inst✝ : Fintype n
+M : Matrix n n R
+f : R →+* S
+i j : n
+n✝ : ℕ
+⊢ (Matrix.diagonal (fun x ↦ Polynomial.X) i j).coeff n✝ = f ((Matrix.diagonal (fun x ↦ Polynomial.X) i j).coeff n✝)
+Source line 12:
+    Matrix.charmatrix (M.map f) = (Matrix.charmatrix M).map (Polynomial.map f) := by
+                                                                                  ^
+Highlighted span: b
+
+WARNING .LspCheck.lean:15:5-15:21
+This simp argument is unused:
+  Polynomial.map_X
+
+Hint: Omit it from the simp argument list.
+  simp [Matrix.charmatrix, Matrix.map_apply, Polynomial.map_sub, Polynomial.map_C,
+      P̵o̵l̵y̵n̵o̵m̵i̵a̵l̵.̵m̵a̵p̵_̵X̵,̵ ̵RingHom.mapMatrix_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 15:
+    Polynomial.map_X, RingHom.mapMatrix_apply]
+    ^^^^^^^^^^^^^^^^
+Highlighted span: Polynomial.map_X
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R S : Type*} [CommRing R] [CommRing S]
+
+variable {m n : Type*} [DecidableEq m] [DecidableEq n] [Fintype m] [Fintype n]
+
+variable (M₁₁ : Matrix m m R) (M₁₂ : Matrix m n R) (M₂₁ : Matrix n m R) (M₂₂ M : Matrix n n R)
+
+variable (i j : n)
+
+theorem charmatrix_map (M : Matrix n n R) (f : R →+* S) :
+    Matrix.charmatrix (M.map f) = (Matrix.charmatrix M).map (Polynomial.map f) := by
+  ext i j
+  by_cases h : i = j
+  · subst h
+    simp [Matrix.charmatrix, Matrix.map_apply, Polynomial.map_sub, Polynomial.map_C,
+      RingHom.mapMatrix_apply]
+  · simp [Matrix.charmatrix, Matrix.map_apply, Polynomial.map_sub, Polynomial.map_C,
+      RingHom.mapMatrix_apply, h]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

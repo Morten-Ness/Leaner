@@ -1,0 +1,132 @@
+FILE: Basic.asHom_injective.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.asHom_injective.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+theorem asHom_injective {G : AddCommGrpCat.{0}} : Function.Injective (@AddCommGrpCat.asHom G) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+theorem asHom_injective {G : AddCommGrpCat.{0}} : Function.Injective (@AddCommGrpCat.asHom G) := by
+  intro a b h
+  cases a
+  cases b
+  rfl
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:5:3-5:10
+Tactic `cases` failed: major premise type is not an inductive type
+  G.1
+
+Explanation: the `cases` tactic is for constructor-based reasoning as well as for applying custom cases principles with a 'using' clause or a registered '@[cases_eliminator]' theorem. The above type neither is an inductive type nor has a registered theorem.
+
+G : AddCommGrpCat
+a b : ↑G
+h : AddCommGrpCat.asHom a = AddCommGrpCat.asHom b
+⊢ a = b
+Source line 5:
+  cases a
+  ^^^^^^^
+Highlighted span: cases a
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:5:3-5:10
+Tactic `cases` failed: major premise type is not an inductive type
+  G.1
+
+Explanation: the `cases` tactic is for constructor-based reasoning as well as for applying custom cases principles with a 'using' clause or a registered '@[cases_eliminator]' theorem. The above type neither is an inductive type nor has a registered theorem.
+
+G : AddCommGrpCat
+a b : ↑G
+h : AddCommGrpCat.asHom a = AddCommGrpCat.asHom b
+⊢ a = b
+Source line 5:
+  cases a
+  ^^^^^^^
+Highlighted span: cases a
+
+===== ASSISTANT =====
+import Mathlib
+
+theorem asHom_injective {G : AddCommGrpCat.{0}} : Function.Injective (@AddCommGrpCat.asHom G) := by
+  intro a b h
+  exact congrArg AddMonoidHom.toFun h
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:5:18-5:36
+Unknown constant `AddMonoidHom.toFun`
+Source line 5:
+  exact congrArg AddMonoidHom.toFun h
+                 ^^^^^^^^^^^^^^^^^^
+Highlighted span: AddMonoidHom.toFun
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:5:18-5:36
+Unknown constant `AddMonoidHom.toFun`
+Source line 5:
+  exact congrArg AddMonoidHom.toFun h
+                 ^^^^^^^^^^^^^^^^^^
+Highlighted span: AddMonoidHom.toFun
+
+===== ASSISTANT =====
+import Mathlib
+
+theorem asHom_injective {G : AddCommGrpCat.{0}} : Function.Injective (@AddCommGrpCat.asHom G) := by
+  intro a b h
+  ext
+  exact congrFun h x
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:5:3-5:6
+No applicable extensionality theorem found for type
+  ↑G
+
+Note: Extensionality theorems can be registered by marking them with the `[ext]` attribute
+Source line 5:
+  ext
+  ^^^
+Highlighted span: ext
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:5:3-5:6
+No applicable extensionality theorem found for type
+  ↑G
+
+Note: Extensionality theorems can be registered by marking them with the `[ext]` attribute
+Source line 5:
+  ext
+  ^^^
+Highlighted span: ext

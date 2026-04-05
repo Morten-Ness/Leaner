@@ -1,0 +1,131 @@
+FILE: Basic.comp_liftAddHom.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.comp_liftAddHom.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {α ι γ A B C : Type*} [AddCommMonoid A] [AddCommMonoid B] [AddCommMonoid C]
+
+variable {t : ι → A → C}
+
+variable {s : Finset α} {f : α → ι →₀ A} (i : ι)
+
+variable (g : ι →₀ A) (k : ι → A → γ → B) (x : γ)
+
+variable {β M M' N P G H R S : Type*}
+
+theorem comp_liftAddHom [AddZeroClass M] [AddCommMonoid N] [AddCommMonoid P] (g : N →+ P)
+    (f : α → M →+ N) :
+    g.comp ((Finsupp.liftAddHom (α := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α ι γ A B C : Type*} [AddCommMonoid A] [AddCommMonoid B] [AddCommMonoid C]
+
+variable {t : ι → A → C}
+
+variable {s : Finset α} {f : α → ι →₀ A} (i : ι)
+
+variable (g : ι →₀ A) (k : ι → A → γ → B) (x : γ)
+
+variable {β M M' N P G H R S : Type*}
+
+theorem comp_liftAddHom [AddZeroClass M] [AddCommMonoid N] [AddCommMonoid P] (g : N →+ P)
+    (f : α → M →+ N) :
+    g.comp ((Finsupp.liftAddHom (α := α) (M := M) (N := N) f)) =
+      Finsupp.liftAddHom (α := α) (M := M) (N := P) fun a => g.comp (f a) := by
+  ext x a
+  rfl
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:18:3-18:6
+Tactic `rfl` failed: The left-hand side
+  ((g.comp (Finsupp.liftAddHom f)).comp (Finsupp.singleAddHom x)) a
+is not definitionally equal to the right-hand side
+  ((Finsupp.liftAddHom fun a ↦ g.comp (f a)).comp (Finsupp.singleAddHom x)) a
+
+case H.h
+α : Type u_1
+M : Type u_8
+N : Type u_10
+P : Type u_11
+inst✝² : AddZeroClass M
+inst✝¹ : AddCommMonoid N
+inst✝ : AddCommMonoid P
+g : N →+ P
+f : α → M →+ N
+x : α
+a : M
+⊢ ((g.comp (Finsupp.liftAddHom f)).comp (Finsupp.singleAddHom x)) a =
+    ((Finsupp.liftAddHom fun a ↦ g.comp (f a)).comp (Finsupp.singleAddHom x)) a
+Source line 18:
+  rfl
+  ^^^
+Highlighted span: rfl
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:18:3-18:6
+Tactic `rfl` failed: The left-hand side
+  ((g.comp (Finsupp.liftAddHom f)).comp (Finsupp.singleAddHom x)) a
+is not definitionally equal to the right-hand side
+  ((Finsupp.liftAddHom fun a ↦ g.comp (f a)).comp (Finsupp.singleAddHom x)) a
+
+case H.h
+α : Type u_1
+M : Type u_8
+N : Type u_10
+P : Type u_11
+inst✝² : AddZeroClass M
+inst✝¹ : AddCommMonoid N
+inst✝ : AddCommMonoid P
+g : N →+ P
+f : α → M →+ N
+x : α
+a : M
+⊢ ((g.comp (Finsupp.liftAddHom f)).comp (Finsupp.singleAddHom x)) a =
+    ((Finsupp.liftAddHom fun a ↦ g.comp (f a)).comp (Finsupp.singleAddHom x)) a
+Source line 18:
+  rfl
+  ^^^
+Highlighted span: rfl
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α ι γ A B C : Type*} [AddCommMonoid A] [AddCommMonoid B] [AddCommMonoid C]
+
+variable {t : ι → A → C}
+
+variable {s : Finset α} {f : α → ι →₀ A} (i : ι)
+
+variable (g : ι →₀ A) (k : ι → A → γ → B) (x : γ)
+
+variable {β M M' N P G H R S : Type*}
+
+theorem comp_liftAddHom [AddZeroClass M] [AddCommMonoid N] [AddCommMonoid P] (g : N →+ P)
+    (f : α → M →+ N) :
+    g.comp ((Finsupp.liftAddHom (α := α) (M := M) (N := N) f)) =
+      Finsupp.liftAddHom (α := α) (M := M) (N := P) fun a => g.comp (f a) := by
+  ext x a
+  simp [Finsupp.liftAddHom_apply, AddMonoidHom.comp_apply]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

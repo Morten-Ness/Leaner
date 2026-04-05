@@ -1,0 +1,243 @@
+FILE: Basic.HasFiniteMulSupport.comp_of_injective.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.HasFiniteMulSupport.comp_of_injective.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {α M : Type*} [One M]
+
+variable {β : Type*} {f : β → M} {g : α → β}
+
+theorem HasFiniteMulSupport.comp_of_injective (hg : Function.Injective g) (hf : f.HasFiniteMulSupport) :
+    (f ∘ g).HasFiniteMulSupport := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α M : Type*} [One M]
+
+variable {β : Type*} {f : β → M} {g : α → β}
+
+theorem HasFiniteMulSupport.comp_of_injective (hg : Function.Injective g) (hf : f.HasFiniteMulSupport) :
+    (f ∘ g).HasFiniteMulSupport := by
+  classical
+  rw [Function.hasFiniteMulSupport_iff]
+  refine hf.subset ?_
+  intro a ha
+  rw [Function.mem_mulSupport] at ha ⊢
+  exact fun h => ha (by simpa [Function.comp] using h)
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:7-10:39
+Unknown identifier `Function.hasFiniteMulSupport_iff`
+Source line 10:
+  rw [Function.hasFiniteMulSupport_iff]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Function.hasFiniteMulSupport_iff
+
+ERROR .LspCheck.lean:8:36-9:1
+unsolved goals
+α : Type u_1
+M : Type u_2
+inst✝ : One M
+β : Type u_3
+f : β → M
+g : α → β
+hg : Function.Injective g
+hf : Function.HasFiniteMulSupport f
+⊢ Function.HasFiniteMulSupport (f ∘ g)
+Source line 8:
+    (f ∘ g).HasFiniteMulSupport := by
+                                   ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:7-10:39
+Unknown identifier `Function.hasFiniteMulSupport_iff`
+Source line 10:
+  rw [Function.hasFiniteMulSupport_iff]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Function.hasFiniteMulSupport_iff
+
+ERROR .LspCheck.lean:8:36-9:1
+unsolved goals
+α : Type u_1
+M : Type u_2
+inst✝ : One M
+β : Type u_3
+f : β → M
+g : α → β
+hg : Function.Injective g
+hf : Function.HasFiniteMulSupport f
+⊢ Function.HasFiniteMulSupport (f ∘ g)
+Source line 8:
+    (f ∘ g).HasFiniteMulSupport := by
+                                   ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α M : Type*} [One M]
+
+variable {β : Type*} {f : β → M} {g : α → β}
+
+theorem HasFiniteMulSupport.comp_of_injective (hg : Function.Injective g) (hf : f.HasFiniteMulSupport) :
+    (f ∘ g).HasFiniteMulSupport := by
+  classical
+  rcases hf with ⟨s, hs⟩
+  refine ⟨s.preimage g, ?_⟩
+  intro a ha
+  have hga : g a ∉ s := ha
+  exact hs (by
+    intro hfg
+    exact hga (by simpa [Set.mem_preimage] using hfg))
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:10-11:28
+Insufficient number of fields for `⟨...⟩` constructor: Constructor `Equiv.mk` has 4 explicit field, but only 2 were provided
+Source line 11:
+  refine ⟨s.preimage g, ?_⟩
+         ^^^^^^^^^^^^^^^^^^
+Highlighted span: ⟨s.preimage g, ?_⟩
+
+ERROR .LspCheck.lean:11:13-11:21
+Invalid field `preimage`: The environment does not contain `Function.preimage`, so it is not possible to project the field `preimage` from an expression
+  s
+of type
+  ↑(Function.mulSupport f) → Fin n✝
+Source line 11:
+  refine ⟨s.preimage g, ?_⟩
+            ^^^^^^^^
+Highlighted span: preimage
+
+ERROR .LspCheck.lean:8:36-9:1
+unsolved goals
+α : Type u_1
+M : Type u_2
+inst✝ : One M
+β : Type u_3
+f : β → M
+g : α → β
+hg : Function.Injective g
+n✝ : ℕ
+s : ↑(Function.mulSupport f) → Fin n✝
+hs : Fin n✝ → ↑(Function.mulSupport f)
+left_inv✝ : Function.LeftInverse hs s
+right_inv✝ : Function.RightInverse hs s
+⊢ Function.HasFiniteMulSupport (f ∘ g)
+Source line 8:
+    (f ∘ g).HasFiniteMulSupport := by
+                                   ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:10-11:28
+Insufficient number of fields for `⟨...⟩` constructor: Constructor `Equiv.mk` has 4 explicit field, but only 2 were provided
+Source line 11:
+  refine ⟨s.preimage g, ?_⟩
+         ^^^^^^^^^^^^^^^^^^
+Highlighted span: ⟨s.preimage g, ?_⟩
+
+ERROR .LspCheck.lean:11:13-11:21
+Invalid field `preimage`: The environment does not contain `Function.preimage`, so it is not possible to project the field `preimage` from an expression
+  s
+of type
+  ↑(Function.mulSupport f) → Fin n✝
+Source line 11:
+  refine ⟨s.preimage g, ?_⟩
+            ^^^^^^^^
+Highlighted span: preimage
+
+ERROR .LspCheck.lean:8:36-9:1
+unsolved goals
+α : Type u_1
+M : Type u_2
+inst✝ : One M
+β : Type u_3
+f : β → M
+g : α → β
+hg : Function.Injective g
+n✝ : ℕ
+s : ↑(Function.mulSupport f) → Fin n✝
+hs : Fin n✝ → ↑(Function.mulSupport f)
+left_inv✝ : Function.LeftInverse hs s
+right_inv✝ : Function.RightInverse hs s
+⊢ Function.HasFiniteMulSupport (f ∘ g)
+Source line 8:
+    (f ∘ g).HasFiniteMulSupport := by
+                                   ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α M : Type*} [One M]
+
+variable {β : Type*} {f : β → M} {g : α → β}
+
+theorem HasFiniteMulSupport.comp_of_injective (hg : Function.Injective g) (hf : f.HasFiniteMulSupport) :
+    (f ∘ g).HasFiniteMulSupport := by
+  classical
+  simpa [Function.mulSupport_comp_eq_preimage, hg] using hf.preimage hg
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:70-10:72
+Application type mismatch: The argument
+  hg
+has type
+  Function.Injective g
+but is expected to have type
+  Set.InjOn ?m.16 (?m.16 ⁻¹' ?m.17)
+in the application
+  Set.Finite.preimage hg
+Source line 10:
+  simpa [Function.mulSupport_comp_eq_preimage, hg] using hf.preimage hg
+                                                                     ^^
+Highlighted span: hg
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:70-10:72
+Application type mismatch: The argument
+  hg
+has type
+  Function.Injective g
+but is expected to have type
+  Set.InjOn ?m.16 (?m.16 ⁻¹' ?m.17)
+in the application
+  Set.Finite.preimage hg
+Source line 10:
+  simpa [Function.mulSupport_comp_eq_preimage, hg] using hf.preimage hg
+                                                                     ^^
+Highlighted span: hg

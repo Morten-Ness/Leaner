@@ -1,0 +1,119 @@
+FILE: Basic.coe_iSup_of_directed.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.coe_iSup_of_directed.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {K : Type u} {L : Type v} {M : Type w}
+
+variable [DivisionRing K] [DivisionRing L] [DivisionRing M]
+
+theorem coe_iSup_of_directed {ι} [hι : Nonempty ι] {S : ι → Subfield K} (hS : Directed (· ≤ ·) S) :
+    ((⨆ i, S i : Subfield K) : Set K) = ⋃ i, ↑(S i) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {K : Type u} {L : Type v} {M : Type w}
+
+variable [DivisionRing K] [DivisionRing L] [DivisionRing M]
+
+theorem coe_iSup_of_directed {ι} [hι : Nonempty ι] {S : ι → Subfield K} (hS : Directed (· ≤ ·) S) :
+    ((⨆ i, S i : Subfield K) : Set K) = ⋃ i, ↑(S i) := by
+  ext x
+  simp only [Set.mem_iUnion, Subfield.mem_coe]
+  constructor
+  · intro hx
+    refine Subfield.mem_iSup_of_directed ?_ hS hx
+  · rintro ⟨i, hi⟩
+    exact Subfield.mem_iSup_of_mem i hi
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:30-10:46
+Unknown constant `Subfield.mem_coe`
+Source line 10:
+  simp only [Set.mem_iUnion, Subfield.mem_coe]
+                             ^^^^^^^^^^^^^^^^
+Highlighted span: Subfield.mem_coe
+
+ERROR .LspCheck.lean:13:12-13:50
+Function expected at
+  Subfield.mem_iSup_of_directed ?m.42
+but this term has type
+  ?m.43 ∈ ⨆ i, ?m.41 i ↔ ∃ i, ?m.43 ∈ ?m.41 i
+
+Note: Expected a function because this term is being applied to the argument
+  hS
+Source line 13:
+    refine Subfield.mem_iSup_of_directed ?_ hS hx
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subfield.mem_iSup_of_directed ?_ hS hx
+
+ERROR .LspCheck.lean:15:11-15:35
+Unknown constant `Subfield.mem_iSup_of_mem`
+Source line 15:
+    exact Subfield.mem_iSup_of_mem i hi
+          ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subfield.mem_iSup_of_mem
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:30-10:46
+Unknown constant `Subfield.mem_coe`
+Source line 10:
+  simp only [Set.mem_iUnion, Subfield.mem_coe]
+                             ^^^^^^^^^^^^^^^^
+Highlighted span: Subfield.mem_coe
+
+ERROR .LspCheck.lean:13:12-13:50
+Function expected at
+  Subfield.mem_iSup_of_directed ?m.42
+but this term has type
+  ?m.43 ∈ ⨆ i, ?m.41 i ↔ ∃ i, ?m.43 ∈ ?m.41 i
+
+Note: Expected a function because this term is being applied to the argument
+  hS
+Source line 13:
+    refine Subfield.mem_iSup_of_directed ?_ hS hx
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subfield.mem_iSup_of_directed ?_ hS hx
+
+ERROR .LspCheck.lean:15:11-15:35
+Unknown constant `Subfield.mem_iSup_of_mem`
+Source line 15:
+    exact Subfield.mem_iSup_of_mem i hi
+          ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subfield.mem_iSup_of_mem
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {K : Type u} {L : Type v} {M : Type w}
+
+variable [DivisionRing K] [DivisionRing L] [DivisionRing M]
+
+theorem coe_iSup_of_directed {ι} [hι : Nonempty ι] {S : ι → Subfield K} (hS : Directed (· ≤ ·) S) :
+    ((⨆ i, S i : Subfield K) : Set K) = ⋃ i, ↑(S i) := by
+  ext x
+  simp only [Set.mem_iUnion]
+  exact show x ∈ (⨆ i, S i) ↔ ∃ i, x ∈ S i by
+    simpa using Subfield.mem_iSup_of_directed hS
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

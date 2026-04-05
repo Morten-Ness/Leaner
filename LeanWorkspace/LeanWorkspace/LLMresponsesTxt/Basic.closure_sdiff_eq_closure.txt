@@ -1,0 +1,56 @@
+FILE: Basic.closure_sdiff_eq_closure.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.closure_sdiff_eq_closure.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {M : Type*} {N : Type*}
+
+variable {A : Type*}
+
+variable [MulOneClass M] {s : Set M}
+
+variable [AddZeroClass A] {t : Set A}
+
+variable (S : Submonoid M)
+
+variable {t : Set M}
+
+theorem closure_sdiff_eq_closure (hts : t ⊆ Submonoid.closure (s \ t)) : Submonoid.closure (s \ t) = Submonoid.closure s := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M : Type*} {N : Type*}
+
+variable {A : Type*}
+
+variable [MulOneClass M] {s : Set M}
+
+variable [AddZeroClass A] {t : Set A}
+
+variable (S : Submonoid M)
+
+variable {t : Set M}
+
+theorem closure_sdiff_eq_closure (hts : t ⊆ Submonoid.closure (s \ t)) : Submonoid.closure (s \ t) = Submonoid.closure s := by
+  apply le_antisymm
+  · exact Submonoid.closure_mono (by intro x hx; exact hx.1)
+  · refine Submonoid.closure_le.2 ?_
+    intro x hx
+    by_cases hxt : x ∈ t
+    · exact hts hxt
+    · exact Submonoid.subset_closure ⟨hx, hxt⟩
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+PASS

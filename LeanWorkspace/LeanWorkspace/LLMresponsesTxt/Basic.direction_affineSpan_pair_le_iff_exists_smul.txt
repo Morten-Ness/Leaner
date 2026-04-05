@@ -1,0 +1,304 @@
+FILE: Basic.direction_affineSpan_pair_le_iff_exists_smul.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.direction_affineSpan_pair_le_iff_exists_smul.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [AddTorsor V P]
+
+theorem direction_affineSpan_pair_le_iff_exists_smul {p₁ q₁ p₂ q₂ : P} :
+    line[k, p₁, q₁].direction ≤ line[k, p₂, q₂].direction ↔ ∃ z : k, z • (q₂ -ᵥ p₂) = q₁ -ᵥ p₁ := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [AddTorsor V P]
+
+theorem direction_affineSpan_pair_le_iff_exists_smul {p₁ q₁ p₂ q₂ : P} :
+    line[k, p₁, q₁].direction ≤ line[k, p₂, q₂].direction ↔ ∃ z : k, z • (q₂ -ᵥ p₂) = q₁ -ᵥ p₁ := by
+  rw [AffineSubspace.direction_le]
+  constructor
+  · intro h
+    have hmem : q₁ -ᵥ p₁ ∈ line[k, p₂, q₂].direction := by
+      exact h (by
+        rw [AffineSubspace.vsub_mem_direction_iff_mem]
+        exact AffineSubspace.right_mem_affineSpan_pair k p₂ q₂)
+    rw [line_direction_eq_span_vsub_right] at hmem
+    simpa [Submodule.mem_span_singleton] using hmem
+  · rintro ⟨z, hz⟩ p hp
+    rw [AffineSubspace.mem_line_iff_eq_smul_vsub] at hp
+    rcases hp with ⟨w, rfl⟩
+    rw [AffineSubspace.vadd_mem_direction_iff_mem]
+    rw [line_direction_eq_span_vsub_right]
+    rw [Submodule.mem_span_singleton]
+    refine ⟨w * z, ?_⟩
+    rw [smul_smul, hz]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:9:7-9:34
+Invalid rewrite argument: Expected an equality or iff proof or definition name, but
+  AffineSubspace.direction_le ?h ?a✝ ?t ?a✝
+is a proof of
+  ?x ∈ ?t
+Source line 9:
+  rw [AffineSubspace.direction_le]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.direction_le
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:9:7-9:34
+Invalid rewrite argument: Expected an equality or iff proof or definition name, but
+  AffineSubspace.direction_le ?h ?a✝ ?t ?a✝
+is a proof of
+  ?x ∈ ?t
+Source line 9:
+  rw [AffineSubspace.direction_le]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.direction_le
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [AddTorsor V P]
+
+theorem direction_affineSpan_pair_le_iff_exists_smul {p₁ q₁ p₂ q₂ : P} :
+    line[k, p₁, q₁].direction ≤ line[k, p₂, q₂].direction ↔ ∃ z : k, z • (q₂ -ᵥ p₂) = q₁ -ᵥ p₁ := by
+  constructor
+  · intro h
+    have hmem : q₁ -ᵥ p₁ ∈ line[k, p₂, q₂].direction := by
+      apply h
+      rw [line_direction_eq_span_vsub_right]
+      exact Submodule.subset_span ⟨1, by simp⟩
+    rw [line_direction_eq_span_vsub_right] at hmem
+    simpa [Submodule.mem_span_singleton] using hmem
+  · rintro ⟨z, hz⟩
+    rw [AffineSubspace.direction_le]
+    intro v hv
+    rw [line_direction_eq_span_vsub_right] at hv
+    rcases (Submodule.mem_span_singleton.mp hv) with ⟨w, rfl⟩
+    rw [line_direction_eq_span_vsub_right]
+    rw [Submodule.mem_span_singleton]
+    refine ⟨w * z, ?_⟩
+    rw [smul_smul, hz]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:11-13:44
+Unknown identifier `line_direction_eq_span_vsub_right`
+Source line 13:
+      rw [line_direction_eq_span_vsub_right]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: line_direction_eq_span_vsub_right
+
+ERROR .LspCheck.lean:15:9-15:42
+Unknown identifier `line_direction_eq_span_vsub_right`
+Source line 15:
+    rw [line_direction_eq_span_vsub_right] at hmem
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: line_direction_eq_span_vsub_right
+
+ERROR .LspCheck.lean:18:9-18:36
+Invalid rewrite argument: Expected an equality or iff proof or definition name, but
+  AffineSubspace.direction_le ?h ?a✝ ?t ?a✝
+is a proof of
+  ?x ∈ ?t
+Source line 18:
+    rw [AffineSubspace.direction_le]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.direction_le
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:11-13:44
+Unknown identifier `line_direction_eq_span_vsub_right`
+Source line 13:
+      rw [line_direction_eq_span_vsub_right]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: line_direction_eq_span_vsub_right
+
+ERROR .LspCheck.lean:15:9-15:42
+Unknown identifier `line_direction_eq_span_vsub_right`
+Source line 15:
+    rw [line_direction_eq_span_vsub_right] at hmem
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: line_direction_eq_span_vsub_right
+
+ERROR .LspCheck.lean:18:9-18:36
+Invalid rewrite argument: Expected an equality or iff proof or definition name, but
+  AffineSubspace.direction_le ?h ?a✝ ?t ?a✝
+is a proof of
+  ?x ∈ ?t
+Source line 18:
+    rw [AffineSubspace.direction_le]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.direction_le
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [AddTorsor V P]
+
+theorem direction_affineSpan_pair_le_iff_exists_smul {p₁ q₁ p₂ q₂ : P} :
+    line[k, p₁, q₁].direction ≤ line[k, p₂, q₂].direction ↔ ∃ z : k, z • (q₂ -ᵥ p₂) = q₁ -ᵥ p₁ := by
+  constructor
+  · intro h
+    have hq : q₁ ∈ line[k, p₁, q₁] := by
+      exact AffineSubspace.right_mem_affineSpan_pair k p₁ q₁
+    have hp : p₁ ∈ line[k, p₁, q₁] := by
+      exact AffineSubspace.left_mem_affineSpan_pair k p₁ q₁
+    have hmem : q₁ -ᵥ p₁ ∈ line[k, p₂, q₂].direction :=
+      h (line[k, p₁, q₁]).vsub_mem_direction hq hp
+    rw [AffineSubspace.mem_direction_iff_eq_vsub_right] at hmem
+    rcases hmem with ⟨r, hr, hrv⟩
+    rw [AffineSubspace.mem_line_iff_eq_smul_vsub p₂ q₂ r] at hr
+    rcases hr with ⟨z, hz⟩
+    refine ⟨z, ?_⟩
+    rw [hz] at hrv
+    simpa [vsub_vadd]
+      using hrv
+  · rintro ⟨z, hz⟩
+    intro v hv
+    rw [AffineSubspace.mem_direction_iff_eq_vsub_right] at hv ⊢
+    rcases hv with ⟨r, hr, hvr⟩
+    refine ⟨r, hr, ?_⟩
+    rw [AffineSubspace.mem_line_iff_eq_smul_vsub p₂ q₂ r]
+    refine ⟨1, by simp⟩
+    rw [hvr, ← hz]
+    simp [smul_smul]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:13-12:53
+Unknown constant `AffineSubspace.right_mem_affineSpan_pair`
+Source line 12:
+      exact AffineSubspace.right_mem_affineSpan_pair k p₁ q₁
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.right_mem_affineSpan_pair
+
+ERROR .LspCheck.lean:14:13-14:52
+Unknown constant `AffineSubspace.left_mem_affineSpan_pair`
+Source line 14:
+      exact AffineSubspace.left_mem_affineSpan_pair k p₁ q₁
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.left_mem_affineSpan_pair
+
+ERROR .LspCheck.lean:16:9-16:45
+Application type mismatch: The argument
+  AffineSubspace.vsub_mem_direction
+has type
+  ?m.144 ∈ affineSpan k {p₁, q₁} → ?m.145 ∈ affineSpan k {p₁, q₁} → ?m.144 -ᵥ ?m.145 ∈ (affineSpan k {p₁, q₁}).direction
+but is expected to have type
+  ?m.124 ∈ (affineSpan k {p₁, q₁}).direction
+in the application
+  h AffineSubspace.vsub_mem_direction
+Source line 16:
+      h (line[k, p₁, q₁]).vsub_mem_direction hq hp
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (line[k, p₁, q₁]).vsub_mem_direction
+
+ERROR .LspCheck.lean:29:16-29:18
+Application type mismatch: The argument
+  hr
+has type
+  r ∈ affineSpan k {p₁, q₁}
+but is expected to have type
+  r ∈ affineSpan k {p₂, q₂}
+in the application
+  And.intro hr
+Source line 29:
+    refine ⟨r, hr, ?_⟩
+               ^^
+Highlighted span: hr
+
+ERROR .LspCheck.lean:30:9-30:49
+Unknown constant `AffineSubspace.mem_line_iff_eq_smul_vsub`
+Source line 30:
+    rw [AffineSubspace.mem_line_iff_eq_smul_vsub p₂ q₂ r]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.mem_line_iff_eq_smul_vsub
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:13-12:53
+Unknown constant `AffineSubspace.right_mem_affineSpan_pair`
+Source line 12:
+      exact AffineSubspace.right_mem_affineSpan_pair k p₁ q₁
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.right_mem_affineSpan_pair
+
+ERROR .LspCheck.lean:14:13-14:52
+Unknown constant `AffineSubspace.left_mem_affineSpan_pair`
+Source line 14:
+      exact AffineSubspace.left_mem_affineSpan_pair k p₁ q₁
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.left_mem_affineSpan_pair
+
+ERROR .LspCheck.lean:16:9-16:45
+Application type mismatch: The argument
+  AffineSubspace.vsub_mem_direction
+has type
+  ?m.144 ∈ affineSpan k {p₁, q₁} → ?m.145 ∈ affineSpan k {p₁, q₁} → ?m.144 -ᵥ ?m.145 ∈ (affineSpan k {p₁, q₁}).direction
+but is expected to have type
+  ?m.124 ∈ (affineSpan k {p₁, q₁}).direction
+in the application
+  h AffineSubspace.vsub_mem_direction
+Source line 16:
+      h (line[k, p₁, q₁]).vsub_mem_direction hq hp
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (line[k, p₁, q₁]).vsub_mem_direction
+
+ERROR .LspCheck.lean:29:16-29:18
+Application type mismatch: The argument
+  hr
+has type
+  r ∈ affineSpan k {p₁, q₁}
+but is expected to have type
+  r ∈ affineSpan k {p₂, q₂}
+in the application
+  And.intro hr
+Source line 29:
+    refine ⟨r, hr, ?_⟩
+               ^^
+Highlighted span: hr
+
+ERROR .LspCheck.lean:30:9-30:49
+Unknown constant `AffineSubspace.mem_line_iff_eq_smul_vsub`
+Source line 30:
+    rw [AffineSubspace.mem_line_iff_eq_smul_vsub p₂ q₂ r]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.mem_line_iff_eq_smul_vsub

@@ -1,0 +1,197 @@
+FILE: Basic.HasFiniteMulSupport.of_comp.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.HasFiniteMulSupport.of_comp.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {α M : Type*} [One M]
+
+variable {β : Type*} {f : β → M} {g : α → β}
+
+theorem HasFiniteMulSupport.of_comp [One β] (hfg : (f ∘ g).HasFiniteMulSupport) (h : f 1 = 1)
+    (hf : Function.Injective f) :
+    g.HasFiniteMulSupport := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α M : Type*} [One M]
+
+variable {β : Type*} {f : β → M} {g : α → β}
+
+theorem HasFiniteMulSupport.of_comp [One β] (hfg : (f ∘ g).HasFiniteMulSupport) (h : f 1 = 1)
+    (hf : Function.Injective f) :
+    g.HasFiniteMulSupport := by
+  classical
+  rw [Fintype.mem_finset] at hfg ⊢
+  refine hfg.subset ?_
+  intro a ha
+  by_contra hga
+  apply ha
+  apply hf
+  simpa [Function.comp, hga] using h
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:7-11:25
+Unknown constant `Fintype.mem_finset`
+Source line 11:
+  rw [Fintype.mem_finset] at hfg ⊢
+      ^^^^^^^^^^^^^^^^^^
+Highlighted span: Fintype.mem_finset
+
+ERROR .LspCheck.lean:9:30-10:1
+unsolved goals
+α : Type u_1
+M : Type u_2
+inst✝¹ : One M
+β : Type u_3
+f : β → M
+g : α → β
+inst✝ : One β
+hfg : Function.HasFiniteMulSupport (f ∘ g)
+h : f 1 = 1
+hf : Function.Injective f
+⊢ Function.HasFiniteMulSupport g
+Source line 9:
+    g.HasFiniteMulSupport := by
+                             ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:7-11:25
+Unknown constant `Fintype.mem_finset`
+Source line 11:
+  rw [Fintype.mem_finset] at hfg ⊢
+      ^^^^^^^^^^^^^^^^^^
+Highlighted span: Fintype.mem_finset
+
+ERROR .LspCheck.lean:9:30-10:1
+unsolved goals
+α : Type u_1
+M : Type u_2
+inst✝¹ : One M
+β : Type u_3
+f : β → M
+g : α → β
+inst✝ : One β
+hfg : Function.HasFiniteMulSupport (f ∘ g)
+h : f 1 = 1
+hf : Function.Injective f
+⊢ Function.HasFiniteMulSupport g
+Source line 9:
+    g.HasFiniteMulSupport := by
+                             ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α M : Type*} [One M]
+
+variable {β : Type*} {f : β → M} {g : α → β}
+
+theorem HasFiniteMulSupport.of_comp [One β] (hfg : (f ∘ g).HasFiniteMulSupport) (h : f 1 = 1)
+    (hf : Function.Injective f) :
+    g.HasFiniteMulSupport := by
+  classical
+  simpa [Function.HasFiniteMulSupport, Set.subset_def, Function.comp] using
+    hfg.of_subset (Function.mulSupport g) <| by
+      intro a ha
+      rw [Function.mem_mulSupport] at ha ⊢
+      exact mt (fun hg => hf <| by simpa [Function.comp, hg] using h) ha
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:9-12:18
+Invalid field `of_subset`: The environment does not contain `Finite.of_subset`, so it is not possible to project the field `of_subset` from an expression
+  hfg
+of type
+  Finite ↑(Function.mulSupport (f ∘ g))
+Source line 12:
+    hfg.of_subset (Function.mulSupport g) <| by
+        ^^^^^^^^^
+Highlighted span: of_subset
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:9-12:18
+Invalid field `of_subset`: The environment does not contain `Finite.of_subset`, so it is not possible to project the field `of_subset` from an expression
+  hfg
+of type
+  Finite ↑(Function.mulSupport (f ∘ g))
+Source line 12:
+    hfg.of_subset (Function.mulSupport g) <| by
+        ^^^^^^^^^
+Highlighted span: of_subset
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α M : Type*} [One M]
+
+variable {β : Type*} {f : β → M} {g : α → β}
+
+theorem HasFiniteMulSupport.of_comp [One β] (hfg : (f ∘ g).HasFiniteMulSupport) (h : f 1 = 1)
+    (hf : Function.Injective f) :
+    g.HasFiniteMulSupport := by
+  classical
+  rw [Function.HasFiniteMulSupport] at hfg ⊢
+  refine Set.Finite.subset hfg ?_
+  intro a ha
+  rw [Function.mem_mulSupport] at ha ⊢
+  exact mt (fun hg => hf <| by simpa [Function.comp, hg] using h) ha
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:32-15:65
+Type mismatch: After simplification, term
+  h
+ has type
+  f 1 = 1
+but is expected to have type
+  f (g a) = f 1
+Source line 15:
+  exact mt (fun hg => hf <| by simpa [Function.comp, hg] using h) ha
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [Function.comp, hg] using h
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:32-15:65
+Type mismatch: After simplification, term
+  h
+ has type
+  f 1 = 1
+but is expected to have type
+  f (g a) = f 1
+Source line 15:
+  exact mt (fun hg => hf <| by simpa [Function.comp, hg] using h) ha
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [Function.comp, hg] using h

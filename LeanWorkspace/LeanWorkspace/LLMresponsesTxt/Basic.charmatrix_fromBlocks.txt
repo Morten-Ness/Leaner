@@ -1,0 +1,244 @@
+FILE: Basic.charmatrix_fromBlocks.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.charmatrix_fromBlocks.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R S : Type*} [CommRing R] [CommRing S]
+
+variable {m n : Type*} [DecidableEq m] [DecidableEq n] [Fintype m] [Fintype n]
+
+variable (M₁₁ : Matrix m m R) (M₁₂ : Matrix m n R) (M₂₁ : Matrix n m R) (M₂₂ M : Matrix n n R)
+
+variable (i j : n)
+
+theorem charmatrix_fromBlocks :
+    Matrix.charmatrix (Matrix.fromBlocks M₁₁ M₁₂ M₂₁ M₂₂) =
+      Matrix.fromBlocks (Matrix.charmatrix M₁₁) (- M₁₂.map Polynomial.C) (- M₂₁.map Polynomial.C) (Matrix.charmatrix M₂₂) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R S : Type*} [CommRing R] [CommRing S]
+
+variable {m n : Type*} [DecidableEq m] [DecidableEq n] [Fintype m] [Fintype n]
+
+variable (M₁₁ : Matrix m m R) (M₁₂ : Matrix m n R) (M₂₁ : Matrix n m R) (M₂₂ M : Matrix n n R)
+
+variable (i j : n)
+
+theorem charmatrix_fromBlocks :
+    Matrix.charmatrix (Matrix.fromBlocks M₁₁ M₁₂ M₂₁ M₂₂) =
+      Matrix.fromBlocks (Matrix.charmatrix M₁₁) (- M₁₂.map Polynomial.C) (- M₂₁.map Polynomial.C) (Matrix.charmatrix M₂₂) := by
+  ext i j <;> simp [Matrix.charmatrix, Matrix.fromBlocks, Matrix.map_apply]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:126-14:1
+unsolved goals
+case a.a
+R : Type u_1
+inst✝⁴ : CommRing R
+m : Type u_3
+n : Type u_4
+inst✝³ : DecidableEq m
+inst✝² : DecidableEq n
+inst✝¹ : Fintype m
+inst✝ : Fintype n
+M₁₁ : Matrix m m R
+M₁₂ : Matrix m n R
+M₂₁ : Matrix n m R
+M₂₂ : Matrix n n R
+i j : m ⊕ n
+n✝ : ℕ
+⊢ (Matrix.diagonal (fun x ↦ Polynomial.X) i j).coeff n✝ -
+      (Polynomial.C (Sum.elim (fun i ↦ Sum.elim (M₁₁ i) (M₁₂ i)) (fun j ↦ Sum.elim (M₂₁ j) (M₂₂ j)) i j)).coeff n✝ =
+    (Sum.elim
+          (fun i ↦
+            Sum.elim (((Matrix.diagonal fun x ↦ Polynomial.X) - M₁₁.map ⇑Polynomial.C) i) ((-M₁₂.map ⇑Polynomial.C) i))
+          (fun j ↦
+            Sum.elim ((-M₂₁.map ⇑Polynomial.C) j) (((Matrix.diagonal fun x ↦ Polynomial.X) - M₂₂.map ⇑Polynomial.C) j))
+          i j).coeff
+      n✝
+Source line 13:
+      Matrix.fromBlocks (Matrix.charmatrix M₁₁) (- M₁₂.map Polynomial.C) (- M₂₁.map Polynomial.C) (Matrix.charmatrix M₂₂) := by
+                                                                                                                             ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:126-14:1
+unsolved goals
+case a.a
+R : Type u_1
+inst✝⁴ : CommRing R
+m : Type u_3
+n : Type u_4
+inst✝³ : DecidableEq m
+inst✝² : DecidableEq n
+inst✝¹ : Fintype m
+inst✝ : Fintype n
+M₁₁ : Matrix m m R
+M₁₂ : Matrix m n R
+M₂₁ : Matrix n m R
+M₂₂ : Matrix n n R
+i j : m ⊕ n
+n✝ : ℕ
+⊢ (Matrix.diagonal (fun x ↦ Polynomial.X) i j).coeff n✝ -
+      (Polynomial.C (Sum.elim (fun i ↦ Sum.elim (M₁₁ i) (M₁₂ i)) (fun j ↦ Sum.elim (M₂₁ j) (M₂₂ j)) i j)).coeff n✝ =
+    (Sum.elim
+          (fun i ↦
+            Sum.elim (((Matrix.diagonal fun x ↦ Polynomial.X) - M₁₁.map ⇑Polynomial.C) i) ((-M₁₂.map ⇑Polynomial.C) i))
+          (fun j ↦
+            Sum.elim ((-M₂₁.map ⇑Polynomial.C) j) (((Matrix.diagonal fun x ↦ Polynomial.X) - M₂₂.map ⇑Polynomial.C) j))
+          i j).coeff
+      n✝
+Source line 13:
+      Matrix.fromBlocks (Matrix.charmatrix M₁₁) (- M₁₂.map Polynomial.C) (- M₂₁.map Polynomial.C) (Matrix.charmatrix M₂₂) := by
+                                                                                                                             ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R S : Type*} [CommRing R] [CommRing S]
+
+variable {m n : Type*} [DecidableEq m] [DecidableEq n] [Fintype m] [Fintype n]
+
+variable (M₁₁ : Matrix m m R) (M₁₂ : Matrix m n R) (M₂₁ : Matrix n m R) (M₂₂ M : Matrix n n R)
+
+variable (i j : n)
+
+theorem charmatrix_fromBlocks :
+    Matrix.charmatrix (Matrix.fromBlocks M₁₁ M₁₂ M₂₁ M₂₂) =
+      Matrix.fromBlocks (Matrix.charmatrix M₁₁) (- M₁₂.map Polynomial.C) (- M₂₁.map Polynomial.C) (Matrix.charmatrix M₂₂) := by
+  ext i j <;> cases i <;> cases j <;> simp [Matrix.charmatrix, Matrix.fromBlocks]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:126-14:1
+unsolved goals
+case a.a.inl.inl
+R : Type u_1
+inst✝⁴ : CommRing R
+m : Type u_3
+n : Type u_4
+inst✝³ : DecidableEq m
+inst✝² : DecidableEq n
+inst✝¹ : Fintype m
+inst✝ : Fintype n
+M₁₁ : Matrix m m R
+M₁₂ : Matrix m n R
+M₂₁ : Matrix n m R
+M₂₂ : Matrix n n R
+n✝ : ℕ
+val✝¹ val✝ : m
+⊢ (Matrix.diagonal (fun x ↦ Polynomial.X) (Sum.inl val✝¹) (Sum.inl val✝)).coeff n✝ =
+    (Matrix.diagonal (fun x ↦ Polynomial.X) val✝¹ val✝).coeff n✝
+
+case a.a.inr.inr
+R : Type u_1
+inst✝⁴ : CommRing R
+m : Type u_3
+n : Type u_4
+inst✝³ : DecidableEq m
+inst✝² : DecidableEq n
+inst✝¹ : Fintype m
+inst✝ : Fintype n
+M₁₁ : Matrix m m R
+M₁₂ : Matrix m n R
+M₂₁ : Matrix n m R
+M₂₂ : Matrix n n R
+n✝ : ℕ
+val✝¹ val✝ : n
+⊢ (Matrix.diagonal (fun x ↦ Polynomial.X) (Sum.inr val✝¹) (Sum.inr val✝)).coeff n✝ =
+    (Matrix.diagonal (fun x ↦ Polynomial.X) val✝¹ val✝).coeff n✝
+Source line 13:
+      Matrix.fromBlocks (Matrix.charmatrix M₁₁) (- M₁₂.map Polynomial.C) (- M₂₁.map Polynomial.C) (Matrix.charmatrix M₂₂) := by
+                                                                                                                             ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:126-14:1
+unsolved goals
+case a.a.inl.inl
+R : Type u_1
+inst✝⁴ : CommRing R
+m : Type u_3
+n : Type u_4
+inst✝³ : DecidableEq m
+inst✝² : DecidableEq n
+inst✝¹ : Fintype m
+inst✝ : Fintype n
+M₁₁ : Matrix m m R
+M₁₂ : Matrix m n R
+M₂₁ : Matrix n m R
+M₂₂ : Matrix n n R
+n✝ : ℕ
+val✝¹ val✝ : m
+⊢ (Matrix.diagonal (fun x ↦ Polynomial.X) (Sum.inl val✝¹) (Sum.inl val✝)).coeff n✝ =
+    (Matrix.diagonal (fun x ↦ Polynomial.X) val✝¹ val✝).coeff n✝
+
+case a.a.inr.inr
+R : Type u_1
+inst✝⁴ : CommRing R
+m : Type u_3
+n : Type u_4
+inst✝³ : DecidableEq m
+inst✝² : DecidableEq n
+inst✝¹ : Fintype m
+inst✝ : Fintype n
+M₁₁ : Matrix m m R
+M₁₂ : Matrix m n R
+M₂₁ : Matrix n m R
+M₂₂ : Matrix n n R
+n✝ : ℕ
+val✝¹ val✝ : n
+⊢ (Matrix.diagonal (fun x ↦ Polynomial.X) (Sum.inr val✝¹) (Sum.inr val✝)).coeff n✝ =
+    (Matrix.diagonal (fun x ↦ Polynomial.X) val✝¹ val✝).coeff n✝
+Source line 13:
+      Matrix.fromBlocks (Matrix.charmatrix M₁₁) (- M₁₂.map Polynomial.C) (- M₂₁.map Polynomial.C) (Matrix.charmatrix M₂₂) := by
+                                                                                                                             ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R S : Type*} [CommRing R] [CommRing S]
+
+variable {m n : Type*} [DecidableEq m] [DecidableEq n] [Fintype m] [Fintype n]
+
+variable (M₁₁ : Matrix m m R) (M₁₂ : Matrix m n R) (M₂₁ : Matrix n m R) (M₂₂ M : Matrix n n R)
+
+variable (i j : n)
+
+theorem charmatrix_fromBlocks :
+    Matrix.charmatrix (Matrix.fromBlocks M₁₁ M₁₂ M₂₁ M₂₂) =
+      Matrix.fromBlocks (Matrix.charmatrix M₁₁) (- M₁₂.map Polynomial.C) (- M₂₁.map Polynomial.C) (Matrix.charmatrix M₂₂) := by
+  ext i j
+  cases i <;> cases j <;>
+    simp [Matrix.charmatrix, Matrix.fromBlocks, Matrix.diagonal, Matrix.map_apply]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

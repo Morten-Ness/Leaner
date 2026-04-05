@@ -1,0 +1,244 @@
+FILE: Basic.disjoint_smul_set_left.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.disjoint_smul_set_left.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Pointwise
+
+variable {F α β γ : Type*}
+
+variable [Group α] [MulAction α β] {s t A B : Set β} {a b : α} {x : β}
+
+theorem disjoint_smul_set_left : Disjoint (a • s) t ↔ Disjoint s (a⁻¹ • t) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise
+
+variable {F α β γ : Type*}
+
+variable [Group α] [MulAction α β] {s t A B : Set β} {a b : α} {x : β}
+
+theorem disjoint_smul_set_left : Disjoint (a • s) t ↔ Disjoint s (a⁻¹ • t) := by
+  rw [Set.disjoint_left, Set.disjoint_left]
+  constructor
+  · intro h x hx hx'
+    apply h (a • x)
+    · exact Set.smul_mem_smul_set hx
+    · simpa using hx'
+  · intro h x hx hx'
+    rcases hx with ⟨y, hy, rfl⟩
+    apply h y hy
+    simpa using hx'
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:14-13:19
+Type mismatch
+  a • x
+has type
+  β
+of sort `outParam (Type u_3)` but is expected to have type
+  ?m.39 ∈ a • s
+of sort `Prop`
+Source line 13:
+    apply h (a • x)
+             ^^^^^
+Highlighted span: a • x
+
+ERROR .LspCheck.lean:14:7-14:37
+Type mismatch
+  Set.smul_mem_smul_set hx
+has type
+  ?m.49 • x ∈ ?m.49 • s
+but is expected to have type
+  ?m.39 ∈ t
+Source line 14:
+    · exact Set.smul_mem_smul_set hx
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: exact Set.smul_mem_smul_set hx
+
+ERROR .LspCheck.lean:15:7-15:22
+Type mismatch: After simplification, term
+  hx'
+ has type
+  x ∈ a⁻¹ • t
+of sort `Prop` but is expected to have type
+  β
+of sort `Type u_3`
+Source line 15:
+    · simpa using hx'
+      ^^^^^^^^^^^^^^^
+Highlighted span: simpa using hx'
+
+ERROR .LspCheck.lean:18:13-18:14
+Application type mismatch: The argument
+  y
+has type
+  β
+of sort `Type u_3` but is expected to have type
+  ?m.87 ∈ s
+of sort `Prop` in the application
+  h y
+Source line 18:
+    apply h y hy
+            ^
+Highlighted span: y
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:14-13:19
+Type mismatch
+  a • x
+has type
+  β
+of sort `outParam (Type u_3)` but is expected to have type
+  ?m.39 ∈ a • s
+of sort `Prop`
+Source line 13:
+    apply h (a • x)
+             ^^^^^
+Highlighted span: a • x
+
+ERROR .LspCheck.lean:14:7-14:37
+Type mismatch
+  Set.smul_mem_smul_set hx
+has type
+  ?m.49 • x ∈ ?m.49 • s
+but is expected to have type
+  ?m.39 ∈ t
+Source line 14:
+    · exact Set.smul_mem_smul_set hx
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: exact Set.smul_mem_smul_set hx
+
+ERROR .LspCheck.lean:15:7-15:22
+Type mismatch: After simplification, term
+  hx'
+ has type
+  x ∈ a⁻¹ • t
+of sort `Prop` but is expected to have type
+  β
+of sort `Type u_3`
+Source line 15:
+    · simpa using hx'
+      ^^^^^^^^^^^^^^^
+Highlighted span: simpa using hx'
+
+ERROR .LspCheck.lean:18:13-18:14
+Application type mismatch: The argument
+  y
+has type
+  β
+of sort `Type u_3` but is expected to have type
+  ?m.87 ∈ s
+of sort `Prop` in the application
+  h y
+Source line 18:
+    apply h y hy
+            ^
+Highlighted span: y
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise
+
+variable {F α β γ : Type*}
+
+variable [Group α] [MulAction α β] {s t A B : Set β} {a b : α} {x : β}
+
+theorem disjoint_smul_set_left : Disjoint (a • s) t ↔ Disjoint s (a⁻¹ • t) := by
+  constructor
+  · intro h
+    rw [Set.disjoint_left] at h ⊢
+    intro x hx hx'
+    apply h
+    · exact Set.smul_mem_smul_set hx
+    · rcases hx' with ⟨y, hy, rfl⟩
+      simpa [smul_smul]
+  · intro h
+    rw [Set.disjoint_left] at h ⊢
+    intro x hx hx'
+    rcases hx with ⟨y, hy, rfl⟩
+    apply h hy
+    simpa [smul_smul] using hx'
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:23:5-23:32
+Type mismatch: After simplification, term
+  hx'
+ has type
+  a • y ∈ t
+but is expected to have type
+  y ∈ a⁻¹ • t
+Source line 23:
+    simpa [smul_smul] using hx'
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [smul_smul] using hx'
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:23:5-23:32
+Type mismatch: After simplification, term
+  hx'
+ has type
+  a • y ∈ t
+but is expected to have type
+  y ∈ a⁻¹ • t
+Source line 23:
+    simpa [smul_smul] using hx'
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [smul_smul] using hx'
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise
+
+variable {F α β γ : Type*}
+
+variable [Group α] [MulAction α β] {s t A B : Set β} {a b : α} {x : β}
+
+theorem disjoint_smul_set_left : Disjoint (a • s) t ↔ Disjoint s (a⁻¹ • t) := by
+  constructor
+  · intro h
+    rw [Set.disjoint_left] at h ⊢
+    intro x hx hx'
+    apply h
+    · exact Set.smul_mem_smul_set hx
+    · rcases hx' with ⟨y, hy, rfl⟩
+      simpa [smul_smul]
+  · intro h
+    rw [Set.disjoint_left] at h ⊢
+    intro x hx hx'
+    rcases hx with ⟨y, hy, rfl⟩
+    apply h hy
+    refine ⟨a • y, hx', ?_⟩
+    simp [smul_smul]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

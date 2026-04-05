@@ -1,0 +1,114 @@
+FILE: Basic.algebraMap_eq_one_iff.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.algebraMap_eq_one_iff.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Algebra
+
+variable (R A : Type*) [CommSemiring R] [Semiring A] [Algebra R A]
+
+variable [FaithfulSMul R A]
+
+theorem algebraMap_eq_one_iff {r : R} : algebraMap R A r = 1 ↔ r = 1 := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Algebra
+
+variable (R A : Type*) [CommSemiring R] [Semiring A] [Algebra R A]
+
+variable [FaithfulSMul R A]
+
+theorem algebraMap_eq_one_iff {r : R} : algebraMap R A r = 1 ↔ r = 1 := by
+  constructor
+  · intro h
+    exact FaithfulSMul.algebraMap_injective R A h
+  · intro h
+    simpa [h]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:49-12:50
+Application type mismatch: The argument
+  h
+has type
+  (algebraMap R A) r = 1
+but is expected to have type
+  (algebraMap R A) r = (algebraMap R A) 1
+in the application
+  FaithfulSMul.algebraMap_injective R A h
+Source line 12:
+    exact FaithfulSMul.algebraMap_injective R A h
+                                                ^
+Highlighted span: h
+
+WARNING .LspCheck.lean:14:5-14:14
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 14:
+    simpa [h]
+    ^^^^^^^^^
+Highlighted span: simpa [h]
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:49-12:50
+Application type mismatch: The argument
+  h
+has type
+  (algebraMap R A) r = 1
+but is expected to have type
+  (algebraMap R A) r = (algebraMap R A) 1
+in the application
+  FaithfulSMul.algebraMap_injective R A h
+Source line 12:
+    exact FaithfulSMul.algebraMap_injective R A h
+                                                ^
+Highlighted span: h
+
+WARNING .LspCheck.lean:14:5-14:14
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 14:
+    simpa [h]
+    ^^^^^^^^^
+Highlighted span: simpa [h]
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Algebra
+
+variable (R A : Type*) [CommSemiring R] [Semiring A] [Algebra R A]
+
+variable [FaithfulSMul R A]
+
+theorem algebraMap_eq_one_iff {r : R} : algebraMap R A r = 1 ↔ r = 1 := by
+  constructor
+  · intro h
+    apply FaithfulSMul.algebraMap_injective R A
+    simpa using h
+  · intro h
+    simp [h]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS
