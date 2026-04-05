@@ -1,0 +1,16 @@
+import Mathlib
+
+variable {I : Type u}
+
+variable {α β γ : Type*}
+
+variable {f : I → Type v₁} {g : I → Type v₂} {h : I → Type v₃}
+
+variable (x y : ∀ i, f i) (i : I)
+
+variable (a a' : α → γ) (b b' : β → γ)
+
+theorem elim_div_div [Div γ] : Sum.elim (a / a') (b / b') = Sum.elim a b / Sum.elim a' b' := by
+  ext x
+  cases x <;> rfl
+

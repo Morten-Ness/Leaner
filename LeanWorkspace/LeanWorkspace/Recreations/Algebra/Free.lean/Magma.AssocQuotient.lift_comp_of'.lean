@@ -1,0 +1,8 @@
+import Mathlib
+
+variable {α : Type u} [Mul α]
+
+variable {β : Type v} [Semigroup β] (f : α →ₙ* β)
+
+theorem lift_comp_of' (f : Magma.AssocQuotient α →ₙ* β) : Magma.AssocQuotient.lift (f.comp Magma.AssocQuotient.of) = f := Magma.AssocQuotient.lift.apply_symm_apply f
+

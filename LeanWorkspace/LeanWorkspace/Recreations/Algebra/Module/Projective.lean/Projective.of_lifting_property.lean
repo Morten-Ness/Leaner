@@ -1,0 +1,15 @@
+import Mathlib
+
+theorem Projective.of_lifting_property {R : Type u} [Ring R] {P : Type v} [AddCommGroup P]
+    [Module R P] [Small.{v} R]
+    -- If for all surjections of `R`-modules `M →ₗ N`, all maps `P →ₗ N` lift to `P →ₗ M`,
+    (h : ∀ {M : Type v} {N : Type v} [AddCommGroup M] [AddCommGroup N]
+      [Module R M] [Module R N] (f : M →ₗ[R] N) (g : P →ₗ[R] N),
+        Function.Surjective f → ∃ h : P →ₗ[R] M, f.comp h = g) :
+    -- then `P` is projective.
+    Projective R P := by
+  refine of_lifting_property'' (fun p hp ↦ ?_)
+  let e := Finsupp.mapRange.linearEquiv (α := P) (Shrink.linearEquiv R R)
+  rcases h (p ∘ₗ e.toLinearMap) LinearMap.id (hp.comp e.surjective) with ⟨g, hg⟩
+  exact ⟨e.toLinearMap ∘ₗ g, hg⟩
+

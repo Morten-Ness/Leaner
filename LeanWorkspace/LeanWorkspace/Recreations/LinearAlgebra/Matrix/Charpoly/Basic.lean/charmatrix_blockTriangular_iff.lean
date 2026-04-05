@@ -10,7 +10,7 @@ variable (i j : n)
 
 theorem charmatrix_blockTriangular_iff {α : Type*} [Preorder α] {M : Matrix n n R} {b : n → α} :
     M.charmatrix.BlockTriangular b ↔ M.BlockTriangular b := by
-  rw [Matrix.charmatrix, scalar_apply, RingHom.mapMatrix_apply, (blockTriangular_diagonal _).sub_iff_right]
+  rw [Matrix.charmatrix, Matrix.scalar_apply, RingHom.mapMatrix_apply, (Matrix.blockTriangular_diagonal _).sub_iff_right]
   simp [BlockTriangular]
 
 alias ⟨BlockTriangular.of_charmatrix, BlockTriangular.charmatrix⟩ := charmatrix_blockTriangular_iff

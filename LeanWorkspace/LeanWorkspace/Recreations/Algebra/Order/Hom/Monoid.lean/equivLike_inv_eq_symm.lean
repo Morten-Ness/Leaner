@@ -1,0 +1,9 @@
+import Mathlib
+
+variable {F α β γ δ : Type*}
+
+variable [Preorder α] [Preorder β] [Preorder γ] [Preorder δ] [Mul α] [Mul β]
+  [Mul γ] [Mul δ] {f g : α ≃*o β}
+
+theorem equivLike_inv_eq_symm (f : α ≃*o β) : EquivLike.inv f = f.symm := rfl
+

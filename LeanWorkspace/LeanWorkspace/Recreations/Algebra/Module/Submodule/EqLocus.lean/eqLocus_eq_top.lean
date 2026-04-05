@@ -1,0 +1,19 @@
+import Mathlib
+
+variable {R : Type*} {R₂ : Type*}
+
+variable {M : Type*} {M₂ : Type*}
+
+variable [Semiring R] [Semiring R₂]
+
+variable [AddCommMonoid M] [AddCommMonoid M₂]
+
+variable [Module R M] [Module R₂ M₂]
+
+variable {τ₁₂ : R →+* R₂}
+
+variable {F : Type*} [FunLike F M M₂] [SemilinearMapClass F τ₁₂ M M₂]
+
+theorem eqLocus_eq_top {f g : F} : LinearMap.eqLocus f g = ⊤ ↔ f = g := by
+  simp [SetLike.ext_iff, DFunLike.ext_iff]
+

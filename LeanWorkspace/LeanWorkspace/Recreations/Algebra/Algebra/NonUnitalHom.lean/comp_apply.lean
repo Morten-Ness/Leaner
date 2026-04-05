@@ -1,0 +1,19 @@
+import Mathlib
+
+variable {R : Type u} {S : Type u₁}
+
+variable {T : Type*} [Monoid R] [Monoid S] [Monoid T] (φ : R →* S)
+
+variable (A : Type v) (B : Type w) (C : Type w₁)
+
+variable [NonUnitalNonAssocSemiring A] [DistribMulAction R A]
+
+variable [NonUnitalNonAssocSemiring B] [DistribMulAction S B]
+
+variable [NonUnitalNonAssocSemiring C] [DistribMulAction T C]
+
+variable {φ' : S →* R} {ψ : S →* T} {χ : R →* T}
+
+theorem comp_apply (f : B →ₛₙₐ[ψ] C) (g : A →ₛₙₐ[φ] B) [MonoidHom.CompTriple φ ψ χ] (x : A) :
+    f.comp g x = f (g x) := rfl
+

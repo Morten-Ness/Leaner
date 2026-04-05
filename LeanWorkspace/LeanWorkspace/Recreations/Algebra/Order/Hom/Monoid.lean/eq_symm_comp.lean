@@ -1,0 +1,10 @@
+import Mathlib
+
+variable {F α β γ δ : Type*}
+
+variable [Preorder α] [Preorder β] [Preorder γ] [Preorder δ] [Mul α] [Mul β]
+  [Mul γ] [Mul δ] {f g : α ≃*o β}
+
+theorem eq_symm_comp (e : α ≃*o β) (f : α → α) (g : α → β) :
+    f = e.symm ∘ g ↔ e ∘ f = g := e.toEquiv.eq_symm_comp f g
+

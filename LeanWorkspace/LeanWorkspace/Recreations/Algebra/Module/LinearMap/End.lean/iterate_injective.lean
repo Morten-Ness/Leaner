@@ -1,0 +1,15 @@
+import Mathlib
+
+variable {R R₂ S M M₁ M₂ M₃ N₁ : Type*}
+
+variable [Semiring R] [AddCommMonoid M] [AddCommGroup N₁] [Module R M] [Module R N₁]
+
+variable [Monoid S] [DistribMulAction S M] [SMulCommClass R S M]
+
+variable {f' : End R M}
+
+theorem iterate_injective (h : Function.Injective f') : ∀ n : ℕ, Function.Injective (f' ^ n)
+  | 0 => injective_id
+  | n + 1 => by
+    rw [Module.End.iterate_succ]
+    exact (iterate_injective h n).comp h

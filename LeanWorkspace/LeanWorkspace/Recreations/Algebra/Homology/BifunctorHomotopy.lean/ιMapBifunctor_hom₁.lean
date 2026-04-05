@@ -1,0 +1,20 @@
+import Mathlib
+
+variable {C₁ C₂ D I₁ I₂ J : Type*} [Category* C₁] [Category* C₂] [Category* D]
+  [Preadditive C₁] [Preadditive C₂] [Preadditive D]
+  {c₁ : ComplexShape I₁} {c₂ : ComplexShape I₂}
+
+variable {K₁ L₁ : HomologicalComplex C₁ c₁} {f₁ f₁' : K₁ ⟶ L₁} (h₁ : Homotopy f₁ f₁')
+  {K₂ L₂ : HomologicalComplex C₂ c₂} (f₂ f₂' : K₂ ⟶ L₂) (h₂ : Homotopy f₂ f₂')
+  (F : C₁ ⥤ C₂ ⥤ D) [F.Additive] [∀ X₁, (F.obj X₁).Additive]
+  (c : ComplexShape J) [DecidableEq J] [TotalComplexShape c₁ c₂ c]
+  [HasMapBifunctor K₁ K₂ F c] [HasMapBifunctor L₁ L₂ F c]
+
+theorem ιMapBifunctor_hom₁ (i₁ i₁' : I₁) (i₂ : I₂) (j j' : J)
+    (h : ComplexShape.π c₁ c₂ c (i₁', i₂) = j) (h' : c₁.prev i₁' = i₁) :
+    ιMapBifunctor K₁ K₂ F c i₁' i₂ j h ≫ HomologicalComplex.mapBifunctorMapHomotopy.hom₁ h₁ f₂ F c j j' = ComplexShape.ε₁ c₁ c₂ c (i₁, i₂) •
+      (F.map (h₁.hom i₁' i₁)).app (K₂.X i₂) ≫ (F.obj (L₁.X i₁)).map (f₂.f i₂) ≫
+        ιMapBifunctorOrZero L₁ L₂ F c _ _ j' := by
+  subst h'
+  simp [HomologicalComplex.mapBifunctorMapHomotopy.hom₁]
+

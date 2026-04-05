@@ -1,0 +1,11 @@
+import Mathlib
+
+variable {ι κ G M : Type*} {s s₁ s₂ : Finset ι} {a : ι}
+
+variable [CommMonoid M] {f g : ι → M}
+
+theorem prod_filter_not_mul_prod_filter (s : Finset ι) (p : ι → Prop) [DecidablePred p]
+    [∀ x, Decidable (¬p x)] (f : ι → M) :
+    (∏ x ∈ s with ¬p x, f x) * ∏ x ∈ s with p x, f x = ∏ x ∈ s, f x := by
+  rw [mul_comm, Finset.prod_filter_mul_prod_filter_not]
+

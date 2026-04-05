@@ -1,0 +1,7 @@
+import Mathlib
+
+variable (R : Type u) [CommRing R]
+
+theorem of_counit {X : Type v} [Ring X] [HopfAlgebra R X] :
+    Coalgebra.counit (A := of R X) = Coalgebra.counit (R := R) (A := X) := rfl
+

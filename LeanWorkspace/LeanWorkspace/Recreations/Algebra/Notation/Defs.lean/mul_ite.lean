@@ -1,0 +1,10 @@
+import Mathlib
+
+variable {G : Type*}
+
+variable {α : Type*} (P : Prop) [Decidable P]
+
+variable [Mul α]
+
+theorem mul_ite (a b c : α) : (a * if P then b else c) = if P then a * b else a * c := mul_dite ..
+

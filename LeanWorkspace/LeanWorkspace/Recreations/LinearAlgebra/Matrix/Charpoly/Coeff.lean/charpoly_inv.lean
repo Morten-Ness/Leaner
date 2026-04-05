@@ -23,3 +23,4 @@ theorem charpoly_inv (A : Matrix n n R) (h : IsUnit A) :
   _ = Polynomial.C A⁻¹.det * ((-1) ^ Fintype.card n * (1 - Matrix.scalar n Polynomial.X * Polynomial.C.mapMatrix A).det) := by
     rw [← neg_sub, Matrix.det_neg, Matrix.det_one_sub_mul_comm]
   _ = _ := by simp [Matrix.charpolyRev, Matrix.smul_eq_diagonal_mul]; ac_rfl
+

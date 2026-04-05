@@ -1,0 +1,10 @@
+import Mathlib
+
+variable {ι α β γ : Type*}
+
+variable [CommMonoidWithZero α] [NormalizedGCDMonoid α]
+
+variable {s s₁ s₂ : Finset β} {f : β → α}
+
+theorem lcm_def : s.lcm f = (s.1.map f).lcm := rfl
+

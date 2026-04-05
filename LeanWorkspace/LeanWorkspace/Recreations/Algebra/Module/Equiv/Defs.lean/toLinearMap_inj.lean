@@ -1,0 +1,14 @@
+import Mathlib
+
+variable {R R₁ R₂ R₃ R₄ S M M₁ M₂ M₃ M₄ N₁ N₂ : Type*}
+
+variable [Semiring R] [Semiring S]
+
+variable [AddCommMonoid M] [AddCommMonoid M₁] [AddCommMonoid M₂]
+
+variable {modM : Module R M} {modM₂ : Module S M₂} {σ : R →+* S} {σ' : S →+* R}
+
+variable [RingHomInvPair σ σ'] [RingHomInvPair σ' σ]
+
+theorem toLinearMap_inj {e₁ e₂ : M ≃ₛₗ[σ] M₂} : (↑e₁ : M →ₛₗ[σ] M₂) = e₂ ↔ e₁ = e₂ := LinearEquiv.toLinearMap_injective.eq_iff
+

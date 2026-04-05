@@ -31,9 +31,13 @@ PARAM_MIN_PROOF_LENGTH = copy_targets.PARAM_MIN_PROOF_LENGTH
 # python3 PythonWorkspace/verify_targets_fast.py --source Mathlib/LinearAlgebra/AffineSpace
 # python3 PythonWorkspace/verify_targets_fast.py --source Mathlib/LinearAlgebra/AffineSpace/Ceva.lean
 
+# Ran until FAILED Algebra/Homology/Embedding/ExtendHomology.lean/extendHomologyIso_hom_homologyι.lean
 
 THEOREM_NAME_RE = re.compile(r"^\s*(?:protected\s+)?theorem\s+([^\s(:{]+)", re.MULTILINE)
-LEAN_ERROR_RE = re.compile(r"^(?P<path>.+\.lean):(?P<line>\d+):(?P<col>\d+):\s*error:", re.MULTILINE)
+LEAN_ERROR_RE = re.compile(
+    r"^(?P<path>.+\.lean):(?P<line>\d+):(?P<col>\d+):\s*error(?:\([^)]+\))?:",
+    re.MULTILINE,
+)
 
 
 @dataclass(frozen=True)

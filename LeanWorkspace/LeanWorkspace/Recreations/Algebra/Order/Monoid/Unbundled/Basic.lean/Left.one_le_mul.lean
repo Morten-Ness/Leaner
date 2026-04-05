@@ -1,0 +1,11 @@
+import Mathlib
+
+variable {α β : Type*}
+
+variable [MulOneClass α]
+
+variable [Preorder α]
+
+theorem Left.one_le_mul [MulLeftMono α] {a b : α} (ha : 1 ≤ a) (hb : 1 ≤ b) :
+    1 ≤ a * b := le_mul_of_le_of_one_le ha hb
+

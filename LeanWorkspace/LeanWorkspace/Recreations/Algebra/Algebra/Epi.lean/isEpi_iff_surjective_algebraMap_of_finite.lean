@@ -1,0 +1,27 @@
+import Mathlib
+
+variable {R A : Type*} [CommRing R] [Ring A] [Algebra R A]
+
+theorem isEpi_iff_surjective_algebraMap_of_finite [Module.Finite R A] :
+    Algebra.IsEpi R A ↔ Function.Surjective (algebraMap R A) := by
+  refine ⟨fun h ↦ ?_, Algebra.isEpi_of_surjective_algebraMap R A⟩
+  let R' := (Algebra.linearMap R A).range
+  rcases subsingleton_or_nontrivial (A ⧸ R') with h | _
+  · rwa [Submodule.Quotient.subsingleton_iff, LinearMap.range_eq_top] at h
+  have : Subsingleton ((A ⧸ R') ⊗[R] (A ⧸ R')) := by
+    refine subsingleton_of_forall_eq 0 fun y ↦ ?_
+    induction y with
+    | zero => rfl
+    | add a b e₁ e₂ => rwa [e₁, zero_add]
+    | tmul x y =>
+      obtain ⟨x, rfl⟩ := R'.mkQ_surjective x
+      obtain ⟨y, rfl⟩ := R'.mkQ_surjective y
+      obtain ⟨s, hs⟩ : ∃ s, 1 ⊗ₜ[R] s = x ⊗ₜ[R] y := by
+        use x * y
+        trans x ⊗ₜ 1 * 1 ⊗ₜ y
+        · simp [(Algebra.isEpi_iff_forall_one_tmul_eq R A).mp]
+        · simp
+      have : R'.mkQ 1 = 0 := (Submodule.Quotient.mk_eq_zero R').mpr ⟨1, map_one (algebraMap R A)⟩
+      rw [← map_tmul R'.mkQ R'.mkQ, ← hs, map_tmul, this, zero_tmul]
+  cases false_of_nontrivial_of_subsingleton ((A ⧸ R') ⊗[R] (A ⧸ R'))
+

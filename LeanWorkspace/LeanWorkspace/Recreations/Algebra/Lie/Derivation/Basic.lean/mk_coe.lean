@@ -1,0 +1,9 @@
+import Mathlib
+
+variable {R L M : Type*} [CommRing R] [LieRing L] [LieAlgebra R L]
+    [AddCommGroup M] [Module R M] [LieRingModule L M] [LieModule R L M]
+
+variable (D : LieDerivation R L M) {D1 D2 : LieDerivation R L M} (a b : L)
+
+theorem mk_coe (f : L →ₗ[R] M) (h₁) : ((⟨f, h₁⟩ : LieDerivation R L M) : L → M) = f := rfl
+

@@ -9,5 +9,5 @@ variable (M₁₁ : Matrix m m R) (M₁₂ : Matrix m n R) (M₂₁ : Matrix n m
 variable (i j : n)
 
 theorem charmatrix_ofNat (k : ℕ) [k.AtLeastTwo] :
-    Matrix.charmatrix (ofNat(k) : Matrix n n R) = diagonal fun _ => Polynomial.X - ofNat(k) := Matrix.charmatrix_natCast _
+    Matrix.charmatrix (ofNat(k) : Matrix n n R) = Matrix.diagonal fun _ => Polynomial.X - ofNat(k) := Matrix.charmatrix_natCast _
 

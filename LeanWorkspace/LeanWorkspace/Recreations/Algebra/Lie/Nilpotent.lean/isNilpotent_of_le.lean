@@ -1,0 +1,36 @@
+import Mathlib
+
+variable {R : Type u} {L : Type v} {M : Type w}
+
+variable [CommRing R] [LieRing L] [LieAlgebra R L] [AddCommGroup M] [Module R M]
+
+variable [LieRingModule L M]
+
+variable (k : ℕ) (N : LieSubmodule R L M)
+
+variable [LieModule R L M]
+
+private theorem coe_lowerCentralSeries_eq_int_aux (R₁ R₂ L M : Type*)
+    [CommRing R₁] [CommRing R₂] [AddCommGroup M]
+    [LieRing L] [LieAlgebra R₁ L] [LieAlgebra R₂ L] [Module R₁ M] [Module R₂ M] [LieRingModule L M]
+    [LieModule R₁ L M] (k : ℕ) :
+    let I := LieModule.lowerCentralSeries R₂ L M k; let S : Set M := {⁅a, b⁆ | (a : L) (b ∈ I)}
+    (Submodule.span R₁ S : Set M) ≤ (Submodule.span R₂ S : Set M) := by
+  intro I S x hx
+  simp only [SetLike.mem_coe] at hx ⊢
+  induction hx using Submodule.closure_induction with
+  | zero => exact Submodule.zero_mem _
+  | add y z hy₁ hz₁ hy₂ hz₂ => exact Submodule.add_mem _ hy₂ hz₂
+  | smul_mem c y hy =>
+      obtain ⟨a, b, hb, rfl⟩ := hy
+      rw [← smul_lie]
+      exact Submodule.subset_span ⟨c • a, b, hb, rfl⟩
+
+
+theorem isNilpotent_of_le (M₁ M₂ : LieSubmodule R L M) (h₁ : M₁ ≤ M₂) [IsNilpotent L M₂] :
+    IsNilpotent L M₁ := by
+  let f : L →ₗ⁅R⁆ L := LieHom.id
+  let g : M₁ →ₗ[R] M₂ := Submodule.inclusion h₁
+  have hfg : ∀ x m, ⁅f x, g m⁆ = g ⁅x, m⁆ := by aesop
+  exact (Submodule.inclusion_injective h₁).lieModuleIsNilpotent hfg
+

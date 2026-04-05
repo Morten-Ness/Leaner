@@ -1,0 +1,15 @@
+import Mathlib
+
+variable {ι α : Type*}
+
+variable [LinearOrder α] [One α]
+
+variable [LocallyFiniteOrder α]
+
+variable [Sub α] [PredSubOrder α] {a b : α}
+
+variable [NoMinOrder α]
+
+theorem Ioc_sub_one_left_eq_Icc (a b : α) : Ioc (a - 1) b = Icc a b := by
+  simpa [pred_eq_sub_one] using Ioc_pred_left_eq_Icc a b
+

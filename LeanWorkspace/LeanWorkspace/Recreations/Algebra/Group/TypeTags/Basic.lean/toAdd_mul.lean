@@ -1,0 +1,6 @@
+import Mathlib
+
+variable {α : Type u} {β : Type v}
+
+theorem toAdd_mul [Add α] (x y : Multiplicative α) : (x * y).toAdd = x.toAdd + y.toAdd := rfl
+

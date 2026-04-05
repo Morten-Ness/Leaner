@@ -1,0 +1,16 @@
+import Mathlib
+
+variable {ι ι' : Type*} {c : ComplexShape ι} {c' : ComplexShape ι'}
+  {C : Type*} [Category* C] [HasZeroMorphisms C]
+
+variable (K L M : HomologicalComplex C c') (φ : K ⟶ L) (φ' : L ⟶ M)
+  (e : c.Embedding c') [e.IsTruncLE]
+  [∀ i', K.HasHomology i'] [∀ i', L.HasHomology i'] [∀ i', M.HasHomology i']
+
+theorem truncLE'_d_eq_toCycles {i j : ι} (hij : c.Rel i j) {i' j' : ι'}
+    (hi' : e.f i = i') (hj' : e.f j = j') (hj : e.BoundaryLE j) :
+    (K.truncLE' e).d i j = (K.truncLE'XIso e hi' (e.not_boundaryLE_prev hij)).hom ≫
+      K.toCycles i' j' ≫ (K.truncLE'XIsoCycles e hj' hj).inv := Quiver.Hom.op_inj (by
+    simpa [HomologicalComplex.truncLE', HomologicalComplex.truncLE'XIso, HomologicalComplex.truncLE'XIsoCycles]
+      using K.op.truncGE'_d_eq_fromOpcycles e.op hij hj' hi' (by simpa))
+

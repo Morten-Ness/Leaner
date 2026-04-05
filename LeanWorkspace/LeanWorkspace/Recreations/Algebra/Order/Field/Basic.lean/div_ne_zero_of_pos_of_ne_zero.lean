@@ -1,0 +1,36 @@
+import Mathlib
+
+variable {ι α β : Type*}
+
+variable {α : Type*} [GroupWithZero α] [PartialOrder α]
+
+variable {a b : α}
+
+private theorem exists_lt_mul_left_of_nonneg {a b c : α} (ha : 0 ≤ a) (hc : 0 ≤ c) (h : c < a * b) :
+    ∃ a' ∈ Set.Ico 0 a, c < a' * b := by
+  have hb : 0 < b := pos_of_mul_pos_right (hc.trans_lt h) ha
+  obtain ⟨a', ha', a_a'⟩ := exists_between ((div_lt_iff₀ hb).2 h)
+  exact ⟨a', ⟨(div_nonneg hc hb.le).trans ha'.le, a_a'⟩, (div_lt_iff₀ hb).1 ha'⟩
+
+
+private theorem exists_lt_mul_right_of_nonneg {a b c : α} (ha : 0 ≤ a) (hc : 0 ≤ c) (h : c < a * b) :
+    ∃ b' ∈ Set.Ico 0 b, c < a * b' := by
+  have hb : 0 < b := pos_of_mul_pos_right (hc.trans_lt h) ha
+  simp_rw [mul_comm a] at h ⊢
+  exact exists_lt_mul_left_of_nonneg hb.le hc h
+
+
+private theorem exists_mul_left_lt₀ {a b c : α} (hc : a * b < c) : ∃ a' > a, a' * b < c := by
+  rcases le_or_gt b 0 with hb | hb
+  · obtain ⟨a', ha'⟩ := exists_gt a
+    exact ⟨a', ha', hc.trans_le' (antitone_mul_right hb ha'.le)⟩
+  · obtain ⟨a', ha', hc'⟩ := exists_between ((lt_div_iff₀ hb).2 hc)
+    exact ⟨a', ha', (lt_div_iff₀ hb).1 hc'⟩
+
+
+private theorem exists_mul_right_lt₀ {a b c : α} (hc : a * b < c) : ∃ b' > b, a * b' < c := by
+  simp_rw [mul_comm a] at hc ⊢; exact exists_mul_left_lt₀ hc
+
+
+theorem div_ne_zero_of_pos_of_ne_zero (ha : 0 < a) (hb : b ≠ 0) : a / b ≠ 0 := div_ne_zero ha.ne' hb
+

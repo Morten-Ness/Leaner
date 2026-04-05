@@ -1,0 +1,27 @@
+import Mathlib
+
+section
+
+variable {R α β : Type*} [CommSemiring R]
+
+variable (e : α ≃ β)
+
+theorem algEquiv_symm_apply (e : α ≃ β) [Semiring β] [Algebra R β] (b : β) : by
+    letI := Equiv.semiring e
+    letI := Equiv.algebra R e
+    exact (Equiv.algEquiv R e).symm b = e.symm b := rfl
+
+end
+
+section
+
+variable {R α β : Type*} [CommSemiring R]
+
+variable (e : α ≃ β)
+
+theorem algebraMap_def (e : α ≃ β) [Semiring β] [Algebra R β] (r : R) :
+    letI := Equiv.semiring e
+    letI := Equiv.algebra R e
+    algebraMap R α r = e.symm (algebraMap R β r) := rfl
+
+end

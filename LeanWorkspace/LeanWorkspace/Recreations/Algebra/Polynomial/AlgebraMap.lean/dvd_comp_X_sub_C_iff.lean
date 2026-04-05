@@ -1,0 +1,13 @@
+import Mathlib
+
+open scoped Polynomial
+
+variable {R : Type u} {S : Type v} {T : Type w} {A : Type z} {A' B : Type*} {a b : R} {n : ℕ}
+
+variable [CommRing R] {p : R[X]} {t : R}
+
+theorem dvd_comp_X_sub_C_iff (p q : R[X]) (a : R) :
+    p ∣ q.comp (Polynomial.X - Polynomial.C a) ↔ p.comp (Polynomial.X + Polynomial.C a) ∣ q := by
+  let _ := invertibleOne (α := R)
+  simpa using Polynomial.dvd_comp_C_mul_X_add_C_iff p q 1 (-a)
+

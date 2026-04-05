@@ -1,0 +1,16 @@
+import Mathlib
+
+variable {ι : Type*}
+
+variable (V : Type u) [Category.{v} V] [HasZeroMorphisms V]
+
+variable (X₀ X₁ X₂ : V) (d₀ : X₁ ⟶ X₀) (d₁ : X₂ ⟶ X₁) (s : d₁ ≫ d₀ = 0)
+  (succ : ∀ (S : ShortComplex V), Σ' (X₃ : V) (d₂ : X₃ ⟶ S.X₁), d₂ ≫ S.f = 0)
+
+theorem mkAux_eq_shortComplex_mk_d_comp_d (n : ℕ) :
+    ChainComplex.mkAux X₀ X₁ X₂ d₀ d₁ s succ n =
+      ShortComplex.mk _ _ (HomologicalComplex.d_comp_d (ChainComplex.mk X₀ X₁ X₂ d₀ d₁ s succ) (n + 2) (n + 1) n) := by
+  change ShortComplex.mk _ _ (ChainComplex.mkAux X₀ X₁ X₂ d₀ d₁ s succ n).zero = _
+  dsimp [ChainComplex.mk, ChainComplex.of, ChainComplex.mkAux]
+  simp
+

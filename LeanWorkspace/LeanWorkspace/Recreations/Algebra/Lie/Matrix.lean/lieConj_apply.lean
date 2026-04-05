@@ -1,0 +1,13 @@
+import Mathlib
+
+open scoped Matrix
+
+variable {R : Type u} [CommRing R]
+
+variable {n : Type w} [DecidableEq n] [Fintype n]
+
+theorem lieConj_apply (P A : Matrix n n R) (h : Invertible P) :
+    P.lieConj h A = P * A * P⁻¹ := by
+  simp [LinearEquiv.conj_apply, Matrix.lieConj, LinearMap.toMatrix'_comp,
+    LinearMap.toMatrix'_toLin']
+

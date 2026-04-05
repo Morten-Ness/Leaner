@@ -8,5 +8,5 @@ variable (M₁₁ : Matrix m m R) (M₁₂ : Matrix m n R) (M₂₁ : Matrix n m
 
 variable (i j : n)
 
-theorem charmatrix_one : Matrix.charmatrix (1 : Matrix n n R) = diagonal fun _ => Polynomial.X - 1 := Matrix.charmatrix_diagonal _
+theorem charmatrix_one : Matrix.charmatrix (1 : Matrix n n R) = Matrix.diagonal fun _ => Polynomial.X - 1 := Matrix.charmatrix_diagonal _
 

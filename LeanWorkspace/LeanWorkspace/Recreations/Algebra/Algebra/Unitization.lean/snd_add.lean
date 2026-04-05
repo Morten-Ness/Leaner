@@ -1,0 +1,6 @@
+import Mathlib
+
+variable {T : Type*} {S : Type*} {R : Type*} {A : Type*}
+
+theorem snd_add [Add R] [Add A] (x₁ x₂ : Unitization R A) : (x₁ + x₂).snd = x₁.snd + x₂.snd := rfl
+

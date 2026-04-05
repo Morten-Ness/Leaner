@@ -1,0 +1,15 @@
+import Mathlib
+
+variable (R : Type u) (L : Type v) (M : Type w) (N : Type w₁) (P : Type w₂)
+
+variable [CommRing R] [LieRing L]
+
+variable [AddCommGroup M] [AddCommGroup N] [AddCommGroup P]
+
+variable [Module R M] [Module R N] [Module R P]
+
+variable [LieRingModule L M] [LieRingModule L N] [LieRingModule L P]
+
+theorem toLinearMap_comp (f : N →ₗ⁅R,L⁆ P) (g : M →ₗ⁅R,L⁆ N) :
+    (f.comp g : M →ₗ[R] P) = (f : N →ₗ[R] P).comp (g : M →ₗ[R] N) := rfl
+

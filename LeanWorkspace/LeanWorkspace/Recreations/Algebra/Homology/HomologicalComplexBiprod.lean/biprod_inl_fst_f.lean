@@ -1,0 +1,9 @@
+import Mathlib
+
+variable {C ι : Type*} [Category* C] [Preadditive C] {c : ComplexShape ι}
+  (K L : HomologicalComplex C c) [∀ i, HasBinaryBiproduct (K.X i) (L.X i)]
+
+theorem biprod_inl_fst_f (i : ι) :
+    (biprod.inl : K ⟶ K ⊞ L).f i ≫ (biprod.fst : K ⊞ L ⟶ K).f i = 𝟙 _ := by
+  rw [← comp_f, biprod.inl_fst, id_f]
+

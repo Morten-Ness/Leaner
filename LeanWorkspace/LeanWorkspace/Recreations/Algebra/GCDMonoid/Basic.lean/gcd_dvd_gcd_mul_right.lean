@@ -1,0 +1,9 @@
+import Mathlib
+
+variable {α : Type*}
+
+variable [CommMonoidWithZero α]
+
+theorem gcd_dvd_gcd_mul_right [GCDMonoid α] (m n k : α) : gcd m n ∣ gcd (m * k) n := by
+  grw [← dvd_mul_right]
+

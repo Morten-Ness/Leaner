@@ -2,6 +2,8 @@ import Mathlib
 
 section
 
+open scoped Polynomial
+
 variable {ι : Type*} [Fintype ι]
 
 variable {M : Type*} [AddCommGroup M] (R : Type*) [CommRing R] [Module R M] (I : Ideal R)
@@ -9,12 +11,14 @@ variable {M : Type*} [AddCommGroup M] (R : Type*) [CommRing R] [Module R M] (I :
 variable (b : ι → M)
 
 theorem LinearMap.exists_monic_and_aeval_eq_zero [Module.Finite R M] (f : Module.End R M) :
-    ∃ p : R[Polynomial.X], p.Monic ∧ Polynomial.aeval f p = 0 := (LinearMap.exists_monic_and_coeff_mem_pow_and_aeval_eq_zero_of_range_le_smul R f ⊤ (by simp)).imp
+    ∃ p : R[X], p.Monic ∧ Polynomial.aeval f p = 0 := (LinearMap.exists_monic_and_coeff_mem_pow_and_aeval_eq_zero_of_range_le_smul R f ⊤ (by simp)).imp
     fun _ h => h.imp_right And.right
 
 end
 
 section
+
+open scoped Polynomial
 
 variable {ι : Type*} [Fintype ι]
 
@@ -24,7 +28,7 @@ variable (b : ι → M)
 
 theorem LinearMap.exists_monic_and_coeff_mem_pow_and_aeval_eq_zero_of_range_le_smul
     [Module.Finite R M] (f : Module.End R M) (I : Ideal R) (hI : LinearMap.range f ≤ I • ⊤) :
-    ∃ p : R[Polynomial.X], p.Monic ∧ (∀ k, p.coeff k ∈ I ^ (p.natDegree - k)) ∧ Polynomial.aeval f p = 0 := by
+    ∃ p : R[X], p.Monic ∧ (∀ k, p.coeff k ∈ I ^ (p.natDegree - k)) ∧ Polynomial.aeval f p = 0 := by
   classical
     cases subsingleton_or_nontrivial R
     · exact ⟨0, Polynomial.monic_of_subsingleton _, by simp⟩

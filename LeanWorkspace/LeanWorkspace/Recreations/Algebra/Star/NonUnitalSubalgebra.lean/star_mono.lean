@@ -1,0 +1,16 @@
+import Mathlib
+
+open scoped Pointwise
+
+variable {F : Type v'} {R' : Type u'} {R : Type u}
+
+variable {A : Type v} {B : Type w} {C : Type w'}
+
+variable [CommSemiring R] [StarRing R]
+
+variable [NonUnitalSemiring A] [StarRing A] [Module R A]
+
+variable [StarModule R A]
+
+theorem star_mono : Monotone (star : NonUnitalSubalgebra R A → NonUnitalSubalgebra R A) := fun _ _ h _ hx => h hx
+

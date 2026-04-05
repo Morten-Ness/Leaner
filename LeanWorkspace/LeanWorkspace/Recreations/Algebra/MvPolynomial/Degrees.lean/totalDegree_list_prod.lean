@@ -1,0 +1,11 @@
+import Mathlib
+
+variable {R : Type u} {S : Type v}
+
+variable {σ τ : Type*} {r : R} {e : ℕ} {n m : σ} {s : σ →₀ ℕ}
+
+variable [CommSemiring R] {p q : MvPolynomial σ R}
+
+theorem totalDegree_list_prod (l : List (MvPolynomial σ R)) :
+    l.prod.totalDegree ≤ (l.map MvPolynomial.totalDegree).sum := l.apply_prod_le_sum_map _ MvPolynomial.totalDegree_one.le MvPolynomial.totalDegree_mul
+

@@ -1,0 +1,16 @@
+import Mathlib
+
+variable {R A B C : Type*}
+
+variable [CommSemiring R]
+
+variable [Semiring A] [Algebra R A] [Semiring B] [Algebra R B] [Semiring C] [Algebra R C]
+
+variable {S T A B : Type*} [Semiring A] [Semiring B]
+  [Semiring S] [Semiring T] [Algebra R S] [Algebra R T] [Algebra R A] [Algebra R B]
+
+variable (l : S ≃ₐ[R] A) (r : T ≃ₐ[R] B)
+
+theorem prodCongr_symm_apply (x : A × B) :
+    (AlgEquiv.prodCongr l r).symm x = (Equiv.prodCongr l r).symm x := rfl
+

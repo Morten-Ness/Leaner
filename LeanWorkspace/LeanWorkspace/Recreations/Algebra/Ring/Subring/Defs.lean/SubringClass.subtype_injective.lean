@@ -1,0 +1,9 @@
+import Mathlib
+
+variable {R : Type u} {S : Type v} {T : Type w} [NonAssocRing R]
+
+variable [SetLike S R] [hSR : SubringClass S R] (s : S)
+
+theorem subtype_injective :
+    Function.Injective (SubringClass.subtype s) := Subtype.coe_injective
+

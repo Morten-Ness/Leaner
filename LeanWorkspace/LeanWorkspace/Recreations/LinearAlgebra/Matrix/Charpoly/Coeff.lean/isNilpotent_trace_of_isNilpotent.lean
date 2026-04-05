@@ -11,7 +11,7 @@ variable {α β : Type v} [DecidableEq α]
 variable {M : Matrix n n R}
 
 theorem isNilpotent_trace_of_isNilpotent (hM : IsNilpotent M) :
-    IsNilpotent (trace M) := by
+    IsNilpotent (Matrix.trace M) := by
   cases isEmpty_or_nonempty n
   · simp
   suffices IsNilpotent (coeff (Matrix.charpolyRev M) 1) by simpa using this

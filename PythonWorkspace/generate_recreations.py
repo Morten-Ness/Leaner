@@ -104,38 +104,101 @@ OPEN_QUALIFY_MAP = {
     "Finset": {
         "affineCombination": "Finset.affineCombination",
         "centroidWeights": "Finset.centroidWeights",
+        "insert_erase": "Finset.insert_erase",
+        "mem_univ": "Finset.mem_univ",
+        "notMem_erase": "Finset.notMem_erase",
+        "card_eq_sum_ones": "Finset.card_eq_sum_ones",
+        "sum_filter": "Finset.sum_filter",
+        "sum_insert": "Finset.sum_insert",
+        "sum_const": "Finset.sum_const",
         "sum_congr": "Finset.sum_congr",
+        "sum_le_sum": "Finset.sum_le_sum",
         "univ": "Finset.univ",
     },
     "Matrix": {
+        "adjugate": "Matrix.adjugate",
+        "adjugate_mul": "Matrix.adjugate_mul",
+        "blockTriangular_diagonal": "Matrix.blockTriangular_diagonal",
+        "charmatrix": "Matrix.charmatrix",
+        "charmatrix_apply_eq": "Matrix.charmatrix_apply_eq",
+        "charmatrix_apply_ne": "Matrix.charmatrix_apply_ne",
+        "charmatrix_apply_natDegree": "Matrix.charmatrix_apply_natDegree",
+        "charmatrix_apply_natDegree_le": "Matrix.charmatrix_apply_natDegree_le",
+        "charpolyRev": "Matrix.charpolyRev",
+        "charpoly_degree_eq_dim": "Matrix.charpoly_degree_eq_dim",
+        "charpoly_natDegree_eq_dim": "Matrix.charpoly_natDegree_eq_dim",
+        "charpoly_sub_diagonal_degree_lt": "Matrix.charpoly_sub_diagonal_degree_lt",
         "charpoly": "Matrix.charpoly",
+        "det": "Matrix.det",
         "det_eq_one_of_card_eq_zero": "Matrix.det_eq_one_of_card_eq_zero",
+        "det_apply'": "Matrix.det_apply'",
+        "det_smul": "Matrix.det_smul",
         "det_mul": "Matrix.det_mul",
         "det_neg": "Matrix.det_neg",
         "det_one_sub_mul_comm": "Matrix.det_one_sub_mul_comm",
         "det_apply": "Matrix.det_apply",
+        "diag_apply": "Matrix.diag_apply",
+        "diagonal": "Matrix.diagonal",
+        "diagonal_apply_eq": "Matrix.diagonal_apply_eq",
+        "diagonal_apply_ne": "Matrix.diagonal_apply_ne",
+        "diagonal_map": "Matrix.diagonal_map",
+        "diagonal_one": "Matrix.diagonal_one",
+        "diagonal_smul": "Matrix.diagonal_smul",
+        "diagonal_sub": "Matrix.diagonal_sub",
+        "fromBlocks": "Matrix.fromBlocks",
         "IsSymm": "Matrix.IsSymm",
+        "matPolyEquiv_charmatrix": "Matrix.matPolyEquiv_charmatrix",
         "map_apply": "Matrix.map_apply",
         "map_updateRow": "Matrix.map_updateRow",
+        "reindex": "Matrix.reindex",
         "scalar": "Matrix.scalar",
+        "scalar_apply": "Matrix.scalar_apply",
+        "smul_eq_diagonal_mul": "Matrix.smul_eq_diagonal_mul",
+        "sub_apply": "Matrix.sub_apply",
+        "trace": "Matrix.trace",
     },
     "Module": {
         "Basis": "Module.Basis",
+    },
+    "LaurentPolynomial": {
+        "T": "LaurentPolynomial.T",
+        "T_add": "LaurentPolynomial.T_add",
+        "T_pow": "LaurentPolynomial.T_pow",
+        "T_zero": "LaurentPolynomial.T_zero",
+        "coe_toLaurentAlg": "Polynomial.coe_toLaurentAlg",
+        "invert": "LaurentPolynomial.invert",
+        "invert_T": "LaurentPolynomial.invert_T",
+        "involutive_invert": "LaurentPolynomial.involutive_invert",
+        "toLaurentAlg": "Polynomial.toLaurentAlg",
+        "toLaurent_injective": "Polynomial.toLaurent_injective",
+        "toLaurent_reverse": "LaurentPolynomial.toLaurent_reverse",
+    },
+    "Polynomial": {
+        "C": "Polynomial.C",
+        "C_eq_intCast": "Polynomial.C_eq_intCast",
+        "Monic": "Polynomial.Monic",
+        "X": "Polynomial.X",
+        "aeval": "Polynomial.aeval",
+        "degree_add_eq_right_of_degree_lt": "Polynomial.degree_add_eq_right_of_degree_lt",
+        "degree_eq_iff_natDegree_eq_of_pos": "Polynomial.degree_eq_iff_natDegree_eq_of_pos",
+        "degree_le_natDegree": "Polynomial.degree_le_natDegree",
+        "degree_neg": "Polynomial.degree_neg",
+        "degreeLT": "Polynomial.degreeLT",
+        "eval_mul_X_sub_C": "Polynomial.eval_mul_X_sub_C",
+        "eval_map": "Polynomial.eval_map",
+        "leadingCoeff_add_of_degree_lt": "Polynomial.leadingCoeff_add_of_degree_lt",
+        "mem_degreeLT": "Polynomial.mem_degreeLT",
+        "monic_prod_of_monic": "Polynomial.monic_prod_of_monic",
+        "monic_X_sub_C": "Polynomial.monic_X_sub_C",
+        "monic_one": "Polynomial.monic_one",
+        "natDegree_X_sub_C": "Polynomial.natDegree_X_sub_C",
+        "natDegree_prod'": "Polynomial.natDegree_prod'",
+        "prod_X_sub_C_coeff_card_pred": "Polynomial.prod_X_sub_C_coeff_card_pred",
     },
     "Set": {
         "range": "Set.range",
         "range_eq_empty": "Set.range_eq_empty",
         "univ": "Set.univ",
-    },
-    "Polynomial": {
-        "C": "Polynomial.C",
-        "Monic": "Polynomial.Monic",
-        "X": "Polynomial.X",
-        "degree_neg": "Polynomial.degree_neg",
-        "leadingCoeff_add_of_degree_lt": "Polynomial.leadingCoeff_add_of_degree_lt",
-        "monic_prod_of_monic": "Polynomial.monic_prod_of_monic",
-        "monic_X_sub_C": "Polynomial.monic_X_sub_C",
-        "monic_one": "Polynomial.monic_one",
     },
 }
 
@@ -143,6 +206,8 @@ OPEN_QUALIFY_MAP = {
 # and the emitted theorem text still contains notation tokens from that scope.
 OPEN_TO_SCOPED_TRIGGER_MAP = {
     "DirectSum": ("⨁",),
+    "LaurentPolynomial": ("[T;T⁻¹]",),
+    "Polynomial": ("[X]",),
 }
 
 CURRENT_NAMESPACE_QUALIFY_MAP = {
@@ -412,7 +477,12 @@ def parse_open_namespaces(stripped: str) -> tuple[str, ...]:
         remainder = remainder[: -len(" in")].rstrip()
     if not remainder:
         return ()
-    return tuple(part for part in remainder.split() if part)
+    parts: list[str] = []
+    for part in remainder.split():
+        if part in {"hiding", "renaming"}:
+            break
+        parts.append(part)
+    return tuple(parts)
 
 
 def parse_scoped_open_namespaces(stripped: str) -> tuple[str, ...]:
@@ -662,6 +732,8 @@ def prefix_names_in_fragment(
             return _qualified
 
         fragment = pattern.sub(repl, fragment)
+    fragment = fragment.replace("[Polynomial.X]", "[X]")
+    fragment = fragment.replace("[LaurentPolynomial.T;LaurentPolynomial.T⁻¹]", "[T;T⁻¹]")
     return fragment
 
 

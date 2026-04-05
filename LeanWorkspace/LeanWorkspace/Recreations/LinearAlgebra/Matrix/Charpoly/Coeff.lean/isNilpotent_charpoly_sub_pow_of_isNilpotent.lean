@@ -1,6 +1,6 @@
 import Mathlib
 
-open scoped Ring
+open scoped Ring Polynomial
 
 variable {R : Type u} [CommRing R]
 
@@ -13,7 +13,7 @@ variable {M : Matrix n n R}
 theorem isNilpotent_charpoly_sub_pow_of_isNilpotent (hM : IsNilpotent M) :
     IsNilpotent (M.charpoly - Polynomial.X ^ (Fintype.card n)) := by
   nontriviality R
-  let p : R[Polynomial.X] := M.charpolyRev
+  let p : R[X] := M.charpolyRev
   have hp : p - 1 = Polynomial.X * (p /ₘ Polynomial.X) := by
     conv_lhs => rw [← modByMonic_add_div p Polynomial.X]
     simp [p, modByMonic_X]
