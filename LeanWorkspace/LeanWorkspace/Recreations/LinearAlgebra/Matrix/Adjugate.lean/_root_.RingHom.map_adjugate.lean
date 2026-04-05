@@ -10,6 +10,6 @@ theorem _root_.RingHom.map_adjugate {R S : Type*} [CommRing R] [CommRing S] (f :
   have : Pi.single i (1 : S) = f ∘ Pi.single i 1 := by
     rw [← f.map_one]
     exact Pi.single_op (fun _ => f) (fun _ => f.map_zero) i (1 : R)
-  rw [Matrix.adjugate_apply, RingHom.mapMatrix_apply, map_apply, RingHom.mapMatrix_apply, this, ←
-    map_updateRow, ← RingHom.mapMatrix_apply, ← RingHom.map_det, ← Matrix.adjugate_apply]
+  rw [Matrix.adjugate_apply, RingHom.mapMatrix_apply, Matrix.map_apply, RingHom.mapMatrix_apply, this, ←
+    Matrix.map_updateRow, ← RingHom.mapMatrix_apply, ← RingHom.map_det, ← Matrix.adjugate_apply]
 

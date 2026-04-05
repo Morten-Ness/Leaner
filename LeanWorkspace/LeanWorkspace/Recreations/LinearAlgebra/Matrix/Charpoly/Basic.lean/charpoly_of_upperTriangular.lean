@@ -9,7 +9,7 @@ variable (M₁₁ : Matrix m m R) (M₁₂ : Matrix m n R) (M₂₁ : Matrix n m
 variable (i j : n)
 
 theorem charpoly_of_upperTriangular [LinearOrder n] (M : Matrix n n R) (h : M.BlockTriangular id) :
-    M.charpoly = ∏ i : n, (X - C (M i i)) := by
+    M.charpoly = ∏ i : n, (Polynomial.X - Polynomial.C (M i i)) := by
   simp [Matrix.charpoly, det_of_upperTriangular h.charmatrix]
 
 -- This proof follows http://drorbn.net/AcademicPensieve/2015-12/CayleyHamilton.pdf

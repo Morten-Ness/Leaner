@@ -1,5 +1,7 @@
 import Mathlib
 
+open scoped Ring
+
 variable {R : Type u} [CommRing R]
 
 variable {n G : Type v} [DecidableEq n] [Fintype n]
@@ -8,9 +10,10 @@ variable {α β : Type v} [DecidableEq α]
 
 variable {M : Matrix n n R}
 
+set_option backward.isDefEq.respectTransparency false in
 theorem coeff_charpoly_mem_ideal_pow {I : Ideal R} (h : ∀ i j, M i j ∈ I) (k : ℕ) :
     M.charpoly.coeff k ∈ I ^ (Fintype.card n - k) := by
-  delta charpoly
+  delta Matrix.charpoly
   rw [Matrix.det_apply, finset_sum_coeff]
   apply sum_mem
   rintro c -

@@ -28,3 +28,13 @@ theorem circulant_injective [SubtractionMonoid n] :
   rw [← Matrix.circulant_col_zero_eq v, ← Matrix.circulant_col_zero_eq w, h]
 
 end
+
+section
+
+variable {α β n R : Type*}
+
+theorem circulant_isSymm_iff [SubtractionMonoid n] {v : n → α} :
+    (Matrix.circulant v).IsSymm ↔ ∀ i, v (-i) = v i := by
+  rw [Matrix.IsSymm, Matrix.transpose_circulant, Matrix.circulant_inj, funext_iff]
+
+end

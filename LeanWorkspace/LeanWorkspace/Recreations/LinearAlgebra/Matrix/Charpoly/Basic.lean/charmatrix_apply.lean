@@ -9,5 +9,5 @@ variable (M₁₁ : Matrix m m R) (M₁₂ : Matrix m n R) (M₂₁ : Matrix n m
 variable (i j : n)
 
 theorem charmatrix_apply :
-    Matrix.charmatrix M i j = (Matrix.diagonal fun _ : n => X) i j - C (M i j) := rfl
+    Matrix.charmatrix M i j = (Matrix.diagonal fun _ : n => Polynomial.X) i j - Polynomial.C (M i j) := rfl
 

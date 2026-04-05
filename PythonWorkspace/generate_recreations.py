@@ -98,10 +98,26 @@ OPEN_QUALIFY_MAP = {
     "DirectSum": {
         "lof": "DirectSum.lof",
     },
+    "Equiv": {
+        "Perm": "Equiv.Perm",
+    },
     "Finset": {
         "affineCombination": "Finset.affineCombination",
         "centroidWeights": "Finset.centroidWeights",
+        "sum_congr": "Finset.sum_congr",
         "univ": "Finset.univ",
+    },
+    "Matrix": {
+        "charpoly": "Matrix.charpoly",
+        "det_eq_one_of_card_eq_zero": "Matrix.det_eq_one_of_card_eq_zero",
+        "det_mul": "Matrix.det_mul",
+        "det_neg": "Matrix.det_neg",
+        "det_one_sub_mul_comm": "Matrix.det_one_sub_mul_comm",
+        "det_apply": "Matrix.det_apply",
+        "IsSymm": "Matrix.IsSymm",
+        "map_apply": "Matrix.map_apply",
+        "map_updateRow": "Matrix.map_updateRow",
+        "scalar": "Matrix.scalar",
     },
     "Module": {
         "Basis": "Module.Basis",
@@ -111,6 +127,22 @@ OPEN_QUALIFY_MAP = {
         "range_eq_empty": "Set.range_eq_empty",
         "univ": "Set.univ",
     },
+    "Polynomial": {
+        "C": "Polynomial.C",
+        "Monic": "Polynomial.Monic",
+        "X": "Polynomial.X",
+        "degree_neg": "Polynomial.degree_neg",
+        "leadingCoeff_add_of_degree_lt": "Polynomial.leadingCoeff_add_of_degree_lt",
+        "monic_prod_of_monic": "Polynomial.monic_prod_of_monic",
+        "monic_X_sub_C": "Polynomial.monic_X_sub_C",
+        "monic_one": "Polynomial.monic_one",
+    },
+}
+
+# Recover selected scoped notation when the source theorem sat under `open X`
+# and the emitted theorem text still contains notation tokens from that scope.
+OPEN_TO_SCOPED_TRIGGER_MAP = {
+    "DirectSum": ("⨁",),
 }
 
 CURRENT_NAMESPACE_QUALIFY_MAP = {
@@ -206,6 +238,7 @@ class Decl:
     name: str
     namespace_path: tuple[str, ...]
     open_namespaces: tuple[str, ...]
+    scoped_opens: tuple[str, ...]
     text: str
     prefix_text: str
     var_blocks: list[VarBlock]
@@ -339,6 +372,28 @@ def ordered_unique_var_blocks(blocks: list[VarBlock]) -> list[VarBlock]:
     return ordered
 
 
+def ordered_unique_names(names: tuple[str, ...]) -> list[str]:
+    seen: set[str] = set()
+    ordered: list[str] = []
+    for name in names:
+        if name in seen:
+            continue
+        seen.add(name)
+        ordered.append(name)
+    return ordered
+
+
+def ordered_unique_name_list(names: list[str]) -> list[str]:
+    seen: set[str] = set()
+    ordered: list[str] = []
+    for name in names:
+        if name in seen:
+            continue
+        seen.add(name)
+        ordered.append(name)
+    return ordered
+
+
 def should_emit_var_block(block: VarBlock) -> bool:
     text = block.text.strip()
     if not text.startswith("variable "):
@@ -360,6 +415,17 @@ def parse_open_namespaces(stripped: str) -> tuple[str, ...]:
     return tuple(part for part in remainder.split() if part)
 
 
+def parse_scoped_open_namespaces(stripped: str) -> tuple[str, ...]:
+    if not stripped.startswith("open scoped "):
+        return ()
+    remainder = stripped[len("open scoped ") :]
+    if remainder.endswith(" in"):
+        remainder = remainder[: -len(" in")].rstrip()
+    if not remainder:
+        return ()
+    return tuple(part for part in remainder.split() if part)
+
+
 def parse_source_file(source_path: Path) -> list[Decl]:
     lines = source_path.read_text(encoding="utf-8").splitlines(keepends=True)
     global_var_blocks: list[VarBlock] = []
@@ -367,6 +433,9 @@ def parse_source_file(source_path: Path) -> list[Decl]:
     global_open_namespaces: list[str] = []
     active_open_namespaces: list[tuple[int, tuple[str, ...]]] = []
     pending_one_shot_opens: tuple[str, ...] = ()
+    global_scoped_opens: list[str] = []
+    active_scoped_opens: list[tuple[int, tuple[str, ...]]] = []
+    pending_one_shot_scoped_opens: tuple[str, ...] = ()
     pending_decl_prefix_lines: list[str] = []
     decls: list[Decl] = []
     scope_stack: list[tuple[str, str]] = []
@@ -400,6 +469,18 @@ def parse_source_file(source_path: Path) -> list[Decl]:
                 active_var_blocks.pop()
             while active_open_namespaces and active_open_namespaces[-1][0] > len(scope_stack):
                 active_open_namespaces.pop()
+            while active_scoped_opens and active_scoped_opens[-1][0] > len(scope_stack):
+                active_scoped_opens.pop()
+            i += 1
+            continue
+        if stripped.startswith("open scoped "):
+            scoped_namespaces = parse_scoped_open_namespaces(stripped)
+            if stripped.endswith(" in"):
+                pending_one_shot_scoped_opens = scoped_namespaces
+            elif not scope_stack:
+                global_scoped_opens.extend(scoped_namespaces)
+            else:
+                active_scoped_opens.append((len(scope_stack), scoped_namespaces))
             i += 1
             continue
         if stripped.startswith("open "):
@@ -448,6 +529,15 @@ def parse_source_file(source_path: Path) -> list[Decl]:
                         ]
                         + list(pending_one_shot_opens)
                     ),
+                    scoped_opens=tuple(
+                        global_scoped_opens
+                        + [
+                            namespace
+                            for _, open_group in active_scoped_opens
+                            for namespace in open_group
+                        ]
+                        + list(pending_one_shot_scoped_opens)
+                    ),
                     text=text,
                     prefix_text="".join(pending_decl_prefix_lines),
                     var_blocks=global_var_blocks + [block for _, block in active_var_blocks],
@@ -455,6 +545,7 @@ def parse_source_file(source_path: Path) -> list[Decl]:
                 )
             )
             pending_one_shot_opens = ()
+            pending_one_shot_scoped_opens = ()
             pending_decl_prefix_lines = []
             order += 1
             continue
@@ -627,6 +718,19 @@ def rewrite_var_block(block: VarBlock) -> str:
     return qualify_common_names(block.text)
 
 
+def inferred_scoped_opens_for_decls(decls: list[Decl]) -> list[str]:
+    inferred: list[str] = []
+    for decl in decls:
+        text = f"{decl.prefix_text}{decl.text}"
+        for namespace in decl.open_namespaces:
+            triggers = OPEN_TO_SCOPED_TRIGGER_MAP.get(namespace)
+            if triggers is None:
+                continue
+            if any(trigger in text for trigger in triggers):
+                inferred.append(namespace)
+    return inferred
+
+
 def theorem_filename(decl: Decl, name_counts: dict[str, int]) -> str:
     stem = decl.name
     if name_counts.get(decl.name, 0) > 1 and decl.namespace_path:
@@ -645,6 +749,12 @@ def iter_target_theorems(decls: list[Decl]) -> list[Decl]:
 
 def output_text_for_theorem(target: Decl, previous_decls: list[Decl]) -> str:
     parts = ["import Mathlib\n\n"]
+    private_supports = [decl for decl in previous_decls if decl.is_private_support]
+    scoped_names = ordered_unique_name_list(
+        list(target.scoped_opens) + inferred_scoped_opens_for_decls(private_supports + [target])
+    )
+    if scoped_names:
+        parts.append(f"open scoped {' '.join(scoped_names)}\n\n")
     for block in ordered_unique_var_blocks(target.var_blocks):
         if not should_emit_var_block(block):
             continue
@@ -652,7 +762,6 @@ def output_text_for_theorem(target: Decl, previous_decls: list[Decl]) -> str:
         parts.append("\n")
     if NAMESPACE_FORMALIZATION:
         parts.append("namespace Formalization\n\n")
-    private_supports = [decl for decl in previous_decls if decl.is_private_support]
     for support in private_supports:
         support_previous = [decl for decl in previous_decls if decl.order < support.order]
         parts.append(rewrite_decl_text(support, support_previous))

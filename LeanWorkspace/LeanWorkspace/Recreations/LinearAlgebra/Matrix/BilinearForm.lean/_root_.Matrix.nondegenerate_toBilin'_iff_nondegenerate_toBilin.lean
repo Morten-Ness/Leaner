@@ -9,5 +9,5 @@ variable {A : Type*} [CommRing A] [IsDomain A] [Module A M₂] (B₃ : BilinForm
 variable {ι : Type*} [DecidableEq ι] [Fintype ι]
 
 theorem _root_.Matrix.nondegenerate_toBilin'_iff_nondegenerate_toBilin {M : Matrix ι ι R₁}
-    (b : Basis ι R₁ M₁) : M.toBilin'.Nondegenerate ↔ (Matrix.toBilin b M).Nondegenerate := (nondegenerate_congr_iff b.equivFun.symm).symm
+    (b : Module.Basis ι R₁ M₁) : M.toBilin'.Nondegenerate ↔ (Matrix.toBilin b M).Nondegenerate := (nondegenerate_congr_iff b.equivFun.symm).symm
 

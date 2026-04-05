@@ -8,9 +8,10 @@ variable (M₁₁ : Matrix m m R) (M₁₂ : Matrix m n R) (M₂₁ : Matrix n m
 
 variable (i j : n)
 
+set_option backward.isDefEq.respectTransparency false in
 theorem charpoly_sub_scalar (M : Matrix n n R) (μ : R) :
-    (M - scalar n μ).charpoly = M.charpoly.comp (X + C μ) := by
-  simp_rw [Matrix.charpoly, det_apply, Polynomial.sum_comp, Polynomial.smul_comp, Polynomial.prod_comp]
+    (M - Matrix.scalar n μ).charpoly = M.charpoly.comp (Polynomial.X + Polynomial.C μ) := by
+  simp_rw [Matrix.charpoly, Matrix.det_apply, Polynomial.sum_comp, Polynomial.smul_comp, Polynomial.prod_comp]
   congr! with σ _ i _
   by_cases hi : σ i = i <;> simp [hi]
   ring

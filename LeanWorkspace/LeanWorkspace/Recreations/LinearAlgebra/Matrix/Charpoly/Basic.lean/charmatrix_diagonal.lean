@@ -9,6 +9,6 @@ variable (M₁₁ : Matrix m m R) (M₁₂ : Matrix m n R) (M₂₁ : Matrix n m
 variable (i j : n)
 
 theorem charmatrix_diagonal (d : n → R) :
-    Matrix.charmatrix (diagonal d) = diagonal fun i => X - C (d i) := by
+    Matrix.charmatrix (diagonal d) = diagonal fun i => Polynomial.X - Polynomial.C (d i) := by
   rw [Matrix.charmatrix, scalar_apply, RingHom.mapMatrix_apply, diagonal_map (map_zero _), diagonal_sub]
 

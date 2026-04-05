@@ -1,5 +1,7 @@
 import Mathlib
 
+open scoped Ring
+
 variable {R : Type u} [CommRing R]
 
 variable {n G : Type v} [DecidableEq n] [Fintype n]
@@ -9,7 +11,7 @@ variable {α β : Type v} [DecidableEq α]
 variable {M : Matrix n n R}
 
 theorem charpoly_of_card_eq_two [Nontrivial R] (hn : Fintype.card n = 2) :
-    M.charpoly = X ^ 2 - C M.trace * X + C M.det := by
+    M.charpoly = Polynomial.X ^ 2 - Polynomial.C M.trace * Polynomial.X + Polynomial.C M.det := by
   have : Nonempty n := by rw [← Fintype.card_pos_iff]; lia
   ext i
   by_cases hi : i ∈ Finset.range 3

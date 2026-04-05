@@ -10,7 +10,7 @@ variable (i j : n)
 
 theorem charmatrix_fromBlocks :
     Matrix.charmatrix (fromBlocks M₁₁ M₁₂ M₂₁ M₂₂) =
-      fromBlocks (Matrix.charmatrix M₁₁) (- M₁₂.map C) (- M₂₁.map C) (Matrix.charmatrix M₂₂) := by
+      fromBlocks (Matrix.charmatrix M₁₁) (- M₁₂.map Polynomial.C) (- M₂₁.map Polynomial.C) (Matrix.charmatrix M₂₂) := by
   simp only [Matrix.charmatrix]
   ext (i | i) (j | j) : 2 <;> simp [diagonal]
 

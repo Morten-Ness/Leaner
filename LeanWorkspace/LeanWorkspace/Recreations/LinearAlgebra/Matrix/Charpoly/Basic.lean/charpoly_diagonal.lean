@@ -8,6 +8,6 @@ variable (M₁₁ : Matrix m m R) (M₁₂ : Matrix m n R) (M₂₁ : Matrix n m
 
 variable (i j : n)
 
-theorem charpoly_diagonal (d : n → R) : Matrix.charpoly (diagonal d) = ∏ i, (X - C (d i)) := by
+theorem charpoly_diagonal (d : n → R) : Matrix.charpoly (diagonal d) = ∏ i, (Polynomial.X - Polynomial.C (d i)) := by
   simp [Matrix.charpoly]
 

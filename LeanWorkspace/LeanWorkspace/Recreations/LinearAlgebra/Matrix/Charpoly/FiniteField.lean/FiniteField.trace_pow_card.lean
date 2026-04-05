@@ -1,5 +1,7 @@
 import Mathlib
 
+open scoped Polynomial
+
 variable {n : Type*} [DecidableEq n] [Fintype n]
 
 theorem FiniteField.trace_pow_card {K : Type*} [Field K] [Fintype K] (M : Matrix n n K) :

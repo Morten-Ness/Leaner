@@ -1,5 +1,7 @@
 import Mathlib
 
+open scoped DirectSum
+
 variable {R ι M' : Type*} {κ : ι → Type*} {M : (i : ι) → κ i → Type*}
 
 variable [CommSemiring R]

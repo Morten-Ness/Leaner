@@ -16,7 +16,7 @@ variable [Fintype ι']
 
 variable [Finite κ] [Fintype ι]
 
-theorem basis_toMatrix_basisFun_mul (b : Basis ι R (ι → R)) (A : Matrix ι ι R) :
+theorem basis_toMatrix_basisFun_mul (b : Module.Basis ι R (ι → R)) (A : Matrix ι ι R) :
     b.toMatrix (Pi.basisFun R ι) * A = of fun i j => b.repr (A.col j) i := by
   classical
   simp only [basis_toMatrix_mul _ _ (Pi.basisFun R ι), Matrix.toLin_eq_toLin']

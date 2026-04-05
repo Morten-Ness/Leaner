@@ -8,6 +8,6 @@ variable (M₁₁ : Matrix m m R) (M₁₂ : Matrix m n R) (M₂₁ : Matrix n m
 
 variable (i j : n)
 
-theorem charpoly_zero : Matrix.charpoly (0 : Matrix n n R) = X ^ Fintype.card n := by
+theorem charpoly_zero : Matrix.charpoly (0 : Matrix n n R) = Polynomial.X ^ Fintype.card n := by
   simp [Matrix.charpoly]
 

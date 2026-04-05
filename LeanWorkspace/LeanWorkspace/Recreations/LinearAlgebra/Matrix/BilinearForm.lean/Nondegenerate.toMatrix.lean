@@ -8,6 +8,6 @@ variable {A : Type*} [CommRing A] [IsDomain A] [Module A M₂] (B₃ : BilinForm
 
 variable {ι : Type*} [DecidableEq ι] [Fintype ι]
 
-theorem Nondegenerate.toMatrix {B : LinearMap.BilinForm R₂ M₂} (h : B.Nondegenerate) (b : Basis ι R₂ M₂) :
+theorem Nondegenerate.toMatrix {B : LinearMap.BilinForm R₂ M₂} (h : B.Nondegenerate) (b : Module.Basis ι R₂ M₂) :
     (LinearMap.BilinForm.toMatrix b B).Nondegenerate := (LinearMap.BilinForm.nondegenerate_toMatrix_iff b).mpr h
 

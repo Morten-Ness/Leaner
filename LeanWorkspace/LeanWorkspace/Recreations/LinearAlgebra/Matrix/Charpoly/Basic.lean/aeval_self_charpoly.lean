@@ -10,10 +10,10 @@ variable (i j : n)
 
 theorem aeval_self_charpoly (M : Matrix n n R) : aeval M M.charpoly = 0 := by
   -- We begin with the fact $χ_M(t) I = adjugate (t I - M) * (t I - M)$,
-  -- as an identity in `Matrix n n R[X]`.
-  have h : M.charpoly • (1 : Matrix n n R[X]) = adjugate (Matrix.charmatrix M) * Matrix.charmatrix M :=
+  -- as an identity in `Matrix n n R[Polynomial.X]`.
+  have h : M.charpoly • (1 : Matrix n n R[Polynomial.X]) = adjugate (Matrix.charmatrix M) * Matrix.charmatrix M :=
     (adjugate_mul _).symm
-  -- Using the algebra isomorphism `Matrix n n R[X] ≃ₐ[R] Polynomial (Matrix n n R)`,
+  -- Using the algebra isomorphism `Matrix n n R[Polynomial.X] ≃ₐ[R] Polynomial (Matrix n n R)`,
   -- we have the same identity in `Polynomial (Matrix n n R)`.
   apply_fun matPolyEquiv at h
   simp only [map_mul, Matrix.matPolyEquiv_charmatrix] at h

@@ -13,6 +13,6 @@ theorem toMatrix_update [DecidableEq ι'] (x : M) :
   ext i' k
   rw [Module.Basis.toMatrix, Matrix.updateCol_apply, Module.Basis.toMatrix_apply e]
   split_ifs with h
-  · rw [h, update_self j x v]
+  · rw [h, Function.update_self j x v]
   · rw [update_of_ne h]
 

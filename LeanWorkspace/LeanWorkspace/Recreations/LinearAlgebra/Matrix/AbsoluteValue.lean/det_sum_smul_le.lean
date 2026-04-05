@@ -1,5 +1,7 @@
 import Mathlib
 
+open scoped Nat
+
 variable {R S : Type*} [CommRing R] [Nontrivial R]
   [CommRing S] [LinearOrder S] [IsStrictOrderedRing S]
 

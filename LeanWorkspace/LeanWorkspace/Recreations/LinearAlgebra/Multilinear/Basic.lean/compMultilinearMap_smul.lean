@@ -1,4 +1,5 @@
 import Mathlib
+universe uR uS uι v v' v₁ v₁' v₁'' v₂ v₃ v₄
 
 variable {R : Type uR} {S : Type uS} {ι : Type uι} {n : ℕ}
   {M : Fin n.succ → Type v} {M₁ : ι → Type v₁} {M₁' : ι → Type v₁'} {M₁'' : ι → Type v₁''}
@@ -17,4 +18,3 @@ theorem compMultilinearMap_smul [DistribSMul S M₂] [DistribSMul S M₃]
     [SMulCommClass R S M₂] [SMulCommClass R S M₃] [CompatibleSMul M₂ M₃ S R]
     (g : M₂ →ₗ[R] M₃) (s : S) (f : MultilinearMap R M₁ M₂) :
     g.compMultilinearMap (s • f) = s • g.compMultilinearMap f := MultilinearMap.ext fun _ => g.map_smul_of_tower _ _
-

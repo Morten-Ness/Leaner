@@ -8,7 +8,7 @@ variable {A : Type*} [CommRing A] [IsDomain A] [Module A M₂] (B₃ : BilinForm
 
 variable {ι : Type*} [DecidableEq ι] [Fintype ι]
 
-theorem nondegenerate_iff_det_ne_zero {B : LinearMap.BilinForm A M₂} (b : Basis ι A M₂) :
+theorem nondegenerate_iff_det_ne_zero {B : LinearMap.BilinForm A M₂} (b : Module.Basis ι A M₂) :
     B.Nondegenerate ↔ (LinearMap.BilinForm.toMatrix b B).det ≠ 0 := by
   rw [← Matrix.nondegenerate_iff_det_ne_zero, LinearMap.BilinForm.nondegenerate_toMatrix_iff]
 

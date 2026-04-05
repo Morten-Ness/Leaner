@@ -9,7 +9,7 @@ theorem det_fromBlocks_zero₂₁ (A : Matrix m m R) (B : Matrix m n R) (D : Mat
   classical
     simp_rw [Matrix.det_apply']
     convert Eq.symm <|
-      sum_subset (M := R) (subset_univ ((sumCongrHom m n).range : Set (Perm (m ⊕ n))).toFinset) ?_
+      sum_subset (M := R) (subset_univ ((sumCongrHom m n).range : Set (Equiv.Perm (m ⊕ n))).toFinset) ?_
     · simp_rw [sum_mul_sum, ← sum_product', univ_product_univ]
       refine sum_nbij (fun σ ↦ σ.fst.sumCongr σ.snd) ?_ ?_ ?_ ?_
       · intro σ₁₂ _
@@ -17,9 +17,9 @@ theorem det_fromBlocks_zero₂₁ (A : Matrix m m R) (B : Matrix m n R) (D : Mat
       · intro σ₁ _ σ₂ _
         dsimp only
         intro h
-        have h2 : ∀ x, Perm.sumCongr σ₁.fst σ₁.snd x = Perm.sumCongr σ₂.fst σ₂.snd x :=
+        have h2 : ∀ x, Equiv.Perm.sumCongr σ₁.fst σ₁.snd x = Equiv.Perm.sumCongr σ₂.fst σ₂.snd x :=
           DFunLike.congr_fun h
-        simp only [Sum.map_inr, Sum.map_inl, Perm.sumCongr_apply, Sum.forall, Sum.inl.injEq,
+        simp only [Sum.map_inr, Sum.map_inl, Equiv.Perm.sumCongr_apply, Sum.forall, Sum.inl.injEq,
           Sum.inr.injEq] at h2
         ext x
         · exact h2.left x

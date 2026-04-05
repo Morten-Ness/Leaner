@@ -1,5 +1,7 @@
 import Mathlib
 
+open scoped Ring
+
 variable {R : Type u} [CommRing R]
 
 variable {n G : Type v} [DecidableEq n] [Fintype n]

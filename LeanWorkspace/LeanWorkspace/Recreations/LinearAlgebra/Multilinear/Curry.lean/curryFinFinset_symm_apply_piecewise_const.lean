@@ -1,4 +1,5 @@
 import Mathlib
+universe uR uS uι v v' v₁ v₁' v₁'' v₂ v₃ v₄
 
 variable {R : Type uR} {S : Type uS} {ι : Type uι} {ι' : Type uι'} {n : ℕ}
   {M : Fin n.succ → Type v} {M₁ : ι → Type v₁} {M₂ : Type v₂} {M₃ : Type v₃} {M' : Type v'}
@@ -22,4 +23,3 @@ theorem curryFinFinset_symm_apply_piecewise_const {k l n : ℕ} {s : Finset (Fin
   · ext
     rw [finSumEquivOfFinset_inr, Finset.piecewise_eq_of_notMem]
     exact Finset.mem_compl.1 (Finset.orderEmbOfFin_mem _ _ _)
-

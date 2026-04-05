@@ -24,5 +24,3 @@ theorem toMatrix_reindex' [DecidableEq ι] [DecidableEq ι'] (b : Module.Basis �
     Matrix.reindex_apply, Matrix.submatrix_apply, Function.comp_apply, e.apply_symm_apply,
     Finsupp.mapDomain_equiv_apply]
 
-omit [Fintype ι'] in
-

@@ -16,6 +16,6 @@ variable (c : Basis o R₁ M₂')
 
 variable [DecidableEq o]
 
-theorem LinearMap.BilinForm.toMatrix_mul_basis_toMatrix (c : Basis o R₁ M₁) (B : BilinForm R₁ M₁) :
+theorem LinearMap.BilinForm.toMatrix_mul_basis_toMatrix (c : Module.Basis o R₁ M₁) (B : BilinForm R₁ M₁) :
     (b.toMatrix c)ᵀ * BilinForm.toMatrix b B * b.toMatrix c = BilinForm.toMatrix c B := LinearMap.toMatrix₂_mul_basis_toMatrix _ _ _ _ B
 

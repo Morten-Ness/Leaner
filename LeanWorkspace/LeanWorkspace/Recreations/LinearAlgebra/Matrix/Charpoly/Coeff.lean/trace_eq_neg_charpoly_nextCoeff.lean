@@ -1,5 +1,7 @@
 import Mathlib
 
+open scoped Ring
+
 variable {R : Type u} [CommRing R]
 
 variable {n G : Type v} [DecidableEq n] [Fintype n]
@@ -13,6 +15,4 @@ theorem trace_eq_neg_charpoly_nextCoeff (M : Matrix n n R) : M.trace = -M.charpo
   · simp [nextCoeff]
   nontriviality
   simp [Matrix.trace_eq_neg_charpoly_coeff, nextCoeff]
-
-set_option backward.isDefEq.respectTransparency false in
 

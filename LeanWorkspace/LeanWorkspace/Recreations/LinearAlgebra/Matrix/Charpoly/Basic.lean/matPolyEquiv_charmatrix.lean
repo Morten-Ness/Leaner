@@ -8,7 +8,7 @@ variable (M₁₁ : Matrix m m R) (M₁₂ : Matrix m n R) (M₂₁ : Matrix n m
 
 variable (i j : n)
 
-theorem matPolyEquiv_charmatrix : matPolyEquiv (Matrix.charmatrix M) = X - C M := by
+theorem matPolyEquiv_charmatrix : matPolyEquiv (Matrix.charmatrix M) = Polynomial.X - Polynomial.C M := by
   ext k i j
   simp only [matPolyEquiv_coeff_apply, coeff_sub]
   by_cases h : i = j

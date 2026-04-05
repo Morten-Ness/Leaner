@@ -1,5 +1,7 @@
 import Mathlib
 
+open scoped Polynomial
+
 variable {n : Type*} [DecidableEq n] [Fintype n]
 
 theorem ZMod.charpoly_pow_card {p : ℕ} [Fact p.Prime] (M : Matrix n n (ZMod p)) :

@@ -9,7 +9,7 @@ variable (M₁₁ : Matrix m m R) (M₁₂ : Matrix m n R) (M₂₁ : Matrix n m
 variable (i j : n)
 
 theorem charpoly_vecMulVec (u v : n → R) :
-    (vecMulVec u v).charpoly = X ^ Fintype.card n - (u ⬝ᵥ v) • X ^ (Fintype.card n - 1) := by
+    (vecMulVec u v).charpoly = Polynomial.X ^ Fintype.card n - (u ⬝ᵥ v) • Polynomial.X ^ (Fintype.card n - 1) := by
   cases isEmpty_or_nonempty n
   · simp
   · have h : 1 ≤ Fintype.card n := NeZero.one_le

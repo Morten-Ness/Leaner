@@ -1,5 +1,7 @@
 import Mathlib
 
+open scoped Matrix
+
 variable {n : Type*} [Fintype n] [DecidableEq n]
 
 variable {R K : Type*} [CommRing R] [Field K]

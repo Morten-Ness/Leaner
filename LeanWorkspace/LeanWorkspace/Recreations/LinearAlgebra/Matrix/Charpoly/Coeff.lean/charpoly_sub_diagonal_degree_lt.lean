@@ -1,5 +1,7 @@
 import Mathlib
 
+open scoped Ring
+
 variable {R : Type u} [CommRing R]
 
 variable {n G : Type v} [DecidableEq n] [Fintype n]
@@ -9,8 +11,8 @@ variable {α β : Type v} [DecidableEq α]
 variable {M : Matrix n n R}
 
 theorem charpoly_sub_diagonal_degree_lt :
-    (M.charpoly - ∏ i : n, (X - C (M i i))).degree < ↑(Fintype.card n - 1) := by
-  rw [charpoly, det_apply', ← insert_erase (mem_univ (Equiv.refl n)),
+    (M.charpoly - ∏ i : n, (Polynomial.X - Polynomial.C (M i i))).degree < ↑(Fintype.card n - 1) := by
+  rw [Matrix.charpoly, det_apply', ← insert_erase (mem_univ (Equiv.refl n)),
     sum_insert (notMem_erase (Equiv.refl n) Finset.univ), add_comm]
   simp only [charmatrix_apply_eq, one_mul, Equiv.Perm.sign_refl, id, Int.cast_one,
     Units.val_one, add_sub_cancel_right, Equiv.coe_refl]

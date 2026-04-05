@@ -1,0 +1,15 @@
+import Mathlib
+
+open scoped RightActions
+
+variable {R R₁ S₁ R₂ S₂ M₁ M₂ M₁' M₂' N₂ n m n' m' ι : Type*}
+
+variable [CommRing R] [DecidableEq m] [Fintype m] [DecidableEq n] [Fintype n]
+  {M : Matrix m n R}
+
+variable {B : (m → R) →ₗ[R] (n → R) →ₗ[R] R}
+
+theorem _root_.Matrix.Nondegenerate.toLinearMap₂' (h : M.Nondegenerate) :
+    (toLinearMap₂' R M).Nondegenerate (R := R) :=
+  ⟨h.1.toLinearMap₂', h.2.toLinearMap₂'⟩
+

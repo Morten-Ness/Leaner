@@ -61,7 +61,7 @@ variable {m n : Type*} [DecidableEq n] [Fintype n] [DecidableEq m] [Fintype m]
 
 variable {R : Type v} [CommRing R]
 
-theorem det_apply' (M : Matrix n n R) : M.det = ∑ σ : Perm n, ε σ * ∏ i, M (σ i) i := by
+theorem det_apply' (M : Matrix n n R) : M.det = ∑ σ : Equiv.Perm n, ε σ * ∏ i, M (σ i) i := by
   simp [Matrix.det_apply, Units.smul_def]
 
 end
@@ -72,7 +72,7 @@ variable {m n : Type*} [DecidableEq n] [Fintype n] [DecidableEq m] [Fintype m]
 
 variable {R : Type v} [CommRing R]
 
-theorem det_apply (M : Matrix n n R) : M.det = ∑ σ : Perm n, Equiv.Perm.sign σ • ∏ i, M (σ i) i := MultilinearMap.alternatization_apply _ M
+theorem det_apply (M : Matrix n n R) : M.det = ∑ σ : Equiv.Perm n, Equiv.Perm.sign σ • ∏ i, M (σ i) i := MultilinearMap.alternatization_apply _ M
 
 -- This is what the old definition was. We use it to avoid having to change the old proofs below
 
@@ -181,9 +181,9 @@ variable {m n : Type*} [DecidableEq n] [Fintype n] [DecidableEq m] [Fintype m]
 variable {R : Type v} [CommRing R]
 
 theorem det_eq_detp_sub_detp (M : Matrix n n R) : M.det = M.detp 1 - M.detp (-1) := by
-  rw [Matrix.det_apply, ← Equiv.sum_comp (Equiv.inv (Perm n)), ← ofSign_disjUnion, sum_disjUnion]
+  rw [Matrix.det_apply, ← Equiv.sum_comp (Equiv.inv (Equiv.Perm n)), ← ofSign_disjUnion, sum_disjUnion]
   simp_rw [inv_apply, sign_inv, sub_eq_add_neg, detp, ← sum_neg_distrib]
-  refine congr_arg₂ (· + ·) (sum_congr rfl fun σ hσ ↦ ?_) (sum_congr rfl fun σ hσ ↦ ?_) <;>
+  refine congr_arg₂ (· + ·) (Finset.sum_congr rfl fun σ hσ ↦ ?_) (Finset.sum_congr rfl fun σ hσ ↦ ?_) <;>
     rw [mem_ofSign.mp hσ, ← Equiv.prod_comp σ] <;> simp
 
 end
@@ -484,7 +484,7 @@ theorem det_fromBlocks_zero₂₁ (A : Matrix m m R) (B : Matrix m n R) (D : Mat
   classical
     simp_rw [Matrix.det_apply']
     convert Eq.symm <|
-      sum_subset (M := R) (subset_univ ((sumCongrHom m n).range : Set (Perm (m ⊕ n))).toFinset) ?_
+      sum_subset (M := R) (subset_univ ((sumCongrHom m n).range : Set (Equiv.Perm (m ⊕ n))).toFinset) ?_
     · simp_rw [sum_mul_sum, ← sum_product', univ_product_univ]
       refine sum_nbij (fun σ ↦ σ.fst.sumCongr σ.snd) ?_ ?_ ?_ ?_
       · intro σ₁₂ _
@@ -492,9 +492,9 @@ theorem det_fromBlocks_zero₂₁ (A : Matrix m m R) (B : Matrix m n R) (D : Mat
       · intro σ₁ _ σ₂ _
         dsimp only
         intro h
-        have h2 : ∀ x, Perm.sumCongr σ₁.fst σ₁.snd x = Perm.sumCongr σ₂.fst σ₂.snd x :=
+        have h2 : ∀ x, Equiv.Perm.sumCongr σ₁.fst σ₁.snd x = Equiv.Perm.sumCongr σ₂.fst σ₂.snd x :=
           DFunLike.congr_fun h
-        simp only [Sum.map_inr, Sum.map_inl, Perm.sumCongr_apply, Sum.forall, Sum.inl.injEq,
+        simp only [Sum.map_inr, Sum.map_inl, Equiv.Perm.sumCongr_apply, Sum.forall, Sum.inl.injEq,
           Sum.inr.injEq] at h2
         ext x
         · exact h2.left x
@@ -534,20 +534,20 @@ variable {m n : Type*} [DecidableEq n] [Fintype n] [DecidableEq m] [Fintype m]
 variable {R : Type v} [CommRing R]
 
 theorem det_mul (M N : Matrix n n R) : Matrix.det (M * N) = Matrix.det M * Matrix.det N := calc
-    Matrix.det (M * N) = ∑ p : n → n, ∑ σ : Perm n, ε σ * ∏ i, M (σ i) (p i) * N (p i) i := by
+    Matrix.det (M * N) = ∑ p : n → n, ∑ σ : Equiv.Perm n, ε σ * ∏ i, M (σ i) (p i) * N (p i) i := by
       simp only [Matrix.det_apply', mul_apply, prod_univ_sum, mul_sum, Fintype.piFinset_univ]
       rw [Finset.sum_comm]
-    _ = ∑ p : n → n with Function.Bijective p, ∑ σ : Perm n, ε σ * ∏ i, M (σ i) (p i) * N (p i) i := by
+    _ = ∑ p : n → n with Function.Bijective p, ∑ σ : Equiv.Perm n, ε σ * ∏ i, M (σ i) (p i) * N (p i) i := by
       refine (sum_subset (filter_subset _ _) fun f _ hbij ↦ Matrix.det_mul_aux ?_).symm
       simpa only [mem_filter_univ] using hbij
-    _ = ∑ τ : Perm n, ∑ σ : Perm n, ε σ * ∏ i, M (σ i) (τ i) * N (τ i) i :=
+    _ = ∑ τ : Equiv.Perm n, ∑ σ : Equiv.Perm n, ε σ * ∏ i, M (σ i) (τ i) * N (τ i) i :=
       sum_bij (fun p h ↦ Equiv.ofBijective p (mem_filter.1 h).2) (fun _ _ ↦ mem_univ _)
         (fun _ _ _ _ h ↦ by injection h)
         (fun b _ ↦ ⟨b, mem_filter.2 ⟨mem_univ _, b.bijective⟩, coe_fn_injective rfl⟩) fun _ _ ↦ rfl
-    _ = ∑ σ : Perm n, ∑ τ : Perm n, (∏ i, N (σ i) i) * ε τ * ∏ j, M (τ j) (σ j) := by
+    _ = ∑ σ : Equiv.Perm n, ∑ τ : Equiv.Perm n, (∏ i, N (σ i) i) * ε τ * ∏ j, M (τ j) (σ j) := by
       simp only [mul_comm, mul_left_comm, prod_mul_distrib, mul_assoc]
-    _ = ∑ σ : Perm n, ∑ τ : Perm n, (∏ i, N (σ i) i) * (ε σ * ε τ) * ∏ i, M (τ i) i :=
-      (sum_congr rfl fun σ _ =>
+    _ = ∑ σ : Equiv.Perm n, ∑ τ : Equiv.Perm n, (∏ i, N (σ i) i) * (ε σ * ε τ) * ∏ i, M (τ i) i :=
+      (Finset.sum_congr rfl fun σ _ =>
         Fintype.sum_equiv (Equiv.mulRight σ⁻¹) _ _ fun τ => by
           have : (∏ j, M (τ j) (σ j)) = ∏ j, M ((τ * σ⁻¹) j) j := by
             rw [← (σ⁻¹ : _ ≃ _).prod_comp]
@@ -572,7 +572,7 @@ variable {m n : Type*} [DecidableEq n] [Fintype n] [DecidableEq m] [Fintype m]
 variable {R : Type v} [CommRing R]
 
 theorem det_mul_aux {M N : Matrix n n R} {p : n → n} (H : ¬Function.Bijective p) :
-    (∑ σ : Perm n, ε σ * ∏ x, M (σ x) (p x) * N (p x) x) = 0 := by
+    (∑ σ : Equiv.Perm n, ε σ * ∏ x, M (σ x) (p x) * N (p x) x) = 0 := by
   obtain ⟨i, j, hpij, hij⟩ : ∃ i j, p i = p j ∧ i ≠ j := by
     rw [← Finite.injective_iff_bijective, Function.Injective] at H
     push Not at H
@@ -678,8 +678,8 @@ variable {m n : Type*} [DecidableEq n] [Fintype n] [DecidableEq m] [Fintype m]
 
 variable {R : Type v} [CommRing R]
 
-theorem det_permute' (σ : Perm n) (M : Matrix n n R) :
-    (M.submatrix id σ).det = Perm.sign σ * M.det := by
+theorem det_permute' (σ : Equiv.Perm n) (M : Matrix n n R) :
+    (M.submatrix id σ).det = Equiv.Perm.sign σ * M.det := by
   rw [← Matrix.det_transpose, transpose_submatrix, Matrix.det_permute, Matrix.det_transpose]
 
 end
@@ -690,8 +690,8 @@ variable {m n : Type*} [DecidableEq n] [Fintype n] [DecidableEq m] [Fintype m]
 
 variable {R : Type v} [CommRing R]
 
-theorem det_permute (σ : Perm n) (M : Matrix n n R) :
-    (M.submatrix σ id).det = Perm.sign σ * M.det := ((Matrix.detRowAlternating : (n → R) [⋀^n]→ₗ[R] R).map_perm M σ).trans (by simp [Units.smul_def, Matrix.det])
+theorem det_permute (σ : Equiv.Perm n) (M : Matrix n n R) :
+    (M.submatrix σ id).det = Equiv.Perm.sign σ * M.det := ((Matrix.detRowAlternating : (n → R) [⋀^n]→ₗ[R] R).map_perm M σ).trans (by simp [Units.smul_def, Matrix.det])
 
 end
 
@@ -806,22 +806,22 @@ theorem det_succ_column_zero {n : ℕ} (A : Matrix (Fin n.succ) (Fin n.succ) R) 
       Equiv.Perm.decomposeFin.symm_sign, Equiv.swap_self, if_true, id,
       Equiv.Perm.decomposeFin_symm_apply_succ, Fin.succAbove_zero, Equiv.coe_refl, pow_zero,
       mul_smul_comm, of_apply]
-  -- `univ_perm_fin_succ` gives a different embedding of `Perm (Fin n)` into
-  -- `Perm (Fin n.succ)` than the determinant of the submatrix we want,
+  -- `univ_perm_fin_succ` gives a different embedding of `Equiv.Perm (Fin n)` into
+  -- `Equiv.Perm (Fin n.succ)` than the determinant of the submatrix we want,
   -- permute `A` so that we get the correct one.
-  have : (-1 : R) ^ (i : ℕ) = (Perm.sign i.cycleRange) := by simp [Fin.sign_cycleRange]
+  have : (-1 : R) ^ (i : ℕ) = (Equiv.Perm.sign i.cycleRange) := by simp [Fin.sign_cycleRange]
   rw [Fin.val_succ, pow_succ', this, mul_assoc, mul_assoc, mul_left_comm (ε _),
     ← Matrix.det_permute, Matrix.det_apply, Finset.mul_sum, Finset.mul_sum]
   -- now we just need to move the corresponding parts to the same place
   refine Finset.sum_congr rfl fun σ _ => ?_
   rw [Equiv.Perm.decomposeFin.symm_sign, if_neg (Fin.succ_ne_zero i)]
   calc
-    ((-1 * Perm.sign σ : ℤ) • ∏ i', A (Perm.decomposeFin.symm (Fin.succ i, σ) i') i') =
-        (-1 * Perm.sign σ : ℤ) • (A (Fin.succ i) 0 *
+    ((-1 * Equiv.Perm.sign σ : ℤ) • ∏ i', A (Equiv.Perm.decomposeFin.symm (Fin.succ i, σ) i') i') =
+        (-1 * Equiv.Perm.sign σ : ℤ) • (A (Fin.succ i) 0 *
           ∏ i', A ((Fin.succ i).succAbove (Fin.cycleRange i (σ i'))) i'.succ) := by
       simp only [Fin.prod_univ_succ, Fin.succAbove_cycleRange,
         Equiv.Perm.decomposeFin_symm_apply_zero, Equiv.Perm.decomposeFin_symm_apply_succ]
-    _ = -1 * (A (Fin.succ i) 0 * (Perm.sign σ : ℤ) •
+    _ = -1 * (A (Fin.succ i) 0 * (Equiv.Perm.sign σ : ℤ) •
         ∏ i', A ((Fin.succ i).succAbove (Fin.cycleRange i (σ i'))) i'.succ) := by
       simp [_root_.neg_mul, one_mul, zsmul_eq_mul, neg_smul,
         Fin.succAbove_cycleRange, mul_left_comm]
@@ -838,10 +838,10 @@ theorem det_succ_row {n : ℕ} (A : Matrix (Fin n.succ) (Fin n.succ) R) (i : Fin
     Matrix.det A =
       ∑ j : Fin n.succ, (-1) ^ (i + j : ℕ) * A i j * Matrix.det (A.submatrix i.succAbove j.succAbove) := by
   simp_rw [pow_add, mul_assoc, ← mul_sum]
-  have : Matrix.det A = (-1 : R) ^ (i : ℕ) * (Perm.sign i.cycleRange⁻¹) * Matrix.det A := by
+  have : Matrix.det A = (-1 : R) ^ (i : ℕ) * (Equiv.Perm.sign i.cycleRange⁻¹) * Matrix.det A := by
     calc
       Matrix.det A = ↑((-1 : ℤˣ) ^ (i : ℕ) * (-1 : ℤˣ) ^ (i : ℕ) : ℤˣ) * Matrix.det A := by simp
-      _ = (-1 : R) ^ (i : ℕ) * (Perm.sign i.cycleRange⁻¹) * Matrix.det A := by simp [-Int.units_mul_self]
+      _ = (-1 : R) ^ (i : ℕ) * (Equiv.Perm.sign i.cycleRange⁻¹) * Matrix.det A := by simp [-Int.units_mul_self]
   rw [this, mul_assoc]
   congr
   rw [← Matrix.det_permute, Matrix.det_succ_row_zero]

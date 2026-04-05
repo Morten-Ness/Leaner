@@ -1,4 +1,5 @@
 import Mathlib
+universe uR uS uι v v' v₁ v₁' v₁'' v₂ v₃ v₄
 
 variable {R : Type uR} {S : Type uS} {ι : Type uι} {n : ℕ}
   {M : Fin n.succ → Type v} {M₁ : ι → Type v₁} {M₁' : ι → Type v₁'} {M₁'' : ι → Type v₁''}
@@ -16,4 +17,3 @@ theorem map_add_eq_map_add_linearDeriv_add [DecidableEq ι] [Fintype ι] (x h : 
     ← powersetCard_eq_filter, sum_union (Finset.univ.pairwise_disjoint_powersetCard zero_ne_one),
     powersetCard_zero, powersetCard_one, sum_singleton, Finset.piecewise_empty, sum_map,
     Function.Embedding.coeFn_mk, Finset.piecewise_singleton, MultilinearMap.linearDeriv_apply, add_comm]
-

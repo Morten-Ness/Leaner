@@ -28,7 +28,7 @@ theorem adjugate_transpose (A : Matrix n n α) : (Matrix.adjugate A)ᵀ = Matrix
       rw [updateCol_self, Pi.single_eq_of_ne' h]
     rw [this]
     apply prod_eq_zero (mem_univ (σ⁻¹ i))
-    simp only [Perm.coe_inv, apply_symm_apply, updateRow_self]
+    simp only [Equiv.Perm.coe_inv, apply_symm_apply, updateRow_self]
     apply Pi.single_eq_of_ne
     intro h'
     exact h ((symm_apply_eq σ).mp h')

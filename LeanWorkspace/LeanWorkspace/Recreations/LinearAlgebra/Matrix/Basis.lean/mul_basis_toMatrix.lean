@@ -16,8 +16,8 @@ variable [Fintype ι']
 
 variable [Finite κ] [Fintype ι]
 
-theorem mul_basis_toMatrix [DecidableEq ι] [DecidableEq ι'] (b₁ : Basis ι R M) (b₂ : Basis ι' R M)
-    (b₃ : Basis κ R N) (A : Matrix κ ι R) :
+theorem mul_basis_toMatrix [DecidableEq ι] [DecidableEq ι'] (b₁ : Module.Basis ι R M) (b₂ : Module.Basis ι' R M)
+    (b₃ : Module.Basis κ R N) (A : Matrix κ ι R) :
     A * b₁.toMatrix b₂ = LinearMap.toMatrix b₂ b₃ (toLin b₁ b₃ A) := by
   cases nonempty_fintype κ
   have := linearMap_toMatrix_mul_basis_toMatrix b₂ b₁ b₃ (Matrix.toLin b₁ b₃ A)

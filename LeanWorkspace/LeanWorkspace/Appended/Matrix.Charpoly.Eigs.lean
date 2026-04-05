@@ -2,6 +2,8 @@ import Mathlib
 
 section
 
+open scoped Matrix
+
 variable {n : Type*} [Fintype n] [DecidableEq n]
 
 variable {R K : Type*} [CommRing R] [Field K]
@@ -14,6 +16,8 @@ end
 
 section
 
+open scoped Matrix
+
 variable {n : Type*} [Fintype n] [DecidableEq n]
 
 variable {R K : Type*} [CommRing R] [Field K]
@@ -25,6 +29,8 @@ theorem trace_eq_sum_roots_charpoly [IsAlgClosed K] : A.trace = (Matrix.charpoly
 end
 
 section
+
+open scoped Matrix
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
 

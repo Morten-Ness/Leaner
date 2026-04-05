@@ -16,6 +16,7 @@ variable [Fintype ι']
 
 variable [Finite κ] [Fintype ι]
 
+omit [Fintype ι'] in
 theorem toMatrix_mulVec_repr [Finite ι'] (m : M) : b'.toMatrix b *ᵥ b.repr m = b'.repr m := by
   classical
   cases nonempty_fintype ι'

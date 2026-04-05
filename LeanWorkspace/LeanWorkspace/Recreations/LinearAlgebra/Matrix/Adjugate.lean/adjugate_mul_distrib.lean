@@ -5,9 +5,9 @@ variable {m : Type u} {n : Type v} {α : Type w}
 variable [DecidableEq n] [Fintype n] [DecidableEq m] [Fintype m] [CommRing α]
 
 theorem adjugate_mul_distrib (A B : Matrix n n α) : Matrix.adjugate (A * B) = Matrix.adjugate B * Matrix.adjugate A := by
-  let g : Matrix n n α → Matrix n n α[X] := fun M =>
-    M.map Polynomial.C + (Polynomial.X : α[X]) • (1 : Matrix n n α[X])
-  let f' : Matrix n n α[X] →+* Matrix n n α := (Polynomial.evalRingHom 0).mapMatrix
+  let g : Matrix n n α → Matrix n n α[Polynomial.X] := fun M =>
+    M.map Polynomial.C + (Polynomial.X : α[Polynomial.X]) • (1 : Matrix n n α[Polynomial.X])
+  let f' : Matrix n n α[Polynomial.X] →+* Matrix n n α := (Polynomial.evalRingHom 0).mapMatrix
   have f'_inv : ∀ M, f' (g M) = M := by
     intro
     ext

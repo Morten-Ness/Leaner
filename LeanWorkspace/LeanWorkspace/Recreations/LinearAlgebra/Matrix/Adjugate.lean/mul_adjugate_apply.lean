@@ -9,5 +9,3 @@ theorem mul_adjugate_apply (A : Matrix n n α) (i j k) :
   rw [← smul_eq_mul, Matrix.adjugate, of_apply, ← Pi.smul_apply, ← map_smul, ← Pi.single_smul',
     smul_eq_mul, mul_one]
 
-set_option backward.isDefEq.respectTransparency false in
-

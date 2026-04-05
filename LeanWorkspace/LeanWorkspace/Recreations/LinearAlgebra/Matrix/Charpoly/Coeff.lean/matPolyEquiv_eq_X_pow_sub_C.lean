@@ -1,5 +1,7 @@
 import Mathlib
 
+open scoped Ring
+
 variable {R : Type u} [CommRing R]
 
 variable {n G : Type v} [DecidableEq n] [Fintype n]
@@ -8,9 +10,10 @@ variable {α β : Type v} [DecidableEq α]
 
 variable {M : Matrix n n R}
 
+set_option backward.isDefEq.respectTransparency false in
 theorem matPolyEquiv_eq_X_pow_sub_C {K : Type*} (k : ℕ) [CommRing K] (M : Matrix n n K) :
-    matPolyEquiv ((expand K k : K[X] →+* K[X]).mapMatrix (charmatrix (M ^ k))) =
-      X ^ k - C (M ^ k) := by
+    matPolyEquiv ((expand K k : K[Polynomial.X] →+* K[Polynomial.X]).mapMatrix (charmatrix (M ^ k))) =
+      Polynomial.X ^ k - Polynomial.C (M ^ k) := by
   ext m i j
   rw [coeff_sub, coeff_C, matPolyEquiv_coeff_apply, RingHom.mapMatrix_apply, Matrix.map_apply,
     AlgHom.coe_toRingHom, coeff_X_pow]

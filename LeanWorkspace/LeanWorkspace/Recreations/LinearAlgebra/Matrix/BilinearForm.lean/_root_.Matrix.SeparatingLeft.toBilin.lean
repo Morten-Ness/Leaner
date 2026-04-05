@@ -9,5 +9,5 @@ variable {A : Type*} [CommRing A] [IsDomain A] [Module A M₂] (B₃ : BilinForm
 variable {ι : Type*} [DecidableEq ι] [Fintype ι]
 
 theorem _root_.Matrix.SeparatingLeft.toBilin {M : Matrix ι ι R₂} (h : M.SeparatingLeft)
-    (b : Basis ι R₂ M₂) : (Matrix.toBilin b M).SeparatingLeft := h.toLinearMap₂ b b
+    (b : Module.Basis ι R₂ M₂) : (Matrix.toBilin b M).SeparatingLeft := h.toLinearMap₂ b b
 

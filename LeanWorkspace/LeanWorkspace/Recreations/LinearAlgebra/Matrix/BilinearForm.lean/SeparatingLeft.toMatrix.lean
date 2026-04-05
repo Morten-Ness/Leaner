@@ -8,6 +8,6 @@ variable {A : Type*} [CommRing A] [IsDomain A] [Module A M₂] (B₃ : BilinForm
 
 variable {ι : Type*} [DecidableEq ι] [Fintype ι]
 
-theorem SeparatingLeft.toMatrix {B : LinearMap.BilinForm R₂ M₂} (h : B.SeparatingLeft) (b : Basis ι R₂ M₂) :
+theorem SeparatingLeft.toMatrix {B : LinearMap.BilinForm R₂ M₂} (h : B.SeparatingLeft) (b : Module.Basis ι R₂ M₂) :
     (LinearMap.BilinForm.toMatrix b B).SeparatingLeft := (LinearMap.BilinForm.separatingLeft_toMatrix_iff b).mpr h
 

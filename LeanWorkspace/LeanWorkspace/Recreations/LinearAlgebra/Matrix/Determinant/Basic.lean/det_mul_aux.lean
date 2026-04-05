@@ -5,7 +5,7 @@ variable {m n : Type*} [DecidableEq n] [Fintype n] [DecidableEq m] [Fintype m]
 variable {R : Type v} [CommRing R]
 
 theorem det_mul_aux {M N : Matrix n n R} {p : n → n} (H : ¬Function.Bijective p) :
-    (∑ σ : Perm n, ε σ * ∏ x, M (σ x) (p x) * N (p x) x) = 0 := by
+    (∑ σ : Equiv.Perm n, ε σ * ∏ x, M (σ x) (p x) * N (p x) x) = 0 := by
   obtain ⟨i, j, hpij, hij⟩ : ∃ i j, p i = p j ∧ i ≠ j := by
     rw [← Finite.injective_iff_bijective, Function.Injective] at H
     push Not at H

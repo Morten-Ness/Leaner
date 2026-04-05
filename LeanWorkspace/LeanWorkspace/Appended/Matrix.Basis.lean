@@ -39,7 +39,7 @@ variable [Fintype ι']
 
 variable [Finite κ] [Fintype ι]
 
-theorem basis_toMatrix_basisFun_mul (b : Basis ι R (ι → R)) (A : Matrix ι ι R) :
+theorem basis_toMatrix_basisFun_mul (b : Module.Basis ι R (ι → R)) (A : Matrix ι ι R) :
     b.toMatrix (Pi.basisFun R ι) * A = of fun i j => b.repr (A.col j) i := by
   classical
   simp only [basis_toMatrix_mul _ _ (Pi.basisFun R ι), Matrix.toLin_eq_toLin']
@@ -66,7 +66,7 @@ variable (f : M →ₗ[R] N)
 variable [Fintype ι']
 
 theorem basis_toMatrix_mul [Fintype κ] [Finite ι] [DecidableEq κ]
-    (b₁ : Basis ι R M) (b₂ : Basis ι' R M) (b₃ : Basis κ R N) (A : Matrix ι' κ R) :
+    (b₁ : Module.Basis ι R M) (b₂ : Module.Basis ι' R M) (b₃ : Module.Basis κ R N) (A : Matrix ι' κ R) :
     b₁.toMatrix b₂ * A = LinearMap.toMatrix b₃ b₁ (toLin b₃ b₂ A) := by
   have := basis_toMatrix_mul_linearMap_toMatrix b₃ b₁ b₂ (Matrix.toLin b₃ b₂ A)
   rwa [LinearMap.toMatrix_toLin] at this
@@ -164,8 +164,8 @@ variable [Fintype ι']
 
 variable [Finite κ] [Fintype ι]
 
-theorem mul_basis_toMatrix [DecidableEq ι] [DecidableEq ι'] (b₁ : Basis ι R M) (b₂ : Basis ι' R M)
-    (b₃ : Basis κ R N) (A : Matrix κ ι R) :
+theorem mul_basis_toMatrix [DecidableEq ι] [DecidableEq ι'] (b₁ : Module.Basis ι R M) (b₂ : Module.Basis ι' R M)
+    (b₃ : Module.Basis κ R N) (A : Matrix κ ι R) :
     A * b₁.toMatrix b₂ = LinearMap.toMatrix b₂ b₃ (toLin b₁ b₃ A) := by
   cases nonempty_fintype κ
   have := linearMap_toMatrix_mul_basis_toMatrix b₂ b₁ b₃ (Matrix.toLin b₁ b₃ A)
@@ -315,6 +315,7 @@ variable [Fintype ι']
 
 variable [Finite κ] [Fintype ι]
 
+omit [Fintype ι'] in
 theorem toMatrix_mulVec_repr [Finite ι'] (m : M) : b'.toMatrix b *ᵥ b.repr m = b'.repr m := by
   classical
   cases nonempty_fintype ι'
@@ -390,8 +391,6 @@ theorem toMatrix_reindex' [DecidableEq ι] [DecidableEq ι'] (b : Module.Basis �
   simp only [Module.Basis.toMatrix_apply, Module.Basis.repr_reindex, Matrix.reindexAlgEquiv_apply,
     Matrix.reindex_apply, Matrix.submatrix_apply, Function.comp_apply, e.apply_symm_apply,
     Finsupp.mapDomain_equiv_apply]
-
-omit [Fintype ι'] in
 
 end
 
@@ -486,7 +485,7 @@ theorem toMatrix_update [DecidableEq ι'] (x : M) :
   ext i' k
   rw [Module.Basis.toMatrix, Matrix.updateCol_apply, Module.Basis.toMatrix_apply e]
   split_ifs with h
-  · rw [h, update_self j x v]
+  · rw [h, Function.update_self j x v]
   · rw [update_of_ne h]
 
 end

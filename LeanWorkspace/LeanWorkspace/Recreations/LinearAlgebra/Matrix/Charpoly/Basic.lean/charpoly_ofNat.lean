@@ -9,5 +9,5 @@ variable (M₁₁ : Matrix m m R) (M₁₂ : Matrix m n R) (M₂₁ : Matrix n m
 variable (i j : n)
 
 theorem charpoly_ofNat (k : ℕ) [k.AtLeastTwo] :
-    Matrix.charpoly (ofNat(k) : Matrix n n R) = (X - ofNat(k)) ^ Fintype.card n := Matrix.charpoly_natCast _
+    Matrix.charpoly (ofNat(k) : Matrix n n R) = (Polynomial.X - ofNat(k)) ^ Fintype.card n := Matrix.charpoly_natCast _
 
