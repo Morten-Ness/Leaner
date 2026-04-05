@@ -1,0 +1,313 @@
+FILE: AffineMap.homothety_injective.lean
+
+===== ATTEMPT 1 PROMPT =====
+Filename: AffineMap.homothety_injective.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R k V1 P1 V2 P2 V3 P3 : Type*}
+
+variable [CommRing k] [AddCommGroup V1] [AddTorsor V1 P1] [AddCommGroup V2]
+
+variable [Module k V1] [Module k V2]
+
+theorem homothety_injective [Module.IsTorsionFree k V1] [IsCancelMulZero k] (c : P1) {r : k}
+    (hr : r ≠ 0) :
+    Function.Injective (AffineMap.homothety c r) := sorry
+
+===== ATTEMPT 1 RESPONSE =====
+import Mathlib
+
+variable {R k V1 P1 V2 P2 V3 P3 : Type*}
+
+variable [CommRing k] [AddCommGroup V1] [AddTorsor V1 P1] [AddCommGroup V2]
+
+variable [Module k V1] [Module k V2]
+
+theorem homothety_injective [Module.IsTorsionFree k V1] [IsCancelMulZero k] (c : P1) {r : k}
+    (hr : r ≠ 0) :
+    Function.Injective (AffineMap.homothety c r) := by
+  intro x y hxy
+  rw [AffineMap.homothety_apply, AffineMap.homothety_apply] at hxy
+  have hsub : r • (x -ᵥ c) = r • (y -ᵥ c) := by
+    exact vsub_left_cancel hxy
+  have hvsub : x -ᵥ c = y -ᵥ c := by
+    exact smul_right_injective k hr hsub
+  exact vsub_left_cancel hvsub
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .tmp_kk_ie050.AffineMap.homothety_injective.lean:15:27-15:30
+Application type mismatch: The argument
+  hxy
+has type
+  Eq.{u_4 + 1} (r • (x -ᵥ c) +ᵥ c) (r • (y -ᵥ c) +ᵥ c)
+but is expected to have type
+  Eq.{u_3 + 1} (r • (x -ᵥ c) -ᵥ ?m.83) (r • (y -ᵥ c) -ᵥ ?m.83)
+in the application
+  vsub_left_cancel hxy
+Source line 15:
+    exact vsub_left_cancel hxy
+                          ^^^
+Highlighted span:  hx
+
+ERROR .tmp_kk_ie050.AffineMap.homothety_injective.lean:17:36-17:40
+Application type mismatch: The argument
+  hsub
+has type
+  Eq.{u_3 + 1} (r • (x -ᵥ c)) (r • (y -ᵥ c))
+but is expected to have type
+  Eq.{u_2 + 1} ((fun x => r • x) ?m.102) ((fun x => r • x) ?m.103)
+in the application
+  smul_right_injective k hr hsub
+Source line 17:
+    exact smul_right_injective k hr hsub
+                                   ^^^^
+Highlighted span:  hsu
+
+===== ATTEMPT 2 PROMPT =====
+Filename: AffineMap.homothety_injective.lean
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return the complete corrected .lean file content only.
+Do not use markdown fences.
+Keep the theorem statement and surrounding context unchanged if possible.
+
+Original target file with `sorry`:
+import Mathlib
+
+variable {R k V1 P1 V2 P2 V3 P3 : Type*}
+
+variable [CommRing k] [AddCommGroup V1] [AddTorsor V1 P1] [AddCommGroup V2]
+
+variable [Module k V1] [Module k V2]
+
+theorem homothety_injective [Module.IsTorsionFree k V1] [IsCancelMulZero k] (c : P1) {r : k}
+    (hr : r ≠ 0) :
+    Function.Injective (AffineMap.homothety c r) := sorry
+
+Previous attempted solution:
+import Mathlib
+
+variable {R k V1 P1 V2 P2 V3 P3 : Type*}
+
+variable [CommRing k] [AddCommGroup V1] [AddTorsor V1 P1] [AddCommGroup V2]
+
+variable [Module k V1] [Module k V2]
+
+theorem homothety_injective [Module.IsTorsionFree k V1] [IsCancelMulZero k] (c : P1) {r : k}
+    (hr : r ≠ 0) :
+    Function.Injective (AffineMap.homothety c r) := by
+  intro x y hxy
+  rw [AffineMap.homothety_apply, AffineMap.homothety_apply] at hxy
+  have hsub : r • (x -ᵥ c) = r • (y -ᵥ c) := by
+    exact vsub_left_cancel hxy
+  have hvsub : x -ᵥ c = y -ᵥ c := by
+    exact smul_right_injective k hr hsub
+  exact vsub_left_cancel hvsub
+
+Lean compiler output:
+ERROR .tmp_kk_ie050.AffineMap.homothety_injective.lean:15:27-15:30
+Application type mismatch: The argument
+  hxy
+has type
+  Eq.{u_4 + 1} (r • (x -ᵥ c) +ᵥ c) (r • (y -ᵥ c) +ᵥ c)
+but is expected to have type
+  Eq.{u_3 + 1} (r • (x -ᵥ c) -ᵥ ?m.83) (r • (y -ᵥ c) -ᵥ ?m.83)
+in the application
+  vsub_left_cancel hxy
+Source line 15:
+    exact vsub_left_cancel hxy
+                          ^^^
+Highlighted span:  hx
+
+ERROR .tmp_kk_ie050.AffineMap.homothety_injective.lean:17:36-17:40
+Application type mismatch: The argument
+  hsub
+has type
+  Eq.{u_3 + 1} (r • (x -ᵥ c)) (r • (y -ᵥ c))
+but is expected to have type
+  Eq.{u_2 + 1} ((fun x => r • x) ?m.102) ((fun x => r • x) ?m.103)
+in the application
+  smul_right_injective k hr hsub
+Source line 17:
+    exact smul_right_injective k hr hsub
+                                   ^^^^
+Highlighted span:  hsu
+
+===== ATTEMPT 2 RESPONSE =====
+import Mathlib
+
+variable {R k V1 P1 V2 P2 V3 P3 : Type*}
+
+variable [CommRing k] [AddCommGroup V1] [AddTorsor V1 P1] [AddCommGroup V2]
+
+variable [Module k V1] [Module k V2]
+
+theorem homothety_injective [Module.IsTorsionFree k V1] [IsCancelMulZero k] (c : P1) {r : k}
+    (hr : r ≠ 0) :
+    Function.Injective (AffineMap.homothety c r) := by
+  intro x y hxy
+  rw [AffineMap.homothety_apply, AffineMap.homothety_apply] at hxy
+  have hsub : r • (x -ᵥ c) = r • (y -ᵥ c) := by
+    simpa using congrArg (fun p : P1 => p -ᵥ c) hxy
+  have hvsub : x -ᵥ c = y -ᵥ c := by
+    exact smul_right_injective k hr hsub
+  exact vsub_eq_zero_iff_eq.mp <| by simpa using sub_eq_zero.mp (by simpa [sub_eq_add_neg] using congrArg (fun v : V1 => v - (y -ᵥ c)) hvsub)
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .tmp_vkb5xsbu.AffineMap.homothety_injective.lean:17:36-17:40
+Application type mismatch: The argument
+  hsub
+has type
+  Eq.{u_3 + 1} (r • (x -ᵥ c)) (r • (y -ᵥ c))
+but is expected to have type
+  Eq.{u_2 + 1} ((fun x => r • x) ?m.110) ((fun x => r • x) ?m.111)
+in the application
+  smul_right_injective k hr hsub
+Source line 17:
+    exact smul_right_injective k hr hsub
+                                   ^^^^
+Highlighted span:  hsu
+
+ERROR .tmp_vkb5xsbu.AffineMap.homothety_injective.lean:18:49-18:141
+failed to synthesize instance of type class
+  AddGroup P1
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 18:
+  exact vsub_eq_zero_iff_eq.mp <| by simpa using sub_eq_zero.mp (by simpa [sub_eq_add_neg] using congrArg (fun v : V1 => v - (y -ᵥ c)) hvsub)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span:  sub_eq_zero.mp (by simpa [sub_eq_add_neg] using congrArg (fun v : V1 => v - (y -ᵥ c)) hvsub
+
+ERROR .tmp_vkb5xsbu.AffineMap.homothety_injective.lean:18:68-18:140
+Type mismatch: After simplification, term
+  congrArg (fun v => v - (y -ᵥ c)) hvsub
+ has type
+  x = y
+but is expected to have type
+  x + -y = 0
+Source line 18:
+  exact vsub_eq_zero_iff_eq.mp <| by simpa using sub_eq_zero.mp (by simpa [sub_eq_add_neg] using congrArg (fun v : V1 => v - (y -ᵥ c)) hvsub)
+                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span:  simpa [sub_eq_add_neg] using congrArg (fun v : V1 => v - (y -ᵥ c)) hvsu
+
+===== ATTEMPT 3 PROMPT =====
+Filename: AffineMap.homothety_injective.lean
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return the complete corrected .lean file content only.
+Do not use markdown fences.
+Keep the theorem statement and surrounding context unchanged if possible.
+
+Original target file with `sorry`:
+import Mathlib
+
+variable {R k V1 P1 V2 P2 V3 P3 : Type*}
+
+variable [CommRing k] [AddCommGroup V1] [AddTorsor V1 P1] [AddCommGroup V2]
+
+variable [Module k V1] [Module k V2]
+
+theorem homothety_injective [Module.IsTorsionFree k V1] [IsCancelMulZero k] (c : P1) {r : k}
+    (hr : r ≠ 0) :
+    Function.Injective (AffineMap.homothety c r) := sorry
+
+Previous attempted solution:
+import Mathlib
+
+variable {R k V1 P1 V2 P2 V3 P3 : Type*}
+
+variable [CommRing k] [AddCommGroup V1] [AddTorsor V1 P1] [AddCommGroup V2]
+
+variable [Module k V1] [Module k V2]
+
+theorem homothety_injective [Module.IsTorsionFree k V1] [IsCancelMulZero k] (c : P1) {r : k}
+    (hr : r ≠ 0) :
+    Function.Injective (AffineMap.homothety c r) := by
+  intro x y hxy
+  rw [AffineMap.homothety_apply, AffineMap.homothety_apply] at hxy
+  have hsub : r • (x -ᵥ c) = r • (y -ᵥ c) := by
+    simpa using congrArg (fun p : P1 => p -ᵥ c) hxy
+  have hvsub : x -ᵥ c = y -ᵥ c := by
+    exact smul_right_injective k hr hsub
+  exact vsub_eq_zero_iff_eq.mp <| by simpa using sub_eq_zero.mp (by simpa [sub_eq_add_neg] using congrArg (fun v : V1 => v - (y -ᵥ c)) hvsub)
+
+Lean compiler output:
+ERROR .tmp_vkb5xsbu.AffineMap.homothety_injective.lean:17:36-17:40
+Application type mismatch: The argument
+  hsub
+has type
+  Eq.{u_3 + 1} (r • (x -ᵥ c)) (r • (y -ᵥ c))
+but is expected to have type
+  Eq.{u_2 + 1} ((fun x => r • x) ?m.110) ((fun x => r • x) ?m.111)
+in the application
+  smul_right_injective k hr hsub
+Source line 17:
+    exact smul_right_injective k hr hsub
+                                   ^^^^
+Highlighted span:  hsu
+
+ERROR .tmp_vkb5xsbu.AffineMap.homothety_injective.lean:18:49-18:141
+failed to synthesize instance of type class
+  AddGroup P1
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 18:
+  exact vsub_eq_zero_iff_eq.mp <| by simpa using sub_eq_zero.mp (by simpa [sub_eq_add_neg] using congrArg (fun v : V1 => v - (y -ᵥ c)) hvsub)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span:  sub_eq_zero.mp (by simpa [sub_eq_add_neg] using congrArg (fun v : V1 => v - (y -ᵥ c)) hvsub
+
+ERROR .tmp_vkb5xsbu.AffineMap.homothety_injective.lean:18:68-18:140
+Type mismatch: After simplification, term
+  congrArg (fun v => v - (y -ᵥ c)) hvsub
+ has type
+  x = y
+but is expected to have type
+  x + -y = 0
+Source line 18:
+  exact vsub_eq_zero_iff_eq.mp <| by simpa using sub_eq_zero.mp (by simpa [sub_eq_add_neg] using congrArg (fun v : V1 => v - (y -ᵥ c)) hvsub)
+                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span:  simpa [sub_eq_add_neg] using congrArg (fun v : V1 => v - (y -ᵥ c)) hvsu
+
+===== ATTEMPT 3 RESPONSE =====
+import Mathlib
+
+variable {R k V1 P1 V2 P2 V3 P3 : Type*}
+
+variable [CommRing k] [AddCommGroup V1] [AddTorsor V1 P1] [AddCommGroup V2]
+
+variable [Module k V1] [Module k V2]
+
+theorem homothety_injective [Module.IsTorsionFree k V1] [IsCancelMulZero k] (c : P1) {r : k}
+    (hr : r ≠ 0) :
+    Function.Injective (AffineMap.homothety c r) := by
+  intro x y hxy
+  rw [AffineMap.homothety_apply, AffineMap.homothety_apply] at hxy
+  have hsub : r • (x -ᵥ c) = r • (y -ᵥ c) := by
+    simpa using congrArg (fun p : P1 => p -ᵥ c) hxy
+  have hvsub : x -ᵥ c = y -ᵥ c := by
+    exact Module.IsTorsionFree.smul_left_cancel_of_nonzero hr hsub
+  exact (eq_vsub_iff_vsub_eq.mp rfl).mp hvsub
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .tmp_ydez2vu_.AffineMap.homothety_injective.lean:17:10-17:58
+Unknown constant `Module.IsTorsionFree.smul_left_cancel_of_nonzero`
+Source line 17:
+    exact Module.IsTorsionFree.smul_left_cancel_of_nonzero hr hsub
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span:  Module.IsTorsionFree.smul_left_cancel_of_nonzer
+
+ERROR .tmp_ydez2vu_.AffineMap.homothety_injective.lean:18:9-18:31
+Unknown identifier `eq_vsub_iff_vsub_eq.mp`
+Source line 18:
+  exact (eq_vsub_iff_vsub_eq.mp rfl).mp hvsub
+        ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (eq_vsub_iff_vsub_eq.m

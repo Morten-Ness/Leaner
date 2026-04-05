@@ -1,0 +1,227 @@
+FILE: Algebra.charZero_of_isFractionRing.lean
+
+===== ATTEMPT 1 PROMPT =====
+Filename: Algebra.charZero_of_isFractionRing.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R A : Type*}
+
+variable (R : Type*) {K : Type*} [CommRing R] [Field K] [Algebra R K] [IsFractionRing R K]
+
+variable (p : ℕ)
+
+theorem charZero_of_isFractionRing [CharZero R] : CharZero K := sorry
+
+===== ATTEMPT 1 RESPONSE =====
+import Mathlib
+
+variable {R A : Type*}
+
+variable (R : Type*) {K : Type*} [CommRing R] [Field K] [Algebra R K] [IsFractionRing R K]
+
+variable (p : ℕ)
+
+theorem charZero_of_isFractionRing [CharZero R] : CharZero K := by
+  infer_instance
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .tmp_pl75_kp7.Algebra.charZero_of_isFractionRing.lean:10:2-10:16
+failed to synthesize instance of type class
+  CharZero K
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 10:
+  infer_instance
+ ^^^^^^^^^^^^^^
+Highlighted span:  infer_instanc
+
+===== ATTEMPT 2 PROMPT =====
+Filename: Algebra.charZero_of_isFractionRing.lean
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return the complete corrected .lean file content only.
+Do not use markdown fences.
+Keep the theorem statement and surrounding context unchanged if possible.
+
+Original target file with `sorry`:
+import Mathlib
+
+variable {R A : Type*}
+
+variable (R : Type*) {K : Type*} [CommRing R] [Field K] [Algebra R K] [IsFractionRing R K]
+
+variable (p : ℕ)
+
+theorem charZero_of_isFractionRing [CharZero R] : CharZero K := sorry
+
+Previous attempted solution:
+import Mathlib
+
+variable {R A : Type*}
+
+variable (R : Type*) {K : Type*} [CommRing R] [Field K] [Algebra R K] [IsFractionRing R K]
+
+variable (p : ℕ)
+
+theorem charZero_of_isFractionRing [CharZero R] : CharZero K := by
+  infer_instance
+
+Lean compiler output:
+ERROR .tmp_pl75_kp7.Algebra.charZero_of_isFractionRing.lean:10:2-10:16
+failed to synthesize instance of type class
+  CharZero K
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 10:
+  infer_instance
+ ^^^^^^^^^^^^^^
+Highlighted span:  infer_instanc
+
+===== ATTEMPT 2 RESPONSE =====
+import Mathlib
+
+variable {R A : Type*}
+
+variable (R : Type*) {K : Type*} [CommRing R] [Field K] [Algebra R K] [IsFractionRing R K]
+
+variable (p : ℕ)
+
+theorem charZero_of_isFractionRing [CharZero R] : CharZero K := by
+  classical
+  rw [charZero_iff]
+  intro m n h
+  by_contra hmn
+  have hne : (m : R) - n ≠ 0 := by
+    intro hz
+    apply hmn
+    exact_mod_cast sub_eq_zero.mp hz
+  have hmne : algebraMap R K ((m : R) - n) ≠ 0 :=
+    map_ne_zero_of_ne_zero hne
+  have hsub : ((m : K) - n) = 0 := by
+    norm_num [h]
+  have hmap : algebraMap R K ((m : R) - n) = ((m : K) - n) := by
+    simp
+  exact hmne (hmap.trans hsub)
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .tmp_g7kew_1u.Algebra.charZero_of_isFractionRing.lean:11:6-11:18
+Unknown identifier `charZero_iff`
+Source line 11:
+  rw [charZero_iff]
+     ^^^^^^^^^^^^
+Highlighted span: [charZero_if
+
+ERROR .tmp_g7kew_1u.Algebra.charZero_of_isFractionRing.lean:9:64-24:30
+unsolved goals
+R : Type u_3
+K : Type u_4
+inst✝⁴ : CommRing R
+inst✝³ : Field K
+inst✝² : Algebra R K
+inst✝¹ : IsFractionRing R K
+inst✝ : CharZero R
+⊢ CharZero K
+Source line 9:
+theorem charZero_of_isFractionRing [CharZero R] : CharZero K := by
+                                                               ^
+Highlighted span:
+
+===== ATTEMPT 3 PROMPT =====
+Filename: Algebra.charZero_of_isFractionRing.lean
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return the complete corrected .lean file content only.
+Do not use markdown fences.
+Keep the theorem statement and surrounding context unchanged if possible.
+
+Original target file with `sorry`:
+import Mathlib
+
+variable {R A : Type*}
+
+variable (R : Type*) {K : Type*} [CommRing R] [Field K] [Algebra R K] [IsFractionRing R K]
+
+variable (p : ℕ)
+
+theorem charZero_of_isFractionRing [CharZero R] : CharZero K := sorry
+
+Previous attempted solution:
+import Mathlib
+
+variable {R A : Type*}
+
+variable (R : Type*) {K : Type*} [CommRing R] [Field K] [Algebra R K] [IsFractionRing R K]
+
+variable (p : ℕ)
+
+theorem charZero_of_isFractionRing [CharZero R] : CharZero K := by
+  classical
+  rw [charZero_iff]
+  intro m n h
+  by_contra hmn
+  have hne : (m : R) - n ≠ 0 := by
+    intro hz
+    apply hmn
+    exact_mod_cast sub_eq_zero.mp hz
+  have hmne : algebraMap R K ((m : R) - n) ≠ 0 :=
+    map_ne_zero_of_ne_zero hne
+  have hsub : ((m : K) - n) = 0 := by
+    norm_num [h]
+  have hmap : algebraMap R K ((m : R) - n) = ((m : K) - n) := by
+    simp
+  exact hmne (hmap.trans hsub)
+
+Lean compiler output:
+ERROR .tmp_g7kew_1u.Algebra.charZero_of_isFractionRing.lean:11:6-11:18
+Unknown identifier `charZero_iff`
+Source line 11:
+  rw [charZero_iff]
+     ^^^^^^^^^^^^
+Highlighted span: [charZero_if
+
+ERROR .tmp_g7kew_1u.Algebra.charZero_of_isFractionRing.lean:9:64-24:30
+unsolved goals
+R : Type u_3
+K : Type u_4
+inst✝⁴ : CommRing R
+inst✝³ : Field K
+inst✝² : Algebra R K
+inst✝¹ : IsFractionRing R K
+inst✝ : CharZero R
+⊢ CharZero K
+Source line 9:
+theorem charZero_of_isFractionRing [CharZero R] : CharZero K := by
+                                                               ^
+Highlighted span:
+
+===== ATTEMPT 3 RESPONSE =====
+import Mathlib
+
+variable {R A : Type*}
+
+variable (R : Type*) {K : Type*} [CommRing R] [Field K] [Algebra R K] [IsFractionRing R K]
+
+variable (p : ℕ)
+
+theorem charZero_of_isFractionRing [CharZero R] : CharZero K := by
+  infer_instance
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .tmp_psv2doxw.Algebra.charZero_of_isFractionRing.lean:10:2-10:16
+failed to synthesize instance of type class
+  CharZero K
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 10:
+  infer_instance
+ ^^^^^^^^^^^^^^
+Highlighted span:  infer_instanc

@@ -1,0 +1,633 @@
+FILE: AffineMap.pi_ext_nonempty'.lean
+
+===== ATTEMPT 1 PROMPT =====
+Filename: AffineMap.pi_ext_nonempty'.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R k V1 P1 V2 P2 V3 P3 : Type*}
+
+variable [Ring k] [AddCommGroup V1] [AddTorsor V1 P1] [AddCommGroup V2] [AddTorsor V2 P2]
+
+variable [AddCommGroup V3] [AddTorsor V3 P3] [Module k V1] [Module k V2] [Module k V3]
+
+variable {ι : Type*} {φv φp : ι → Type*} [(i : ι) → AddCommGroup (φv i)]
+  [(i : ι) → Module k (φv i)] [(i : ι) → AddTorsor (φv i) (φp i)]
+
+variable (fp : (i : ι) → (P1 →ᵃ[k] φp i)) (fv : (i : ι) → (P1 →ᵃ[k] φv i))
+  (f' : ι → P1 →ᵃ[k] P2)
+
+variable [Finite ι] [DecidableEq ι] {f g : ((i : ι) → φv i) →ᵃ[k] P2}
+
+theorem pi_ext_nonempty' [Nonempty ι] (h : ∀ i, f.comp (LinearMap.single _ _ i).toAffineMap =
+    g.comp (LinearMap.single _ _ i).toAffineMap) : f = g := sorry
+
+===== ATTEMPT 1 RESPONSE =====
+import Mathlib
+
+variable {R k V1 P1 V2 P2 V3 P3 : Type*}
+
+variable [Ring k] [AddCommGroup V1] [AddTorsor V1 P1] [AddCommGroup V2] [AddTorsor V2 P2]
+
+variable [AddCommGroup V3] [AddTorsor V3 P3] [Module k V1] [Module k V2] [Module k V3]
+
+variable {ι : Type*} {φv φp : ι → Type*} [(i : ι) → AddCommGroup (φv i)]
+  [(i : ι) → Module k (φv i)] [(i : ι) → AddTorsor (φv i) (φp i)]
+
+variable (fp : (i : ι) → (P1 →ᵃ[k] φp i)) (fv : (i : ι) → (P1 →ᵃ[k] φv i))
+  (f' : ι → P1 →ᵃ[k] P2)
+
+variable [Finite ι] [DecidableEq ι] {f g : ((i : ι) → φv i) →ᵃ[k] P2}
+
+theorem pi_ext_nonempty' [Nonempty ι] (h : ∀ i, f.comp (LinearMap.single _ _ i).toAffineMap =
+    g.comp (LinearMap.single _ _ i).toAffineMap) : f = g := by
+  let i0 : ι := Classical.choice ‹Nonempty ι›
+  let p0 : P2 := f (fun _ => 0)
+  have hp : g (fun _ => 0) = p0 := by
+    have h0 := congrArg (fun F => F 0) (h i0)
+    simpa [p0] using h0
+  ext v
+  rw [← vsub_eq_zero_iff_eq]
+  have hs : ∀ i, f v -ᵥ p0 = g v -ᵥ p0 := by
+    intro i
+    have hi := congrArg (fun F => F (v i)) (h i)
+    have hfi : f ((LinearMap.single (R := k) (M := φv) (i := i) (v i)) : (j : ι) → φv j) -ᵥ p0 =
+        g ((LinearMap.single (R := k) (M := φv) (i := i) (v i)) : (j : ι) → φv j) -ᵥ p0 := by
+      simpa [AffineMap.comp_apply, p0] using hi
+    simpa using hfi
+  have hlin :
+      f.linear ((v : (i : ι) → φv i)) = g.linear v := by
+    apply funext
+    intro i
+    have := hs i
+    simpa [AffineMap.linear_apply] using this
+  have hv :
+      f v -ᵥ p0 = g v -ᵥ p0 := by
+    simpa [p0, hp] using congrArg (fun w => w v) hlin
+  simpa [vsub_eq_zero_iff_eq] using hv
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .tmp_ut78otd7.AffineMap.pi_ext_nonempty'.lean:23:4-23:23
+Type mismatch: After simplification, term
+  h0
+ has type
+  f 0 = g 0
+but is expected to have type
+  (g fun x => 0) = f fun x => 0
+Source line 23:
+    simpa [p0] using h0
+   ^^^^^^^^^^^^^^^^^^^
+Highlighted span:  simpa [p0] using h
+
+ERROR .tmp_ut78otd7.AffineMap.pi_ext_nonempty'.lean:26:19-26:20
+Application type mismatch: The argument
+  v
+has type
+  ι
+of sort `Type u_9` but is expected to have type
+  (i : ι) → φv i
+of sort `Type (max u_10 u_9)` in the application
+  f v
+Source line 26:
+  have hs : ∀ i, f v -ᵥ p0 = g v -ᵥ p0 := by
+                  ^
+Highlighted span:  
+
+ERROR .tmp_ut78otd7.AffineMap.pi_ext_nonempty'.lean:26:31-26:32
+Application type mismatch: The argument
+  v
+has type
+  ι
+of sort `Type u_9` but is expected to have type
+  (i : ι) → φv i
+of sort `Type (max u_10 u_9)` in the application
+  g v
+Source line 26:
+  have hs : ∀ i, f v -ᵥ p0 = g v -ᵥ p0 := by
+                              ^
+Highlighted span:  
+
+ERROR .tmp_ut78otd7.AffineMap.pi_ext_nonempty'.lean:18:60-42:38
+unsolved goals
+case h.h
+k : Type u_2
+V2 : Type u_5
+P2 : Type u_6
+inst✝⁸ : Ring k
+inst✝⁷ : AddCommGroup V2
+inst✝⁶ : AddTorsor V2 P2
+inst✝⁵ : Module k V2
+ι : Type u_9
+φv : ι → Type u_10
+inst✝⁴ : (i : ι) → AddCommGroup (φv i)
+inst✝³ : (i : ι) → Module k (φv i)
+inst✝² : Finite ι
+inst✝¹ : DecidableEq ι
+f g : ((i : ι) → φv i) →ᵃ[k] P2
+inst✝ : Nonempty ι
+h : ∀ (i : ι), f.comp (LinearMap.single k φv i).toAffineMap = g.comp (LinearMap.single k φv i).toAffineMap
+i0 : ι := Classical.choice inst✝
+p0 : P2 := f fun x => 0
+hp : (g fun x => 0) = p0
+v : ι
+p✝ : φv v
+⊢ (f.comp (LinearMap.single k φv v).toAffineMap) p✝ -ᵥ (g.comp (LinearMap.single k φv v).toAffineMap) p✝ = 0
+Source line 18:
+    g.comp (LinearMap.single _ _ i).toAffineMap) : f = g := by
+                                                           ^
+Highlighted span:
+
+===== ATTEMPT 2 PROMPT =====
+Filename: AffineMap.pi_ext_nonempty'.lean
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return the complete corrected .lean file content only.
+Do not use markdown fences.
+Keep the theorem statement and surrounding context unchanged if possible.
+
+Original target file with `sorry`:
+import Mathlib
+
+variable {R k V1 P1 V2 P2 V3 P3 : Type*}
+
+variable [Ring k] [AddCommGroup V1] [AddTorsor V1 P1] [AddCommGroup V2] [AddTorsor V2 P2]
+
+variable [AddCommGroup V3] [AddTorsor V3 P3] [Module k V1] [Module k V2] [Module k V3]
+
+variable {ι : Type*} {φv φp : ι → Type*} [(i : ι) → AddCommGroup (φv i)]
+  [(i : ι) → Module k (φv i)] [(i : ι) → AddTorsor (φv i) (φp i)]
+
+variable (fp : (i : ι) → (P1 →ᵃ[k] φp i)) (fv : (i : ι) → (P1 →ᵃ[k] φv i))
+  (f' : ι → P1 →ᵃ[k] P2)
+
+variable [Finite ι] [DecidableEq ι] {f g : ((i : ι) → φv i) →ᵃ[k] P2}
+
+theorem pi_ext_nonempty' [Nonempty ι] (h : ∀ i, f.comp (LinearMap.single _ _ i).toAffineMap =
+    g.comp (LinearMap.single _ _ i).toAffineMap) : f = g := sorry
+
+Previous attempted solution:
+import Mathlib
+
+variable {R k V1 P1 V2 P2 V3 P3 : Type*}
+
+variable [Ring k] [AddCommGroup V1] [AddTorsor V1 P1] [AddCommGroup V2] [AddTorsor V2 P2]
+
+variable [AddCommGroup V3] [AddTorsor V3 P3] [Module k V1] [Module k V2] [Module k V3]
+
+variable {ι : Type*} {φv φp : ι → Type*} [(i : ι) → AddCommGroup (φv i)]
+  [(i : ι) → Module k (φv i)] [(i : ι) → AddTorsor (φv i) (φp i)]
+
+variable (fp : (i : ι) → (P1 →ᵃ[k] φp i)) (fv : (i : ι) → (P1 →ᵃ[k] φv i))
+  (f' : ι → P1 →ᵃ[k] P2)
+
+variable [Finite ι] [DecidableEq ι] {f g : ((i : ι) → φv i) →ᵃ[k] P2}
+
+theorem pi_ext_nonempty' [Nonempty ι] (h : ∀ i, f.comp (LinearMap.single _ _ i).toAffineMap =
+    g.comp (LinearMap.single _ _ i).toAffineMap) : f = g := by
+  let i0 : ι := Classical.choice ‹Nonempty ι›
+  let p0 : P2 := f (fun _ => 0)
+  have hp : g (fun _ => 0) = p0 := by
+    have h0 := congrArg (fun F => F 0) (h i0)
+    simpa [p0] using h0
+  ext v
+  rw [← vsub_eq_zero_iff_eq]
+  have hs : ∀ i, f v -ᵥ p0 = g v -ᵥ p0 := by
+    intro i
+    have hi := congrArg (fun F => F (v i)) (h i)
+    have hfi : f ((LinearMap.single (R := k) (M := φv) (i := i) (v i)) : (j : ι) → φv j) -ᵥ p0 =
+        g ((LinearMap.single (R := k) (M := φv) (i := i) (v i)) : (j : ι) → φv j) -ᵥ p0 := by
+      simpa [AffineMap.comp_apply, p0] using hi
+    simpa using hfi
+  have hlin :
+      f.linear ((v : (i : ι) → φv i)) = g.linear v := by
+    apply funext
+    intro i
+    have := hs i
+    simpa [AffineMap.linear_apply] using this
+  have hv :
+      f v -ᵥ p0 = g v -ᵥ p0 := by
+    simpa [p0, hp] using congrArg (fun w => w v) hlin
+  simpa [vsub_eq_zero_iff_eq] using hv
+
+Lean compiler output:
+ERROR .tmp_ut78otd7.AffineMap.pi_ext_nonempty'.lean:23:4-23:23
+Type mismatch: After simplification, term
+  h0
+ has type
+  f 0 = g 0
+but is expected to have type
+  (g fun x => 0) = f fun x => 0
+Source line 23:
+    simpa [p0] using h0
+   ^^^^^^^^^^^^^^^^^^^
+Highlighted span:  simpa [p0] using h
+
+ERROR .tmp_ut78otd7.AffineMap.pi_ext_nonempty'.lean:26:19-26:20
+Application type mismatch: The argument
+  v
+has type
+  ι
+of sort `Type u_9` but is expected to have type
+  (i : ι) → φv i
+of sort `Type (max u_10 u_9)` in the application
+  f v
+Source line 26:
+  have hs : ∀ i, f v -ᵥ p0 = g v -ᵥ p0 := by
+                  ^
+Highlighted span:  
+
+ERROR .tmp_ut78otd7.AffineMap.pi_ext_nonempty'.lean:26:31-26:32
+Application type mismatch: The argument
+  v
+has type
+  ι
+of sort `Type u_9` but is expected to have type
+  (i : ι) → φv i
+of sort `Type (max u_10 u_9)` in the application
+  g v
+Source line 26:
+  have hs : ∀ i, f v -ᵥ p0 = g v -ᵥ p0 := by
+                              ^
+Highlighted span:  
+
+ERROR .tmp_ut78otd7.AffineMap.pi_ext_nonempty'.lean:18:60-42:38
+unsolved goals
+case h.h
+k : Type u_2
+V2 : Type u_5
+P2 : Type u_6
+inst✝⁸ : Ring k
+inst✝⁷ : AddCommGroup V2
+inst✝⁶ : AddTorsor V2 P2
+inst✝⁵ : Module k V2
+ι : Type u_9
+φv : ι → Type u_10
+inst✝⁴ : (i : ι) → AddCommGroup (φv i)
+inst✝³ : (i : ι) → Module k (φv i)
+inst✝² : Finite ι
+inst✝¹ : DecidableEq ι
+f g : ((i : ι) → φv i) →ᵃ[k] P2
+inst✝ : Nonempty ι
+h : ∀ (i : ι), f.comp (LinearMap.single k φv i).toAffineMap = g.comp (LinearMap.single k φv i).toAffineMap
+i0 : ι := Classical.choice inst✝
+p0 : P2 := f fun x => 0
+hp : (g fun x => 0) = p0
+v : ι
+p✝ : φv v
+⊢ (f.comp (LinearMap.single k φv v).toAffineMap) p✝ -ᵥ (g.comp (LinearMap.single k φv v).toAffineMap) p✝ = 0
+Source line 18:
+    g.comp (LinearMap.single _ _ i).toAffineMap) : f = g := by
+                                                           ^
+Highlighted span:
+
+===== ATTEMPT 2 RESPONSE =====
+import Mathlib
+
+variable {R k V1 P1 V2 P2 V3 P3 : Type*}
+
+variable [Ring k] [AddCommGroup V1] [AddTorsor V1 P1] [AddCommGroup V2] [AddTorsor V2 P2]
+
+variable [AddCommGroup V3] [AddTorsor V3 P3] [Module k V1] [Module k V2] [Module k V3]
+
+variable {ι : Type*} {φv φp : ι → Type*} [(i : ι) → AddCommGroup (φv i)]
+  [(i : ι) → Module k (φv i)] [(i : ι) → AddTorsor (φv i) (φp i)]
+
+variable (fp : (i : ι) → (P1 →ᵃ[k] φp i)) (fv : (i : ι) → (P1 →ᵃ[k] φv i))
+  (f' : ι → P1 →ᵃ[k] P2)
+
+variable [Finite ι] [DecidableEq ι] {f g : ((i : ι) → φv i) →ᵃ[k] P2}
+
+theorem pi_ext_nonempty' [Nonempty ι] (h : ∀ i, f.comp (LinearMap.single _ _ i).toAffineMap =
+    g.comp (LinearMap.single _ _ i).toAffineMap) : f = g := by
+  let i0 : ι := Classical.choice ‹Nonempty ι›
+  have hconst : f 0 = g 0 := by
+    have h0 := congrArg (fun F => F 0) (h i0)
+    simpa using h0
+  have hlin : f.linear = g.linear := by
+    ext v i
+    have hi := congrArg (fun F => F (v i)) (h i)
+    simpa using hi
+  ext v
+  rw [← AffineMap.linear_eq_vsub (f := f) (q := 0) (p := v)]
+  rw [← AffineMap.linear_eq_vsub (f := g) (q := 0) (p := v)]
+  rw [hlin]
+  simpa [hconst]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .tmp_64o2ic47.AffineMap.pi_ext_nonempty'.lean:25:46-25:47
+Application type mismatch: The argument
+  i
+has type
+  φv v
+of sort `Type u_10` but is expected to have type
+  ι
+of sort `Type u_9` in the application
+  h i
+Source line 25:
+    have hi := congrArg (fun F => F (v i)) (h i)
+                                             ^
+Highlighted span:  
+
+ERROR .tmp_64o2ic47.AffineMap.pi_ext_nonempty'.lean:25:37-25:40
+Function expected at
+  v
+but this term has type
+  ι
+
+Note: Expected a function because this term is being applied to the argument
+  i
+Source line 25:
+    have hi := congrArg (fun F => F (v i)) (h i)
+                                    ^^^
+Highlighted span: (v 
+
+ERROR .tmp_64o2ic47.AffineMap.pi_ext_nonempty'.lean:28:8-28:32
+Unknown constant `AffineMap.linear_eq_vsub`
+Source line 28:
+  rw [← AffineMap.linear_eq_vsub (f := f) (q := 0) (p := v)]
+       ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span:  AffineMap.linear_eq_vsu
+
+ERROR .tmp_64o2ic47.AffineMap.pi_ext_nonempty'.lean:18:60-31:16
+unsolved goals
+case h.h
+k : Type u_2
+V2 : Type u_5
+P2 : Type u_6
+inst✝⁸ : Ring k
+inst✝⁷ : AddCommGroup V2
+inst✝⁶ : AddTorsor V2 P2
+inst✝⁵ : Module k V2
+ι : Type u_9
+φv : ι → Type u_10
+inst✝⁴ : (i : ι) → AddCommGroup (φv i)
+inst✝³ : (i : ι) → Module k (φv i)
+inst✝² : Finite ι
+inst✝¹ : DecidableEq ι
+f g : ((i : ι) → φv i) →ᵃ[k] P2
+inst✝ : Nonempty ι
+h : ∀ (i : ι), f.comp (LinearMap.single k φv i).toAffineMap = g.comp (LinearMap.single k φv i).toAffineMap
+i0 : ι := Classical.choice inst✝
+hconst : f 0 = g 0
+hlin : f.linear = g.linear
+v : ι
+p✝ : φv v
+⊢ (f.comp (LinearMap.single k φv v).toAffineMap) p✝ = (g.comp (LinearMap.single k φv v).toAffineMap) p✝
+Source line 18:
+    g.comp (LinearMap.single _ _ i).toAffineMap) : f = g := by
+                                                           ^
+Highlighted span:
+
+===== ATTEMPT 3 PROMPT =====
+Filename: AffineMap.pi_ext_nonempty'.lean
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return the complete corrected .lean file content only.
+Do not use markdown fences.
+Keep the theorem statement and surrounding context unchanged if possible.
+
+Original target file with `sorry`:
+import Mathlib
+
+variable {R k V1 P1 V2 P2 V3 P3 : Type*}
+
+variable [Ring k] [AddCommGroup V1] [AddTorsor V1 P1] [AddCommGroup V2] [AddTorsor V2 P2]
+
+variable [AddCommGroup V3] [AddTorsor V3 P3] [Module k V1] [Module k V2] [Module k V3]
+
+variable {ι : Type*} {φv φp : ι → Type*} [(i : ι) → AddCommGroup (φv i)]
+  [(i : ι) → Module k (φv i)] [(i : ι) → AddTorsor (φv i) (φp i)]
+
+variable (fp : (i : ι) → (P1 →ᵃ[k] φp i)) (fv : (i : ι) → (P1 →ᵃ[k] φv i))
+  (f' : ι → P1 →ᵃ[k] P2)
+
+variable [Finite ι] [DecidableEq ι] {f g : ((i : ι) → φv i) →ᵃ[k] P2}
+
+theorem pi_ext_nonempty' [Nonempty ι] (h : ∀ i, f.comp (LinearMap.single _ _ i).toAffineMap =
+    g.comp (LinearMap.single _ _ i).toAffineMap) : f = g := sorry
+
+Previous attempted solution:
+import Mathlib
+
+variable {R k V1 P1 V2 P2 V3 P3 : Type*}
+
+variable [Ring k] [AddCommGroup V1] [AddTorsor V1 P1] [AddCommGroup V2] [AddTorsor V2 P2]
+
+variable [AddCommGroup V3] [AddTorsor V3 P3] [Module k V1] [Module k V2] [Module k V3]
+
+variable {ι : Type*} {φv φp : ι → Type*} [(i : ι) → AddCommGroup (φv i)]
+  [(i : ι) → Module k (φv i)] [(i : ι) → AddTorsor (φv i) (φp i)]
+
+variable (fp : (i : ι) → (P1 →ᵃ[k] φp i)) (fv : (i : ι) → (P1 →ᵃ[k] φv i))
+  (f' : ι → P1 →ᵃ[k] P2)
+
+variable [Finite ι] [DecidableEq ι] {f g : ((i : ι) → φv i) →ᵃ[k] P2}
+
+theorem pi_ext_nonempty' [Nonempty ι] (h : ∀ i, f.comp (LinearMap.single _ _ i).toAffineMap =
+    g.comp (LinearMap.single _ _ i).toAffineMap) : f = g := by
+  let i0 : ι := Classical.choice ‹Nonempty ι›
+  have hconst : f 0 = g 0 := by
+    have h0 := congrArg (fun F => F 0) (h i0)
+    simpa using h0
+  have hlin : f.linear = g.linear := by
+    ext v i
+    have hi := congrArg (fun F => F (v i)) (h i)
+    simpa using hi
+  ext v
+  rw [← AffineMap.linear_eq_vsub (f := f) (q := 0) (p := v)]
+  rw [← AffineMap.linear_eq_vsub (f := g) (q := 0) (p := v)]
+  rw [hlin]
+  simpa [hconst]
+
+Lean compiler output:
+ERROR .tmp_64o2ic47.AffineMap.pi_ext_nonempty'.lean:25:46-25:47
+Application type mismatch: The argument
+  i
+has type
+  φv v
+of sort `Type u_10` but is expected to have type
+  ι
+of sort `Type u_9` in the application
+  h i
+Source line 25:
+    have hi := congrArg (fun F => F (v i)) (h i)
+                                             ^
+Highlighted span:  
+
+ERROR .tmp_64o2ic47.AffineMap.pi_ext_nonempty'.lean:25:37-25:40
+Function expected at
+  v
+but this term has type
+  ι
+
+Note: Expected a function because this term is being applied to the argument
+  i
+Source line 25:
+    have hi := congrArg (fun F => F (v i)) (h i)
+                                    ^^^
+Highlighted span: (v 
+
+ERROR .tmp_64o2ic47.AffineMap.pi_ext_nonempty'.lean:28:8-28:32
+Unknown constant `AffineMap.linear_eq_vsub`
+Source line 28:
+  rw [← AffineMap.linear_eq_vsub (f := f) (q := 0) (p := v)]
+       ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span:  AffineMap.linear_eq_vsu
+
+ERROR .tmp_64o2ic47.AffineMap.pi_ext_nonempty'.lean:18:60-31:16
+unsolved goals
+case h.h
+k : Type u_2
+V2 : Type u_5
+P2 : Type u_6
+inst✝⁸ : Ring k
+inst✝⁷ : AddCommGroup V2
+inst✝⁶ : AddTorsor V2 P2
+inst✝⁵ : Module k V2
+ι : Type u_9
+φv : ι → Type u_10
+inst✝⁴ : (i : ι) → AddCommGroup (φv i)
+inst✝³ : (i : ι) → Module k (φv i)
+inst✝² : Finite ι
+inst✝¹ : DecidableEq ι
+f g : ((i : ι) → φv i) →ᵃ[k] P2
+inst✝ : Nonempty ι
+h : ∀ (i : ι), f.comp (LinearMap.single k φv i).toAffineMap = g.comp (LinearMap.single k φv i).toAffineMap
+i0 : ι := Classical.choice inst✝
+hconst : f 0 = g 0
+hlin : f.linear = g.linear
+v : ι
+p✝ : φv v
+⊢ (f.comp (LinearMap.single k φv v).toAffineMap) p✝ = (g.comp (LinearMap.single k φv v).toAffineMap) p✝
+Source line 18:
+    g.comp (LinearMap.single _ _ i).toAffineMap) : f = g := by
+                                                           ^
+Highlighted span:
+
+===== ATTEMPT 3 RESPONSE =====
+import Mathlib
+
+variable {R k V1 P1 V2 P2 V3 P3 : Type*}
+
+variable [Ring k] [AddCommGroup V1] [AddTorsor V1 P1] [AddCommGroup V2] [AddTorsor V2 P2]
+
+variable [AddCommGroup V3] [AddTorsor V3 P3] [Module k V1] [Module k V2] [Module k V3]
+
+variable {ι : Type*} {φv φp : ι → Type*} [(i : ι) → AddCommGroup (φv i)]
+  [(i : ι) → Module k (φv i)] [(i : ι) → AddTorsor (φv i) (φp i)]
+
+variable (fp : (i : ι) → (P1 →ᵃ[k] φp i)) (fv : (i : ι) → (P1 →ᵃ[k] φv i))
+  (f' : ι → P1 →ᵃ[k] P2)
+
+variable [Finite ι] [DecidableEq ι] {f g : ((i : ι) → φv i) →ᵃ[k] P2}
+
+theorem pi_ext_nonempty' [Nonempty ι] (h : ∀ i, f.comp (LinearMap.single _ _ i).toAffineMap =
+    g.comp (LinearMap.single _ _ i).toAffineMap) : f = g := by
+  let i0 : ι := Classical.choice ‹Nonempty ι›
+  have hconst : f 0 = g 0 := by
+    have h0 := congrArg (fun F => F 0) (h i0)
+    simpa using h0
+  have hlin : f.linear = g.linear := by
+    ext x i
+    have hi := congrArg (fun F => F (x i)) (h i)
+    simpa [AffineMap.comp_apply] using hi
+  ext x
+  rw [show f x = f.linear x +ᵥ f 0 by
+    simpa using (AffineMap.apply_eq_lineMap_vadd (f := f) x 0)]
+  rw [show g x = g.linear x +ᵥ g 0 by
+    simpa using (AffineMap.apply_eq_lineMap_vadd (f := g) x 0)]
+  rw [hlin, hconst]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .tmp_ss4arpvw.AffineMap.pi_ext_nonempty'.lean:25:46-25:47
+Application type mismatch: The argument
+  i
+has type
+  φv x
+of sort `Type u_10` but is expected to have type
+  ι
+of sort `Type u_9` in the application
+  h i
+Source line 25:
+    have hi := congrArg (fun F => F (x i)) (h i)
+                                             ^
+Highlighted span:  
+
+ERROR .tmp_ss4arpvw.AffineMap.pi_ext_nonempty'.lean:25:37-25:40
+Function expected at
+  x
+but this term has type
+  ι
+
+Note: Expected a function because this term is being applied to the argument
+  i
+Source line 25:
+    have hi := congrArg (fun F => F (x i)) (h i)
+                                    ^^^
+Highlighted span: (x 
+
+ERROR .tmp_ss4arpvw.AffineMap.pi_ext_nonempty'.lean:28:13-28:14
+Application type mismatch: The argument
+  x
+has type
+  ι
+of sort `Type u_9` but is expected to have type
+  (i : ι) → φv i
+of sort `Type (max u_10 u_9)` in the application
+  f x
+Source line 28:
+  rw [show f x = f.linear x +ᵥ f 0 by
+            ^
+Highlighted span:  
+
+ERROR .tmp_ss4arpvw.AffineMap.pi_ext_nonempty'.lean:28:26-28:27
+Application type mismatch: The argument
+  x
+has type
+  ι
+of sort `Type u_9` but is expected to have type
+  (i : ι) → φv i
+of sort `Type (max u_10 u_9)` in the application
+  f.linear x
+Source line 28:
+  rw [show f x = f.linear x +ᵥ f 0 by
+                         ^
+Highlighted span:  
+
+ERROR .tmp_ss4arpvw.AffineMap.pi_ext_nonempty'.lean:18:60-32:19
+unsolved goals
+case h.h
+k : Type u_2
+V2 : Type u_5
+P2 : Type u_6
+inst✝⁸ : Ring k
+inst✝⁷ : AddCommGroup V2
+inst✝⁶ : AddTorsor V2 P2
+inst✝⁵ : Module k V2
+ι : Type u_9
+φv : ι → Type u_10
+inst✝⁴ : (i : ι) → AddCommGroup (φv i)
+inst✝³ : (i : ι) → Module k (φv i)
+inst✝² : Finite ι
+inst✝¹ : DecidableEq ι
+f g : ((i : ι) → φv i) →ᵃ[k] P2
+inst✝ : Nonempty ι
+h : ∀ (i : ι), f.comp (LinearMap.single k φv i).toAffineMap = g.comp (LinearMap.single k φv i).toAffineMap
+i0 : ι := Classical.choice inst✝
+hconst : f 0 = g 0
+hlin : f.linear = g.linear
+x : ι
+p✝ : φv x
+⊢ (f.comp (LinearMap.single k φv x).toAffineMap) p✝ = (g.comp (LinearMap.single k φv x).toAffineMap) p✝
+Source line 18:
+    g.comp (LinearMap.single _ _ i).toAffineMap) : f = g := by
+                                                           ^
+Highlighted span:

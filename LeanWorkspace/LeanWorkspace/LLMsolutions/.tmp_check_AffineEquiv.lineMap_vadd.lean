@@ -1,0 +1,12 @@
+import Mathlib
+
+variable {k P₁ P₂ P₃ P₄ V₁ V₂ V₃ V₄ : Type*} [Ring k]
+  [AddCommGroup V₁] [AddCommGroup V₂] [AddCommGroup V₃] [AddCommGroup V₄]
+  [Module k V₁] [Module k V₂] [Module k V₃] [Module k V₄]
+  [AddTorsor V₁ P₁] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃] [AddTorsor V₄ P₄]
+
+theorem lineMap_vadd (v v' : V₁) (p : P₁) (c : k) :
+    AffineMap.lineMap v v' c +ᵥ p = AffineMap.lineMap (v +ᵥ p) (v' +ᵥ p) c := by
+  rw [AffineMap.lineMap_apply, AffineMap.lineMap_apply]
+  rw [← vadd_vadd, vsub_vadd_eq_vsub_sub, vadd_vsub_assoc]
+  simp

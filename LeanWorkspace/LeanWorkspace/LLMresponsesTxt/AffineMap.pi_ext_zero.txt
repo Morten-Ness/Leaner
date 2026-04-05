@@ -1,0 +1,526 @@
+FILE: AffineMap.pi_ext_zero.lean
+
+===== ATTEMPT 1 PROMPT =====
+Filename: AffineMap.pi_ext_zero.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R k V1 P1 V2 P2 V3 P3 : Type*}
+
+variable [Ring k] [AddCommGroup V1] [AddTorsor V1 P1] [AddCommGroup V2] [AddTorsor V2 P2]
+
+variable [AddCommGroup V3] [AddTorsor V3 P3] [Module k V1] [Module k V2] [Module k V3]
+
+variable {ι : Type*} {φv φp : ι → Type*} [(i : ι) → AddCommGroup (φv i)]
+  [(i : ι) → Module k (φv i)] [(i : ι) → AddTorsor (φv i) (φp i)]
+
+variable (fp : (i : ι) → (P1 →ᵃ[k] φp i)) (fv : (i : ι) → (P1 →ᵃ[k] φv i))
+  (f' : ι → P1 →ᵃ[k] P2)
+
+variable [Finite ι] [DecidableEq ι] {f g : ((i : ι) → φv i) →ᵃ[k] P2}
+
+theorem pi_ext_zero (h : ∀ i x, f (Pi.single i x) = g (Pi.single i x)) (h₂ : f 0 = g 0) :
+    f = g := sorry
+
+===== ATTEMPT 1 RESPONSE =====
+import Mathlib
+
+variable {R k V1 P1 V2 P2 V3 P3 : Type*}
+
+variable [Ring k] [AddCommGroup V1] [AddTorsor V1 P1] [AddCommGroup V2] [AddTorsor V2 P2]
+
+variable [AddCommGroup V3] [AddTorsor V3 P3] [Module k V1] [Module k V2] [Module k V3]
+
+variable {ι : Type*} {φv φp : ι → Type*} [(i : ι) → AddCommGroup (φv i)]
+  [(i : ι) → Module k (φv i)] [(i : ι) → AddTorsor (φv i) (φp i)]
+
+variable (fp : (i : ι) → (P1 →ᵃ[k] φp i)) (fv : (i : ι) → (P1 →ᵃ[k] φv i))
+  (f' : ι → P1 →ᵃ[k] P2)
+
+variable [Finite ι] [DecidableEq ι] {f g : ((i : ι) → φv i) →ᵃ[k] P2}
+
+theorem pi_ext_zero (h : ∀ i x, f (Pi.single i x) = g (Pi.single i x)) (h₂ : f 0 = g 0) :
+    f = g := by
+  ext x
+  let s : Finset ι := Finset.univ
+  have hs :
+      x = ∑ i in s, Pi.single i (x i) := by
+    ext i
+    simp [s]
+  rw [hs]
+  clear hs
+  refine Finset.induction_on s ?base ?step
+  · simpa using h₂
+  · intro i s his hs
+    rw [Finset.sum_insert his]
+    let y : (j : ι) → φv j := ∑ j in s, Pi.single j (x j)
+    have hy : y i = 0 := by
+      simp [y, his]
+    have hsplit : Pi.single i (x i) + y = x := by
+      ext j
+      by_cases hji : j = i
+      · subst hji
+        simp [y, his, hy]
+      · simp [y, hji]
+    rw [← hsplit]
+    simp only [AffineMap.map_vadd]
+    rw [h i (x i)]
+    congr 1
+    exact hs
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .tmp_v8_2x_qc.AffineMap.pi_ext_zero.lean:22:13-22:16
+unexpected token 'in'; expected ','
+Source line 22:
+      x = ∑ i in s, Pi.single i (x i) := by
+            ^^^
+Highlighted span: i i
+
+ERROR .tmp_v8_2x_qc.AffineMap.pi_ext_zero.lean:20:22-20:33
+failed to synthesize instance of type class
+  Fintype ι
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 20:
+  let s : Finset ι := Finset.univ
+                     ^^^^^^^^^^^
+Highlighted span:  Finset.uni
+
+ERROR .tmp_v8_2x_qc.AffineMap.pi_ext_zero.lean:18:13-22:13
+unsolved goals
+case hs
+k : Type u_2
+V2 : Type u_5
+P2 : Type u_6
+inst✝⁷ : Ring k
+inst✝⁶ : AddCommGroup V2
+inst✝⁵ : AddTorsor V2 P2
+inst✝⁴ : Module k V2
+ι : Type u_9
+φv : ι → Type u_10
+inst✝³ : (i : ι) → AddCommGroup (φv i)
+inst✝² : (i : ι) → Module k (φv i)
+inst✝¹ : Finite ι
+inst✝ : DecidableEq ι
+f g : ((i : ι) → φv i) →ᵃ[k] P2
+h : ∀ (i : ι) (x : φv i), f (Pi.single i x) = g (Pi.single i x)
+h₂ : f 0 = g 0
+x : (i : ι) → φv i
+s : Finset ι := sorry
+⊢ x = ∑ i, sorry
+
+case h
+k : Type u_2
+V2 : Type u_5
+P2 : Type u_6
+inst✝⁷ : Ring k
+inst✝⁶ : AddCommGroup V2
+inst✝⁵ : AddTorsor V2 P2
+inst✝⁴ : Module k V2
+ι : Type u_9
+φv : ι → Type u_10
+inst✝³ : (i : ι) → AddCommGroup (φv i)
+inst✝² : (i : ι) → Module k (φv i)
+inst✝¹ : Finite ι
+inst✝ : DecidableEq ι
+f g : ((i : ι) → φv i) →ᵃ[k] P2
+h : ∀ (i : ι) (x : φv i), f (Pi.single i x) = g (Pi.single i x)
+h₂ : f 0 = g 0
+x : (i : ι) → φv i
+s : Finset ι := sorry
+hs : x = ∑ i, sorry
+⊢ f x = g x
+Source line 18:
+    f = g := by
+            ^
+Highlighted span:
+
+===== ATTEMPT 2 PROMPT =====
+Filename: AffineMap.pi_ext_zero.lean
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return the complete corrected .lean file content only.
+Do not use markdown fences.
+Keep the theorem statement and surrounding context unchanged if possible.
+
+Original target file with `sorry`:
+import Mathlib
+
+variable {R k V1 P1 V2 P2 V3 P3 : Type*}
+
+variable [Ring k] [AddCommGroup V1] [AddTorsor V1 P1] [AddCommGroup V2] [AddTorsor V2 P2]
+
+variable [AddCommGroup V3] [AddTorsor V3 P3] [Module k V1] [Module k V2] [Module k V3]
+
+variable {ι : Type*} {φv φp : ι → Type*} [(i : ι) → AddCommGroup (φv i)]
+  [(i : ι) → Module k (φv i)] [(i : ι) → AddTorsor (φv i) (φp i)]
+
+variable (fp : (i : ι) → (P1 →ᵃ[k] φp i)) (fv : (i : ι) → (P1 →ᵃ[k] φv i))
+  (f' : ι → P1 →ᵃ[k] P2)
+
+variable [Finite ι] [DecidableEq ι] {f g : ((i : ι) → φv i) →ᵃ[k] P2}
+
+theorem pi_ext_zero (h : ∀ i x, f (Pi.single i x) = g (Pi.single i x)) (h₂ : f 0 = g 0) :
+    f = g := sorry
+
+Previous attempted solution:
+import Mathlib
+
+variable {R k V1 P1 V2 P2 V3 P3 : Type*}
+
+variable [Ring k] [AddCommGroup V1] [AddTorsor V1 P1] [AddCommGroup V2] [AddTorsor V2 P2]
+
+variable [AddCommGroup V3] [AddTorsor V3 P3] [Module k V1] [Module k V2] [Module k V3]
+
+variable {ι : Type*} {φv φp : ι → Type*} [(i : ι) → AddCommGroup (φv i)]
+  [(i : ι) → Module k (φv i)] [(i : ι) → AddTorsor (φv i) (φp i)]
+
+variable (fp : (i : ι) → (P1 →ᵃ[k] φp i)) (fv : (i : ι) → (P1 →ᵃ[k] φv i))
+  (f' : ι → P1 →ᵃ[k] P2)
+
+variable [Finite ι] [DecidableEq ι] {f g : ((i : ι) → φv i) →ᵃ[k] P2}
+
+theorem pi_ext_zero (h : ∀ i x, f (Pi.single i x) = g (Pi.single i x)) (h₂ : f 0 = g 0) :
+    f = g := by
+  ext x
+  let s : Finset ι := Finset.univ
+  have hs :
+      x = ∑ i in s, Pi.single i (x i) := by
+    ext i
+    simp [s]
+  rw [hs]
+  clear hs
+  refine Finset.induction_on s ?base ?step
+  · simpa using h₂
+  · intro i s his hs
+    rw [Finset.sum_insert his]
+    let y : (j : ι) → φv j := ∑ j in s, Pi.single j (x j)
+    have hy : y i = 0 := by
+      simp [y, his]
+    have hsplit : Pi.single i (x i) + y = x := by
+      ext j
+      by_cases hji : j = i
+      · subst hji
+        simp [y, his, hy]
+      · simp [y, hji]
+    rw [← hsplit]
+    simp only [AffineMap.map_vadd]
+    rw [h i (x i)]
+    congr 1
+    exact hs
+
+Lean compiler output:
+ERROR .tmp_v8_2x_qc.AffineMap.pi_ext_zero.lean:22:13-22:16
+unexpected token 'in'; expected ','
+Source line 22:
+      x = ∑ i in s, Pi.single i (x i) := by
+            ^^^
+Highlighted span: i i
+
+ERROR .tmp_v8_2x_qc.AffineMap.pi_ext_zero.lean:20:22-20:33
+failed to synthesize instance of type class
+  Fintype ι
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 20:
+  let s : Finset ι := Finset.univ
+                     ^^^^^^^^^^^
+Highlighted span:  Finset.uni
+
+ERROR .tmp_v8_2x_qc.AffineMap.pi_ext_zero.lean:18:13-22:13
+unsolved goals
+case hs
+k : Type u_2
+V2 : Type u_5
+P2 : Type u_6
+inst✝⁷ : Ring k
+inst✝⁶ : AddCommGroup V2
+inst✝⁵ : AddTorsor V2 P2
+inst✝⁴ : Module k V2
+ι : Type u_9
+φv : ι → Type u_10
+inst✝³ : (i : ι) → AddCommGroup (φv i)
+inst✝² : (i : ι) → Module k (φv i)
+inst✝¹ : Finite ι
+inst✝ : DecidableEq ι
+f g : ((i : ι) → φv i) →ᵃ[k] P2
+h : ∀ (i : ι) (x : φv i), f (Pi.single i x) = g (Pi.single i x)
+h₂ : f 0 = g 0
+x : (i : ι) → φv i
+s : Finset ι := sorry
+⊢ x = ∑ i, sorry
+
+case h
+k : Type u_2
+V2 : Type u_5
+P2 : Type u_6
+inst✝⁷ : Ring k
+inst✝⁶ : AddCommGroup V2
+inst✝⁵ : AddTorsor V2 P2
+inst✝⁴ : Module k V2
+ι : Type u_9
+φv : ι → Type u_10
+inst✝³ : (i : ι) → AddCommGroup (φv i)
+inst✝² : (i : ι) → Module k (φv i)
+inst✝¹ : Finite ι
+inst✝ : DecidableEq ι
+f g : ((i : ι) → φv i) →ᵃ[k] P2
+h : ∀ (i : ι) (x : φv i), f (Pi.single i x) = g (Pi.single i x)
+h₂ : f 0 = g 0
+x : (i : ι) → φv i
+s : Finset ι := sorry
+hs : x = ∑ i, sorry
+⊢ f x = g x
+Source line 18:
+    f = g := by
+            ^
+Highlighted span:
+
+===== ATTEMPT 2 RESPONSE =====
+import Mathlib
+
+variable {R k V1 P1 V2 P2 V3 P3 : Type*}
+
+variable [Ring k] [AddCommGroup V1] [AddTorsor V1 P1] [AddCommGroup V2] [AddTorsor V2 P2]
+
+variable [AddCommGroup V3] [AddTorsor V3 P3] [Module k V1] [Module k V2] [Module k V3]
+
+variable {ι : Type*} {φv φp : ι → Type*} [(i : ι) → AddCommGroup (φv i)]
+  [(i : ι) → Module k (φv i)] [(i : ι) → AddTorsor (φv i) (φp i)]
+
+variable (fp : (i : ι) → (P1 →ᵃ[k] φp i)) (fv : (i : ι) → (P1 →ᵃ[k] φv i))
+  (f' : ι → P1 →ᵃ[k] P2)
+
+variable [Finite ι] [DecidableEq ι] {f g : ((i : ι) → φv i) →ᵃ[k] P2}
+
+theorem pi_ext_zero (h : ∀ i x, f (Pi.single i x) = g (Pi.single i x)) (h₂ : f 0 = g 0) :
+    f = g := by
+  haveI : Fintype ι := Fintype.ofFinite ι
+  ext x
+  let s : Finset ι := Finset.univ
+  have hs : x = ∑ i in s, Pi.single i (x i) := by
+    ext i
+    simp [s]
+  rw [hs]
+  clear hs
+  revert x
+  refine Finset.induction_on s ?base ?step
+  · intro x hx
+    have : x = 0 := by
+      ext i
+      have : i ∉ (∅ : Finset ι) := by simp
+      simpa [hx] using this
+    simpa [this] using h₂
+  · intro i s his ih x hx
+    let y : (j : ι) → φv j := ∑ j in s, Pi.single j (x j)
+    have hy : y i = 0 := by
+      simp [y, his]
+    have hxy : x = Pi.single i (x i) + y := by
+      ext j
+      by_cases hji : j = i
+      · subst hji
+        simp [y, his, hy]
+      · simp [y, hji]
+    rw [hxy]
+    simp only [AffineMap.map_vadd]
+    rw [h i (x i)]
+    have hys : y = ∑ j in s, Pi.single j (y j) := by
+      ext j
+      by_cases hj : j ∈ s
+      · simp [y, hj]
+      · simp [y, hj]
+    rw [hys]
+    apply ih
+    intro j hj
+    simp [y, hj, his]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .tmp_m3mm1ddu.AffineMap.pi_ext_zero.lean:22:19-22:22
+unexpected token 'in'; expected ','
+Source line 22:
+  have hs : x = ∑ i in s, Pi.single i (x i) := by
+                  ^^^
+Highlighted span: i i
+
+===== ATTEMPT 3 PROMPT =====
+Filename: AffineMap.pi_ext_zero.lean
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return the complete corrected .lean file content only.
+Do not use markdown fences.
+Keep the theorem statement and surrounding context unchanged if possible.
+
+Original target file with `sorry`:
+import Mathlib
+
+variable {R k V1 P1 V2 P2 V3 P3 : Type*}
+
+variable [Ring k] [AddCommGroup V1] [AddTorsor V1 P1] [AddCommGroup V2] [AddTorsor V2 P2]
+
+variable [AddCommGroup V3] [AddTorsor V3 P3] [Module k V1] [Module k V2] [Module k V3]
+
+variable {ι : Type*} {φv φp : ι → Type*} [(i : ι) → AddCommGroup (φv i)]
+  [(i : ι) → Module k (φv i)] [(i : ι) → AddTorsor (φv i) (φp i)]
+
+variable (fp : (i : ι) → (P1 →ᵃ[k] φp i)) (fv : (i : ι) → (P1 →ᵃ[k] φv i))
+  (f' : ι → P1 →ᵃ[k] P2)
+
+variable [Finite ι] [DecidableEq ι] {f g : ((i : ι) → φv i) →ᵃ[k] P2}
+
+theorem pi_ext_zero (h : ∀ i x, f (Pi.single i x) = g (Pi.single i x)) (h₂ : f 0 = g 0) :
+    f = g := sorry
+
+Previous attempted solution:
+import Mathlib
+
+variable {R k V1 P1 V2 P2 V3 P3 : Type*}
+
+variable [Ring k] [AddCommGroup V1] [AddTorsor V1 P1] [AddCommGroup V2] [AddTorsor V2 P2]
+
+variable [AddCommGroup V3] [AddTorsor V3 P3] [Module k V1] [Module k V2] [Module k V3]
+
+variable {ι : Type*} {φv φp : ι → Type*} [(i : ι) → AddCommGroup (φv i)]
+  [(i : ι) → Module k (φv i)] [(i : ι) → AddTorsor (φv i) (φp i)]
+
+variable (fp : (i : ι) → (P1 →ᵃ[k] φp i)) (fv : (i : ι) → (P1 →ᵃ[k] φv i))
+  (f' : ι → P1 →ᵃ[k] P2)
+
+variable [Finite ι] [DecidableEq ι] {f g : ((i : ι) → φv i) →ᵃ[k] P2}
+
+theorem pi_ext_zero (h : ∀ i x, f (Pi.single i x) = g (Pi.single i x)) (h₂ : f 0 = g 0) :
+    f = g := by
+  haveI : Fintype ι := Fintype.ofFinite ι
+  ext x
+  let s : Finset ι := Finset.univ
+  have hs : x = ∑ i in s, Pi.single i (x i) := by
+    ext i
+    simp [s]
+  rw [hs]
+  clear hs
+  revert x
+  refine Finset.induction_on s ?base ?step
+  · intro x hx
+    have : x = 0 := by
+      ext i
+      have : i ∉ (∅ : Finset ι) := by simp
+      simpa [hx] using this
+    simpa [this] using h₂
+  · intro i s his ih x hx
+    let y : (j : ι) → φv j := ∑ j in s, Pi.single j (x j)
+    have hy : y i = 0 := by
+      simp [y, his]
+    have hxy : x = Pi.single i (x i) + y := by
+      ext j
+      by_cases hji : j = i
+      · subst hji
+        simp [y, his, hy]
+      · simp [y, hji]
+    rw [hxy]
+    simp only [AffineMap.map_vadd]
+    rw [h i (x i)]
+    have hys : y = ∑ j in s, Pi.single j (y j) := by
+      ext j
+      by_cases hj : j ∈ s
+      · simp [y, hj]
+      · simp [y, hj]
+    rw [hys]
+    apply ih
+    intro j hj
+    simp [y, hj, his]
+
+Lean compiler output:
+ERROR .tmp_m3mm1ddu.AffineMap.pi_ext_zero.lean:22:19-22:22
+unexpected token 'in'; expected ','
+Source line 22:
+  have hs : x = ∑ i in s, Pi.single i (x i) := by
+                  ^^^
+Highlighted span: i i
+
+===== ATTEMPT 3 RESPONSE =====
+import Mathlib
+
+variable {R k V1 P1 V2 P2 V3 P3 : Type*}
+
+variable [Ring k] [AddCommGroup V1] [AddTorsor V1 P1] [AddCommGroup V2] [AddTorsor V2 P2]
+
+variable [AddCommGroup V3] [AddTorsor V3 P3] [Module k V1] [Module k V2] [Module k V3]
+
+variable {ι : Type*} {φv φp : ι → Type*} [(i : ι) → AddCommGroup (φv i)]
+  [(i : ι) → Module k (φv i)] [(i : ι) → AddTorsor (φv i) (φp i)]
+
+variable (fp : (i : ι) → (P1 →ᵃ[k] φp i)) (fv : (i : ι) → (P1 →ᵃ[k] φv i))
+  (f' : ι → P1 →ᵃ[k] P2)
+
+variable [Finite ι] [DecidableEq ι] {f g : ((i : ι) → φv i) →ᵃ[k] P2}
+
+theorem pi_ext_zero (h : ∀ i x, f (Pi.single i x) = g (Pi.single i x)) (h₂ : f 0 = g 0) :
+    f = g := by
+  have hlin :
+      f.toLinearMap = g.toLinearMap := by
+    haveI : Fintype ι := Fintype.ofFinite ι
+    ext x
+    rw [show x = ∑ i, Pi.single i (x i) by
+      ext i
+      simp]
+    simp only [LinearMap.map_sum]
+    apply Finset.sum_congr rfl
+    intro i hi
+    have hi0 := h i (0 : φv i)
+    rw [AffineMap.linear_eq_zero_iff_eq_zero] at hi0
+    simpa using hi0
+  ext x
+  rw [AffineMap.ext_iff]
+  constructor
+  · exact h₂
+  · exact hlin
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .tmp_3oe7svzc.AffineMap.pi_ext_zero.lean:20:8-20:19
+Invalid field `toLinearMap`: The environment does not contain `AffineMap.toLinearMap`, so it is not possible to project the field `toLinearMap` from an expression
+  f
+of type `((i : ι) → φv i) →ᵃ[k] P2`
+Source line 20:
+      f.toLinearMap = g.toLinearMap := by
+       ^^^^^^^^^^^
+Highlighted span: .toLinearMa
+
+ERROR .tmp_3oe7svzc.AffineMap.pi_ext_zero.lean:20:24-20:35
+Invalid field `toLinearMap`: The environment does not contain `AffineMap.toLinearMap`, so it is not possible to project the field `toLinearMap` from an expression
+  g
+of type `((i : ι) → φv i) →ᵃ[k] P2`
+Source line 20:
+      f.toLinearMap = g.toLinearMap := by
+                       ^^^^^^^^^^^
+Highlighted span: .toLinearMa
+
+ERROR .tmp_3oe7svzc.AffineMap.pi_ext_zero.lean:18:13-36:14
+unsolved goals
+k : Type u_2
+V2 : Type u_5
+P2 : Type u_6
+inst✝⁷ : Ring k
+inst✝⁶ : AddCommGroup V2
+inst✝⁵ : AddTorsor V2 P2
+inst✝⁴ : Module k V2
+ι : Type u_9
+φv : ι → Type u_10
+inst✝³ : (i : ι) → AddCommGroup (φv i)
+inst✝² : (i : ι) → Module k (φv i)
+inst✝¹ : Finite ι
+inst✝ : DecidableEq ι
+f g : ((i : ι) → φv i) →ᵃ[k] P2
+h : ∀ (i : ι) (x : φv i), f (Pi.single i x) = g (Pi.single i x)
+h₂ : f 0 = g 0
+⊢ f = g
+Source line 18:
+    f = g := by
+            ^
+Highlighted span:

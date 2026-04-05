@@ -1,0 +1,468 @@
+FILE: AffineMap.linear_eq_zero_iff_exists_const.lean
+
+===== ATTEMPT 1 PROMPT =====
+Filename: AffineMap.linear_eq_zero_iff_exists_const.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {k : Type*} {V1 : Type*} {P1 : Type*} {V2 : Type*} {P2 : Type*} {V3 : Type*}
+  {P3 : Type*} {V4 : Type*} {P4 : Type*} [Ring k] [AddCommGroup V1] [Module k V1]
+  [AddTorsor V1 P1] [AddCommGroup V2] [Module k V2] [AddTorsor V2 P2] [AddCommGroup V3]
+  [Module k V3] [AddTorsor V3 P3] [AddCommGroup V4] [Module k V4] [AddTorsor V4 P4]
+
+variable (k P1)
+
+variable {k P1}
+
+theorem linear_eq_zero_iff_exists_const (f : P1 →ᵃ[k] P2) :
+    f.linear = 0 ↔ ∃ q, f = AffineMap.const k P1 q := sorry
+
+===== ATTEMPT 1 RESPONSE =====
+import Mathlib
+
+variable {k : Type*} {V1 : Type*} {P1 : Type*} {V2 : Type*} {P2 : Type*} {V3 : Type*}
+  {P3 : Type*} {V4 : Type*} {P4 : Type*} [Ring k] [AddCommGroup V1] [Module k V1]
+  [AddTorsor V1 P1] [AddCommGroup V2] [Module k V2] [AddTorsor V2 P2] [AddCommGroup V3]
+  [Module k V3] [AddTorsor V3 P3] [AddCommGroup V4] [Module k V4] [AddTorsor V4 P4]
+
+variable (k P1)
+
+variable {k P1}
+
+theorem linear_eq_zero_iff_exists_const (f : P1 →ᵃ[k] P2) :
+    f.linear = 0 ↔ ∃ q, f = AffineMap.const k P1 q := by
+  constructor
+  · intro h
+    classical
+    refine ⟨f (Classical.choice ‹Nonempty P1›), ?_⟩
+    ext p
+    let p0 : P1 := Classical.choice ‹Nonempty P1›
+    have hp : f p = f p0 +ᵥ (f.linear (p0 -ᵥ p)) := by
+      rw [AffineMap.vadd_linear, vsub_vadd]
+    rw [h, LinearMap.zero_apply] at hp
+    simpa [AffineMap.const]
+      using hp
+  · rintro ⟨q, rfl⟩
+    ext v
+    rfl
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .tmp_va35xmhk.AffineMap.linear_eq_zero_iff_exists_const.lean:17:32-17:45
+Tactic `assumption` failed
+
+k : Type u_1
+V1 : Type u_2
+P1 : Type u_3
+V2 : Type u_4
+P2 : Type u_5
+inst✝⁶ : Ring k
+inst✝⁵ : AddCommGroup V1
+inst✝⁴ : Module k V1
+inst✝³ : AddTorsor V1 P1
+inst✝² : AddCommGroup V2
+inst✝¹ : Module k V2
+inst✝ : AddTorsor V2 P2
+f : P1 →ᵃ[k] P2
+h : f.linear = 0
+⊢ Nonempty P1
+Source line 17:
+    refine ⟨f (Classical.choice ‹Nonempty P1›), ?_⟩
+                               ^^^^^^^^^^^^^
+Highlighted span:  ‹Nonempty P1
+
+ERROR .tmp_va35xmhk.AffineMap.linear_eq_zero_iff_exists_const.lean:19:36-19:49
+Tactic `assumption` failed
+
+k : Type u_1
+V1 : Type u_2
+P1 : Type u_3
+V2 : Type u_4
+P2 : Type u_5
+inst✝⁶ : Ring k
+inst✝⁵ : AddCommGroup V1
+inst✝⁴ : Module k V1
+inst✝³ : AddTorsor V1 P1
+inst✝² : AddCommGroup V2
+inst✝¹ : Module k V2
+inst✝ : AddTorsor V2 P2
+f : P1 →ᵃ[k] P2
+h : f.linear = 0
+p : P1
+⊢ Nonempty P1
+Source line 19:
+    let p0 : P1 := Classical.choice ‹Nonempty P1›
+                                   ^^^^^^^^^^^^^
+Highlighted span:  ‹Nonempty P1
+
+ERROR .tmp_va35xmhk.AffineMap.linear_eq_zero_iff_exists_const.lean:20:20-20:48
+failed to synthesize instance of type class
+  HVAdd P2 V2 ?m.88
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 20:
+    have hp : f p = f p0 +ᵥ (f.linear (p0 -ᵥ p)) := by
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span:  f p0 +ᵥ (f.linear (p0 -ᵥ p)
+
+===== ATTEMPT 2 PROMPT =====
+Filename: AffineMap.linear_eq_zero_iff_exists_const.lean
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return the complete corrected .lean file content only.
+Do not use markdown fences.
+Keep the theorem statement and surrounding context unchanged if possible.
+
+Original target file with `sorry`:
+import Mathlib
+
+variable {k : Type*} {V1 : Type*} {P1 : Type*} {V2 : Type*} {P2 : Type*} {V3 : Type*}
+  {P3 : Type*} {V4 : Type*} {P4 : Type*} [Ring k] [AddCommGroup V1] [Module k V1]
+  [AddTorsor V1 P1] [AddCommGroup V2] [Module k V2] [AddTorsor V2 P2] [AddCommGroup V3]
+  [Module k V3] [AddTorsor V3 P3] [AddCommGroup V4] [Module k V4] [AddTorsor V4 P4]
+
+variable (k P1)
+
+variable {k P1}
+
+theorem linear_eq_zero_iff_exists_const (f : P1 →ᵃ[k] P2) :
+    f.linear = 0 ↔ ∃ q, f = AffineMap.const k P1 q := sorry
+
+Previous attempted solution:
+import Mathlib
+
+variable {k : Type*} {V1 : Type*} {P1 : Type*} {V2 : Type*} {P2 : Type*} {V3 : Type*}
+  {P3 : Type*} {V4 : Type*} {P4 : Type*} [Ring k] [AddCommGroup V1] [Module k V1]
+  [AddTorsor V1 P1] [AddCommGroup V2] [Module k V2] [AddTorsor V2 P2] [AddCommGroup V3]
+  [Module k V3] [AddTorsor V3 P3] [AddCommGroup V4] [Module k V4] [AddTorsor V4 P4]
+
+variable (k P1)
+
+variable {k P1}
+
+theorem linear_eq_zero_iff_exists_const (f : P1 →ᵃ[k] P2) :
+    f.linear = 0 ↔ ∃ q, f = AffineMap.const k P1 q := by
+  constructor
+  · intro h
+    classical
+    refine ⟨f (Classical.choice ‹Nonempty P1›), ?_⟩
+    ext p
+    let p0 : P1 := Classical.choice ‹Nonempty P1›
+    have hp : f p = f p0 +ᵥ (f.linear (p0 -ᵥ p)) := by
+      rw [AffineMap.vadd_linear, vsub_vadd]
+    rw [h, LinearMap.zero_apply] at hp
+    simpa [AffineMap.const]
+      using hp
+  · rintro ⟨q, rfl⟩
+    ext v
+    rfl
+
+Lean compiler output:
+ERROR .tmp_va35xmhk.AffineMap.linear_eq_zero_iff_exists_const.lean:17:32-17:45
+Tactic `assumption` failed
+
+k : Type u_1
+V1 : Type u_2
+P1 : Type u_3
+V2 : Type u_4
+P2 : Type u_5
+inst✝⁶ : Ring k
+inst✝⁵ : AddCommGroup V1
+inst✝⁴ : Module k V1
+inst✝³ : AddTorsor V1 P1
+inst✝² : AddCommGroup V2
+inst✝¹ : Module k V2
+inst✝ : AddTorsor V2 P2
+f : P1 →ᵃ[k] P2
+h : f.linear = 0
+⊢ Nonempty P1
+Source line 17:
+    refine ⟨f (Classical.choice ‹Nonempty P1›), ?_⟩
+                               ^^^^^^^^^^^^^
+Highlighted span:  ‹Nonempty P1
+
+ERROR .tmp_va35xmhk.AffineMap.linear_eq_zero_iff_exists_const.lean:19:36-19:49
+Tactic `assumption` failed
+
+k : Type u_1
+V1 : Type u_2
+P1 : Type u_3
+V2 : Type u_4
+P2 : Type u_5
+inst✝⁶ : Ring k
+inst✝⁵ : AddCommGroup V1
+inst✝⁴ : Module k V1
+inst✝³ : AddTorsor V1 P1
+inst✝² : AddCommGroup V2
+inst✝¹ : Module k V2
+inst✝ : AddTorsor V2 P2
+f : P1 →ᵃ[k] P2
+h : f.linear = 0
+p : P1
+⊢ Nonempty P1
+Source line 19:
+    let p0 : P1 := Classical.choice ‹Nonempty P1›
+                                   ^^^^^^^^^^^^^
+Highlighted span:  ‹Nonempty P1
+
+ERROR .tmp_va35xmhk.AffineMap.linear_eq_zero_iff_exists_const.lean:20:20-20:48
+failed to synthesize instance of type class
+  HVAdd P2 V2 ?m.88
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 20:
+    have hp : f p = f p0 +ᵥ (f.linear (p0 -ᵥ p)) := by
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span:  f p0 +ᵥ (f.linear (p0 -ᵥ p)
+
+===== ATTEMPT 2 RESPONSE =====
+import Mathlib
+
+variable {k : Type*} {V1 : Type*} {P1 : Type*} {V2 : Type*} {P2 : Type*} {V3 : Type*}
+  {P3 : Type*} {V4 : Type*} {P4 : Type*} [Ring k] [AddCommGroup V1] [Module k V1]
+  [AddTorsor V1 P1] [AddCommGroup V2] [Module k V2] [AddTorsor V2 P2] [AddCommGroup V3]
+  [Module k V3] [AddTorsor V3 P3] [AddCommGroup V4] [Module k V4] [AddTorsor V4 P4]
+
+variable (k P1)
+
+variable {k P1}
+
+theorem linear_eq_zero_iff_exists_const (f : P1 →ᵃ[k] P2) :
+    f.linear = 0 ↔ ∃ q, f = AffineMap.const k P1 q := by
+  constructor
+  · intro h
+    classical
+    let g : P1 → P2 := f
+    simp only [AffineMap.ext_iff] at *
+    by_cases hp : Nonempty P1
+    · let p0 : P1 := Classical.choice hp
+      refine ⟨f p0, ?_⟩
+      ext p
+      have h' := congrArg (fun e => e (p -ᵥ p0)) h
+      have hv : f.linear (p -ᵥ p0) = 0 := by simpa using h'
+      have hs := f.linear_vsub' p p0
+      simpa [hv] using hs
+    · exfalso
+      exact hp (Classical.inhabited_of_nonempty (by infer_instance) |> fun _ => by infer_instance)
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .tmp_fk0tynm8.AffineMap.linear_eq_zero_iff_exists_const.lean:22:6-22:11
+This extensionality tactic only applies to equalities, not
+  ∀ (p : P1), f p = (AffineMap.const k P1 (f p0)) p
+Source line 22:
+      ext p
+     ^^^^^
+Highlighted span:  ext 
+
+ERROR .tmp_fk0tynm8.AffineMap.linear_eq_zero_iff_exists_const.lean:28:49-28:66
+unsolved goals
+k : Type u_1
+V1 : Type u_2
+P1 : Type u_3
+V2 : Type u_4
+P2 : Type u_5
+inst✝⁶ : Ring k
+inst✝⁵ : AddCommGroup V1
+inst✝⁴ : Module k V1
+inst✝³ : AddTorsor V1 P1
+inst✝² : AddCommGroup V2
+inst✝¹ : Module k V2
+inst✝ : AddTorsor V2 P2
+f : P1 →ᵃ[k] P2
+h : f.linear = 0
+g : P1 → P2 := ⇑f
+hp : ¬Nonempty P1
+⊢ Nonempty ?m.86
+Source line 28:
+      exact hp (Classical.inhabited_of_nonempty (by infer_instance) |> fun _ => by infer_instance)
+                                                ^^^^^^^^^^^^^^^^^
+Highlighted span: (by infer_instanc
+
+ERROR .tmp_fk0tynm8.AffineMap.linear_eq_zero_iff_exists_const.lean:13:54-28:98
+unsolved goals
+case mpr
+k : Type u_1
+V1 : Type u_2
+P1 : Type u_3
+V2 : Type u_4
+P2 : Type u_5
+inst✝⁶ : Ring k
+inst✝⁵ : AddCommGroup V1
+inst✝⁴ : Module k V1
+inst✝³ : AddTorsor V1 P1
+inst✝² : AddCommGroup V2
+inst✝¹ : Module k V2
+inst✝ : AddTorsor V2 P2
+f : P1 →ᵃ[k] P2
+⊢ (∃ q, f = AffineMap.const k P1 q) → f.linear = 0
+Source line 13:
+    f.linear = 0 ↔ ∃ q, f = AffineMap.const k P1 q := by
+                                                     ^^^
+Highlighted span:  by
+
+===== ATTEMPT 3 PROMPT =====
+Filename: AffineMap.linear_eq_zero_iff_exists_const.lean
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return the complete corrected .lean file content only.
+Do not use markdown fences.
+Keep the theorem statement and surrounding context unchanged if possible.
+
+Original target file with `sorry`:
+import Mathlib
+
+variable {k : Type*} {V1 : Type*} {P1 : Type*} {V2 : Type*} {P2 : Type*} {V3 : Type*}
+  {P3 : Type*} {V4 : Type*} {P4 : Type*} [Ring k] [AddCommGroup V1] [Module k V1]
+  [AddTorsor V1 P1] [AddCommGroup V2] [Module k V2] [AddTorsor V2 P2] [AddCommGroup V3]
+  [Module k V3] [AddTorsor V3 P3] [AddCommGroup V4] [Module k V4] [AddTorsor V4 P4]
+
+variable (k P1)
+
+variable {k P1}
+
+theorem linear_eq_zero_iff_exists_const (f : P1 →ᵃ[k] P2) :
+    f.linear = 0 ↔ ∃ q, f = AffineMap.const k P1 q := sorry
+
+Previous attempted solution:
+import Mathlib
+
+variable {k : Type*} {V1 : Type*} {P1 : Type*} {V2 : Type*} {P2 : Type*} {V3 : Type*}
+  {P3 : Type*} {V4 : Type*} {P4 : Type*} [Ring k] [AddCommGroup V1] [Module k V1]
+  [AddTorsor V1 P1] [AddCommGroup V2] [Module k V2] [AddTorsor V2 P2] [AddCommGroup V3]
+  [Module k V3] [AddTorsor V3 P3] [AddCommGroup V4] [Module k V4] [AddTorsor V4 P4]
+
+variable (k P1)
+
+variable {k P1}
+
+theorem linear_eq_zero_iff_exists_const (f : P1 →ᵃ[k] P2) :
+    f.linear = 0 ↔ ∃ q, f = AffineMap.const k P1 q := by
+  constructor
+  · intro h
+    classical
+    let g : P1 → P2 := f
+    simp only [AffineMap.ext_iff] at *
+    by_cases hp : Nonempty P1
+    · let p0 : P1 := Classical.choice hp
+      refine ⟨f p0, ?_⟩
+      ext p
+      have h' := congrArg (fun e => e (p -ᵥ p0)) h
+      have hv : f.linear (p -ᵥ p0) = 0 := by simpa using h'
+      have hs := f.linear_vsub' p p0
+      simpa [hv] using hs
+    · exfalso
+      exact hp (Classical.inhabited_of_nonempty (by infer_instance) |> fun _ => by infer_instance)
+
+Lean compiler output:
+ERROR .tmp_fk0tynm8.AffineMap.linear_eq_zero_iff_exists_const.lean:22:6-22:11
+This extensionality tactic only applies to equalities, not
+  ∀ (p : P1), f p = (AffineMap.const k P1 (f p0)) p
+Source line 22:
+      ext p
+     ^^^^^
+Highlighted span:  ext 
+
+ERROR .tmp_fk0tynm8.AffineMap.linear_eq_zero_iff_exists_const.lean:28:49-28:66
+unsolved goals
+k : Type u_1
+V1 : Type u_2
+P1 : Type u_3
+V2 : Type u_4
+P2 : Type u_5
+inst✝⁶ : Ring k
+inst✝⁵ : AddCommGroup V1
+inst✝⁴ : Module k V1
+inst✝³ : AddTorsor V1 P1
+inst✝² : AddCommGroup V2
+inst✝¹ : Module k V2
+inst✝ : AddTorsor V2 P2
+f : P1 →ᵃ[k] P2
+h : f.linear = 0
+g : P1 → P2 := ⇑f
+hp : ¬Nonempty P1
+⊢ Nonempty ?m.86
+Source line 28:
+      exact hp (Classical.inhabited_of_nonempty (by infer_instance) |> fun _ => by infer_instance)
+                                                ^^^^^^^^^^^^^^^^^
+Highlighted span: (by infer_instanc
+
+ERROR .tmp_fk0tynm8.AffineMap.linear_eq_zero_iff_exists_const.lean:13:54-28:98
+unsolved goals
+case mpr
+k : Type u_1
+V1 : Type u_2
+P1 : Type u_3
+V2 : Type u_4
+P2 : Type u_5
+inst✝⁶ : Ring k
+inst✝⁵ : AddCommGroup V1
+inst✝⁴ : Module k V1
+inst✝³ : AddTorsor V1 P1
+inst✝² : AddCommGroup V2
+inst✝¹ : Module k V2
+inst✝ : AddTorsor V2 P2
+f : P1 →ᵃ[k] P2
+⊢ (∃ q, f = AffineMap.const k P1 q) → f.linear = 0
+Source line 13:
+    f.linear = 0 ↔ ∃ q, f = AffineMap.const k P1 q := by
+                                                     ^^^
+Highlighted span:  by
+
+===== ATTEMPT 3 RESPONSE =====
+import Mathlib
+
+variable {k : Type*} {V1 : Type*} {P1 : Type*} {V2 : Type*} {P2 : Type*} {V3 : Type*}
+  {P3 : Type*} {V4 : Type*} {P4 : Type*} [Ring k] [AddCommGroup V1] [Module k V1]
+  [AddTorsor V1 P1] [AddCommGroup V2] [Module k V2] [AddTorsor V2 P2] [AddCommGroup V3]
+  [Module k V3] [AddTorsor V3 P3] [AddCommGroup V4] [Module k V4] [AddTorsor V4 P4]
+
+variable (k P1)
+
+variable {k P1}
+
+theorem linear_eq_zero_iff_exists_const (f : P1 →ᵃ[k] P2) :
+    f.linear = 0 ↔ ∃ q, f = AffineMap.const k P1 q := by
+  constructor
+  · intro h
+    by_cases hp : Nonempty P1
+    · rcases hp with ⟨p0⟩
+      refine ⟨f p0, ?_⟩
+      ext p
+      have hs := f.linear_vsub' p p0
+      rw [h] at hs
+      simpa using hs
+    · exfalso
+      exact hp <| AddTorsor.nonempty P1
+  · rintro ⟨q, rfl⟩
+    ext v
+    rfl
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .tmp_wolfby8k.AffineMap.linear_eq_zero_iff_exists_const.lean:20:19-20:31
+Invalid field `linear_vsub'`: The environment does not contain `AffineMap.linear_vsub'`, so it is not possible to project the field `linear_vsub'` from an expression
+  f
+of type `P1 →ᵃ[k] P2`
+Source line 20:
+      have hs := f.linear_vsub' p p0
+                  ^^^^^^^^^^^^
+Highlighted span: .linear_vsub
+
+ERROR .tmp_wolfby8k.AffineMap.linear_eq_zero_iff_exists_const.lean:24:18-24:39
+Function expected at
+  AddTorsor.nonempty
+but this term has type
+  Nonempty ?m.101
+
+Note: Expected a function because this term is being applied to the argument
+  P1
+Source line 24:
+      exact hp <| AddTorsor.nonempty P1
+                 ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span:  AddTorsor.nonempty P
