@@ -27,6 +27,11 @@ PARAM_API_KEY_ENV = "OPENAI_API_KEY"
 # Set to an integer like 5 to stop after that many completed files this run.
 # Leave as None for no limit.
 PARAM_MAX_SOLUTIONS: int | None = None
+SYSTEM_PROMPT = (
+    "You are a precise Lean 4 and mathlib theorem prover. "
+    "Return only the full .lean file content, with no markdown fences "
+    "and no explanation."
+)
 
 THEOREM_RE = re.compile(r"^\s*(?:protected\s+)?theorem\b", re.MULTILINE)
 END_NAMESPACE_RE = re.compile(r"^\s*end(?:\s+\S.*)?\s*$")
@@ -135,43 +140,44 @@ def build_initial_prompt(filename: str, theorem_text: str) -> str:
 
 
 def build_retry_prompt(
-    filename: str,
-    theorem_text: str,
-    previous_solution: str,
     lean_error: str,
     attempt_number: int,
 ) -> str:
     return "\n".join(
         [
-            f"Filename: {filename}",
             f"Retry attempt: {attempt_number}",
             "",
             "The previous Lean solution did not compile.",
-            "Return the complete corrected .lean file content only.",
+            "Return a corrected complete .lean file content only.",
             "Do not use markdown fences.",
-            "Keep the theorem statement and surrounding context unchanged if possible.",
             "",
-            "Original target file with `sorry`:",
-            theorem_text.rstrip(),
-            "",
-            "Previous attempted solution:",
-            previous_solution.rstrip(),
-            "",
-            "Lean compiler output:",
+            "Lean compiler output for your previous answer:",
             lean_error.rstrip(),
         ]
     )
 
 
-def call_openai(prompt: str, *, api_key: str) -> str:
+def make_message(role: str, text: str) -> dict[str, object]:
+    return {
+        "role": role,
+        "content": text,
+    }
+
+
+def format_message_for_transcript(role: str, text: str) -> str:
+    return "\n".join(
+        [
+            f"===== {role.upper()} =====",
+            text.rstrip(),
+            "",
+        ]
+    )
+
+
+def call_openai(messages: list[dict[str, object]], *, api_key: str) -> str:
     payload = {
         "model": PARAM_MODEL,
-        "instructions": (
-            "You are a precise Lean 4 and mathlib theorem prover. "
-            "Return only the full .lean file content, with no markdown fences "
-            "and no explanation."
-        ),
-        "input": prompt,
+        "input": messages,
     }
     request = urllib.request.Request(
         "https://api.openai.com/v1/responses",
@@ -358,28 +364,25 @@ def save_results_log(results: dict[str, dict[str, object]]) -> None:
 
 def solve_file(target_file: Path, *, api_key: str) -> tuple[str, str, int, str]:
     theorem_text = theorem_with_sorry(target_file.read_text(encoding="utf-8"))
-    prompt = build_initial_prompt(target_file.name, theorem_text)
     last_candidate = ""
     last_error = ""
     transcript_parts = [f"FILE: {target_file.name}", ""]
+    conversation: list[dict[str, object]] = [
+        make_message("system", SYSTEM_PROMPT),
+        make_message("user", build_initial_prompt(target_file.name, theorem_text)),
+    ]
+    transcript_parts.append(format_message_for_transcript("system", SYSTEM_PROMPT))
+    transcript_parts.append(
+        format_message_for_transcript(
+            "user", build_initial_prompt(target_file.name, theorem_text)
+        )
+    )
 
     for attempt in range(1, PARAM_MAX_ATTEMPTS + 1):
-        transcript_parts.extend(
-            [
-                f"===== ATTEMPT {attempt} PROMPT =====",
-                prompt.rstrip(),
-                "",
-            ]
-        )
-        raw_response = call_openai(prompt, api_key=api_key)
+        raw_response = call_openai(conversation, api_key=api_key)
         candidate = extract_lean_file_text(raw_response)
-        transcript_parts.extend(
-            [
-                f"===== ATTEMPT {attempt} RESPONSE =====",
-                candidate.rstrip(),
-                "",
-            ]
-        )
+        conversation.append(make_message("assistant", candidate))
+        transcript_parts.append(format_message_for_transcript("assistant", candidate))
         ok, lean_output = compile_candidate(candidate, target_file.name)
         if ok:
             print(f"{attempt}. ATTEMPT PASS")
@@ -402,13 +405,9 @@ def solve_file(target_file: Path, *, api_key: str) -> tuple[str, str, int, str]:
                 "",
             ]
         )
-        prompt = build_retry_prompt(
-            target_file.name,
-            theorem_text,
-            last_candidate,
-            last_error,
-            attempt + 1,
-        )
+        retry_message = build_retry_prompt(last_error, attempt + 1)
+        conversation.append(make_message("user", retry_message))
+        transcript_parts.append(format_message_for_transcript("user", retry_message))
 
     return (
         final_output_for_failure(last_candidate or theorem_text),
