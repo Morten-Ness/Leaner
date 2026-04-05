@@ -36,6 +36,16 @@ DECL_START_RE = re.compile(
     r"^(?P<kind>private noncomputable def|private theorem|private lemma|private def|noncomputable def|protected theorem|theorem|lemma|def|instance)\s+"
     r"(?P<name>[^\s(:{]+)"
 )
+ANON_INSTANCE_PREFIXES = (
+    "instance :",
+    "instance (",
+    "instance [",
+    "instance {",
+    "private instance :",
+    "private instance (",
+    "private instance [",
+    "private instance {",
+)
 
 THEOREM_KINDS = {"theorem", "lemma", "protected theorem"}
 
@@ -214,6 +224,8 @@ def is_toplevel_break(stripped: str) -> bool:
     if stripped.startswith(("/-", "/--", "/-!", "@[")):
         return True
     if stripped.startswith(("namespace ", "section", "end", "variable ", "open ", "open scoped")):
+        return True
+    if stripped.startswith(ANON_INSTANCE_PREFIXES):
         return True
     return DECL_START_RE.match(stripped) is not None
 

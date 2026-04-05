@@ -20,6 +20,8 @@ Modes:
 
 Example usage:
 python3 PythonWorkspace/test_recreations.py --source Mathlib/LinearAlgebra/AffineSpace/Ceva.lean --fast
+
+--source should point to a Mathlib file or directory; the script will test the mirrored files under Recreations/. This is because Fast mode intelligently retrieves only the relevant imports from the source file.
 """
 
 import argparse
