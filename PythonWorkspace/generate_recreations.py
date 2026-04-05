@@ -56,7 +56,8 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 MATHLIB_ROOT = REPO_ROOT / "Mathlib"
 RECREATIONS_ROOT = REPO_ROOT / "LeanWorkspace/LeanWorkspace/Recreations"
-DEFAULT_SOURCE = MATHLIB_ROOT / "LinearAlgebra/AffineSpace"
+DEFAULT_SOURCE = MATHLIB_ROOT / "LinearAlgebra/Multilinear"
+PARAM_OVERWRITE = False
 
 DECL_START_RE = re.compile(
     r"^(?P<kind>private noncomputable def|private theorem|private lemma|private def|noncomputable def|protected theorem|theorem|lemma|def|instance)\s+"
@@ -81,6 +82,10 @@ QUALIFY_MAP = {
     "Surjective": "Function.Surjective",
     "Bijective": "Function.Bijective",
     "Involutive": "Function.Involutive",
+    "surjInv": "Function.surjInv",
+    "surjInv_eq": "Function.surjInv_eq",
+    "update": "Function.update",
+    "update_self": "Function.update_self",
 }
 
 OPEN_QUALIFY_MAP = {
@@ -90,13 +95,20 @@ OPEN_QUALIFY_MAP = {
         "pointReflection": "AffineEquiv.pointReflection",
         "vaddConst": "AffineEquiv.vaddConst",
     },
+    "DirectSum": {
+        "lof": "DirectSum.lof",
+    },
     "Finset": {
         "affineCombination": "Finset.affineCombination",
         "centroidWeights": "Finset.centroidWeights",
         "univ": "Finset.univ",
     },
+    "Module": {
+        "Basis": "Module.Basis",
+    },
     "Set": {
         "range": "Set.range",
+        "range_eq_empty": "Set.range_eq_empty",
         "univ": "Set.univ",
     },
 }
@@ -107,6 +119,13 @@ CURRENT_NAMESPACE_QUALIFY_MAP = {
         "homothety_apply": "AffineMap.homothety_apply",
         "id": "AffineMap.id",
         "lineMap": "AffineMap.lineMap",
+    },
+    "MultilinearMap": {
+        "coeAddMonoidHom": "MultilinearMap.coeAddMonoidHom",
+        "dfinsupp_ext": "MultilinearMap.dfinsupp_ext",
+        "fromDFinsuppEquiv_apply": "MultilinearMap.fromDFinsuppEquiv_apply",
+        "fromDFinsuppEquiv_single": "MultilinearMap.fromDFinsuppEquiv_single",
+        "fromDFinsuppEquiv_symm_apply": "MultilinearMap.fromDFinsuppEquiv_symm_apply",
     },
 }
 
@@ -188,6 +207,7 @@ class Decl:
     namespace_path: tuple[str, ...]
     open_namespaces: tuple[str, ...]
     text: str
+    prefix_text: str
     var_blocks: list[VarBlock]
     order: int
 
@@ -250,6 +270,10 @@ def is_toplevel_break(stripped: str) -> bool:
     if stripped.startswith(("/-", "/--", "/-!", "@[")):
         return True
     if stripped.startswith(("namespace ", "section", "end", "variable ", "open ", "open scoped")):
+        return True
+    if stripped.startswith("set_option ") and stripped.endswith(" in"):
+        return True
+    if stripped.startswith(("include ", "omit ")) and stripped.endswith(" in"):
         return True
     if stripped.startswith(ANON_INSTANCE_PREFIXES):
         return True
@@ -343,6 +367,7 @@ def parse_source_file(source_path: Path) -> list[Decl]:
     global_open_namespaces: list[str] = []
     active_open_namespaces: list[tuple[int, tuple[str, ...]]] = []
     pending_one_shot_opens: tuple[str, ...] = ()
+    pending_decl_prefix_lines: list[str] = []
     decls: list[Decl] = []
     scope_stack: list[tuple[str, str]] = []
     order = 0
@@ -387,6 +412,14 @@ def parse_source_file(source_path: Path) -> list[Decl]:
                 active_open_namespaces.append((len(scope_stack), open_namespaces))
             i += 1
             continue
+        if stripped.startswith("set_option ") and stripped.endswith(" in"):
+            pending_decl_prefix_lines.append(line)
+            i += 1
+            continue
+        if stripped.startswith(("include ", "omit ")) and stripped.endswith(" in"):
+            pending_decl_prefix_lines.append(line)
+            i += 1
+            continue
         if stripped.startswith("variable "):
             block_text, i = collect_variable_block(lines, i)
             block = VarBlock(block_text)
@@ -416,11 +449,13 @@ def parse_source_file(source_path: Path) -> list[Decl]:
                         + list(pending_one_shot_opens)
                     ),
                     text=text,
+                    prefix_text="".join(pending_decl_prefix_lines),
                     var_blocks=global_var_blocks + [block for _, block in active_var_blocks],
                     order=order,
                 )
             )
             pending_one_shot_opens = ()
+            pending_decl_prefix_lines = []
             order += 1
             continue
         i += 1
@@ -583,9 +618,9 @@ def rewrite_decl_text(decl: Decl, previous_decls: list[Decl]) -> str:
     else:
         statement = prefix_names_in_fragment(statement, replacements, skip_first_tactic_token=False)
     if not body:
-        return statement
+        return f"{decl.prefix_text}{statement}"
     body = rewrite_method_calls(body, method_rewrites)
-    return f"{statement} := {rewrite_body(body, replacements)}"
+    return f"{decl.prefix_text}{statement} := {rewrite_body(body, replacements)}"
 
 
 def rewrite_var_block(block: VarBlock) -> str:
@@ -654,7 +689,12 @@ def output_dir_for_source(source_file: Path, output_root: Path) -> Path:
     return output_root / relative
 
 
-def generate_for_source_file(source_file: Path, output_root: Path) -> tuple[int, int]:
+def generate_for_source_file(
+    source_file: Path,
+    output_root: Path,
+    *,
+    overwrite: bool = PARAM_OVERWRITE,
+) -> tuple[int, int]:
     decls = parse_source_file(source_file)
     target_theorems = iter_target_theorems(decls)
     name_counts: dict[str, int] = {}
@@ -668,7 +708,7 @@ def generate_for_source_file(source_file: Path, output_root: Path) -> tuple[int,
     skipped = 0
     for theorem in target_theorems:
         destination = output_dir / theorem_filename(theorem, name_counts)
-        if destination.exists():
+        if destination.exists() and not overwrite:
             skipped += 1
             continue
         previous_decls = [decl for decl in decls if decl.order < theorem.order]
@@ -680,12 +720,17 @@ def generate_for_source_file(source_file: Path, output_root: Path) -> tuple[int,
     return generated, skipped
 
 
-def generate(source: Path, output_root: Path) -> tuple[int, int, int]:
+def generate(
+    source: Path,
+    output_root: Path,
+    *,
+    overwrite: bool = PARAM_OVERWRITE,
+) -> tuple[int, int, int]:
     generated = 0
     skipped = 0
     files_processed = 0
     for source_file in source_files_from_input(source):
-        gen, skip = generate_for_source_file(source_file, output_root)
+        gen, skip = generate_for_source_file(source_file, output_root, overwrite=overwrite)
         generated += gen
         skipped += skip
         files_processed += 1
@@ -698,12 +743,17 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--source", type=Path, default=DEFAULT_SOURCE)
     parser.add_argument("--output-root", type=Path, default=RECREATIONS_ROOT)
+    parser.add_argument("--overwrite", action="store_true", default=PARAM_OVERWRITE)
     return parser.parse_args()
 
 
 def main() -> int:
     args = parse_args()
-    generated, skipped, files_processed = generate(args.source, args.output_root)
+    generated, skipped, files_processed = generate(
+        args.source,
+        args.output_root,
+        overwrite=args.overwrite,
+    )
     print(
         f"Processed {files_processed} source file(s); "
         f"generated {generated} theorem file(s); skipped {skipped} existing file(s)."

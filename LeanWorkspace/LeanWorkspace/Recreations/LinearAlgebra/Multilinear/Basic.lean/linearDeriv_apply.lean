@@ -11,7 +11,7 @@ variable [Semiring R] [∀ i, AddCommMonoid (M i)] [∀ i, AddCommMonoid (M₁ i
 
 theorem linearDeriv_apply [DecidableEq ι] [Fintype ι] (f : MultilinearMap R M₁ M₂)
     (x y : (i : ι) → M₁ i) :
-    f.linearDeriv x y = ∑ i, f (update x i (y i)) := by
+    f.linearDeriv x y = ∑ i, f (Function.update x i (y i)) := by
   unfold MultilinearMap.linearDeriv
   simp only [LinearMap.coe_sum, LinearMap.coe_comp, LinearMap.coe_proj, Finset.sum_apply,
     Function.comp_apply, Function.eval, toLinearMap_apply]

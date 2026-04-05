@@ -9,6 +9,6 @@ variable [Semiring R] [∀ i, AddCommGroup (M₁ i)] [AddCommGroup M₂] [∀ i,
   [Module R M₂] (f : MultilinearMap R M₁ M₂)
 
 theorem map_update [DecidableEq ι] (x : (i : ι) → M₁ i) (i : ι) (v : M₁ i) :
-    f (update x i v) = f x - f (update x i (x i - v)) := by
+    f (Function.update x i v) = f x - f (Function.update x i (x i - v)) := by
   rw [MultilinearMap.map_update_sub, update_eq_self, sub_sub_cancel]
 

@@ -16,6 +16,6 @@ variable [∀ i, AddCommMonoid (M₁'' i)] [∀ i, Module R (M₁'' i)]
 theorem compLinearMap_injective (f : ∀ i, M₁ i →ₗ[R] M₁' i) (hf : ∀ i, Function.Surjective (f i)) :
     Function.Injective fun g : MultilinearMap R M₁' M₂ => g.compLinearMap f := fun g₁ g₂ h =>
   MultilinearMap.ext fun x => by
-    simpa [fun i => surjInv_eq (hf i)]
-      using MultilinearMap.ext_iff.mp h fun i => surjInv (hf i) (x i)
+    simpa [fun i => Function.surjInv_eq (hf i)]
+      using MultilinearMap.ext_iff.mp h fun i => Function.surjInv (hf i) (x i)
 

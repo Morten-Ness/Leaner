@@ -13,3 +13,4 @@ variable {α : ι → Type*} (g : ∀ i, α i → M₁ i) (A : ∀ i, Finset (α
 
 theorem map_sum [DecidableEq ι] [Fintype ι] [∀ i, Fintype (α i)] :
     (f fun i => ∑ j, g i j) = ∑ r : ∀ i, α i, f fun i => g i (r i) := MultilinearMap.map_sum_finset f g fun _ => Finset.univ
+

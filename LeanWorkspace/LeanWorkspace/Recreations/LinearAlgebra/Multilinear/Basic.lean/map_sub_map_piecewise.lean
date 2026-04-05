@@ -23,7 +23,7 @@ theorem map_sub_map_piecewise [LinearOrder ι] (a b : (i : ι) → M₁ i) (s : 
       · exact fun h ↦ (hk i h).not_gt (h₁ <| .inr h)
       · exact fun h ↦ (h₁ <| .inl h).ne h
     · cases h₂
-      rw [update_self, s.piecewise_eq_of_notMem _ _ (lt_irrefl _ <| hk k ·)]
+      rw [Function.update_self, s.piecewise_eq_of_notMem _ _ (lt_irrefl _ <| hk k ·)]
     · push Not at h₁
       rw [update_of_ne (Ne.symm h₂), s.piecewise_eq_of_mem _ _ (h₁.1.resolve_left <| Ne.symm h₂)]
   · apply sum_congr rfl

@@ -10,5 +10,5 @@ variable [Semiring R] [∀ i, AddCommMonoid (M i)] [∀ i, AddCommMonoid (M₁ i
   [Module R M₃] [Module R M'] (f f' : MultilinearMap R M₁ M₂)
 
 theorem map_update_add [DecidableEq ι] (m : ∀ i, M₁ i) (i : ι) (x y : M₁ i) :
-    f (update m i (x + y)) = f (update m i x) + f (update m i y) := f.map_update_add' m i x y
+    f (Function.update m i (x + y)) = f (Function.update m i x) + f (Function.update m i y) := f.map_update_add' m i x y
 

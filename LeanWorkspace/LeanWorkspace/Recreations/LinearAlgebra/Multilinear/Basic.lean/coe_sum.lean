@@ -10,5 +10,5 @@ variable [Semiring R] [∀ i, AddCommMonoid (M i)] [∀ i, AddCommMonoid (M₁ i
   [Module R M₃] [Module R M'] (f f' : MultilinearMap R M₁ M₂)
 
 theorem coe_sum {α : Type*} (f : α → MultilinearMap R M₁ M₂) (s : Finset α) :
-    ⇑(∑ a ∈ s, f a) = ∑ a ∈ s, ⇑(f a) := map_sum coeAddMonoidHom f s
+    ⇑(∑ a ∈ s, f a) = ∑ a ∈ s, ⇑(f a) := map_sum MultilinearMap.coeAddMonoidHom f s
 

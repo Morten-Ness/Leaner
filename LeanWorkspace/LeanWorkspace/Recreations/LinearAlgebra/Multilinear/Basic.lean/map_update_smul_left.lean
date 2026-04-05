@@ -10,9 +10,9 @@ variable [CommSemiring R] [∀ i, AddCommMonoid (M₁ i)] [∀ i, AddCommMonoid 
 
 theorem map_update_smul_left [DecidableEq ι] [Fintype ι]
     (m : ∀ i, M₁ i) (i : ι) (c : R) (x : M₁ i) :
-    f (update (c • m) i x) = c ^ (Fintype.card ι - 1) • f (update m i x) := by
-  have : f ((Finset.univ.erase i).piecewise (c • update m i x) (update m i x)) =
-      (∏ _i ∈ Finset.univ.erase i, c) • f (update m i x) :=
+    f (Function.update (c • m) i x) = c ^ (Fintype.card ι - 1) • f (Function.update m i x) := by
+  have : f ((Finset.univ.erase i).piecewise (c • Function.update m i x) (Function.update m i x)) =
+      (∏ _i ∈ Finset.univ.erase i, c) • f (Function.update m i x) :=
     MultilinearMap.map_piecewise_smul f _ _ _
   simpa [← Function.update_smul c m] using this
 

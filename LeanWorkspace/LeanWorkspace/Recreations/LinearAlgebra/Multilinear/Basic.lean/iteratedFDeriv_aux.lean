@@ -13,10 +13,10 @@ variable [Π i, AddCommMonoid (M₁' i)] [Π i, Module R (M₁' i)]
 theorem iteratedFDeriv_aux {ι} {M₁ : ι → Type*} {α : Type*} [DecidableEq α]
     (s : Set ι) [DecidableEq { x // x ∈ s }] (e : α ≃ s)
     (m : α → ((i : ι) → M₁ i)) (a : α) (z : (i : ι) → M₁ i) :
-    (fun i ↦ update m a z (e.symm i) i) =
-      (fun i ↦ update (fun j ↦ m (e.symm j) j) (e a) (z (e a)) i) := by
+    (fun i ↦ Function.update m a z (e.symm i) i) =
+      (fun i ↦ Function.update (fun j ↦ m (e.symm j) j) (e a) (z (e a)) i) := by
   ext i
   rcases eq_or_ne a (e.symm i) with rfl | hne
-  · rw [Equiv.apply_symm_apply e i, update_self, update_self]
+  · rw [Equiv.apply_symm_apply e i, Function.update_self, Function.update_self]
   · rw [update_of_ne hne.symm, update_of_ne fun h ↦ (Equiv.symm_apply_apply .. ▸ h ▸ hne) rfl]
 

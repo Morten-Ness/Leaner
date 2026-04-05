@@ -11,6 +11,22 @@ variable [Semiring R] [∀ i, AddCommMonoid (M i)] [∀ i, AddCommMonoid (M₁ i
   [AddCommMonoid M₃] [AddCommMonoid M'] [∀ i, Module R (M i)] [∀ i, Module R (M₁ i)] [Module R M₂]
   [Module R M₃] [Module R M'] (f f' : MultilinearMap R M₁ M₂)
 
+theorem coe_sum {α : Type*} (f : α → MultilinearMap R M₁ M₂) (s : Finset α) :
+    ⇑(∑ a ∈ s, f a) = ∑ a ∈ s, ⇑(f a) := map_sum MultilinearMap.coeAddMonoidHom f s
+
+end
+
+section
+
+variable {R : Type uR} {S : Type uS} {ι : Type uι} {n : ℕ}
+  {M : Fin n.succ → Type v} {M₁ : ι → Type v₁} {M₁' : ι → Type v₁'} {M₁'' : ι → Type v₁''}
+
+variable {M₂ : Type v₂} {M₃ : Type v₃} {M₄ : Type v₄} {M' : Type v'}
+
+variable [Semiring R] [∀ i, AddCommMonoid (M i)] [∀ i, AddCommMonoid (M₁ i)] [AddCommMonoid M₂]
+  [AddCommMonoid M₃] [AddCommMonoid M'] [∀ i, Module R (M i)] [∀ i, Module R (M₁ i)] [Module R M₂]
+  [Module R M₃] [Module R M'] (f f' : MultilinearMap R M₁ M₂)
+
 variable [∀ i, AddCommMonoid (M₁' i)] [∀ i, Module R (M₁' i)]
 
 variable [∀ i, AddCommMonoid (M₁'' i)] [∀ i, Module R (M₁'' i)]
@@ -38,8 +54,8 @@ variable [∀ i, AddCommMonoid (M₁'' i)] [∀ i, Module R (M₁'' i)]
 theorem compLinearMap_injective (f : ∀ i, M₁ i →ₗ[R] M₁' i) (hf : ∀ i, Function.Surjective (f i)) :
     Function.Injective fun g : MultilinearMap R M₁' M₂ => g.compLinearMap f := fun g₁ g₂ h =>
   MultilinearMap.ext fun x => by
-    simpa [fun i => surjInv_eq (hf i)]
-      using MultilinearMap.ext_iff.mp h fun i => surjInv (hf i) (x i)
+    simpa [fun i => Function.surjInv_eq (hf i)]
+      using MultilinearMap.ext_iff.mp h fun i => Function.surjInv (hf i) (x i)
 
 end
 
@@ -194,6 +210,30 @@ variable {R : Type uR} {S : Type uS} {ι : Type uι} {n : ℕ}
 
 variable {M₂ : Type v₂} {M₃ : Type v₃} {M₄ : Type v₄} {M' : Type v'}
 
+variable [CommSemiring R] [∀ i, AddCommMonoid (M₁ i)] [∀ i, AddCommMonoid (M i)] [AddCommMonoid M₂]
+  [∀ i, Module R (M i)] [∀ i, Module R (M₁ i)] [Module R M₂] (f f' : MultilinearMap R M₁ M₂)
+
+variable [Π i, AddCommMonoid (M₁' i)] [Π i, Module R (M₁' i)]
+
+theorem iteratedFDeriv_aux {ι} {M₁ : ι → Type*} {α : Type*} [DecidableEq α]
+    (s : Set ι) [DecidableEq { x // x ∈ s }] (e : α ≃ s)
+    (m : α → ((i : ι) → M₁ i)) (a : α) (z : (i : ι) → M₁ i) :
+    (fun i ↦ Function.update m a z (e.symm i) i) =
+      (fun i ↦ Function.update (fun j ↦ m (e.symm j) j) (e a) (z (e a)) i) := by
+  ext i
+  rcases eq_or_ne a (e.symm i) with rfl | hne
+  · rw [Equiv.apply_symm_apply e i, Function.update_self, Function.update_self]
+  · rw [update_of_ne hne.symm, update_of_ne fun h ↦ (Equiv.symm_apply_apply .. ▸ h ▸ hne) rfl]
+
+end
+
+section
+
+variable {R : Type uR} {S : Type uS} {ι : Type uι} {n : ℕ}
+  {M : Fin n.succ → Type v} {M₁ : ι → Type v₁} {M₁' : ι → Type v₁'} {M₁'' : ι → Type v₁''}
+
+variable {M₂ : Type v₂} {M₃ : Type v₃} {M₄ : Type v₄} {M' : Type v'}
+
 variable [Semiring R] [∀ i, AddCommMonoid (M i)] [∀ i, AddCommMonoid (M₁ i)] [AddCommMonoid M₂]
   [AddCommMonoid M₃] [AddCommMonoid M'] [∀ i, Module R (M i)] [∀ i, Module R (M₁ i)] [Module R M₂]
   [Module R M₃] [Module R M'] (f f' : MultilinearMap R M₁ M₂)
@@ -270,16 +310,16 @@ theorem map_piecewise_add [DecidableEq ι] (m m' : ∀ i, M₁ i) (t : Finset ι
   revert m'
   refine Finset.induction_on t (by simp) ?_
   intro i t hit Hrec m'
-  have A : (insert i t).piecewise (m + m') m' = update (t.piecewise (m + m') m') i (m i + m' i) :=
+  have A : (insert i t).piecewise (m + m') m' = Function.update (t.piecewise (m + m') m') i (m i + m' i) :=
     t.piecewise_insert _ _ _
-  have B : update (t.piecewise (m + m') m') i (m' i) = t.piecewise (m + m') m' := by
+  have B : Function.update (t.piecewise (m + m') m') i (m' i) = t.piecewise (m + m') m' := by
     ext j
     by_cases h : j = i
     · rw [h]
       simp [hit]
     · simp [h]
-  let m'' := update m' i (m i)
-  have C : update (t.piecewise (m + m') m') i (m i) = t.piecewise (m + m'') m'' := by
+  let m'' := Function.update m' i (m i)
+  have C : Function.update (t.piecewise (m + m') m') i (m i) = t.piecewise (m + m'') m'' := by
     ext j
     by_cases h : j = i
     · rw [h]
@@ -364,6 +404,95 @@ variable [CommSemiring R] [∀ i, AddCommMonoid (M₁ i)] [∀ i, AddCommMonoid 
 theorem map_smul_univ [Fintype ι] (c : ι → R) (m : ∀ i, M₁ i) :
     (f fun i => c i • m i) = (∏ i, c i) • f m := by
   classical simpa using MultilinearMap.map_piecewise_smul f c m Finset.univ
+
+end
+
+section
+
+variable {R : Type uR} {S : Type uS} {ι : Type uι} {n : ℕ}
+  {M : Fin n.succ → Type v} {M₁ : ι → Type v₁} {M₁' : ι → Type v₁'} {M₁'' : ι → Type v₁''}
+
+variable {M₂ : Type v₂} {M₃ : Type v₃} {M₄ : Type v₄} {M' : Type v'}
+
+variable [Semiring R] [∀ i, AddCommGroup (M₁ i)] [AddCommGroup M₂] [∀ i, Module R (M₁ i)]
+  [Module R M₂] (f : MultilinearMap R M₁ M₂)
+
+theorem map_update_neg [DecidableEq ι] (m : ∀ i, M₁ i) (i : ι) (x : M₁ i) :
+    f (Function.update m i (-x)) = -f (Function.update m i x) := eq_neg_of_add_eq_zero_left <| by
+    rw [← MultilinearMap.map_update_add, neg_add_cancel, MultilinearMap.map_coord_zero f i (Function.update_self i 0 m)]
+
+end
+
+section
+
+variable {R : Type uR} {S : Type uS} {ι : Type uι} {n : ℕ}
+  {M : Fin n.succ → Type v} {M₁ : ι → Type v₁} {M₁' : ι → Type v₁'} {M₁'' : ι → Type v₁''}
+
+variable {M₂ : Type v₂} {M₃ : Type v₃} {M₄ : Type v₄} {M' : Type v'}
+
+variable [CommSemiring R] [∀ i, AddCommMonoid (M₁ i)] [∀ i, AddCommMonoid (M i)] [AddCommMonoid M₂]
+  [∀ i, Module R (M i)] [∀ i, Module R (M₁ i)] [Module R M₂] (f f' : MultilinearMap R M₁ M₂)
+
+theorem map_update_smul_left [DecidableEq ι] [Fintype ι]
+    (m : ∀ i, M₁ i) (i : ι) (c : R) (x : M₁ i) :
+    f (Function.update (c • m) i x) = c ^ (Fintype.card ι - 1) • f (Function.update m i x) := by
+  have : f ((Finset.univ.erase i).piecewise (c • Function.update m i x) (Function.update m i x)) =
+      (∏ _i ∈ Finset.univ.erase i, c) • f (Function.update m i x) :=
+    MultilinearMap.map_piecewise_smul f _ _ _
+  simpa [← Function.update_smul c m] using this
+
+end
+
+section
+
+variable {R : Type uR} {S : Type uS} {ι : Type uι} {n : ℕ}
+  {M : Fin n.succ → Type v} {M₁ : ι → Type v₁} {M₁' : ι → Type v₁'} {M₁'' : ι → Type v₁''}
+
+variable {M₂ : Type v₂} {M₃ : Type v₃} {M₄ : Type v₄} {M' : Type v'}
+
+variable [Semiring R] [∀ i, AddCommGroup (M₁ i)] [AddCommGroup M₂] [∀ i, Module R (M₁ i)]
+  [Module R M₂] (f : MultilinearMap R M₁ M₂)
+
+theorem map_update_sub [DecidableEq ι] (m : ∀ i, M₁ i) (i : ι) (x y : M₁ i) :
+    f (Function.update m i (x - y)) = f (Function.update m i x) - f (Function.update m i y) := by
+  rw [sub_eq_add_neg, sub_eq_add_neg, MultilinearMap.map_update_add, MultilinearMap.map_update_neg]
+
+end
+
+section
+
+variable {R : Type uR} {S : Type uS} {ι : Type uι} {n : ℕ}
+  {M : Fin n.succ → Type v} {M₁ : ι → Type v₁} {M₁' : ι → Type v₁'} {M₁'' : ι → Type v₁''}
+
+variable {M₂ : Type v₂} {M₃ : Type v₃} {M₄ : Type v₄} {M' : Type v'}
+
+variable [Semiring R] [∀ i, AddCommMonoid (M i)] [∀ i, AddCommMonoid (M₁ i)] [AddCommMonoid M₂]
+  [AddCommMonoid M₃] [AddCommMonoid M'] [∀ i, Module R (M i)] [∀ i, Module R (M₁ i)] [Module R M₂]
+  [Module R M₃] [Module R M'] (f f' : MultilinearMap R M₁ M₂)
+
+variable {α : ι → Type*} (g : ∀ i, α i → M₁ i) (A : ∀ i, Finset (α i))
+
+theorem map_update_sum {α : Type*} [DecidableEq ι] (t : Finset α) (i : ι) (g : α → M₁ i)
+    (m : ∀ i, M₁ i) : f (Function.update m i (∑ a ∈ t, g a)) = ∑ a ∈ t, f (Function.update m i (g a)) := by
+  classical
+    induction t using Finset.induction with
+    | empty => simp
+    | insert _ _ has ih => simp [Finset.sum_insert has, ih]
+
+end
+
+section
+
+variable {R : Type uR} {S : Type uS} {ι : Type uι} {n : ℕ}
+  {M : Fin n.succ → Type v} {M₁ : ι → Type v₁} {M₁' : ι → Type v₁'} {M₁'' : ι → Type v₁''}
+
+variable {M₂ : Type v₂} {M₃ : Type v₃} {M₄ : Type v₄} {M' : Type v'}
+
+variable [Semiring R] [∀ i, AddCommMonoid (M i)] [∀ i, AddCommMonoid (M₁ i)] [AddCommMonoid M₂]
+  [AddCommMonoid M₃] [AddCommMonoid M'] [∀ i, Module R (M i)] [∀ i, Module R (M₁ i)] [Module R M₂]
+  [Module R M₃] [Module R M'] (f f' : MultilinearMap R M₁ M₂)
+
+theorem map_update_zero [DecidableEq ι] (m : ∀ i, M₁ i) (i : ι) : f (Function.update m i 0) = 0 := MultilinearMap.map_coord_zero f i (Function.update_self i 0 m)
 
 end
 

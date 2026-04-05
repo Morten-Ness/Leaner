@@ -53,13 +53,13 @@ theorem map_sum_finset_aux [DecidableEq ι] [Fintype ι] {n : ℕ} (h : (∑ i, 
     intro i
     by_cases hi : i = i₀
     · rw [hi]
-      simp only [B, sdiff_subset, update_self]
+      simp only [B, sdiff_subset, Function.update_self]
     · simp only [B, hi, update_of_ne, Ne, not_false_iff, Finset.Subset.refl]
   have C_subset_A : ∀ i, C i ⊆ A i := by
     intro i
     by_cases hi : i = i₀
     · rw [hi]
-      simp only [C, hj₂, Finset.singleton_subset_iff, update_self]
+      simp only [C, hj₂, Finset.singleton_subset_iff, Function.update_self]
     · simp only [C, hi, update_of_ne, Ne, not_false_iff, Finset.Subset.refl]
   -- split the sum at `i₀` as the sum over `B i₀` plus the sum over `C i₀`, to use additivity.
   have A_eq_BC :
@@ -68,7 +68,7 @@ theorem map_sum_finset_aux [DecidableEq ι] [Fintype ι] {n : ℕ} (h : (∑ i, 
         ((∑ j ∈ B i₀, g i₀ j) + ∑ j ∈ C i₀, g i₀ j) := by
     ext i
     by_cases hi : i = i₀
-    · rw [hi, update_self]
+    · rw [hi, Function.update_self]
       have : A i₀ = B i₀ ∪ C i₀ := by
         simp only [B, C, Function.update_self, Finset.sdiff_union_self_eq_union]
         symm
@@ -79,7 +79,7 @@ theorem map_sum_finset_aux [DecidableEq ι] [Fintype ι] {n : ℕ} (h : (∑ i, 
         simpa [C] using hj
       rw [this]
       simp only [B, mem_sdiff, not_true, not_false_iff, Finset.mem_singleton,
-        update_self, and_false]
+        Function.update_self, and_false]
     · simp [hi]
   have Beq :
     Function.update (fun i => ∑ j ∈ A i, g i j) i₀ (∑ j ∈ B i₀, g i₀ j) = fun i =>
@@ -87,7 +87,7 @@ theorem map_sum_finset_aux [DecidableEq ι] [Fintype ι] {n : ℕ} (h : (∑ i, 
     ext i
     by_cases hi : i = i₀
     · rw [hi]
-      simp only [update_self]
+      simp only [Function.update_self]
     · simp only [B, hi, update_of_ne, Ne, not_false_iff]
   have Ceq :
     Function.update (fun i => ∑ j ∈ A i, g i j) i₀ (∑ j ∈ C i₀, g i₀ j) = fun i =>
@@ -95,7 +95,7 @@ theorem map_sum_finset_aux [DecidableEq ι] [Fintype ι] {n : ℕ} (h : (∑ i, 
     ext i
     by_cases hi : i = i₀
     · rw [hi]
-      simp only [update_self]
+      simp only [Function.update_self]
     · simp only [C, hi, update_of_ne, Ne, not_false_iff]
   -- Express the inductive assumption for `B`
   have Brec : (f fun i => ∑ j ∈ B i, g i j) = ∑ r ∈ piFinset B, f fun i => g i (r i) := by

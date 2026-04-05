@@ -12,7 +12,7 @@ variable [Semiring R] [∀ i, AddCommMonoid (M i)] [∀ i, AddCommMonoid (M₁ i
 variable {α : ι → Type*} (g : ∀ i, α i → M₁ i) (A : ∀ i, Finset (α i))
 
 theorem map_update_sum {α : Type*} [DecidableEq ι] (t : Finset α) (i : ι) (g : α → M₁ i)
-    (m : ∀ i, M₁ i) : f (update m i (∑ a ∈ t, g a)) = ∑ a ∈ t, f (update m i (g a)) := by
+    (m : ∀ i, M₁ i) : f (Function.update m i (∑ a ∈ t, g a)) = ∑ a ∈ t, f (Function.update m i (g a)) := by
   classical
     induction t using Finset.induction with
     | empty => simp

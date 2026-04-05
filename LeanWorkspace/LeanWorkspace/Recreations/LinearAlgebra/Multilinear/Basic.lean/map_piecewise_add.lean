@@ -14,16 +14,16 @@ theorem map_piecewise_add [DecidableEq ι] (m m' : ∀ i, M₁ i) (t : Finset ι
   revert m'
   refine Finset.induction_on t (by simp) ?_
   intro i t hit Hrec m'
-  have A : (insert i t).piecewise (m + m') m' = update (t.piecewise (m + m') m') i (m i + m' i) :=
+  have A : (insert i t).piecewise (m + m') m' = Function.update (t.piecewise (m + m') m') i (m i + m' i) :=
     t.piecewise_insert _ _ _
-  have B : update (t.piecewise (m + m') m') i (m' i) = t.piecewise (m + m') m' := by
+  have B : Function.update (t.piecewise (m + m') m') i (m' i) = t.piecewise (m + m') m' := by
     ext j
     by_cases h : j = i
     · rw [h]
       simp [hit]
     · simp [h]
-  let m'' := update m' i (m i)
-  have C : update (t.piecewise (m + m') m') i (m i) = t.piecewise (m + m'') m'' := by
+  let m'' := Function.update m' i (m i)
+  have C : Function.update (t.piecewise (m + m') m') i (m i) = t.piecewise (m + m'') m'' := by
     ext j
     by_cases h : j = i
     · rw [h]
