@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -16,6 +17,7 @@ LLM_RESPONSES_ROOT = LEAN_WORKSPACE_ROOT / "LLMresponses"
 LLM_RESPONSES_LEAN_ROOT = LLM_RESPONSES_ROOT / "Lean"
 RESULTS_JSON_PATH = LLM_RESPONSES_ROOT / "results.json"
 DEFAULT_OUTPUT_PATH = LLM_RESPONSES_ROOT / "proofs.csv"
+THEOREM_NAME_RE = re.compile(r"^\s*(?:protected\s+)?theorem\s+([^\s(:{]+)", re.MULTILINE)
 
 
 def parse_args() -> argparse.Namespace:
@@ -57,6 +59,24 @@ def strip_lean_comment_lines(text: str) -> str:
     return "\n".join(kept_lines).rstrip() + "\n"
 
 
+def theorem_name_and_proof_text(text: str) -> tuple[str | None, str]:
+    theorem_match = THEOREM_NAME_RE.search(text)
+    if theorem_match is None:
+        return None, ""
+    theorem_name = theorem_match.group(1)
+    assign_index = text.find(":=", theorem_match.end())
+    if assign_index == -1:
+        return theorem_name, ""
+    return theorem_name, text[assign_index + 2 :]
+
+
+def has_self_reference(text: str) -> bool:
+    theorem_name, proof_text = theorem_name_and_proof_text(text)
+    if theorem_name is None or not proof_text:
+        return False
+    return theorem_name in proof_text
+
+
 def main() -> int:
     args = parse_args()
     output_path = args.output if args.output.is_absolute() else (REPO_ROOT / args.output)
@@ -74,6 +94,7 @@ def main() -> int:
                 "LLMresponse",
                 "status",
                 "attempts",
+                "SelfRef",
                 "CharDiff",
             ],
             quoting=csv.QUOTE_ALL,
@@ -96,9 +117,10 @@ def main() -> int:
                     "filename": filename,
                     "VerifiedTarget": verified_text,
                     "LLMresponse": llm_text,
-                    "CharDiff": len(llm_text) - len(verified_text),
                     "status": status,
                     "attempts": attempts,
+                    "SelfRef": has_self_reference(llm_text),
+                    "CharDiff": len(llm_text) - len(verified_text),
                 }
             )
 

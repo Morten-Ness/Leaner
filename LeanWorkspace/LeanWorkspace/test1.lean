@@ -1,11 +1,11 @@
 import Mathlib
 
-variable {A B M N : Type*} [AddMonoid A] [AddMonoid B] [Monoid M] [Monoid N]
+variable {G : Type*} [Group G]
+variable {A : Type*} [AddGroup A]
+variable (H K : Subgroup G)
 
-theorem compAddMonoidHom_injective_left
-    (f : A →+ B) (hf : Function.Surjective f) :
-    Function.Injective (fun ψ : AddChar B M => ψ.compAddMonoidHom f) := by
-  intro ψ₁ ψ₂ h
-  ext b
-  obtain ⟨a, rfl⟩ := hf b
-  simpa using congrArg (fun χ : AddChar A M => χ a) h
+theorem one_lt_card_iff_ne_bot [Finite H] : 1 < Nat.card H ↔ H ≠ ⊥ :=
+  not_le.symm.trans (not_congr H.card_le_one_iff_eq_bot)
+
+theorem one_lt_card_iff_ne_bot2 [Finite H] : 1 < Nat.card H ↔ H ≠ ⊥ :=
+  lt_iff_not_ge.trans H.card_le_one_iff_eq_bot.not
