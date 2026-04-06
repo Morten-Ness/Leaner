@@ -1,0 +1,224 @@
+FILE: Combination.sum_smul_vsub_eq_weightedVSub_sub.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Combination.sum_smul_vsub_eq_weightedVSub_sub.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+theorem sum_smul_vsub_eq_weightedVSub_sub (w : ι → k) (p₁ p₂ : ι → P) :
+    (∑ i ∈ s, w i • (p₁ i -ᵥ p₂ i)) = s.weightedVSub p₁ w - s.weightedVSub p₂ w := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+theorem sum_smul_vsub_eq_weightedVSub_sub (w : ι → k) (p₁ p₂ : ι → P) :
+    (∑ i ∈ s, w i • (p₁ i -ᵥ p₂ i)) = s.weightedVSub p₁ w - s.weightedVSub p₂ w := by
+  classical
+  induction s using Finset.induction with
+  | empty =>
+      simp [Finset.weightedVSub]
+  | @insert a s ha ih =>
+      simp only [Finset.sum_insert, ha, not_false_eq_true, Finset.weightedVSub_insert, ih]
+      rw [smul_vsub_assoc, add_assoc]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:18:60-18:86
+Unknown constant `Finset.weightedVSub_insert`
+Source line 18:
+      simp only [Finset.sum_insert, ha, not_false_eq_true, Finset.weightedVSub_insert, ih]
+                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.weightedVSub_insert
+
+ERROR .LspCheck.lean:19:11-19:26
+Unknown identifier `smul_vsub_assoc`
+Source line 19:
+      rw [smul_vsub_assoc, add_assoc]
+          ^^^^^^^^^^^^^^^
+Highlighted span: smul_vsub_assoc
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:18:60-18:86
+Unknown constant `Finset.weightedVSub_insert`
+Source line 18:
+      simp only [Finset.sum_insert, ha, not_false_eq_true, Finset.weightedVSub_insert, ih]
+                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.weightedVSub_insert
+
+ERROR .LspCheck.lean:19:11-19:26
+Unknown identifier `smul_vsub_assoc`
+Source line 19:
+      rw [smul_vsub_assoc, add_assoc]
+          ^^^^^^^^^^^^^^^
+Highlighted span: smul_vsub_assoc
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+theorem sum_smul_vsub_eq_weightedVSub_sub (w : ι → k) (p₁ p₂ : ι → P) :
+    (∑ i ∈ s, w i • (p₁ i -ᵥ p₂ i)) = s.weightedVSub p₁ w - s.weightedVSub p₂ w := by
+  classical
+  simpa [Finset.weightedVSub, smul_sub, Finset.sum_sub_distrib] using
+    congrArg (fun x => x - ∑ i ∈ s, w i • p₂ i) (rfl : (∑ i ∈ s, w i • p₁ i) = ∑ i ∈ s, w i • p₁ i)
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:37-15:47
+failed to synthesize instance of type class
+  HSMul k P ?m.54
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 15:
+    congrArg (fun x => x - ∑ i ∈ s, w i • p₂ i) (rfl : (∑ i ∈ s, w i • p₁ i) = ∑ i ∈ s, w i • p₁ i)
+                                    ^^^^^^^^^^
+Highlighted span: w i • p₂ i
+
+ERROR .LspCheck.lean:15:66-15:76
+failed to synthesize instance of type class
+  HSMul k P ?m.71
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 15:
+    congrArg (fun x => x - ∑ i ∈ s, w i • p₂ i) (rfl : (∑ i ∈ s, w i • p₁ i) = ∑ i ∈ s, w i • p₁ i)
+                                                                 ^^^^^^^^^^
+Highlighted span: w i • p₁ i
+
+ERROR .LspCheck.lean:15:89-15:99
+failed to synthesize instance of type class
+  HSMul k P ?m.80
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 15:
+    congrArg (fun x => x - ∑ i ∈ s, w i • p₂ i) (rfl : (∑ i ∈ s, w i • p₁ i) = ∑ i ∈ s, w i • p₁ i)
+                                                                                        ^^^^^^^^^^
+Highlighted span: w i • p₁ i
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:37-15:47
+failed to synthesize instance of type class
+  HSMul k P ?m.54
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 15:
+    congrArg (fun x => x - ∑ i ∈ s, w i • p₂ i) (rfl : (∑ i ∈ s, w i • p₁ i) = ∑ i ∈ s, w i • p₁ i)
+                                    ^^^^^^^^^^
+Highlighted span: w i • p₂ i
+
+ERROR .LspCheck.lean:15:66-15:76
+failed to synthesize instance of type class
+  HSMul k P ?m.71
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 15:
+    congrArg (fun x => x - ∑ i ∈ s, w i • p₂ i) (rfl : (∑ i ∈ s, w i • p₁ i) = ∑ i ∈ s, w i • p₁ i)
+                                                                 ^^^^^^^^^^
+Highlighted span: w i • p₁ i
+
+ERROR .LspCheck.lean:15:89-15:99
+failed to synthesize instance of type class
+  HSMul k P ?m.80
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 15:
+    congrArg (fun x => x - ∑ i ∈ s, w i • p₂ i) (rfl : (∑ i ∈ s, w i • p₁ i) = ∑ i ∈ s, w i • p₁ i)
+                                                                                        ^^^^^^^^^^
+Highlighted span: w i • p₁ i
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+theorem sum_smul_vsub_eq_weightedVSub_sub (w : ι → k) (p₁ p₂ : ι → P) :
+    (∑ i ∈ s, w i • (p₁ i -ᵥ p₂ i)) = s.weightedVSub p₁ w - s.weightedVSub p₂ w := by
+  classical
+  simp_rw [Finset.weightedVSub, smul_vsub]
+  rw [Finset.sum_sub_distrib]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:33-14:42
+Unknown identifier `smul_vsub`
+Source line 14:
+  simp_rw [Finset.weightedVSub, smul_vsub]
+                                ^^^^^^^^^
+Highlighted span: smul_vsub
+
+ERROR .LspCheck.lean:14:33-14:42
+`simp` made no progress
+Source line 14:
+  simp_rw [Finset.weightedVSub, smul_vsub]
+                                ^^^^^^^^^
+Highlighted span: smul_vsub
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:33-14:42
+Unknown identifier `smul_vsub`
+Source line 14:
+  simp_rw [Finset.weightedVSub, smul_vsub]
+                                ^^^^^^^^^
+Highlighted span: smul_vsub
+
+ERROR .LspCheck.lean:14:33-14:42
+`simp` made no progress
+Source line 14:
+  simp_rw [Finset.weightedVSub, smul_vsub]
+                                ^^^^^^^^^
+Highlighted span: smul_vsub

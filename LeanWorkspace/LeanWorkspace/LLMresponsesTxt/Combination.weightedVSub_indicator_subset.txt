@@ -1,0 +1,359 @@
+FILE: Combination.weightedVSub_indicator_subset.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Combination.weightedVSub_indicator_subset.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+theorem weightedVSub_indicator_subset (w : ι → k) (p : ι → P) {s₁ s₂ : Finset ι} (h : s₁ ⊆ s₂) :
+    s₁.weightedVSub p w = s₂.weightedVSub p (Set.indicator (↑s₁) w) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+theorem weightedVSub_indicator_subset (w : ι → k) (p : ι → P) {s₁ s₂ : Finset ι} (h : s₁ ⊆ s₂) :
+    s₁.weightedVSub p w = s₂.weightedVSub p (Set.indicator (↑s₁) w) := by
+  classical
+  rw [Finset.weightedVSub_eq_weightedVSub_of_eqOn]
+  intro i hi
+  simp [Set.indicator_of_mem]
+  exact h hi
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:7-14:50
+Unknown constant `Finset.weightedVSub_eq_weightedVSub_of_eqOn`
+Source line 14:
+  rw [Finset.weightedVSub_eq_weightedVSub_of_eqOn]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.weightedVSub_eq_weightedVSub_of_eqOn
+
+ERROR .LspCheck.lean:12:72-13:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+w : ι → k
+p : ι → P
+s₁ s₂ : Finset ι
+h : s₁ ⊆ s₂
+⊢ (s₁.weightedVSub p) w = (s₂.weightedVSub p) ((↑s₁).indicator w)
+Source line 12:
+    s₁.weightedVSub p w = s₂.weightedVSub p (Set.indicator (↑s₁) w) := by
+                                                                       ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:7-14:50
+Unknown constant `Finset.weightedVSub_eq_weightedVSub_of_eqOn`
+Source line 14:
+  rw [Finset.weightedVSub_eq_weightedVSub_of_eqOn]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.weightedVSub_eq_weightedVSub_of_eqOn
+
+ERROR .LspCheck.lean:12:72-13:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+w : ι → k
+p : ι → P
+s₁ s₂ : Finset ι
+h : s₁ ⊆ s₂
+⊢ (s₁.weightedVSub p) w = (s₂.weightedVSub p) ((↑s₁).indicator w)
+Source line 12:
+    s₁.weightedVSub p w = s₂.weightedVSub p (Set.indicator (↑s₁) w) := by
+                                                                       ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+theorem weightedVSub_indicator_subset (w : ι → k) (p : ι → P) {s₁ s₂ : Finset ι} (h : s₁ ⊆ s₂) :
+    s₁.weightedVSub p w = s₂.weightedVSub p (Set.indicator (↑s₁) w) := by
+  classical
+  induction s₂ using Finset.induction_on with
+  | empty =>
+      have hs : s₁ = ∅ := Finset.eq_empty_iff_forall_not_mem.mpr fun i hi => by
+        exact Finset.not_mem_empty i (h hi)
+      subst hs
+      simp
+  | @insert a s ha ih =>
+      by_cases ha1 : a ∈ s₁
+      · have hs₁ : s₁.erase a ⊆ s := by
+          intro i hi
+          have hi' : i ∈ s₁ := Finset.mem_of_mem_erase hi
+          have : i ∈ insert a s := h hi'
+          simp at this
+          exact this.elim (fun hia => (Finset.not_mem_erase i hi).elim hia) id
+        have hsubset : s₁.erase a ⊆ s := hs₁
+        have ih' := ih hsubset
+        rw [Finset.weightedVSub_insert ha]
+        rw [ih']
+        have hs₁a : a ∈ s₁ := ha1
+        rw [Finset.weightedVSub_insert (Finset.not_mem_erase a s₁)]
+        · congr 1
+          funext i
+          by_cases hi : i = a
+          · subst hi
+            simp [Set.indicator_of_mem hs₁a]
+          · by_cases his₁ : i ∈ s₁
+            · have hierase : i ∈ s₁.erase a := by simp [his₁, hi]
+              simp [Set.indicator_of_mem his₁, Set.indicator_of_mem hierase, hi]
+            · have hierase : i ∉ s₁.erase a := by simp [his₁]
+              simp [Set.indicator_of_not_mem his₁, Set.indicator_of_not_mem hierase, hi]
+        · simp [ha1]
+      · have hs₁ : s₁ ⊆ s := by
+          intro i hi
+          have : i ∈ insert a s := h hi
+          simp at this
+          exact this.elim (fun hia => (ha1 (hia ▸ hi)).elim) id
+        have ih' := ih hs₁
+        rw [Finset.weightedVSub_insert ha]
+        simp [Set.indicator_of_not_mem ha1, ih']
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:27-16:65
+Unknown constant `Finset.eq_empty_iff_forall_not_mem.mpr`
+Source line 16:
+      have hs : s₁ = ∅ := Finset.eq_empty_iff_forall_not_mem.mpr fun i hi => by
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.eq_empty_iff_forall_not_mem.mpr
+
+ERROR .LspCheck.lean:27:40-27:60
+Unknown constant `Finset.not_mem_erase`
+Source line 27:
+          exact this.elim (fun hia => (Finset.not_mem_erase i hi).elim hia) id
+                                       ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.not_mem_erase
+
+ERROR .LspCheck.lean:29:24-29:31
+Application type mismatch: The argument
+  hsubset
+has type
+  s₁.erase a ⊆ s
+but is expected to have type
+  s₁ ⊆ s
+in the application
+  ih hsubset
+Source line 29:
+        have ih' := ih hsubset
+                       ^^^^^^^
+Highlighted span: hsubset
+
+ERROR .LspCheck.lean:30:13-30:39
+Unknown constant `Finset.weightedVSub_insert`
+Source line 30:
+        rw [Finset.weightedVSub_insert ha]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.weightedVSub_insert
+
+ERROR .LspCheck.lean:51:13-51:39
+Unknown constant `Finset.weightedVSub_insert`
+Source line 51:
+        rw [Finset.weightedVSub_insert ha]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.weightedVSub_insert
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:27-16:65
+Unknown constant `Finset.eq_empty_iff_forall_not_mem.mpr`
+Source line 16:
+      have hs : s₁ = ∅ := Finset.eq_empty_iff_forall_not_mem.mpr fun i hi => by
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.eq_empty_iff_forall_not_mem.mpr
+
+ERROR .LspCheck.lean:27:40-27:60
+Unknown constant `Finset.not_mem_erase`
+Source line 27:
+          exact this.elim (fun hia => (Finset.not_mem_erase i hi).elim hia) id
+                                       ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.not_mem_erase
+
+ERROR .LspCheck.lean:29:24-29:31
+Application type mismatch: The argument
+  hsubset
+has type
+  s₁.erase a ⊆ s
+but is expected to have type
+  s₁ ⊆ s
+in the application
+  ih hsubset
+Source line 29:
+        have ih' := ih hsubset
+                       ^^^^^^^
+Highlighted span: hsubset
+
+ERROR .LspCheck.lean:30:13-30:39
+Unknown constant `Finset.weightedVSub_insert`
+Source line 30:
+        rw [Finset.weightedVSub_insert ha]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.weightedVSub_insert
+
+ERROR .LspCheck.lean:51:13-51:39
+Unknown constant `Finset.weightedVSub_insert`
+Source line 51:
+        rw [Finset.weightedVSub_insert ha]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.weightedVSub_insert
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+theorem weightedVSub_indicator_subset (w : ι → k) (p : ι → P) {s₁ s₂ : Finset ι} (h : s₁ ⊆ s₂) :
+    s₁.weightedVSub p w = s₂.weightedVSub p (Set.indicator (↑s₁) w) := by
+  classical
+  simp only [Finset.weightedVSub, smul_eq_mul, Set.indicator_apply]
+  refine Finset.sum_subset h ?_
+  intro x hx1 hx2
+  simp [hx2]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:10-15:32
+typeclass instance problem is stuck
+  AddCommMonoid ?m.32
+
+Note: Lean will not try to resolve this typeclass instance problem because the type argument to `AddCommMonoid` is a metavariable. This argument must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+Source line 15:
+  refine Finset.sum_subset h ?_
+         ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.sum_subset h ?_
+
+WARNING .LspCheck.lean:14:35-14:46
+This simp argument is unused:
+  smul_eq_mul
+
+Hint: Omit it from the simp argument list.
+  simp only [Finset.weightedVSub, s̵m̵u̵l̵_̵e̵q̵_̵m̵u̵l̵,̵ ̵Set.indicator_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 14:
+  simp only [Finset.weightedVSub, smul_eq_mul, Set.indicator_apply]
+                                  ^^^^^^^^^^^
+Highlighted span: smul_eq_mul
+
+WARNING .LspCheck.lean:14:48-14:67
+This simp argument is unused:
+  Set.indicator_apply
+
+Hint: Omit it from the simp argument list.
+  simp only [Finset.weightedVSub, smul_eq_mul,̵ ̵S̵e̵t̵.̵i̵n̵d̵i̵c̵a̵t̵o̵r̵_̵a̵p̵p̵l̵y̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 14:
+  simp only [Finset.weightedVSub, smul_eq_mul, Set.indicator_apply]
+                                               ^^^^^^^^^^^^^^^^^^^
+Highlighted span: Set.indicator_apply
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:10-15:32
+typeclass instance problem is stuck
+  AddCommMonoid ?m.32
+
+Note: Lean will not try to resolve this typeclass instance problem because the type argument to `AddCommMonoid` is a metavariable. This argument must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+Source line 15:
+  refine Finset.sum_subset h ?_
+         ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.sum_subset h ?_
+
+WARNING .LspCheck.lean:14:35-14:46
+This simp argument is unused:
+  smul_eq_mul
+
+Hint: Omit it from the simp argument list.
+  simp only [Finset.weightedVSub, s̵m̵u̵l̵_̵e̵q̵_̵m̵u̵l̵,̵ ̵Set.indicator_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 14:
+  simp only [Finset.weightedVSub, smul_eq_mul, Set.indicator_apply]
+                                  ^^^^^^^^^^^
+Highlighted span: smul_eq_mul
+
+WARNING .LspCheck.lean:14:48-14:67
+This simp argument is unused:
+  Set.indicator_apply
+
+Hint: Omit it from the simp argument list.
+  simp only [Finset.weightedVSub, smul_eq_mul,̵ ̵S̵e̵t̵.̵i̵n̵d̵i̵c̵a̵t̵o̵r̵_̵a̵p̵p̵l̵y̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 14:
+  simp only [Finset.weightedVSub, smul_eq_mul, Set.indicator_apply]
+                                               ^^^^^^^^^^^^^^^^^^^
+Highlighted span: Set.indicator_apply

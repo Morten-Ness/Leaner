@@ -1,0 +1,283 @@
+FILE: Lattice.ext_on_codisjoint.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Lattice.ext_on_codisjoint.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R A B : Type*} [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B]
+
+variable {F : Type*}
+
+variable [FunLike F A B] [AlgHomClass F R A B]
+
+theorem ext_on_codisjoint {φ ψ : F} {S T : Subalgebra R A} (hST : Codisjoint S T)
+    (hS : Set.EqOn φ ψ S) (hT : Set.EqOn φ ψ T) : φ = ψ := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R A B : Type*} [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B]
+
+variable {F : Type*}
+
+variable [FunLike F A B] [AlgHomClass F R A B]
+
+theorem ext_on_codisjoint {φ ψ : F} {S T : Subalgebra R A} (hST : Codisjoint S T)
+    (hS : Set.EqOn φ ψ S) (hT : Set.EqOn φ ψ T) : φ = ψ := by
+  ext x
+  let y : S ⊔ T := ⟨x, by
+    rw [hST.sup_eq_top]
+    exact Subalgebra.mem_top⟩
+  have hy : y ∈ (S ⊔ T) := y.2
+  rw [Subalgebra.mem_sup] at hy
+  rcases hy with ⟨s, hs, t, ht, rfl⟩
+  rw [map_add, map_add, hS hs, hT ht]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:3-11:8
+No applicable extensionality theorem found for type
+  F
+
+Note: Extensionality theorems can be registered by marking them with the `[ext]` attribute
+Source line 11:
+  ext x
+  ^^^^^
+Highlighted span: ext x
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:3-11:8
+No applicable extensionality theorem found for type
+  F
+
+Note: Extensionality theorems can be registered by marking them with the `[ext]` attribute
+Source line 11:
+  ext x
+  ^^^^^
+Highlighted span: ext x
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R A B : Type*} [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B]
+
+variable {F : Type*}
+
+variable [FunLike F A B] [AlgHomClass F R A B]
+
+theorem ext_on_codisjoint {φ ψ : F} {S T : Subalgebra R A} (hST : Codisjoint S T)
+    (hS : Set.EqOn φ ψ S) (hT : Set.EqOn φ ψ T) : φ = ψ := by
+  apply DFunLike.ext
+  intro x
+  let y : S ⊔ T := ⟨x, by
+    rw [hST.sup_eq_top]
+    exact Subalgebra.mem_top⟩
+  have hy : y ∈ (S ⊔ T) := y.2
+  rw [Subalgebra.mem_sup] at hy
+  rcases hy with ⟨s, hs, t, ht, rfl⟩
+  rw [map_add, map_add, hS hs, hT ht]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:11-13:16
+failed to synthesize instance of type class
+  Max (Type u_2)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 13:
+  let y : S ⊔ T := ⟨x, by
+          ^^^^^
+Highlighted span: S ⊔ T
+
+ERROR .LspCheck.lean:17:7-17:25
+Unknown constant `Subalgebra.mem_sup`
+Source line 17:
+  rw [Subalgebra.mem_sup] at hy
+      ^^^^^^^^^^^^^^^^^^
+Highlighted span: Subalgebra.mem_sup
+
+ERROR .LspCheck.lean:10:60-11:1
+unsolved goals
+case h
+R : Type u_1
+A : Type u_2
+B : Type u_3
+inst✝⁶ : CommSemiring R
+inst✝⁵ : Semiring A
+inst✝⁴ : Algebra R A
+inst✝³ : Semiring B
+inst✝² : Algebra R B
+F : Type u_4
+inst✝¹ : FunLike F A B
+inst✝ : AlgHomClass F R A B
+φ ψ : F
+S T : Subalgebra R A
+hST : Codisjoint S T
+hS : Set.EqOn ⇑φ ⇑ψ ↑S
+hT : Set.EqOn ⇑φ ⇑ψ ↑T
+x : A
+y : sorry := sorry
+hy : sorry
+⊢ φ x = ψ x
+Source line 10:
+    (hS : Set.EqOn φ ψ S) (hT : Set.EqOn φ ψ T) : φ = ψ := by
+                                                           ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:11-13:16
+failed to synthesize instance of type class
+  Max (Type u_2)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 13:
+  let y : S ⊔ T := ⟨x, by
+          ^^^^^
+Highlighted span: S ⊔ T
+
+ERROR .LspCheck.lean:17:7-17:25
+Unknown constant `Subalgebra.mem_sup`
+Source line 17:
+  rw [Subalgebra.mem_sup] at hy
+      ^^^^^^^^^^^^^^^^^^
+Highlighted span: Subalgebra.mem_sup
+
+ERROR .LspCheck.lean:10:60-11:1
+unsolved goals
+case h
+R : Type u_1
+A : Type u_2
+B : Type u_3
+inst✝⁶ : CommSemiring R
+inst✝⁵ : Semiring A
+inst✝⁴ : Algebra R A
+inst✝³ : Semiring B
+inst✝² : Algebra R B
+F : Type u_4
+inst✝¹ : FunLike F A B
+inst✝ : AlgHomClass F R A B
+φ ψ : F
+S T : Subalgebra R A
+hST : Codisjoint S T
+hS : Set.EqOn ⇑φ ⇑ψ ↑S
+hT : Set.EqOn ⇑φ ⇑ψ ↑T
+x : A
+y : sorry := sorry
+hy : sorry
+⊢ φ x = ψ x
+Source line 10:
+    (hS : Set.EqOn φ ψ S) (hT : Set.EqOn φ ψ T) : φ = ψ := by
+                                                           ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R A B : Type*} [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B]
+
+variable {F : Type*}
+
+variable [FunLike F A B] [AlgHomClass F R A B]
+
+theorem ext_on_codisjoint {φ ψ : F} {S T : Subalgebra R A} (hST : Codisjoint S T)
+    (hS : Set.EqOn φ ψ S) (hT : Set.EqOn φ ψ T) : φ = ψ := by
+  apply DFunLike.ext
+  intro x
+  rw [← show ((⊤ : Subalgebra R A) : Set A) x ↔ x ∈ (S ⊔ T : Subalgebra R A) by
+    rw [hST.sup_eq_top]]
+  rw [Subalgebra.mem_toSubmodule] at *
+  change x ∈ ((S : Submodule R A) ⊔ (T : Submodule R A)) at ‹x ∈ (S ⊔ T : Subalgebra R A)›
+  rw [Submodule.mem_sup] at ‹x ∈ ((S : Submodule R A) ⊔ (T : Submodule R A))›
+  rcases ‹x ∈ ((S : Submodule R A) ⊔ (T : Submodule R A))› with ⟨s, hs, t, ht, rfl⟩
+  rw [map_add, hS hs, hT ht]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:7-14:1
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  x ∈ S ⊔ T
+in the target expression
+  φ x = ψ x
+
+case h
+R : Type u_1
+A : Type u_2
+B : Type u_3
+inst✝⁶ : CommSemiring R
+inst✝⁵ : Semiring A
+inst✝⁴ : Algebra R A
+inst✝³ : Semiring B
+inst✝² : Algebra R B
+F : Type u_4
+inst✝¹ : FunLike F A B
+inst✝ : AlgHomClass F R A B
+φ ψ : F
+S T : Subalgebra R A
+hST : Codisjoint S T
+hS : Set.EqOn ⇑φ ⇑ψ ↑S
+hT : Set.EqOn ⇑φ ⇑ψ ↑T
+x : A
+⊢ φ x = ψ x
+Source line 13:
+  rw [← show ((⊤ : Subalgebra R A) : Set A) x ↔ x ∈ (S ⊔ T : Subalgebra R A) by
+      ^
+Highlighted span: ←
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:7-14:1
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  x ∈ S ⊔ T
+in the target expression
+  φ x = ψ x
+
+case h
+R : Type u_1
+A : Type u_2
+B : Type u_3
+inst✝⁶ : CommSemiring R
+inst✝⁵ : Semiring A
+inst✝⁴ : Algebra R A
+inst✝³ : Semiring B
+inst✝² : Algebra R B
+F : Type u_4
+inst✝¹ : FunLike F A B
+inst✝ : AlgHomClass F R A B
+φ ψ : F
+S T : Subalgebra R A
+hST : Codisjoint S T
+hS : Set.EqOn ⇑φ ⇑ψ ↑S
+hT : Set.EqOn ⇑φ ⇑ψ ↑T
+x : A
+⊢ φ x = ψ x
+Source line 13:
+  rw [← show ((⊤ : Subalgebra R A) : Set A) x ↔ x ∈ (S ⊔ T : Subalgebra R A) by
+      ^
+Highlighted span: ←

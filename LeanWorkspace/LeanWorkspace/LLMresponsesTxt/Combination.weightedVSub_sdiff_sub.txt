@@ -1,0 +1,493 @@
+FILE: Combination.weightedVSub_sdiff_sub.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Combination.weightedVSub_sdiff_sub.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+theorem weightedVSub_sdiff_sub [DecidableEq ι] {s₂ : Finset ι} (h : s₂ ⊆ s) (w : ι → k)
+    (p : ι → P) : (s \ s₂).weightedVSub p w - s₂.weightedVSub p (-w) = s.weightedVSub p w := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+theorem weightedVSub_sdiff_sub [DecidableEq ι] {s₂ : Finset ι} (h : s₂ ⊆ s) (w : ι → k)
+    (p : ι → P) : (s \ s₂).weightedVSub p w - s₂.weightedVSub p (-w) = s.weightedVSub p w := by
+  rw [sub_eq_add_neg, ← Finset.weightedVSub_neg, ← Finset.weightedVSub_union]
+  exact Finset.sdiff_disjoint h
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:25-13:48
+Unknown constant `Finset.weightedVSub_neg`
+Source line 13:
+  rw [sub_eq_add_neg, ← Finset.weightedVSub_neg, ← Finset.weightedVSub_union]
+                        ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.weightedVSub_neg
+
+ERROR .LspCheck.lean:12:94-13:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s : Finset ι
+inst✝ : DecidableEq ι
+s₂ : Finset ι
+h : s₂ ⊆ s
+w : ι → k
+p : ι → P
+⊢ ((s \ s₂).weightedVSub p) w + -(s₂.weightedVSub p) (-w) = (s.weightedVSub p) w
+Source line 12:
+    (p : ι → P) : (s \ s₂).weightedVSub p w - s₂.weightedVSub p (-w) = s.weightedVSub p w := by
+                                                                                             ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:25-13:48
+Unknown constant `Finset.weightedVSub_neg`
+Source line 13:
+  rw [sub_eq_add_neg, ← Finset.weightedVSub_neg, ← Finset.weightedVSub_union]
+                        ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.weightedVSub_neg
+
+ERROR .LspCheck.lean:12:94-13:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s : Finset ι
+inst✝ : DecidableEq ι
+s₂ : Finset ι
+h : s₂ ⊆ s
+w : ι → k
+p : ι → P
+⊢ ((s \ s₂).weightedVSub p) w + -(s₂.weightedVSub p) (-w) = (s.weightedVSub p) w
+Source line 12:
+    (p : ι → P) : (s \ s₂).weightedVSub p w - s₂.weightedVSub p (-w) = s.weightedVSub p w := by
+                                                                                             ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+theorem weightedVSub_sdiff_sub [DecidableEq ι] {s₂ : Finset ι} (h : s₂ ⊆ s) (w : ι → k)
+    (p : ι → P) : (s \ s₂).weightedVSub p w - s₂.weightedVSub p (-w) = s.weightedVSub p w := by
+  classical
+  simp only [Finset.weightedVSub, Finset.sum_sdiff h, Pi.neg_apply, smul_neg, sub_eq_add_neg,
+    add_comm, add_left_comm, add_assoc]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:94-13:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s : Finset ι
+inst✝ : DecidableEq ι
+s₂ : Finset ι
+h : s₂ ⊆ s
+w : ι → k
+p : ι → P
+⊢ ((s \ s₂).weightedVSubOfPoint p (Classical.choice ⋯)) w + -(s₂.weightedVSubOfPoint p (Classical.choice ⋯)) (-w) =
+    (s.weightedVSubOfPoint p (Classical.choice ⋯)) w
+Source line 12:
+    (p : ι → P) : (s \ s₂).weightedVSub p w - s₂.weightedVSub p (-w) = s.weightedVSub p w := by
+                                                                                             ^
+Highlighted span: b
+
+WARNING .LspCheck.lean:14:35-14:53
+This simp argument is unused:
+  Finset.sum_sdiff h
+
+Hint: Omit it from the simp argument list.
+  simp only [Finset.weightedVSub, F̵i̵n̵s̵e̵t̵.̵s̵u̵m̵_̵s̵d̵i̵f̵f̵ ̵h̵,̵ ̵Pi.neg_apply, smul_neg, sub_eq_add_neg, add_comm, add_left_comm,
+  ̲  ̲ ̲ ̲add_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 14:
+  simp only [Finset.weightedVSub, Finset.sum_sdiff h, Pi.neg_apply, smul_neg, sub_eq_add_neg,
+                                  ^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.sum_sdiff h
+
+WARNING .LspCheck.lean:14:55-14:67
+This simp argument is unused:
+  Pi.neg_apply
+
+Hint: Omit it from the simp argument list.
+  simp only [Finset.weightedVSub, Finset.sum_sdiff h, P̵i̵.̵n̵e̵g̵_̵a̵p̵p̵l̵y̵,̵ ̵smul_neg, sub_eq_add_neg,
+  ̵  ̵ ̵ ̵add_comm,
+  ̲  ̲ ̲ ̲add_left_comm, add_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 14:
+  simp only [Finset.weightedVSub, Finset.sum_sdiff h, Pi.neg_apply, smul_neg, sub_eq_add_neg,
+                                                      ^^^^^^^^^^^^
+Highlighted span: Pi.neg_apply
+
+WARNING .LspCheck.lean:14:69-14:77
+This simp argument is unused:
+  smul_neg
+
+Hint: Omit it from the simp argument list.
+  simp only [Finset.weightedVSub, Finset.sum_sdiff h, Pi.neg_apply, sm̵ul̵_̵n̵e̵g̵,̵ ̵s̵u̵b_eq_add_neg,
+  ̵  ̵ ̵ ̵add_comm,
+  ̲  ̲ ̲ ̲add_left_comm, add_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 14:
+  simp only [Finset.weightedVSub, Finset.sum_sdiff h, Pi.neg_apply, smul_neg, sub_eq_add_neg,
+                                                                    ^^^^^^^^
+Highlighted span: smul_neg
+
+WARNING .LspCheck.lean:15:5-15:13
+This simp argument is unused:
+  add_comm
+
+Hint: Omit it from the simp argument list.
+  simp only [Finset.weightedVSub, Finset.sum_sdiff h, Pi.neg_apply, smul_neg, sub_eq_add_neg,
+      add_c̵o̵m̵m̵,̵ ̵a̵d̵d̵_̵left_comm, add_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 15:
+    add_comm, add_left_comm, add_assoc]
+    ^^^^^^^^
+Highlighted span: add_comm
+
+WARNING .LspCheck.lean:15:15-15:28
+This simp argument is unused:
+  add_left_comm
+
+Hint: Omit it from the simp argument list.
+  simp only [Finset.weightedVSub, Finset.sum_sdiff h, Pi.neg_apply, smul_neg, sub_eq_add_neg,
+      add_comm, add_l̵e̵f̵t̵_̵c̵o̵m̵m̵,̵ ̵ad̵d̵_̵a̵ssoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 15:
+    add_comm, add_left_comm, add_assoc]
+              ^^^^^^^^^^^^^
+Highlighted span: add_left_comm
+
+WARNING .LspCheck.lean:15:30-15:39
+This simp argument is unused:
+  add_assoc
+
+Hint: Omit it from the simp argument list.
+  simp only [Finset.weightedVSub, Finset.sum_sdiff h, Pi.neg_apply, smul_neg, sub_eq_add_neg,
+      add_comm, add_left_comm,̵ ̵a̵d̵d̵_̵a̵s̵s̵o̵c̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 15:
+    add_comm, add_left_comm, add_assoc]
+                             ^^^^^^^^^
+Highlighted span: add_assoc
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:94-13:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s : Finset ι
+inst✝ : DecidableEq ι
+s₂ : Finset ι
+h : s₂ ⊆ s
+w : ι → k
+p : ι → P
+⊢ ((s \ s₂).weightedVSubOfPoint p (Classical.choice ⋯)) w + -(s₂.weightedVSubOfPoint p (Classical.choice ⋯)) (-w) =
+    (s.weightedVSubOfPoint p (Classical.choice ⋯)) w
+Source line 12:
+    (p : ι → P) : (s \ s₂).weightedVSub p w - s₂.weightedVSub p (-w) = s.weightedVSub p w := by
+                                                                                             ^
+Highlighted span: b
+
+WARNING .LspCheck.lean:14:35-14:53
+This simp argument is unused:
+  Finset.sum_sdiff h
+
+Hint: Omit it from the simp argument list.
+  simp only [Finset.weightedVSub, F̵i̵n̵s̵e̵t̵.̵s̵u̵m̵_̵s̵d̵i̵f̵f̵ ̵h̵,̵ ̵Pi.neg_apply, smul_neg, sub_eq_add_neg, add_comm, add_left_comm,
+  ̲  ̲ ̲ ̲add_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 14:
+  simp only [Finset.weightedVSub, Finset.sum_sdiff h, Pi.neg_apply, smul_neg, sub_eq_add_neg,
+                                  ^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.sum_sdiff h
+
+WARNING .LspCheck.lean:14:55-14:67
+This simp argument is unused:
+  Pi.neg_apply
+
+Hint: Omit it from the simp argument list.
+  simp only [Finset.weightedVSub, Finset.sum_sdiff h, P̵i̵.̵n̵e̵g̵_̵a̵p̵p̵l̵y̵,̵ ̵smul_neg, sub_eq_add_neg,
+  ̵  ̵ ̵ ̵add_comm,
+  ̲  ̲ ̲ ̲add_left_comm, add_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 14:
+  simp only [Finset.weightedVSub, Finset.sum_sdiff h, Pi.neg_apply, smul_neg, sub_eq_add_neg,
+                                                      ^^^^^^^^^^^^
+Highlighted span: Pi.neg_apply
+
+WARNING .LspCheck.lean:14:69-14:77
+This simp argument is unused:
+  smul_neg
+
+Hint: Omit it from the simp argument list.
+  simp only [Finset.weightedVSub, Finset.sum_sdiff h, Pi.neg_apply, sm̵ul̵_̵n̵e̵g̵,̵ ̵s̵u̵b_eq_add_neg,
+  ̵  ̵ ̵ ̵add_comm,
+  ̲  ̲ ̲ ̲add_left_comm, add_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 14:
+  simp only [Finset.weightedVSub, Finset.sum_sdiff h, Pi.neg_apply, smul_neg, sub_eq_add_neg,
+                                                                    ^^^^^^^^
+Highlighted span: smul_neg
+
+WARNING .LspCheck.lean:15:5-15:13
+This simp argument is unused:
+  add_comm
+
+Hint: Omit it from the simp argument list.
+  simp only [Finset.weightedVSub, Finset.sum_sdiff h, Pi.neg_apply, smul_neg, sub_eq_add_neg,
+      add_c̵o̵m̵m̵,̵ ̵a̵d̵d̵_̵left_comm, add_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 15:
+    add_comm, add_left_comm, add_assoc]
+    ^^^^^^^^
+Highlighted span: add_comm
+
+WARNING .LspCheck.lean:15:15-15:28
+This simp argument is unused:
+  add_left_comm
+
+Hint: Omit it from the simp argument list.
+  simp only [Finset.weightedVSub, Finset.sum_sdiff h, Pi.neg_apply, smul_neg, sub_eq_add_neg,
+      add_comm, add_l̵e̵f̵t̵_̵c̵o̵m̵m̵,̵ ̵ad̵d̵_̵a̵ssoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 15:
+    add_comm, add_left_comm, add_assoc]
+              ^^^^^^^^^^^^^
+Highlighted span: add_left_comm
+
+WARNING .LspCheck.lean:15:30-15:39
+This simp argument is unused:
+  add_assoc
+
+Hint: Omit it from the simp argument list.
+  simp only [Finset.weightedVSub, Finset.sum_sdiff h, Pi.neg_apply, smul_neg, sub_eq_add_neg,
+      add_comm, add_left_comm,̵ ̵a̵d̵d̵_̵a̵s̵s̵o̵c̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 15:
+    add_comm, add_left_comm, add_assoc]
+                             ^^^^^^^^^
+Highlighted span: add_assoc
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+theorem weightedVSub_sdiff_sub [DecidableEq ι] {s₂ : Finset ι} (h : s₂ ⊆ s) (w : ι → k)
+    (p : ι → P) : (s \ s₂).weightedVSub p w - s₂.weightedVSub p (-w) = s.weightedVSub p w := by
+  classical
+  let p₀ : P := p (Classical.choice <| Finset.nonempty_of_ne_empty <| by
+    intro hs
+    simpa [hs] using h)
+  rw [Finset.weightedVSub_eq_weightedVSubOfPoint_of_sum_eq_zero p₀]
+  · rw [Finset.weightedVSub_eq_weightedVSubOfPoint_of_sum_eq_zero p₀]
+    · rw [Finset.weightedVSubOfPoint_apply, Finset.weightedVSubOfPoint_apply,
+        Finset.weightedVSubOfPoint_apply, sub_eq_add_neg, Finset.sum_sdiff h]
+      simp
+    · simp
+  · simp
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:40-15:1
+Application type mismatch: The argument
+  Finset.nonempty_of_ne_empty ?m.47
+has type
+  Finset.Nonempty ?m.46
+but is expected to have type
+  Nonempty ι
+in the application
+  Classical.choice ⋯
+Source line 14:
+  let p₀ : P := p (Classical.choice <| Finset.nonempty_of_ne_empty <| by
+                                       ^
+Highlighted span: F
+
+ERROR .LspCheck.lean:16:5-16:23
+Type mismatch: After simplification, term
+  h
+ has type
+  s₂ ⊆ s
+but is expected to have type
+  False
+Source line 16:
+    simpa [hs] using h)
+    ^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [hs] using h
+
+ERROR .LspCheck.lean:17:7-17:67
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (Finset.weightedVSub ?m.65 ?p) ?w
+in the target expression
+  ((s \ s₂).weightedVSub p) w - (s₂.weightedVSub p) (-w) = (s.weightedVSub p) w
+
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s : Finset ι
+inst✝ : DecidableEq ι
+s₂ : Finset ι
+h : s₂ ⊆ s
+w : ι → k
+p : ι → P
+p₀ : P := p (Classical.choice ⋯)
+⊢ ((s \ s₂).weightedVSub p) w - (s₂.weightedVSub p) (-w) = (s.weightedVSub p) w
+Source line 17:
+  rw [Finset.weightedVSub_eq_weightedVSubOfPoint_of_sum_eq_zero p₀]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.weightedVSub_eq_weightedVSubOfPoint_of_sum_eq_zero p₀
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:40-15:1
+Application type mismatch: The argument
+  Finset.nonempty_of_ne_empty ?m.47
+has type
+  Finset.Nonempty ?m.46
+but is expected to have type
+  Nonempty ι
+in the application
+  Classical.choice ⋯
+Source line 14:
+  let p₀ : P := p (Classical.choice <| Finset.nonempty_of_ne_empty <| by
+                                       ^
+Highlighted span: F
+
+ERROR .LspCheck.lean:16:5-16:23
+Type mismatch: After simplification, term
+  h
+ has type
+  s₂ ⊆ s
+but is expected to have type
+  False
+Source line 16:
+    simpa [hs] using h)
+    ^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [hs] using h
+
+ERROR .LspCheck.lean:17:7-17:67
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (Finset.weightedVSub ?m.65 ?p) ?w
+in the target expression
+  ((s \ s₂).weightedVSub p) w - (s₂.weightedVSub p) (-w) = (s.weightedVSub p) w
+
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s : Finset ι
+inst✝ : DecidableEq ι
+s₂ : Finset ι
+h : s₂ ⊆ s
+w : ι → k
+p : ι → P
+p₀ : P := p (Classical.choice ⋯)
+⊢ ((s \ s₂).weightedVSub p) w - (s₂.weightedVSub p) (-w) = (s.weightedVSub p) w
+Source line 17:
+  rw [Finset.weightedVSub_eq_weightedVSubOfPoint_of_sum_eq_zero p₀]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.weightedVSub_eq_weightedVSubOfPoint_of_sum_eq_zero p₀

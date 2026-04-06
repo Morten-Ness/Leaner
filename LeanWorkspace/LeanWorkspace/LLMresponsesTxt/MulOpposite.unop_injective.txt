@@ -1,0 +1,78 @@
+FILE: MulOpposite.unop_injective.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: MulOpposite.unop_injective.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {ι : Sort*} {M : Type*} [Mul M]
+
+theorem unop_injective : (@Subsemigroup.unop M _).Injective := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι : Sort*} {M : Type*} [Mul M]
+
+theorem unop_injective : (@Subsemigroup.unop M _).Injective := by
+  intro S T h
+  exact Subsemigroup.op_injective h
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:7:35-7:36
+Application type mismatch: The argument
+  h
+has type
+  S.unop = T.unop
+but is expected to have type
+  S.op = T.op
+in the application
+  Subsemigroup.op_injective h
+Source line 7:
+  exact Subsemigroup.op_injective h
+                                  ^
+Highlighted span: h
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:7:35-7:36
+Application type mismatch: The argument
+  h
+has type
+  S.unop = T.unop
+but is expected to have type
+  S.op = T.op
+in the application
+  Subsemigroup.op_injective h
+Source line 7:
+  exact Subsemigroup.op_injective h
+                                  ^
+Highlighted span: h
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι : Sort*} {M : Type*} [Mul M]
+
+theorem unop_injective : (@Subsemigroup.unop M _).Injective := by
+  intro S T h
+  rw [← Subsemigroup.op_unop S, ← Subsemigroup.op_unop T]
+  exact congrArg Subsemigroup.op h
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

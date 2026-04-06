@@ -1,0 +1,154 @@
+FILE: Basic.mulSingle_mem_pi.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.mulSingle_mem_pi.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable (H K : Subgroup G)
+
+variable {k : Set G}
+
+variable {N : Type*} [Group N] {P : Type*} [Group P]
+
+variable {η : Type*} {f : η → Type*}
+
+variable [∀ i, Group (f i)]
+
+theorem mulSingle_mem_pi [DecidableEq η] {I : Set η} {H : ∀ i, Subgroup (f i)} (i : η) (x : f i) :
+    Pi.mulSingle i x ∈ Subgroup.pi I H ↔ i ∈ I → x ∈ H i := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable (H K : Subgroup G)
+
+variable {k : Set G}
+
+variable {N : Type*} [Group N] {P : Type*} [Group P]
+
+variable {η : Type*} {f : η → Type*}
+
+variable [∀ i, Group (f i)]
+
+theorem mulSingle_mem_pi [DecidableEq η] {I : Set η} {H : ∀ i, Subgroup (f i)} (i : η) (x : f i) :
+    Pi.mulSingle i x ∈ Subgroup.pi I H ↔ i ∈ I → x ∈ H i := by
+  constructor
+  · intro hx hi
+    exact hx i hi
+  · intro hx j hj
+    by_cases hji : j = i
+    · subst hji
+      exact hx hj
+    · simp [Pi.mulSingle, hji]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:23:5-23:18
+Type mismatch
+  hx i hi
+has type
+  Pi.mulSingle i x i ∈ (fun i ↦ ((fun i ↦ (H i).toSubmonoid) i).carrier) i
+but is expected to have type
+  x ∈ H i
+Source line 23:
+    exact hx i hi
+    ^^^^^^^^^^^^^
+Highlighted span: exact hx i hi
+
+ERROR .LspCheck.lean:27:7-27:18
+Type mismatch
+  hx hj
+has type
+  x ∈ H j
+but is expected to have type
+  Pi.mulSingle j x j ∈ (fun i ↦ ((fun i ↦ (H i).toSubmonoid) i).carrier) j
+Source line 27:
+      exact hx hj
+      ^^^^^^^^^^^
+Highlighted span: exact hx hj
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:23:5-23:18
+Type mismatch
+  hx i hi
+has type
+  Pi.mulSingle i x i ∈ (fun i ↦ ((fun i ↦ (H i).toSubmonoid) i).carrier) i
+but is expected to have type
+  x ∈ H i
+Source line 23:
+    exact hx i hi
+    ^^^^^^^^^^^^^
+Highlighted span: exact hx i hi
+
+ERROR .LspCheck.lean:27:7-27:18
+Type mismatch
+  hx hj
+has type
+  x ∈ H j
+but is expected to have type
+  Pi.mulSingle j x j ∈ (fun i ↦ ((fun i ↦ (H i).toSubmonoid) i).carrier) j
+Source line 27:
+      exact hx hj
+      ^^^^^^^^^^^
+Highlighted span: exact hx hj
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable (H K : Subgroup G)
+
+variable {k : Set G}
+
+variable {N : Type*} [Group N] {P : Type*} [Group P]
+
+variable {η : Type*} {f : η → Type*}
+
+variable [∀ i, Group (f i)]
+
+theorem mulSingle_mem_pi [DecidableEq η] {I : Set η} {H : ∀ i, Subgroup (f i)} (i : η) (x : f i) :
+    Pi.mulSingle i x ∈ Subgroup.pi I H ↔ i ∈ I → x ∈ H i := by
+  constructor
+  · intro hx hi
+    simpa [Pi.mulSingle] using hx i hi
+  · intro hx j hj
+    by_cases hji : j = i
+    · subst hji
+      simpa [Pi.mulSingle] using hx hj
+    · simp [Pi.mulSingle, hji]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

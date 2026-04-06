@@ -1,0 +1,164 @@
+FILE: Membership.coe_sSup_of_directedOn.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Membership.coe_sSup_of_directedOn.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {M A B : Type*}
+
+variable [MulOneClass M]
+
+theorem coe_sSup_of_directedOn {S : Set (Submonoid M)} (Sne : S.Nonempty)
+    (hS : DirectedOn (· ≤ ·) S) : (↑(sSup S) : Set M) = ⋃ s ∈ S, ↑s := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M A B : Type*}
+
+variable [MulOneClass M]
+
+theorem coe_sSup_of_directedOn {S : Set (Submonoid M)} (Sne : S.Nonempty)
+    (hS : DirectedOn (· ≤ ·) S) : (↑(sSup S) : Set M) = ⋃ s ∈ S, ↑s := by
+  ext x
+  constructor
+  · intro hx
+    rw [Submonoid.mem_sSup_of_directedOn Sne hS] at hx
+    simpa [Set.mem_iUnion] using hx
+  · intro hx
+    rw [Set.mem_iUnion] at hx
+    rcases hx with ⟨s, hx⟩
+    rw [Set.mem_iUnion] at hx
+    rcases hx with ⟨hsS, hxs⟩
+    rw [Submonoid.mem_sSup_of_directedOn Sne hS]
+    exact ⟨s, hsS, hxs⟩
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:9-12:48
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.42 ∈ sSup S
+in the target expression
+  x ∈ ↑(sSup S)
+
+case h.mp
+M : Type u_1
+inst✝ : MulOneClass M
+S : Set (Submonoid M)
+Sne : S.Nonempty
+hS : DirectedOn (fun x1 x2 ↦ x1 ≤ x2) S
+x : M
+hx : x ∈ ↑(sSup S)
+⊢ x ∈ ⋃ s ∈ S, ↑s
+Source line 12:
+    rw [Submonoid.mem_sSup_of_directedOn Sne hS] at hx
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submonoid.mem_sSup_of_directedOn Sne hS
+
+ERROR .LspCheck.lean:19:9-19:48
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.80 ∈ sSup S
+in the target expression
+  x ∈ ↑(sSup S)
+
+case h.mpr
+M : Type u_1
+inst✝ : MulOneClass M
+S : Set (Submonoid M)
+Sne : S.Nonempty
+hS : DirectedOn (fun x1 x2 ↦ x1 ≤ x2) S
+x : M
+s : Submonoid M
+hsS : s ∈ S
+hxs : x ∈ ↑s
+⊢ x ∈ ↑(sSup S)
+Source line 19:
+    rw [Submonoid.mem_sSup_of_directedOn Sne hS]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submonoid.mem_sSup_of_directedOn Sne hS
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:9-12:48
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.42 ∈ sSup S
+in the target expression
+  x ∈ ↑(sSup S)
+
+case h.mp
+M : Type u_1
+inst✝ : MulOneClass M
+S : Set (Submonoid M)
+Sne : S.Nonempty
+hS : DirectedOn (fun x1 x2 ↦ x1 ≤ x2) S
+x : M
+hx : x ∈ ↑(sSup S)
+⊢ x ∈ ⋃ s ∈ S, ↑s
+Source line 12:
+    rw [Submonoid.mem_sSup_of_directedOn Sne hS] at hx
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submonoid.mem_sSup_of_directedOn Sne hS
+
+ERROR .LspCheck.lean:19:9-19:48
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.80 ∈ sSup S
+in the target expression
+  x ∈ ↑(sSup S)
+
+case h.mpr
+M : Type u_1
+inst✝ : MulOneClass M
+S : Set (Submonoid M)
+Sne : S.Nonempty
+hS : DirectedOn (fun x1 x2 ↦ x1 ≤ x2) S
+x : M
+s : Submonoid M
+hsS : s ∈ S
+hxs : x ∈ ↑s
+⊢ x ∈ ↑(sSup S)
+Source line 19:
+    rw [Submonoid.mem_sSup_of_directedOn Sne hS]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submonoid.mem_sSup_of_directedOn Sne hS
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M A B : Type*}
+
+variable [MulOneClass M]
+
+theorem coe_sSup_of_directedOn {S : Set (Submonoid M)} (Sne : S.Nonempty)
+    (hS : DirectedOn (· ≤ ·) S) : (↑(sSup S) : Set M) = ⋃ s ∈ S, ↑s := by
+  ext x
+  constructor
+  · intro hx
+    change x ∈ sSup S at hx
+    rw [Submonoid.mem_sSup_of_directedOn Sne hS] at hx
+    simpa [Set.mem_iUnion] using hx
+  · intro hx
+    rw [Set.mem_iUnion] at hx
+    rcases hx with ⟨s, hx⟩
+    rw [Set.mem_iUnion] at hx
+    rcases hx with ⟨hsS, hxs⟩
+    change x ∈ sSup S
+    rw [Submonoid.mem_sSup_of_directedOn Sne hS]
+    exact ⟨s, hsS, hxs⟩
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

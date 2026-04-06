@@ -1,0 +1,295 @@
+FILE: Basis.exists_affine_subbasis.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basis.exists_affine_subbasis.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {ι ι' G G' k V P : Type*} [AddCommGroup V] [AddTorsor V P]
+
+variable [DivisionRing k] [Module k V]
+
+theorem exists_affine_subbasis {t : Set P} (ht : affineSpan k t = ⊤) :
+    ∃ s ⊆ t, ∃ b : AffineBasis s k P, ⇑b = ((↑) : s → P) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι ι' G G' k V P : Type*} [AddCommGroup V] [AddTorsor V P]
+
+variable [DivisionRing k] [Module k V]
+
+theorem exists_affine_subbasis {t : Set P} (ht : affineSpan k t = ⊤) :
+    ∃ s ⊆ t, ∃ b : AffineBasis s k P, ⇑b = ((↑) : s → P) := by
+  classical
+  let h' : AffineIndependent k ((↑) : t → P) := by
+    rw [← affineSpan_coe_eq_top_iff]
+    simpa [ht]
+  obtain ⟨s, hs, b⟩ := h'.exists_affineBasis_extension
+  refine ⟨s, hs, b, ?_⟩
+  ext x
+  rfl
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:11-11:36
+Unknown identifier `affineSpan_coe_eq_top_iff`
+Source line 11:
+    rw [← affineSpan_coe_eq_top_iff]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: affineSpan_coe_eq_top_iff
+
+ERROR .LspCheck.lean:10:49-11:1
+unsolved goals
+k : Type u_5
+V : Type u_6
+P : Type u_7
+inst✝³ : AddCommGroup V
+inst✝² : AddTorsor V P
+inst✝¹ : DivisionRing k
+inst✝ : Module k V
+t : Set P
+ht : affineSpan k t = ⊤
+⊢ AffineIndependent k Subtype.val
+Source line 10:
+  let h' : AffineIndependent k ((↑) : t → P) := by
+                                                ^
+Highlighted span: b
+
+ERROR .LspCheck.lean:13:27-13:55
+Invalid field `exists_affineBasis_extension`: The environment does not contain `Function.exists_affineBasis_extension`, so it is not possible to project the field `exists_affineBasis_extension` from an expression
+  h'
+of type
+  ∀ (s : Finset { x // x ∈ t }) (w : { x // x ∈ t } → k),
+    ∑ i ∈ s, w i = 0 → (s.weightedVSub Subtype.val) w = 0 → ∀ i ∈ s, w i = 0
+Source line 13:
+  obtain ⟨s, hs, b⟩ := h'.exists_affineBasis_extension
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: exists_affineBasis_extension
+
+ERROR .LspCheck.lean:13:10-13:20
+Tactic `rcases` failed: `x✝ : ?m.40` is not an inductive datatype
+Source line 13:
+  obtain ⟨s, hs, b⟩ := h'.exists_affineBasis_extension
+         ^^^^^^^^^^
+Highlighted span: ⟨s, hs, b⟩
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:11-11:36
+Unknown identifier `affineSpan_coe_eq_top_iff`
+Source line 11:
+    rw [← affineSpan_coe_eq_top_iff]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: affineSpan_coe_eq_top_iff
+
+ERROR .LspCheck.lean:10:49-11:1
+unsolved goals
+k : Type u_5
+V : Type u_6
+P : Type u_7
+inst✝³ : AddCommGroup V
+inst✝² : AddTorsor V P
+inst✝¹ : DivisionRing k
+inst✝ : Module k V
+t : Set P
+ht : affineSpan k t = ⊤
+⊢ AffineIndependent k Subtype.val
+Source line 10:
+  let h' : AffineIndependent k ((↑) : t → P) := by
+                                                ^
+Highlighted span: b
+
+ERROR .LspCheck.lean:13:27-13:55
+Invalid field `exists_affineBasis_extension`: The environment does not contain `Function.exists_affineBasis_extension`, so it is not possible to project the field `exists_affineBasis_extension` from an expression
+  h'
+of type
+  ∀ (s : Finset { x // x ∈ t }) (w : { x // x ∈ t } → k),
+    ∑ i ∈ s, w i = 0 → (s.weightedVSub Subtype.val) w = 0 → ∀ i ∈ s, w i = 0
+Source line 13:
+  obtain ⟨s, hs, b⟩ := h'.exists_affineBasis_extension
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: exists_affineBasis_extension
+
+ERROR .LspCheck.lean:13:10-13:20
+Tactic `rcases` failed: `x✝ : ?m.40` is not an inductive datatype
+Source line 13:
+  obtain ⟨s, hs, b⟩ := h'.exists_affineBasis_extension
+         ^^^^^^^^^^
+Highlighted span: ⟨s, hs, b⟩
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι ι' G G' k V P : Type*} [AddCommGroup V] [AddTorsor V P]
+
+variable [DivisionRing k] [Module k V]
+
+theorem exists_affine_subbasis {t : Set P} (ht : affineSpan k t = ⊤) :
+    ∃ s ⊆ t, ∃ b : AffineBasis s k P, ⇑b = ((↑) : s → P) := by
+  classical
+  let b : AffineBasis (Set.univ : Set P) k P := AffineBasis.ofPoint (k := k) (P := P)
+  refine ⟨Set.univ, Set.subset_univ t, ?_, ?_⟩
+  · simpa using ht
+  · ext x
+    rfl
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:49-10:68
+Unknown constant `AffineBasis.ofPoint`
+Source line 10:
+  let b : AffineBasis (Set.univ : Set P) k P := AffineBasis.ofPoint (k := k) (P := P)
+                                                ^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineBasis.ofPoint
+
+ERROR .LspCheck.lean:11:21-11:38
+Application type mismatch: The argument
+  Set.subset_univ t
+has type
+  t ⊆ Set.univ
+but is expected to have type
+  Set.univ ⊆ t
+in the application
+  And.intro (Set.subset_univ t)
+Source line 11:
+  refine ⟨Set.univ, Set.subset_univ t, ?_, ?_⟩
+                    ^^^^^^^^^^^^^^^^^
+Highlighted span: Set.subset_univ t
+
+ERROR .LspCheck.lean:12:5-12:19
+Type mismatch: After simplification, term
+  ht
+ has type
+  affineSpan k t = ⊤
+of sort `Prop` but is expected to have type
+  AffineBasis (↑Set.univ) k P
+of sort `Type u_7`
+Source line 12:
+  · simpa using ht
+    ^^^^^^^^^^^^^^
+Highlighted span: simpa using ht
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:49-10:68
+Unknown constant `AffineBasis.ofPoint`
+Source line 10:
+  let b : AffineBasis (Set.univ : Set P) k P := AffineBasis.ofPoint (k := k) (P := P)
+                                                ^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineBasis.ofPoint
+
+ERROR .LspCheck.lean:11:21-11:38
+Application type mismatch: The argument
+  Set.subset_univ t
+has type
+  t ⊆ Set.univ
+but is expected to have type
+  Set.univ ⊆ t
+in the application
+  And.intro (Set.subset_univ t)
+Source line 11:
+  refine ⟨Set.univ, Set.subset_univ t, ?_, ?_⟩
+                    ^^^^^^^^^^^^^^^^^
+Highlighted span: Set.subset_univ t
+
+ERROR .LspCheck.lean:12:5-12:19
+Type mismatch: After simplification, term
+  ht
+ has type
+  affineSpan k t = ⊤
+of sort `Prop` but is expected to have type
+  AffineBasis (↑Set.univ) k P
+of sort `Type u_7`
+Source line 12:
+  · simpa using ht
+    ^^^^^^^^^^^^^^
+Highlighted span: simpa using ht
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι ι' G G' k V P : Type*} [AddCommGroup V] [AddTorsor V P]
+
+variable [DivisionRing k] [Module k V]
+
+theorem exists_affine_subbasis {t : Set P} (ht : affineSpan k t = ⊤) :
+    ∃ s ⊆ t, ∃ b : AffineBasis s k P, ⇑b = ((↑) : s → P) := by
+  classical
+  let b : AffineBasis (Set.univ : Set P) k P := by
+    classical
+    simpa using (AffineBasis.ofEq (k := k) (P := P) (s := (Set.univ : Set P)) (by ext x; simp))
+  refine ⟨t, Set.Subset.rfl, ?_, ?_⟩
+  · simpa [ht] using b.reindex (Equiv.Set.univ t)
+  · ext x
+    rfl
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:18-12:34
+Unknown constant `AffineBasis.ofEq`
+Source line 12:
+    simpa using (AffineBasis.ofEq (k := k) (P := P) (s := (Set.univ : Set P)) (by ext x; simp))
+                 ^^^^^^^^^^^^^^^^
+Highlighted span: AffineBasis.ofEq
+
+ERROR .LspCheck.lean:14:32-14:50
+Application type mismatch: The argument
+  Equiv.Set.univ ↑t
+has type
+  ↑(@Set.univ ↑t) ≃ ↑t
+but is expected to have type
+  ↑(@Set.univ P) ≃ ↑t
+in the application
+  b.reindex (Equiv.Set.univ ↑t)
+Source line 14:
+  · simpa [ht] using b.reindex (Equiv.Set.univ t)
+                               ^^^^^^^^^^^^^^^^^^
+Highlighted span: (Equiv.Set.univ t)
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:18-12:34
+Unknown constant `AffineBasis.ofEq`
+Source line 12:
+    simpa using (AffineBasis.ofEq (k := k) (P := P) (s := (Set.univ : Set P)) (by ext x; simp))
+                 ^^^^^^^^^^^^^^^^
+Highlighted span: AffineBasis.ofEq
+
+ERROR .LspCheck.lean:14:32-14:50
+Application type mismatch: The argument
+  Equiv.Set.univ ↑t
+has type
+  ↑(@Set.univ ↑t) ≃ ↑t
+but is expected to have type
+  ↑(@Set.univ P) ≃ ↑t
+in the application
+  b.reindex (Equiv.Set.univ ↑t)
+Source line 14:
+  · simpa [ht] using b.reindex (Equiv.Set.univ t)
+                               ^^^^^^^^^^^^^^^^^^
+Highlighted span: (Equiv.Set.univ t)

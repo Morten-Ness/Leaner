@@ -1,0 +1,101 @@
+FILE: BigOperators.SubmonoidClass.coe_finset_prod.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: BigOperators.SubmonoidClass.coe_finset_prod.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {M A B : Type*}
+
+variable [Monoid M] [SetLike B M] [SubmonoidClass B M] {x : M} {S : B}
+
+theorem coe_finset_prod {ι M} [CommMonoid M] [SetLike B M] [SubmonoidClass B M] (f : ι → S)
+    (s : Finset ι) : ↑(∏ i ∈ s, f i) = (∏ i ∈ s, f i : M) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M A B : Type*}
+
+variable [Monoid M] [SetLike B M] [SubmonoidClass B M] {x : M} {S : B}
+
+theorem coe_finset_prod {ι M} [CommMonoid M] [SetLike B M] [SubmonoidClass B M] (f : ι → S)
+    (s : Finset ι) : ↑(∏ i ∈ s, f i) = (∏ i ∈ s, f i : M) := by
+  induction s using Finset.induction_on with
+  | empty =>
+      simp
+  | @insert a s ha ih =>
+      simp [ha, ih]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:8:62-9:1
+unsolved goals
+case inst
+B : Type u_3
+S : B
+ι : Type u_4
+M : Type u_5
+inst✝² : CommMonoid M
+inst✝¹ : SetLike B M
+inst✝ : SubmonoidClass B M
+f : ι → ↥S
+s : Finset ι
+⊢ DecidableEq ι
+Source line 8:
+    (s : Finset ι) : ↑(∏ i ∈ s, f i) = (∏ i ∈ s, f i : M) := by
+                                                             ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:8:62-9:1
+unsolved goals
+case inst
+B : Type u_3
+S : B
+ι : Type u_4
+M : Type u_5
+inst✝² : CommMonoid M
+inst✝¹ : SetLike B M
+inst✝ : SubmonoidClass B M
+f : ι → ↥S
+s : Finset ι
+⊢ DecidableEq ι
+Source line 8:
+    (s : Finset ι) : ↑(∏ i ∈ s, f i) = (∏ i ∈ s, f i : M) := by
+                                                             ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M A B : Type*}
+
+variable [Monoid M] [SetLike B M] [SubmonoidClass B M] {x : M} {S : B}
+
+theorem coe_finset_prod {ι M} [CommMonoid M] [SetLike B M] [SubmonoidClass B M] (f : ι → S)
+    (s : Finset ι) : ↑(∏ i ∈ s, f i) = (∏ i ∈ s, f i : M) := by
+  classical
+  induction s using Finset.induction_on with
+  | empty =>
+      simp
+  | @insert a s ha ih =>
+      simp [ha, ih]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

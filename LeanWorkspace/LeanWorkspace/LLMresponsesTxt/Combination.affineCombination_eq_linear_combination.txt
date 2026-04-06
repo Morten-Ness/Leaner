@@ -1,0 +1,242 @@
+FILE: Combination.affineCombination_eq_linear_combination.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Combination.affineCombination_eq_linear_combination.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+variable (k)
+
+variable {k}
+
+theorem affineCombination_eq_linear_combination (s : Finset ι) (p : ι → V) (w : ι → k)
+    (hw : ∑ i ∈ s, w i = 1) : s.affineCombination k p w = ∑ i ∈ s, w i • p i := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+variable (k)
+
+variable {k}
+
+theorem affineCombination_eq_linear_combination (s : Finset ι) (p : ι → V) (w : ι → k)
+    (hw : ∑ i ∈ s, w i = 1) : s.affineCombination k p w = ∑ i ∈ s, w i • p i := by
+  simpa [Finset.affineCombination, hw]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:17:3-17:39
+Tactic `assumption` failed
+
+k : Type u_1
+V : Type u_2
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+ι : Type u_4
+s : Finset ι
+p : ι → V
+w : ι → k
+hw : ∑ i ∈ s, w i = 1
+⊢ ∑ x ∈ s, w x • (p x - Classical.choice ⋯) + Classical.choice ⋯ = ∑ i ∈ s, w i • p i
+Source line 17:
+  simpa [Finset.affineCombination, hw]
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [Finset.affineCombination, hw]
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:17:3-17:39
+Tactic `assumption` failed
+
+k : Type u_1
+V : Type u_2
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+ι : Type u_4
+s : Finset ι
+p : ι → V
+w : ι → k
+hw : ∑ i ∈ s, w i = 1
+⊢ ∑ x ∈ s, w x • (p x - Classical.choice ⋯) + Classical.choice ⋯ = ∑ i ∈ s, w i • p i
+Source line 17:
+  simpa [Finset.affineCombination, hw]
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [Finset.affineCombination, hw]
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+variable (k)
+
+variable {k}
+
+theorem affineCombination_eq_linear_combination (s : Finset ι) (p : ι → V) (w : ι → k)
+    (hw : ∑ i ∈ s, w i = 1) : s.affineCombination k p w = ∑ i ∈ s, w i • p i := by
+  classical
+  rcases s.eq_empty_or_nonempty with rfl | hs
+  · simp [Finset.affineCombination]
+  · rw [Finset.affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one _ _ _ hs hw]
+    let p0 : V := p hs.choose
+    have hp0 : p hs.choose = p0 := rfl
+    rw [show (∑ i ∈ s, w i • (p i -ᵥ p0)) +ᵥ p0 = (∑ i ∈ s, w i • (p i - p0)) + p0 by rfl]
+    simp only [vsub_eq_sub, Finset.smul_sum, smul_sub, Finset.sum_sub_distrib]
+    have hs' : hs.choose ∈ s := hs.choose_spec
+    rw [Finset.sum_const_zero, zero_sub, ← one_smul k p0, ← hw]
+    simp [Finset.mem_univ, Finset.sum_mul, Finset.mul_sum, hp0]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:19:3-19:36
+unsolved goals
+case inl
+k : Type u_1
+V : Type u_2
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+ι : Type u_4
+p : ι → V
+w : ι → k
+hw : ∑ i ∈ ∅, w i = 1
+⊢ Classical.choice ⋯ = 0
+Source line 19:
+  · simp [Finset.affineCombination]
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simp [Finset.affineCombination]
+
+ERROR .LspCheck.lean:20:82-20:84
+Application type mismatch: The argument
+  hs
+has type
+  s.Nonempty
+but is expected to have type
+  ∑ i ∈ ?m.64, ?m.65 i = 1
+in the application
+  Finset.affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one ?m.64 ?m.65 ?m.66 hs
+Source line 20:
+  · rw [Finset.affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one _ _ _ hs hw]
+                                                                                 ^^
+Highlighted span: hs
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:19:3-19:36
+unsolved goals
+case inl
+k : Type u_1
+V : Type u_2
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+ι : Type u_4
+p : ι → V
+w : ι → k
+hw : ∑ i ∈ ∅, w i = 1
+⊢ Classical.choice ⋯ = 0
+Source line 19:
+  · simp [Finset.affineCombination]
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simp [Finset.affineCombination]
+
+ERROR .LspCheck.lean:20:82-20:84
+Application type mismatch: The argument
+  hs
+has type
+  s.Nonempty
+but is expected to have type
+  ∑ i ∈ ?m.64, ?m.65 i = 1
+in the application
+  Finset.affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one ?m.64 ?m.65 ?m.66 hs
+Source line 20:
+  · rw [Finset.affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one _ _ _ hs hw]
+                                                                                 ^^
+Highlighted span: hs
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+variable (k)
+
+variable {k}
+
+theorem affineCombination_eq_linear_combination (s : Finset ι) (p : ι → V) (w : ι → k)
+    (hw : ∑ i ∈ s, w i = 1) : s.affineCombination k p w = ∑ i ∈ s, w i • p i := by
+  classical
+  simpa using
+    (Finset.affineCombination_eq_centroidHom _ _ _ hw)
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:19:6-19:45
+Unknown constant `Finset.affineCombination_eq_centroidHom`
+Source line 19:
+    (Finset.affineCombination_eq_centroidHom _ _ _ hw)
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.affineCombination_eq_centroidHom
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:19:6-19:45
+Unknown constant `Finset.affineCombination_eq_centroidHom`
+Source line 19:
+    (Finset.affineCombination_eq_centroidHom _ _ _ hw)
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.affineCombination_eq_centroidHom

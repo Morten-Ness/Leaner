@@ -1,0 +1,356 @@
+FILE: Basis.coord_apply_combination_of_notMem.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basis.coord_apply_combination_of_notMem.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {ι ι' G G' k V P : Type*} [AddCommGroup V] [AddTorsor V P]
+
+variable [Ring k] [Module k V] (b : AffineBasis ι k P) {s : Finset ι} {i j : ι} (e : ι ≃ ι')
+
+theorem coord_apply_combination_of_notMem (hi : i ∉ s) {w : ι → k} (hw : s.sum w = 1) :
+    b.coord i (s.affineCombination k b w) = 0 := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι ι' G G' k V P : Type*} [AddCommGroup V] [AddTorsor V P]
+
+variable [Ring k] [Module k V] (b : AffineBasis ι k P) {s : Finset ι} {i j : ι} (e : ι ≃ ι')
+
+theorem coord_apply_combination_of_notMem (hi : i ∉ s) {w : ι → k} (hw : s.sum w = 1) :
+    b.coord i (s.affineCombination k b w) = 0 := by
+  rw [AffineBasis.coord_apply_combination]
+  exact Finset.sum_eq_zero fun j hj => by
+    rw [if_neg]
+    intro h
+    exact hi (h ▸ hj)
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:9:7-9:42
+Unknown constant `AffineBasis.coord_apply_combination`
+Source line 9:
+  rw [AffineBasis.coord_apply_combination]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineBasis.coord_apply_combination
+
+ERROR .LspCheck.lean:8:50-9:1
+unsolved goals
+ι : Type u_1
+k : Type u_5
+V : Type u_6
+P : Type u_7
+inst✝³ : AddCommGroup V
+inst✝² : AddTorsor V P
+inst✝¹ : Ring k
+inst✝ : Module k V
+b : AffineBasis ι k P
+s : Finset ι
+i : ι
+hi : i ∉ s
+w : ι → k
+hw : s.sum w = 1
+⊢ (b.coord i) ((Finset.affineCombination k s ⇑b) w) = 0
+Source line 8:
+    b.coord i (s.affineCombination k b w) = 0 := by
+                                                 ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:9:7-9:42
+Unknown constant `AffineBasis.coord_apply_combination`
+Source line 9:
+  rw [AffineBasis.coord_apply_combination]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineBasis.coord_apply_combination
+
+ERROR .LspCheck.lean:8:50-9:1
+unsolved goals
+ι : Type u_1
+k : Type u_5
+V : Type u_6
+P : Type u_7
+inst✝³ : AddCommGroup V
+inst✝² : AddTorsor V P
+inst✝¹ : Ring k
+inst✝ : Module k V
+b : AffineBasis ι k P
+s : Finset ι
+i : ι
+hi : i ∉ s
+w : ι → k
+hw : s.sum w = 1
+⊢ (b.coord i) ((Finset.affineCombination k s ⇑b) w) = 0
+Source line 8:
+    b.coord i (s.affineCombination k b w) = 0 := by
+                                                 ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι ι' G G' k V P : Type*} [AddCommGroup V] [AddTorsor V P]
+
+variable [Ring k] [Module k V] (b : AffineBasis ι k P) {s : Finset ι} {i j : ι} (e : ι ≃ ι')
+
+theorem coord_apply_combination_of_notMem (hi : i ∉ s) {w : ι → k} (hw : s.sum w = 1) :
+    b.coord i (s.affineCombination k b w) = 0 := by
+  classical
+  rw [AffineBasis.coord_apply_eq]
+  simp only [Finset.vsub_affineCombination]
+  rw [b.basis.repr_sum]
+  simp only [AffineBasis.basis_repr, Finset.sum_apply, Pi.zero_apply]
+  refine Finset.sum_eq_zero ?_
+  intro j hj
+  by_cases hji : j = i
+  · subst hji
+    rw [if_neg hi]
+  · rw [if_neg hji.symm]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:7-10:33
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (AffineBasis.coord ?b ?i) (?b ?i)
+in the target expression
+  (b.coord i) ((Finset.affineCombination k s ⇑b) w) = 0
+
+ι : Type u_1
+k : Type u_5
+V : Type u_6
+P : Type u_7
+inst✝³ : AddCommGroup V
+inst✝² : AddTorsor V P
+inst✝¹ : Ring k
+inst✝ : Module k V
+b : AffineBasis ι k P
+s : Finset ι
+i : ι
+hi : i ∉ s
+w : ι → k
+hw : s.sum w = 1
+⊢ (b.coord i) ((Finset.affineCombination k s ⇑b) w) = 0
+Source line 10:
+  rw [AffineBasis.coord_apply_eq]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineBasis.coord_apply_eq
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:7-10:33
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (AffineBasis.coord ?b ?i) (?b ?i)
+in the target expression
+  (b.coord i) ((Finset.affineCombination k s ⇑b) w) = 0
+
+ι : Type u_1
+k : Type u_5
+V : Type u_6
+P : Type u_7
+inst✝³ : AddCommGroup V
+inst✝² : AddTorsor V P
+inst✝¹ : Ring k
+inst✝ : Module k V
+b : AffineBasis ι k P
+s : Finset ι
+i : ι
+hi : i ∉ s
+w : ι → k
+hw : s.sum w = 1
+⊢ (b.coord i) ((Finset.affineCombination k s ⇑b) w) = 0
+Source line 10:
+  rw [AffineBasis.coord_apply_eq]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineBasis.coord_apply_eq
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι ι' G G' k V P : Type*} [AddCommGroup V] [AddTorsor V P]
+
+variable [Ring k] [Module k V] (b : AffineBasis ι k P) {s : Finset ι} {i j : ι} (e : ι ≃ ι')
+
+theorem coord_apply_combination_of_notMem (hi : i ∉ s) {w : ι → k} (hw : s.sum w = 1) :
+    b.coord i (s.affineCombination k b w) = 0 := by
+  classical
+  let p := s.affineCombination k b w
+  have hp : p = s.affineCombination k b w := rfl
+  have hsum :
+      ∑ j in s, w j • (b j :ᵥ p) = 0 := by
+    rw [← Finset.weightedVSub_eq_weightedVSubOfPoint_vsub hw p]
+    simp [p, Finset.affineCombination_vsub hw]
+  have hrepr := congrArg (b.basis.repr) hsum
+  simp only [LinearEquiv.map_sum, map_smul, Basis.repr_self, Pi.smul_apply, smul_eq_mul,
+    Finsupp.sum, Finset.sum_apply] at hrepr
+  have := congrArg (fun f => f i) hrepr
+  simp only [Pi.zero_apply] at this
+  rw [show b.coord i p = (b.basis.repr (b i :ᵥ p)) i by rfl]
+  rw [show (b i :ᵥ p) = - (p :ᵥ b i) by simpa using vsub_rev p (b i)]
+  rw [b.basis.repr_neg]
+  have hcoeff : (b.basis.repr (p :ᵥ b i)) i = 0 := by
+    have hrepr' : b.basis.repr (p :ᵥ b i) = ∑ j in s, w j • b.basis.repr (p :ᵥ b j) := by
+      simpa [p] using congrArg (b.basis.repr) (Finset.affineCombination_vsub hw (b := b) (s := s) (w := w) (p := b i))
+    have hi' : ∀ j ∈ s, j ≠ i := by
+      intro j hj
+      exact fun h => hi (h ▸ hj)
+    have hzero :
+        (∑ j in s, w j • b.basis.repr (p :ᵥ b j)) i = 0 := by
+      refine Finset.sum_eq_zero ?_
+      intro j hj
+      simp [AffineBasis.basis_repr, hi' j hj]
+    have := congrArg (fun f => f i) hrepr'
+    simpa [hzero] using this
+  simp [hcoeff]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:10-13:13
+unexpected token 'in'; expected ','
+Source line 13:
+      ∑ j in s, w j • (b j :ᵥ p) = 0 := by
+         ^^^
+Highlighted span:  in
+
+ERROR .LspCheck.lean:13:7-13:10
+failed to synthesize instance of type class
+  AddCommMonoid (Sort ?u.5089.2371)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 13:
+      ∑ j in s, w j • (b j :ᵥ p) = 0 := by
+      ^^^
+Highlighted span: ∑ j
+
+ERROR .LspCheck.lean:8:50-9:1
+unsolved goals
+case hsum
+ι : Type u_1
+k : Type u_5
+V : Type u_6
+P : Type u_7
+inst✝³ : AddCommGroup V
+inst✝² : AddTorsor V P
+inst✝¹ : Ring k
+inst✝ : Module k V
+b : AffineBasis ι k P
+s : Finset ι
+i : ι
+hi : i ∉ s
+w : ι → k
+hw : s.sum w = 1
+p : P := (Finset.affineCombination k s ⇑b) w
+hp : p = (Finset.affineCombination k s ⇑b) w
+⊢ sorry
+
+ι : Type u_1
+k : Type u_5
+V : Type u_6
+P : Type u_7
+inst✝³ : AddCommGroup V
+inst✝² : AddTorsor V P
+inst✝¹ : Ring k
+inst✝ : Module k V
+b : AffineBasis ι k P
+s : Finset ι
+i : ι
+hi : i ∉ s
+w : ι → k
+hw : s.sum w = 1
+p : P := (Finset.affineCombination k s ⇑b) w
+hp : p = (Finset.affineCombination k s ⇑b) w
+hsum : sorry
+⊢ (b.coord i) ((Finset.affineCombination k s ⇑b) w) = 0
+Source line 8:
+    b.coord i (s.affineCombination k b w) = 0 := by
+                                                 ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:10-13:13
+unexpected token 'in'; expected ','
+Source line 13:
+      ∑ j in s, w j • (b j :ᵥ p) = 0 := by
+         ^^^
+Highlighted span:  in
+
+ERROR .LspCheck.lean:13:7-13:10
+failed to synthesize instance of type class
+  AddCommMonoid (Sort ?u.5089.2371)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 13:
+      ∑ j in s, w j • (b j :ᵥ p) = 0 := by
+      ^^^
+Highlighted span: ∑ j
+
+ERROR .LspCheck.lean:8:50-9:1
+unsolved goals
+case hsum
+ι : Type u_1
+k : Type u_5
+V : Type u_6
+P : Type u_7
+inst✝³ : AddCommGroup V
+inst✝² : AddTorsor V P
+inst✝¹ : Ring k
+inst✝ : Module k V
+b : AffineBasis ι k P
+s : Finset ι
+i : ι
+hi : i ∉ s
+w : ι → k
+hw : s.sum w = 1
+p : P := (Finset.affineCombination k s ⇑b) w
+hp : p = (Finset.affineCombination k s ⇑b) w
+⊢ sorry
+
+ι : Type u_1
+k : Type u_5
+V : Type u_6
+P : Type u_7
+inst✝³ : AddCommGroup V
+inst✝² : AddTorsor V P
+inst✝¹ : Ring k
+inst✝ : Module k V
+b : AffineBasis ι k P
+s : Finset ι
+i : ι
+hi : i ∉ s
+w : ι → k
+hw : s.sum w = 1
+p : P := (Finset.affineCombination k s ⇑b) w
+hp : p = (Finset.affineCombination k s ⇑b) w
+hsum : sorry
+⊢ (b.coord i) ((Finset.affineCombination k s ⇑b) w) = 0
+Source line 8:
+    b.coord i (s.affineCombination k b w) = 0 := by
+                                                 ^
+Highlighted span: b

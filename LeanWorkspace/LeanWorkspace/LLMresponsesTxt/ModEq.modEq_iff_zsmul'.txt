@@ -1,0 +1,355 @@
+FILE: ModEq.modEq_iff_zsmul'.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: ModEq.modEq_iff_zsmul'.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {G : Type*} [AddCommGroup G] {p a a₁ a₂ b b₁ b₂ c : G} {n : ℕ} {z : ℤ}
+
+theorem modEq_iff_zsmul' : a ≡ b [PMOD p] ↔ ∃ m : ℤ, b - a = m • p := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G : Type*} [AddCommGroup G] {p a a₁ a₂ b b₁ b₂ c : G} {n : ℕ} {z : ℤ}
+
+theorem modEq_iff_zsmul' : a ≡ b [PMOD p] ↔ ∃ m : ℤ, b - a = m • p := by
+  rw [AddCommGroup.modEq_iff_eq_int, sub_eq_iff_eq_add]
+  constructor
+  · rintro ⟨m, hm⟩
+    refine ⟨-m, ?_⟩
+    rw [zsmul_neg, neg_add_eq_iff_eq_add, add_comm, hm]
+  · rintro ⟨m, hm⟩
+    refine ⟨-m, ?_⟩
+    rw [zsmul_neg] at hm
+    rw [eq_neg_iff_add_eq_zero, add_assoc, hm, neg_add_cancel, add_zero]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:6:7-6:36
+Unknown constant `AddCommGroup.modEq_iff_eq_int`
+Source line 6:
+  rw [AddCommGroup.modEq_iff_eq_int, sub_eq_iff_eq_add]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AddCommGroup.modEq_iff_eq_int
+
+ERROR .LspCheck.lean:5:71-6:1
+unsolved goals
+G : Type u_1
+inst✝ : AddCommGroup G
+p a b : G
+⊢ a ≡ b [PMOD p] ↔ ∃ m, b - a = m • p
+Source line 5:
+theorem modEq_iff_zsmul' : a ≡ b [PMOD p] ↔ ∃ m : ℤ, b - a = m • p := by
+                                                                      ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:6:7-6:36
+Unknown constant `AddCommGroup.modEq_iff_eq_int`
+Source line 6:
+  rw [AddCommGroup.modEq_iff_eq_int, sub_eq_iff_eq_add]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AddCommGroup.modEq_iff_eq_int
+
+ERROR .LspCheck.lean:5:71-6:1
+unsolved goals
+G : Type u_1
+inst✝ : AddCommGroup G
+p a b : G
+⊢ a ≡ b [PMOD p] ↔ ∃ m, b - a = m • p
+Source line 5:
+theorem modEq_iff_zsmul' : a ≡ b [PMOD p] ↔ ∃ m : ℤ, b - a = m • p := by
+                                                                      ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G : Type*} [AddCommGroup G] {p a a₁ a₂ b b₁ b₂ c : G} {n : ℕ} {z : ℤ}
+
+theorem modEq_iff_zsmul' : a ≡ b [PMOD p] ↔ ∃ m : ℤ, b - a = m • p := by
+  constructor
+  · intro h
+    rcases h with ⟨z, hz⟩
+    refine ⟨-z, ?_⟩
+    rw [hz, zsmul_neg, neg_sub]
+  · rintro ⟨m, hm⟩
+    refine ⟨-m, ?_⟩
+    rw [zsmul_neg, neg_zsmul] at hm
+    simpa [sub_eq_add_neg, add_comm, add_left_comm, add_assoc] using hm.symm
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:9-10:11
+Invalid rewrite argument: Expected an equality or iff proof or definition name, but `hz` is a proof of
+  ∃ n, z • p + a = n • p + b
+Source line 10:
+    rw [hz, zsmul_neg, neg_sub]
+        ^^
+Highlighted span: hz
+
+ERROR .LspCheck.lean:12:13-12:15
+Type mismatch
+  -m
+has type
+  ℤ
+but is expected to have type
+  ℕ
+Source line 12:
+    refine ⟨-m, ?_⟩
+            ^^
+Highlighted span: -m
+
+ERROR .LspCheck.lean:13:9-13:18
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?n • -?a
+in the target expression
+  b - a = m • p
+
+case mpr
+G : Type u_1
+inst✝ : AddCommGroup G
+p a b : G
+m : ℤ
+hm : b - a = m • p
+⊢ ∃ n, sorry • p + a = n • p + b
+Source line 13:
+    rw [zsmul_neg, neg_zsmul] at hm
+        ^^^^^^^^^
+Highlighted span: zsmul_neg
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:9-10:11
+Invalid rewrite argument: Expected an equality or iff proof or definition name, but `hz` is a proof of
+  ∃ n, z • p + a = n • p + b
+Source line 10:
+    rw [hz, zsmul_neg, neg_sub]
+        ^^
+Highlighted span: hz
+
+ERROR .LspCheck.lean:12:13-12:15
+Type mismatch
+  -m
+has type
+  ℤ
+but is expected to have type
+  ℕ
+Source line 12:
+    refine ⟨-m, ?_⟩
+            ^^
+Highlighted span: -m
+
+ERROR .LspCheck.lean:13:9-13:18
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?n • -?a
+in the target expression
+  b - a = m • p
+
+case mpr
+G : Type u_1
+inst✝ : AddCommGroup G
+p a b : G
+m : ℤ
+hm : b - a = m • p
+⊢ ∃ n, sorry • p + a = n • p + b
+Source line 13:
+    rw [zsmul_neg, neg_zsmul] at hm
+        ^^^^^^^^^
+Highlighted span: zsmul_neg
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G : Type*} [AddCommGroup G] {p a a₁ a₂ b b₁ b₂ c : G} {n : ℕ} {z : ℤ}
+
+theorem modEq_iff_zsmul' : a ≡ b [PMOD p] ↔ ∃ m : ℤ, b - a = m • p := by
+  constructor
+  · intro h
+    rcases h with ⟨m, n, hmn⟩
+    refine ⟨m - n, ?_⟩
+    have h1 : b = (m - n) • p + a := by
+      calc
+        b = -(n • p) + (n • p + b) := by abel
+        _ = -(n • p) + (m • p + a) := by rw [hmn]
+        _ = (m - n) • p + a := by
+          rw [sub_eq_add_neg, sub_zsmul, add_assoc]
+    calc
+      b - a = ((m - n) • p + a) - a := by rw [h1]
+      _ = (m - n) • p := by abel
+  · rintro ⟨m, hm⟩
+    refine ⟨Int.natAbs m, Int.natAbs (-m), ?_⟩
+    have hz : (m : ℤ) = Int.natAbs m - Int.natAbs (-m) := by
+      simpa [Int.subNatNat_eq_coe, Int.natAbs_ofNat, Int.natAbs_neg] using Int.ofNat_natAbs_eq_of_nonneg (Int.le_add_neg_iff.mp le_rfl)
+    have hp : (m • p : G) = Int.natAbs m • p - Int.natAbs (-m) • p := by
+      rw [hz, sub_eq_add_neg, sub_zsmul]
+    have hb : b = m • p + a := by
+      calc
+        b = (b - a) + a := by abel
+        _ = m • p + a := by rw [hm]
+    calc
+      Int.natAbs m • p + a
+          = (Int.natAbs (-m) • p + m • p) + a := by
+              rw [hp]
+              abel
+      _ = Int.natAbs (-m) • p + (m • p + a) := by abel
+      _ = Int.natAbs (-m) • p + b := by rw [hb]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:15-15:29
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?a - ?b
+in the target expression
+  -(n • p) + (m • p + a) = (m - n) • p + a
+
+G : Type u_1
+inst✝ : AddCommGroup G
+p a b : G
+m n : ℕ
+hmn : m • p + a = n • p + b
+⊢ -(n • p) + (m • p + a) = (m - n) • p + a
+Source line 15:
+          rw [sub_eq_add_neg, sub_zsmul, add_assoc]
+              ^^^^^^^^^^^^^^
+Highlighted span: sub_eq_add_neg
+
+ERROR .LspCheck.lean:7:3-8:1
+unsolved goals
+case mp.calc.step
+G : Type u_1
+inst✝ : AddCommGroup G
+p a b : G
+m n : ℕ
+hmn : m • p + a = n • p + b
+h1 : b = (m - n) • p + a
+⊢ (m - n) • p = (↑m - ↑n) • p
+Source line 7:
+  · intro h
+  ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:22:36-22:52
+Unknown constant `Int.natAbs_ofNat`
+Source line 22:
+      simpa [Int.subNatNat_eq_coe, Int.natAbs_ofNat, Int.natAbs_neg] using Int.ofNat_natAbs_eq_of_nonneg (Int.le_add_neg_iff.mp le_rfl)
+                                   ^^^^^^^^^^^^^^^^
+Highlighted span: Int.natAbs_ofNat
+
+ERROR .LspCheck.lean:22:76-22:105
+Unknown constant `Int.ofNat_natAbs_eq_of_nonneg`
+Source line 22:
+      simpa [Int.subNatNat_eq_coe, Int.natAbs_ofNat, Int.natAbs_neg] using Int.ofNat_natAbs_eq_of_nonneg (Int.le_add_neg_iff.mp le_rfl)
+                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Int.ofNat_natAbs_eq_of_nonneg
+
+ERROR .LspCheck.lean:24:31-24:40
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (?m - ?n) • ?a
+in the target expression
+  (↑m.natAbs + -↑(-m).natAbs) • p = (↑m.natAbs + -↑(-m).natAbs).natAbs • p - (-(↑m.natAbs + -↑(-m).natAbs)).natAbs • p
+
+G : Type u_1
+inst✝ : AddCommGroup G
+p a b : G
+m : ℤ
+hm : b - a = m • p
+hz : m = ↑m.natAbs - ↑(-m).natAbs
+⊢ (↑m.natAbs + -↑(-m).natAbs) • p = (↑m.natAbs + -↑(-m).natAbs).natAbs • p - (-(↑m.natAbs + -↑(-m).natAbs)).natAbs • p
+Source line 24:
+      rw [hz, sub_eq_add_neg, sub_zsmul]
+                              ^^^^^^^^^
+Highlighted span: sub_zsmul
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:15-15:29
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?a - ?b
+in the target expression
+  -(n • p) + (m • p + a) = (m - n) • p + a
+
+G : Type u_1
+inst✝ : AddCommGroup G
+p a b : G
+m n : ℕ
+hmn : m • p + a = n • p + b
+⊢ -(n • p) + (m • p + a) = (m - n) • p + a
+Source line 15:
+          rw [sub_eq_add_neg, sub_zsmul, add_assoc]
+              ^^^^^^^^^^^^^^
+Highlighted span: sub_eq_add_neg
+
+ERROR .LspCheck.lean:7:3-8:1
+unsolved goals
+case mp.calc.step
+G : Type u_1
+inst✝ : AddCommGroup G
+p a b : G
+m n : ℕ
+hmn : m • p + a = n • p + b
+h1 : b = (m - n) • p + a
+⊢ (m - n) • p = (↑m - ↑n) • p
+Source line 7:
+  · intro h
+  ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:22:36-22:52
+Unknown constant `Int.natAbs_ofNat`
+Source line 22:
+      simpa [Int.subNatNat_eq_coe, Int.natAbs_ofNat, Int.natAbs_neg] using Int.ofNat_natAbs_eq_of_nonneg (Int.le_add_neg_iff.mp le_rfl)
+                                   ^^^^^^^^^^^^^^^^
+Highlighted span: Int.natAbs_ofNat
+
+ERROR .LspCheck.lean:22:76-22:105
+Unknown constant `Int.ofNat_natAbs_eq_of_nonneg`
+Source line 22:
+      simpa [Int.subNatNat_eq_coe, Int.natAbs_ofNat, Int.natAbs_neg] using Int.ofNat_natAbs_eq_of_nonneg (Int.le_add_neg_iff.mp le_rfl)
+                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Int.ofNat_natAbs_eq_of_nonneg
+
+ERROR .LspCheck.lean:24:31-24:40
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (?m - ?n) • ?a
+in the target expression
+  (↑m.natAbs + -↑(-m).natAbs) • p = (↑m.natAbs + -↑(-m).natAbs).natAbs • p - (-(↑m.natAbs + -↑(-m).natAbs)).natAbs • p
+
+G : Type u_1
+inst✝ : AddCommGroup G
+p a b : G
+m : ℤ
+hm : b - a = m • p
+hz : m = ↑m.natAbs - ↑(-m).natAbs
+⊢ (↑m.natAbs + -↑(-m).natAbs) • p = (↑m.natAbs + -↑(-m).natAbs).natAbs • p - (-(↑m.natAbs + -↑(-m).natAbs)).natAbs • p
+Source line 24:
+      rw [hz, sub_eq_add_neg, sub_zsmul]
+                              ^^^^^^^^^
+Highlighted span: sub_zsmul

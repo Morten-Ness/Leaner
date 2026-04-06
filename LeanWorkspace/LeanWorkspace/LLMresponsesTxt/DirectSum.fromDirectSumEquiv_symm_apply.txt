@@ -1,0 +1,281 @@
+FILE: DirectSum.fromDirectSumEquiv_symm_apply.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: DirectSum.fromDirectSumEquiv_symm_apply.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped DirectSum
+
+variable {R ι M' : Type*} {κ : ι → Type*} {M : (i : ι) → κ i → Type*}
+
+variable [CommSemiring R]
+
+variable [∀ i j, AddCommMonoid (M i j)] [∀ i j, Module R (M i j)] [AddCommMonoid M'] [Module R M']
+
+variable [DecidableEq ι]
+
+set_option backward.isDefEq.respectTransparency false in
+theorem fromDirectSumEquiv_symm_apply [Finite ι] [(i : ι) → DecidableEq (κ i)]
+    (f : MultilinearMap R (fun i ↦ ⨁ j : κ i, M i j) M')
+    (p : (i : ι) → κ i) :
+    MultilinearMap.fromDirectSumEquiv.symm f p = f.compLinearMap (fun i ↦ DirectSum.lof _ _ _ (p i)) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped DirectSum
+
+variable {R ι M' : Type*} {κ : ι → Type*} {M : (i : ι) → κ i → Type*}
+
+variable [CommSemiring R]
+
+variable [∀ i j, AddCommMonoid (M i j)] [∀ i j, Module R (M i j)] [AddCommMonoid M'] [Module R M']
+
+variable [DecidableEq ι]
+
+set_option backward.isDefEq.respectTransparency false in
+theorem fromDirectSumEquiv_symm_apply [Finite ι] [(i : ι) → DecidableEq (κ i)]
+    (f : MultilinearMap R (fun i ↦ ⨁ j : κ i, M i j) M')
+    (p : (i : ι) → κ i) :
+    MultilinearMap.fromDirectSumEquiv.symm f p = f.compLinearMap (fun i ↦ DirectSum.lof _ _ _ (p i)) := rfl
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:1-15:1
+Not a definitional equality: the left-hand side
+  MultilinearMap.fromDirectSumEquiv.symm f p
+is not definitionally equal to the right-hand side
+  f.compLinearMap fun i ↦ DirectSum.lof R (κ i) (M i) (p i)
+Source line 14:
+theorem fromDirectSumEquiv_symm_apply [Finite ι] [(i : ι) → DecidableEq (κ i)]
+^
+Highlighted span: t
+
+ERROR .LspCheck.lean:17:105-17:108
+Type mismatch
+  rfl
+has type
+  ?m.68 = ?m.68
+but is expected to have type
+  MultilinearMap.fromDirectSumEquiv.symm f p = f.compLinearMap fun i ↦ DirectSum.lof R (κ i) (M i) (p i)
+Source line 17:
+    MultilinearMap.fromDirectSumEquiv.symm f p = f.compLinearMap (fun i ↦ DirectSum.lof _ _ _ (p i)) := rfl
+                                                                                                        ^^^
+Highlighted span: rfl
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:1-15:1
+Not a definitional equality: the left-hand side
+  MultilinearMap.fromDirectSumEquiv.symm f p
+is not definitionally equal to the right-hand side
+  f.compLinearMap fun i ↦ DirectSum.lof R (κ i) (M i) (p i)
+Source line 14:
+theorem fromDirectSumEquiv_symm_apply [Finite ι] [(i : ι) → DecidableEq (κ i)]
+^
+Highlighted span: t
+
+ERROR .LspCheck.lean:17:105-17:108
+Type mismatch
+  rfl
+has type
+  ?m.68 = ?m.68
+but is expected to have type
+  MultilinearMap.fromDirectSumEquiv.symm f p = f.compLinearMap fun i ↦ DirectSum.lof R (κ i) (M i) (p i)
+Source line 17:
+    MultilinearMap.fromDirectSumEquiv.symm f p = f.compLinearMap (fun i ↦ DirectSum.lof _ _ _ (p i)) := rfl
+                                                                                                        ^^^
+Highlighted span: rfl
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped DirectSum
+
+variable {R ι M' : Type*} {κ : ι → Type*} {M : (i : ι) → κ i → Type*}
+
+variable [CommSemiring R]
+
+variable [∀ i j, AddCommMonoid (M i j)] [∀ i j, Module R (M i j)] [AddCommMonoid M'] [Module R M']
+
+variable [DecidableEq ι]
+
+set_option backward.isDefEq.respectTransparency false in
+theorem fromDirectSumEquiv_symm_apply [Finite ι] [(i : ι) → DecidableEq (κ i)]
+    (f : MultilinearMap R (fun i ↦ ⨁ j : κ i, M i j) M')
+    (p : (i : ι) → κ i) :
+    MultilinearMap.fromDirectSumEquiv.symm f p = f.compLinearMap (fun i ↦ DirectSum.lof _ _ _ (p i)) := by
+  ext x i
+  simp [MultilinearMap.fromDirectSumEquiv]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+WARNING .LspCheck.lean:18:9-18:10
+`ext` did not consume the patterns `i`
+
+Note: This linter can be disabled with `set_option linter.unusedRCasesPattern false`
+Source line 18:
+  ext x i
+        ^
+Highlighted span: i
+
+ERROR .LspCheck.lean:17:105-18:1
+unsolved goals
+case H
+R : Type u_1
+ι : Type u_2
+M' : Type u_3
+κ : ι → Type u_4
+M : (i : ι) → κ i → Type u_5
+inst✝⁷ : CommSemiring R
+inst✝⁶ : (i : ι) → (j : κ i) → AddCommMonoid (M i j)
+inst✝⁵ : (i : ι) → (j : κ i) → Module R (M i j)
+inst✝⁴ : AddCommMonoid M'
+inst✝³ : Module R M'
+inst✝² : DecidableEq ι
+inst✝¹ : Finite ι
+inst✝ : (i : ι) → DecidableEq (κ i)
+f : MultilinearMap R (fun i ↦ ⨁ (j : κ i), M i j) M'
+p : (i : ι) → κ i
+x : (i : ι) → M i (p i)
+⊢ ((MultilinearMap.fromDFinsuppEquiv κ R).symm f p) x = f fun i ↦ (DirectSum.lof R (κ i) (M i) (p i)) (x i)
+Source line 17:
+    MultilinearMap.fromDirectSumEquiv.symm f p = f.compLinearMap (fun i ↦ DirectSum.lof _ _ _ (p i)) := by
+                                                                                                        ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+WARNING .LspCheck.lean:18:9-18:10
+`ext` did not consume the patterns `i`
+
+Note: This linter can be disabled with `set_option linter.unusedRCasesPattern false`
+Source line 18:
+  ext x i
+        ^
+Highlighted span: i
+
+ERROR .LspCheck.lean:17:105-18:1
+unsolved goals
+case H
+R : Type u_1
+ι : Type u_2
+M' : Type u_3
+κ : ι → Type u_4
+M : (i : ι) → κ i → Type u_5
+inst✝⁷ : CommSemiring R
+inst✝⁶ : (i : ι) → (j : κ i) → AddCommMonoid (M i j)
+inst✝⁵ : (i : ι) → (j : κ i) → Module R (M i j)
+inst✝⁴ : AddCommMonoid M'
+inst✝³ : Module R M'
+inst✝² : DecidableEq ι
+inst✝¹ : Finite ι
+inst✝ : (i : ι) → DecidableEq (κ i)
+f : MultilinearMap R (fun i ↦ ⨁ (j : κ i), M i j) M'
+p : (i : ι) → κ i
+x : (i : ι) → M i (p i)
+⊢ ((MultilinearMap.fromDFinsuppEquiv κ R).symm f p) x = f fun i ↦ (DirectSum.lof R (κ i) (M i) (p i)) (x i)
+Source line 17:
+    MultilinearMap.fromDirectSumEquiv.symm f p = f.compLinearMap (fun i ↦ DirectSum.lof _ _ _ (p i)) := by
+                                                                                                        ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped DirectSum
+
+variable {R ι M' : Type*} {κ : ι → Type*} {M : (i : ι) → κ i → Type*}
+
+variable [CommSemiring R]
+
+variable [∀ i j, AddCommMonoid (M i j)] [∀ i j, Module R (M i j)] [AddCommMonoid M'] [Module R M']
+
+variable [DecidableEq ι]
+
+set_option backward.isDefEq.respectTransparency false in
+theorem fromDirectSumEquiv_symm_apply [Finite ι] [(i : ι) → DecidableEq (κ i)]
+    (f : MultilinearMap R (fun i ↦ ⨁ j : κ i, M i j) M')
+    (p : (i : ι) → κ i) :
+    MultilinearMap.fromDirectSumEquiv.symm f p = f.compLinearMap (fun i ↦ DirectSum.lof _ _ _ (p i)) := by
+  ext x
+  simp [MultilinearMap.fromDirectSumEquiv, MultilinearMap.compLinearMap]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:17:105-18:1
+unsolved goals
+case H
+R : Type u_1
+ι : Type u_2
+M' : Type u_3
+κ : ι → Type u_4
+M : (i : ι) → κ i → Type u_5
+inst✝⁷ : CommSemiring R
+inst✝⁶ : (i : ι) → (j : κ i) → AddCommMonoid (M i j)
+inst✝⁵ : (i : ι) → (j : κ i) → Module R (M i j)
+inst✝⁴ : AddCommMonoid M'
+inst✝³ : Module R M'
+inst✝² : DecidableEq ι
+inst✝¹ : Finite ι
+inst✝ : (i : ι) → DecidableEq (κ i)
+f : MultilinearMap R (fun i ↦ ⨁ (j : κ i), M i j) M'
+p : (i : ι) → κ i
+x : (i : ι) → M i (p i)
+⊢ ((MultilinearMap.fromDFinsuppEquiv κ R).symm f p) x = f fun i ↦ (DirectSum.lof R (κ i) (M i) (p i)) (x i)
+Source line 17:
+    MultilinearMap.fromDirectSumEquiv.symm f p = f.compLinearMap (fun i ↦ DirectSum.lof _ _ _ (p i)) := by
+                                                                                                        ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:17:105-18:1
+unsolved goals
+case H
+R : Type u_1
+ι : Type u_2
+M' : Type u_3
+κ : ι → Type u_4
+M : (i : ι) → κ i → Type u_5
+inst✝⁷ : CommSemiring R
+inst✝⁶ : (i : ι) → (j : κ i) → AddCommMonoid (M i j)
+inst✝⁵ : (i : ι) → (j : κ i) → Module R (M i j)
+inst✝⁴ : AddCommMonoid M'
+inst✝³ : Module R M'
+inst✝² : DecidableEq ι
+inst✝¹ : Finite ι
+inst✝ : (i : ι) → DecidableEq (κ i)
+f : MultilinearMap R (fun i ↦ ⨁ (j : κ i), M i j) M'
+p : (i : ι) → κ i
+x : (i : ι) → M i (p i)
+⊢ ((MultilinearMap.fromDFinsuppEquiv κ R).symm f p) x = f fun i ↦ (DirectSum.lof R (κ i) (M i) (p i)) (x i)
+Source line 17:
+    MultilinearMap.fromDirectSumEquiv.symm f p = f.compLinearMap (fun i ↦ DirectSum.lof _ _ _ (p i)) := by
+                                                                                                        ^
+Highlighted span: b

@@ -1,0 +1,39 @@
+FILE: Defs.map_injective.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Defs.map_injective.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {l m n o : Type*} {m' : o → Type*} {n' : o → Type*}
+
+variable {R : Type*} {S : Type*} {α : Type v} {β : Type w} {γ : Type*}
+
+theorem map_injective {f : α → β} (hf : Function.Injective f) :
+    Function.Injective fun M : Matrix m n α => M.map f := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {l m n o : Type*} {m' : o → Type*} {n' : o → Type*}
+
+variable {R : Type*} {S : Type*} {α : Type v} {β : Type w} {γ : Type*}
+
+theorem map_injective {f : α → β} (hf : Function.Injective f) :
+    Function.Injective fun M : Matrix m n α => M.map f := by
+  intro M N h
+  ext i j
+  apply hf
+  simpa [Matrix.map_apply] using congrArg (fun X => X i j) h
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+PASS

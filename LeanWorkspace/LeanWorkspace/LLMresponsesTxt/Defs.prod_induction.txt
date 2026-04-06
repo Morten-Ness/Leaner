@@ -1,0 +1,97 @@
+FILE: Defs.prod_induction.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Defs.prod_induction.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {ι κ M N G α : Type*}
+
+variable {s s₁ s₂ : Finset ι} {a : ι} {f g : ι → M}
+
+variable [CommMonoid M]
+
+theorem prod_induction {M : Type*} [CommMonoid M] (f : ι → M) (p : M → Prop)
+    (hom : ∀ a b, p a → p b → p (a * b)) (unit : p 1) (base : ∀ x ∈ s, p <| f x) :
+    p <| ∏ x ∈ s, f x := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι κ M N G α : Type*}
+
+variable {s s₁ s₂ : Finset ι} {a : ι} {f g : ι → M}
+
+variable [CommMonoid M]
+
+theorem prod_induction {M : Type*} [CommMonoid M] (f : ι → M) (p : M → Prop)
+    (hom : ∀ a b, p a → p b → p (a * b)) (unit : p 1) (base : ∀ x ∈ s, p <| f x) :
+    p <| ∏ x ∈ s, f x := by
+  classical
+  refine Finset.induction_on s ?_ ?_
+  · simpa using unit
+  · intro a s ha ih
+    simp only [Finset.prod_insert, ha]
+    exact hom _ _ (base a (Finset.mem_insert_self a s)) <|
+      ih (by
+        intro x hx
+        exact base x (Finset.mem_insert_of_mem hx))
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:5-16:39
+`simp` made no progress
+Source line 16:
+    simp only [Finset.prod_insert, ha]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simp only [Finset.prod_insert, ha]
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:5-16:39
+`simp` made no progress
+Source line 16:
+    simp only [Finset.prod_insert, ha]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simp only [Finset.prod_insert, ha]
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι κ M N G α : Type*}
+
+variable {s s₁ s₂ : Finset ι} {a : ι} {f g : ι → M}
+
+variable [CommMonoid M]
+
+theorem prod_induction {M : Type*} [CommMonoid M] (f : ι → M) (p : M → Prop)
+    (hom : ∀ a b, p a → p b → p (a * b)) (unit : p 1) (base : ∀ x ∈ s, p <| f x) :
+    p <| ∏ x ∈ s, f x := by
+  classical
+  induction s using Finset.induction_on with
+  | empty =>
+      simpa using unit
+  | @insert a s ha ih =>
+      rw [Finset.prod_insert ha]
+      apply hom
+      · exact base a (Finset.mem_insert_self a s)
+      · apply ih
+        intro x hx
+        exact base x (Finset.mem_insert_of_mem hx)
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

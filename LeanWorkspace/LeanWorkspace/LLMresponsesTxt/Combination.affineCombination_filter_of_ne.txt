@@ -1,0 +1,503 @@
+FILE: Combination.affineCombination_filter_of_ne.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Combination.affineCombination_filter_of_ne.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+variable (k)
+
+variable {k}
+
+theorem affineCombination_filter_of_ne (w : ι → k) (p : ι → P) {pred : ι → Prop}
+    [DecidablePred pred] (h : ∀ i ∈ s, w i ≠ 0 → pred i) :
+    {x ∈ s | pred x}.affineCombination k p w = s.affineCombination k p w := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+variable (k)
+
+variable {k}
+
+theorem affineCombination_filter_of_ne (w : ι → k) (p : ι → P) {pred : ι → Prop}
+    [DecidablePred pred] (h : ∀ i ∈ s, w i ≠ 0 → pred i) :
+    {x ∈ s | pred x}.affineCombination k p w = s.affineCombination k p w := by
+  classical
+  rw [Finset.affineCombination_eq_weightedVSubOfPoint_vadd s k p w ({x ∈ s | pred x}.choose? (by
+    by_cases hs : ({x ∈ s | pred x} : Finset ι).Nonempty
+    · exact hs
+    · have hs' : s.Nonempty := by
+        by_cases hse : s.Nonempty
+        · exact hse
+        · simp [Finset.affineCombination, hse] at *
+      exact False.elim <| hs hs'),
+    Finset.affineCombination_eq_weightedVSubOfPoint_vadd s k p w (s.choose? (by
+      by_cases hs : s.Nonempty
+      · exact hs
+      · simp [Finset.affineCombination, hs] at *))]
+  by_cases hs : s.Nonempty
+  · let i₀ : ι := hs.choose
+    have hi₀ : i₀ ∈ s := hs.choose_spec
+    have hpred : pred i₀ := by
+      by_cases hw : w i₀ = 0
+      · have : ({x ∈ s | pred x} : Finset ι).affineCombination k p w = s.affineCombination k p w := by
+          rw [Finset.affineCombination_eq_of_eqOn_weights]
+          intro i hi
+          simp at hi
+        exact this ▸ by simp [hw]
+      · exact h i₀ hi₀ hw
+    have hmem : i₀ ∈ {x ∈ s | pred x} := by simp [hi₀, hpred]
+    rw [Finset.affineCombination_eq_weightedVSubOfPoint_vadd _ _ _ _ i₀ hmem,
+      Finset.affineCombination_eq_weightedVSubOfPoint_vadd _ _ _ _ i₀ hi₀]
+    congr 1
+    exact Finset.weightedVSubOfPoint_filter_of_ne _ _ _ h
+  · have hs' : s = ∅ := Finset.not_nonempty_iff_eq_empty.mp hs
+    subst hs'
+    simp
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:30:51-30:52
+unexpected token ']'; expected ')'
+Source line 30:
+      · simp [Finset.affineCombination, hs] at *))]
+                                                  ^
+Highlighted span: ]
+
+ERROR .LspCheck.lean:19:7-19:59
+Unknown constant `Finset.affineCombination_eq_weightedVSubOfPoint_vadd`
+Source line 19:
+  rw [Finset.affineCombination_eq_weightedVSubOfPoint_vadd s k p w ({x ∈ s | pred x}.choose? (by
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.affineCombination_eq_weightedVSubOfPoint_vadd
+
+ERROR .LspCheck.lean:17:77-18:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s : Finset ι
+w : ι → k
+p : ι → P
+pred : ι → Prop
+inst✝ : DecidablePred pred
+h : ∀ i ∈ s, w i ≠ 0 → pred i
+⊢ (Finset.affineCombination k ({x ∈ s | pred x}) p) w = (Finset.affineCombination k s p) w
+Source line 17:
+    {x ∈ s | pred x}.affineCombination k p w = s.affineCombination k p w := by
+                                                                            ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:30:51-30:52
+unexpected token ']'; expected ')'
+Source line 30:
+      · simp [Finset.affineCombination, hs] at *))]
+                                                  ^
+Highlighted span: ]
+
+ERROR .LspCheck.lean:19:7-19:59
+Unknown constant `Finset.affineCombination_eq_weightedVSubOfPoint_vadd`
+Source line 19:
+  rw [Finset.affineCombination_eq_weightedVSubOfPoint_vadd s k p w ({x ∈ s | pred x}.choose? (by
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.affineCombination_eq_weightedVSubOfPoint_vadd
+
+ERROR .LspCheck.lean:17:77-18:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s : Finset ι
+w : ι → k
+p : ι → P
+pred : ι → Prop
+inst✝ : DecidablePred pred
+h : ∀ i ∈ s, w i ≠ 0 → pred i
+⊢ (Finset.affineCombination k ({x ∈ s | pred x}) p) w = (Finset.affineCombination k s p) w
+Source line 17:
+    {x ∈ s | pred x}.affineCombination k p w = s.affineCombination k p w := by
+                                                                            ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+variable (k)
+
+variable {k}
+
+theorem affineCombination_filter_of_ne (w : ι → k) (p : ι → P) {pred : ι → Prop}
+    [DecidablePred pred] (h : ∀ i ∈ s, w i ≠ 0 → pred i) :
+    {x ∈ s | pred x}.affineCombination k p w = s.affineCombination k p w := by
+  classical
+  induction s using Finset.induction_on with
+  | empty =>
+      simp
+  | @insert a s ha ih =>
+      by_cases hpred : pred a
+      · simp [Finset.affineCombination_insert, ha, hpred, ih, fun i hi hwi => h i (by simp [hi]) hwi]
+      · have hwa : w a = 0 := by
+          by_contra hne
+          exact hpred (h a (by simp [ha]) hne)
+        simp [Finset.affineCombination_insert, ha, hpred, hwa, ih,
+          fun i hi hwi => h i (by simp [hi, ha]) hwi]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:24:15-24:46
+Unknown constant `Finset.affineCombination_insert`
+Source line 24:
+      · simp [Finset.affineCombination_insert, ha, hpred, ih, fun i hi hwi => h i (by simp [hi]) hwi]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.affineCombination_insert
+
+ERROR .LspCheck.lean:24:93-24:95
+Invalid argument: Variable `hi` is not a proposition or let-declaration
+Source line 24:
+      · simp [Finset.affineCombination_insert, ha, hpred, ih, fun i hi hwi => h i (by simp [hi]) hwi]
+                                                                                            ^^
+Highlighted span: hi
+
+ERROR .LspCheck.lean:24:84-24:96
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s✝ : Finset ι
+w : ι → k
+p : ι → P
+pred : ι → Prop
+inst✝ : DecidablePred pred
+a : ι
+s : Finset ι
+ha : a ∉ s
+ih :
+  (∀ i ∈ s, w i ≠ 0 → pred i) → (Finset.affineCombination k ({x ∈ s | pred x}) p) w = (Finset.affineCombination k s p) w
+h : ∀ i ∈ insert a s, w i ≠ 0 → pred i
+hpred : pred a
+i : ι
+hi : ?m.64 i
+hwi : w i ≠ 0
+⊢ i = a ∨ i ∈ s
+Source line 24:
+      · simp [Finset.affineCombination_insert, ha, hpred, ih, fun i hi hwi => h i (by simp [hi]) hwi]
+                                                                                   ^^^^^^^^^^^^
+Highlighted span: by simp [hi]
+
+ERROR .LspCheck.lean:24:9-24:102
+`simp` made no progress
+Source line 24:
+      · simp [Finset.affineCombination_insert, ha, hpred, ih, fun i hi hwi => h i (by simp [hi]) hwi]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simp [Finset.affineCombination_insert, ha, hpred, ih, fun i hi hwi => h i (by simp [hi]) hwi]
+
+ERROR .LspCheck.lean:28:15-28:46
+Unknown constant `Finset.affineCombination_insert`
+Source line 28:
+        simp [Finset.affineCombination_insert, ha, hpred, hwa, ih,
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.affineCombination_insert
+
+ERROR .LspCheck.lean:29:41-29:43
+Invalid argument: Variable `hi` is not a proposition or let-declaration
+Source line 29:
+          fun i hi hwi => h i (by simp [hi, ha]) hwi]
+                                        ^^
+Highlighted span: hi
+
+ERROR .LspCheck.lean:29:32-29:48
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s✝ : Finset ι
+w : ι → k
+p : ι → P
+pred : ι → Prop
+inst✝ : DecidablePred pred
+a : ι
+s : Finset ι
+ha : a ∉ s
+ih :
+  (∀ i ∈ s, w i ≠ 0 → pred i) → (Finset.affineCombination k ({x ∈ s | pred x}) p) w = (Finset.affineCombination k s p) w
+h : ∀ i ∈ insert a s, w i ≠ 0 → pred i
+hpred : ¬pred a
+hwa : w a = 0
+i : ι
+hi : ?m.76 i
+hwi : w i ≠ 0
+⊢ i = a ∨ i ∈ s
+Source line 29:
+          fun i hi hwi => h i (by simp [hi, ha]) hwi]
+                               ^^^^^^^^^^^^^^^^
+Highlighted span: by simp [hi, ha]
+
+ERROR .LspCheck.lean:28:9-29:1
+`simp` made no progress
+Source line 28:
+        simp [Finset.affineCombination_insert, ha, hpred, hwa, ih,
+        ^
+Highlighted span: s
+
+WARNING .LspCheck.lean:29:45-29:47
+This simp argument is unused:
+  ha
+
+Hint: Omit it from the simp argument list.
+  simp [hi,̵ ̵h̵a̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 29:
+          fun i hi hwi => h i (by simp [hi, ha]) hwi]
+                                            ^^
+Highlighted span: ha
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:24:15-24:46
+Unknown constant `Finset.affineCombination_insert`
+Source line 24:
+      · simp [Finset.affineCombination_insert, ha, hpred, ih, fun i hi hwi => h i (by simp [hi]) hwi]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.affineCombination_insert
+
+ERROR .LspCheck.lean:24:93-24:95
+Invalid argument: Variable `hi` is not a proposition or let-declaration
+Source line 24:
+      · simp [Finset.affineCombination_insert, ha, hpred, ih, fun i hi hwi => h i (by simp [hi]) hwi]
+                                                                                            ^^
+Highlighted span: hi
+
+ERROR .LspCheck.lean:24:84-24:96
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s✝ : Finset ι
+w : ι → k
+p : ι → P
+pred : ι → Prop
+inst✝ : DecidablePred pred
+a : ι
+s : Finset ι
+ha : a ∉ s
+ih :
+  (∀ i ∈ s, w i ≠ 0 → pred i) → (Finset.affineCombination k ({x ∈ s | pred x}) p) w = (Finset.affineCombination k s p) w
+h : ∀ i ∈ insert a s, w i ≠ 0 → pred i
+hpred : pred a
+i : ι
+hi : ?m.64 i
+hwi : w i ≠ 0
+⊢ i = a ∨ i ∈ s
+Source line 24:
+      · simp [Finset.affineCombination_insert, ha, hpred, ih, fun i hi hwi => h i (by simp [hi]) hwi]
+                                                                                   ^^^^^^^^^^^^
+Highlighted span: by simp [hi]
+
+ERROR .LspCheck.lean:24:9-24:102
+`simp` made no progress
+Source line 24:
+      · simp [Finset.affineCombination_insert, ha, hpred, ih, fun i hi hwi => h i (by simp [hi]) hwi]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simp [Finset.affineCombination_insert, ha, hpred, ih, fun i hi hwi => h i (by simp [hi]) hwi]
+
+ERROR .LspCheck.lean:28:15-28:46
+Unknown constant `Finset.affineCombination_insert`
+Source line 28:
+        simp [Finset.affineCombination_insert, ha, hpred, hwa, ih,
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.affineCombination_insert
+
+ERROR .LspCheck.lean:29:41-29:43
+Invalid argument: Variable `hi` is not a proposition or let-declaration
+Source line 29:
+          fun i hi hwi => h i (by simp [hi, ha]) hwi]
+                                        ^^
+Highlighted span: hi
+
+ERROR .LspCheck.lean:29:32-29:48
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s✝ : Finset ι
+w : ι → k
+p : ι → P
+pred : ι → Prop
+inst✝ : DecidablePred pred
+a : ι
+s : Finset ι
+ha : a ∉ s
+ih :
+  (∀ i ∈ s, w i ≠ 0 → pred i) → (Finset.affineCombination k ({x ∈ s | pred x}) p) w = (Finset.affineCombination k s p) w
+h : ∀ i ∈ insert a s, w i ≠ 0 → pred i
+hpred : ¬pred a
+hwa : w a = 0
+i : ι
+hi : ?m.76 i
+hwi : w i ≠ 0
+⊢ i = a ∨ i ∈ s
+Source line 29:
+          fun i hi hwi => h i (by simp [hi, ha]) hwi]
+                               ^^^^^^^^^^^^^^^^
+Highlighted span: by simp [hi, ha]
+
+ERROR .LspCheck.lean:28:9-29:1
+`simp` made no progress
+Source line 28:
+        simp [Finset.affineCombination_insert, ha, hpred, hwa, ih,
+        ^
+Highlighted span: s
+
+WARNING .LspCheck.lean:29:45-29:47
+This simp argument is unused:
+  ha
+
+Hint: Omit it from the simp argument list.
+  simp [hi,̵ ̵h̵a̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 29:
+          fun i hi hwi => h i (by simp [hi, ha]) hwi]
+                                            ^^
+Highlighted span: ha
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+variable (k)
+
+variable {k}
+
+theorem affineCombination_filter_of_ne (w : ι → k) (p : ι → P) {pred : ι → Prop}
+    [DecidablePred pred] (h : ∀ i ∈ s, w i ≠ 0 → pred i) :
+    {x ∈ s | pred x}.affineCombination k p w = s.affineCombination k p w := by
+  classical
+  refine Finset.affineCombination_eq_of_eq_weights ?_
+  intro i hi
+  by_cases hp : pred i
+  · simp [Finset.mem_filter] at hi
+    exact hi.1
+  · exfalso
+    exact hp (h i hi.1 hi.2)
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:19:10-19:51
+Unknown constant `Finset.affineCombination_eq_of_eq_weights`
+Source line 19:
+  refine Finset.affineCombination_eq_of_eq_weights ?_
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.affineCombination_eq_of_eq_weights
+
+ERROR .LspCheck.lean:20:9-20:10
+No goals to be solved
+Source line 20:
+  intro i hi
+        ^
+Highlighted span: i
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:19:10-19:51
+Unknown constant `Finset.affineCombination_eq_of_eq_weights`
+Source line 19:
+  refine Finset.affineCombination_eq_of_eq_weights ?_
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.affineCombination_eq_of_eq_weights
+
+ERROR .LspCheck.lean:20:9-20:10
+No goals to be solved
+Source line 20:
+  intro i hi
+        ^
+Highlighted span: i

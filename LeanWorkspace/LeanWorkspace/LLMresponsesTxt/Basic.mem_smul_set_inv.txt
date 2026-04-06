@@ -1,0 +1,162 @@
+FILE: Basic.mem_smul_set_inv.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.mem_smul_set_inv.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Pointwise
+
+variable {F α β γ : Type*}
+
+variable [Group α] [MulAction α β] {s t A B : Set β} {a b : α} {x : β}
+
+theorem mem_smul_set_inv {s : Set α} : a ∈ b • s⁻¹ ↔ b ∈ a • s := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise
+
+variable {F α β γ : Type*}
+
+variable [Group α] [MulAction α β] {s t A B : Set β} {a b : α} {x : β}
+
+theorem mem_smul_set_inv {s : Set α} : a ∈ b • s⁻¹ ↔ b ∈ a • s := by
+  rw [Set.mem_smul_set]
+  constructor
+  · rintro ⟨y, hy, rfl⟩
+    refine ⟨y⁻¹, ?_, ?_⟩
+    · simpa using hy
+    · simp [mul_assoc]
+  · rintro ⟨y, hy, h⟩
+    refine ⟨y⁻¹, ?_, ?_⟩
+    · simpa using hy
+    · simp [h, mul_assoc]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:19:5-19:26
+unsolved goals
+case mpr.refine_2
+α : Type u_2
+inst✝ : Group α
+a b : α
+s : Set α
+y : α
+hy : y ∈ s
+h : (fun x ↦ a • x) y = b
+⊢ b * y⁻¹ = a
+Source line 19:
+    · simp [h, mul_assoc]
+    ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simp [h, mul_assoc]
+
+WARNING .LspCheck.lean:19:13-19:14
+This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [h̵,̵ ̵mul_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 19:
+    · simp [h, mul_assoc]
+            ^
+Highlighted span: h
+
+WARNING .LspCheck.lean:19:16-19:25
+This simp argument is unused:
+  mul_assoc
+
+Hint: Omit it from the simp argument list.
+  simp [h,̵ ̵m̵u̵l̵_̵a̵s̵s̵o̵c̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 19:
+    · simp [h, mul_assoc]
+               ^^^^^^^^^
+Highlighted span: mul_assoc
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:19:5-19:26
+unsolved goals
+case mpr.refine_2
+α : Type u_2
+inst✝ : Group α
+a b : α
+s : Set α
+y : α
+hy : y ∈ s
+h : (fun x ↦ a • x) y = b
+⊢ b * y⁻¹ = a
+Source line 19:
+    · simp [h, mul_assoc]
+    ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simp [h, mul_assoc]
+
+WARNING .LspCheck.lean:19:13-19:14
+This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [h̵,̵ ̵mul_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 19:
+    · simp [h, mul_assoc]
+            ^
+Highlighted span: h
+
+WARNING .LspCheck.lean:19:16-19:25
+This simp argument is unused:
+  mul_assoc
+
+Hint: Omit it from the simp argument list.
+  simp [h,̵ ̵m̵u̵l̵_̵a̵s̵s̵o̵c̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 19:
+    · simp [h, mul_assoc]
+               ^^^^^^^^^
+Highlighted span: mul_assoc
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise
+
+variable {F α β γ : Type*}
+
+variable [Group α] [MulAction α β] {s t A B : Set β} {a b : α} {x : β}
+
+theorem mem_smul_set_inv {s : Set α} : a ∈ b • s⁻¹ ↔ b ∈ a • s := by
+  rw [Set.mem_smul_set]
+  constructor
+  · rintro ⟨y, hy, rfl⟩
+    refine ⟨y⁻¹, ?_, ?_⟩
+    · simpa using hy
+    · simp [mul_assoc]
+  · rintro ⟨y, hy, h⟩
+    refine ⟨y⁻¹, ?_, ?_⟩
+    · simpa using hy
+    · rw [← h]
+      simp [mul_assoc]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

@@ -1,0 +1,180 @@
+FILE: Membership.mem_iSup_prop.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Membership.mem_iSup_prop.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {M A B : Type*}
+
+variable [MulOneClass M]
+
+theorem mem_iSup_prop {p : Prop} {S : p → Submonoid M} {x : M} :
+    x ∈ ⨆ (h : p), S h ↔ x = 1 ∨ ∃ (h : p), x ∈ S h := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M A B : Type*}
+
+variable [MulOneClass M]
+
+theorem mem_iSup_prop {p : Prop} {S : p → Submonoid M} {x : M} :
+    x ∈ ⨆ (h : p), S h ↔ x = 1 ∨ ∃ (h : p), x ∈ S h := by
+  by_cases hp : p
+  · let h0 : p := hp
+    have hEq : (⨆ (h : p), S h) = S h0 := by
+      apply le_antisymm
+      · refine iSup_le ?_
+        intro h
+        exact le_of_eq (Subsingleton.elim _ _)
+      · exact le_iSup (fun h : p => S h) h0
+    rw [hEq]
+    constructor
+    · intro hx
+      right
+      exact ⟨h0, hx⟩
+    · intro hx
+      rcases hx with rfl | ⟨h, hh⟩
+      · exact (S h0).one_mem
+      · simpa [hEq] using hh
+  · have hEq : (⨆ (h : p), S h) = ⊥ := by
+      rw [iSup_of_empty]
+      exact not_nonempty_iff.mp hp
+    rw [hEq]
+    constructor
+    · intro hx
+      left
+      simpa using hx
+    · intro hx
+      rcases hx with rfl | ⟨h, _⟩
+      · exact (show (1 : M) ∈ (⊥ : Submonoid M) by simp)
+      · exact (hp h).elim
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:25-15:46
+failed to synthesize instance of type class
+  Subsingleton (Submonoid M)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 15:
+        exact le_of_eq (Subsingleton.elim _ _)
+                        ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subsingleton.elim _ _
+
+ERROR .LspCheck.lean:27:11-27:24
+failed to synthesize instance of type class
+  IsEmpty p
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 27:
+      rw [iSup_of_empty]
+          ^^^^^^^^^^^^^
+Highlighted span: iSup_of_empty
+
+ERROR .LspCheck.lean:28:33-28:35
+Application type mismatch: The argument
+  hp
+has type
+  ¬p
+but is expected to have type
+  ¬Nonempty p
+in the application
+  not_nonempty_iff.mp hp
+Source line 28:
+      exact not_nonempty_iff.mp hp
+                                ^^
+Highlighted span: hp
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:25-15:46
+failed to synthesize instance of type class
+  Subsingleton (Submonoid M)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 15:
+        exact le_of_eq (Subsingleton.elim _ _)
+                        ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subsingleton.elim _ _
+
+ERROR .LspCheck.lean:27:11-27:24
+failed to synthesize instance of type class
+  IsEmpty p
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 27:
+      rw [iSup_of_empty]
+          ^^^^^^^^^^^^^
+Highlighted span: iSup_of_empty
+
+ERROR .LspCheck.lean:28:33-28:35
+Application type mismatch: The argument
+  hp
+has type
+  ¬p
+but is expected to have type
+  ¬Nonempty p
+in the application
+  not_nonempty_iff.mp hp
+Source line 28:
+      exact not_nonempty_iff.mp hp
+                                ^^
+Highlighted span: hp
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M A B : Type*}
+
+variable [MulOneClass M]
+
+theorem mem_iSup_prop {p : Prop} {S : p → Submonoid M} {x : M} :
+    x ∈ ⨆ (h : p), S h ↔ x = 1 ∨ ∃ (h : p), x ∈ S h := by
+  by_cases hp : p
+  · let h0 : p := hp
+    have hEq : (⨆ (h : p), S h) = S h0 := by
+      apply le_antisymm
+      · refine iSup_le ?_
+        intro h
+        cases Subsingleton.elim h h0
+        exact le_rfl
+      · exact le_iSup (fun h : p => S h) h0
+    rw [hEq]
+    constructor
+    · intro hx
+      right
+      exact ⟨h0, hx⟩
+    · rintro (rfl | ⟨h, hh⟩)
+      · exact (S h0).one_mem
+      · cases Subsingleton.elim h h0
+        simpa using hh
+  · have hp' : IsEmpty p := ⟨hp⟩
+    have hEq : (⨆ (h : p), S h) = ⊥ := by
+      exact iSup_of_empty S
+    rw [hEq]
+    constructor
+    · intro hx
+      left
+      simpa using hx
+    · rintro (rfl | ⟨h, _⟩)
+      · simp
+      · exact (hp h).elim
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

@@ -1,0 +1,181 @@
+FILE: Piecewise.prod_eq_mul_prod_diff_singleton_of_mem.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Piecewise.prod_eq_mul_prod_diff_singleton_of_mem.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {ι κ M β γ : Type*} {s : Finset ι}
+
+variable [CommMonoid M]
+
+theorem prod_eq_mul_prod_diff_singleton_of_mem [DecidableEq ι] {s : Finset ι} {i : ι} (h : i ∈ s)
+    (f : ι → M) : ∏ x ∈ s, f x = f i * ∏ x ∈ s \ {i}, f x := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι κ M β γ : Type*} {s : Finset ι}
+
+variable [CommMonoid M]
+
+theorem prod_eq_mul_prod_diff_singleton_of_mem [DecidableEq ι] {s : Finset ι} {i : ι} (h : i ∈ s)
+    (f : ι → M) : ∏ x ∈ s, f x = f i * ∏ x ∈ s \ {i}, f x := by
+  classical
+  simpa [Finset.mul_prod_erase _ _ h, Finset.erase_eq_of_subset, Finset.singleton_subset_iff] using
+    (Finset.mul_prod_erase (s := s) (f := f) h).symm
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:39-10:64
+Unknown constant `Finset.erase_eq_of_subset`
+Source line 10:
+  simpa [Finset.mul_prod_erase _ _ h, Finset.erase_eq_of_subset, Finset.singleton_subset_iff] using
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.erase_eq_of_subset
+
+ERROR .LspCheck.lean:10:3-11:1
+Type mismatch: After simplification, term
+  Eq.symm (Finset.mul_prod_erase s f h)
+ has type
+  True
+but is expected to have type
+  ∏ x ∈ s, f x = f i * ∏ x ∈ s \ {i}, f x
+Source line 10:
+  simpa [Finset.mul_prod_erase _ _ h, Finset.erase_eq_of_subset, Finset.singleton_subset_iff] using
+  ^
+Highlighted span: s
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:39-10:64
+Unknown constant `Finset.erase_eq_of_subset`
+Source line 10:
+  simpa [Finset.mul_prod_erase _ _ h, Finset.erase_eq_of_subset, Finset.singleton_subset_iff] using
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.erase_eq_of_subset
+
+ERROR .LspCheck.lean:10:3-11:1
+Type mismatch: After simplification, term
+  Eq.symm (Finset.mul_prod_erase s f h)
+ has type
+  True
+but is expected to have type
+  ∏ x ∈ s, f x = f i * ∏ x ∈ s \ {i}, f x
+Source line 10:
+  simpa [Finset.mul_prod_erase _ _ h, Finset.erase_eq_of_subset, Finset.singleton_subset_iff] using
+  ^
+Highlighted span: s
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι κ M β γ : Type*} {s : Finset ι}
+
+variable [CommMonoid M]
+
+theorem prod_eq_mul_prod_diff_singleton_of_mem [DecidableEq ι] {s : Finset ι} {i : ι} (h : i ∈ s)
+    (f : ι → M) : ∏ x ∈ s, f x = f i * ∏ x ∈ s \ {i}, f x := by
+  classical
+  rw [Finset.prod_eq_mul_prod_diff_singleton h]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:46-10:47
+Application type mismatch: The argument
+  h
+has type
+  i ∈ s
+of sort `Prop` but is expected to have type
+  ι
+of sort `Type u_1` in the application
+  Finset.prod_eq_mul_prod_diff_singleton h
+Source line 10:
+  rw [Finset.prod_eq_mul_prod_diff_singleton h]
+                                             ^
+Highlighted span: h
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:46-10:47
+Application type mismatch: The argument
+  h
+has type
+  i ∈ s
+of sort `Prop` but is expected to have type
+  ι
+of sort `Type u_1` in the application
+  Finset.prod_eq_mul_prod_diff_singleton h
+Source line 10:
+  rw [Finset.prod_eq_mul_prod_diff_singleton h]
+                                             ^
+Highlighted span: h
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι κ M β γ : Type*} {s : Finset ι}
+
+variable [CommMonoid M]
+
+theorem prod_eq_mul_prod_diff_singleton_of_mem [DecidableEq ι] {s : Finset ι} {i : ι} (h : i ∈ s)
+    (f : ι → M) : ∏ x ∈ s, f x = f i * ∏ x ∈ s \ {i}, f x := by
+  classical
+  simpa [Finset.mem_sdiff, h, and_self, Finset.prod_insert, not_false_eq_true] using
+    (Finset.prod_insert (s := s \ {i}) (a := i) (f := f)
+      (by
+        simp)) .symm
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:5-12:1
+Function expected at
+  Finset.prod_insert ?m.35
+but this term has type
+  ∏ x ∈ insert i (s \ {i}), f x = f i * ∏ x ∈ s \ {i}, f x
+
+Note: Expected a function because this term is being applied to the argument
+  .symm
+Source line 11:
+    (Finset.prod_insert (s := s \ {i}) (a := i) (f := f)
+    ^
+Highlighted span: (
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:5-12:1
+Function expected at
+  Finset.prod_insert ?m.35
+but this term has type
+  ∏ x ∈ insert i (s \ {i}), f x = f i * ∏ x ∈ s \ {i}, f x
+
+Note: Expected a function because this term is being applied to the argument
+  .symm
+Source line 11:
+    (Finset.prod_insert (s := s \ {i}) (a := i) (f := f)
+    ^
+Highlighted span: (

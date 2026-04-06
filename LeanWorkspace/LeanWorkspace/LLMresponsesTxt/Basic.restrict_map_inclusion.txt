@@ -1,0 +1,270 @@
+FILE: Basic.restrict_map_inclusion.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.restrict_map_inclusion.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable (k : Type*) {V V₂ V₃ : Type*} (P P₂ P₃ : Type*)
+
+variable [Ring k] [AddCommGroup V] [AddCommGroup V₂] [AddCommGroup V₃]
+
+variable [Module k V] [Module k V₂] [Module k V₃]
+
+variable [AddTorsor V P] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃]
+
+variable {P P₂ P₃}
+
+variable {k}
+
+theorem restrict_map_inclusion {n : ℕ} (s : Affine.Simplex k P n)
+    (S₁ S₂ : AffineSubspace k P) (hS₁) (hS₂ : S₁ ≤ S₂) :
+    letI := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (k : Type*) {V V₂ V₃ : Type*} (P P₂ P₃ : Type*)
+
+variable [Ring k] [AddCommGroup V] [AddCommGroup V₂] [AddCommGroup V₃]
+
+variable [Module k V] [Module k V₂] [Module k V₃]
+
+variable [AddTorsor V P] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃]
+
+variable {P P₂ P₃}
+
+variable {k}
+
+theorem restrict_map_inclusion {n : ℕ} (s : Affine.Simplex k P n)
+    (S₁ S₂ : AffineSubspace k P) (hS₁) (hS₂ : S₁ ≤ S₂) :
+    letI := hS₁
+    letI := hS₂
+    (s.restrict S₁).map (AffineSubspace.inclusion hS₂) = s.restrict S₂ := by
+  ext i
+  rfl
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:19:21-19:24
+Invalid field `map`: The environment does not contain `Function.map`, so it is not possible to project the field `map` from an expression
+  s.restrict S₁
+of type
+  (hS : affineSpan k (Set.range s.points) ≤ S₁) → Affine.Simplex k (↥S₁) n
+Source line 19:
+    (s.restrict S₁).map (AffineSubspace.inclusion hS₂) = s.restrict S₂ := by
+                    ^^^
+Highlighted span: map
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:19:21-19:24
+Invalid field `map`: The environment does not contain `Function.map`, so it is not possible to project the field `map` from an expression
+  s.restrict S₁
+of type
+  (hS : affineSpan k (Set.range s.points) ≤ S₁) → Affine.Simplex k (↥S₁) n
+Source line 19:
+    (s.restrict S₁).map (AffineSubspace.inclusion hS₂) = s.restrict S₂ := by
+                    ^^^
+Highlighted span: map
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (k : Type*) {V V₂ V₃ : Type*} (P P₂ P₃ : Type*)
+
+variable [Ring k] [AddCommGroup V] [AddCommGroup V₂] [AddCommGroup V₃]
+
+variable [Module k V] [Module k V₂] [Module k V₃]
+
+variable [AddTorsor V P] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃]
+
+variable {P P₂ P₃}
+
+variable {k}
+
+theorem restrict_map_inclusion {n : ℕ} (s : Affine.Simplex k P n)
+    (S₁ S₂ : AffineSubspace k P) (hS₁) (hS₂ : S₁ ≤ S₂) :
+    letI := hS₁
+    letI := hS₂
+    Affine.Simplex.map (AffineSubspace.inclusion hS₂) (s.restrict S₁) = s.restrict S₂ := by
+  ext i
+  rfl
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:19:25-19:53
+failed to synthesize instance of type class
+  Nonempty ↥S₁
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 19:
+    Affine.Simplex.map (AffineSubspace.inclusion hS₂) (s.restrict S₁) = s.restrict S₂ := by
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.inclusion hS₂
+
+ERROR .LspCheck.lean:19:73-19:86
+Type mismatch
+  s.restrict S₂
+has type
+  (hS : affineSpan k (Set.range s.points) ≤ S₂) → Affine.Simplex k (↥S₂) n
+but is expected to have type
+  Function.Injective ⇑?m.61 → Affine.Simplex ?m.30 ?m.34 ?m.42
+Source line 19:
+    Affine.Simplex.map (AffineSubspace.inclusion hS₂) (s.restrict S₁) = s.restrict S₂ := by
+                                                                        ^^^^^^^^^^^^^
+Highlighted span: s.restrict S₂
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:19:25-19:53
+failed to synthesize instance of type class
+  Nonempty ↥S₁
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 19:
+    Affine.Simplex.map (AffineSubspace.inclusion hS₂) (s.restrict S₁) = s.restrict S₂ := by
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.inclusion hS₂
+
+ERROR .LspCheck.lean:19:73-19:86
+Type mismatch
+  s.restrict S₂
+has type
+  (hS : affineSpan k (Set.range s.points) ≤ S₂) → Affine.Simplex k (↥S₂) n
+but is expected to have type
+  Function.Injective ⇑?m.61 → Affine.Simplex ?m.30 ?m.34 ?m.42
+Source line 19:
+    Affine.Simplex.map (AffineSubspace.inclusion hS₂) (s.restrict S₁) = s.restrict S₂ := by
+                                                                        ^^^^^^^^^^^^^
+Highlighted span: s.restrict S₂
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (k : Type*) {V V₂ V₃ : Type*} (P P₂ P₃ : Type*)
+
+variable [Ring k] [AddCommGroup V] [AddCommGroup V₂] [AddCommGroup V₃]
+
+variable [Module k V] [Module k V₂] [Module k V₃]
+
+variable [AddTorsor V P] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃]
+
+variable {P P₂ P₃}
+
+variable {k}
+
+theorem restrict_map_inclusion {n : ℕ} (s : Affine.Simplex k P n)
+    (S₁ S₂ : AffineSubspace k P) (hS₁) (hS₂ : S₁ ≤ S₂) :
+    letI := hS₁
+    letI := hS₂
+    ∀ h₁ : affineSpan k (Set.range s.points) ≤ S₁,
+      Affine.Simplex.map
+          ⟨AffineSubspace.inclusion hS₂, by
+            intro x y h
+            exact Subtype.ext h⟩
+          (s.restrict S₁ h₁) =
+        s.restrict S₂ (le_trans h₁ hS₂) := by
+  intro h₁
+  ext i
+  rfl
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:21:12-21:40
+failed to synthesize instance of type class
+  Nonempty ↥S₁
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 21:
+          ⟨AffineSubspace.inclusion hS₂, by
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.inclusion hS₂
+
+ERROR .LspCheck.lean:25:9-25:40
+Type mismatch
+  s.restrict S₂ ⋯
+has type
+  Affine.Simplex k (↥S₂) n
+but is expected to have type
+  Function.Injective ⇑?m.88 → Affine.Simplex ?m.61 ?m.52 ?m.68
+Source line 25:
+        s.restrict S₂ (le_trans h₁ hS₂) := by
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: s.restrict S₂ (le_trans h₁ hS₂)
+
+ERROR .LspCheck.lean:23:31-23:32
+Application type mismatch: The argument
+  h
+has type
+  ∑ i ∈ x, y i = 0
+but is expected to have type
+  ↑?m.111 = ↑?m.112
+in the application
+  Subtype.ext h
+Source line 23:
+            exact Subtype.ext h⟩
+                              ^
+Highlighted span: h
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:21:12-21:40
+failed to synthesize instance of type class
+  Nonempty ↥S₁
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 21:
+          ⟨AffineSubspace.inclusion hS₂, by
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.inclusion hS₂
+
+ERROR .LspCheck.lean:25:9-25:40
+Type mismatch
+  s.restrict S₂ ⋯
+has type
+  Affine.Simplex k (↥S₂) n
+but is expected to have type
+  Function.Injective ⇑?m.88 → Affine.Simplex ?m.61 ?m.52 ?m.68
+Source line 25:
+        s.restrict S₂ (le_trans h₁ hS₂) := by
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: s.restrict S₂ (le_trans h₁ hS₂)
+
+ERROR .LspCheck.lean:23:31-23:32
+Application type mismatch: The argument
+  h
+has type
+  ∑ i ∈ x, y i = 0
+but is expected to have type
+  ↑?m.111 = ↑?m.112
+in the application
+  Subtype.ext h
+Source line 23:
+            exact Subtype.ext h⟩
+                              ^
+Highlighted span: h

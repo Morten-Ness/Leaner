@@ -1,0 +1,91 @@
+FILE: Indicator.inter_indicator_one.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Indicator.inter_indicator_one.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {ι κ G₀ M₀ R : Type*}
+
+variable [MulZeroOneClass M₀] {s t : Set ι} {i : ι}
+
+theorem inter_indicator_one : (s ∩ t).indicator (1 : ι → M₀) = s.indicator 1 * t.indicator 1 := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι κ G₀ M₀ R : Type*}
+
+variable [MulZeroOneClass M₀] {s t : Set ι} {i : ι}
+
+theorem inter_indicator_one : (s ∩ t).indicator (1 : ι → M₀) = s.indicator 1 * t.indicator 1 := by
+  ext i
+  by_cases hs : i ∈ s
+  · by_cases ht : i ∈ t
+    · simp [Set.indicator_of_mem, hs, ht]
+    · simp [Set.indicator_of_mem, Set.indicator_of_not_mem, hs, ht]
+  · simp [Set.indicator_of_not_mem, hs]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:35-12:59
+Unknown constant `Set.indicator_of_not_mem`
+Source line 12:
+    · simp [Set.indicator_of_mem, Set.indicator_of_not_mem, hs, ht]
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Set.indicator_of_not_mem
+
+ERROR .LspCheck.lean:13:11-13:35
+Unknown constant `Set.indicator_of_not_mem`
+Source line 13:
+  · simp [Set.indicator_of_not_mem, hs]
+          ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Set.indicator_of_not_mem
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:35-12:59
+Unknown constant `Set.indicator_of_not_mem`
+Source line 12:
+    · simp [Set.indicator_of_mem, Set.indicator_of_not_mem, hs, ht]
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Set.indicator_of_not_mem
+
+ERROR .LspCheck.lean:13:11-13:35
+Unknown constant `Set.indicator_of_not_mem`
+Source line 13:
+  · simp [Set.indicator_of_not_mem, hs]
+          ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Set.indicator_of_not_mem
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι κ G₀ M₀ R : Type*}
+
+variable [MulZeroOneClass M₀] {s t : Set ι} {i : ι}
+
+theorem inter_indicator_one : (s ∩ t).indicator (1 : ι → M₀) = s.indicator 1 * t.indicator 1 := by
+  ext i
+  by_cases hs : i ∈ s
+  · by_cases ht : i ∈ t
+    · simp [Set.indicator, hs, ht]
+    · simp [Set.indicator, hs, ht]
+  · simp [Set.indicator, hs]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

@@ -1,0 +1,816 @@
+FILE: Rank.rank_sup_eq_rank_left_mul_rank_of_free.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Rank.rank_sup_eq_rank_left_mul_rank_of_free.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R S : Type*} [CommRing R] [CommRing S] [Algebra R S]
+  (A B : Subalgebra R S)
+
+variable [Module.Free R A] [Module.Free A (Algebra.adjoin A (B : Set S))]
+
+theorem rank_sup_eq_rank_left_mul_rank_of_free :
+    Module.rank R ↥(A ⊔ B) = Module.rank R A * Module.rank A (Algebra.adjoin A (B : Set S)) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R S : Type*} [CommRing R] [CommRing S] [Algebra R S]
+  (A B : Subalgebra R S)
+
+variable [Module.Free R A] [Module.Free A (Algebra.adjoin A (B : Set S))]
+
+theorem rank_sup_eq_rank_left_mul_rank_of_free :
+    Module.rank R ↥(A ⊔ B) = Module.rank R A * Module.rank A (Algebra.adjoin A (B : Set S)) := by
+  let C : Subalgebra A S := Algebra.adjoin A (B : Set S)
+  have h1 :
+      Module.rank R ↥C = Module.rank R A * Module.rank A C :=
+    by
+      simpa [C] using
+        (Module.Free.rank_eq_rank_mul_rank (R := R) (A := A) (M := C))
+  have h2 : (A ⊔ B : Subalgebra R S) = C.restrictScalars R := by
+    ext x
+    change x ∈ A ⊔ B ↔ x ∈ Algebra.adjoin A (B : Set S)
+    rw [Algebra.adjoin_eq_sup]
+  simpa [h2, C] using h1
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:10-15:43
+Unknown constant `Module.Free.rank_eq_rank_mul_rank`
+Source line 15:
+        (Module.Free.rank_eq_rank_mul_rank (R := R) (A := A) (M := C))
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Module.Free.rank_eq_rank_mul_rank
+
+ERROR .LspCheck.lean:19:9-19:30
+Unknown constant `Algebra.adjoin_eq_sup`
+Source line 19:
+    rw [Algebra.adjoin_eq_sup]
+        ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Algebra.adjoin_eq_sup
+
+ERROR .LspCheck.lean:20:3-20:25
+Type mismatch: After simplification, term
+  h1
+ has type
+  Module.rank R ↥(Algebra.adjoin ↥A ↑B) = Module.rank R ↥A * Module.rank ↥A ↥(Algebra.adjoin ↥A ↑B)
+but is expected to have type
+  Module.rank R ↥(A ⊔ B) = Module.rank R ↥A * Module.rank ↥A ↥(Algebra.adjoin ↥A ↑B)
+Source line 20:
+  simpa [h2, C] using h1
+  ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [h2, C] using h1
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:10-15:43
+Unknown constant `Module.Free.rank_eq_rank_mul_rank`
+Source line 15:
+        (Module.Free.rank_eq_rank_mul_rank (R := R) (A := A) (M := C))
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Module.Free.rank_eq_rank_mul_rank
+
+ERROR .LspCheck.lean:19:9-19:30
+Unknown constant `Algebra.adjoin_eq_sup`
+Source line 19:
+    rw [Algebra.adjoin_eq_sup]
+        ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Algebra.adjoin_eq_sup
+
+ERROR .LspCheck.lean:20:3-20:25
+Type mismatch: After simplification, term
+  h1
+ has type
+  Module.rank R ↥(Algebra.adjoin ↥A ↑B) = Module.rank R ↥A * Module.rank ↥A ↥(Algebra.adjoin ↥A ↑B)
+but is expected to have type
+  Module.rank R ↥(A ⊔ B) = Module.rank R ↥A * Module.rank ↥A ↥(Algebra.adjoin ↥A ↑B)
+Source line 20:
+  simpa [h2, C] using h1
+  ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [h2, C] using h1
+
+===== ASSISTANT =====
+import Mathlib
+
+open Cardinal
+
+variable {R S : Type*} [CommRing R] [CommRing S] [Algebra R S]
+  (A B : Subalgebra R S)
+
+variable [Module.Free R A] [Module.Free A (Algebra.adjoin A (B : Set S))]
+
+theorem rank_sup_eq_rank_left_mul_rank_of_free :
+    Module.rank R ↥(A ⊔ B) = Module.rank R A * Module.rank A (Algebra.adjoin A (B : Set S)) := by
+  let C : Subalgebra A S := Algebra.adjoin A (B : Set S)
+  have hmul :
+      Module.rank R ↥C = Module.rank R A * Module.rank A C := by
+    simpa only [C] using
+      (Cardinal.lift_id (Module.rank R ↥C)).symm.trans
+        (Module.rank_eq_mul_rank A C)
+  have hs :
+      ((A ⊔ B : Subalgebra R S) : Set S) = (C : Set S) := by
+    ext x
+    constructor
+    · intro hx
+      refine Subalgebra.sup_induction ?ha ?hb ?add ?mul ?algebraMap hx
+      · intro x hxA
+        exact Algebra.subset_adjoin (K := A) hxA
+      · intro x hxB
+        exact Algebra.subset_adjoin (K := A) hxB
+      · intro x y hx hy
+        exact Subalgebra.add_mem _ hx hy
+      · intro x y hx hy
+        exact Subalgebra.mul_mem _ hx hy
+      · intro r
+        exact (Algebra.adjoin A (B : Set S)).algebraMap_mem r
+    · intro hx
+      refine Algebra.adjoin_induction ?hB ?hA ?add ?mul ?smul hx
+      · intro x hxB
+        exact show x ∈ (A ⊔ B : Subalgebra R S) from
+          show x ∈ B from hxB |> fun h => show x ∈ A ⊔ B from Or.inr h
+      · intro x hxA
+        exact show x ∈ (A ⊔ B : Subalgebra R S) from
+          show x ∈ A from hxA |> fun h => show x ∈ A ⊔ B from Or.inl h
+      · intro x y hx hy
+        exact Subalgebra.add_mem _ hx hy
+      · intro x y hx hy
+        exact Subalgebra.mul_mem _ hx hy
+      · intro a x hx
+        rw [show a • x = (algebraMap A S a) * x by
+          rfl]
+        exact Subalgebra.mul_mem _ (show algebraMap A S a ∈ (A ⊔ B : Subalgebra R S) from
+          show algebraMap A S a ∈ A from A.algebraMap_mem a |> fun h => show algebraMap A S a ∈ A ⊔ B from Or.inl h) hx
+  have hEq : (A ⊔ B : Subalgebra R S) = C.restrictScalars R := by
+    ext x
+    change x ∈ ((A ⊔ B : Subalgebra R S) : Set S) ↔ x ∈ (C : Set S)
+    simpa [hs]
+  simpa [hEq, C] using hmul
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:17:10-17:33
+Unknown constant `Module.rank_eq_mul_rank`
+Source line 17:
+        (Module.rank_eq_mul_rank A C)
+         ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Module.rank_eq_mul_rank
+
+ERROR .LspCheck.lean:23:14-23:38
+Unknown constant `Subalgebra.sup_induction`
+Source line 23:
+      refine Subalgebra.sup_induction ?ha ?hb ?add ?mul ?algebraMap hx
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subalgebra.sup_induction
+
+ERROR .LspCheck.lean:24:7-25:1
+No goals to be solved
+Source line 24:
+      · intro x hxA
+      ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:36:15-36:16
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case h.mpr.refine_1
+R : Type u_1
+S : Type u_2
+inst✝⁴ : CommRing R
+inst✝³ : CommRing S
+inst✝² : Algebra R S
+A B : Subalgebra R S
+inst✝¹ : Module.Free R ↥A
+inst✝ : Module.Free ↥A ↥(Algebra.adjoin ↥A ↑B)
+C : Subalgebra (↥A) S := ⋯
+hmul : Module.rank R ↥C = Module.rank R ↥A * Module.rank ↥A ↥C
+x : S
+hx : x ∈ ↑C
+⊢ Type ?u.54337.22824
+Source line 36:
+      · intro x hxB
+              ^
+Highlighted span: x
+
+ERROR .LspCheck.lean:39:15-39:16
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case h.mpr.refine_2
+R : Type u_1
+S : Type u_2
+inst✝⁴ : CommRing R
+inst✝³ : CommRing S
+inst✝² : Algebra R S
+A B : Subalgebra R S
+inst✝¹ : Module.Free R ↥A
+inst✝ : Module.Free ↥A ↥(Algebra.adjoin ↥A ↑B)
+C : Subalgebra (↥A) S := ⋯
+hmul : Module.rank R ↥C = Module.rank R ↥A * Module.rank ↥A ↥C
+x : S
+hx : x ∈ ↑C
+⊢ Type ?u.54337.22823
+Source line 39:
+      · intro x hxA
+              ^
+Highlighted span: x
+
+ERROR .LspCheck.lean:42:15-42:16
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case h.mpr.refine_3
+R : Type u_1
+S : Type u_2
+inst✝⁴ : CommRing R
+inst✝³ : CommRing S
+inst✝² : Algebra R S
+A B : Subalgebra R S
+inst✝¹ : Module.Free R ↥A
+inst✝ : Module.Free ↥A ↥(Algebra.adjoin ↥A ↑B)
+C : Subalgebra (↥A) S := ⋯
+hmul : Module.rank R ↥C = Module.rank R ↥A * Module.rank ↥A ↥C
+x : S
+hx : x ∈ ↑C
+⊢ CommSemiring sorry
+Source line 42:
+      · intro x y hx hy
+              ^
+Highlighted span: x
+
+ERROR .LspCheck.lean:44:15-44:16
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case h.mpr.refine_4
+R : Type u_1
+S : Type u_2
+inst✝⁴ : CommRing R
+inst✝³ : CommRing S
+inst✝² : Algebra R S
+A B : Subalgebra R S
+inst✝¹ : Module.Free R ↥A
+inst✝ : Module.Free ↥A ↥(Algebra.adjoin ↥A ↑B)
+C : Subalgebra (↥A) S := ⋯
+hmul : Module.rank R ↥C = Module.rank R ↥A * Module.rank ↥A ↥C
+x : S
+hx : x ∈ ↑C
+⊢ Semiring sorry
+Source line 44:
+      · intro x y hx hy
+              ^
+Highlighted span: x
+
+ERROR .LspCheck.lean:46:15-46:16
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case h.mpr.refine_5
+R : Type u_1
+S : Type u_2
+inst✝⁴ : CommRing R
+inst✝³ : CommRing S
+inst✝² : Algebra R S
+A B : Subalgebra R S
+inst✝¹ : Module.Free R ↥A
+inst✝ : Module.Free ↥A ↥(Algebra.adjoin ↥A ↑B)
+C : Subalgebra (↥A) S := ⋯
+hmul : Module.rank R ↥C = Module.rank R ↥A * Module.rank ↥A ↥C
+x : S
+hx : x ∈ ↑C
+⊢ Algebra sorry sorry
+Source line 46:
+      · intro a x hx
+              ^
+Highlighted span: a
+
+ERROR .LspCheck.lean:34:5-35:1
+unsolved goals
+case h.mpr.refine_6
+R : Type u_1
+S : Type u_2
+inst✝⁴ : CommRing R
+inst✝³ : CommRing S
+inst✝² : Algebra R S
+A B : Subalgebra R S
+inst✝¹ : Module.Free R ↥A
+inst✝ : Module.Free ↥A ↥(Algebra.adjoin ↥A ↑B)
+C : Subalgebra (↥A) S := ⋯
+hmul : Module.rank R ↥C = Module.rank R ↥A * Module.rank ↥A ↥C
+x : S
+hx : x ∈ ↑C
+⊢ Set sorry
+
+case h.mpr.refine_7
+R : Type u_1
+S : Type u_2
+inst✝⁴ : CommRing R
+inst✝³ : CommRing S
+inst✝² : Algebra R S
+A B : Subalgebra R S
+inst✝¹ : Module.Free R ↥A
+inst✝ : Module.Free ↥A ↥(Algebra.adjoin ↥A ↑B)
+C : Subalgebra (↥A) S := ⋯
+hmul : Module.rank R ↥C = Module.rank R ↥A * Module.rank ↥A ↥C
+x : S
+hx : x ∈ ↑C
+⊢ sorry
+
+case smul
+R : Type u_1
+S : Type u_2
+inst✝⁴ : CommRing R
+inst✝³ : CommRing S
+inst✝² : Algebra R S
+A B : Subalgebra R S
+inst✝¹ : Module.Free R ↥A
+inst✝ : Module.Free ↥A ↥(Algebra.adjoin ↥A ↑B)
+C : Subalgebra (↥A) S := Algebra.adjoin ↥A ↑B
+hmul : Module.rank R ↥C = Module.rank R ↥A * Module.rank ↥A ↥C
+x : S
+hx : x ∈ ↑C
+⊢ ?h.mpr.refine_7 ∈ Algebra.adjoin sorry ?h.mpr.refine_6
+
+case hB
+R : Type u_1
+S : Type u_2
+inst✝⁴ : CommRing R
+inst✝³ : CommRing S
+inst✝² : Algebra R S
+A B : Subalgebra R S
+inst✝¹ : Module.Free R ↥A
+inst✝ : Module.Free ↥A ↥(Algebra.adjoin ↥A ↑B)
+C : Subalgebra (↥A) S := Algebra.adjoin ↥A ↑B
+hmul : Module.rank R ↥C = Module.rank R ↥A * Module.rank ↥A ↥C
+x : S
+hx : x ∈ ↑C
+⊢ ∀ x_1 ∈ ?h.mpr.refine_6, x ∈ ↑C → x ∈ ↑(A ⊔ B)
+
+case hA
+R : Type u_1
+S : Type u_2
+inst✝⁴ : CommRing R
+inst✝³ : CommRing S
+inst✝² : Algebra R S
+A B : Subalgebra R S
+inst✝¹ : Module.Free R ↥A
+inst✝ : Module.Free ↥A ↥(Algebra.adjoin ↥A ↑B)
+C : Subalgebra (↥A) S := Algebra.adjoin ↥A ↑B
+hmul : Module.rank R ↥C = Module.rank R ↥A * Module.rank ↥A ↥C
+x : S
+hx : x ∈ ↑C
+⊢ ∀ (r : sorry), x ∈ ↑C → x ∈ ↑(A ⊔ B)
+
+case add
+R : Type u_1
+S : Type u_2
+inst✝⁴ : CommRing R
+inst✝³ : CommRing S
+inst✝² : Algebra R S
+A B : Subalgebra R S
+inst✝¹ : Module.Free R ↥A
+inst✝ : Module.Free ↥A ↥(Algebra.adjoin ↥A ↑B)
+C : Subalgebra (↥A) S := Algebra.adjoin ↥A ↑B
+hmul : Module.rank R ↥C = Module.rank R ↥A * Module.rank ↥A ↥C
+x : S
+hx : x ∈ ↑C
+⊢ ∀ (x_1 y : sorry),
+    x_1 ∈ Algebra.adjoin sorry ?h.mpr.refine_6 →
+      y ∈ Algebra.adjoin sorry ?h.mpr.refine_6 →
+        (x ∈ ↑C → x ∈ ↑(A ⊔ B)) → (x ∈ ↑C → x ∈ ↑(A ⊔ B)) → x ∈ ↑C → x ∈ ↑(A ⊔ B)
+
+case mul
+R : Type u_1
+S : Type u_2
+inst✝⁴ : CommRing R
+inst✝³ : CommRing S
+inst✝² : Algebra R S
+A B : Subalgebra R S
+inst✝¹ : Module.Free R ↥A
+inst✝ : Module.Free ↥A ↥(Algebra.adjoin ↥A ↑B)
+C : Subalgebra (↥A) S := Algebra.adjoin ↥A ↑B
+hmul : Module.rank R ↥C = Module.rank R ↥A * Module.rank ↥A ↥C
+x : S
+hx : x ∈ ↑C
+⊢ ∀ (x_1 y : sorry),
+    x_1 ∈ Algebra.adjoin sorry ?h.mpr.refine_6 →
+      y ∈ Algebra.adjoin sorry ?h.mpr.refine_6 →
+        (x ∈ ↑C → x ∈ ↑(A ⊔ B)) → (x ∈ ↑C → x ∈ ↑(A ⊔ B)) → x ∈ ↑C → x ∈ ↑(A ⊔ B)
+Source line 34:
+    · intro hx
+    ^
+Highlighted span: ·
+
+WARNING .LspCheck.lean:54:5-54:15
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 54:
+    simpa [hs]
+    ^^^^^^^^^^
+Highlighted span: simpa [hs]
+
+ERROR .LspCheck.lean:55:3-55:28
+Type mismatch: After simplification, term
+  hmul
+ has type
+  Module.rank R ↥(Algebra.adjoin ↥A ↑B) = Module.rank R ↥A * Module.rank ↥A ↥(Algebra.adjoin ↥A ↑B)
+but is expected to have type
+  Module.rank R ↥(A ⊔ B) = Module.rank R ↥A * Module.rank ↥A ↥(Algebra.adjoin ↥A ↑B)
+Source line 55:
+  simpa [hEq, C] using hmul
+  ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [hEq, C] using hmul
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:17:10-17:33
+Unknown constant `Module.rank_eq_mul_rank`
+Source line 17:
+        (Module.rank_eq_mul_rank A C)
+         ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Module.rank_eq_mul_rank
+
+ERROR .LspCheck.lean:23:14-23:38
+Unknown constant `Subalgebra.sup_induction`
+Source line 23:
+      refine Subalgebra.sup_induction ?ha ?hb ?add ?mul ?algebraMap hx
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subalgebra.sup_induction
+
+ERROR .LspCheck.lean:24:7-25:1
+No goals to be solved
+Source line 24:
+      · intro x hxA
+      ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:36:15-36:16
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case h.mpr.refine_1
+R : Type u_1
+S : Type u_2
+inst✝⁴ : CommRing R
+inst✝³ : CommRing S
+inst✝² : Algebra R S
+A B : Subalgebra R S
+inst✝¹ : Module.Free R ↥A
+inst✝ : Module.Free ↥A ↥(Algebra.adjoin ↥A ↑B)
+C : Subalgebra (↥A) S := ⋯
+hmul : Module.rank R ↥C = Module.rank R ↥A * Module.rank ↥A ↥C
+x : S
+hx : x ∈ ↑C
+⊢ Type ?u.54337.22824
+Source line 36:
+      · intro x hxB
+              ^
+Highlighted span: x
+
+ERROR .LspCheck.lean:39:15-39:16
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case h.mpr.refine_2
+R : Type u_1
+S : Type u_2
+inst✝⁴ : CommRing R
+inst✝³ : CommRing S
+inst✝² : Algebra R S
+A B : Subalgebra R S
+inst✝¹ : Module.Free R ↥A
+inst✝ : Module.Free ↥A ↥(Algebra.adjoin ↥A ↑B)
+C : Subalgebra (↥A) S := ⋯
+hmul : Module.rank R ↥C = Module.rank R ↥A * Module.rank ↥A ↥C
+x : S
+hx : x ∈ ↑C
+⊢ Type ?u.54337.22823
+Source line 39:
+      · intro x hxA
+              ^
+Highlighted span: x
+
+ERROR .LspCheck.lean:42:15-42:16
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case h.mpr.refine_3
+R : Type u_1
+S : Type u_2
+inst✝⁴ : CommRing R
+inst✝³ : CommRing S
+inst✝² : Algebra R S
+A B : Subalgebra R S
+inst✝¹ : Module.Free R ↥A
+inst✝ : Module.Free ↥A ↥(Algebra.adjoin ↥A ↑B)
+C : Subalgebra (↥A) S := ⋯
+hmul : Module.rank R ↥C = Module.rank R ↥A * Module.rank ↥A ↥C
+x : S
+hx : x ∈ ↑C
+⊢ CommSemiring sorry
+Source line 42:
+      · intro x y hx hy
+              ^
+Highlighted span: x
+
+ERROR .LspCheck.lean:44:15-44:16
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case h.mpr.refine_4
+R : Type u_1
+S : Type u_2
+inst✝⁴ : CommRing R
+inst✝³ : CommRing S
+inst✝² : Algebra R S
+A B : Subalgebra R S
+inst✝¹ : Module.Free R ↥A
+inst✝ : Module.Free ↥A ↥(Algebra.adjoin ↥A ↑B)
+C : Subalgebra (↥A) S := ⋯
+hmul : Module.rank R ↥C = Module.rank R ↥A * Module.rank ↥A ↥C
+x : S
+hx : x ∈ ↑C
+⊢ Semiring sorry
+Source line 44:
+      · intro x y hx hy
+              ^
+Highlighted span: x
+
+ERROR .LspCheck.lean:46:15-46:16
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case h.mpr.refine_5
+R : Type u_1
+S : Type u_2
+inst✝⁴ : CommRing R
+inst✝³ : CommRing S
+inst✝² : Algebra R S
+A B : Subalgebra R S
+inst✝¹ : Module.Free R ↥A
+inst✝ : Module.Free ↥A ↥(Algebra.adjoin ↥A ↑B)
+C : Subalgebra (↥A) S := ⋯
+hmul : Module.rank R ↥C = Module.rank R ↥A * Module.rank ↥A ↥C
+x : S
+hx : x ∈ ↑C
+⊢ Algebra sorry sorry
+Source line 46:
+      · intro a x hx
+              ^
+Highlighted span: a
+
+ERROR .LspCheck.lean:34:5-35:1
+unsolved goals
+case h.mpr.refine_6
+R : Type u_1
+S : Type u_2
+inst✝⁴ : CommRing R
+inst✝³ : CommRing S
+inst✝² : Algebra R S
+A B : Subalgebra R S
+inst✝¹ : Module.Free R ↥A
+inst✝ : Module.Free ↥A ↥(Algebra.adjoin ↥A ↑B)
+C : Subalgebra (↥A) S := ⋯
+hmul : Module.rank R ↥C = Module.rank R ↥A * Module.rank ↥A ↥C
+x : S
+hx : x ∈ ↑C
+⊢ Set sorry
+
+case h.mpr.refine_7
+R : Type u_1
+S : Type u_2
+inst✝⁴ : CommRing R
+inst✝³ : CommRing S
+inst✝² : Algebra R S
+A B : Subalgebra R S
+inst✝¹ : Module.Free R ↥A
+inst✝ : Module.Free ↥A ↥(Algebra.adjoin ↥A ↑B)
+C : Subalgebra (↥A) S := ⋯
+hmul : Module.rank R ↥C = Module.rank R ↥A * Module.rank ↥A ↥C
+x : S
+hx : x ∈ ↑C
+⊢ sorry
+
+case smul
+R : Type u_1
+S : Type u_2
+inst✝⁴ : CommRing R
+inst✝³ : CommRing S
+inst✝² : Algebra R S
+A B : Subalgebra R S
+inst✝¹ : Module.Free R ↥A
+inst✝ : Module.Free ↥A ↥(Algebra.adjoin ↥A ↑B)
+C : Subalgebra (↥A) S := Algebra.adjoin ↥A ↑B
+hmul : Module.rank R ↥C = Module.rank R ↥A * Module.rank ↥A ↥C
+x : S
+hx : x ∈ ↑C
+⊢ ?h.mpr.refine_7 ∈ Algebra.adjoin sorry ?h.mpr.refine_6
+
+case hB
+R : Type u_1
+S : Type u_2
+inst✝⁴ : CommRing R
+inst✝³ : CommRing S
+inst✝² : Algebra R S
+A B : Subalgebra R S
+inst✝¹ : Module.Free R ↥A
+inst✝ : Module.Free ↥A ↥(Algebra.adjoin ↥A ↑B)
+C : Subalgebra (↥A) S := Algebra.adjoin ↥A ↑B
+hmul : Module.rank R ↥C = Module.rank R ↥A * Module.rank ↥A ↥C
+x : S
+hx : x ∈ ↑C
+⊢ ∀ x_1 ∈ ?h.mpr.refine_6, x ∈ ↑C → x ∈ ↑(A ⊔ B)
+
+case hA
+R : Type u_1
+S : Type u_2
+inst✝⁴ : CommRing R
+inst✝³ : CommRing S
+inst✝² : Algebra R S
+A B : Subalgebra R S
+inst✝¹ : Module.Free R ↥A
+inst✝ : Module.Free ↥A ↥(Algebra.adjoin ↥A ↑B)
+C : Subalgebra (↥A) S := Algebra.adjoin ↥A ↑B
+hmul : Module.rank R ↥C = Module.rank R ↥A * Module.rank ↥A ↥C
+x : S
+hx : x ∈ ↑C
+⊢ ∀ (r : sorry), x ∈ ↑C → x ∈ ↑(A ⊔ B)
+
+case add
+R : Type u_1
+S : Type u_2
+inst✝⁴ : CommRing R
+inst✝³ : CommRing S
+inst✝² : Algebra R S
+A B : Subalgebra R S
+inst✝¹ : Module.Free R ↥A
+inst✝ : Module.Free ↥A ↥(Algebra.adjoin ↥A ↑B)
+C : Subalgebra (↥A) S := Algebra.adjoin ↥A ↑B
+hmul : Module.rank R ↥C = Module.rank R ↥A * Module.rank ↥A ↥C
+x : S
+hx : x ∈ ↑C
+⊢ ∀ (x_1 y : sorry),
+    x_1 ∈ Algebra.adjoin sorry ?h.mpr.refine_6 →
+      y ∈ Algebra.adjoin sorry ?h.mpr.refine_6 →
+        (x ∈ ↑C → x ∈ ↑(A ⊔ B)) → (x ∈ ↑C → x ∈ ↑(A ⊔ B)) → x ∈ ↑C → x ∈ ↑(A ⊔ B)
+
+case mul
+R : Type u_1
+S : Type u_2
+inst✝⁴ : CommRing R
+inst✝³ : CommRing S
+inst✝² : Algebra R S
+A B : Subalgebra R S
+inst✝¹ : Module.Free R ↥A
+inst✝ : Module.Free ↥A ↥(Algebra.adjoin ↥A ↑B)
+C : Subalgebra (↥A) S := Algebra.adjoin ↥A ↑B
+hmul : Module.rank R ↥C = Module.rank R ↥A * Module.rank ↥A ↥C
+x : S
+hx : x ∈ ↑C
+⊢ ∀ (x_1 y : sorry),
+    x_1 ∈ Algebra.adjoin sorry ?h.mpr.refine_6 →
+      y ∈ Algebra.adjoin sorry ?h.mpr.refine_6 →
+        (x ∈ ↑C → x ∈ ↑(A ⊔ B)) → (x ∈ ↑C → x ∈ ↑(A ⊔ B)) → x ∈ ↑C → x ∈ ↑(A ⊔ B)
+Source line 34:
+    · intro hx
+    ^
+Highlighted span: ·
+
+WARNING .LspCheck.lean:54:5-54:15
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 54:
+    simpa [hs]
+    ^^^^^^^^^^
+Highlighted span: simpa [hs]
+
+ERROR .LspCheck.lean:55:3-55:28
+Type mismatch: After simplification, term
+  hmul
+ has type
+  Module.rank R ↥(Algebra.adjoin ↥A ↑B) = Module.rank R ↥A * Module.rank ↥A ↥(Algebra.adjoin ↥A ↑B)
+but is expected to have type
+  Module.rank R ↥(A ⊔ B) = Module.rank R ↥A * Module.rank ↥A ↥(Algebra.adjoin ↥A ↑B)
+Source line 55:
+  simpa [hEq, C] using hmul
+  ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [hEq, C] using hmul
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R S : Type*} [CommRing R] [CommRing S] [Algebra R S]
+  (A B : Subalgebra R S)
+
+variable [Module.Free R A] [Module.Free A (Algebra.adjoin A (B : Set S))]
+
+theorem rank_sup_eq_rank_left_mul_rank_of_free :
+    Module.rank R ↥(A ⊔ B) = Module.rank R A * Module.rank A (Algebra.adjoin A (B : Set S)) := by
+  rw [show A ⊔ B = (Algebra.adjoin A (B : Set S)).restrictScalars R by
+    ext x
+    change x ∈ A ⊔ B ↔ x ∈ Algebra.adjoin A (B : Set S)
+    constructor
+    · intro hx
+      refine Subalgebra.sup_le ?_ hx
+      · exact fun y hy => Algebra.subset_adjoin hy
+      · exact fun y hy => Algebra.subset_adjoin hy
+    · intro hx
+      refine Algebra.adjoin_le_iff.2 ?_ hx
+      intro y hy
+      exact show y ∈ A ⊔ B from Or.inr hy]
+  simpa using
+    (Submodule.rank_mul_rank (R := R) (S := A) (V := Algebra.adjoin A (B : Set S)))
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:14-15:31
+Unknown constant `Subalgebra.sup_le`
+Source line 15:
+      refine Subalgebra.sup_le ?_ hx
+             ^^^^^^^^^^^^^^^^^
+Highlighted span: Subalgebra.sup_le
+
+ERROR .LspCheck.lean:16:7-16:51
+No goals to be solved
+Source line 16:
+      · exact fun y hy => Algebra.subset_adjoin hy
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · exact fun y hy => Algebra.subset_adjoin hy
+
+ERROR .LspCheck.lean:19:41-19:43
+(deterministic) timeout at `isDefEq`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+Source line 19:
+      refine Algebra.adjoin_le_iff.2 ?_ hx
+                                        ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:10:7-11:1
+(deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+Source line 10:
+  rw [show A ⊔ B = (Algebra.adjoin A (B : Set S)).restrictScalars R by
+      ^
+Highlighted span: s
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:14-15:31
+Unknown constant `Subalgebra.sup_le`
+Source line 15:
+      refine Subalgebra.sup_le ?_ hx
+             ^^^^^^^^^^^^^^^^^
+Highlighted span: Subalgebra.sup_le
+
+ERROR .LspCheck.lean:16:7-16:51
+No goals to be solved
+Source line 16:
+      · exact fun y hy => Algebra.subset_adjoin hy
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · exact fun y hy => Algebra.subset_adjoin hy
+
+ERROR .LspCheck.lean:19:41-19:43
+(deterministic) timeout at `isDefEq`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+Source line 19:
+      refine Algebra.adjoin_le_iff.2 ?_ hx
+                                        ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:10:7-11:1
+(deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+Source line 10:
+  rw [show A ⊔ B = (Algebra.adjoin A (B : Set S)).restrictScalars R by
+      ^
+Highlighted span: s

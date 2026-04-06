@@ -1,0 +1,265 @@
+FILE: Defs.coe_direction_eq_vsub_set.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Defs.coe_direction_eq_vsub_set.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable (k : Type*) {V : Type*} (P : Type*) [Ring k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {k P}
+
+theorem coe_direction_eq_vsub_set {s : AffineSubspace k P} (h : (s : Set P).Nonempty) :
+    (s.direction : Set V) = (s : Set P) -ᵥ s := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (k : Type*) {V : Type*} (P : Type*) [Ring k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {k P}
+
+theorem coe_direction_eq_vsub_set {s : AffineSubspace k P} (h : (s : Set P).Nonempty) :
+    (s.direction : Set V) = (s : Set P) -ᵥ s := by
+  ext v
+  constructor
+  · intro hv
+    rcases h with ⟨p, hp⟩
+    refine ⟨p, hp, ?_⟩
+    rw [Set.mem_vsub_set]
+    exact s.vsub_mem_direction hp hv
+  · intro hv
+    rcases hv with ⟨p1, hp1, p2, hp2, h12⟩
+    rw [Set.mem_vsub_set] at h12
+    simpa [h12] using s.vsub_mem_direction hp1 hp2
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:9-15:25
+Unknown constant `Set.mem_vsub_set`
+Source line 15:
+    rw [Set.mem_vsub_set]
+        ^^^^^^^^^^^^^^^^
+Highlighted span: Set.mem_vsub_set
+
+ERROR .LspCheck.lean:19:9-19:25
+Unknown constant `Set.mem_vsub_set`
+Source line 19:
+    rw [Set.mem_vsub_set] at h12
+        ^^^^^^^^^^^^^^^^
+Highlighted span: Set.mem_vsub_set
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:9-15:25
+Unknown constant `Set.mem_vsub_set`
+Source line 15:
+    rw [Set.mem_vsub_set]
+        ^^^^^^^^^^^^^^^^
+Highlighted span: Set.mem_vsub_set
+
+ERROR .LspCheck.lean:19:9-19:25
+Unknown constant `Set.mem_vsub_set`
+Source line 19:
+    rw [Set.mem_vsub_set] at h12
+        ^^^^^^^^^^^^^^^^
+Highlighted span: Set.mem_vsub_set
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (k : Type*) {V : Type*} (P : Type*) [Ring k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {k P}
+
+theorem coe_direction_eq_vsub_set {s : AffineSubspace k P} (h : (s : Set P).Nonempty) :
+    (s.direction : Set V) = (s : Set P) -ᵥ s := by
+  ext v
+  constructor
+  · intro hv
+    rcases h with ⟨p, hp⟩
+    refine ⟨p, hp, p, ?_⟩
+    constructor
+    · exact hp
+    · simpa using s.vadd_mem_of_mem_direction hp hv
+  · rintro ⟨p1, hp1, p2, hp2, rfl⟩
+    exact s.vsub_mem_direction hp1 hp2
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:17:50-17:52
+Application type mismatch: The argument
+  hv
+has type
+  Membership.mem.{u_2, u_2} (↑s.direction) v
+but is expected to have type
+  Membership.mem.{u_3, u_3} s ?m.63
+in the application
+  AffineSubspace.vadd_mem_of_mem_direction ?m.62 hv
+Source line 17:
+    · simpa using s.vadd_mem_of_mem_direction hp hv
+                                                 ^^
+Highlighted span: hv
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:17:50-17:52
+Application type mismatch: The argument
+  hv
+has type
+  Membership.mem.{u_2, u_2} (↑s.direction) v
+but is expected to have type
+  Membership.mem.{u_3, u_3} s ?m.63
+in the application
+  AffineSubspace.vadd_mem_of_mem_direction ?m.62 hv
+Source line 17:
+    · simpa using s.vadd_mem_of_mem_direction hp hv
+                                                 ^^
+Highlighted span: hv
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (k : Type*) {V : Type*} (P : Type*) [Ring k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {k P}
+
+theorem coe_direction_eq_vsub_set {s : AffineSubspace k P} (h : (s : Set P).Nonempty) :
+    (s.direction : Set V) = (s : Set P) -ᵥ s := by
+  ext v
+  constructor
+  · intro hv
+    rcases h with ⟨p, hp⟩
+    refine ⟨p, hp, v +ᵥ p, ?_, by simp⟩
+    exact s.vadd_mem_of_mem_direction hp hv
+  · rintro ⟨p1, hp1, p2, hp2, hEq⟩
+    rw [← hEq]
+    exact s.vsub_mem_direction hp1 hp2
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:32-14:39
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+inst✝ : AddTorsor V P
+s : AffineSubspace k P
+v : V
+hv : v ∈ ↑s.direction
+p : P
+hp : p ∈ ↑s
+⊢ p -ᵥ (v +ᵥ p) = v
+Source line 14:
+    refine ⟨p, hp, v +ᵥ p, ?_, by simp⟩
+                               ^^^^^^^
+Highlighted span: by simp
+
+ERROR .LspCheck.lean:15:42-15:44
+Application type mismatch: The argument
+  hv
+has type
+  Membership.mem.{u_2, u_2} (↑s.direction) v
+but is expected to have type
+  Membership.mem.{u_3, u_3} s p
+in the application
+  AffineSubspace.vadd_mem_of_mem_direction ?m.65 hv
+Source line 15:
+    exact s.vadd_mem_of_mem_direction hp hv
+                                         ^^
+Highlighted span: hv
+
+ERROR .LspCheck.lean:15:39-15:41
+Application type mismatch: The argument
+  hp
+has type
+  Membership.mem.{u_3, u_3} (↑s) p
+but is expected to have type
+  Membership.mem.{u_2, u_2} s.direction v
+in the application
+  @AffineSubspace.vadd_mem_of_mem_direction k V P inst✝³ inst✝² inst✝¹ inst✝ s v hp
+Source line 15:
+    exact s.vadd_mem_of_mem_direction hp hv
+                                      ^^
+Highlighted span: hp
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:32-14:39
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+inst✝ : AddTorsor V P
+s : AffineSubspace k P
+v : V
+hv : v ∈ ↑s.direction
+p : P
+hp : p ∈ ↑s
+⊢ p -ᵥ (v +ᵥ p) = v
+Source line 14:
+    refine ⟨p, hp, v +ᵥ p, ?_, by simp⟩
+                               ^^^^^^^
+Highlighted span: by simp
+
+ERROR .LspCheck.lean:15:42-15:44
+Application type mismatch: The argument
+  hv
+has type
+  Membership.mem.{u_2, u_2} (↑s.direction) v
+but is expected to have type
+  Membership.mem.{u_3, u_3} s p
+in the application
+  AffineSubspace.vadd_mem_of_mem_direction ?m.65 hv
+Source line 15:
+    exact s.vadd_mem_of_mem_direction hp hv
+                                         ^^
+Highlighted span: hv
+
+ERROR .LspCheck.lean:15:39-15:41
+Application type mismatch: The argument
+  hp
+has type
+  Membership.mem.{u_3, u_3} (↑s) p
+but is expected to have type
+  Membership.mem.{u_2, u_2} s.direction v
+in the application
+  @AffineSubspace.vadd_mem_of_mem_direction k V P inst✝³ inst✝² inst✝¹ inst✝ s v hp
+Source line 15:
+    exact s.vadd_mem_of_mem_direction hp hv
+                                      ^^
+Highlighted span: hp

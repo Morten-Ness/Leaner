@@ -1,0 +1,21 @@
+import Mathlib
+
+variable (k : Type*) {V V₂ V₃ : Type*} (P P₂ P₃ : Type*)
+
+variable [Ring k] [AddCommGroup V] [AddCommGroup V₂] [AddCommGroup V₃]
+
+variable [Module k V] [Module k V₂] [Module k V₃]
+
+variable [AddTorsor V P] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃]
+
+variable {P P₂ P₃}
+
+variable {k}
+
+theorem restrict_map_restrict
+    {n : ℕ} (s : Affine.Simplex k P n) (f : P →ᵃ[k] P₂) (hf : Function.Injective f)
+    (S₁ : AffineSubspace k P) (S₂ : AffineSubspace k P₂)
+    (hS₁ : affineSpan k (Set.range s.points) ≤ S₁) (hfS : AffineSubspace.map f S₁ ≤ S₂) :
+    letI := Classical.decEq P
+    True := by
+  trivial

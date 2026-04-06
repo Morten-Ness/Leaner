@@ -1,0 +1,221 @@
+FILE: Basic.eq_of_eqOn_of_field_closure_eq_top.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.eq_of_eqOn_of_field_closure_eq_top.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {K : Type u} {L : Type v} {M : Type w}
+
+variable [DivisionRing K] [DivisionRing L] [DivisionRing M]
+
+variable {s : Subfield K}
+
+variable {L : Type v} [Semiring L]
+
+theorem eq_of_eqOn_of_field_closure_eq_top {s : Set K} (hs : Subfield.closure s = ⊤) {f g : K →+* L}
+    (h : s.EqOn f g) : f = g := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {K : Type u} {L : Type v} {M : Type w}
+
+variable [DivisionRing K] [DivisionRing L] [DivisionRing M]
+
+variable {s : Subfield K}
+
+variable {L : Type v} [Semiring L]
+
+theorem eq_of_eqOn_of_field_closure_eq_top {s : Set K} (hs : Subfield.closure s = ⊤) {f g : K →+* L}
+    (h : s.EqOn f g) : f = g := by
+  ext x
+  have hx : x ∈ Subfield.closure s := by
+    rw [hs]
+    trivial
+  exact Subfield.eqOn_closure h hx
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:17:9-17:30
+Unknown constant `Subfield.eqOn_closure`
+Source line 17:
+  exact Subfield.eqOn_closure h hx
+        ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subfield.eqOn_closure
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:17:9-17:30
+Unknown constant `Subfield.eqOn_closure`
+Source line 17:
+  exact Subfield.eqOn_closure h hx
+        ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subfield.eqOn_closure
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {K : Type u} {L : Type v} {M : Type w}
+
+variable [DivisionRing K] [DivisionRing L] [DivisionRing M]
+
+variable {s : Subfield K}
+
+variable {L : Type v} [Semiring L]
+
+theorem eq_of_eqOn_of_field_closure_eq_top {s : Set K} (hs : Subfield.closure s = ⊤) {f g : K →+* L}
+    (h : s.EqOn f g) : f = g := by
+  rw [RingHom.ext_iff]
+  intro x
+  apply Subfield.closure_induction s (p := fun x => f x = g x)
+  · intro x hx
+    exact h hx
+  · simp
+  · intro x y hx hy
+    simp [map_add, hx, hy]
+  · intro x hx
+    simp [map_mul, hx]
+  · intro x hx
+    simp [map_inv₀, hx]
+  · have hx : x ∈ (⊤ : Subfield K) := by trivial
+    rw [← hs] at hx
+    exact hx
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:53-15:62
+Type mismatch
+  f x = g x
+has type
+  Prop
+but is expected to have type
+  x ∈ Subfield.closure ?m.28 → Prop
+Source line 15:
+  apply Subfield.closure_induction s (p := fun x => f x = g x)
+                                                    ^^^^^^^^^
+Highlighted span: f x = g x
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:53-15:62
+Type mismatch
+  f x = g x
+has type
+  Prop
+but is expected to have type
+  x ∈ Subfield.closure ?m.28 → Prop
+Source line 15:
+  apply Subfield.closure_induction s (p := fun x => f x = g x)
+                                                    ^^^^^^^^^
+Highlighted span: f x = g x
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {K : Type u} {L : Type v} {M : Type w}
+
+variable [DivisionRing K] [DivisionRing L] [DivisionRing M]
+
+variable {s : Subfield K}
+
+variable {L : Type v} [Semiring L]
+
+theorem eq_of_eqOn_of_field_closure_eq_top {s : Set K} (hs : Subfield.closure s = ⊤) {f g : K →+* L}
+    (h : s.EqOn f g) : f = g := by
+  ext x
+  have hx : x ∈ Subfield.closure s := by
+    rw [hs]
+    simp
+  refine Subfield.closure_induction hx ?_ ?_ ?_ ?_ ?_
+  · intro y hy
+    exact h hy
+  · simp
+  · intro a b ha hb
+    simp [map_add, ha, hb]
+  · intro a b ha hb
+    simp [map_mul, ha, hb]
+  · intro a ha
+    simp [map_inv₀, ha]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:17:10-17:54
+failed to elaborate eliminator, insufficient number of arguments, expected type:
+  f x = g x
+Source line 17:
+  refine Subfield.closure_induction hx ?_ ?_ ?_ ?_ ?_
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subfield.closure_induction hx ?_ ?_ ?_ ?_ ?_
+
+ERROR .LspCheck.lean:17:37-17:39
+Type mismatch
+  hx
+has type
+  x ∈ Subfield.closure s
+but is expected to have type
+  ∀ (x : ?m.35) (hx : x ∈ ?m.37), ?m.38 x ⋯
+Source line 17:
+  refine Subfield.closure_induction hx ?_ ?_ ?_ ?_ ?_
+                                    ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:18:3-19:1
+No goals to be solved
+Source line 18:
+  · intro y hy
+  ^
+Highlighted span: ·
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:17:10-17:54
+failed to elaborate eliminator, insufficient number of arguments, expected type:
+  f x = g x
+Source line 17:
+  refine Subfield.closure_induction hx ?_ ?_ ?_ ?_ ?_
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subfield.closure_induction hx ?_ ?_ ?_ ?_ ?_
+
+ERROR .LspCheck.lean:17:37-17:39
+Type mismatch
+  hx
+has type
+  x ∈ Subfield.closure s
+but is expected to have type
+  ∀ (x : ?m.35) (hx : x ∈ ?m.37), ?m.38 x ⋯
+Source line 17:
+  refine Subfield.closure_induction hx ?_ ?_ ?_ ?_ ?_
+                                    ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:18:3-19:1
+No goals to be solved
+Source line 18:
+  · intro y hy
+  ^
+Highlighted span: ·

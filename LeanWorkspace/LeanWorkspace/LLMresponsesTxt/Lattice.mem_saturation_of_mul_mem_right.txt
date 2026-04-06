@@ -1,0 +1,107 @@
+FILE: Lattice.mem_saturation_of_mul_mem_right.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Lattice.mem_saturation_of_mul_mem_right.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R S : Type*} [CommSemiring R] [CommSemiring S] [Algebra R S]
+  {s : Subalgebra R S} {M : Submonoid S} {H : M ≤ s.toSubmonoid}
+
+theorem mem_saturation_of_mul_mem_right {x y} (hxy : x * y ∈ s.saturation M H)
+    (hy : y ∈ M) : x ∈ s.saturation M H := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R S : Type*} [CommSemiring R] [CommSemiring S] [Algebra R S]
+  {s : Subalgebra R S} {M : Submonoid S} {H : M ≤ s.toSubmonoid}
+
+theorem mem_saturation_of_mul_mem_right {x y} (hxy : x * y ∈ s.saturation M H)
+    (hy : y ∈ M) : x ∈ s.saturation M H := by
+  rcases hxy with ⟨z, hzM, hz_eq⟩
+  refine ⟨y * z, M.mul_mem hy hzM, ?_⟩
+  rw [← mul_assoc, hz_eq, mul_assoc]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:7-10:18
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?a * (?b * ?c)
+in the target expression
+  y * z * x ∈ s
+
+R : Type u_1
+S : Type u_2
+inst✝² : CommSemiring R
+inst✝¹ : CommSemiring S
+inst✝ : Algebra R S
+s : Subalgebra R S
+M : Submonoid S
+H : M ≤ s.toSubmonoid
+x y : S
+hy : y ∈ M
+z : S
+hzM : z ∈ M
+hz_eq : z * (x * y) ∈ s
+⊢ y * z * x ∈ s
+Source line 10:
+  rw [← mul_assoc, hz_eq, mul_assoc]
+      ^^^^^^^^^^^
+Highlighted span: ← mul_assoc
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:7-10:18
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?a * (?b * ?c)
+in the target expression
+  y * z * x ∈ s
+
+R : Type u_1
+S : Type u_2
+inst✝² : CommSemiring R
+inst✝¹ : CommSemiring S
+inst✝ : Algebra R S
+s : Subalgebra R S
+M : Submonoid S
+H : M ≤ s.toSubmonoid
+x y : S
+hy : y ∈ M
+z : S
+hzM : z ∈ M
+hz_eq : z * (x * y) ∈ s
+⊢ y * z * x ∈ s
+Source line 10:
+  rw [← mul_assoc, hz_eq, mul_assoc]
+      ^^^^^^^^^^^
+Highlighted span: ← mul_assoc
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R S : Type*} [CommSemiring R] [CommSemiring S] [Algebra R S]
+  {s : Subalgebra R S} {M : Submonoid S} {H : M ≤ s.toSubmonoid}
+
+theorem mem_saturation_of_mul_mem_right {x y} (hxy : x * y ∈ s.saturation M H)
+    (hy : y ∈ M) : x ∈ s.saturation M H := by
+  rcases hxy with ⟨z, hzM, hz_eq⟩
+  refine ⟨y * z, M.mul_mem hy hzM, ?_⟩
+  simpa [mul_assoc, mul_left_comm, mul_comm] using hz_eq
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

@@ -1,0 +1,8 @@
+import Mathlib
+
+variable {G H : Type*} [Mul G] [Mul H] {A B : Finset G} {a0 b0 : G}
+
+theorem mono {A' B' : Finset G} (hA : A ⊆ A') (hB : B ⊆ B') (h : UniqueMul A' B' a0 b0) :
+    UniqueMul A B a0 b0 := by
+  intro a b ha hb hab
+  exact h (hA ha) (hB hb) hab

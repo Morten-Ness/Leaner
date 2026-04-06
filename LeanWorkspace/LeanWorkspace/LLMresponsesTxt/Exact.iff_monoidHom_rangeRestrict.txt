@@ -1,0 +1,341 @@
+FILE: Exact.iff_monoidHom_rangeRestrict.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Exact.iff_monoidHom_rangeRestrict.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R M M' N N' P P' : Type*}
+
+variable [Group M] [Group N] [Group P] {f : M →* N} {g : N →* P}
+
+theorem iff_monoidHom_rangeRestrict :
+    Function.MulExact f g ↔ Function.MulExact f.range.subtype g.rangeRestrict := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R M M' N N' P P' : Type*}
+
+variable [Group M] [Group N] [Group P] {f : M →* N} {g : N →* P}
+
+theorem iff_monoidHom_rangeRestrict :
+    Function.MulExact f g ↔ Function.MulExact f.range.subtype g.rangeRestrict := by
+  rw [MonoidHom.mulExact_iff]
+  constructor
+  · rintro ⟨hcomp, hker⟩
+    refine ⟨?_, ?_⟩
+    · ext x
+      rfl
+    · ext x
+      constructor
+      · rintro ⟨hx, rfl⟩
+        change g x = 1 at hx
+        exact hker hx
+      · intro hx
+        change g x = 1
+        exact congrArg Subtype.val hx
+  · rintro ⟨hcomp, hker⟩
+    refine ⟨?_, ?_⟩
+    · ext x
+      exact congrArg Subtype.val (DFunLike.congr_fun hcomp x)
+    · intro x hx
+      have hx' : g.rangeRestrict x = 1 := by
+        ext
+        exact hx
+      exact hker hx'
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:12-11:25
+Tactic `cases` failed with a nested error:
+Dependent elimination failed: Failed to solve equation
+  (fun x ↦ ∃ y, f y = x) = fun x ↦ g x ∈ ↑⊥
+at case `Eq.refl`
+Source line 11:
+  · rintro ⟨hcomp, hker⟩
+           ^^^^^^^^^^^^^
+Highlighted span: ⟨hcomp, hker⟩
+
+ERROR .LspCheck.lean:23:12-23:25
+Tactic `rcases` failed: `a✝ : ∀ (y : N),
+  g.rangeRestrict y = 1 ↔ y ∈ Set.range ⇑f.range.subtype` is not an inductive datatype
+Source line 23:
+  · rintro ⟨hcomp, hker⟩
+           ^^^^^^^^^^^^^
+Highlighted span: ⟨hcomp, hker⟩
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:12-11:25
+Tactic `cases` failed with a nested error:
+Dependent elimination failed: Failed to solve equation
+  (fun x ↦ ∃ y, f y = x) = fun x ↦ g x ∈ ↑⊥
+at case `Eq.refl`
+Source line 11:
+  · rintro ⟨hcomp, hker⟩
+           ^^^^^^^^^^^^^
+Highlighted span: ⟨hcomp, hker⟩
+
+ERROR .LspCheck.lean:23:12-23:25
+Tactic `rcases` failed: `a✝ : ∀ (y : N),
+  g.rangeRestrict y = 1 ↔ y ∈ Set.range ⇑f.range.subtype` is not an inductive datatype
+Source line 23:
+  · rintro ⟨hcomp, hker⟩
+           ^^^^^^^^^^^^^
+Highlighted span: ⟨hcomp, hker⟩
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R M M' N N' P P' : Type*}
+
+variable [Group M] [Group N] [Group P] {f : M →* N} {g : N →* P}
+
+theorem iff_monoidHom_rangeRestrict :
+    Function.MulExact f g ↔ Function.MulExact f.range.subtype g.rangeRestrict := by
+  rw [MonoidHom.mulExact_iff, MonoidHom.mulExact_iff]
+  constructor
+  · intro h
+    constructor
+    · ext x
+      rfl
+    · intro y
+      constructor
+      · intro hy
+        change g y = 1 at hy
+        rw [h.2]
+        exact hy
+      · rintro ⟨x, rfl⟩
+        change g (f x) = 1
+        rw [h.1]
+        simp
+  · intro h
+    constructor
+    · ext x
+      exact congrArg Subtype.val (DFunLike.congr_fun h.1 x)
+    · intro y
+      have := h.2 y
+      constructor
+      · intro hy
+        have hy' : g.rangeRestrict y = 1 := by
+          ext
+          exact hy
+        rw [this] at hy'
+        rcases hy' with ⟨x, hx⟩
+        exact hx
+      · intro hy
+        have hy' : y ∈ Set.range f.range.subtype := by
+          exact hy
+        rw [← this] at hy'
+        change g.rangeRestrict y = 1 at hy'
+        exact congrArg Subtype.val hy'
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:5-12:16
+Tactic `constructor` failed: no applicable constructor found
+
+case mp
+M : Type u_2
+N : Type u_4
+P : Type u_6
+inst✝² : Group M
+inst✝¹ : Group N
+inst✝ : Group P
+f : M →* N
+g : N →* P
+h : g.ker = f.range
+⊢ g.rangeRestrict.ker = f.range.subtype.range
+Source line 12:
+    constructor
+    ^^^^^^^^^^^
+Highlighted span: constructor
+
+ERROR .LspCheck.lean:26:5-26:16
+Tactic `constructor` failed: no applicable constructor found
+
+case mpr
+M : Type u_2
+N : Type u_4
+P : Type u_6
+inst✝² : Group M
+inst✝¹ : Group N
+inst✝ : Group P
+f : M →* N
+g : N →* P
+h : g.rangeRestrict.ker = f.range.subtype.range
+⊢ g.ker = f.range
+Source line 26:
+    constructor
+    ^^^^^^^^^^^
+Highlighted span: constructor
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:5-12:16
+Tactic `constructor` failed: no applicable constructor found
+
+case mp
+M : Type u_2
+N : Type u_4
+P : Type u_6
+inst✝² : Group M
+inst✝¹ : Group N
+inst✝ : Group P
+f : M →* N
+g : N →* P
+h : g.ker = f.range
+⊢ g.rangeRestrict.ker = f.range.subtype.range
+Source line 12:
+    constructor
+    ^^^^^^^^^^^
+Highlighted span: constructor
+
+ERROR .LspCheck.lean:26:5-26:16
+Tactic `constructor` failed: no applicable constructor found
+
+case mpr
+M : Type u_2
+N : Type u_4
+P : Type u_6
+inst✝² : Group M
+inst✝¹ : Group N
+inst✝ : Group P
+f : M →* N
+g : N →* P
+h : g.rangeRestrict.ker = f.range.subtype.range
+⊢ g.ker = f.range
+Source line 26:
+    constructor
+    ^^^^^^^^^^^
+Highlighted span: constructor
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R M M' N N' P P' : Type*}
+
+variable [Group M] [Group N] [Group P] {f : M →* N} {g : N →* P}
+
+theorem iff_monoidHom_rangeRestrict :
+    Function.MulExact f g ↔ Function.MulExact f.range.subtype g.rangeRestrict := by
+  rw [MonoidHom.mulExact_iff, MonoidHom.mulExact_iff]
+  constructor
+  · intro h
+    refine ⟨?_, ?_⟩
+    · ext x
+      rfl
+    · ext y
+      constructor
+      · intro hy
+        change g y = 1 at hy
+        rw [h.2]
+        exact hy
+      · rintro ⟨x, rfl⟩
+        change g (f x) = 1
+        rw [h.1]
+        simp
+  · intro h
+    refine ⟨?_, ?_⟩
+    · ext x
+      exact congrArg Subtype.val (DFunLike.congr_fun h.1 x)
+    · ext y
+      constructor
+      · intro hy
+        have hy' : g.rangeRestrict y = 1 := by
+          ext
+          exact hy
+        rw [h.2] at hy'
+        rcases hy' with ⟨x, rfl⟩
+        rfl
+      · intro hy
+        rw [← h.2]
+        rcases hy with ⟨x, rfl⟩
+        change g.rangeRestrict (f x) = 1
+        ext
+        simpa [h.1] using DFunLike.congr_fun h.1 x
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:12-12:20
+Insufficient number of fields for `⟨...⟩` constructor: Constructor `Eq.refl` does not have explicit fields, but 2 were provided
+Source line 12:
+    refine ⟨?_, ?_⟩
+           ^^^^^^^^
+Highlighted span: ⟨?_, ?_⟩
+
+ERROR .LspCheck.lean:13:5-14:1
+No goals to be solved
+Source line 13:
+    · ext x
+    ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:26:12-26:20
+Insufficient number of fields for `⟨...⟩` constructor: Constructor `Eq.refl` does not have explicit fields, but 2 were provided
+Source line 26:
+    refine ⟨?_, ?_⟩
+           ^^^^^^^^
+Highlighted span: ⟨?_, ?_⟩
+
+ERROR .LspCheck.lean:27:5-28:1
+No goals to be solved
+Source line 27:
+    · ext x
+    ^
+Highlighted span: ·
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:12-12:20
+Insufficient number of fields for `⟨...⟩` constructor: Constructor `Eq.refl` does not have explicit fields, but 2 were provided
+Source line 12:
+    refine ⟨?_, ?_⟩
+           ^^^^^^^^
+Highlighted span: ⟨?_, ?_⟩
+
+ERROR .LspCheck.lean:13:5-14:1
+No goals to be solved
+Source line 13:
+    · ext x
+    ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:26:12-26:20
+Insufficient number of fields for `⟨...⟩` constructor: Constructor `Eq.refl` does not have explicit fields, but 2 were provided
+Source line 26:
+    refine ⟨?_, ?_⟩
+           ^^^^^^^^
+Highlighted span: ⟨?_, ?_⟩
+
+ERROR .LspCheck.lean:27:5-28:1
+No goals to be solved
+Source line 27:
+    · ext x
+    ^
+Highlighted span: ·

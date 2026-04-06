@@ -1,0 +1,192 @@
+FILE: Unitization.linearMap_ext.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Unitization.linearMap_ext.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {T : Type*} {S : Type*} {R : Type*} {A : Type*}
+
+theorem linearMap_ext {N} [CommSemiring S] [AddCommMonoid R] [AddCommMonoid A] [AddCommMonoid N]
+    [Module S R] [Module S A] [Module S N] ⦃f g : Unitization R A →ₗ[S] N⦄
+    (hl : ∀ r, f (Unitization.inl r) = g (Unitization.inl r)) (hr : ∀ a : A, f a = g a) : f = g := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {T : Type*} {S : Type*} {R : Type*} {A : Type*}
+
+theorem linearMap_ext {N} [CommSemiring S] [AddCommMonoid R] [AddCommMonoid A] [AddCommMonoid N]
+    [Module S R] [Module S A] [Module S N] ⦃f g : Unitization R A →ₗ[S] N⦄
+    (hl : ∀ r, f (Unitization.inl r) = g (Unitization.inl r)) (hr : ∀ a : A, f a = g a) : f = g := by
+  ext x
+  rcases x with ⟨r, a⟩
+  change f (Unitization.inl r + a) = g (Unitization.inl r + a)
+  rw [map_add, map_add, hl, hr]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:9:17-9:23
+Tactic `rcases` failed: `x : R` is not an inductive datatype
+Source line 9:
+  rcases x with ⟨r, a⟩
+                ^^^^^^
+Highlighted span: ⟨r, a⟩
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:9:17-9:23
+Tactic `rcases` failed: `x : R` is not an inductive datatype
+Source line 9:
+  rcases x with ⟨r, a⟩
+                ^^^^^^
+Highlighted span: ⟨r, a⟩
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {T : Type*} {S : Type*} {R : Type*} {A : Type*}
+
+theorem linearMap_ext {N} [CommSemiring S] [AddCommMonoid R] [AddCommMonoid A] [AddCommMonoid N]
+    [Module S R] [Module S A] [Module S N] ⦃f g : Unitization R A →ₗ[S] N⦄
+    (hl : ∀ r, f (Unitization.inl r) = g (Unitization.inl r)) (hr : ∀ a : A, f a = g a) : f = g := by
+  ext r a : 2
+  · exact hl r
+  · exact hr a
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+WARNING .LspCheck.lean:8:9-8:10
+`ext` did not consume the patterns `a`
+
+Note: This linter can be disabled with `set_option linter.unusedRCasesPattern false`
+Source line 8:
+  ext r a : 2
+        ^
+Highlighted span: a
+
+ERROR .LspCheck.lean:10:14-10:15
+Unknown identifier `a`
+Source line 10:
+  · exact hr a
+             ^
+Highlighted span: a
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+WARNING .LspCheck.lean:8:9-8:10
+`ext` did not consume the patterns `a`
+
+Note: This linter can be disabled with `set_option linter.unusedRCasesPattern false`
+Source line 8:
+  ext r a : 2
+        ^
+Highlighted span: a
+
+ERROR .LspCheck.lean:10:14-10:15
+Unknown identifier `a`
+Source line 10:
+  · exact hr a
+             ^
+Highlighted span: a
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {T : Type*} {S : Type*} {R : Type*} {A : Type*}
+
+theorem linearMap_ext {N} [CommSemiring S] [AddCommMonoid R] [AddCommMonoid A] [AddCommMonoid N]
+    [Module S R] [Module S A] [Module S N] ⦃f g : Unitization R A →ₗ[S] N⦄
+    (hl : ∀ r, f (Unitization.inl r) = g (Unitization.inl r)) (hr : ∀ a : A, f a = g a) : f = g := by
+  ext x
+  exact Unitization.induction_on x (fun r => hl r) (fun a => hr a) (fun x y hx hy => by rw [map_add, map_add, hx, hy])
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:9:9-9:33
+Unknown constant `Unitization.induction_on`
+Source line 9:
+  exact Unitization.induction_on x (fun r => hl r) (fun a => hr a) (fun x y hx hy => by rw [map_add, map_add, hx, hy])
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Unitization.induction_on
+
+ERROR .LspCheck.lean:7:100-8:1
+unsolved goals
+case hr
+S : Type u_2
+R : Type u_3
+A : Type u_4
+N : Type u_5
+inst✝⁶ : CommSemiring S
+inst✝⁵ : AddCommMonoid R
+inst✝⁴ : AddCommMonoid A
+inst✝³ : AddCommMonoid N
+inst✝² : Module S R
+inst✝¹ : Module S A
+inst✝ : Module S N
+f g : Unitization R A →ₗ[S] N
+hl : ∀ (r : R), f (Unitization.inl r) = g (Unitization.inl r)
+hr : ∀ (a : A), f ↑a = g ↑a
+x : A
+⊢ f ↑x = g ↑x
+Source line 7:
+    (hl : ∀ r, f (Unitization.inl r) = g (Unitization.inl r)) (hr : ∀ a : A, f a = g a) : f = g := by
+                                                                                                   ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:9:9-9:33
+Unknown constant `Unitization.induction_on`
+Source line 9:
+  exact Unitization.induction_on x (fun r => hl r) (fun a => hr a) (fun x y hx hy => by rw [map_add, map_add, hx, hy])
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Unitization.induction_on
+
+ERROR .LspCheck.lean:7:100-8:1
+unsolved goals
+case hr
+S : Type u_2
+R : Type u_3
+A : Type u_4
+N : Type u_5
+inst✝⁶ : CommSemiring S
+inst✝⁵ : AddCommMonoid R
+inst✝⁴ : AddCommMonoid A
+inst✝³ : AddCommMonoid N
+inst✝² : Module S R
+inst✝¹ : Module S A
+inst✝ : Module S N
+f g : Unitization R A →ₗ[S] N
+hl : ∀ (r : R), f (Unitization.inl r) = g (Unitization.inl r)
+hr : ∀ (a : A), f ↑a = g ↑a
+x : A
+⊢ f ↑x = g ↑x
+Source line 7:
+    (hl : ∀ r, f (Unitization.inl r) = g (Unitization.inl r)) (hr : ∀ a : A, f a = g a) : f = g := by
+                                                                                                   ^
+Highlighted span: b

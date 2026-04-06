@@ -1,0 +1,282 @@
+FILE: Expect.Finset.expect_mul_expect.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Expect.Finset.expect_mul_expect.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Pointwise BigOperators
+
+variable {ι κ M N : Type*}
+
+variable [Semiring M] [Module ℚ≥0 M]
+
+theorem expect_mul_expect [IsScalarTower ℚ≥0 M M] [SMulCommClass ℚ≥0 M M] (s : Finset ι)
+    (t : Finset κ) (f : ι → M) (g : κ → M) :
+    (𝔼 i ∈ s, f i) * 𝔼 j ∈ t, g j = 𝔼 i ∈ s, 𝔼 j ∈ t, f i * g j := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise BigOperators
+
+variable {ι κ M N : Type*}
+
+variable [Semiring M] [Module ℚ≥0 M]
+
+theorem expect_mul_expect [IsScalarTower ℚ≥0 M M] [SMulCommClass ℚ≥0 M M] (s : Finset ι)
+    (t : Finset κ) (f : ι → M) (g : κ → M) :
+    (𝔼 i ∈ s, f i) * 𝔼 j ∈ t, g j = 𝔼 i ∈ s, 𝔼 j ∈ t, f i * g j := by
+  classical
+  simp_rw [Finset.expect]
+  rw [smul_mul_assoc]
+  rw [Finset.mul_sum]
+  refine Finset.sum_congr rfl ?_
+  intro i hi
+  rw [← smul_mul_assoc]
+  rw [Finset.smul_sum]
+  refine Finset.sum_congr rfl ?_
+  intro j hj
+  rw [← smul_assoc]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:7-15:21
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?a * ∑ i ∈ ?s, ?f i
+in the target expression
+  (↑s.card)⁻¹ • ((∑ x ∈ s, f x) * (↑t.card)⁻¹ • ∑ x ∈ t, g x) =
+    (↑s.card)⁻¹ • ∑ x ∈ s, (↑t.card)⁻¹ • ∑ x_1 ∈ t, f x * g x_1
+
+ι : Type u_1
+κ : Type u_2
+M : Type u_3
+inst✝³ : Semiring M
+inst✝² : Module ℚ≥0 M
+inst✝¹ : IsScalarTower ℚ≥0 M M
+inst✝ : SMulCommClass ℚ≥0 M M
+s : Finset ι
+t : Finset κ
+f : ι → M
+g : κ → M
+⊢ (↑s.card)⁻¹ • ((∑ x ∈ s, f x) * (↑t.card)⁻¹ • ∑ x ∈ t, g x) =
+    (↑s.card)⁻¹ • ∑ x ∈ s, (↑t.card)⁻¹ • ∑ x_1 ∈ t, f x * g x_1
+Source line 15:
+  rw [Finset.mul_sum]
+      ^^^^^^^^^^^^^^
+Highlighted span: Finset.mul_sum
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:7-15:21
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?a * ∑ i ∈ ?s, ?f i
+in the target expression
+  (↑s.card)⁻¹ • ((∑ x ∈ s, f x) * (↑t.card)⁻¹ • ∑ x ∈ t, g x) =
+    (↑s.card)⁻¹ • ∑ x ∈ s, (↑t.card)⁻¹ • ∑ x_1 ∈ t, f x * g x_1
+
+ι : Type u_1
+κ : Type u_2
+M : Type u_3
+inst✝³ : Semiring M
+inst✝² : Module ℚ≥0 M
+inst✝¹ : IsScalarTower ℚ≥0 M M
+inst✝ : SMulCommClass ℚ≥0 M M
+s : Finset ι
+t : Finset κ
+f : ι → M
+g : κ → M
+⊢ (↑s.card)⁻¹ • ((∑ x ∈ s, f x) * (↑t.card)⁻¹ • ∑ x ∈ t, g x) =
+    (↑s.card)⁻¹ • ∑ x ∈ s, (↑t.card)⁻¹ • ∑ x_1 ∈ t, f x * g x_1
+Source line 15:
+  rw [Finset.mul_sum]
+      ^^^^^^^^^^^^^^
+Highlighted span: Finset.mul_sum
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise BigOperators
+
+variable {ι κ M N : Type*}
+
+variable [Semiring M] [Module ℚ≥0 M]
+
+theorem expect_mul_expect [IsScalarTower ℚ≥0 M M] [SMulCommClass ℚ≥0 M M] (s : Finset ι)
+    (t : Finset κ) (f : ι → M) (g : κ → M) :
+    (𝔼 i ∈ s, f i) * 𝔼 j ∈ t, g j = 𝔼 i ∈ s, 𝔼 j ∈ t, f i * g j := by
+  classical
+  simp_rw [Finset.expect]
+  rw [smul_mul_assoc]
+  congr 1
+  rw [sum_mul]
+  refine Finset.sum_congr rfl ?_
+  intro i hi
+  rw [← smul_mul_assoc]
+  rw [Finset.smul_sum]
+  refine Finset.sum_congr rfl ?_
+  intro j hj
+  rw [← smul_assoc]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:7-16:14
+Unknown identifier `sum_mul`
+Source line 16:
+  rw [sum_mul]
+      ^^^^^^^
+Highlighted span: sum_mul
+
+ERROR .LspCheck.lean:11:72-12:1
+unsolved goals
+case e_a
+ι : Type u_1
+κ : Type u_2
+M : Type u_3
+inst✝³ : Semiring M
+inst✝² : Module ℚ≥0 M
+inst✝¹ : IsScalarTower ℚ≥0 M M
+inst✝ : SMulCommClass ℚ≥0 M M
+s : Finset ι
+t : Finset κ
+f : ι → M
+g : κ → M
+⊢ (∑ x ∈ s, f x) * (↑t.card)⁻¹ • ∑ x ∈ t, g x = ∑ x ∈ s, (↑t.card)⁻¹ • ∑ x_1 ∈ t, f x * g x_1
+Source line 11:
+    (𝔼 i ∈ s, f i) * 𝔼 j ∈ t, g j = 𝔼 i ∈ s, 𝔼 j ∈ t, f i * g j := by
+                                                                       ^
+Highlighted span:
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:7-16:14
+Unknown identifier `sum_mul`
+Source line 16:
+  rw [sum_mul]
+      ^^^^^^^
+Highlighted span: sum_mul
+
+ERROR .LspCheck.lean:11:72-12:1
+unsolved goals
+case e_a
+ι : Type u_1
+κ : Type u_2
+M : Type u_3
+inst✝³ : Semiring M
+inst✝² : Module ℚ≥0 M
+inst✝¹ : IsScalarTower ℚ≥0 M M
+inst✝ : SMulCommClass ℚ≥0 M M
+s : Finset ι
+t : Finset κ
+f : ι → M
+g : κ → M
+⊢ (∑ x ∈ s, f x) * (↑t.card)⁻¹ • ∑ x ∈ t, g x = ∑ x ∈ s, (↑t.card)⁻¹ • ∑ x_1 ∈ t, f x * g x_1
+Source line 11:
+    (𝔼 i ∈ s, f i) * 𝔼 j ∈ t, g j = 𝔼 i ∈ s, 𝔼 j ∈ t, f i * g j := by
+                                                                       ^
+Highlighted span:
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise BigOperators
+
+variable {ι κ M N : Type*}
+
+variable [Semiring M] [Module ℚ≥0 M]
+
+theorem expect_mul_expect [IsScalarTower ℚ≥0 M M] [SMulCommClass ℚ≥0 M M] (s : Finset ι)
+    (t : Finset κ) (f : ι → M) (g : κ → M) :
+    (𝔼 i ∈ s, f i) * 𝔼 j ∈ t, g j = 𝔼 i ∈ s, 𝔼 j ∈ t, f i * g j := by
+  classical
+  simp_rw [Finset.expect]
+  rw [smul_mul_assoc]
+  congr 1
+  rw [Finset.sum_mul]
+  refine Finset.sum_congr rfl ?_
+  intro i hi
+  rw [← smul_mul_assoc]
+  rw [Finset.smul_sum]
+  refine Finset.sum_congr rfl ?_
+  intro j hj
+  rw [← smul_assoc]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:19:7-19:23
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?r • (?x * ?y)
+in the target expression
+  f i * (↑t.card)⁻¹ • ∑ x ∈ t, g x = (↑t.card)⁻¹ • ∑ x ∈ t, f i * g x
+
+case e_a
+ι : Type u_1
+κ : Type u_2
+M : Type u_3
+inst✝³ : Semiring M
+inst✝² : Module ℚ≥0 M
+inst✝¹ : IsScalarTower ℚ≥0 M M
+inst✝ : SMulCommClass ℚ≥0 M M
+s : Finset ι
+t : Finset κ
+f : ι → M
+g : κ → M
+i : ι
+hi : i ∈ s
+⊢ f i * (↑t.card)⁻¹ • ∑ x ∈ t, g x = (↑t.card)⁻¹ • ∑ x ∈ t, f i * g x
+Source line 19:
+  rw [← smul_mul_assoc]
+      ^^^^^^^^^^^^^^^^
+Highlighted span: ← smul_mul_assoc
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:19:7-19:23
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?r • (?x * ?y)
+in the target expression
+  f i * (↑t.card)⁻¹ • ∑ x ∈ t, g x = (↑t.card)⁻¹ • ∑ x ∈ t, f i * g x
+
+case e_a
+ι : Type u_1
+κ : Type u_2
+M : Type u_3
+inst✝³ : Semiring M
+inst✝² : Module ℚ≥0 M
+inst✝¹ : IsScalarTower ℚ≥0 M M
+inst✝ : SMulCommClass ℚ≥0 M M
+s : Finset ι
+t : Finset κ
+f : ι → M
+g : κ → M
+i : ι
+hi : i ∈ s
+⊢ f i * (↑t.card)⁻¹ • ∑ x ∈ t, g x = (↑t.card)⁻¹ • ∑ x ∈ t, f i * g x
+Source line 19:
+  rw [← smul_mul_assoc]
+      ^^^^^^^^^^^^^^^^
+Highlighted span: ← smul_mul_assoc

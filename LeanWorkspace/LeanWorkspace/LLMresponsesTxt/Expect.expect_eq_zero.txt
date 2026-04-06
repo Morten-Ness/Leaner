@@ -1,0 +1,123 @@
+FILE: Expect.expect_eq_zero.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Expect.expect_eq_zero.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Pointwise BigOperators
+
+variable {ι κ M N : Type*}
+
+variable [AddCommMonoid M] [Module ℚ≥0 M] [AddCommMonoid N] [Module ℚ≥0 N] {s t : Finset ι}
+  {f g : ι → M} {p q : ι → Prop} [DecidablePred p] [DecidablePred q]
+
+theorem expect_eq_zero (h : ∀ i ∈ s, f i = 0) : 𝔼 i ∈ s, f i = 0 := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise BigOperators
+
+variable {ι κ M N : Type*}
+
+variable [AddCommMonoid M] [Module ℚ≥0 M] [AddCommMonoid N] [Module ℚ≥0 N] {s t : Finset ι}
+  {f g : ι → M} {p q : ι → Prop} [DecidablePred p] [DecidablePred q]
+
+theorem expect_eq_zero (h : ∀ i ∈ s, f i = 0) : 𝔼 i ∈ s, f i = 0 := by
+  classical
+  simp [Finset.expect, h]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:70-11:1
+unsolved goals
+ι : Type u_1
+M : Type u_3
+inst✝¹ : AddCommMonoid M
+inst✝ : Module ℚ≥0 M
+s : Finset ι
+f : ι → M
+h : ∀ i ∈ s, f i = 0
+⊢ s = ∅ ∨ ∑ x ∈ s, f x = 0
+Source line 10:
+theorem expect_eq_zero (h : ∀ i ∈ s, f i = 0) : 𝔼 i ∈ s, f i = 0 := by
+                                                                     ^
+Highlighted span: y
+
+WARNING .LspCheck.lean:12:24-12:25
+This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [Finset.expect,̵ ̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 12:
+  simp [Finset.expect, h]
+                       ^
+Highlighted span: h
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:70-11:1
+unsolved goals
+ι : Type u_1
+M : Type u_3
+inst✝¹ : AddCommMonoid M
+inst✝ : Module ℚ≥0 M
+s : Finset ι
+f : ι → M
+h : ∀ i ∈ s, f i = 0
+⊢ s = ∅ ∨ ∑ x ∈ s, f x = 0
+Source line 10:
+theorem expect_eq_zero (h : ∀ i ∈ s, f i = 0) : 𝔼 i ∈ s, f i = 0 := by
+                                                                     ^
+Highlighted span: y
+
+WARNING .LspCheck.lean:12:24-12:25
+This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [Finset.expect,̵ ̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 12:
+  simp [Finset.expect, h]
+                       ^
+Highlighted span: h
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise BigOperators
+
+variable {ι κ M N : Type*}
+
+variable [AddCommMonoid M] [Module ℚ≥0 M] [AddCommMonoid N] [Module ℚ≥0 N] {s t : Finset ι}
+  {f g : ι → M} {p q : ι → Prop} [DecidablePred p] [DecidablePred q]
+
+theorem expect_eq_zero (h : ∀ i ∈ s, f i = 0) : 𝔼 i ∈ s, f i = 0 := by
+  classical
+  by_cases hs : s = ∅
+  · simp [Finset.expect, hs]
+  · simp [Finset.expect, hs]
+    exact Finset.sum_eq_zero fun i hi => h i (by simpa using hi)
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

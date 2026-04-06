@@ -1,0 +1,44 @@
+FILE: Translations.succ_nth_stream_eq_some_iff.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Translations.succ_nth_stream_eq_some_iff.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {K : Type*} [DivisionRing K] [LinearOrder K] [FloorRing K] {v : K}
+
+variable {n : ℕ}
+
+theorem succ_nth_stream_eq_some_iff {ifp_succ_n : GenContFract.IntFractPair K} :
+    GenContFract.IntFractPair.stream v (n + 1) = some ifp_succ_n ↔
+      ∃ ifp_n : GenContFract.IntFractPair K,
+        GenContFract.IntFractPair.stream v n = some ifp_n ∧
+          ifp_n.fr ≠ 0 ∧ GenContFract.IntFractPair.of ifp_n.fr⁻¹ = ifp_succ_n := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {K : Type*} [DivisionRing K] [LinearOrder K] [FloorRing K] {v : K}
+
+variable {n : ℕ}
+
+theorem succ_nth_stream_eq_some_iff {ifp_succ_n : GenContFract.IntFractPair K} :
+    GenContFract.IntFractPair.stream v (n + 1) = some ifp_succ_n ↔
+      ∃ ifp_n : GenContFract.IntFractPair K,
+        GenContFract.IntFractPair.stream v n = some ifp_n ∧
+          ifp_n.fr ≠ 0 ∧ GenContFract.IntFractPair.of ifp_n.fr⁻¹ = ifp_succ_n := by
+  simpa [Nat.add_comm 1 n, Nat.add_left_comm, Nat.add_assoc] using
+    (GenContFract.IntFractPair.succ_nth_stream_eq_some_iff (v := v) (n := n)
+      (ifp_succ_n := ifp_succ_n))
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+PASS

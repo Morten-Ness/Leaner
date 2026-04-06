@@ -1,0 +1,417 @@
+FILE: Lattice.mem_iSup_prop.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Lattice.mem_iSup_prop.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G]
+
+variable (H K : Subgroup G)
+
+variable {k : Set G}
+
+theorem mem_iSup_prop {p : Prop} {K : p → Subgroup G} {x : G} :
+    x ∈ ⨆ (h : p), K h ↔ x = 1 ∨ ∃ (h : p), x ∈ K h := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G]
+
+variable (H K : Subgroup G)
+
+variable {k : Set G}
+
+theorem mem_iSup_prop {p : Prop} {K : p → Subgroup G} {x : G} :
+    x ∈ ⨆ (h : p), K h ↔ x = 1 ∨ ∃ (h : p), x ∈ K h := by
+  by_cases hp : p
+  · letI : Nonempty p := Classical.choice hp
+    rw [Subgroup.mem_iSup_of_directed]
+    · constructor
+      · intro hx
+        rcases hx with hx | ⟨h, hx⟩
+        · exact Or.inl hx
+        · exact Or.inr ⟨h, hx⟩
+      · intro hx
+        rcases hx with rfl | ⟨h, hh⟩
+        · exact Or.inl rfl
+        · exact Or.inr ⟨h, hh⟩
+    · intro a b
+      exact ⟨Classical.choice hp, le_rfl, le_rfl⟩
+  · have hbot : (⨆ (h : p), K h) = ⊥ := by
+      rw [iSup_of_empty]
+      simpa [not_nonempty_iff] using hp
+    rw [hbot, Subgroup.mem_bot]
+    constructor
+    · intro hx
+      exact Or.inl hx
+    · intro hx
+      rcases hx with rfl | ⟨h, _⟩
+      · exact rfl
+      · exact (hp ⟨h⟩).elim
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:43-14:45
+Application type mismatch: The argument
+  hp
+has type
+  p
+but is expected to have type
+  Nonempty (Nonempty p)
+in the application
+  Classical.choice hp
+Source line 14:
+  · letI : Nonempty p := Classical.choice hp
+                                          ^^
+Highlighted span: hp
+
+ERROR .LspCheck.lean:18:24-18:36
+Tactic `rcases` failed: `w✝ : p` is not an inductive datatype
+Source line 18:
+        rcases hx with hx | ⟨h, hx⟩
+                       ^^^^^^^^^^^^
+Highlighted span: hx | ⟨h, hx⟩
+
+ERROR .LspCheck.lean:23:11-23:27
+Type mismatch
+  Or.inl rfl
+has type
+  ?m.82 = ?m.82 ∨ ?m.80
+but is expected to have type
+  ∃ (i : p), 1 ∈ K i
+Source line 23:
+        · exact Or.inl rfl
+          ^^^^^^^^^^^^^^^^
+Highlighted span: exact Or.inl rfl
+
+ERROR .LspCheck.lean:24:24-24:31
+Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+Source line 24:
+        · exact Or.inr ⟨h, hh⟩
+                       ^^^^^^^
+Highlighted span: ⟨h, hh⟩
+
+ERROR .LspCheck.lean:26:31-26:33
+Application type mismatch: The argument
+  hp
+has type
+  p
+but is expected to have type
+  Nonempty p
+in the application
+  Classical.choice hp
+Source line 26:
+      exact ⟨Classical.choice hp, le_rfl, le_rfl⟩
+                              ^^
+Highlighted span: hp
+
+ERROR .LspCheck.lean:28:11-28:24
+failed to synthesize instance of type class
+  IsEmpty p
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 28:
+      rw [iSup_of_empty]
+          ^^^^^^^^^^^^^
+Highlighted span: iSup_of_empty
+
+ERROR .LspCheck.lean:37:19-37:22
+Invalid `⟨...⟩` notation: The expected type `p` is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+Source line 37:
+      · exact (hp ⟨h⟩).elim
+                  ^^^
+Highlighted span: ⟨h⟩
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:43-14:45
+Application type mismatch: The argument
+  hp
+has type
+  p
+but is expected to have type
+  Nonempty (Nonempty p)
+in the application
+  Classical.choice hp
+Source line 14:
+  · letI : Nonempty p := Classical.choice hp
+                                          ^^
+Highlighted span: hp
+
+ERROR .LspCheck.lean:18:24-18:36
+Tactic `rcases` failed: `w✝ : p` is not an inductive datatype
+Source line 18:
+        rcases hx with hx | ⟨h, hx⟩
+                       ^^^^^^^^^^^^
+Highlighted span: hx | ⟨h, hx⟩
+
+ERROR .LspCheck.lean:23:11-23:27
+Type mismatch
+  Or.inl rfl
+has type
+  ?m.82 = ?m.82 ∨ ?m.80
+but is expected to have type
+  ∃ (i : p), 1 ∈ K i
+Source line 23:
+        · exact Or.inl rfl
+          ^^^^^^^^^^^^^^^^
+Highlighted span: exact Or.inl rfl
+
+ERROR .LspCheck.lean:24:24-24:31
+Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+Source line 24:
+        · exact Or.inr ⟨h, hh⟩
+                       ^^^^^^^
+Highlighted span: ⟨h, hh⟩
+
+ERROR .LspCheck.lean:26:31-26:33
+Application type mismatch: The argument
+  hp
+has type
+  p
+but is expected to have type
+  Nonempty p
+in the application
+  Classical.choice hp
+Source line 26:
+      exact ⟨Classical.choice hp, le_rfl, le_rfl⟩
+                              ^^
+Highlighted span: hp
+
+ERROR .LspCheck.lean:28:11-28:24
+failed to synthesize instance of type class
+  IsEmpty p
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 28:
+      rw [iSup_of_empty]
+          ^^^^^^^^^^^^^
+Highlighted span: iSup_of_empty
+
+ERROR .LspCheck.lean:37:19-37:22
+Invalid `⟨...⟩` notation: The expected type `p` is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+Source line 37:
+      · exact (hp ⟨h⟩).elim
+                  ^^^
+Highlighted span: ⟨h⟩
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G]
+
+variable (H K : Subgroup G)
+
+variable {k : Set G}
+
+theorem mem_iSup_prop {p : Prop} {K : p → Subgroup G} {x : G} :
+    x ∈ ⨆ (h : p), K h ↔ x = 1 ∨ ∃ (h : p), x ∈ K h := by
+  classical
+  by_cases hp : Nonempty p
+  · letI : Nonempty p := hp
+    rw [Subgroup.mem_iSup_of_directed]
+    · constructor
+      · intro hx
+        rcases hx with rfl | ⟨h, hh⟩
+        · exact Or.inl rfl
+        · exact Or.inr ⟨h, hh⟩
+      · intro hx
+        rcases hx with rfl | ⟨h, hh⟩
+        · exact Or.inl rfl
+        · exact Or.inr ⟨h, hh⟩
+    · intro a b
+      refine ⟨Classical.choice hp, ?_, ?_⟩ <;> simp
+  · have hp' : IsEmpty p := not_nonempty_iff.mp hp
+    letI : IsEmpty p := hp'
+    rw [iSup_of_empty, Subgroup.mem_bot]
+    constructor
+    · intro hx
+      exact Or.inl hx
+    · intro hx
+      rcases hx with rfl | h
+      · rfl
+      · rcases h with ⟨h, _⟩
+        exact (hp ⟨h⟩).elim
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:19:24-19:37
+Tactic `rcases` failed: `w✝ : p` is not an inductive datatype
+Source line 19:
+        rcases hx with rfl | ⟨h, hh⟩
+                       ^^^^^^^^^^^^^
+Highlighted span: rfl | ⟨h, hh⟩
+
+ERROR .LspCheck.lean:24:11-24:27
+Type mismatch
+  Or.inl rfl
+has type
+  ?m.82 = ?m.82 ∨ ?m.80
+but is expected to have type
+  ∃ (i : p), 1 ∈ K i
+Source line 24:
+        · exact Or.inl rfl
+          ^^^^^^^^^^^^^^^^
+Highlighted span: exact Or.inl rfl
+
+ERROR .LspCheck.lean:25:24-25:31
+Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+Source line 25:
+        · exact Or.inr ⟨h, hh⟩
+                       ^^^^^^^
+Highlighted span: ⟨h, hh⟩
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:19:24-19:37
+Tactic `rcases` failed: `w✝ : p` is not an inductive datatype
+Source line 19:
+        rcases hx with rfl | ⟨h, hh⟩
+                       ^^^^^^^^^^^^^
+Highlighted span: rfl | ⟨h, hh⟩
+
+ERROR .LspCheck.lean:24:11-24:27
+Type mismatch
+  Or.inl rfl
+has type
+  ?m.82 = ?m.82 ∨ ?m.80
+but is expected to have type
+  ∃ (i : p), 1 ∈ K i
+Source line 24:
+        · exact Or.inl rfl
+          ^^^^^^^^^^^^^^^^
+Highlighted span: exact Or.inl rfl
+
+ERROR .LspCheck.lean:25:24-25:31
+Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+Source line 25:
+        · exact Or.inr ⟨h, hh⟩
+                       ^^^^^^^
+Highlighted span: ⟨h, hh⟩
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G]
+
+variable (H K : Subgroup G)
+
+variable {k : Set G}
+
+theorem mem_iSup_prop {p : Prop} {K : p → Subgroup G} {x : G} :
+    x ∈ ⨆ (h : p), K h ↔ x = 1 ∨ ∃ (h : p), x ∈ K h := by
+  classical
+  by_cases hp : Nonempty p
+  · letI : Nonempty p := hp
+    constructor
+    · intro hx
+      rw [Subgroup.mem_iSup_of_directed] at hx
+      · simpa using hx
+      · intro a b
+        refine ⟨Classical.choice hp, ?_, ?_⟩ <;> simp
+    · intro hx
+      rw [Subgroup.mem_iSup_of_directed]
+      · simpa using hx
+      · intro a b
+        refine ⟨Classical.choice hp, ?_, ?_⟩ <;> simp
+  · have hp' : IsEmpty p := not_nonempty_iff.mp hp
+    letI : IsEmpty p := hp'
+    rw [iSup_of_empty, Subgroup.mem_bot]
+    constructor
+    · intro hx
+      exact Or.inl hx
+    · intro hx
+      rcases hx with rfl | h
+      · rfl
+      · rcases h with ⟨h, _⟩
+        exact (hp ⟨h⟩).elim
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:19:9-19:23
+Type mismatch: After simplification, term
+  hx
+ has type
+  ∃ (i : p), x ∈ K i
+but is expected to have type
+  x = 1 ∨ ∃ (h : p), x ∈ K h
+Source line 19:
+      · simpa using hx
+        ^^^^^^^^^^^^^^
+Highlighted span: simpa using hx
+
+ERROR .LspCheck.lean:24:9-24:23
+Type mismatch: After simplification, term
+  hx
+ has type
+  x = 1 ∨ ∃ (h : p), x ∈ K h
+but is expected to have type
+  ∃ (i : p), x ∈ K i
+Source line 24:
+      · simpa using hx
+        ^^^^^^^^^^^^^^
+Highlighted span: simpa using hx
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:19:9-19:23
+Type mismatch: After simplification, term
+  hx
+ has type
+  ∃ (i : p), x ∈ K i
+but is expected to have type
+  x = 1 ∨ ∃ (h : p), x ∈ K h
+Source line 19:
+      · simpa using hx
+        ^^^^^^^^^^^^^^
+Highlighted span: simpa using hx
+
+ERROR .LspCheck.lean:24:9-24:23
+Type mismatch: After simplification, term
+  hx
+ has type
+  x = 1 ∨ ∃ (h : p), x ∈ K h
+but is expected to have type
+  ∃ (i : p), x ∈ K i
+Source line 24:
+      · simpa using hx
+        ^^^^^^^^^^^^^^
+Highlighted span: simpa using hx

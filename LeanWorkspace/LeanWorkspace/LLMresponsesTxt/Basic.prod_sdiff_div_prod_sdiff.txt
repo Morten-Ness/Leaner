@@ -1,0 +1,203 @@
+FILE: Basic.prod_sdiff_div_prod_sdiff.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.prod_sdiff_div_prod_sdiff.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {ι κ G M : Type*} {s s₁ s₂ : Finset ι} {a : ι}
+
+variable [CommGroup G] [DecidableEq ι] {f : ι → G}
+
+theorem prod_sdiff_div_prod_sdiff :
+    (∏ x ∈ s₂ \ s₁, f x) / ∏ x ∈ s₁ \ s₂, f x = (∏ x ∈ s₂, f x) / ∏ x ∈ s₁, f x := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι κ G M : Type*} {s s₁ s₂ : Finset ι} {a : ι}
+
+variable [CommGroup G] [DecidableEq ι] {f : ι → G}
+
+theorem prod_sdiff_div_prod_sdiff :
+    (∏ x ∈ s₂ \ s₁, f x) / ∏ x ∈ s₁ \ s₂, f x = (∏ x ∈ s₂, f x) / ∏ x ∈ s₁, f x := by
+  classical
+  rw [div_eq_mul_inv, div_eq_mul_inv]
+  have h1 :
+      (∏ x ∈ s₂ \ s₁, f x) * ∏ x ∈ s₁ ∩ s₂, f x = ∏ x ∈ s₂, f x := by
+    rw [← Finset.prod_union]
+    · simp [Finset.sdiff_union_inter]
+    · exact Finset.disjoint_sdiff_left
+  have h2 :
+      (∏ x ∈ s₁ \ s₂, f x) * ∏ x ∈ s₁ ∩ s₂, f x = ∏ x ∈ s₁, f x := by
+    rw [← Finset.prod_union]
+    · simp [Finset.sdiff_union_inter]
+    · exact Finset.disjoint_sdiff_left
+  calc
+    (∏ x ∈ s₂ \ s₁, f x) * (∏ x ∈ s₁ \ s₂, f x)⁻¹
+        = ((∏ x ∈ s₂ \ s₁, f x) * ∏ x ∈ s₁ ∩ s₂, f x) *
+            (((∏ x ∈ s₁ \ s₂, f x) * ∏ x ∈ s₁ ∩ s₂, f x)⁻¹) := by
+              simp [mul_assoc, mul_left_comm, mul_comm]
+    _ = (∏ x ∈ s₂, f x) * (∏ x ∈ s₁, f x)⁻¹ := by rw [h1, h2]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:7-14:38
+`simp` made no progress
+Source line 14:
+    · simp [Finset.sdiff_union_inter]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simp [Finset.sdiff_union_inter]
+
+ERROR .LspCheck.lean:15:13-15:39
+Unknown constant `Finset.disjoint_sdiff_left`
+Source line 15:
+    · exact Finset.disjoint_sdiff_left
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.disjoint_sdiff_left
+
+ERROR .LspCheck.lean:20:13-20:39
+Unknown constant `Finset.disjoint_sdiff_left`
+Source line 20:
+    · exact Finset.disjoint_sdiff_left
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.disjoint_sdiff_left
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:7-14:38
+`simp` made no progress
+Source line 14:
+    · simp [Finset.sdiff_union_inter]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simp [Finset.sdiff_union_inter]
+
+ERROR .LspCheck.lean:15:13-15:39
+Unknown constant `Finset.disjoint_sdiff_left`
+Source line 15:
+    · exact Finset.disjoint_sdiff_left
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.disjoint_sdiff_left
+
+ERROR .LspCheck.lean:20:13-20:39
+Unknown constant `Finset.disjoint_sdiff_left`
+Source line 20:
+    · exact Finset.disjoint_sdiff_left
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.disjoint_sdiff_left
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι κ G M : Type*} {s s₁ s₂ : Finset ι} {a : ι}
+
+variable [CommGroup G] [DecidableEq ι] {f : ι → G}
+
+theorem prod_sdiff_div_prod_sdiff :
+    (∏ x ∈ s₂ \ s₁, f x) / ∏ x ∈ s₁ \ s₂, f x = (∏ x ∈ s₂, f x) / ∏ x ∈ s₁, f x := by
+  classical
+  rw [div_eq_mul_inv, div_eq_mul_inv]
+  nth_rewrite 2 [← Finset.sdiff_union_inter s₂ s₁]
+  nth_rewrite 2 [← Finset.sdiff_union_inter s₁ s₂]
+  rw [Finset.prod_union, Finset.prod_union]
+  · simp [mul_assoc, mul_left_comm, mul_comm]
+  · exact Finset.disjoint_comm.mp (Finset.disjoint_sdiff_inter s₁ s₂)
+  · exact Finset.disjoint_sdiff_inter s₂ s₁
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:7-13:24
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∏ x ∈ ?m.54 ∪ ?m.55, ?m.57 x
+in the target expression
+  (∏ x ∈ s₂ \ s₁, f x) * (∏ x ∈ (s₁ \ s₂ ∪ s₁ ∩ s₂) \ (s₂ \ s₁ ∪ s₂ ∩ s₁), f x)⁻¹ = (∏ x ∈ s₂, f x) * (∏ x ∈ s₁, f x)⁻¹
+
+ι : Type u_1
+G : Type u_3
+s₁ s₂ : Finset ι
+inst✝¹ : CommGroup G
+inst✝ : DecidableEq ι
+f : ι → G
+⊢ (∏ x ∈ s₂ \ s₁, f x) * (∏ x ∈ (s₁ \ s₂ ∪ s₁ ∩ s₂) \ (s₂ \ s₁ ∪ s₂ ∩ s₁), f x)⁻¹ = (∏ x ∈ s₂, f x) * (∏ x ∈ s₁, f x)⁻¹
+Source line 13:
+  rw [Finset.prod_union, Finset.prod_union]
+      ^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.prod_union
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:7-13:24
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∏ x ∈ ?m.54 ∪ ?m.55, ?m.57 x
+in the target expression
+  (∏ x ∈ s₂ \ s₁, f x) * (∏ x ∈ (s₁ \ s₂ ∪ s₁ ∩ s₂) \ (s₂ \ s₁ ∪ s₂ ∩ s₁), f x)⁻¹ = (∏ x ∈ s₂, f x) * (∏ x ∈ s₁, f x)⁻¹
+
+ι : Type u_1
+G : Type u_3
+s₁ s₂ : Finset ι
+inst✝¹ : CommGroup G
+inst✝ : DecidableEq ι
+f : ι → G
+⊢ (∏ x ∈ s₂ \ s₁, f x) * (∏ x ∈ (s₁ \ s₂ ∪ s₁ ∩ s₂) \ (s₂ \ s₁ ∪ s₂ ∩ s₁), f x)⁻¹ = (∏ x ∈ s₂, f x) * (∏ x ∈ s₁, f x)⁻¹
+Source line 13:
+  rw [Finset.prod_union, Finset.prod_union]
+      ^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.prod_union
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι κ G M : Type*} {s s₁ s₂ : Finset ι} {a : ι}
+
+variable [CommGroup G] [DecidableEq ι] {f : ι → G}
+
+theorem prod_sdiff_div_prod_sdiff :
+    (∏ x ∈ s₂ \ s₁, f x) / ∏ x ∈ s₁ \ s₂, f x = (∏ x ∈ s₂, f x) / ∏ x ∈ s₁, f x := by
+  classical
+  simp_rw [div_eq_mul_inv, Finset.prod_sdiff ?_, Finset.inter_eq_right.2]
+  · rw [Finset.inter_comm]
+  · exact fun x hx => by simp at hx
+  · exact Finset.inter_subset_right
+  · exact Finset.inter_subset_left
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:28-10:48
+`simp` made no progress
+Source line 10:
+  simp_rw [div_eq_mul_inv, Finset.prod_sdiff ?_, Finset.inter_eq_right.2]
+                           ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.prod_sdiff ?_
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:28-10:48
+`simp` made no progress
+Source line 10:
+  simp_rw [div_eq_mul_inv, Finset.prod_sdiff ?_, Finset.inter_eq_right.2]
+                           ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.prod_sdiff ?_

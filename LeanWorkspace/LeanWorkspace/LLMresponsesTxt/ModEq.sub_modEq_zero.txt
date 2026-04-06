@@ -1,0 +1,65 @@
+FILE: ModEq.sub_modEq_zero.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: ModEq.sub_modEq_zero.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {G : Type*} [AddCommGroup G] {p a a₁ a₂ b b₁ b₂ c : G} {n : ℕ} {z : ℤ}
+
+theorem sub_modEq_zero : a - b ≡ 0 [PMOD p] ↔ a ≡ b [PMOD p] := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G : Type*} [AddCommGroup G] {p a a₁ a₂ b b₁ b₂ c : G} {n : ℕ} {z : ℤ}
+
+theorem sub_modEq_zero : a - b ≡ 0 [PMOD p] ↔ a ≡ b [PMOD p] := by
+  simpa [sub_eq_add_neg] using (modEq_iff_eq _ _ _)
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:6:33-6:45
+Unknown identifier `modEq_iff_eq`
+Source line 6:
+  simpa [sub_eq_add_neg] using (modEq_iff_eq _ _ _)
+                                ^^^^^^^^^^^^
+Highlighted span: modEq_iff_eq
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:6:33-6:45
+Unknown identifier `modEq_iff_eq`
+Source line 6:
+  simpa [sub_eq_add_neg] using (modEq_iff_eq _ _ _)
+                                ^^^^^^^^^^^^
+Highlighted span: modEq_iff_eq
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G : Type*} [AddCommGroup G] {p a a₁ a₂ b b₁ b₂ c : G} {n : ℕ} {z : ℤ}
+
+theorem sub_modEq_zero : a - b ≡ 0 [PMOD p] ↔ a ≡ b [PMOD p] := by
+  constructor
+  · intro h
+    simpa [sub_eq_add_neg] using h.add_right b
+  · intro h
+    simpa [sub_eq_add_neg] using h.sub_right b
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

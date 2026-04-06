@@ -1,0 +1,214 @@
+FILE: Basic.intCast_eq_intCast.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.intCast_eq_intCast.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable (R : Type*)
+
+variable [AddGroupWithOne R] (p : ℕ) [CharP R p] {a b : ℤ}
+
+theorem intCast_eq_intCast : (a : R) = b ↔ a ≡ b [ZMOD p] := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (R : Type*)
+
+variable [AddGroupWithOne R] (p : ℕ) [CharP R p] {a b : ℤ}
+
+theorem intCast_eq_intCast : (a : R) = b ↔ a ≡ b [ZMOD p] := by
+  simpa using (Int.cast_eq_cast_iff (R := R) (p := p) (m := a) (n := b))
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:8:16-8:36
+Unknown constant `Int.cast_eq_cast_iff`
+Source line 8:
+  simpa using (Int.cast_eq_cast_iff (R := R) (p := p) (m := a) (n := b))
+               ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Int.cast_eq_cast_iff
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:8:16-8:36
+Unknown constant `Int.cast_eq_cast_iff`
+Source line 8:
+  simpa using (Int.cast_eq_cast_iff (R := R) (p := p) (m := a) (n := b))
+               ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Int.cast_eq_cast_iff
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (R : Type*)
+
+variable [AddGroupWithOne R] (p : ℕ) [CharP R p] {a b : ℤ}
+
+theorem intCast_eq_intCast : (a : R) = b ↔ a ≡ b [ZMOD p] := by
+  rw [Int.modEq_iff_dvd]
+  constructor
+  · intro h
+    exact CharP.intCast_eq_zero_iff (R := R) p (a - b) |>.mp (by simpa using sub_eq_zero.mpr h)
+  · intro h
+    apply sub_eq_zero.mp
+    exact CharP.intCast_eq_zero_iff (R := R) p (a - b) |>.mpr h
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:5-11:96
+Type mismatch
+  (CharP.intCast_eq_zero_iff R p (a - b)).mp
+    (Eq.mpr (id (congrFun' (congrArg Eq (Int.cast_sub a b)) 0)) (sub_eq_zero.mpr h))
+has type
+  ↑p ∣ a - b
+but is expected to have type
+  ↑p ∣ b - a
+Source line 11:
+    exact CharP.intCast_eq_zero_iff (R := R) p (a - b) |>.mp (by simpa using sub_eq_zero.mpr h)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: exact CharP.intCast_eq_zero_iff (R := R) p (a - b) |>.mp (by simpa using sub_eq_zero.mpr h)
+
+ERROR .LspCheck.lean:14:63-14:64
+Application type mismatch: The argument
+  h
+has type
+  ↑p ∣ b - a
+but is expected to have type
+  ↑p ∣ a - b
+in the application
+  (CharP.intCast_eq_zero_iff R p (a - b)).mpr h
+Source line 14:
+    exact CharP.intCast_eq_zero_iff (R := R) p (a - b) |>.mpr h
+                                                              ^
+Highlighted span: h
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:5-11:96
+Type mismatch
+  (CharP.intCast_eq_zero_iff R p (a - b)).mp
+    (Eq.mpr (id (congrFun' (congrArg Eq (Int.cast_sub a b)) 0)) (sub_eq_zero.mpr h))
+has type
+  ↑p ∣ a - b
+but is expected to have type
+  ↑p ∣ b - a
+Source line 11:
+    exact CharP.intCast_eq_zero_iff (R := R) p (a - b) |>.mp (by simpa using sub_eq_zero.mpr h)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: exact CharP.intCast_eq_zero_iff (R := R) p (a - b) |>.mp (by simpa using sub_eq_zero.mpr h)
+
+ERROR .LspCheck.lean:14:63-14:64
+Application type mismatch: The argument
+  h
+has type
+  ↑p ∣ b - a
+but is expected to have type
+  ↑p ∣ a - b
+in the application
+  (CharP.intCast_eq_zero_iff R p (a - b)).mpr h
+Source line 14:
+    exact CharP.intCast_eq_zero_iff (R := R) p (a - b) |>.mpr h
+                                                              ^
+Highlighted span: h
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (R : Type*)
+
+variable [AddGroupWithOne R] (p : ℕ) [CharP R p] {a b : ℤ}
+
+theorem intCast_eq_intCast : (a : R) = b ↔ a ≡ b [ZMOD p] := by
+  rw [Int.modEq_iff_dvd]
+  constructor
+  · intro h
+    have hz : ((b - a : ℤ) : R) = 0 := by
+      simpa [sub_eq_add_neg] using sub_eq_zero.mpr h
+    exact (CharP.intCast_eq_zero_iff (R := R) p (b - a)).mp hz
+  · intro h
+    have hz : ((b - a : ℤ) : R) = 0 := (CharP.intCast_eq_zero_iff (R := R) p (b - a)).mpr h
+    have hs : (b : R) - a = 0 := by
+      simpa [sub_eq_add_neg] using hz
+    exact sub_eq_zero.mp hs
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:7-12:53
+Type mismatch: After simplification, term
+  sub_eq_zero.mpr h
+ has type
+  ↑a + -↑b = 0
+but is expected to have type
+  ↑b + -↑a = 0
+Source line 12:
+      simpa [sub_eq_add_neg] using sub_eq_zero.mpr h
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [sub_eq_add_neg] using sub_eq_zero.mpr h
+
+ERROR .LspCheck.lean:18:26-18:28
+Application type mismatch: The argument
+  hs
+has type
+  ↑b - ↑a = 0
+but is expected to have type
+  ↑a - ↑b = 0
+in the application
+  sub_eq_zero.mp hs
+Source line 18:
+    exact sub_eq_zero.mp hs
+                         ^^
+Highlighted span: hs
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:7-12:53
+Type mismatch: After simplification, term
+  sub_eq_zero.mpr h
+ has type
+  ↑a + -↑b = 0
+but is expected to have type
+  ↑b + -↑a = 0
+Source line 12:
+      simpa [sub_eq_add_neg] using sub_eq_zero.mpr h
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [sub_eq_add_neg] using sub_eq_zero.mpr h
+
+ERROR .LspCheck.lean:18:26-18:28
+Application type mismatch: The argument
+  hs
+has type
+  ↑b - ↑a = 0
+but is expected to have type
+  ↑a - ↑b = 0
+in the application
+  sub_eq_zero.mp hs
+Source line 18:
+    exact sub_eq_zero.mp hs
+                         ^^
+Highlighted span: hs

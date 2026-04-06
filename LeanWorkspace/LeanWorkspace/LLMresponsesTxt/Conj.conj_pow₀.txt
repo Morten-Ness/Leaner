@@ -1,0 +1,41 @@
+FILE: Conj.conj_pow₀.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Conj.conj_pow₀.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {α : Type*} [GroupWithZero α] {a b : α}
+
+theorem conj_pow₀ {s : ℕ} {a d : α} (ha : a ≠ 0) : (a⁻¹ * d * a) ^ s = a⁻¹ * d ^ s * a := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α : Type*} [GroupWithZero α] {a b : α}
+
+theorem conj_pow₀ {s : ℕ} {a d : α} (ha : a ≠ 0) : (a⁻¹ * d * a) ^ s = a⁻¹ * d ^ s * a := by
+  induction s with
+  | zero =>
+      simp [ha]
+  | succ s ih =>
+      calc
+        (a⁻¹ * d * a) ^ (s + 1)
+            = (a⁻¹ * d * a) ^ s * (a⁻¹ * d * a) := by simp [pow_succ]
+        _ = (a⁻¹ * d ^ s * a) * (a⁻¹ * d * a) := by rw [ih]
+        _ = a⁻¹ * d ^ s * (a * a⁻¹) * d * a := by ac_rfl
+        _ = a⁻¹ * d ^ s * 1 * d * a := by rw [mul_inv_cancel₀ ha]
+        _ = a⁻¹ * (d ^ s * d) * a := by simp [mul_assoc]
+        _ = a⁻¹ * d ^ (s + 1) * a := by simp [pow_succ, mul_assoc]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+PASS

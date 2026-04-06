@@ -1,0 +1,98 @@
+FILE: Combination.weightedVSubOfPoint_sdiff_sub.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Combination.weightedVSubOfPoint_sdiff_sub.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+theorem weightedVSubOfPoint_sdiff_sub [DecidableEq ι] {s₂ : Finset ι} (h : s₂ ⊆ s) (w : ι → k)
+    (p : ι → P) (b : P) :
+    (s \ s₂).weightedVSubOfPoint p b w - s₂.weightedVSubOfPoint p b (-w) =
+      s.weightedVSubOfPoint p b w := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+theorem weightedVSubOfPoint_sdiff_sub [DecidableEq ι] {s₂ : Finset ι} (h : s₂ ⊆ s) (w : ι → k)
+    (p : ι → P) (b : P) :
+    (s \ s₂).weightedVSubOfPoint p b w - s₂.weightedVSubOfPoint p b (-w) =
+      s.weightedVSubOfPoint p b w := by
+  classical
+  rw [sub_eq_add_neg]
+  simp_rw [Finset.weightedVSubOfPoint_apply]
+  rw [← Finset.sum_add_distrib]
+  refine congrArg (fun x => x + (∑ i in s \ s₂, w i) • (b -ᵥ b)) ?_
+  rw [Finset.sum_sdiff h]
+  refine Finset.sum_congr rfl ?_
+  intro i hi
+  simp [sub_eq_add_neg, add_comm, add_left_comm, add_assoc]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:19:37-19:40
+unexpected token 'in'; expected ','
+Source line 19:
+  refine congrArg (fun x => x + (∑ i in s \ s₂, w i) • (b -ᵥ b)) ?_
+                                    ^^^
+Highlighted span:  in
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:19:37-19:40
+unexpected token 'in'; expected ','
+Source line 19:
+  refine congrArg (fun x => x + (∑ i in s \ s₂, w i) • (b -ᵥ b)) ?_
+                                    ^^^
+Highlighted span:  in
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+theorem weightedVSubOfPoint_sdiff_sub [DecidableEq ι] {s₂ : Finset ι} (h : s₂ ⊆ s) (w : ι → k)
+    (p : ι → P) (b : P) :
+    (s \ s₂).weightedVSubOfPoint p b w - s₂.weightedVSubOfPoint p b (-w) =
+      s.weightedVSubOfPoint p b w := by
+  classical
+  simp [Finset.weightedVSubOfPoint, h, sub_eq_add_neg, add_comm, add_left_comm, add_assoc,
+    smul_add, add_smul, neg_smul, Finset.sum_sdiff]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

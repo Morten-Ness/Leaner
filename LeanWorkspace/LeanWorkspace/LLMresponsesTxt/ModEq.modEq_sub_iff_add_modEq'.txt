@@ -1,0 +1,162 @@
+FILE: ModEq.modEq_sub_iff_add_modEq'.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: ModEq.modEq_sub_iff_add_modEq'.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {G : Type*} [AddCommGroup G] {p a a₁ a₂ b b₁ b₂ c : G} {n : ℕ} {z : ℤ}
+
+theorem modEq_sub_iff_add_modEq' : a ≡ b - c [PMOD p] ↔ c + a ≡ b [PMOD p] := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G : Type*} [AddCommGroup G] {p a a₁ a₂ b b₁ b₂ c : G} {n : ℕ} {z : ℤ}
+
+theorem modEq_sub_iff_add_modEq' : a ≡ b - c [PMOD p] ↔ c + a ≡ b [PMOD p] := by
+  constructor
+  · intro h
+    rcases h with ⟨z, hz⟩
+    refine ⟨z, ?_⟩
+    calc
+      c + a = c + (b - c + z • p) := by simpa [hz]
+      _ = b + z • p := by abel
+  · intro h
+    rcases h with ⟨z, hz⟩
+    refine ⟨z, ?_⟩
+    calc
+      a = -c + (c + a) := by abel
+      _ = -c + (b + z • p) := by simpa [hz]
+      _ = b - c + z • p := by abel
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:5-10:9
+'calc' expression has type
+  c + a = b + z • p
+but is expected to have type
+  ∃ n, z • p + (c + a) = n • p + b
+Source line 10:
+    calc
+    ^^^^
+Highlighted span: calc
+
+ERROR .LspCheck.lean:11:41-11:51
+Tactic `assumption` failed
+
+G : Type u_1
+inst✝ : AddCommGroup G
+p a b c : G
+z : ℕ
+hz : ∃ n, z • p + a = n • p + (b - c)
+⊢ a = b - c + z • p
+Source line 11:
+      c + a = c + (b - c + z • p) := by simpa [hz]
+                                        ^^^^^^^^^^
+Highlighted span: simpa [hz]
+
+ERROR .LspCheck.lean:16:5-16:9
+'calc' expression has type
+  a = b - c + z • p
+but is expected to have type
+  ∃ n, z • p + a = n • p + (b - c)
+Source line 16:
+    calc
+    ^^^^
+Highlighted span: calc
+
+ERROR .LspCheck.lean:18:34-18:44
+Tactic `assumption` failed
+
+G : Type u_1
+inst✝ : AddCommGroup G
+p a b c : G
+z : ℕ
+hz : ∃ n, z • p + (c + a) = n • p + b
+⊢ a = -c + (b + z • p)
+Source line 18:
+      _ = -c + (b + z • p) := by simpa [hz]
+                                 ^^^^^^^^^^
+Highlighted span: simpa [hz]
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:5-10:9
+'calc' expression has type
+  c + a = b + z • p
+but is expected to have type
+  ∃ n, z • p + (c + a) = n • p + b
+Source line 10:
+    calc
+    ^^^^
+Highlighted span: calc
+
+ERROR .LspCheck.lean:11:41-11:51
+Tactic `assumption` failed
+
+G : Type u_1
+inst✝ : AddCommGroup G
+p a b c : G
+z : ℕ
+hz : ∃ n, z • p + a = n • p + (b - c)
+⊢ a = b - c + z • p
+Source line 11:
+      c + a = c + (b - c + z • p) := by simpa [hz]
+                                        ^^^^^^^^^^
+Highlighted span: simpa [hz]
+
+ERROR .LspCheck.lean:16:5-16:9
+'calc' expression has type
+  a = b - c + z • p
+but is expected to have type
+  ∃ n, z • p + a = n • p + (b - c)
+Source line 16:
+    calc
+    ^^^^
+Highlighted span: calc
+
+ERROR .LspCheck.lean:18:34-18:44
+Tactic `assumption` failed
+
+G : Type u_1
+inst✝ : AddCommGroup G
+p a b c : G
+z : ℕ
+hz : ∃ n, z • p + (c + a) = n • p + b
+⊢ a = -c + (b + z • p)
+Source line 18:
+      _ = -c + (b + z • p) := by simpa [hz]
+                                 ^^^^^^^^^^
+Highlighted span: simpa [hz]
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G : Type*} [AddCommGroup G] {p a a₁ a₂ b b₁ b₂ c : G} {n : ℕ} {z : ℤ}
+
+theorem modEq_sub_iff_add_modEq' : a ≡ b - c [PMOD p] ↔ c + a ≡ b [PMOD p] := by
+  constructor
+  · rintro ⟨m, n, h⟩
+    refine ⟨m, n, ?_⟩
+    simpa [sub_eq_add_neg, add_assoc, add_left_comm, add_comm] using congrArg (fun x => c + x) h
+  · rintro ⟨m, n, h⟩
+    refine ⟨m, n, ?_⟩
+    simpa [sub_eq_add_neg, add_assoc, add_left_comm, add_comm] using congrArg (fun x => -c + x) h
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

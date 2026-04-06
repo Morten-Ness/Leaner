@@ -1,0 +1,313 @@
+FILE: Combination.sum_smul_vsub_eq_affineCombination_vsub.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Combination.sum_smul_vsub_eq_affineCombination_vsub.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+variable (k)
+
+variable {k}
+
+theorem sum_smul_vsub_eq_affineCombination_vsub (w : ι → k) (p₁ p₂ : ι → P) :
+    (∑ i ∈ s, w i • (p₁ i -ᵥ p₂ i)) =
+      s.affineCombination k p₁ w -ᵥ s.affineCombination k p₂ w := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+variable (k)
+
+variable {k}
+
+theorem sum_smul_vsub_eq_affineCombination_vsub (w : ι → k) (p₁ p₂ : ι → P) :
+    (∑ i ∈ s, w i • (p₁ i -ᵥ p₂ i)) =
+      s.affineCombination k p₁ w -ᵥ s.affineCombination k p₂ w := by
+  simpa [Finset.affineCombination] using
+    (AffineMap.lineMap_apply_module_vsub (s.centerMass k p₁ w) (s.centerMass k p₂ w)).symm
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:19:6-19:41
+Unknown constant `AffineMap.lineMap_apply_module_vsub`
+Source line 19:
+    (AffineMap.lineMap_apply_module_vsub (s.centerMass k p₁ w) (s.centerMass k p₂ w)).symm
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineMap.lineMap_apply_module_vsub
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:19:6-19:41
+Unknown constant `AffineMap.lineMap_apply_module_vsub`
+Source line 19:
+    (AffineMap.lineMap_apply_module_vsub (s.centerMass k p₁ w) (s.centerMass k p₂ w)).symm
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineMap.lineMap_apply_module_vsub
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+variable (k)
+
+variable {k}
+
+theorem sum_smul_vsub_eq_affineCombination_vsub (w : ι → k) (p₁ p₂ : ι → P) :
+    (∑ i ∈ s, w i • (p₁ i -ᵥ p₂ i)) =
+      s.affineCombination k p₁ w -ᵥ s.affineCombination k p₂ w := by
+  classical
+  refine Finset.induction_on s ?base ?step
+  · simp [Finset.affineCombination]
+  · intro a s ha hs
+    simp [Finset.affineCombination_insert, ha, hs, smul_vsub_assoc, add_comm, add_left_comm,
+      add_assoc]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:22:11-22:42
+Unknown constant `Finset.affineCombination_insert`
+Source line 22:
+    simp [Finset.affineCombination_insert, ha, hs, smul_vsub_assoc, add_comm, add_left_comm,
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.affineCombination_insert
+
+ERROR .LspCheck.lean:22:52-22:67
+Unknown identifier `smul_vsub_assoc`
+Source line 22:
+    simp [Finset.affineCombination_insert, ha, hs, smul_vsub_assoc, add_comm, add_left_comm,
+                                                   ^^^^^^^^^^^^^^^
+Highlighted span: smul_vsub_assoc
+
+ERROR .LspCheck.lean:21:3-22:1
+unsolved goals
+case step
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s✝ : Finset ι
+w : ι → k
+p₁ p₂ : ι → P
+a : ι
+s : Finset ι
+ha : a ∉ s
+hs : ∑ i ∈ s, w i • (p₁ i -ᵥ p₂ i) = (Finset.affineCombination k s p₁) w -ᵥ (Finset.affineCombination k s p₂) w
+⊢ w a • (p₁ a -ᵥ p₂ a) + ((Finset.affineCombination k s p₁) w -ᵥ (Finset.affineCombination k s p₂) w) =
+    (Finset.affineCombination k (insert a s) p₁) w -ᵥ (Finset.affineCombination k (insert a s) p₂) w
+Source line 21:
+  · intro a s ha hs
+  ^
+Highlighted span: ·
+
+WARNING .LspCheck.lean:22:69-22:77
+This simp argument is unused:
+  add_comm
+
+Hint: Omit it from the simp argument list.
+  simp [Finset.affineCombination_insert, ha, hs, smul_vsub_assoc, add_c̵o̵m̵m̵,̵ ̵a̵d̵d̵_̵left_comm,
+  ̵  ̵ ̵ ̵ ̵ ̵add_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 22:
+    simp [Finset.affineCombination_insert, ha, hs, smul_vsub_assoc, add_comm, add_left_comm,
+                                                                    ^^^^^^^^
+Highlighted span: add_comm
+
+WARNING .LspCheck.lean:22:79-22:92
+This simp argument is unused:
+  add_left_comm
+
+Hint: Omit it from the simp argument list.
+  simp [Finset.affineCombination_insert, ha, hs, smul_vsub_assoc, add_comm, a̵d̵d̵_̵l̵e̵f̵t̵_̵c̵o̵m̵m̵,̵add_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 22:
+    simp [Finset.affineCombination_insert, ha, hs, smul_vsub_assoc, add_comm, add_left_comm,
+                                                                              ^^^^^^^^^^^^^
+Highlighted span: add_left_comm
+
+WARNING .LspCheck.lean:23:7-23:16
+This simp argument is unused:
+  add_assoc
+
+Hint: Omit it from the simp argument list.
+  simp [Finset.affineCombination_insert, ha, hs, smul_vsub_assoc, add_comm, add_left_comm,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵a̵d̵d̵_̵a̵s̵s̵o̵c̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 23:
+      add_assoc]
+      ^^^^^^^^^
+Highlighted span: add_assoc
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:22:11-22:42
+Unknown constant `Finset.affineCombination_insert`
+Source line 22:
+    simp [Finset.affineCombination_insert, ha, hs, smul_vsub_assoc, add_comm, add_left_comm,
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.affineCombination_insert
+
+ERROR .LspCheck.lean:22:52-22:67
+Unknown identifier `smul_vsub_assoc`
+Source line 22:
+    simp [Finset.affineCombination_insert, ha, hs, smul_vsub_assoc, add_comm, add_left_comm,
+                                                   ^^^^^^^^^^^^^^^
+Highlighted span: smul_vsub_assoc
+
+ERROR .LspCheck.lean:21:3-22:1
+unsolved goals
+case step
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s✝ : Finset ι
+w : ι → k
+p₁ p₂ : ι → P
+a : ι
+s : Finset ι
+ha : a ∉ s
+hs : ∑ i ∈ s, w i • (p₁ i -ᵥ p₂ i) = (Finset.affineCombination k s p₁) w -ᵥ (Finset.affineCombination k s p₂) w
+⊢ w a • (p₁ a -ᵥ p₂ a) + ((Finset.affineCombination k s p₁) w -ᵥ (Finset.affineCombination k s p₂) w) =
+    (Finset.affineCombination k (insert a s) p₁) w -ᵥ (Finset.affineCombination k (insert a s) p₂) w
+Source line 21:
+  · intro a s ha hs
+  ^
+Highlighted span: ·
+
+WARNING .LspCheck.lean:22:69-22:77
+This simp argument is unused:
+  add_comm
+
+Hint: Omit it from the simp argument list.
+  simp [Finset.affineCombination_insert, ha, hs, smul_vsub_assoc, add_c̵o̵m̵m̵,̵ ̵a̵d̵d̵_̵left_comm,
+  ̵  ̵ ̵ ̵ ̵ ̵add_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 22:
+    simp [Finset.affineCombination_insert, ha, hs, smul_vsub_assoc, add_comm, add_left_comm,
+                                                                    ^^^^^^^^
+Highlighted span: add_comm
+
+WARNING .LspCheck.lean:22:79-22:92
+This simp argument is unused:
+  add_left_comm
+
+Hint: Omit it from the simp argument list.
+  simp [Finset.affineCombination_insert, ha, hs, smul_vsub_assoc, add_comm, a̵d̵d̵_̵l̵e̵f̵t̵_̵c̵o̵m̵m̵,̵add_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 22:
+    simp [Finset.affineCombination_insert, ha, hs, smul_vsub_assoc, add_comm, add_left_comm,
+                                                                              ^^^^^^^^^^^^^
+Highlighted span: add_left_comm
+
+WARNING .LspCheck.lean:23:7-23:16
+This simp argument is unused:
+  add_assoc
+
+Hint: Omit it from the simp argument list.
+  simp [Finset.affineCombination_insert, ha, hs, smul_vsub_assoc, add_comm, add_left_comm,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵a̵d̵d̵_̵a̵s̵s̵o̵c̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 23:
+      add_assoc]
+      ^^^^^^^^^
+Highlighted span: add_assoc
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+variable (k)
+
+variable {k}
+
+theorem sum_smul_vsub_eq_affineCombination_vsub (w : ι → k) (p₁ p₂ : ι → P) :
+    (∑ i ∈ s, w i • (p₁ i -ᵥ p₂ i)) =
+      s.affineCombination k p₁ w -ᵥ s.affineCombination k p₂ w := by
+  simpa [Finset.affineCombination] using
+    (Finset.centerMass_vsub (s := s) (k := k) (t₁ := p₁) (t₂ := p₂) (w := w))
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:19:6-19:28
+Unknown constant `Finset.centerMass_vsub`
+Source line 19:
+    (Finset.centerMass_vsub (s := s) (k := k) (t₁ := p₁) (t₂ := p₂) (w := w))
+     ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.centerMass_vsub
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:19:6-19:28
+Unknown constant `Finset.centerMass_vsub`
+Source line 19:
+    (Finset.centerMass_vsub (s := s) (k := k) (t₁ := p₁) (t₂ := p₂) (w := w))
+     ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.centerMass_vsub

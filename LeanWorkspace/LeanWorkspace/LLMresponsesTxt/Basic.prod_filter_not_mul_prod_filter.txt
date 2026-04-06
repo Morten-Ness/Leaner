@@ -1,0 +1,40 @@
+FILE: Basic.prod_filter_not_mul_prod_filter.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.prod_filter_not_mul_prod_filter.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {ι κ G M : Type*} {s s₁ s₂ : Finset ι} {a : ι}
+
+variable [CommMonoid M] {f g : ι → M}
+
+theorem prod_filter_not_mul_prod_filter (s : Finset ι) (p : ι → Prop) [DecidablePred p]
+    [∀ x, Decidable (¬p x)] (f : ι → M) :
+    (∏ x ∈ s with ¬p x, f x) * ∏ x ∈ s with p x, f x = ∏ x ∈ s, f x := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι κ G M : Type*} {s s₁ s₂ : Finset ι} {a : ι}
+
+variable [CommMonoid M] {f g : ι → M}
+
+theorem prod_filter_not_mul_prod_filter (s : Finset ι) (p : ι → Prop) [DecidablePred p]
+    [∀ x, Decidable (¬p x)] (f : ι → M) :
+    (∏ x ∈ s with ¬p x, f x) * ∏ x ∈ s with p x, f x = ∏ x ∈ s, f x := by
+  classical
+  rw [← Finset.prod_filter_mul_prod_filter_not (s := s) (p := p) (f := f)]
+  simp [mul_comm]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+PASS

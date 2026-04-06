@@ -1,0 +1,51 @@
+FILE: Lattice.mem_sSup_of_directedOn.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Lattice.mem_sSup_of_directedOn.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G]
+
+variable (H K : Subgroup G)
+
+variable {k : Set G}
+
+theorem mem_sSup_of_directedOn {K : Set (Subgroup G)} (Kne : K.Nonempty) (hK : DirectedOn (· ≤ ·) K)
+    {x : G} : x ∈ sSup K ↔ ∃ s ∈ K, x ∈ s := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G]
+
+variable (H K : Subgroup G)
+
+variable {k : Set G}
+
+theorem mem_sSup_of_directedOn {K : Set (Subgroup G)} (Kne : K.Nonempty) (hK : DirectedOn (· ≤ ·) K)
+    {x : G} : x ∈ sSup K ↔ ∃ s ∈ K, x ∈ s := by
+  classical
+  constructor
+  · intro hx
+    rw [Subgroup.mem_sSup_of_directedOn Kne hK] at hx
+    simpa using hx
+  · rintro ⟨s, hsK, hxs⟩
+    rw [Subgroup.mem_sSup_of_directedOn Kne hK]
+    exact ⟨s, hsK, hxs⟩
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+PASS

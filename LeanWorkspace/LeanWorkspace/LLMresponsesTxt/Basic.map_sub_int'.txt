@@ -1,0 +1,133 @@
+FILE: Basic.map_sub_int'.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.map_sub_int'.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_sub_int' [AddGroupWithOne G] [AddGroup H] [AddConstMapClass F G H 1 b]
+    (f : F) (x : G) (n : ℤ) : f (x - n) = f x - n • b := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_sub_int' [AddGroupWithOne G] [AddGroup H] [AddConstMapClass F G H 1 b]
+    (f : F) (x : G) (n : ℤ) : f (x - n) = f x - n • b := by
+  simpa [sub_eq_add_neg, zsmul_neg'] using
+    (map_int_add' (f := f) (a := x) (n := -n))
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:8:6-8:18
+Unknown identifier `map_int_add'`
+Source line 8:
+    (map_int_add' (f := f) (a := x) (n := -n))
+     ^^^^^^^^^^^^
+Highlighted span: map_int_add'
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:8:6-8:18
+Unknown identifier `map_int_add'`
+Source line 8:
+    (map_int_add' (f := f) (a := x) (n := -n))
+     ^^^^^^^^^^^^
+Highlighted span: map_int_add'
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_sub_int' [AddGroupWithOne G] [AddGroup H] [AddConstMapClass F G H 1 b]
+    (f : F) (x : G) (n : ℤ) : f (x - n) = f x - n • b := by
+  simpa [sub_eq_add_neg, zsmul_neg'] using
+    (AddConstMapClass.map_int_add (F := F) (G := G) (H := H) (f := f) (a := x) (-n))
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:8:71-8:79
+Invalid argument name `a` for function `AddConstMapClass.map_int_add`
+
+Hint: Perhaps you meant one of the following parameter names:
+  • `n`: a̵n̲
+  • `x`: a̵x̲
+Source line 8:
+    (AddConstMapClass.map_int_add (F := F) (G := G) (H := H) (f := f) (a := x) (-n))
+                                                                      ^^^^^^^^
+Highlighted span: (a := x)
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:8:71-8:79
+Invalid argument name `a` for function `AddConstMapClass.map_int_add`
+
+Hint: Perhaps you meant one of the following parameter names:
+  • `n`: a̵n̲
+  • `x`: a̵x̲
+Source line 8:
+    (AddConstMapClass.map_int_add (F := F) (G := G) (H := H) (f := f) (a := x) (-n))
+                                                                      ^^^^^^^^
+Highlighted span: (a := x)
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_sub_int' [AddGroupWithOne G] [AddGroup H] [AddConstMapClass F G H 1 b]
+    (f : F) (x : G) (n : ℤ) : f (x - n) = f x - n • b := by
+  simpa [sub_eq_add_neg, zsmul_neg'] using
+    (AddConstMapClass.map_int_add (F := F) (G := G) (H := H) (f := f) (x := x) (n := -n))
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:8:6-8:89
+failed to synthesize instance of type class
+  AddCommGroupWithOne G
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 8:
+    (AddConstMapClass.map_int_add (F := F) (G := G) (H := H) (f := f) (x := x) (n := -n))
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AddConstMapClass.map_int_add (F := F) (G := G) (H := H) (f := f) (x := x) (n := -n)
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:8:6-8:89
+failed to synthesize instance of type class
+  AddCommGroupWithOne G
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 8:
+    (AddConstMapClass.map_int_add (F := F) (G := G) (H := H) (f := f) (x := x) (n := -n))
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AddConstMapClass.map_int_add (F := F) (G := G) (H := H) (f := f) (x := x) (n := -n)

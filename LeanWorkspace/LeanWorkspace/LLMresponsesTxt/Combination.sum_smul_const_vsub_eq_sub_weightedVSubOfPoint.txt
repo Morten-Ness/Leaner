@@ -1,0 +1,286 @@
+FILE: Combination.sum_smul_const_vsub_eq_sub_weightedVSubOfPoint.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Combination.sum_smul_const_vsub_eq_sub_weightedVSubOfPoint.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+theorem sum_smul_const_vsub_eq_sub_weightedVSubOfPoint (w : ι → k) (p₂ : ι → P) (p₁ b : P) :
+    (∑ i ∈ s, w i • (p₁ -ᵥ p₂ i)) = (∑ i ∈ s, w i) • (p₁ -ᵥ b) - s.weightedVSubOfPoint p₂ b w := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+theorem sum_smul_const_vsub_eq_sub_weightedVSubOfPoint (w : ι → k) (p₂ : ι → P) (p₁ b : P) :
+    (∑ i ∈ s, w i • (p₁ -ᵥ p₂ i)) = (∑ i ∈ s, w i) • (p₁ -ᵥ b) - s.weightedVSubOfPoint p₂ b w := by
+  classical
+  simp_rw [vsub_eq_sub_vsub_cancel_right, smul_sub, Finset.sum_sub_distrib, s.weightedVSubOfPoint_apply]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:12-14:41
+Unknown identifier `vsub_eq_sub_vsub_cancel_right`
+Source line 14:
+  simp_rw [vsub_eq_sub_vsub_cancel_right, smul_sub, Finset.sum_sub_distrib, s.weightedVSubOfPoint_apply]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: vsub_eq_sub_vsub_cancel_right
+
+ERROR .LspCheck.lean:14:12-14:41
+`simp` made no progress
+Source line 14:
+  simp_rw [vsub_eq_sub_vsub_cancel_right, smul_sub, Finset.sum_sub_distrib, s.weightedVSubOfPoint_apply]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: vsub_eq_sub_vsub_cancel_right
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:12-14:41
+Unknown identifier `vsub_eq_sub_vsub_cancel_right`
+Source line 14:
+  simp_rw [vsub_eq_sub_vsub_cancel_right, smul_sub, Finset.sum_sub_distrib, s.weightedVSubOfPoint_apply]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: vsub_eq_sub_vsub_cancel_right
+
+ERROR .LspCheck.lean:14:12-14:41
+`simp` made no progress
+Source line 14:
+  simp_rw [vsub_eq_sub_vsub_cancel_right, smul_sub, Finset.sum_sub_distrib, s.weightedVSubOfPoint_apply]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: vsub_eq_sub_vsub_cancel_right
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+theorem sum_smul_const_vsub_eq_sub_weightedVSubOfPoint (w : ι → k) (p₂ : ι → P) (p₁ b : P) :
+    (∑ i ∈ s, w i • (p₁ -ᵥ p₂ i)) = (∑ i ∈ s, w i) • (p₁ -ᵥ b) - s.weightedVSubOfPoint p₂ b w := by
+  classical
+  rw [Finset.weightedVSubOfPoint_eq_finset_sum]
+  simp_rw [← vsub_add_vsub_cancel p₁ b (p₂ ·), smul_sub, Finset.sum_sub_distrib]
+  abel
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:7-14:47
+Unknown constant `Finset.weightedVSubOfPoint_eq_finset_sum`
+Source line 14:
+  rw [Finset.weightedVSubOfPoint_eq_finset_sum]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.weightedVSubOfPoint_eq_finset_sum
+
+ERROR .LspCheck.lean:12:98-13:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s : Finset ι
+w : ι → k
+p₂ : ι → P
+p₁ b : P
+⊢ ∑ i ∈ s, w i • (p₁ -ᵥ p₂ i) = (∑ i ∈ s, w i) • (p₁ -ᵥ b) - (s.weightedVSubOfPoint p₂ b) w
+Source line 12:
+    (∑ i ∈ s, w i • (p₁ -ᵥ p₂ i)) = (∑ i ∈ s, w i) • (p₁ -ᵥ b) - s.weightedVSubOfPoint p₂ b w := by
+                                                                                                 ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:7-14:47
+Unknown constant `Finset.weightedVSubOfPoint_eq_finset_sum`
+Source line 14:
+  rw [Finset.weightedVSubOfPoint_eq_finset_sum]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.weightedVSubOfPoint_eq_finset_sum
+
+ERROR .LspCheck.lean:12:98-13:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s : Finset ι
+w : ι → k
+p₂ : ι → P
+p₁ b : P
+⊢ ∑ i ∈ s, w i • (p₁ -ᵥ p₂ i) = (∑ i ∈ s, w i) • (p₁ -ᵥ b) - (s.weightedVSubOfPoint p₂ b) w
+Source line 12:
+    (∑ i ∈ s, w i • (p₁ -ᵥ p₂ i)) = (∑ i ∈ s, w i) • (p₁ -ᵥ b) - s.weightedVSubOfPoint p₂ b w := by
+                                                                                                 ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+theorem sum_smul_const_vsub_eq_sub_weightedVSubOfPoint (w : ι → k) (p₂ : ι → P) (p₁ b : P) :
+    (∑ i ∈ s, w i • (p₁ -ᵥ p₂ i)) = (∑ i ∈ s, w i) • (p₁ -ᵥ b) - s.weightedVSubOfPoint p₂ b w := by
+  classical
+  induction s using Finset.induction with
+  | empty =>
+      simp [Finset.weightedVSubOfPoint]
+  | @insert i s his ih =>
+      simp [Finset.weightedVSubOfPoint, his, ih, smul_sub, add_comm, add_left_comm, add_assoc,
+        sub_eq_add_neg, add_smul, vsub_eq_sub_vsub_cancel_right]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:19:35-19:64
+Unknown identifier `vsub_eq_sub_vsub_cancel_right`
+Source line 19:
+        sub_eq_add_neg, add_smul, vsub_eq_sub_vsub_cancel_right]
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: vsub_eq_sub_vsub_cancel_right
+
+ERROR .LspCheck.lean:17:24-18:1
+unsolved goals
+case insert
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s✝ : Finset ι
+w : ι → k
+p₂ : ι → P
+p₁ b : P
+i : ι
+s : Finset ι
+his : i ∉ s
+ih : ∑ i ∈ s, w i • (p₁ -ᵥ p₂ i) = (∑ i ∈ s, w i) • (p₁ -ᵥ b) - (s.weightedVSubOfPoint p₂ b) w
+⊢ (∑ i ∈ s, w i) • (p₁ -ᵥ b) + (w i • (p₁ -ᵥ p₂ i) + -∑ c ∈ s, w c • (p₂ c -ᵥ b)) =
+    w i • (p₁ -ᵥ b) + ((∑ i ∈ s, w i) • (p₁ -ᵥ b) + (-(w i • (p₂ i -ᵥ b)) + -∑ c ∈ s, w c • (p₂ c -ᵥ b)))
+Source line 17:
+  | @insert i s his ih =>
+                       ^
+Highlighted span: =
+
+WARNING .LspCheck.lean:18:50-18:58
+This simp argument is unused:
+  smul_sub
+
+Hint: Omit it from the simp argument list.
+  simp [Finset.weightedVSubOfPoint, his, ih, s̵m̵u̵l̵_̵s̵u̵b̵,̵ ̵add_comm, add_left_comm, add_assoc,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵sub_eq_add_neg,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲add_smul, vsub_eq_sub_vsub_cancel_right]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 18:
+      simp [Finset.weightedVSubOfPoint, his, ih, smul_sub, add_comm, add_left_comm, add_assoc,
+                                                 ^^^^^^^^
+Highlighted span: smul_sub
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:19:35-19:64
+Unknown identifier `vsub_eq_sub_vsub_cancel_right`
+Source line 19:
+        sub_eq_add_neg, add_smul, vsub_eq_sub_vsub_cancel_right]
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: vsub_eq_sub_vsub_cancel_right
+
+ERROR .LspCheck.lean:17:24-18:1
+unsolved goals
+case insert
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s✝ : Finset ι
+w : ι → k
+p₂ : ι → P
+p₁ b : P
+i : ι
+s : Finset ι
+his : i ∉ s
+ih : ∑ i ∈ s, w i • (p₁ -ᵥ p₂ i) = (∑ i ∈ s, w i) • (p₁ -ᵥ b) - (s.weightedVSubOfPoint p₂ b) w
+⊢ (∑ i ∈ s, w i) • (p₁ -ᵥ b) + (w i • (p₁ -ᵥ p₂ i) + -∑ c ∈ s, w c • (p₂ c -ᵥ b)) =
+    w i • (p₁ -ᵥ b) + ((∑ i ∈ s, w i) • (p₁ -ᵥ b) + (-(w i • (p₂ i -ᵥ b)) + -∑ c ∈ s, w c • (p₂ c -ᵥ b)))
+Source line 17:
+  | @insert i s his ih =>
+                       ^
+Highlighted span: =
+
+WARNING .LspCheck.lean:18:50-18:58
+This simp argument is unused:
+  smul_sub
+
+Hint: Omit it from the simp argument list.
+  simp [Finset.weightedVSubOfPoint, his, ih, s̵m̵u̵l̵_̵s̵u̵b̵,̵ ̵add_comm, add_left_comm, add_assoc,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵sub_eq_add_neg,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲add_smul, vsub_eq_sub_vsub_cancel_right]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 18:
+      simp [Finset.weightedVSubOfPoint, his, ih, smul_sub, add_comm, add_left_comm, add_assoc,
+                                                 ^^^^^^^^
+Highlighted span: smul_sub

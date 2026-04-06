@@ -1,0 +1,98 @@
+FILE: Units.isUnit_add_isUnit_eq_isUnit_add_isUnit.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Units.isUnit_add_isUnit_eq_isUnit_add_isUnit.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {u v : ℤ}
+
+theorem isUnit_add_isUnit_eq_isUnit_add_isUnit {a b c d : ℤ} (ha : IsUnit a) (hb : IsUnit b)
+    (hc : IsUnit c) (hd : IsUnit d) : a + b = c + d ↔ a = c ∧ b = d ∨ a = d ∧ b = c := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {u v : ℤ}
+
+theorem isUnit_add_isUnit_eq_isUnit_add_isUnit {a b c d : ℤ} (ha : IsUnit a) (hb : IsUnit b)
+    (hc : IsUnit c) (hd : IsUnit d) : a + b = c + d ↔ a = c ∧ b = d ∨ a = d ∧ b = c := by
+  rcases Int.isUnit_iff.mp ha with ha'
+  rcases Int.isUnit_iff.mp hb with hb'
+  rcases Int.isUnit_iff.mp hc with hc'
+  rcases Int.isUnit_iff.mp hd with hd'
+  subst ha'
+  subst hb'
+  subst hc'
+  subst hd'
+  decide
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:3-11:12
+Tactic `subst` failed: did not find equation for eliminating 'ha''
+
+a b c d : ℤ
+ha : IsUnit a
+hb : IsUnit b
+hc : IsUnit c
+hd : IsUnit d
+ha' : a = 1 ∨ a = -1
+hb' : b = 1 ∨ b = -1
+hc' : c = 1 ∨ c = -1
+hd' : d = 1 ∨ d = -1
+⊢ a + b = c + d ↔ a = c ∧ b = d ∨ a = d ∧ b = c
+Source line 11:
+  subst ha'
+  ^^^^^^^^^
+Highlighted span: subst ha'
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:3-11:12
+Tactic `subst` failed: did not find equation for eliminating 'ha''
+
+a b c d : ℤ
+ha : IsUnit a
+hb : IsUnit b
+hc : IsUnit c
+hd : IsUnit d
+ha' : a = 1 ∨ a = -1
+hb' : b = 1 ∨ b = -1
+hc' : c = 1 ∨ c = -1
+hd' : d = 1 ∨ d = -1
+⊢ a + b = c + d ↔ a = c ∧ b = d ∨ a = d ∧ b = c
+Source line 11:
+  subst ha'
+  ^^^^^^^^^
+Highlighted span: subst ha'
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {u v : ℤ}
+
+theorem isUnit_add_isUnit_eq_isUnit_add_isUnit {a b c d : ℤ} (ha : IsUnit a) (hb : IsUnit b)
+    (hc : IsUnit c) (hd : IsUnit d) : a + b = c + d ↔ a = c ∧ b = d ∨ a = d ∧ b = c := by
+  rcases Int.isUnit_iff.mp ha with rfl | rfl <;>
+    rcases Int.isUnit_iff.mp hb with rfl | rfl <;>
+    rcases Int.isUnit_iff.mp hc with rfl | rfl <;>
+    rcases Int.isUnit_iff.mp hd with rfl | rfl <;>
+    decide
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

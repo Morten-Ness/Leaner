@@ -1,0 +1,187 @@
+FILE: Equidecomp.restr_of_source_subset.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Equidecomp.restr_of_source_subset.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {X G : Type*} {A B C : Set X}
+
+variable [SMul G X]
+
+theorem restr_of_source_subset {f : Equidecomp X G} {A : Set X} (hA : f.source ⊆ A) :
+    f.restr A = f := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {X G : Type*} {A B C : Set X}
+
+variable [SMul G X]
+
+theorem restr_of_source_subset {f : Equidecomp X G} {A : Set X} (hA : f.source ⊆ A) :
+    f.restr A = f := by
+  ext x
+  simp [Equidecomp.restr, hA]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:9:3-9:8
+No applicable extensionality theorem found for type
+  Equidecomp X G
+
+Note: Extensionality theorems can be registered by marking them with the `[ext]` attribute
+Source line 9:
+  ext x
+  ^^^^^
+Highlighted span: ext x
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:9:3-9:8
+No applicable extensionality theorem found for type
+  Equidecomp X G
+
+Note: Extensionality theorems can be registered by marking them with the `[ext]` attribute
+Source line 9:
+  ext x
+  ^^^^^
+Highlighted span: ext x
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {X G : Type*} {A B C : Set X}
+
+variable [SMul G X]
+
+theorem restr_of_source_subset {f : Equidecomp X G} {A : Set X} (hA : f.source ⊆ A) :
+    f.restr A = f := by
+  cases f
+  simp [Equidecomp.restr, hA]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:8:22-9:1
+unsolved goals
+case mk
+X : Type u_1
+G : Type u_2
+inst✝ : SMul G X
+A : Set X
+toPartialEquiv✝ : PartialEquiv X X
+isDecompOn'✝ : ∃ S, Equidecomp.IsDecompOn (↑toPartialEquiv✝) toPartialEquiv✝.source S
+hA : { toPartialEquiv := toPartialEquiv✝, isDecompOn' := isDecompOn'✝ }.source ⊆ A
+⊢ toPartialEquiv✝.restr A = toPartialEquiv✝
+Source line 8:
+    f.restr A = f := by
+                     ^
+Highlighted span: b
+
+WARNING .LspCheck.lean:10:27-10:29
+This simp argument is unused:
+  hA
+
+Hint: Omit it from the simp argument list.
+  simp [Equidecomp.restr,̵ ̵h̵A̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 10:
+  simp [Equidecomp.restr, hA]
+                          ^^
+Highlighted span: hA
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:8:22-9:1
+unsolved goals
+case mk
+X : Type u_1
+G : Type u_2
+inst✝ : SMul G X
+A : Set X
+toPartialEquiv✝ : PartialEquiv X X
+isDecompOn'✝ : ∃ S, Equidecomp.IsDecompOn (↑toPartialEquiv✝) toPartialEquiv✝.source S
+hA : { toPartialEquiv := toPartialEquiv✝, isDecompOn' := isDecompOn'✝ }.source ⊆ A
+⊢ toPartialEquiv✝.restr A = toPartialEquiv✝
+Source line 8:
+    f.restr A = f := by
+                     ^
+Highlighted span: b
+
+WARNING .LspCheck.lean:10:27-10:29
+This simp argument is unused:
+  hA
+
+Hint: Omit it from the simp argument list.
+  simp [Equidecomp.restr,̵ ̵h̵A̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 10:
+  simp [Equidecomp.restr, hA]
+                          ^^
+Highlighted span: hA
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {X G : Type*} {A B C : Set X}
+
+variable [SMul G X]
+
+theorem restr_of_source_subset {f : Equidecomp X G} {A : Set X} (hA : f.source ⊆ A) :
+    f.restr A = f := by
+  cases f with
+  | mk toPartialEquiv isDecompOn' =>
+      change toPartialEquiv.restr A = toPartialEquiv
+      exact PartialEquiv.restr_eq_self.2 hA
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:7-11:53
+'change' tactic failed, pattern
+  toPartialEquiv.restr A = toPartialEquiv
+is not definitionally equal to target
+  { toPartialEquiv := toPartialEquiv, isDecompOn' := isDecompOn' }.restr A =
+    { toPartialEquiv := toPartialEquiv, isDecompOn' := isDecompOn' }
+Source line 11:
+      change toPartialEquiv.restr A = toPartialEquiv
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: change toPartialEquiv.restr A = toPartialEquiv
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:7-11:53
+'change' tactic failed, pattern
+  toPartialEquiv.restr A = toPartialEquiv
+is not definitionally equal to target
+  { toPartialEquiv := toPartialEquiv, isDecompOn' := isDecompOn' }.restr A =
+    { toPartialEquiv := toPartialEquiv, isDecompOn' := isDecompOn' }
+Source line 11:
+      change toPartialEquiv.restr A = toPartialEquiv
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: change toPartialEquiv.restr A = toPartialEquiv

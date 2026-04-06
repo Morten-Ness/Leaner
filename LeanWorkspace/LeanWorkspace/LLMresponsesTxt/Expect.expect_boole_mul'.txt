@@ -1,0 +1,277 @@
+FILE: Expect.expect_boole_mul'.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Expect.expect_boole_mul'.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Pointwise BigOperators
+
+variable {ι κ M N : Type*}
+
+variable [Semifield M] [CharZero M]
+
+theorem expect_boole_mul' [Fintype ι] [Nonempty ι] [DecidableEq ι] (f : ι → M) (i : ι) :
+    𝔼 j, ite (j = i) (Fintype.card ι : M) 0 * f j = f i := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise BigOperators
+
+variable {ι κ M N : Type*}
+
+variable [Semifield M] [CharZero M]
+
+theorem expect_boole_mul' [Fintype ι] [Nonempty ι] [DecidableEq ι] (f : ι → M) (i : ι) :
+    𝔼 j, ite (j = i) (Fintype.card ι : M) 0 * f j = f i := by
+  classical
+  simp [Finset.expect, Finset.sum_ite_eq, Fintype.card_univ]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:43-12:60
+Unknown constant `Fintype.card_univ`
+Source line 12:
+  simp [Finset.expect, Finset.sum_ite_eq, Fintype.card_univ]
+                                          ^^^^^^^^^^^^^^^^^
+Highlighted span: Fintype.card_univ
+
+ERROR .LspCheck.lean:10:61-11:1
+unsolved goals
+ι : Type u_1
+M : Type u_3
+inst✝⁴ : Semifield M
+inst✝³ : CharZero M
+inst✝² : Fintype ι
+inst✝¹ : Nonempty ι
+inst✝ : DecidableEq ι
+f : ι → M
+i : ι
+⊢ (↑(Fintype.card ι))⁻¹ • (↑(Fintype.card ι) * f i) = f i
+Source line 10:
+    𝔼 j, ite (j = i) (Fintype.card ι : M) 0 * f j = f i := by
+                                                            ^
+Highlighted span: y
+
+WARNING .LspCheck.lean:12:24-12:41
+This simp argument is unused:
+  Finset.sum_ite_eq
+
+Hint: Omit it from the simp argument list.
+  simp [Finset.expect, F̵i̵n̵s̵e̵t̵.̵s̵u̵m̵_̵i̵t̵e̵_̵e̵q̵,̵ ̵Fintype.card_univ]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 12:
+  simp [Finset.expect, Finset.sum_ite_eq, Fintype.card_univ]
+                       ^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.sum_ite_eq
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:43-12:60
+Unknown constant `Fintype.card_univ`
+Source line 12:
+  simp [Finset.expect, Finset.sum_ite_eq, Fintype.card_univ]
+                                          ^^^^^^^^^^^^^^^^^
+Highlighted span: Fintype.card_univ
+
+ERROR .LspCheck.lean:10:61-11:1
+unsolved goals
+ι : Type u_1
+M : Type u_3
+inst✝⁴ : Semifield M
+inst✝³ : CharZero M
+inst✝² : Fintype ι
+inst✝¹ : Nonempty ι
+inst✝ : DecidableEq ι
+f : ι → M
+i : ι
+⊢ (↑(Fintype.card ι))⁻¹ • (↑(Fintype.card ι) * f i) = f i
+Source line 10:
+    𝔼 j, ite (j = i) (Fintype.card ι : M) 0 * f j = f i := by
+                                                            ^
+Highlighted span: y
+
+WARNING .LspCheck.lean:12:24-12:41
+This simp argument is unused:
+  Finset.sum_ite_eq
+
+Hint: Omit it from the simp argument list.
+  simp [Finset.expect, F̵i̵n̵s̵e̵t̵.̵s̵u̵m̵_̵i̵t̵e̵_̵e̵q̵,̵ ̵Fintype.card_univ]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 12:
+  simp [Finset.expect, Finset.sum_ite_eq, Fintype.card_univ]
+                       ^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.sum_ite_eq
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise BigOperators
+
+variable {ι κ M N : Type*}
+
+variable [Semifield M] [CharZero M]
+
+theorem expect_boole_mul' [Fintype ι] [Nonempty ι] [DecidableEq ι] (f : ι → M) (i : ι) :
+    𝔼 j, ite (j = i) (Fintype.card ι : M) 0 * f j = f i := by
+  classical
+  rw [Finset.expect]
+  simp only [Finset.sum_ite_eq, Finset.mem_univ, if_true, one_smul, zero_mul]
+  rw [smul_eq_mul, inv_mul_cancel₀]
+  exact Nat.cast_ne_zero.mpr Fintype.card_ne_zero
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:3-13:78
+`simp` made no progress
+Source line 13:
+  simp only [Finset.sum_ite_eq, Finset.mem_univ, if_true, one_smul, zero_mul]
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simp only [Finset.sum_ite_eq, Finset.mem_univ, if_true, one_smul, zero_mul]
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:3-13:78
+`simp` made no progress
+Source line 13:
+  simp only [Finset.sum_ite_eq, Finset.mem_univ, if_true, one_smul, zero_mul]
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simp only [Finset.sum_ite_eq, Finset.mem_univ, if_true, one_smul, zero_mul]
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise BigOperators
+
+variable {ι κ M N : Type*}
+
+variable [Semifield M] [CharZero M]
+
+theorem expect_boole_mul' [Fintype ι] [Nonempty ι] [DecidableEq ι] (f : ι → M) (i : ι) :
+    𝔼 j, ite (j = i) (Fintype.card ι : M) 0 * f j = f i := by
+  classical
+  rw [Finset.expect]
+  rw [Finset.smul_sum]
+  rw [Finset.sum_eq_single i]
+  · simp [smul_eq_mul, Nat.cast_ne_zero.mpr Fintype.card_ne_zero]
+  · intro j _ hj
+    simp [hj]
+  · intro hi
+    exact (hi (Finset.mem_univ i)).elim
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:3-15:66
+unsolved goals
+ι : Type u_1
+M : Type u_3
+inst✝⁴ : Semifield M
+inst✝³ : CharZero M
+inst✝² : Fintype ι
+inst✝¹ : Nonempty ι
+inst✝ : DecidableEq ι
+f : ι → M
+i : ι
+⊢ (↑(Fintype.card ι))⁻¹ • (↑(Fintype.card ι) * f i) = f i
+Source line 15:
+  · simp [smul_eq_mul, Nat.cast_ne_zero.mpr Fintype.card_ne_zero]
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simp [smul_eq_mul, Nat.cast_ne_zero.mpr Fintype.card_ne_zero]
+
+WARNING .LspCheck.lean:15:11-15:22
+This simp argument is unused:
+  smul_eq_mul
+
+Hint: Omit it from the simp argument list.
+  simp [s̵m̵u̵l̵_̵e̵q̵_̵m̵u̵l̵,̵ ̵Nat.cast_ne_zero.mpr Fintype.card_ne_zero]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 15:
+  · simp [smul_eq_mul, Nat.cast_ne_zero.mpr Fintype.card_ne_zero]
+          ^^^^^^^^^^^
+Highlighted span: smul_eq_mul
+
+WARNING .LspCheck.lean:15:24-15:65
+This simp argument is unused:
+  Nat.cast_ne_zero.mpr Fintype.card_ne_zero
+
+Hint: Omit it from the simp argument list.
+  simp [smul_eq_mul,̵ ̵N̵a̵t̵.̵c̵a̵s̵t̵_̵n̵e̵_̵z̵e̵r̵o̵.̵m̵p̵r̵ ̵F̵i̵n̵t̵y̵p̵e̵.̵c̵a̵r̵d̵_̵n̵e̵_̵z̵e̵r̵o̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 15:
+  · simp [smul_eq_mul, Nat.cast_ne_zero.mpr Fintype.card_ne_zero]
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Nat.cast_ne_zero.mpr Fintype.card_ne_zero
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:3-15:66
+unsolved goals
+ι : Type u_1
+M : Type u_3
+inst✝⁴ : Semifield M
+inst✝³ : CharZero M
+inst✝² : Fintype ι
+inst✝¹ : Nonempty ι
+inst✝ : DecidableEq ι
+f : ι → M
+i : ι
+⊢ (↑(Fintype.card ι))⁻¹ • (↑(Fintype.card ι) * f i) = f i
+Source line 15:
+  · simp [smul_eq_mul, Nat.cast_ne_zero.mpr Fintype.card_ne_zero]
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simp [smul_eq_mul, Nat.cast_ne_zero.mpr Fintype.card_ne_zero]
+
+WARNING .LspCheck.lean:15:11-15:22
+This simp argument is unused:
+  smul_eq_mul
+
+Hint: Omit it from the simp argument list.
+  simp [s̵m̵u̵l̵_̵e̵q̵_̵m̵u̵l̵,̵ ̵Nat.cast_ne_zero.mpr Fintype.card_ne_zero]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 15:
+  · simp [smul_eq_mul, Nat.cast_ne_zero.mpr Fintype.card_ne_zero]
+          ^^^^^^^^^^^
+Highlighted span: smul_eq_mul
+
+WARNING .LspCheck.lean:15:24-15:65
+This simp argument is unused:
+  Nat.cast_ne_zero.mpr Fintype.card_ne_zero
+
+Hint: Omit it from the simp argument list.
+  simp [smul_eq_mul,̵ ̵N̵a̵t̵.̵c̵a̵s̵t̵_̵n̵e̵_̵z̵e̵r̵o̵.̵m̵p̵r̵ ̵F̵i̵n̵t̵y̵p̵e̵.̵c̵a̵r̵d̵_̵n̵e̵_̵z̵e̵r̵o̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 15:
+  · simp [smul_eq_mul, Nat.cast_ne_zero.mpr Fintype.card_ne_zero]
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Nat.cast_ne_zero.mpr Fintype.card_ne_zero

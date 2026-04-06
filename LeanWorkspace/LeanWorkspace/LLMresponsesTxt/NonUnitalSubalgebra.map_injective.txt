@@ -1,0 +1,398 @@
+FILE: NonUnitalSubalgebra.map_injective.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: NonUnitalSubalgebra.map_injective.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {F : Type v'} {R' : Type u'} {R : Type u} {A : Type v} {B : Type w} {C : Type w'}
+
+variable [CommSemiring R]
+
+variable [NonUnitalNonAssocSemiring A] [NonUnitalNonAssocSemiring B] [NonUnitalNonAssocSemiring C]
+
+variable [Module R A] [Module R B] [Module R C]
+
+variable {S : NonUnitalSubalgebra R A}
+
+variable [FunLike F A B] [NonUnitalAlgHomClass F R A B]
+
+theorem map_injective {f : F} (hf : Function.Injective f) :
+    Function.Injective (NonUnitalSubalgebra.map f : NonUnitalSubalgebra R A → NonUnitalSubalgebra R B) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F : Type v'} {R' : Type u'} {R : Type u} {A : Type v} {B : Type w} {C : Type w'}
+
+variable [CommSemiring R]
+
+variable [NonUnitalNonAssocSemiring A] [NonUnitalNonAssocSemiring B] [NonUnitalNonAssocSemiring C]
+
+variable [Module R A] [Module R B] [Module R C]
+
+variable {S : NonUnitalSubalgebra R A}
+
+variable [FunLike F A B] [NonUnitalAlgHomClass F R A B]
+
+theorem map_injective {f : F} (hf : Function.Injective f) :
+    Function.Injective (NonUnitalSubalgebra.map f : NonUnitalSubalgebra R A → NonUnitalSubalgebra R B) := by
+  intro S T h
+  ext x
+  constructor
+  · intro hx
+    have : f x ∈ NonUnitalSubalgebra.map f T := by
+      exact ⟨x, hx, rfl⟩
+    rw [h] at this
+    rcases this with ⟨y, hy, hyx⟩
+    have : y = x := hf (by simpa [hyx])
+    simpa [this] using hy
+  · intro hx
+    have : f x ∈ NonUnitalSubalgebra.map f S := by
+      exact ⟨x, hx, rfl⟩
+    rw [h] at this
+    rcases this with ⟨y, hy, hyx⟩
+    have : y = x := hf (by simpa [hyx])
+    simpa [this] using hy
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:22:17-22:19
+Application type mismatch: The argument
+  hx
+has type
+  x ∈ S
+but is expected to have type
+  x ∈ ↑T.toNonUnitalSubsemiring
+in the application
+  And.intro hx
+Source line 22:
+      exact ⟨x, hx, rfl⟩
+                ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:23:9-23:10
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  NonUnitalSubalgebra.map f S
+in the target expression
+  f x ∈ NonUnitalSubalgebra.map f T
+
+case h.mp
+F : Type v'
+R : Type u
+A : Type v
+B : Type w
+inst✝⁶ : CommSemiring R
+inst✝⁵ : NonUnitalNonAssocSemiring A
+inst✝⁴ : NonUnitalNonAssocSemiring B
+inst✝³ : Module R A
+inst✝² : Module R B
+inst✝¹ : FunLike F A B
+inst✝ : NonUnitalAlgHomClass F R A B
+f : F
+hf : Function.Injective ⇑f
+S T : NonUnitalSubalgebra R A
+h : NonUnitalSubalgebra.map f S = NonUnitalSubalgebra.map f T
+x : A
+hx : x ∈ S
+this : f x ∈ NonUnitalSubalgebra.map f T
+⊢ x ∈ T
+Source line 23:
+    rw [h] at this
+        ^
+Highlighted span: h
+
+ERROR .LspCheck.lean:29:17-29:19
+Application type mismatch: The argument
+  hx
+has type
+  x ∈ T
+but is expected to have type
+  x ∈ ↑S.toNonUnitalSubsemiring
+in the application
+  And.intro hx
+Source line 29:
+      exact ⟨x, hx, rfl⟩
+                ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:33:5-33:26
+Type mismatch: After simplification, term
+  hy
+ has type
+  x ∈ T
+but is expected to have type
+  x ∈ S
+Source line 33:
+    simpa [this] using hy
+    ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [this] using hy
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:22:17-22:19
+Application type mismatch: The argument
+  hx
+has type
+  x ∈ S
+but is expected to have type
+  x ∈ ↑T.toNonUnitalSubsemiring
+in the application
+  And.intro hx
+Source line 22:
+      exact ⟨x, hx, rfl⟩
+                ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:23:9-23:10
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  NonUnitalSubalgebra.map f S
+in the target expression
+  f x ∈ NonUnitalSubalgebra.map f T
+
+case h.mp
+F : Type v'
+R : Type u
+A : Type v
+B : Type w
+inst✝⁶ : CommSemiring R
+inst✝⁵ : NonUnitalNonAssocSemiring A
+inst✝⁴ : NonUnitalNonAssocSemiring B
+inst✝³ : Module R A
+inst✝² : Module R B
+inst✝¹ : FunLike F A B
+inst✝ : NonUnitalAlgHomClass F R A B
+f : F
+hf : Function.Injective ⇑f
+S T : NonUnitalSubalgebra R A
+h : NonUnitalSubalgebra.map f S = NonUnitalSubalgebra.map f T
+x : A
+hx : x ∈ S
+this : f x ∈ NonUnitalSubalgebra.map f T
+⊢ x ∈ T
+Source line 23:
+    rw [h] at this
+        ^
+Highlighted span: h
+
+ERROR .LspCheck.lean:29:17-29:19
+Application type mismatch: The argument
+  hx
+has type
+  x ∈ T
+but is expected to have type
+  x ∈ ↑S.toNonUnitalSubsemiring
+in the application
+  And.intro hx
+Source line 29:
+      exact ⟨x, hx, rfl⟩
+                ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:33:5-33:26
+Type mismatch: After simplification, term
+  hy
+ has type
+  x ∈ T
+but is expected to have type
+  x ∈ S
+Source line 33:
+    simpa [this] using hy
+    ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [this] using hy
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F : Type v'} {R' : Type u'} {R : Type u} {A : Type v} {B : Type w} {C : Type w'}
+
+variable [CommSemiring R]
+
+variable [NonUnitalNonAssocSemiring A] [NonUnitalNonAssocSemiring B] [NonUnitalNonAssocSemiring C]
+
+variable [Module R A] [Module R B] [Module R C]
+
+variable {S : NonUnitalSubalgebra R A}
+
+variable [FunLike F A B] [NonUnitalAlgHomClass F R A B]
+
+theorem map_injective {f : F} (hf : Function.Injective f) :
+    Function.Injective (NonUnitalSubalgebra.map f : NonUnitalSubalgebra R A → NonUnitalSubalgebra R B) := by
+  intro S T h
+  ext x
+  constructor
+  · intro hx
+    have hx' : x ∈ S.toNonUnitalSubsemiring := hx.1
+    have hmem : f x ∈ (NonUnitalSubalgebra.map f S : NonUnitalSubalgebra R B) := ⟨x, hx', rfl⟩
+    rw [h] at hmem
+    rcases hmem with ⟨y, hy, hyx⟩
+    have : y = x := hf (by simpa [hyx])
+    refine ⟨?_, ?_⟩
+    · simpa [this] using hy
+    · simpa [this] using hx.2
+  · intro hx
+    have hx' : x ∈ T.toNonUnitalSubsemiring := hx.1
+    have hmem : f x ∈ (NonUnitalSubalgebra.map f T : NonUnitalSubalgebra R B) := ⟨x, hx', rfl⟩
+    rw [← h] at hmem
+    rcases hmem with ⟨y, hy, hyx⟩
+    have : y = x := hf (by simpa [hyx])
+    refine ⟨?_, ?_⟩
+    · simpa [this] using hy
+    · simpa [this] using hx.2
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:21:48-21:52
+Invalid projection: Projection operates on types of the form `C ...` where C is a constant. The expression
+  hx
+has type `S.toAddSubsemigroup.1 x` which does not have the necessary form.
+Source line 21:
+    have hx' : x ∈ S.toNonUnitalSubsemiring := hx.1
+                                               ^^^^
+Highlighted span: hx.1
+
+ERROR .LspCheck.lean:26:12-26:20
+Invalid `⟨...⟩` notation: The expected type `T.toAddSubsemigroup.1 x` is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+Source line 26:
+    refine ⟨?_, ?_⟩
+           ^^^^^^^^
+Highlighted span: ⟨?_, ?_⟩
+
+ERROR .LspCheck.lean:27:5-27:28
+No goals to be solved
+Source line 27:
+    · simpa [this] using hy
+    ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simpa [this] using hy
+
+ERROR .LspCheck.lean:30:48-30:52
+Invalid projection: Projection operates on types of the form `C ...` where C is a constant. The expression
+  hx
+has type `T.toAddSubsemigroup.1 x` which does not have the necessary form.
+Source line 30:
+    have hx' : x ∈ T.toNonUnitalSubsemiring := hx.1
+                                               ^^^^
+Highlighted span: hx.1
+
+ERROR .LspCheck.lean:35:12-35:20
+Invalid `⟨...⟩` notation: The expected type `S.toAddSubsemigroup.1 x` is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+Source line 35:
+    refine ⟨?_, ?_⟩
+           ^^^^^^^^
+Highlighted span: ⟨?_, ?_⟩
+
+ERROR .LspCheck.lean:36:5-36:28
+No goals to be solved
+Source line 36:
+    · simpa [this] using hy
+    ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simpa [this] using hy
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:21:48-21:52
+Invalid projection: Projection operates on types of the form `C ...` where C is a constant. The expression
+  hx
+has type `S.toAddSubsemigroup.1 x` which does not have the necessary form.
+Source line 21:
+    have hx' : x ∈ S.toNonUnitalSubsemiring := hx.1
+                                               ^^^^
+Highlighted span: hx.1
+
+ERROR .LspCheck.lean:26:12-26:20
+Invalid `⟨...⟩` notation: The expected type `T.toAddSubsemigroup.1 x` is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+Source line 26:
+    refine ⟨?_, ?_⟩
+           ^^^^^^^^
+Highlighted span: ⟨?_, ?_⟩
+
+ERROR .LspCheck.lean:27:5-27:28
+No goals to be solved
+Source line 27:
+    · simpa [this] using hy
+    ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simpa [this] using hy
+
+ERROR .LspCheck.lean:30:48-30:52
+Invalid projection: Projection operates on types of the form `C ...` where C is a constant. The expression
+  hx
+has type `T.toAddSubsemigroup.1 x` which does not have the necessary form.
+Source line 30:
+    have hx' : x ∈ T.toNonUnitalSubsemiring := hx.1
+                                               ^^^^
+Highlighted span: hx.1
+
+ERROR .LspCheck.lean:35:12-35:20
+Invalid `⟨...⟩` notation: The expected type `S.toAddSubsemigroup.1 x` is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+Source line 35:
+    refine ⟨?_, ?_⟩
+           ^^^^^^^^
+Highlighted span: ⟨?_, ?_⟩
+
+ERROR .LspCheck.lean:36:5-36:28
+No goals to be solved
+Source line 36:
+    · simpa [this] using hy
+    ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simpa [this] using hy
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F : Type v'} {R' : Type u'} {R : Type u} {A : Type v} {B : Type w} {C : Type w'}
+
+variable [CommSemiring R]
+
+variable [NonUnitalNonAssocSemiring A] [NonUnitalNonAssocSemiring B] [NonUnitalNonAssocSemiring C]
+
+variable [Module R A] [Module R B] [Module R C]
+
+variable {S : NonUnitalSubalgebra R A}
+
+variable [FunLike F A B] [NonUnitalAlgHomClass F R A B]
+
+theorem map_injective {f : F} (hf : Function.Injective f) :
+    Function.Injective (NonUnitalSubalgebra.map f : NonUnitalSubalgebra R A → NonUnitalSubalgebra R B) := by
+  intro S T h
+  ext x
+  constructor
+  · intro hx
+    have hmem : f x ∈ (NonUnitalSubalgebra.map f S : NonUnitalSubalgebra R B) := ⟨x, hx, rfl⟩
+    rw [h] at hmem
+    rcases hmem with ⟨y, hy, hyx⟩
+    exact hf (hyx.trans rfl.symm) ▸ hy
+  · intro hx
+    have hmem : f x ∈ (NonUnitalSubalgebra.map f T : NonUnitalSubalgebra R B) := ⟨x, hx, rfl⟩
+    rw [← h] at hmem
+    rcases hmem with ⟨y, hy, hyx⟩
+    exact hf (hyx.trans rfl.symm) ▸ hy
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

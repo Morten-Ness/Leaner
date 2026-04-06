@@ -1,0 +1,903 @@
+FILE: Lattice.adjoin_induction.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Lattice.adjoin_induction.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+
+variable [CommSemiring R] [CommSemiring S] [Semiring A] [Semiring B]
+
+variable [Algebra R S] [Algebra R A] [Algebra S A] [Algebra R B] [IsScalarTower R S A]
+
+variable {s t : Set A}
+
+theorem adjoin_induction {p : (x : A) → x ∈ Algebra.adjoin R s → Prop}
+    (mem : ∀ (x) (hx : x ∈ s), p x (Algebra.subset_adjoin hx))
+    (algebraMap : ∀ r, p (algebraMap R A r) (algebraMap_mem _ r))
+    (add : ∀ x y hx hy, p x hx → p y hy → p (x + y) (add_mem hx hy))
+    (mul : ∀ x y hx hy, p x hx → p y hy → p (x * y) (mul_mem hx hy))
+    {x : A} (hx : x ∈ Algebra.adjoin R s) : p x hx := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+
+variable [CommSemiring R] [CommSemiring S] [Semiring A] [Semiring B]
+
+variable [Algebra R S] [Algebra R A] [Algebra S A] [Algebra R B] [IsScalarTower R S A]
+
+variable {s t : Set A}
+
+theorem adjoin_induction {p : (x : A) → x ∈ Algebra.adjoin R s → Prop}
+    (mem : ∀ (x) (hx : x ∈ s), p x (Algebra.subset_adjoin hx))
+    (algebraMap : ∀ r, p (algebraMap R A r) (algebraMap_mem _ r))
+    (add : ∀ x y hx hy, p x hx → p y hy → p (x + y) (add_mem hx hy))
+    (mul : ∀ x y hx hy, p x hx → p y hy → p (x * y) (mul_mem hx hy))
+    {x : A} (hx : x ∈ Algebra.adjoin R s) : p x hx := by
+  let S : Subsemiring A :=
+    { carrier := Algebra.adjoin R s
+      algebraMap_mem' := algebraMap_mem (Algebra.adjoin R s)
+      zero_mem' := by
+        simpa using (algebraMap_mem (Algebra.adjoin R s) (0 : R))
+      add_mem' := fun _ _ => add_mem
+      one_mem' := by
+        simpa using (algebraMap_mem (Algebra.adjoin R s) (1 : R))
+      mul_mem' := fun _ _ => mul_mem }
+  have hs : s ⊆ S := fun x hx => Algebra.subset_adjoin hx
+  have hS : S = Algebra.adjoin R s := by
+    apply le_antisymm
+    · exact Algebra.adjoin_le hs
+    · exact le_rfl
+  have hpx : ∀ y ∈ S, p y (by simpa [hS] using ‹y ∈ S›) := by
+    intro y hy
+    refine Subsemiring.closure_induction ?hs ?ha ?hadd ?hmul hy
+    · intro y hy
+      exact mem y hy
+    · intro r
+      simpa [hS] using algebraMap r
+    · intro y z hy hz py pz
+      simpa [hS] using add y z hy hz py pz
+    · intro y z hy hz py pz
+      simpa [hS] using mul y z hy hz py pz
+  exact hpx x (by simpa [hS] using hx)
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:3:20-3:22
+unknown universe level `uR`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                   ^^
+Highlighted span: uR
+
+ERROR .LspCheck.lean:3:34-3:36
+unknown universe level `uS`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                                 ^^
+Highlighted span: uS
+
+ERROR .LspCheck.lean:3:48-3:50
+unknown universe level `uA`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                                               ^^
+Highlighted span: uA
+
+ERROR .LspCheck.lean:3:62-3:64
+unknown universe level `uB`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                                                             ^^
+Highlighted span: uB
+
+WARNING .LspCheck.lean:12:6-12:9
+unused variable `mem`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 12:
+    (mem : ∀ (x) (hx : x ∈ s), p x (Algebra.subset_adjoin hx))
+     ^^^
+Highlighted span: mem
+
+WARNING .LspCheck.lean:12:19-12:21
+unused variable `hx`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 12:
+    (mem : ∀ (x) (hx : x ∈ s), p x (Algebra.subset_adjoin hx))
+                  ^^
+Highlighted span: hx
+
+WARNING .LspCheck.lean:13:6-13:16
+unused variable `algebraMap`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 13:
+    (algebraMap : ∀ r, p (algebraMap R A r) (algebraMap_mem _ r))
+     ^^^^^^^^^^
+Highlighted span: algebraMap
+
+WARNING .LspCheck.lean:13:21-13:22
+unused variable `r`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 13:
+    (algebraMap : ∀ r, p (algebraMap R A r) (algebraMap_mem _ r))
+                    ^
+Highlighted span: r
+
+WARNING .LspCheck.lean:14:6-14:9
+unused variable `add`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 14:
+    (add : ∀ x y hx hy, p x hx → p y hy → p (x + y) (add_mem hx hy))
+     ^^^
+Highlighted span: add
+
+WARNING .LspCheck.lean:14:14-14:15
+unused variable `x`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 14:
+    (add : ∀ x y hx hy, p x hx → p y hy → p (x + y) (add_mem hx hy))
+             ^
+Highlighted span: x
+
+WARNING .LspCheck.lean:14:16-14:17
+unused variable `y`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 14:
+    (add : ∀ x y hx hy, p x hx → p y hy → p (x + y) (add_mem hx hy))
+               ^
+Highlighted span: y
+
+WARNING .LspCheck.lean:14:18-14:20
+unused variable `hx`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 14:
+    (add : ∀ x y hx hy, p x hx → p y hy → p (x + y) (add_mem hx hy))
+                 ^^
+Highlighted span: hx
+
+WARNING .LspCheck.lean:14:21-14:23
+unused variable `hy`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 14:
+    (add : ∀ x y hx hy, p x hx → p y hy → p (x + y) (add_mem hx hy))
+                    ^^
+Highlighted span: hy
+
+WARNING .LspCheck.lean:15:6-15:9
+unused variable `mul`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 15:
+    (mul : ∀ x y hx hy, p x hx → p y hy → p (x * y) (mul_mem hx hy))
+     ^^^
+Highlighted span: mul
+
+WARNING .LspCheck.lean:15:14-15:15
+unused variable `x`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 15:
+    (mul : ∀ x y hx hy, p x hx → p y hy → p (x * y) (mul_mem hx hy))
+             ^
+Highlighted span: x
+
+WARNING .LspCheck.lean:15:16-15:17
+unused variable `y`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 15:
+    (mul : ∀ x y hx hy, p x hx → p y hy → p (x * y) (mul_mem hx hy))
+               ^
+Highlighted span: y
+
+WARNING .LspCheck.lean:15:18-15:20
+unused variable `hx`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 15:
+    (mul : ∀ x y hx hy, p x hx → p y hy → p (x * y) (mul_mem hx hy))
+                 ^^
+Highlighted span: hx
+
+WARNING .LspCheck.lean:15:21-15:23
+unused variable `hy`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 15:
+    (mul : ∀ x y hx hy, p x hx → p y hy → p (x * y) (mul_mem hx hy))
+                    ^^
+Highlighted span: hy
+
+WARNING .LspCheck.lean:17:3-18:1
+this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Source line 17:
+  let S : Subsemiring A :=
+  ^
+Highlighted span: l
+
+WARNING .LspCheck.lean:26:3-26:58
+this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Source line 26:
+  have hs : s ⊆ S := fun x hx => Algebra.subset_adjoin hx
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: have hs : s ⊆ S := fun x hx => Algebra.subset_adjoin hx
+
+WARNING .LspCheck.lean:27:3-28:1
+this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Source line 27:
+  have hS : S = Algebra.adjoin R s := by
+  ^
+Highlighted span: h
+
+WARNING .LspCheck.lean:31:3-32:1
+this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Source line 31:
+  have hpx : ∀ y ∈ S, p y (by simpa [hS] using ‹y ∈ S›) := by
+  ^
+Highlighted span: h
+
+WARNING .LspCheck.lean:42:3-42:39
+this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Source line 42:
+  exact hpx x (by simpa [hS] using hx)
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: exact hpx x (by simpa [hS] using hx)
+
+WARNING .LspCheck.lean:17:3-18:1
+'let S : Subsemiring A :=
+  { carrier := Algebra.adjoin R s
+    algebraMap_mem' := algebraMap_mem (Algebra.adjoin R s)
+    zero_mem' := by simpa using (algebraMap_mem (Algebra.adjoin R s) (0 : R))
+    add_mem' := fun _ _ => add_mem
+    one_mem' := by simpa using (algebraMap_mem (Algebra.adjoin R s) (1 : R))
+    mul_mem' := fun _ _ => mul_mem }' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Source line 17:
+  let S : Subsemiring A :=
+  ^
+Highlighted span: l
+
+WARNING .LspCheck.lean:26:3-26:58
+'have hs : s ⊆ S := fun x hx => Algebra.subset_adjoin hx' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Source line 26:
+  have hs : s ⊆ S := fun x hx => Algebra.subset_adjoin hx
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: have hs : s ⊆ S := fun x hx => Algebra.subset_adjoin hx
+
+WARNING .LspCheck.lean:27:3-28:1
+'have hS : S = Algebra.adjoin R s := by
+  apply le_antisymm
+  · exact Algebra.adjoin_le hs
+  · exact le_rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Source line 27:
+  have hS : S = Algebra.adjoin R s := by
+  ^
+Highlighted span: h
+
+WARNING .LspCheck.lean:31:3-32:1
+'have hpx : ∀ y ∈ S, p y (by simpa [hS] using ‹y ∈ S›) :=
+  by
+  intro y hy
+  refine Subsemiring.closure_induction ?hs ?ha ?hadd ?hmul hy
+  · intro y hy
+    exact mem y hy
+  · intro r
+    simpa [hS] using algebraMap r
+  · intro y z hy hz py pz
+    simpa [hS] using add y z hy hz py pz
+  · intro y z hy hz py pz
+    simpa [hS] using mul y z hy hz py pz' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Source line 31:
+  have hpx : ∀ y ∈ S, p y (by simpa [hS] using ‹y ∈ S›) := by
+  ^
+Highlighted span: h
+
+WARNING .LspCheck.lean:42:3-42:39
+'exact hpx x (by simpa [hS] using hx)' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Source line 42:
+  exact hpx x (by simpa [hS] using hx)
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: exact hpx x (by simpa [hS] using hx)
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:3:20-3:22
+unknown universe level `uR`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                   ^^
+Highlighted span: uR
+
+ERROR .LspCheck.lean:3:34-3:36
+unknown universe level `uS`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                                 ^^
+Highlighted span: uS
+
+ERROR .LspCheck.lean:3:48-3:50
+unknown universe level `uA`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                                               ^^
+Highlighted span: uA
+
+ERROR .LspCheck.lean:3:62-3:64
+unknown universe level `uB`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                                                             ^^
+Highlighted span: uB
+
+WARNING .LspCheck.lean:12:6-12:9
+unused variable `mem`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 12:
+    (mem : ∀ (x) (hx : x ∈ s), p x (Algebra.subset_adjoin hx))
+     ^^^
+Highlighted span: mem
+
+WARNING .LspCheck.lean:12:19-12:21
+unused variable `hx`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 12:
+    (mem : ∀ (x) (hx : x ∈ s), p x (Algebra.subset_adjoin hx))
+                  ^^
+Highlighted span: hx
+
+WARNING .LspCheck.lean:13:6-13:16
+unused variable `algebraMap`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 13:
+    (algebraMap : ∀ r, p (algebraMap R A r) (algebraMap_mem _ r))
+     ^^^^^^^^^^
+Highlighted span: algebraMap
+
+WARNING .LspCheck.lean:13:21-13:22
+unused variable `r`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 13:
+    (algebraMap : ∀ r, p (algebraMap R A r) (algebraMap_mem _ r))
+                    ^
+Highlighted span: r
+
+WARNING .LspCheck.lean:14:6-14:9
+unused variable `add`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 14:
+    (add : ∀ x y hx hy, p x hx → p y hy → p (x + y) (add_mem hx hy))
+     ^^^
+Highlighted span: add
+
+WARNING .LspCheck.lean:14:14-14:15
+unused variable `x`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 14:
+    (add : ∀ x y hx hy, p x hx → p y hy → p (x + y) (add_mem hx hy))
+             ^
+Highlighted span: x
+
+WARNING .LspCheck.lean:14:16-14:17
+unused variable `y`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 14:
+    (add : ∀ x y hx hy, p x hx → p y hy → p (x + y) (add_mem hx hy))
+               ^
+Highlighted span: y
+
+WARNING .LspCheck.lean:14:18-14:20
+unused variable `hx`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 14:
+    (add : ∀ x y hx hy, p x hx → p y hy → p (x + y) (add_mem hx hy))
+                 ^^
+Highlighted span: hx
+
+WARNING .LspCheck.lean:14:21-14:23
+unused variable `hy`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 14:
+    (add : ∀ x y hx hy, p x hx → p y hy → p (x + y) (add_mem hx hy))
+                    ^^
+Highlighted span: hy
+
+WARNING .LspCheck.lean:15:6-15:9
+unused variable `mul`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 15:
+    (mul : ∀ x y hx hy, p x hx → p y hy → p (x * y) (mul_mem hx hy))
+     ^^^
+Highlighted span: mul
+
+WARNING .LspCheck.lean:15:14-15:15
+unused variable `x`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 15:
+    (mul : ∀ x y hx hy, p x hx → p y hy → p (x * y) (mul_mem hx hy))
+             ^
+Highlighted span: x
+
+WARNING .LspCheck.lean:15:16-15:17
+unused variable `y`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 15:
+    (mul : ∀ x y hx hy, p x hx → p y hy → p (x * y) (mul_mem hx hy))
+               ^
+Highlighted span: y
+
+WARNING .LspCheck.lean:15:18-15:20
+unused variable `hx`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 15:
+    (mul : ∀ x y hx hy, p x hx → p y hy → p (x * y) (mul_mem hx hy))
+                 ^^
+Highlighted span: hx
+
+WARNING .LspCheck.lean:15:21-15:23
+unused variable `hy`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 15:
+    (mul : ∀ x y hx hy, p x hx → p y hy → p (x * y) (mul_mem hx hy))
+                    ^^
+Highlighted span: hy
+
+WARNING .LspCheck.lean:17:3-18:1
+this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Source line 17:
+  let S : Subsemiring A :=
+  ^
+Highlighted span: l
+
+WARNING .LspCheck.lean:26:3-26:58
+this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Source line 26:
+  have hs : s ⊆ S := fun x hx => Algebra.subset_adjoin hx
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: have hs : s ⊆ S := fun x hx => Algebra.subset_adjoin hx
+
+WARNING .LspCheck.lean:27:3-28:1
+this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Source line 27:
+  have hS : S = Algebra.adjoin R s := by
+  ^
+Highlighted span: h
+
+WARNING .LspCheck.lean:31:3-32:1
+this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Source line 31:
+  have hpx : ∀ y ∈ S, p y (by simpa [hS] using ‹y ∈ S›) := by
+  ^
+Highlighted span: h
+
+WARNING .LspCheck.lean:42:3-42:39
+this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Source line 42:
+  exact hpx x (by simpa [hS] using hx)
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: exact hpx x (by simpa [hS] using hx)
+
+WARNING .LspCheck.lean:17:3-18:1
+'let S : Subsemiring A :=
+  { carrier := Algebra.adjoin R s
+    algebraMap_mem' := algebraMap_mem (Algebra.adjoin R s)
+    zero_mem' := by simpa using (algebraMap_mem (Algebra.adjoin R s) (0 : R))
+    add_mem' := fun _ _ => add_mem
+    one_mem' := by simpa using (algebraMap_mem (Algebra.adjoin R s) (1 : R))
+    mul_mem' := fun _ _ => mul_mem }' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Source line 17:
+  let S : Subsemiring A :=
+  ^
+Highlighted span: l
+
+WARNING .LspCheck.lean:26:3-26:58
+'have hs : s ⊆ S := fun x hx => Algebra.subset_adjoin hx' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Source line 26:
+  have hs : s ⊆ S := fun x hx => Algebra.subset_adjoin hx
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: have hs : s ⊆ S := fun x hx => Algebra.subset_adjoin hx
+
+WARNING .LspCheck.lean:27:3-28:1
+'have hS : S = Algebra.adjoin R s := by
+  apply le_antisymm
+  · exact Algebra.adjoin_le hs
+  · exact le_rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Source line 27:
+  have hS : S = Algebra.adjoin R s := by
+  ^
+Highlighted span: h
+
+WARNING .LspCheck.lean:31:3-32:1
+'have hpx : ∀ y ∈ S, p y (by simpa [hS] using ‹y ∈ S›) :=
+  by
+  intro y hy
+  refine Subsemiring.closure_induction ?hs ?ha ?hadd ?hmul hy
+  · intro y hy
+    exact mem y hy
+  · intro r
+    simpa [hS] using algebraMap r
+  · intro y z hy hz py pz
+    simpa [hS] using add y z hy hz py pz
+  · intro y z hy hz py pz
+    simpa [hS] using mul y z hy hz py pz' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Source line 31:
+  have hpx : ∀ y ∈ S, p y (by simpa [hS] using ‹y ∈ S›) := by
+  ^
+Highlighted span: h
+
+WARNING .LspCheck.lean:42:3-42:39
+'exact hpx x (by simpa [hS] using hx)' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Source line 42:
+  exact hpx x (by simpa [hS] using hx)
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: exact hpx x (by simpa [hS] using hx)
+
+===== ASSISTANT =====
+import Mathlib
+
+universe uR uS uA uB
+
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+
+variable [CommSemiring R] [CommSemiring S] [Semiring A] [Semiring B]
+
+variable [Algebra R S] [Algebra R A] [Algebra S A] [Algebra R B] [IsScalarTower R S A]
+
+variable {s t : Set A}
+
+theorem adjoin_induction {p : (x : A) → x ∈ Algebra.adjoin R s → Prop}
+    (mem : ∀ (x) (hx : x ∈ s), p x (Algebra.subset_adjoin hx))
+    (algebraMap : ∀ r, p (algebraMap R A r) (algebraMap_mem _ r))
+    (add : ∀ x y hx hy, p x hx → p y hy → p (x + y) (add_mem hx hy))
+    (mul : ∀ x y hx hy, p x hx → p y hy → p (x * y) (mul_mem hx hy))
+    {x : A} (hx : x ∈ Algebra.adjoin R s) : p x hx := by
+  classical
+  let q : A → Prop := fun x => ∀ hx : x ∈ Algebra.adjoin R s, p x hx
+  have hq_mem : ∀ x ∈ s, q x := by
+    intro x hx hx'
+    exact mem x hx
+  have hq_algebraMap : ∀ r, q (algebraMap R A r) := by
+    intro r hx'
+    exact algebraMap r
+  have hq_add : ∀ x y, q x → q y → q (x + y) := by
+    intro x y hxq hyq hxy
+    exact add x y (show x ∈ Algebra.adjoin R s from Algebra.subset_closure (show x ∈ {x | q x} from hxq))
+      (show y ∈ Algebra.adjoin R s from Algebra.subset_closure (show y ∈ {x | q x} from hyq))
+      (hxq _) (hyq _)
+  have hq_mul : ∀ x y, q x → q y → q (x * y) := by
+    intro x y hxq hyq hxy
+    exact mul x y (show x ∈ Algebra.adjoin R s from Algebra.subset_closure (show x ∈ {x | q x} from hxq))
+      (show y ∈ Algebra.adjoin R s from Algebra.subset_closure (show y ∈ {x | q x} from hyq))
+      (hxq _) (hyq _)
+  have hsubset : Algebra.adjoin R s ≤ Algebra.adjoin R {x | q x} := by
+    apply Algebra.adjoin_le
+    intro x hx
+    exact Algebra.subset_adjoin (hq_mem x hx)
+  have hfixed : Algebra.adjoin R {x | q x} ≤ Algebra.adjoin R s := by
+    apply Algebra.adjoin_le
+    intro x hxq
+    exact hxq (Algebra.subset_adjoin hxq)
+  have hq_all : ∀ x ∈ Algebra.adjoin R s, q x := by
+    intro x hx'
+    have hx'' : x ∈ Algebra.adjoin R {x | q x} := hsubset hx'
+    exact (Algebra.adjoin_induction (K := R) (s := {x | q x}) (p := fun x => x ∈ Algebra.adjoin R s)
+      (fun x hxq => hxq (Algebra.subset_adjoin hxq))
+      (fun r => algebraMap_mem (Algebra.adjoin R s) r)
+      (fun x y _ _ hx hy => add_mem hx hy)
+      (fun x y _ _ hx hy => mul_mem hx hy)
+      hx'')
+  exact hq_all x hx hx
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:24:43-24:44
+Application type mismatch: The argument
+  R
+has type
+  Type uR
+of sort `Type (uR + 1)` but is expected to have type
+  R
+of sort `Type uR` in the application
+  algebraMap R
+Source line 24:
+  have hq_algebraMap : ∀ r, q (algebraMap R A r) := by
+                                          ^
+Highlighted span: R
+
+ERROR .LspCheck.lean:18:55-19:1
+unsolved goals
+R : Type uR
+A : Type uA
+inst✝² : CommSemiring R
+inst✝¹ : Semiring A
+inst✝ : Algebra R A
+s : Set A
+p : (x : A) → x ∈ Algebra.adjoin R s → Prop
+mem : ∀ (x : A) (hx : x ∈ s), p x ⋯
+algebraMap : ∀ (r : R), p ((_root_.algebraMap R A) r) ⋯
+add : ∀ (x y : A) (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s), p x hx → p y hy → p (x + y) ⋯
+mul : ∀ (x y : A) (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s), p x hx → p y hy → p (x * y) ⋯
+x : A
+hx : x ∈ Algebra.adjoin R s
+q : A → Prop := fun x ↦ ∀ (hx : x ∈ Algebra.adjoin R s), p x hx
+hq_mem : ∀ x ∈ s, q x
+⊢ p x hx
+Source line 18:
+    {x : A} (hx : x ∈ Algebra.adjoin R s) : p x hx := by
+                                                      ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:24:43-24:44
+Application type mismatch: The argument
+  R
+has type
+  Type uR
+of sort `Type (uR + 1)` but is expected to have type
+  R
+of sort `Type uR` in the application
+  algebraMap R
+Source line 24:
+  have hq_algebraMap : ∀ r, q (algebraMap R A r) := by
+                                          ^
+Highlighted span: R
+
+ERROR .LspCheck.lean:18:55-19:1
+unsolved goals
+R : Type uR
+A : Type uA
+inst✝² : CommSemiring R
+inst✝¹ : Semiring A
+inst✝ : Algebra R A
+s : Set A
+p : (x : A) → x ∈ Algebra.adjoin R s → Prop
+mem : ∀ (x : A) (hx : x ∈ s), p x ⋯
+algebraMap : ∀ (r : R), p ((_root_.algebraMap R A) r) ⋯
+add : ∀ (x y : A) (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s), p x hx → p y hy → p (x + y) ⋯
+mul : ∀ (x y : A) (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s), p x hx → p y hy → p (x * y) ⋯
+x : A
+hx : x ∈ Algebra.adjoin R s
+q : A → Prop := fun x ↦ ∀ (hx : x ∈ Algebra.adjoin R s), p x hx
+hq_mem : ∀ x ∈ s, q x
+⊢ p x hx
+Source line 18:
+    {x : A} (hx : x ∈ Algebra.adjoin R s) : p x hx := by
+                                                      ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+universe uR uS uA uB
+
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+
+variable [CommSemiring R] [CommSemiring S] [Semiring A] [Semiring B]
+
+variable [Algebra R S] [Algebra R A] [Algebra S A] [Algebra R B] [IsScalarTower R S A]
+
+variable {s t : Set A}
+
+theorem adjoin_induction {p : (x : A) → x ∈ Algebra.adjoin R s → Prop}
+    (mem : ∀ (x) (hx : x ∈ s), p x (Algebra.subset_adjoin hx))
+    (algebraMap : ∀ r, p (algebraMap R A r) (algebraMap_mem _ r))
+    (add : ∀ x y hx hy, p x hx → p y hy → p (x + y) (add_mem hx hy))
+    (mul : ∀ x y hx hy, p x hx → p y hy → p (x * y) (mul_mem hx hy))
+    {x : A} (hx : x ∈ Algebra.adjoin R s) : p x hx := by
+  simpa using
+    (Algebra.adjoin_induction
+      (K := R) (s := s) (p := fun x => ∀ hx : x ∈ Algebra.adjoin R s, p x hx)
+      (fun x hx hx' => by simpa using mem x hx)
+      (fun r hx' => by simpa using algebraMap r)
+      (fun x y hx hy px py hxy => by
+        exact add x y hx hy (px hx) (py hy))
+      (fun x y hx hy px py hxy => by
+        exact mul x y hx hy (px hx) (py hy))
+      hx) hx
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:21:40-21:77
+Type mismatch
+  ∀ (hx : x ∈ Algebra.adjoin R s), p x hx
+has type
+  Prop
+but is expected to have type
+  x ∈ Algebra.adjoin ?m.99 s → Prop
+Source line 21:
+      (K := R) (s := s) (p := fun x => ∀ hx : x ∈ Algebra.adjoin R s, p x hx)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ∀ hx : x ∈ Algebra.adjoin R s, p x hx
+
+ERROR .LspCheck.lean:22:24-22:47
+invalid 'by' tactic, expected type has not been provided
+Source line 22:
+      (fun x hx hx' => by simpa using mem x hx)
+                       ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: by simpa using mem x hx
+
+ERROR .LspCheck.lean:23:21-23:48
+invalid 'by' tactic, expected type has not been provided
+Source line 23:
+      (fun r hx' => by simpa using algebraMap r)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: by simpa using algebraMap r
+
+ERROR .LspCheck.lean:24:35-25:1
+invalid 'by' tactic, expected type has not been provided
+Source line 24:
+      (fun x y hx hy px py hxy => by
+                                  ^
+Highlighted span: b
+
+ERROR .LspCheck.lean:26:35-27:1
+invalid 'by' tactic, expected type has not been provided
+Source line 26:
+      (fun x y hx hy px py hxy => by
+                                  ^
+Highlighted span: b
+
+ERROR .LspCheck.lean:21:7-21:15
+Invalid argument name `K` for function `Algebra.adjoin_induction`
+
+Hint: Perhaps you meant one of the following parameter names:
+  • `R`: K̵R̲
+  • `A`: K̵A̲
+  • `mem`: K̵m̲e̲m̲
+  • `algebraMap`: K̵a̲l̲g̲e̲b̲r̲a̲M̲a̲p̲
+  • `add`: K̵a̲d̲d̲
+  • `mul`: K̵m̲u̲l̲
+  • `x`: K̵x̲
+  • `hx`: K̵h̲x̲
+Source line 21:
+      (K := R) (s := s) (p := fun x => ∀ hx : x ∈ Algebra.adjoin R s, p x hx)
+      ^^^^^^^^
+Highlighted span: (K := R)
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:21:40-21:77
+Type mismatch
+  ∀ (hx : x ∈ Algebra.adjoin R s), p x hx
+has type
+  Prop
+but is expected to have type
+  x ∈ Algebra.adjoin ?m.99 s → Prop
+Source line 21:
+      (K := R) (s := s) (p := fun x => ∀ hx : x ∈ Algebra.adjoin R s, p x hx)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ∀ hx : x ∈ Algebra.adjoin R s, p x hx
+
+ERROR .LspCheck.lean:22:24-22:47
+invalid 'by' tactic, expected type has not been provided
+Source line 22:
+      (fun x hx hx' => by simpa using mem x hx)
+                       ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: by simpa using mem x hx
+
+ERROR .LspCheck.lean:23:21-23:48
+invalid 'by' tactic, expected type has not been provided
+Source line 23:
+      (fun r hx' => by simpa using algebraMap r)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: by simpa using algebraMap r
+
+ERROR .LspCheck.lean:24:35-25:1
+invalid 'by' tactic, expected type has not been provided
+Source line 24:
+      (fun x y hx hy px py hxy => by
+                                  ^
+Highlighted span: b
+
+ERROR .LspCheck.lean:26:35-27:1
+invalid 'by' tactic, expected type has not been provided
+Source line 26:
+      (fun x y hx hy px py hxy => by
+                                  ^
+Highlighted span: b
+
+ERROR .LspCheck.lean:21:7-21:15
+Invalid argument name `K` for function `Algebra.adjoin_induction`
+
+Hint: Perhaps you meant one of the following parameter names:
+  • `R`: K̵R̲
+  • `A`: K̵A̲
+  • `mem`: K̵m̲e̲m̲
+  • `algebraMap`: K̵a̲l̲g̲e̲b̲r̲a̲M̲a̲p̲
+  • `add`: K̵a̲d̲d̲
+  • `mul`: K̵m̲u̲l̲
+  • `x`: K̵x̲
+  • `hx`: K̵h̲x̲
+Source line 21:
+      (K := R) (s := s) (p := fun x => ∀ hx : x ∈ Algebra.adjoin R s, p x hx)
+      ^^^^^^^^
+Highlighted span: (K := R)

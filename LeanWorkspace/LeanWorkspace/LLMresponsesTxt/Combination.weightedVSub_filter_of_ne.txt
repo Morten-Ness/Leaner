@@ -1,0 +1,250 @@
+FILE: Combination.weightedVSub_filter_of_ne.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Combination.weightedVSub_filter_of_ne.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+theorem weightedVSub_filter_of_ne (w : ι → k) (p : ι → P) {pred : ι → Prop} [DecidablePred pred]
+    (h : ∀ i ∈ s, w i ≠ 0 → pred i) : {x ∈ s | pred x}.weightedVSub p w = s.weightedVSub p w := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+theorem weightedVSub_filter_of_ne (w : ι → k) (p : ι → P) {pred : ι → Prop} [DecidablePred pred]
+    (h : ∀ i ∈ s, w i ≠ 0 → pred i) : {x ∈ s | pred x}.weightedVSub p w = s.weightedVSub p w := by
+  classical
+  rw [Finset.weightedVSub_eq_weightedVSub_filter_ne_zero]
+  refine Finset.sum_subset ?_ ?_
+  · intro x hx
+    simp only [Finset.mem_filter] at hx ⊢
+    exact ⟨h x hx.1 hx.2, hx⟩
+  · intro x hx hsx
+    simp only [Finset.mem_filter] at hx
+    rw [smul_eq_zero]
+    right
+    exact hx.2
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:7-14:57
+Unknown constant `Finset.weightedVSub_eq_weightedVSub_filter_ne_zero`
+Source line 14:
+  rw [Finset.weightedVSub_eq_weightedVSub_filter_ne_zero]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.weightedVSub_eq_weightedVSub_filter_ne_zero
+
+ERROR .LspCheck.lean:12:97-13:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s : Finset ι
+w : ι → k
+p : ι → P
+pred : ι → Prop
+inst✝ : DecidablePred pred
+h : ∀ i ∈ s, w i ≠ 0 → pred i
+⊢ ({x ∈ s | pred x}.weightedVSub p) w = (s.weightedVSub p) w
+Source line 12:
+    (h : ∀ i ∈ s, w i ≠ 0 → pred i) : {x ∈ s | pred x}.weightedVSub p w = s.weightedVSub p w := by
+                                                                                                ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:7-14:57
+Unknown constant `Finset.weightedVSub_eq_weightedVSub_filter_ne_zero`
+Source line 14:
+  rw [Finset.weightedVSub_eq_weightedVSub_filter_ne_zero]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.weightedVSub_eq_weightedVSub_filter_ne_zero
+
+ERROR .LspCheck.lean:12:97-13:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s : Finset ι
+w : ι → k
+p : ι → P
+pred : ι → Prop
+inst✝ : DecidablePred pred
+h : ∀ i ∈ s, w i ≠ 0 → pred i
+⊢ ({x ∈ s | pred x}.weightedVSub p) w = (s.weightedVSub p) w
+Source line 12:
+    (h : ∀ i ∈ s, w i ≠ 0 → pred i) : {x ∈ s | pred x}.weightedVSub p w = s.weightedVSub p w := by
+                                                                                                ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+theorem weightedVSub_filter_of_ne (w : ι → k) (p : ι → P) {pred : ι → Prop} [DecidablePred pred]
+    (h : ∀ i ∈ s, w i ≠ 0 → pred i) : {x ∈ s | pred x}.weightedVSub p w = s.weightedVSub p w := by
+  classical
+  unfold Finset.weightedVSub
+  rw [Finset.sum_filter]
+  apply congrArg
+  ext i
+  by_cases hi : i ∈ s
+  · by_cases hpred : pred i
+    · simp [hi, hpred]
+    · have hw : w i = 0 := by
+        by_contra hw
+        exact hpred (h i hi hw)
+      simp [hi, hpred, hw]
+  · simp [hi]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:7-15:24
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ a ∈ ?m.39 with ?p a, ?f a
+in the target expression
+  ({x ∈ s | pred x}.weightedVSubOfPoint p (Classical.choice ⋯)) w = (s.weightedVSubOfPoint p (Classical.choice ⋯)) w
+
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s : Finset ι
+w : ι → k
+p : ι → P
+pred : ι → Prop
+inst✝ : DecidablePred pred
+h : ∀ i ∈ s, w i ≠ 0 → pred i
+⊢ ({x ∈ s | pred x}.weightedVSubOfPoint p (Classical.choice ⋯)) w = (s.weightedVSubOfPoint p (Classical.choice ⋯)) w
+Source line 15:
+  rw [Finset.sum_filter]
+      ^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.sum_filter
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:7-15:24
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ a ∈ ?m.39 with ?p a, ?f a
+in the target expression
+  ({x ∈ s | pred x}.weightedVSubOfPoint p (Classical.choice ⋯)) w = (s.weightedVSubOfPoint p (Classical.choice ⋯)) w
+
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s : Finset ι
+w : ι → k
+p : ι → P
+pred : ι → Prop
+inst✝ : DecidablePred pred
+h : ∀ i ∈ s, w i ≠ 0 → pred i
+⊢ ({x ∈ s | pred x}.weightedVSubOfPoint p (Classical.choice ⋯)) w = (s.weightedVSubOfPoint p (Classical.choice ⋯)) w
+Source line 15:
+  rw [Finset.sum_filter]
+      ^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.sum_filter
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+theorem weightedVSub_filter_of_ne (w : ι → k) (p : ι → P) {pred : ι → Prop} [DecidablePred pred]
+    (h : ∀ i ∈ s, w i ≠ 0 → pred i) : {x ∈ s | pred x}.weightedVSub p w = s.weightedVSub p w := by
+  classical
+  by_cases hs : s.Nonempty
+  · rcases hs with ⟨i, hi⟩
+    rw [Finset.weightedVSub_eq_weightedVSubOfPoint_vadd_of_sum_eq_zero _ _ _ i hi,
+      Finset.weightedVSub_eq_weightedVSubOfPoint_vadd_of_sum_eq_zero _ _ _ i
+        (by simp [hi, h i hi])]
+  · simp [Finset.not_nonempty_iff_eq_empty.mp hs]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:9-16:71
+Unknown constant `Finset.weightedVSub_eq_weightedVSubOfPoint_vadd_of_sum_eq_zero`
+Source line 16:
+    rw [Finset.weightedVSub_eq_weightedVSubOfPoint_vadd_of_sum_eq_zero _ _ _ i hi,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.weightedVSub_eq_weightedVSubOfPoint_vadd_of_sum_eq_zero
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:9-16:71
+Unknown constant `Finset.weightedVSub_eq_weightedVSubOfPoint_vadd_of_sum_eq_zero`
+Source line 16:
+    rw [Finset.weightedVSub_eq_weightedVSubOfPoint_vadd_of_sum_eq_zero _ _ _ i hi,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.weightedVSub_eq_weightedVSubOfPoint_vadd_of_sum_eq_zero

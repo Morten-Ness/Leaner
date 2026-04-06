@@ -1,0 +1,41 @@
+FILE: Operations.mrange_comp.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Operations.mrange_comp.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+variable {F : Type*} [FunLike F M N] [mc : MonoidHomClass F M N]
+
+theorem mrange_comp {O : Type*} [MulOneClass O] (f : N →* O) (g : M →* N) :
+    MonoidHom.mrange (f.comp g) = (MonoidHom.mrange g).map f := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+variable {F : Type*} [FunLike F M N] [mc : MonoidHomClass F M N]
+
+theorem mrange_comp {O : Type*} [MulOneClass O] (f : N →* O) (g : M →* N) :
+    MonoidHom.mrange (f.comp g) = (MonoidHom.mrange g).map f := by
+  ext x
+  constructor
+  · rintro ⟨y, rfl⟩
+    exact ⟨g y, ⟨y, rfl⟩, rfl⟩
+  · rintro ⟨y, ⟨z, rfl⟩, rfl⟩
+    exact ⟨z, rfl⟩
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+PASS

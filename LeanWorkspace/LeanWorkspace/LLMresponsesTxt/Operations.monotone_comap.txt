@@ -1,0 +1,85 @@
+FILE: Operations.monotone_comap.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Operations.monotone_comap.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+variable {F : Type*} [FunLike F M N] [mc : MonoidHomClass F M N]
+
+theorem monotone_comap {f : F} : Monotone (Submonoid.comap f) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+variable {F : Type*} [FunLike F M N] [mc : MonoidHomClass F M N]
+
+theorem monotone_comap {f : F} : Monotone (Submonoid.comap f) := by
+  intro S T hST
+  exact Set.preimage_mono hST
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:9:27-9:30
+Application type mismatch: The argument
+  hST
+has type
+  S ≤ T
+but is expected to have type
+  (Submonoid.comap f S).carrier ⊆ (Submonoid.comap f T).carrier
+in the application
+  Set.preimage_mono hST
+Source line 9:
+  exact Set.preimage_mono hST
+                          ^^^
+Highlighted span: hST
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:9:27-9:30
+Application type mismatch: The argument
+  hST
+has type
+  S ≤ T
+but is expected to have type
+  (Submonoid.comap f S).carrier ⊆ (Submonoid.comap f T).carrier
+in the application
+  Set.preimage_mono hST
+Source line 9:
+  exact Set.preimage_mono hST
+                          ^^^
+Highlighted span: hST
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+variable {F : Type*} [FunLike F M N] [mc : MonoidHomClass F M N]
+
+theorem monotone_comap {f : F} : Monotone (Submonoid.comap f) := by
+  intro S T hST
+  show Submonoid.comap f S ≤ Submonoid.comap f T
+  intro x hx
+  exact hST hx
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

@@ -1,0 +1,309 @@
+FILE: Unitization.starAlgHom_ext.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Unitization.starAlgHom_ext.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R A C : Type*} [CommSemiring R] [StarRing R] [NonUnitalSemiring A] [StarRing A]
+
+variable [Module R A] [SMulCommClass R A A] [IsScalarTower R A A]
+
+variable [Semiring C] [Algebra R C] [StarRing C]
+
+theorem starAlgHom_ext {φ ψ : Unitization R A →⋆ₐ[R] C}
+    (h : (φ : Unitization R A →⋆ₙₐ[R] C).comp (Unitization.inrNonUnitalStarAlgHom R A) =
+      (ψ : Unitization R A →⋆ₙₐ[R] C).comp (Unitization.inrNonUnitalStarAlgHom R A)) :
+    φ = ψ := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R A C : Type*} [CommSemiring R] [StarRing R] [NonUnitalSemiring A] [StarRing A]
+
+variable [Module R A] [SMulCommClass R A A] [IsScalarTower R A A]
+
+variable [Semiring C] [Algebra R C] [StarRing C]
+
+theorem starAlgHom_ext {φ ψ : Unitization R A →⋆ₐ[R] C}
+    (h : (φ : Unitization R A →⋆ₙₐ[R] C).comp (Unitization.inrNonUnitalStarAlgHom R A) =
+      (ψ : Unitization R A →⋆ₙₐ[R] C).comp (Unitization.inrNonUnitalStarAlgHom R A)) :
+    φ = ψ := by
+  ext r a <;> simp [NonUnitalStarAlgHom.ext_iff] at h ⊢
+  simpa using DFunLike.congr_fun h a
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+WARNING .LspCheck.lean:13:9-13:10
+`ext` did not consume the patterns `a`
+
+Note: This linter can be disabled with `set_option linter.unusedRCasesPattern false`
+Source line 13:
+  ext r a <;> simp [NonUnitalStarAlgHom.ext_iff] at h ⊢
+        ^
+Highlighted span: a
+
+ERROR .LspCheck.lean:14:34-14:35
+Application type mismatch: The argument
+  h
+has type
+  ∀ (x : A), φ ↑x = ψ ↑x
+but is expected to have type
+  ?m.122 = ?m.123
+in the application
+  DFunLike.congr_fun h
+Source line 14:
+  simpa using DFunLike.congr_fun h a
+                                 ^
+Highlighted span: h
+
+ERROR .LspCheck.lean:14:36-14:37
+Unknown identifier `a`
+Source line 14:
+  simpa using DFunLike.congr_fun h a
+                                   ^
+Highlighted span: a
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+WARNING .LspCheck.lean:13:9-13:10
+`ext` did not consume the patterns `a`
+
+Note: This linter can be disabled with `set_option linter.unusedRCasesPattern false`
+Source line 13:
+  ext r a <;> simp [NonUnitalStarAlgHom.ext_iff] at h ⊢
+        ^
+Highlighted span: a
+
+ERROR .LspCheck.lean:14:34-14:35
+Application type mismatch: The argument
+  h
+has type
+  ∀ (x : A), φ ↑x = ψ ↑x
+but is expected to have type
+  ?m.122 = ?m.123
+in the application
+  DFunLike.congr_fun h
+Source line 14:
+  simpa using DFunLike.congr_fun h a
+                                 ^
+Highlighted span: h
+
+ERROR .LspCheck.lean:14:36-14:37
+Unknown identifier `a`
+Source line 14:
+  simpa using DFunLike.congr_fun h a
+                                   ^
+Highlighted span: a
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R A C : Type*} [CommSemiring R] [StarRing R] [NonUnitalSemiring A] [StarRing A]
+
+variable [Module R A] [SMulCommClass R A A] [IsScalarTower R A A]
+
+variable [Semiring C] [Algebra R C] [StarRing C]
+
+theorem starAlgHom_ext {φ ψ : Unitization R A →⋆ₐ[R] C}
+    (h : (φ : Unitization R A →⋆ₙₐ[R] C).comp (Unitization.inrNonUnitalStarAlgHom R A) =
+      (ψ : Unitization R A →⋆ₙₐ[R] C).comp (Unitization.inrNonUnitalStarAlgHom R A)) :
+    φ = ψ := by
+  ext r a
+  · simp
+  · exact congrFun h a
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+WARNING .LspCheck.lean:13:9-13:10
+`ext` did not consume the patterns `a`
+
+Note: This linter can be disabled with `set_option linter.unusedRCasesPattern false`
+Source line 13:
+  ext r a
+        ^
+Highlighted span: a
+
+ERROR .LspCheck.lean:14:3-14:9
+unsolved goals
+case h.h
+R : Type u_1
+A : Type u_2
+C : Type u_3
+inst✝⁹ : CommSemiring R
+inst✝⁸ : StarRing R
+inst✝⁷ : NonUnitalSemiring A
+inst✝⁶ : StarRing A
+inst✝⁵ : Module R A
+inst✝⁴ : SMulCommClass R A A
+inst✝³ : IsScalarTower R A A
+inst✝² : Semiring C
+inst✝¹ : Algebra R C
+inst✝ : StarRing C
+φ ψ : Unitization R A →⋆ₐ[R] C
+h : (↑φ).comp (Unitization.inrNonUnitalStarAlgHom R A) = (↑ψ).comp (Unitization.inrNonUnitalStarAlgHom R A)
+r : A
+⊢ φ ↑r = ψ ↑r
+Source line 14:
+  · simp
+  ^^^^^^
+Highlighted span: · simp
+
+ERROR .LspCheck.lean:15:3-15:23
+No goals to be solved
+Source line 15:
+  · exact congrFun h a
+  ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · exact congrFun h a
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+WARNING .LspCheck.lean:13:9-13:10
+`ext` did not consume the patterns `a`
+
+Note: This linter can be disabled with `set_option linter.unusedRCasesPattern false`
+Source line 13:
+  ext r a
+        ^
+Highlighted span: a
+
+ERROR .LspCheck.lean:14:3-14:9
+unsolved goals
+case h.h
+R : Type u_1
+A : Type u_2
+C : Type u_3
+inst✝⁹ : CommSemiring R
+inst✝⁸ : StarRing R
+inst✝⁷ : NonUnitalSemiring A
+inst✝⁶ : StarRing A
+inst✝⁵ : Module R A
+inst✝⁴ : SMulCommClass R A A
+inst✝³ : IsScalarTower R A A
+inst✝² : Semiring C
+inst✝¹ : Algebra R C
+inst✝ : StarRing C
+φ ψ : Unitization R A →⋆ₐ[R] C
+h : (↑φ).comp (Unitization.inrNonUnitalStarAlgHom R A) = (↑ψ).comp (Unitization.inrNonUnitalStarAlgHom R A)
+r : A
+⊢ φ ↑r = ψ ↑r
+Source line 14:
+  · simp
+  ^^^^^^
+Highlighted span: · simp
+
+ERROR .LspCheck.lean:15:3-15:23
+No goals to be solved
+Source line 15:
+  · exact congrFun h a
+  ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · exact congrFun h a
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R A C : Type*} [CommSemiring R] [StarRing R] [NonUnitalSemiring A] [StarRing A]
+
+variable [Module R A] [SMulCommClass R A A] [IsScalarTower R A A]
+
+variable [Semiring C] [Algebra R C] [StarRing C]
+
+theorem starAlgHom_ext {φ ψ : Unitization R A →⋆ₐ[R] C}
+    (h : (φ : Unitization R A →⋆ₙₐ[R] C).comp (Unitization.inrNonUnitalStarAlgHom R A) =
+      (ψ : Unitization R A →⋆ₙₐ[R] C).comp (Unitization.inrNonUnitalStarAlgHom R A)) :
+    φ = ψ := by
+  ext r
+  · simp
+  · exact congrFun h r
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:3-14:9
+unsolved goals
+case h.h
+R : Type u_1
+A : Type u_2
+C : Type u_3
+inst✝⁹ : CommSemiring R
+inst✝⁸ : StarRing R
+inst✝⁷ : NonUnitalSemiring A
+inst✝⁶ : StarRing A
+inst✝⁵ : Module R A
+inst✝⁴ : SMulCommClass R A A
+inst✝³ : IsScalarTower R A A
+inst✝² : Semiring C
+inst✝¹ : Algebra R C
+inst✝ : StarRing C
+φ ψ : Unitization R A →⋆ₐ[R] C
+h : (↑φ).comp (Unitization.inrNonUnitalStarAlgHom R A) = (↑ψ).comp (Unitization.inrNonUnitalStarAlgHom R A)
+r : A
+⊢ φ ↑r = ψ ↑r
+Source line 14:
+  · simp
+  ^^^^^^
+Highlighted span: · simp
+
+ERROR .LspCheck.lean:15:3-15:23
+No goals to be solved
+Source line 15:
+  · exact congrFun h r
+  ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · exact congrFun h r
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:3-14:9
+unsolved goals
+case h.h
+R : Type u_1
+A : Type u_2
+C : Type u_3
+inst✝⁹ : CommSemiring R
+inst✝⁸ : StarRing R
+inst✝⁷ : NonUnitalSemiring A
+inst✝⁶ : StarRing A
+inst✝⁵ : Module R A
+inst✝⁴ : SMulCommClass R A A
+inst✝³ : IsScalarTower R A A
+inst✝² : Semiring C
+inst✝¹ : Algebra R C
+inst✝ : StarRing C
+φ ψ : Unitization R A →⋆ₐ[R] C
+h : (↑φ).comp (Unitization.inrNonUnitalStarAlgHom R A) = (↑ψ).comp (Unitization.inrNonUnitalStarAlgHom R A)
+r : A
+⊢ φ ↑r = ψ ↑r
+Source line 14:
+  · simp
+  ^^^^^^
+Highlighted span: · simp
+
+ERROR .LspCheck.lean:15:3-15:23
+No goals to be solved
+Source line 15:
+  · exact congrFun h r
+  ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · exact congrFun h r

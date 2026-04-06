@@ -1,0 +1,84 @@
+FILE: Finset.dvd_sum.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Finset.dvd_sum.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {ι κ M R : Type*} {s s₁ s₂ : Finset ι} {i : ι}
+
+variable [NonUnitalSemiring R] {f : ι → R} {a : R}
+
+theorem dvd_sum (h : ∀ i ∈ s, a ∣ f i) : a ∣ ∑ i ∈ s, f i := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι κ M R : Type*} {s s₁ s₂ : Finset ι} {i : ι}
+
+variable [NonUnitalSemiring R] {f : ι → R} {a : R}
+
+theorem dvd_sum (h : ∀ i ∈ s, a ∣ f i) : a ∣ ∑ i ∈ s, f i := by
+  classical
+  refine Finset.induction_on s ?base ?step
+  · simp
+  · intro b s hb hs
+    simp only [Finset.mem_insert, Finset.sum_insert, hb] at h ⊢
+    rcases h with ⟨hb_dvd, hs_h⟩
+    exact dvd_add hb_dvd (hs (by
+      intro i hi
+      exact hs_h i hi))
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:5-12:64
+`simp` made no progress
+Source line 12:
+    simp only [Finset.mem_insert, Finset.sum_insert, hb] at h ⊢
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simp only [Finset.mem_insert, Finset.sum_insert, hb] at h ⊢
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:5-12:64
+`simp` made no progress
+Source line 12:
+    simp only [Finset.mem_insert, Finset.sum_insert, hb] at h ⊢
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simp only [Finset.mem_insert, Finset.sum_insert, hb] at h ⊢
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι κ M R : Type*} {s s₁ s₂ : Finset ι} {i : ι}
+
+variable [NonUnitalSemiring R] {f : ι → R} {a : R}
+
+theorem dvd_sum (h : ∀ i ∈ s, a ∣ f i) : a ∣ ∑ i ∈ s, f i := by
+  classical
+  induction s using Finset.induction_on with
+  | empty =>
+      simp
+  | @insert b s hb ih =>
+      have hb' : a ∣ f b := h b (Finset.mem_insert_self b s)
+      have hs' : ∀ i ∈ s, a ∣ f i := by
+        intro i hi
+        exact h i (Finset.mem_insert_of_mem hi)
+      simpa [Finset.sum_insert hb] using dvd_add hb' (ih hs')
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

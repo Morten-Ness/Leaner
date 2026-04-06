@@ -1,0 +1,74 @@
+FILE: Basic.prod_erase.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.prod_erase.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {ι α β M N P G : Type*}
+
+variable [CommMonoid M] {a : M} {l l₁ l₂ : List M}
+
+theorem prod_erase [DecidableEq M] (ha : a ∈ l) : a * (l.erase a).prod = l.prod := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι α β M N P G : Type*}
+
+variable [CommMonoid M] {a : M} {l l₁ l₂ : List M}
+
+theorem prod_erase [DecidableEq M] (ha : a ∈ l) : a * (l.erase a).prod = l.prod := by
+  simpa [mul_comm] using List.erase_cons_prod ha
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:8:26-8:46
+Unknown constant `List.erase_cons_prod`
+Source line 8:
+  simpa [mul_comm] using List.erase_cons_prod ha
+                         ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: List.erase_cons_prod
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:8:26-8:46
+Unknown constant `List.erase_cons_prod`
+Source line 8:
+  simpa [mul_comm] using List.erase_cons_prod ha
+                         ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: List.erase_cons_prod
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι α β M N P G : Type*}
+
+variable [CommMonoid M] {a : M} {l l₁ l₂ : List M}
+
+theorem prod_erase [DecidableEq M] (ha : a ∈ l) : a * (l.erase a).prod = l.prod := by
+  induction l with
+  | nil =>
+      cases ha
+  | cons b t ih =>
+      simp only [List.mem_cons] at ha
+      rcases ha with rfl | ha
+      · simp
+      · simp [List.erase_cons_tail, ha, ih ha, mul_left_comm, mul_assoc]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

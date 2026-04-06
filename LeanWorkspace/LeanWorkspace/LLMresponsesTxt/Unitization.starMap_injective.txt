@@ -1,0 +1,253 @@
+FILE: Unitization.starMap_injective.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Unitization.starMap_injective.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R A B C : Type*} [CommSemiring R] [StarRing R]
+
+variable [NonUnitalSemiring A] [StarRing A] [Module R A] [SMulCommClass R A A] [IsScalarTower R A A]
+
+variable [NonUnitalSemiring B] [StarRing B] [Module R B] [SMulCommClass R B B] [IsScalarTower R B B]
+
+variable [NonUnitalSemiring C] [StarRing C] [Module R C] [SMulCommClass R C C] [IsScalarTower R C C]
+
+variable [StarModule R B] [StarModule R C]
+
+theorem starMap_injective {φ : A →⋆ₙₐ[R] B} (hφ : Function.Injective φ) :
+    Function.Injective (Unitization.starMap φ) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R A B C : Type*} [CommSemiring R] [StarRing R]
+
+variable [NonUnitalSemiring A] [StarRing A] [Module R A] [SMulCommClass R A A] [IsScalarTower R A A]
+
+variable [NonUnitalSemiring B] [StarRing B] [Module R B] [SMulCommClass R B B] [IsScalarTower R B B]
+
+variable [NonUnitalSemiring C] [StarRing C] [Module R C] [SMulCommClass R C C] [IsScalarTower R C C]
+
+variable [StarModule R B] [StarModule R C]
+
+theorem starMap_injective {φ : A →⋆ₙₐ[R] B} (hφ : Function.Injective φ) :
+    Function.Injective (Unitization.starMap φ) := by
+  intro x y h
+  cases x with
+  | mk rx ax =>
+    cases y with
+    | mk ry ay =>
+      simp only [Unitization.starMap_coe, Prod.mk.injEq] at h ⊢
+      exact ⟨h.1, hφ h.2⟩
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:17:3-18:1
+Invalid alternative name `mk`: Expected `inl_add_inr`
+Source line 17:
+  | mk rx ax =>
+  ^
+Highlighted span: |
+
+ERROR .LspCheck.lean:16:3-16:8
+Alternative `inl_add_inr` has not been provided
+Source line 16:
+  cases x with
+  ^^^^^
+Highlighted span: cases
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:17:3-18:1
+Invalid alternative name `mk`: Expected `inl_add_inr`
+Source line 17:
+  | mk rx ax =>
+  ^
+Highlighted span: |
+
+ERROR .LspCheck.lean:16:3-16:8
+Alternative `inl_add_inr` has not been provided
+Source line 16:
+  cases x with
+  ^^^^^
+Highlighted span: cases
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R A B C : Type*} [CommSemiring R] [StarRing R]
+
+variable [NonUnitalSemiring A] [StarRing A] [Module R A] [SMulCommClass R A A] [IsScalarTower R A A]
+
+variable [NonUnitalSemiring B] [StarRing B] [Module R B] [SMulCommClass R B B] [IsScalarTower R B B]
+
+variable [NonUnitalSemiring C] [StarRing C] [Module R C] [SMulCommClass R C C] [IsScalarTower R C C]
+
+variable [StarModule R B] [StarModule R C]
+
+theorem starMap_injective {φ : A →⋆ₙₐ[R] B} (hφ : Function.Injective φ) :
+    Function.Injective (Unitization.starMap φ) := by
+  intro x y h
+  rcases x with ⟨r, a⟩
+  rcases y with ⟨s, b⟩
+  change Unitization.inl r + Unitization.inr (φ a) = Unitization.inl s + Unitization.inr (φ b) at h
+  rw [Unitization.inl_add_inr_eq_iff] at h
+  rcases h with ⟨hr, hab⟩
+  ext
+  · exact hr
+  · exact hφ hab
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:19:7-19:37
+Unknown constant `Unitization.inl_add_inr_eq_iff`
+Source line 19:
+  rw [Unitization.inl_add_inr_eq_iff] at h
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Unitization.inl_add_inr_eq_iff
+
+ERROR .LspCheck.lean:14:51-15:1
+unsolved goals
+R : Type u_1
+A : Type u_2
+B : Type u_3
+inst✝¹² : CommSemiring R
+inst✝¹¹ : StarRing R
+inst✝¹⁰ : NonUnitalSemiring A
+inst✝⁹ : StarRing A
+inst✝⁸ : Module R A
+inst✝⁷ : SMulCommClass R A A
+inst✝⁶ : IsScalarTower R A A
+inst✝⁵ : NonUnitalSemiring B
+inst✝⁴ : StarRing B
+inst✝³ : Module R B
+inst✝² : SMulCommClass R B B
+inst✝¹ : IsScalarTower R B B
+inst✝ : StarModule R B
+φ : A →⋆ₙₐ[R] B
+hφ : Function.Injective ⇑φ
+r : R
+a : A
+s : R
+b : A
+h : Unitization.inl r + ↑(φ a) = Unitization.inl s + ↑(φ b)
+⊢ Unitization.mk (r, a) = Unitization.mk (s, b)
+Source line 14:
+    Function.Injective (Unitization.starMap φ) := by
+                                                  ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:19:7-19:37
+Unknown constant `Unitization.inl_add_inr_eq_iff`
+Source line 19:
+  rw [Unitization.inl_add_inr_eq_iff] at h
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Unitization.inl_add_inr_eq_iff
+
+ERROR .LspCheck.lean:14:51-15:1
+unsolved goals
+R : Type u_1
+A : Type u_2
+B : Type u_3
+inst✝¹² : CommSemiring R
+inst✝¹¹ : StarRing R
+inst✝¹⁰ : NonUnitalSemiring A
+inst✝⁹ : StarRing A
+inst✝⁸ : Module R A
+inst✝⁷ : SMulCommClass R A A
+inst✝⁶ : IsScalarTower R A A
+inst✝⁵ : NonUnitalSemiring B
+inst✝⁴ : StarRing B
+inst✝³ : Module R B
+inst✝² : SMulCommClass R B B
+inst✝¹ : IsScalarTower R B B
+inst✝ : StarModule R B
+φ : A →⋆ₙₐ[R] B
+hφ : Function.Injective ⇑φ
+r : R
+a : A
+s : R
+b : A
+h : Unitization.inl r + ↑(φ a) = Unitization.inl s + ↑(φ b)
+⊢ Unitization.mk (r, a) = Unitization.mk (s, b)
+Source line 14:
+    Function.Injective (Unitization.starMap φ) := by
+                                                  ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R A B C : Type*} [CommSemiring R] [StarRing R]
+
+variable [NonUnitalSemiring A] [StarRing A] [Module R A] [SMulCommClass R A A] [IsScalarTower R A A]
+
+variable [NonUnitalSemiring B] [StarRing B] [Module R B] [SMulCommClass R B B] [IsScalarTower R B B]
+
+variable [NonUnitalSemiring C] [StarRing C] [Module R C] [SMulCommClass R C C] [IsScalarTower R C C]
+
+variable [StarModule R B] [StarModule R C]
+
+theorem starMap_injective {φ : A →⋆ₙₐ[R] B} (hφ : Function.Injective φ) :
+    Function.Injective (Unitization.starMap φ) := by
+  intro x y h
+  simpa [Unitization.ext_iff] using congrArg Unitization.fst h, congrArg Unitization.snd h
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:63-16:64
+unexpected token ','; expected command
+Source line 16:
+  simpa [Unitization.ext_iff] using congrArg Unitization.fst h, congrArg Unitization.snd h
+                                                              ^
+Highlighted span: ,
+
+ERROR .LspCheck.lean:16:46-16:61
+Unknown constant `Unitization.fst`
+Source line 16:
+  simpa [Unitization.ext_iff] using congrArg Unitization.fst h, congrArg Unitization.snd h
+                                             ^^^^^^^^^^^^^^^
+Highlighted span: Unitization.fst
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:63-16:64
+unexpected token ','; expected command
+Source line 16:
+  simpa [Unitization.ext_iff] using congrArg Unitization.fst h, congrArg Unitization.snd h
+                                                              ^
+Highlighted span: ,
+
+ERROR .LspCheck.lean:16:46-16:61
+Unknown constant `Unitization.fst`
+Source line 16:
+  simpa [Unitization.ext_iff] using congrArg Unitization.fst h, congrArg Unitization.snd h
+                                             ^^^^^^^^^^^^^^^
+Highlighted span: Unitization.fst

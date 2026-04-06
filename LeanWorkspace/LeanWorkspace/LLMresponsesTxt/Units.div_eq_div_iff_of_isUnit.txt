@@ -1,0 +1,292 @@
+FILE: Units.div_eq_div_iff_of_isUnit.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Units.div_eq_div_iff_of_isUnit.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {M : Type*}
+
+variable [DivisionMonoid M] {a b c d : M}
+
+theorem div_eq_div_iff_of_isUnit (hbd : Commute b d) (hb : IsUnit b) (hd : IsUnit d) :
+    a / b = c / d ↔ a * d = c * b := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M : Type*}
+
+variable [DivisionMonoid M] {a b c d : M}
+
+theorem div_eq_div_iff_of_isUnit (hbd : Commute b d) (hb : IsUnit b) (hd : IsUnit d) :
+    a / b = c / d ↔ a * d = c * b := by
+  simpa [div_eq_mul_inv, mul_assoc] using
+    (mul_inv_eq_mul_inv_iff_of_isUnit_mul hb hd hbd).trans
+      (by constructor <;> intro h <;> simpa [mul_assoc] using h)
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:6-10:42
+Unknown identifier `mul_inv_eq_mul_inv_iff_of_isUnit_mul`
+Source line 10:
+    (mul_inv_eq_mul_inv_iff_of_isUnit_mul hb hd hbd).trans
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: mul_inv_eq_mul_inv_iff_of_isUnit_mul
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:6-10:42
+Unknown identifier `mul_inv_eq_mul_inv_iff_of_isUnit_mul`
+Source line 10:
+    (mul_inv_eq_mul_inv_iff_of_isUnit_mul hb hd hbd).trans
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: mul_inv_eq_mul_inv_iff_of_isUnit_mul
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M : Type*}
+
+variable [DivisionMonoid M] {a b c d : M}
+
+theorem div_eq_div_iff_of_isUnit (hbd : Commute b d) (hb : IsUnit b) (hd : IsUnit d) :
+    a / b = c / d ↔ a * d = c * b := by
+  constructor
+  · intro h
+    rw [div_eq_iff hb, div_eq_iff hd] at h
+    simpa [mul_assoc, hbd.eq] using h
+  · intro h
+    rw [div_eq_iff hb, div_eq_iff hd]
+    simpa [mul_assoc, hbd.eq] using h
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:20-11:22
+Application type mismatch: The argument
+  hb
+has type
+  IsUnit b
+but is expected to have type
+  ?m.35 ≠ 0
+in the application
+  div_eq_iff hb
+Source line 11:
+    rw [div_eq_iff hb, div_eq_iff hd] at h
+                   ^^
+Highlighted span: hb
+
+ERROR .LspCheck.lean:14:20-14:22
+Application type mismatch: The argument
+  hb
+has type
+  IsUnit b
+but is expected to have type
+  ?m.42 ≠ 0
+in the application
+  div_eq_iff hb
+Source line 14:
+    rw [div_eq_iff hb, div_eq_iff hd]
+                   ^^
+Highlighted span: hb
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:20-11:22
+Application type mismatch: The argument
+  hb
+has type
+  IsUnit b
+but is expected to have type
+  ?m.35 ≠ 0
+in the application
+  div_eq_iff hb
+Source line 11:
+    rw [div_eq_iff hb, div_eq_iff hd] at h
+                   ^^
+Highlighted span: hb
+
+ERROR .LspCheck.lean:14:20-14:22
+Application type mismatch: The argument
+  hb
+has type
+  IsUnit b
+but is expected to have type
+  ?m.42 ≠ 0
+in the application
+  div_eq_iff hb
+Source line 14:
+    rw [div_eq_iff hb, div_eq_iff hd]
+                   ^^
+Highlighted span: hb
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M : Type*}
+
+variable [DivisionMonoid M] {a b c d : M}
+
+theorem div_eq_div_iff_of_isUnit (hbd : Commute b d) (hb : IsUnit b) (hd : IsUnit d) :
+    a / b = c / d ↔ a * d = c * b := by
+  rcases hb with ⟨u, rfl⟩
+  rcases hd with ⟨v, rfl⟩
+  simp [div_eq_mul_inv, mul_assoc, Units.val_mul, Units.mul_inv, hbd.eq]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:8:38-9:1
+unsolved goals
+M : Type u_1
+inst✝ : DivisionMonoid M
+a c : M
+u v : Mˣ
+hbd : Commute ↑u ↑v
+⊢ a * (↑u)⁻¹ = c * (↑v)⁻¹ ↔ a * ↑v = c * ↑u
+Source line 8:
+    a / b = c / d ↔ a * d = c * b := by
+                                     ^
+Highlighted span: b
+
+WARNING .LspCheck.lean:11:25-11:34
+This simp argument is unused:
+  mul_assoc
+
+Hint: Omit it from the simp argument list.
+  simp [div_eq_mul_inv, m̵u̵l̵_̵a̵s̵s̵o̵c̵,̵ ̵Units.val_mul, Units.mul_inv, hbd.eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 11:
+  simp [div_eq_mul_inv, mul_assoc, Units.val_mul, Units.mul_inv, hbd.eq]
+                        ^^^^^^^^^
+Highlighted span: mul_assoc
+
+WARNING .LspCheck.lean:11:36-11:49
+This simp argument is unused:
+  Units.val_mul
+
+Hint: Omit it from the simp argument list.
+  simp [div_eq_mul_inv, mul_assoc, U̵n̵i̵t̵s̵.̵v̵a̵l̵_̵m̵u̵l̵,̵ ̵Units.mul_inv, hbd.eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 11:
+  simp [div_eq_mul_inv, mul_assoc, Units.val_mul, Units.mul_inv, hbd.eq]
+                                   ^^^^^^^^^^^^^
+Highlighted span: Units.val_mul
+
+WARNING .LspCheck.lean:11:51-11:64
+This simp argument is unused:
+  Units.mul_inv
+
+Hint: Omit it from the simp argument list.
+  simp [div_eq_mul_inv, mul_assoc, Units.val_mul, U̵n̵i̵t̵s̵.̵m̵u̵l̵_̵i̵n̵v̵,̵ ̵hbd.eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 11:
+  simp [div_eq_mul_inv, mul_assoc, Units.val_mul, Units.mul_inv, hbd.eq]
+                                                  ^^^^^^^^^^^^^
+Highlighted span: Units.mul_inv
+
+WARNING .LspCheck.lean:11:66-11:72
+This simp argument is unused:
+  hbd.eq
+
+Hint: Omit it from the simp argument list.
+  simp [div_eq_mul_inv, mul_assoc, Units.val_mul, Units.mul_inv,̵ ̵h̵b̵d̵.̵e̵q̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 11:
+  simp [div_eq_mul_inv, mul_assoc, Units.val_mul, Units.mul_inv, hbd.eq]
+                                                                 ^^^^^^
+Highlighted span: hbd.eq
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:8:38-9:1
+unsolved goals
+M : Type u_1
+inst✝ : DivisionMonoid M
+a c : M
+u v : Mˣ
+hbd : Commute ↑u ↑v
+⊢ a * (↑u)⁻¹ = c * (↑v)⁻¹ ↔ a * ↑v = c * ↑u
+Source line 8:
+    a / b = c / d ↔ a * d = c * b := by
+                                     ^
+Highlighted span: b
+
+WARNING .LspCheck.lean:11:25-11:34
+This simp argument is unused:
+  mul_assoc
+
+Hint: Omit it from the simp argument list.
+  simp [div_eq_mul_inv, m̵u̵l̵_̵a̵s̵s̵o̵c̵,̵ ̵Units.val_mul, Units.mul_inv, hbd.eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 11:
+  simp [div_eq_mul_inv, mul_assoc, Units.val_mul, Units.mul_inv, hbd.eq]
+                        ^^^^^^^^^
+Highlighted span: mul_assoc
+
+WARNING .LspCheck.lean:11:36-11:49
+This simp argument is unused:
+  Units.val_mul
+
+Hint: Omit it from the simp argument list.
+  simp [div_eq_mul_inv, mul_assoc, U̵n̵i̵t̵s̵.̵v̵a̵l̵_̵m̵u̵l̵,̵ ̵Units.mul_inv, hbd.eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 11:
+  simp [div_eq_mul_inv, mul_assoc, Units.val_mul, Units.mul_inv, hbd.eq]
+                                   ^^^^^^^^^^^^^
+Highlighted span: Units.val_mul
+
+WARNING .LspCheck.lean:11:51-11:64
+This simp argument is unused:
+  Units.mul_inv
+
+Hint: Omit it from the simp argument list.
+  simp [div_eq_mul_inv, mul_assoc, Units.val_mul, U̵n̵i̵t̵s̵.̵m̵u̵l̵_̵i̵n̵v̵,̵ ̵hbd.eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 11:
+  simp [div_eq_mul_inv, mul_assoc, Units.val_mul, Units.mul_inv, hbd.eq]
+                                                  ^^^^^^^^^^^^^
+Highlighted span: Units.mul_inv
+
+WARNING .LspCheck.lean:11:66-11:72
+This simp argument is unused:
+  hbd.eq
+
+Hint: Omit it from the simp argument list.
+  simp [div_eq_mul_inv, mul_assoc, Units.val_mul, Units.mul_inv,̵ ̵h̵b̵d̵.̵e̵q̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 11:
+  simp [div_eq_mul_inv, mul_assoc, Units.val_mul, Units.mul_inv, hbd.eq]
+                                                                 ^^^^^^
+Highlighted span: hbd.eq

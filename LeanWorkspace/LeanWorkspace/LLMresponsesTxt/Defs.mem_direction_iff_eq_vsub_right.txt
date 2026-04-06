@@ -1,0 +1,275 @@
+FILE: Defs.mem_direction_iff_eq_vsub_right.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Defs.mem_direction_iff_eq_vsub_right.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable (k : Type*) {V : Type*} (P : Type*) [Ring k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {k P}
+
+theorem mem_direction_iff_eq_vsub_right {s : AffineSubspace k P} {p : P} (hp : p ∈ s) (v : V) :
+    v ∈ s.direction ↔ ∃ p₂ ∈ s, v = p₂ -ᵥ p := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (k : Type*) {V : Type*} (P : Type*) [Ring k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {k P}
+
+theorem mem_direction_iff_eq_vsub_right {s : AffineSubspace k P} {p : P} (hp : p ∈ s) (v : V) :
+    v ∈ s.direction ↔ ∃ p₂ ∈ s, v = p₂ -ᵥ p := by
+  constructor
+  · intro hv
+    rcases s.vsub_mem_direction_iff_mem hp with ⟨p₂, hp₂, h⟩
+    refine ⟨p₂, hp₂, ?_⟩
+    simpa [eq_comm] using h
+  · rintro ⟨p₂, hp₂, rfl⟩
+    exact s.vsub_mem_direction hp₂ hp
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:14-12:40
+Invalid field `vsub_mem_direction_iff_mem`: The environment does not contain `AffineSubspace.vsub_mem_direction_iff_mem`, so it is not possible to project the field `vsub_mem_direction_iff_mem` from an expression
+  s
+of type `AffineSubspace k P`
+Source line 12:
+    rcases s.vsub_mem_direction_iff_mem hp with ⟨p₂, hp₂, h⟩
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: vsub_mem_direction_iff_mem
+
+ERROR .LspCheck.lean:12:49-12:61
+Tactic `rcases` failed: `x✝ : ?m.38` is not an inductive datatype
+Source line 12:
+    rcases s.vsub_mem_direction_iff_mem hp with ⟨p₂, hp₂, h⟩
+                                                ^^^^^^^^^^^^
+Highlighted span: ⟨p₂, hp₂, h⟩
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:14-12:40
+Invalid field `vsub_mem_direction_iff_mem`: The environment does not contain `AffineSubspace.vsub_mem_direction_iff_mem`, so it is not possible to project the field `vsub_mem_direction_iff_mem` from an expression
+  s
+of type `AffineSubspace k P`
+Source line 12:
+    rcases s.vsub_mem_direction_iff_mem hp with ⟨p₂, hp₂, h⟩
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: vsub_mem_direction_iff_mem
+
+ERROR .LspCheck.lean:12:49-12:61
+Tactic `rcases` failed: `x✝ : ?m.38` is not an inductive datatype
+Source line 12:
+    rcases s.vsub_mem_direction_iff_mem hp with ⟨p₂, hp₂, h⟩
+                                                ^^^^^^^^^^^^
+Highlighted span: ⟨p₂, hp₂, h⟩
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (k : Type*) {V : Type*} (P : Type*) [Ring k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {k P}
+
+theorem mem_direction_iff_eq_vsub_right {s : AffineSubspace k P} {p : P} (hp : p ∈ s) (v : V) :
+    v ∈ s.direction ↔ ∃ p₂ ∈ s, v = p₂ -ᵥ p := by
+  constructor
+  · intro hv
+    refine ⟨v +ᵥ p, ?_, ?_⟩
+    · rw [AffineSubspace.vadd_mem_iff_mem_direction hp]
+      exact hv
+    · simp
+  · rintro ⟨p₂, hp₂, rfl⟩
+    exact s.vsub_mem_direction hp₂ hp
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:11-13:55
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.56 +ᵥ ?m.57 ∈ ?m.55
+in the target expression
+  v +ᵥ p ∈ s
+
+case mp.refine_1
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+inst✝ : AddTorsor V P
+s : AffineSubspace k P
+p : P
+hp : p ∈ s
+v : V
+hv : v ∈ s.direction
+⊢ v +ᵥ p ∈ s
+Source line 13:
+    · rw [AffineSubspace.vadd_mem_iff_mem_direction hp]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.vadd_mem_iff_mem_direction hp
+
+ERROR .LspCheck.lean:13:53-13:55
+Application type mismatch: The argument
+  hp
+has type
+  p ∈ s
+of sort `Prop` but is expected to have type
+  ?m.49
+of sort `Type ?u.4056.908` in the application
+  @AffineSubspace.vadd_mem_iff_mem_direction ?m.48 ?m.49 ?m.50 ?m.51 ?m.52 ?m.53 ?m.54 ?m.55 hp
+Source line 13:
+    · rw [AffineSubspace.vadd_mem_iff_mem_direction hp]
+                                                    ^^
+Highlighted span: hp
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:11-13:55
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.56 +ᵥ ?m.57 ∈ ?m.55
+in the target expression
+  v +ᵥ p ∈ s
+
+case mp.refine_1
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+inst✝ : AddTorsor V P
+s : AffineSubspace k P
+p : P
+hp : p ∈ s
+v : V
+hv : v ∈ s.direction
+⊢ v +ᵥ p ∈ s
+Source line 13:
+    · rw [AffineSubspace.vadd_mem_iff_mem_direction hp]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.vadd_mem_iff_mem_direction hp
+
+ERROR .LspCheck.lean:13:53-13:55
+Application type mismatch: The argument
+  hp
+has type
+  p ∈ s
+of sort `Prop` but is expected to have type
+  ?m.49
+of sort `Type ?u.4056.908` in the application
+  @AffineSubspace.vadd_mem_iff_mem_direction ?m.48 ?m.49 ?m.50 ?m.51 ?m.52 ?m.53 ?m.54 ?m.55 hp
+Source line 13:
+    · rw [AffineSubspace.vadd_mem_iff_mem_direction hp]
+                                                    ^^
+Highlighted span: hp
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (k : Type*) {V : Type*} (P : Type*) [Ring k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {k P}
+
+theorem mem_direction_iff_eq_vsub_right {s : AffineSubspace k P} {p : P} (hp : p ∈ s) (v : V) :
+    v ∈ s.direction ↔ ∃ p₂ ∈ s, v = p₂ -ᵥ p := by
+  constructor
+  · intro hv
+    refine ⟨v +ᵥ p, s.smul_vsub_vadd_mem ?_ hp, ?_⟩
+    · simpa using hv
+    · simp
+  · rintro ⟨p₂, hp₂, rfl⟩
+    exact s.vsub_mem_direction hp₂ hp
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:21-12:47
+Application type mismatch: The argument
+  s.smul_vsub_vadd_mem ?m.53 hp
+has type
+  ?m.55 ∈ s.carrier → ?m.56 ∈ s.carrier → ?m.53 • (p -ᵥ ?m.55) +ᵥ ?m.56 ∈ s.carrier
+but is expected to have type
+  v +ᵥ p ∈ s
+in the application
+  And.intro (s.smul_vsub_vadd_mem ?m.53 hp)
+Source line 12:
+    refine ⟨v +ᵥ p, s.smul_vsub_vadd_mem ?_ hp, ?_⟩
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: s.smul_vsub_vadd_mem ?_ hp
+
+WARNING .LspCheck.lean:13:7-13:21
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 13:
+    · simpa using hv
+      ^^^^^^^^^^^^^^
+Highlighted span: simpa using hv
+
+ERROR .LspCheck.lean:14:5-14:11
+No goals to be solved
+Source line 14:
+    · simp
+    ^^^^^^
+Highlighted span: · simp
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:21-12:47
+Application type mismatch: The argument
+  s.smul_vsub_vadd_mem ?m.53 hp
+has type
+  ?m.55 ∈ s.carrier → ?m.56 ∈ s.carrier → ?m.53 • (p -ᵥ ?m.55) +ᵥ ?m.56 ∈ s.carrier
+but is expected to have type
+  v +ᵥ p ∈ s
+in the application
+  And.intro (s.smul_vsub_vadd_mem ?m.53 hp)
+Source line 12:
+    refine ⟨v +ᵥ p, s.smul_vsub_vadd_mem ?_ hp, ?_⟩
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: s.smul_vsub_vadd_mem ?_ hp
+
+WARNING .LspCheck.lean:13:7-13:21
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 13:
+    · simpa using hv
+      ^^^^^^^^^^^^^^
+Highlighted span: simpa using hv
+
+ERROR .LspCheck.lean:14:5-14:11
+No goals to be solved
+Source line 14:
+    · simp
+    ^^^^^^
+Highlighted span: · simp

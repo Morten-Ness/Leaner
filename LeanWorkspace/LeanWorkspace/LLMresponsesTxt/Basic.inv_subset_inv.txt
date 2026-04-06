@@ -1,0 +1,81 @@
+FILE: Basic.inv_subset_inv.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.inv_subset_inv.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {F α β γ : Type*}
+
+variable [InvolutiveInv α] {s t : Set α} {a : α}
+
+theorem inv_subset_inv : s⁻¹ ⊆ t⁻¹ ↔ s ⊆ t := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F α β γ : Type*}
+
+variable [InvolutiveInv α] {s t : Set α} {a : α}
+
+theorem inv_subset_inv : s⁻¹ ⊆ t⁻¹ ↔ s ⊆ t := by
+  constructor
+  · intro h x hx
+    have hx' : x⁻¹ ∈ s⁻¹ := by simpa using hx
+    have ht' : x⁻¹ ∈ t⁻¹ := h hx'
+    simpa using ht'
+  · intro h x hx
+    rcases hx with ⟨y, hy, rfl⟩
+    exact ⟨y, h hy, by simp⟩
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:20-14:32
+Tactic `rcases` failed: `hx : s x⁻¹` is not an inductive datatype
+Source line 14:
+    rcases hx with ⟨y, hy, rfl⟩
+                   ^^^^^^^^^^^^
+Highlighted span: ⟨y, hy, rfl⟩
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:20-14:32
+Tactic `rcases` failed: `hx : s x⁻¹` is not an inductive datatype
+Source line 14:
+    rcases hx with ⟨y, hy, rfl⟩
+                   ^^^^^^^^^^^^
+Highlighted span: ⟨y, hy, rfl⟩
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F α β γ : Type*}
+
+variable [InvolutiveInv α] {s t : Set α} {a : α}
+
+theorem inv_subset_inv : s⁻¹ ⊆ t⁻¹ ↔ s ⊆ t := by
+  constructor
+  · intro h x hx
+    have hs : x⁻¹ ∈ s⁻¹ := by simpa using hx
+    have ht : x⁻¹ ∈ t⁻¹ := h hs
+    simpa using ht
+  · intro h x hx
+    change x⁻¹ ∈ t at *
+    exact h hx
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

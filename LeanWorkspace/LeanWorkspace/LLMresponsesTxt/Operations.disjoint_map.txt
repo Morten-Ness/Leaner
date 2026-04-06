@@ -1,0 +1,173 @@
+FILE: Operations.disjoint_map.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Operations.disjoint_map.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+variable {F : Type*} [FunLike F M N] [mc : MonoidHomClass F M N]
+
+theorem disjoint_map {f : F} (hf : Function.Injective f) {H K : Submonoid M} (h : Disjoint H K) :
+    Disjoint (H.map f) (K.map f) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+variable {F : Type*} [FunLike F M N] [mc : MonoidHomClass F M N]
+
+theorem disjoint_map {f : F} (hf : Function.Injective f) {H K : Submonoid M} (h : Disjoint H K) :
+    Disjoint (H.map f) (K.map f) := by
+  rw [Submonoid.disjoint_def] at h ⊢
+  intro x hxH hxK
+  rcases hxH with ⟨y, hy, rfl⟩
+  rcases hxK with ⟨z, hz, hzEq⟩
+  have : y = z := hf hzEq
+  subst this
+  exact h hy hz
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:22-13:26
+Application type mismatch: The argument
+  hzEq
+has type
+  f z = f y
+but is expected to have type
+  f y = f z
+in the application
+  hf hzEq
+Source line 13:
+  have : y = z := hf hzEq
+                     ^^^^
+Highlighted span: hzEq
+
+ERROR .LspCheck.lean:15:3-15:16
+Type mismatch
+  h hy hz
+has type
+  Eq.{u_1 + 1} y 1
+but is expected to have type
+  Eq.{u_2 + 1} (f y) 1
+Source line 15:
+  exact h hy hz
+  ^^^^^^^^^^^^^
+Highlighted span: exact h hy hz
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:22-13:26
+Application type mismatch: The argument
+  hzEq
+has type
+  f z = f y
+but is expected to have type
+  f y = f z
+in the application
+  hf hzEq
+Source line 13:
+  have : y = z := hf hzEq
+                     ^^^^
+Highlighted span: hzEq
+
+ERROR .LspCheck.lean:15:3-15:16
+Type mismatch
+  h hy hz
+has type
+  Eq.{u_1 + 1} y 1
+but is expected to have type
+  Eq.{u_2 + 1} (f y) 1
+Source line 15:
+  exact h hy hz
+  ^^^^^^^^^^^^^
+Highlighted span: exact h hy hz
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+variable {F : Type*} [FunLike F M N] [mc : MonoidHomClass F M N]
+
+theorem disjoint_map {f : F} (hf : Function.Injective f) {H K : Submonoid M} (h : Disjoint H K) :
+    Disjoint (H.map f) (K.map f) := by
+  rw [Submonoid.disjoint_def] at h ⊢
+  intro x hxH hxK
+  rcases hxH with ⟨y, hy, rfl⟩
+  rcases hxK with ⟨z, hz, hzEq⟩
+  have hyz : y = z := hf hzEq.symm
+  subst hyz
+  simpa using map_one f (h hy hz)
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:15-15:34
+Function expected at
+  map_one f
+but this term has type
+  f 1 = 1
+
+Note: Expected a function because this term is being applied to the argument
+  (h hy hz)
+Source line 15:
+  simpa using map_one f (h hy hz)
+              ^^^^^^^^^^^^^^^^^^^
+Highlighted span: map_one f (h hy hz)
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:15-15:34
+Function expected at
+  map_one f
+but this term has type
+  f 1 = 1
+
+Note: Expected a function because this term is being applied to the argument
+  (h hy hz)
+Source line 15:
+  simpa using map_one f (h hy hz)
+              ^^^^^^^^^^^^^^^^^^^
+Highlighted span: map_one f (h hy hz)
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+variable {F : Type*} [FunLike F M N] [mc : MonoidHomClass F M N]
+
+theorem disjoint_map {f : F} (hf : Function.Injective f) {H K : Submonoid M} (h : Disjoint H K) :
+    Disjoint (H.map f) (K.map f) := by
+  rw [Submonoid.disjoint_def] at h ⊢
+  intro x hxH hxK
+  rcases hxH with ⟨y, hy, rfl⟩
+  rcases hxK with ⟨z, hz, hzEq⟩
+  have hyz : y = z := hf hzEq.symm
+  subst hyz
+  rw [← map_one f]
+  exact congrArg f (h hy hz)
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

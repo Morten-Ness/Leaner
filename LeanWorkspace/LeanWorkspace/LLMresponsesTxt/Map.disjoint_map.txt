@@ -1,0 +1,194 @@
+FILE: Map.disjoint_map.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Map.disjoint_map.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable (H K : Subgroup G) {k : Set G}
+
+variable {N : Type*} [Group N] {P : Type*} [Group P]
+
+theorem disjoint_map {f : G →* N} (hf : Function.Injective f) {H K : Subgroup G} (h : Disjoint H K) :
+    Disjoint (H.map f) (K.map f) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable (H K : Subgroup G) {k : Set G}
+
+variable {N : Type*} [Group N] {P : Type*} [Group P]
+
+theorem disjoint_map {f : G →* N} (hf : Function.Injective f) {H K : Subgroup G} (h : Disjoint H K) :
+    Disjoint (H.map f) (K.map f) := by
+  rw [Subgroup.disjoint_def] at h ⊢
+  ext x
+  constructor
+  · intro hx
+    rcases hx with ⟨hxH, hxK⟩
+    rcases hxH with ⟨y, hy, rfl⟩
+    rcases hxK with ⟨z, hz, hz_eq⟩
+    have : y = z := hf hz_eq
+    subst this
+    exact h ⟨hy, hz⟩
+  · intro hx
+    simp only [Subgroup.mem_map]
+    refine ⟨?_, ?_⟩
+    · exact ⟨1, H.one_mem, by simp⟩
+    · exact ⟨1, K.one_mem, by simp⟩
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:3-16:8
+This extensionality tactic only applies to equalities, not
+  ∀ {x : N}, x ∈ Subgroup.map f H → x ∈ Subgroup.map f K → x = 1
+Source line 16:
+  ext x
+  ^^^^^
+Highlighted span: ext x
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:3-16:8
+This extensionality tactic only applies to equalities, not
+  ∀ {x : N}, x ∈ Subgroup.map f H → x ∈ Subgroup.map f K → x = 1
+Source line 16:
+  ext x
+  ^^^^^
+Highlighted span: ext x
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable (H K : Subgroup G) {k : Set G}
+
+variable {N : Type*} [Group N] {P : Type*} [Group P]
+
+theorem disjoint_map {f : G →* N} (hf : Function.Injective f) {H K : Subgroup G} (h : Disjoint H K) :
+    Disjoint (H.map f) (K.map f) := by
+  rw [Subgroup.disjoint_def] at h ⊢
+  intro x hxH hxK
+  rcases hxH with ⟨y, hy, rfl⟩
+  rcases hxK with ⟨z, hz, hz_eq⟩
+  have : y = z := hf hz_eq
+  subst this
+  exact h hy hz
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:19:22-19:27
+Application type mismatch: The argument
+  hz_eq
+has type
+  f z = f y
+but is expected to have type
+  f y = f z
+in the application
+  hf hz_eq
+Source line 19:
+  have : y = z := hf hz_eq
+                     ^^^^^
+Highlighted span: hz_eq
+
+ERROR .LspCheck.lean:21:3-21:16
+Type mismatch
+  h hy hz
+has type
+  Eq.{u_1 + 1} y 1
+but is expected to have type
+  Eq.{u_5 + 1} (f y) 1
+Source line 21:
+  exact h hy hz
+  ^^^^^^^^^^^^^
+Highlighted span: exact h hy hz
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:19:22-19:27
+Application type mismatch: The argument
+  hz_eq
+has type
+  f z = f y
+but is expected to have type
+  f y = f z
+in the application
+  hf hz_eq
+Source line 19:
+  have : y = z := hf hz_eq
+                     ^^^^^
+Highlighted span: hz_eq
+
+ERROR .LspCheck.lean:21:3-21:16
+Type mismatch
+  h hy hz
+has type
+  Eq.{u_1 + 1} y 1
+but is expected to have type
+  Eq.{u_5 + 1} (f y) 1
+Source line 21:
+  exact h hy hz
+  ^^^^^^^^^^^^^
+Highlighted span: exact h hy hz
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable (H K : Subgroup G) {k : Set G}
+
+variable {N : Type*} [Group N] {P : Type*} [Group P]
+
+theorem disjoint_map {f : G →* N} (hf : Function.Injective f) {H K : Subgroup G} (h : Disjoint H K) :
+    Disjoint (H.map f) (K.map f) := by
+  rw [Subgroup.disjoint_def] at h ⊢
+  intro x hxH hxK
+  rcases hxH with ⟨y, hy, rfl⟩
+  rcases hxK with ⟨z, hz, hz_eq⟩
+  have hyz : y = z := hf hz_eq.symm
+  subst hyz
+  simpa using congrArg f (h hy hz)
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

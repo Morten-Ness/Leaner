@@ -1,0 +1,368 @@
+FILE: Expect.expect_bijective.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Expect.expect_bijective.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Pointwise BigOperators
+
+variable {ι κ M N : Type*}
+
+variable [Fintype ι] [Fintype κ]
+
+variable [AddCommMonoid M] [Module ℚ≥0 M]
+
+theorem expect_bijective (e : ι → κ) (he : Function.Bijective e) (f : ι → M) (g : κ → M)
+    (h : ∀ i, f i = g (e i)) : 𝔼 i, f i = 𝔼 i, g i := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise BigOperators
+
+variable {ι κ M N : Type*}
+
+variable [Fintype ι] [Fintype κ]
+
+variable [AddCommMonoid M] [Module ℚ≥0 M]
+
+theorem expect_bijective (e : ι → κ) (he : Function.Bijective e) (f : ι → M) (g : κ → M)
+    (h : ∀ i, f i = g (e i)) : 𝔼 i, f i = 𝔼 i, g i := by
+  classical
+  subst h
+  simpa [Finset.expect, Fintype.card_of_bijective he] using
+    Finset.sum_bij (fun i _ => e i)
+      (by intro i hi; simp)
+      (by intro i hi; simp)
+      (by intro i₁ i₂ hi₁ hi₂ hEq; exact he.1 hEq)
+      (by
+        intro j hj
+        refine ⟨he.surjective j, by simp, by simp⟩)
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:3-14:10
+Tactic `subst` failed: did not find equation for eliminating 'h'
+
+ι : Type u_1
+κ : Type u_2
+M : Type u_3
+inst✝³ : Fintype ι
+inst✝² : Fintype κ
+inst✝¹ : AddCommMonoid M
+inst✝ : Module ℚ≥0 M
+e : ι → κ
+he : Function.Bijective e
+f : ι → M
+g : κ → M
+h : ∀ (i : ι), f i = g (e i)
+⊢ 𝔼 i, f i = 𝔼 i, g i
+Source line 14:
+  subst h
+  ^^^^^^^
+Highlighted span: subst h
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:3-14:10
+Tactic `subst` failed: did not find equation for eliminating 'h'
+
+ι : Type u_1
+κ : Type u_2
+M : Type u_3
+inst✝³ : Fintype ι
+inst✝² : Fintype κ
+inst✝¹ : AddCommMonoid M
+inst✝ : Module ℚ≥0 M
+e : ι → κ
+he : Function.Bijective e
+f : ι → M
+g : κ → M
+h : ∀ (i : ι), f i = g (e i)
+⊢ 𝔼 i, f i = 𝔼 i, g i
+Source line 14:
+  subst h
+  ^^^^^^^
+Highlighted span: subst h
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise BigOperators
+
+variable {ι κ M N : Type*}
+
+variable [Fintype ι] [Fintype κ]
+
+variable [AddCommMonoid M] [Module ℚ≥0 M]
+
+theorem expect_bijective (e : ι → κ) (he : Function.Bijective e) (f : ι → M) (g : κ → M)
+    (h : ∀ i, f i = g (e i)) : 𝔼 i, f i = 𝔼 i, g i := by
+  classical
+  rw [show f = fun i => g (e i) by
+    funext i
+    exact h i]
+  simpa [Finset.expect, Fintype.card_of_bijective he] using
+    Finset.sum_bij (fun i _ => e i)
+      (by intro i hi; simp)
+      (by intro i hi; simp)
+      (by intro i₁ i₂ hi₁ hi₂ hEq; exact he.1 hEq)
+      (by
+        intro j hj
+        refine ⟨he.surjective j, by simp, by simp⟩)
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:19:8-19:27
+unsolved goals
+ι : Type u_1
+κ : Type u_2
+M : Type u_3
+inst✝³ : Fintype ι
+inst✝² : Fintype κ
+inst✝¹ : AddCommMonoid M
+inst✝ : Module ℚ≥0 M
+e : ι → κ
+he : Function.Bijective e
+f : ι → M
+g : κ → M
+h : ∀ (i : ι), f i = g (e i)
+i : ι
+hi : i ∈ ?m.41
+⊢ e i ∈ ?m.42
+Source line 19:
+      (by intro i hi; simp)
+       ^^^^^^^^^^^^^^^^^^^
+Highlighted span: by intro i hi; simp
+
+ERROR .LspCheck.lean:20:8-20:27
+unsolved goals
+ι : Type u_1
+κ : Type u_2
+M : Type u_3
+inst✝³ : Fintype ι
+inst✝² : Fintype κ
+inst✝¹ : AddCommMonoid M
+inst✝ : Module ℚ≥0 M
+e : ι → κ
+he : Function.Bijective e
+f : ι → M
+g : κ → M
+h : ∀ (i : ι), f i = g (e i)
+i : ι
+hi : i ∈ ?m.41
+⊢ ∀ a₂ ∈ ?m.41, e i = e a₂ → i = a₂
+Source line 20:
+      (by intro i hi; simp)
+       ^^^^^^^^^^^^^^^^^^^
+Highlighted span: by intro i hi; simp
+
+ERROR .LspCheck.lean:21:23-21:26
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+ι : Type u_1
+κ : Type u_2
+M : Type u_3
+inst✝³ : Fintype ι
+inst✝² : Fintype κ
+inst✝¹ : AddCommMonoid M
+inst✝ : Module ℚ≥0 M
+e : ι → κ
+he : Function.Bijective e
+f : ι → M
+g : κ → M
+h : ∀ (i : ι), f i = g (e i)
+i₁ : κ
+i₂ : i₁ ∈ ?m.42
+⊢ ∃ a, ∃ (ha : a ∈ ?m.41), (fun i x ↦ e i) a ha = i₁
+Source line 21:
+      (by intro i₁ i₂ hi₁ hi₂ hEq; exact he.1 hEq)
+                      ^^^
+Highlighted span: hi₁
+
+ERROR .LspCheck.lean:24:16-24:51
+Insufficient number of fields for `⟨...⟩` constructor: Constructor `Eq.refl` does not have explicit fields, but 3 were provided
+Source line 24:
+        refine ⟨he.surjective j, by simp, by simp⟩)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ⟨he.surjective j, by simp, by simp⟩
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:19:8-19:27
+unsolved goals
+ι : Type u_1
+κ : Type u_2
+M : Type u_3
+inst✝³ : Fintype ι
+inst✝² : Fintype κ
+inst✝¹ : AddCommMonoid M
+inst✝ : Module ℚ≥0 M
+e : ι → κ
+he : Function.Bijective e
+f : ι → M
+g : κ → M
+h : ∀ (i : ι), f i = g (e i)
+i : ι
+hi : i ∈ ?m.41
+⊢ e i ∈ ?m.42
+Source line 19:
+      (by intro i hi; simp)
+       ^^^^^^^^^^^^^^^^^^^
+Highlighted span: by intro i hi; simp
+
+ERROR .LspCheck.lean:20:8-20:27
+unsolved goals
+ι : Type u_1
+κ : Type u_2
+M : Type u_3
+inst✝³ : Fintype ι
+inst✝² : Fintype κ
+inst✝¹ : AddCommMonoid M
+inst✝ : Module ℚ≥0 M
+e : ι → κ
+he : Function.Bijective e
+f : ι → M
+g : κ → M
+h : ∀ (i : ι), f i = g (e i)
+i : ι
+hi : i ∈ ?m.41
+⊢ ∀ a₂ ∈ ?m.41, e i = e a₂ → i = a₂
+Source line 20:
+      (by intro i hi; simp)
+       ^^^^^^^^^^^^^^^^^^^
+Highlighted span: by intro i hi; simp
+
+ERROR .LspCheck.lean:21:23-21:26
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+ι : Type u_1
+κ : Type u_2
+M : Type u_3
+inst✝³ : Fintype ι
+inst✝² : Fintype κ
+inst✝¹ : AddCommMonoid M
+inst✝ : Module ℚ≥0 M
+e : ι → κ
+he : Function.Bijective e
+f : ι → M
+g : κ → M
+h : ∀ (i : ι), f i = g (e i)
+i₁ : κ
+i₂ : i₁ ∈ ?m.42
+⊢ ∃ a, ∃ (ha : a ∈ ?m.41), (fun i x ↦ e i) a ha = i₁
+Source line 21:
+      (by intro i₁ i₂ hi₁ hi₂ hEq; exact he.1 hEq)
+                      ^^^
+Highlighted span: hi₁
+
+ERROR .LspCheck.lean:24:16-24:51
+Insufficient number of fields for `⟨...⟩` constructor: Constructor `Eq.refl` does not have explicit fields, but 3 were provided
+Source line 24:
+        refine ⟨he.surjective j, by simp, by simp⟩)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ⟨he.surjective j, by simp, by simp⟩
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise BigOperators
+
+variable {ι κ M N : Type*}
+
+variable [Fintype ι] [Fintype κ]
+
+variable [AddCommMonoid M] [Module ℚ≥0 M]
+
+theorem expect_bijective (e : ι → κ) (he : Function.Bijective e) (f : ι → M) (g : κ → M)
+    (h : ∀ i, f i = g (e i)) : 𝔼 i, f i = 𝔼 i, g i := by
+  classical
+  rw [show f = fun i => g (e i) by
+    funext i
+    exact h i]
+  simp_rw [Finset.expect]
+  rw [Finset.sum_univ_bijective e he.injective he.surjective]
+  simp [Fintype.card_of_bijective he]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:18:7-18:32
+Unknown constant `Finset.sum_univ_bijective`
+Source line 18:
+  rw [Finset.sum_univ_bijective e he.injective he.surjective]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.sum_univ_bijective
+
+ERROR .LspCheck.lean:12:57-13:1
+unsolved goals
+ι : Type u_1
+κ : Type u_2
+M : Type u_3
+inst✝³ : Fintype ι
+inst✝² : Fintype κ
+inst✝¹ : AddCommMonoid M
+inst✝ : Module ℚ≥0 M
+e : ι → κ
+he : Function.Bijective e
+f : ι → M
+g : κ → M
+h : ∀ (i : ι), f i = g (e i)
+⊢ (↑Finset.univ.card)⁻¹ • ∑ x, g (e x) = (↑Finset.univ.card)⁻¹ • ∑ x, g x
+Source line 12:
+    (h : ∀ i, f i = g (e i)) : 𝔼 i, f i = 𝔼 i, g i := by
+                                                        ^
+Highlighted span:
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:18:7-18:32
+Unknown constant `Finset.sum_univ_bijective`
+Source line 18:
+  rw [Finset.sum_univ_bijective e he.injective he.surjective]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.sum_univ_bijective
+
+ERROR .LspCheck.lean:12:57-13:1
+unsolved goals
+ι : Type u_1
+κ : Type u_2
+M : Type u_3
+inst✝³ : Fintype ι
+inst✝² : Fintype κ
+inst✝¹ : AddCommMonoid M
+inst✝ : Module ℚ≥0 M
+e : ι → κ
+he : Function.Bijective e
+f : ι → M
+g : κ → M
+h : ∀ (i : ι), f i = g (e i)
+⊢ (↑Finset.univ.card)⁻¹ • ∑ x, g (e x) = (↑Finset.univ.card)⁻¹ • ∑ x, g x
+Source line 12:
+    (h : ∀ i, f i = g (e i)) : 𝔼 i, f i = 𝔼 i, g i := by
+                                                        ^
+Highlighted span:

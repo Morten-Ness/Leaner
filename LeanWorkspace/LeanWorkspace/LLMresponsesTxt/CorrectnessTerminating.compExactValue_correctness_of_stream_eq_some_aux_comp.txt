@@ -1,0 +1,289 @@
+FILE: CorrectnessTerminating.compExactValue_correctness_of_stream_eq_some_aux_comp.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: CorrectnessTerminating.compExactValue_correctness_of_stream_eq_some_aux_comp.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {K : Type*} [Field K] [LinearOrder K] {v : K} {n : ℕ}
+
+variable [FloorRing K]
+
+theorem compExactValue_correctness_of_stream_eq_some_aux_comp {a : K} (b c : K)
+    (fract_a_ne_zero : Int.fract a ≠ 0) :
+    ((⌊a⌋ : K) * b + c) / Int.fract a + b = (b * a + c) / Int.fract a := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {K : Type*} [Field K] [LinearOrder K] {v : K} {n : ℕ}
+
+variable [FloorRing K]
+
+theorem compExactValue_correctness_of_stream_eq_some_aux_comp {a : K} (b c : K)
+    (fract_a_ne_zero : Int.fract a ≠ 0) :
+    ((⌊a⌋ : K) * b + c) / Int.fract a + b = (b * a + c) / Int.fract a := by
+  have hfract : (Int.fract a : K) ≠ 0 := fract_a_ne_zero
+  have ha : (a : K) = (⌊a⌋ : K) + Int.fract a := by
+    simpa [Int.fract] using (Int.floor_add_fract a).symm
+  field_simp [hfract]
+  rw [ha]
+  ring
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:5-12:57
+Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+Source line 12:
+    simpa [Int.fract] using (Int.floor_add_fract a).symm
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [Int.fract] using (Int.floor_add_fract a).symm
+
+INFORMATION .LspCheck.lean:15:3-15:7
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+Source line 15:
+  ring
+  ^^^^
+Highlighted span: ring
+
+ERROR .LspCheck.lean:9:74-10:1
+unsolved goals
+K : Type u_1
+inst✝² : Field K
+inst✝¹ : LinearOrder K
+inst✝ : FloorRing K
+a b c : K
+fract_a_ne_zero hfract : Int.fract a ≠ 0
+ha : a = ↑⌊a⌋ + Int.fract a
+⊢ ↑⌊↑⌊a⌋ + Int.fract a⌋ * b + b * Int.fract (↑⌊a⌋ + Int.fract a) + c = ↑⌊a⌋ * b + Int.fract a * b + c
+Source line 9:
+    ((⌊a⌋ : K) * b + c) / Int.fract a + b = (b * a + c) / Int.fract a := by
+                                                                         ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:5-12:57
+Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+Source line 12:
+    simpa [Int.fract] using (Int.floor_add_fract a).symm
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [Int.fract] using (Int.floor_add_fract a).symm
+
+INFORMATION .LspCheck.lean:15:3-15:7
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+Source line 15:
+  ring
+  ^^^^
+Highlighted span: ring
+
+ERROR .LspCheck.lean:9:74-10:1
+unsolved goals
+K : Type u_1
+inst✝² : Field K
+inst✝¹ : LinearOrder K
+inst✝ : FloorRing K
+a b c : K
+fract_a_ne_zero hfract : Int.fract a ≠ 0
+ha : a = ↑⌊a⌋ + Int.fract a
+⊢ ↑⌊↑⌊a⌋ + Int.fract a⌋ * b + b * Int.fract (↑⌊a⌋ + Int.fract a) + c = ↑⌊a⌋ * b + Int.fract a * b + c
+Source line 9:
+    ((⌊a⌋ : K) * b + c) / Int.fract a + b = (b * a + c) / Int.fract a := by
+                                                                         ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {K : Type*} [Field K] [LinearOrder K] {v : K} {n : ℕ}
+
+variable [FloorRing K]
+
+theorem compExactValue_correctness_of_stream_eq_some_aux_comp {a : K} (b c : K)
+    (fract_a_ne_zero : Int.fract a ≠ 0) :
+    ((⌊a⌋ : K) * b + c) / Int.fract a + b = (b * a + c) / Int.fract a := by
+  have hfract : (Int.fract a : K) ≠ 0 := fract_a_ne_zero
+  have ha : a = (⌊a⌋ : K) + Int.fract a := Int.floor_add_fract a
+  apply (div_eq_iff hfract).2
+  rw [ha]
+  ring
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:44-11:65
+Type mismatch
+  Int.floor_add_fract a
+has type
+  ↑⌊a⌋ + Int.fract a = a
+but is expected to have type
+  a = ↑⌊a⌋ + Int.fract a
+Source line 11:
+  have ha : a = (⌊a⌋ : K) + Int.fract a := Int.floor_add_fract a
+                                           ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Int.floor_add_fract a
+
+ERROR .LspCheck.lean:12:3-12:30
+Tactic `apply` failed: could not unify the conclusion of `(div_eq_iff hfract).mpr`
+  ?m.82 / Int.fract a = ?m.84
+with the goal
+  (↑⌊a⌋ * b + c) / Int.fract a + b = (b * a + c) / Int.fract a
+
+Note: The full type of `(div_eq_iff hfract).mpr` is
+  ?m.82 = ?m.84 * Int.fract a → ?m.82 / Int.fract a = ?m.84
+
+K : Type u_1
+inst✝² : Field K
+inst✝¹ : LinearOrder K
+inst✝ : FloorRing K
+a b c : K
+fract_a_ne_zero hfract : Int.fract a ≠ 0
+ha : a = ↑⌊a⌋ + Int.fract a
+⊢ (↑⌊a⌋ * b + c) / Int.fract a + b = (b * a + c) / Int.fract a
+Source line 12:
+  apply (div_eq_iff hfract).2
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: apply (div_eq_iff hfract).2
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:44-11:65
+Type mismatch
+  Int.floor_add_fract a
+has type
+  ↑⌊a⌋ + Int.fract a = a
+but is expected to have type
+  a = ↑⌊a⌋ + Int.fract a
+Source line 11:
+  have ha : a = (⌊a⌋ : K) + Int.fract a := Int.floor_add_fract a
+                                           ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Int.floor_add_fract a
+
+ERROR .LspCheck.lean:12:3-12:30
+Tactic `apply` failed: could not unify the conclusion of `(div_eq_iff hfract).mpr`
+  ?m.82 / Int.fract a = ?m.84
+with the goal
+  (↑⌊a⌋ * b + c) / Int.fract a + b = (b * a + c) / Int.fract a
+
+Note: The full type of `(div_eq_iff hfract).mpr` is
+  ?m.82 = ?m.84 * Int.fract a → ?m.82 / Int.fract a = ?m.84
+
+K : Type u_1
+inst✝² : Field K
+inst✝¹ : LinearOrder K
+inst✝ : FloorRing K
+a b c : K
+fract_a_ne_zero hfract : Int.fract a ≠ 0
+ha : a = ↑⌊a⌋ + Int.fract a
+⊢ (↑⌊a⌋ * b + c) / Int.fract a + b = (b * a + c) / Int.fract a
+Source line 12:
+  apply (div_eq_iff hfract).2
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: apply (div_eq_iff hfract).2
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {K : Type*} [Field K] [LinearOrder K] {v : K} {n : ℕ}
+
+variable [FloorRing K]
+
+theorem compExactValue_correctness_of_stream_eq_some_aux_comp {a : K} (b c : K)
+    (fract_a_ne_zero : Int.fract a ≠ 0) :
+    ((⌊a⌋ : K) * b + c) / Int.fract a + b = (b * a + c) / Int.fract a := by
+  have hfract : (Int.fract a : K) ≠ 0 := fract_a_ne_zero
+  have ha : a = (⌊a⌋ : K) + Int.fract a := (Int.floor_add_fract a).symm
+  rw [ha]
+  calc
+    ((⌊a⌋ : K) * b + c) / Int.fract a + b
+        = (((⌊a⌋ : K) * b + c) + b * Int.fract a) / Int.fract a := by
+            rw [add_div]
+            field_simp [hfract]
+            ring
+    _ = (b * ((⌊a⌋ : K) + Int.fract a) + c) / Int.fract a := by
+          congr 1
+          ring
+    _ = (b * a + c) / Int.fract a := by rw [ha]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:5-15:1
+invalid 'calc' step, left-hand side is
+  (↑⌊a⌋ * b + c) / Int.fract a + b : K
+but is expected to be
+  (↑⌊↑⌊a⌋ + Int.fract a⌋ * b + c) / Int.fract (↑⌊a⌋ + Int.fract a) + b : K
+Source line 14:
+    ((⌊a⌋ : K) * b + c) / Int.fract a + b
+    ^
+Highlighted span: (
+
+ERROR .LspCheck.lean:22:5-22:34
+invalid 'calc' step, right-hand side is
+  (b * a + c) / Int.fract a : K
+but is expected to be
+  (b * (↑⌊a⌋ + Int.fract a) + c) / Int.fract (↑⌊a⌋ + Int.fract a) : K
+Source line 22:
+    _ = (b * a + c) / Int.fract a := by rw [ha]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: _ = (b * a + c) / Int.fract a
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:5-15:1
+invalid 'calc' step, left-hand side is
+  (↑⌊a⌋ * b + c) / Int.fract a + b : K
+but is expected to be
+  (↑⌊↑⌊a⌋ + Int.fract a⌋ * b + c) / Int.fract (↑⌊a⌋ + Int.fract a) + b : K
+Source line 14:
+    ((⌊a⌋ : K) * b + c) / Int.fract a + b
+    ^
+Highlighted span: (
+
+ERROR .LspCheck.lean:22:5-22:34
+invalid 'calc' step, right-hand side is
+  (b * a + c) / Int.fract a : K
+but is expected to be
+  (b * (↑⌊a⌋ + Int.fract a) + c) / Int.fract (↑⌊a⌋ + Int.fract a) : K
+Source line 22:
+    _ = (b * a + c) / Int.fract a := by rw [ha]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: _ = (b * a + c) / Int.fract a

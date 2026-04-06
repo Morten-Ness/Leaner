@@ -1,0 +1,213 @@
+FILE: Basic.map_sub_zsmul.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.map_sub_zsmul.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_sub_zsmul [AddGroup G] [AddGroup H] [AddConstMapClass F G H a b]
+    (f : F) (x : G) (n : ℤ) : f (x - n • a) = f x - n • b := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_sub_zsmul [AddGroup G] [AddGroup H] [AddConstMapClass F G H a b]
+    (f : F) (x : G) (n : ℤ) : f (x - n • a) = f x - n • b := by
+  simpa [sub_eq_add_neg] using (map_zsmul_add (f := f) (n := -n) (a := a) (x := x))
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:7:33-7:46
+Unknown identifier `map_zsmul_add`
+Source line 7:
+  simpa [sub_eq_add_neg] using (map_zsmul_add (f := f) (n := -n) (a := a) (x := x))
+                                ^^^^^^^^^^^^^
+Highlighted span: map_zsmul_add
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:7:33-7:46
+Unknown identifier `map_zsmul_add`
+Source line 7:
+  simpa [sub_eq_add_neg] using (map_zsmul_add (f := f) (n := -n) (a := a) (x := x))
+                                ^^^^^^^^^^^^^
+Highlighted span: map_zsmul_add
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_sub_zsmul [AddGroup G] [AddGroup H] [AddConstMapClass F G H a b]
+    (f : F) (x : G) (n : ℤ) : f (x - n • a) = f x - n • b := by
+  induction n with
+  | ofNat m =>
+      induction m with
+      | zero =>
+          simp
+      | succ m hm =>
+          calc
+            f (x - Int.ofNat (Nat.succ m) • a)
+                = f ((x - Int.ofNat m • a) - a) := by
+                    simp [sub_eq_add_neg, add_assoc, add_left_comm, add_comm, zsmul_eq_mul]
+            _ = f (x - Int.ofNat m • a) - b := by
+                  simpa [sub_eq_add_neg] using (AddConstMapClass.map_add_const (F := F) (G := G) (H := H) (a := -a) (b := -b) f (x - Int.ofNat m • a))
+            _ = (f x - Int.ofNat m • b) - b := by rw [hm]
+            _ = f x - Int.ofNat (Nat.succ m) • b := by
+                  simp [sub_eq_add_neg, add_assoc, add_left_comm, add_comm, zsmul_eq_mul]
+  | negSucc m =>
+      induction m with
+      | zero =>
+          simp [sub_eq_add_neg, add_assoc, add_left_comm, add_comm]
+      | succ m hm =>
+          calc
+            f (x - Int.negSucc (Nat.succ m) • a)
+                = f ((x - Int.negSucc m • a) + a) := by
+                    simp [sub_eq_add_neg, add_assoc, add_left_comm, add_comm, zsmul_eq_mul]
+            _ = f (x - Int.negSucc m • a) + b := by
+                  simpa using (AddConstMapClass.map_add_const (F := F) (G := G) (H := H) (a := a) (b := b) f (x - Int.negSucc m • a))
+            _ = (f x - Int.negSucc m • b) + b := by rw [hm]
+            _ = f x - Int.negSucc (Nat.succ m) • b := by
+                  simp [sub_eq_add_neg, add_assoc, add_left_comm, add_comm, zsmul_eq_mul]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:8:3-9:1
+Invalid alternative name `ofNat`: Expected `zero`, `succ`, or `pred`
+Source line 8:
+  | ofNat m =>
+  ^
+Highlighted span: |
+
+ERROR .LspCheck.lean:22:3-23:1
+Invalid alternative name `negSucc`: Expected `zero`, `succ`, or `pred`
+Source line 22:
+  | negSucc m =>
+  ^
+Highlighted span: |
+
+ERROR .LspCheck.lean:7:3-7:12
+Alternative `zero` has not been provided
+Source line 7:
+  induction n with
+  ^^^^^^^^^
+Highlighted span: induction
+
+ERROR .LspCheck.lean:7:3-7:12
+Alternative `succ` has not been provided
+Source line 7:
+  induction n with
+  ^^^^^^^^^
+Highlighted span: induction
+
+ERROR .LspCheck.lean:7:3-7:12
+Alternative `pred` has not been provided
+Source line 7:
+  induction n with
+  ^^^^^^^^^
+Highlighted span: induction
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:8:3-9:1
+Invalid alternative name `ofNat`: Expected `zero`, `succ`, or `pred`
+Source line 8:
+  | ofNat m =>
+  ^
+Highlighted span: |
+
+ERROR .LspCheck.lean:22:3-23:1
+Invalid alternative name `negSucc`: Expected `zero`, `succ`, or `pred`
+Source line 22:
+  | negSucc m =>
+  ^
+Highlighted span: |
+
+ERROR .LspCheck.lean:7:3-7:12
+Alternative `zero` has not been provided
+Source line 7:
+  induction n with
+  ^^^^^^^^^
+Highlighted span: induction
+
+ERROR .LspCheck.lean:7:3-7:12
+Alternative `succ` has not been provided
+Source line 7:
+  induction n with
+  ^^^^^^^^^
+Highlighted span: induction
+
+ERROR .LspCheck.lean:7:3-7:12
+Alternative `pred` has not been provided
+Source line 7:
+  induction n with
+  ^^^^^^^^^
+Highlighted span: induction
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_sub_zsmul [AddGroup G] [AddGroup H] [AddConstMapClass F G H a b]
+    (f : F) (x : G) (n : ℤ) : f (x - n • a) = f x - n • b := by
+  simpa [sub_eq_add_neg, add_comm, add_left_comm, add_assoc] using
+    (map_zsmul (f := f) (x := x) (n := -n) (a := a) (b := b))
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:8:25-8:33
+Invalid argument name `x` for function `map_zsmul`
+
+Hint: Perhaps you meant one of the following parameter names:
+  • `G`: x̵G̲
+  • `H`: x̵H̲
+  • `F`: x̵F̲
+  • `g`: x̵g̲
+Source line 8:
+    (map_zsmul (f := f) (x := x) (n := -n) (a := a) (b := b))
+                        ^^^^^^^^
+Highlighted span: (x := x)
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:8:25-8:33
+Invalid argument name `x` for function `map_zsmul`
+
+Hint: Perhaps you meant one of the following parameter names:
+  • `G`: x̵G̲
+  • `H`: x̵H̲
+  • `F`: x̵F̲
+  • `g`: x̵g̲
+Source line 8:
+    (map_zsmul (f := f) (x := x) (n := -n) (a := a) (b := b))
+                        ^^^^^^^^
+Highlighted span: (x := x)

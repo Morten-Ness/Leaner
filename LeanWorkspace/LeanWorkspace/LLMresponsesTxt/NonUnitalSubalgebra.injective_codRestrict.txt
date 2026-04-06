@@ -1,0 +1,107 @@
+FILE: NonUnitalSubalgebra.injective_codRestrict.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: NonUnitalSubalgebra.injective_codRestrict.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {F : Type v'} {R' : Type u'} {R : Type u} {A : Type v} {B : Type w} {C : Type w'}
+
+variable [CommSemiring R]
+
+variable [NonUnitalNonAssocSemiring A] [Module R A] [NonUnitalNonAssocSemiring B] [Module R B]
+
+variable [NonUnitalNonAssocSemiring C] [Module R C] [FunLike F A B] [NonUnitalAlgHomClass F R A B]
+
+theorem injective_codRestrict (f : F) (S : NonUnitalSubalgebra R B) (hf : ∀ x : A, f x ∈ S) :
+    Function.Injective (NonUnitalAlgHom.codRestrict f S hf) ↔ Function.Injective f := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F : Type v'} {R' : Type u'} {R : Type u} {A : Type v} {B : Type w} {C : Type w'}
+
+variable [CommSemiring R]
+
+variable [NonUnitalNonAssocSemiring A] [Module R A] [NonUnitalNonAssocSemiring B] [Module R B]
+
+variable [NonUnitalNonAssocSemiring C] [Module R C] [FunLike F A B] [NonUnitalAlgHomClass F R A B]
+
+theorem injective_codRestrict (f : F) (S : NonUnitalSubalgebra R B) (hf : ∀ x : A, f x ∈ S) :
+    Function.Injective (NonUnitalAlgHom.codRestrict f S hf) ↔ Function.Injective f := by
+  constructor
+  · intro h x y hxy
+    apply h
+    exact hxy
+  · intro h x y hxy
+    apply h
+    exact congrArg Subtype.val hxy
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:5-16:14
+Type mismatch
+  hxy
+has type
+  DFunLike.coe.{v' + 1, v + 1, w + 1} f x = f y
+but is expected to have type
+  DFunLike.coe.{max (v + 1) (w + 1), v + 1, w + 1} (NonUnitalAlgHom.codRestrict f S hf) x =
+    (NonUnitalAlgHom.codRestrict f S hf) y
+Source line 16:
+    exact hxy
+    ^^^^^^^^^
+Highlighted span: exact hxy
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:5-16:14
+Type mismatch
+  hxy
+has type
+  DFunLike.coe.{v' + 1, v + 1, w + 1} f x = f y
+but is expected to have type
+  DFunLike.coe.{max (v + 1) (w + 1), v + 1, w + 1} (NonUnitalAlgHom.codRestrict f S hf) x =
+    (NonUnitalAlgHom.codRestrict f S hf) y
+Source line 16:
+    exact hxy
+    ^^^^^^^^^
+Highlighted span: exact hxy
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F : Type v'} {R' : Type u'} {R : Type u} {A : Type v} {B : Type w} {C : Type w'}
+
+variable [CommSemiring R]
+
+variable [NonUnitalNonAssocSemiring A] [Module R A] [NonUnitalNonAssocSemiring B] [Module R B]
+
+variable [NonUnitalNonAssocSemiring C] [Module R C] [FunLike F A B] [NonUnitalAlgHomClass F R A B]
+
+theorem injective_codRestrict (f : F) (S : NonUnitalSubalgebra R B) (hf : ∀ x : A, f x ∈ S) :
+    Function.Injective (NonUnitalAlgHom.codRestrict f S hf) ↔ Function.Injective f := by
+  constructor
+  · intro h x y hxy
+    apply h
+    ext
+    exact hxy
+  · intro h x y hxy
+    apply h
+    exact congrArg Subtype.val hxy
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

@@ -1,0 +1,232 @@
+FILE: Defs.vectorSpan_eq_top_of_affineSpan_eq_top.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Defs.vectorSpan_eq_top_of_affineSpan_eq_top.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+  [S : AddTorsor V P] {ι : Sort*}
+
+variable (k V)
+
+variable (P)
+
+variable {k V P}
+
+variable (k V) {p₁ p₂ : P}
+
+variable (P) in
+
+theorem vectorSpan_eq_top_of_affineSpan_eq_top {s : Set P} (h : affineSpan k s = ⊤) :
+    vectorSpan k s = ⊤ := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+  [S : AddTorsor V P] {ι : Sort*}
+
+variable (k V)
+
+variable (P)
+
+variable {k V P}
+
+variable (k V) {p₁ p₂ : P}
+
+variable (P) in
+
+theorem vectorSpan_eq_top_of_affineSpan_eq_top {s : Set P} (h : affineSpan k s = ⊤) :
+    vectorSpan k s = ⊤ := by
+  by_cases hs : s.Nonempty
+  · rcases hs with ⟨p, hp⟩
+    rw [← AffineSubspace.direction_eq_top_iff_of_nonempty (affineSpan_nonempty_iff.mp ⟨p, subset_affineSpan k s hp⟩)]
+    rw [affineSpan_direction]
+    simpa [h]
+  · have hs' : s = ∅ := Set.not_nonempty_iff_eq_empty.mp hs
+    rw [hs', affineSpan_empty, vectorSpan_empty] at h ⊢
+    simp at h
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:20:60-20:86
+Unknown identifier `affineSpan_nonempty_iff.mp`
+Source line 20:
+    rw [← AffineSubspace.direction_eq_top_iff_of_nonempty (affineSpan_nonempty_iff.mp ⟨p, subset_affineSpan k s hp⟩)]
+                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: affineSpan_nonempty_iff.mp
+
+ERROR .LspCheck.lean:24:14-24:30
+Unknown identifier `affineSpan_empty`
+Source line 24:
+    rw [hs', affineSpan_empty, vectorSpan_empty] at h ⊢
+             ^^^^^^^^^^^^^^^^
+Highlighted span: affineSpan_empty
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:20:60-20:86
+Unknown identifier `affineSpan_nonempty_iff.mp`
+Source line 20:
+    rw [← AffineSubspace.direction_eq_top_iff_of_nonempty (affineSpan_nonempty_iff.mp ⟨p, subset_affineSpan k s hp⟩)]
+                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: affineSpan_nonempty_iff.mp
+
+ERROR .LspCheck.lean:24:14-24:30
+Unknown identifier `affineSpan_empty`
+Source line 24:
+    rw [hs', affineSpan_empty, vectorSpan_empty] at h ⊢
+             ^^^^^^^^^^^^^^^^
+Highlighted span: affineSpan_empty
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+  [S : AddTorsor V P] {ι : Sort*}
+
+variable (k V)
+
+variable (P)
+
+variable {k V P}
+
+variable (k V) {p₁ p₂ : P}
+
+variable (P) in
+
+theorem vectorSpan_eq_top_of_affineSpan_eq_top {s : Set P} (h : affineSpan k s = ⊤) :
+    vectorSpan k s = ⊤ := by
+  by_cases hs : s.Nonempty
+  · rcases hs with ⟨p, hp⟩
+    have hne : (affineSpan k s).Nonempty := ⟨p, subset_affineSpan k s hp⟩
+    rw [← AffineSubspace.direction_eq_top_iff_of_nonempty hne]
+    rw [affineSpan_direction]
+    simpa [h]
+  · have hs' : s = ∅ := Set.not_nonempty_iff_eq_empty.mp hs
+    subst hs'
+    simp at h
+    simp [h]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:20:33-20:41
+Invalid field `Nonempty`: The environment does not contain `AffineSubspace.Nonempty`, so it is not possible to project the field `Nonempty` from an expression
+  affineSpan k s
+of type `AffineSubspace k P`
+Source line 20:
+    have hne : (affineSpan k s).Nonempty := ⟨p, subset_affineSpan k s hp⟩
+                                ^^^^^^^^
+Highlighted span: Nonempty
+
+ERROR .LspCheck.lean:27:5-27:13
+No goals to be solved
+Source line 27:
+    simp [h]
+    ^^^^^^^^
+Highlighted span: simp [h]
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:20:33-20:41
+Invalid field `Nonempty`: The environment does not contain `AffineSubspace.Nonempty`, so it is not possible to project the field `Nonempty` from an expression
+  affineSpan k s
+of type `AffineSubspace k P`
+Source line 20:
+    have hne : (affineSpan k s).Nonempty := ⟨p, subset_affineSpan k s hp⟩
+                                ^^^^^^^^
+Highlighted span: Nonempty
+
+ERROR .LspCheck.lean:27:5-27:13
+No goals to be solved
+Source line 27:
+    simp [h]
+    ^^^^^^^^
+Highlighted span: simp [h]
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+  [S : AddTorsor V P] {ι : Sort*}
+
+variable (k V)
+
+variable (P)
+
+variable {k V P}
+
+variable (k V) {p₁ p₂ : P}
+
+variable (P) in
+
+theorem vectorSpan_eq_top_of_affineSpan_eq_top {s : Set P} (h : affineSpan k s = ⊤) :
+    vectorSpan k s = ⊤ := by
+  by_cases hs : s.Nonempty
+  · rcases hs with ⟨p, hp⟩
+    rw [← AffineSubspace.direction_eq_top_iff_of_nonempty (p := p)]
+    · rw [affineSpan_direction]
+      simpa [h]
+    · exact subset_affineSpan k s hp
+  · have hs' : s = ∅ := Set.not_nonempty_iff_eq_empty.mp hs
+    subst hs'
+    simp at h
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:20:59-20:67
+Invalid argument name `p` for function `AffineSubspace.direction_eq_top_iff_of_nonempty`
+
+Hint: Perhaps you meant one of the following parameter names:
+  • `k`: p̵k̲
+  • `V`: p̵V̲
+  • `P`: p̵P̲
+  • `S`: p̵S̲
+  • `s`: p̵s̲
+  • `h`: p̵h̲
+Source line 20:
+    rw [← AffineSubspace.direction_eq_top_iff_of_nonempty (p := p)]
+                                                          ^^^^^^^^
+Highlighted span: (p := p)
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:20:59-20:67
+Invalid argument name `p` for function `AffineSubspace.direction_eq_top_iff_of_nonempty`
+
+Hint: Perhaps you meant one of the following parameter names:
+  • `k`: p̵k̲
+  • `V`: p̵V̲
+  • `P`: p̵P̲
+  • `S`: p̵S̲
+  • `s`: p̵s̲
+  • `h`: p̵h̲
+Source line 20:
+    rw [← AffineSubspace.direction_eq_top_iff_of_nonempty (p := p)]
+                                                          ^^^^^^^^
+Highlighted span: (p := p)

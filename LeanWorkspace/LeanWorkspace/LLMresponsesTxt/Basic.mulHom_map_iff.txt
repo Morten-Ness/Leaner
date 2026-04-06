@@ -1,0 +1,337 @@
+FILE: Basic.mulHom_map_iff.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.mulHom_map_iff.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {G H : Type*} [Mul G] [Mul H] {A B : Finset G} {a0 b0 : G}
+
+theorem mulHom_map_iff (f : G ↪ H) (mul : ∀ x y, f (x * y) = f x * f y) :
+    UniqueMul (A.map f) (B.map f) (f a0) (f b0) ↔ UniqueMul A B a0 b0 := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G H : Type*} [Mul G] [Mul H] {A B : Finset G} {a0 b0 : G}
+
+theorem mulHom_map_iff (f : G ↪ H) (mul : ∀ x y, f (x * y) = f x * f y) :
+    UniqueMul (A.map f) (B.map f) (f a0) (f b0) ↔ UniqueMul A B a0 b0 := by
+  constructor
+  · intro h
+    rcases h with ⟨ha, hb, huniq⟩
+    refine ⟨?_, ?_, ?_⟩
+    · simpa [Finset.mem_map] using ha
+    · simpa [Finset.mem_map] using hb
+    · intro a b ha' hb' hab
+      have hfa : f a ∈ A.map f := by
+        simpa [Finset.mem_map] using ha'
+      have hfb : f b ∈ B.map f := by
+        simpa [Finset.mem_map] using hb'
+      have hmul : f a * f b = f a0 * f b0 := by
+        rw [← mul, ← mul, hab]
+      rcases huniq (f a) (f b) hfa hfb hmul with ⟨h1, h2⟩
+      exact ⟨f.injective h1, f.injective h2⟩
+  · intro h
+    rcases h with ⟨ha, hb, huniq⟩
+    refine ⟨?_, ?_, ?_⟩
+    · simpa [Finset.mem_map] using ha
+    · simpa [Finset.mem_map] using hb
+    · intro x y hx hy hxy
+      rcases Finset.mem_map.mp hx with ⟨a, ha', rfl⟩
+      rcases Finset.mem_map.mp hy with ⟨b, hb', rfl⟩
+      have hab : a * b = a0 * b0 := by
+        apply f.injective
+        rw [mul, mul, hxy]
+      rcases huniq a b ha' hb' hab with ⟨rfl, rfl⟩
+      exact ⟨rfl, rfl⟩
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:9:19-9:34
+Tactic `rcases` failed: `h : ∀ ⦃a b : H⦄,
+  a ∈ Finset.map f A → b ∈ Finset.map f B → a * b = f a0 * f b0 → a = f a0 ∧ b = f b0` is not an inductive datatype
+Source line 9:
+    rcases h with ⟨ha, hb, huniq⟩
+                  ^^^^^^^^^^^^^^^
+Highlighted span: ⟨ha, hb, huniq⟩
+
+ERROR .LspCheck.lean:23:19-23:34
+Tactic `rcases` failed: `h : ∀ ⦃a b : G⦄,
+  a ∈ A → b ∈ B → a * b = a0 * b0 → a = a0 ∧ b = b0` is not an inductive datatype
+Source line 23:
+    rcases h with ⟨ha, hb, huniq⟩
+                  ^^^^^^^^^^^^^^^
+Highlighted span: ⟨ha, hb, huniq⟩
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:9:19-9:34
+Tactic `rcases` failed: `h : ∀ ⦃a b : H⦄,
+  a ∈ Finset.map f A → b ∈ Finset.map f B → a * b = f a0 * f b0 → a = f a0 ∧ b = f b0` is not an inductive datatype
+Source line 9:
+    rcases h with ⟨ha, hb, huniq⟩
+                  ^^^^^^^^^^^^^^^
+Highlighted span: ⟨ha, hb, huniq⟩
+
+ERROR .LspCheck.lean:23:19-23:34
+Tactic `rcases` failed: `h : ∀ ⦃a b : G⦄,
+  a ∈ A → b ∈ B → a * b = a0 * b0 → a = a0 ∧ b = b0` is not an inductive datatype
+Source line 23:
+    rcases h with ⟨ha, hb, huniq⟩
+                  ^^^^^^^^^^^^^^^
+Highlighted span: ⟨ha, hb, huniq⟩
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G H : Type*} [Mul G] [Mul H] {A B : Finset G} {a0 b0 : G}
+
+theorem mulHom_map_iff (f : G ↪ H) (mul : ∀ x y, f (x * y) = f x * f y) :
+    UniqueMul (A.map f) (B.map f) (f a0) (f b0) ↔ UniqueMul A B a0 b0 := by
+  constructor
+  · intro h
+    refine ⟨?_, ?_, ?_⟩
+    · have : f a0 ∈ A.map f := h.1
+      simpa [Finset.mem_map] using this
+    · have : f b0 ∈ B.map f := h.2.1
+      simpa [Finset.mem_map] using this
+    · intro a b ha hb hab
+      have hfa : f a ∈ A.map f := by
+        simpa [Finset.mem_map] using ha
+      have hfb : f b ∈ B.map f := by
+        simpa [Finset.mem_map] using hb
+      have hmul : f a * f b = f a0 * f b0 := by
+        rw [← mul, ← mul, hab]
+      have hEq : f a = f a0 ∧ f b = f b0 := h.2.2 hfa hfb hmul
+      exact ⟨f.injective hEq.1, f.injective hEq.2⟩
+  · intro h
+    refine ⟨?_, ?_, ?_⟩
+    · simpa [Finset.mem_map] using h.1
+    · simpa [Finset.mem_map] using h.2.1
+    · intro x y hx hy hxy
+      rcases Finset.mem_map.mp hx with ⟨a, ha, rfl⟩
+      rcases Finset.mem_map.mp hy with ⟨b, hb, rfl⟩
+      have hab : a * b = a0 * b0 := by
+        apply f.injective
+        rw [mul, mul, hxy]
+      have hEq : a = a0 ∧ b = b0 := h.2.2 ha hb hab
+      exact ⟨by simpa [hEq.1], by simpa [hEq.2]⟩
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:9:12-9:24
+Invalid `⟨...⟩` notation: The expected type
+  ∀ ⦃a b : G⦄, a ∈ A → b ∈ B → a * b = a0 * b0 → a = a0 ∧ b = b0
+is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+Source line 9:
+    refine ⟨?_, ?_, ?_⟩
+           ^^^^^^^^^^^^
+Highlighted span: ⟨?_, ?_, ?_⟩
+
+ERROR .LspCheck.lean:10:5-11:1
+No goals to be solved
+Source line 10:
+    · have : f a0 ∈ A.map f := h.1
+    ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:24:12-24:24
+Invalid `⟨...⟩` notation: The expected type
+  ∀ ⦃a b : H⦄, a ∈ Finset.map f A → b ∈ Finset.map f B → a * b = f a0 * f b0 → a = f a0 ∧ b = f b0
+is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+Source line 24:
+    refine ⟨?_, ?_, ?_⟩
+           ^^^^^^^^^^^^
+Highlighted span: ⟨?_, ?_, ?_⟩
+
+ERROR .LspCheck.lean:25:5-25:39
+No goals to be solved
+Source line 25:
+    · simpa [Finset.mem_map] using h.1
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simpa [Finset.mem_map] using h.1
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:9:12-9:24
+Invalid `⟨...⟩` notation: The expected type
+  ∀ ⦃a b : G⦄, a ∈ A → b ∈ B → a * b = a0 * b0 → a = a0 ∧ b = b0
+is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+Source line 9:
+    refine ⟨?_, ?_, ?_⟩
+           ^^^^^^^^^^^^
+Highlighted span: ⟨?_, ?_, ?_⟩
+
+ERROR .LspCheck.lean:10:5-11:1
+No goals to be solved
+Source line 10:
+    · have : f a0 ∈ A.map f := h.1
+    ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:24:12-24:24
+Invalid `⟨...⟩` notation: The expected type
+  ∀ ⦃a b : H⦄, a ∈ Finset.map f A → b ∈ Finset.map f B → a * b = f a0 * f b0 → a = f a0 ∧ b = f b0
+is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+Source line 24:
+    refine ⟨?_, ?_, ?_⟩
+           ^^^^^^^^^^^^
+Highlighted span: ⟨?_, ?_, ?_⟩
+
+ERROR .LspCheck.lean:25:5-25:39
+No goals to be solved
+Source line 25:
+    · simpa [Finset.mem_map] using h.1
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simpa [Finset.mem_map] using h.1
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G H : Type*} [Mul G] [Mul H] {A B : Finset G} {a0 b0 : G}
+
+theorem mulHom_map_iff (f : G ↪ H) (mul : ∀ x y, f (x * y) = f x * f y) :
+    UniqueMul (A.map f) (B.map f) (f a0) (f b0) ↔ UniqueMul A B a0 b0 := by
+  constructor
+  · intro h
+    constructor
+    · have : f a0 ∈ A.map f := h.1
+      simpa [Finset.mem_map] using this
+    constructor
+    · have : f b0 ∈ B.map f := h.2.1
+      simpa [Finset.mem_map] using this
+    · intro a b ha hb hab
+      have hfa : f a ∈ A.map f := by
+        simpa [Finset.mem_map] using ha
+      have hfb : f b ∈ B.map f := by
+        simpa [Finset.mem_map] using hb
+      have hmul : f a * f b = f a0 * f b0 := by
+        rw [← mul, ← mul, hab]
+      have hEq : f a = f a0 ∧ f b = f b0 := h.2.2 hfa hfb hmul
+      exact ⟨f.injective hEq.1, f.injective hEq.2⟩
+  · intro h
+    constructor
+    · simpa [Finset.mem_map] using h.1
+    constructor
+    · simpa [Finset.mem_map] using h.2.1
+    · intro x y hx hy hxy
+      rcases Finset.mem_map.mp hx with ⟨a, ha, rfl⟩
+      rcases Finset.mem_map.mp hy with ⟨b, hb, rfl⟩
+      have hab : a * b = a0 * b0 := by
+        apply f.injective
+        rw [mul, mul, hxy]
+      have hEq : a = a0 ∧ b = b0 := h.2.2 ha hb hab
+      exact ⟨by simpa [hEq.1], by simpa [hEq.2]⟩
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:9:5-9:16
+Tactic `constructor` failed: target is not an inductive datatype
+
+case mp
+G : Type u_1
+H : Type u_2
+inst✝¹ : Mul G
+inst✝ : Mul H
+A B : Finset G
+a0 b0 : G
+f : G ↪ H
+mul : ∀ (x y : G), f (x * y) = f x * f y
+h : UniqueMul (Finset.map f A) (Finset.map f B) (f a0) (f b0)
+⊢ UniqueMul A B a0 b0
+Source line 9:
+    constructor
+    ^^^^^^^^^^^
+Highlighted span: constructor
+
+ERROR .LspCheck.lean:25:5-25:16
+Tactic `constructor` failed: target is not an inductive datatype
+
+case mpr
+G : Type u_1
+H : Type u_2
+inst✝¹ : Mul G
+inst✝ : Mul H
+A B : Finset G
+a0 b0 : G
+f : G ↪ H
+mul : ∀ (x y : G), f (x * y) = f x * f y
+h : UniqueMul A B a0 b0
+⊢ UniqueMul (Finset.map f A) (Finset.map f B) (f a0) (f b0)
+Source line 25:
+    constructor
+    ^^^^^^^^^^^
+Highlighted span: constructor
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:9:5-9:16
+Tactic `constructor` failed: target is not an inductive datatype
+
+case mp
+G : Type u_1
+H : Type u_2
+inst✝¹ : Mul G
+inst✝ : Mul H
+A B : Finset G
+a0 b0 : G
+f : G ↪ H
+mul : ∀ (x y : G), f (x * y) = f x * f y
+h : UniqueMul (Finset.map f A) (Finset.map f B) (f a0) (f b0)
+⊢ UniqueMul A B a0 b0
+Source line 9:
+    constructor
+    ^^^^^^^^^^^
+Highlighted span: constructor
+
+ERROR .LspCheck.lean:25:5-25:16
+Tactic `constructor` failed: target is not an inductive datatype
+
+case mpr
+G : Type u_1
+H : Type u_2
+inst✝¹ : Mul G
+inst✝ : Mul H
+A B : Finset G
+a0 b0 : G
+f : G ↪ H
+mul : ∀ (x y : G), f (x * y) = f x * f y
+h : UniqueMul A B a0 b0
+⊢ UniqueMul (Finset.map f A) (Finset.map f B) (f a0) (f b0)
+Source line 25:
+    constructor
+    ^^^^^^^^^^^
+Highlighted span: constructor

@@ -1,0 +1,159 @@
+FILE: Operations.submonoidComap_surjective_of_surjective.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Operations.submonoidComap_surjective_of_surjective.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+variable {F : Type*} [FunLike F M N] [mc : MonoidHomClass F M N]
+
+theorem submonoidComap_surjective_of_surjective (f : M →* N) (N' : Submonoid N) (hf : Function.Surjective f) :
+    Function.Surjective (f.submonoidComap N') := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+variable {F : Type*} [FunLike F M N] [mc : MonoidHomClass F M N]
+
+theorem submonoidComap_surjective_of_surjective (f : M →* N) (N' : Submonoid N) (hf : Function.Surjective f) :
+    Function.Surjective (f.submonoidComap N') := by
+  intro x
+  rcases hf x with ⟨y, rfl⟩
+  refine ⟨⟨y, ?_⟩, rfl⟩
+  exact x.property
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:24-10:27
+Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  f y = ↑x
+
+M : Type u_1
+N : Type u_2
+inst✝¹ : MulOneClass M
+inst✝ : MulOneClass N
+f : M →* N
+N' : Submonoid N
+hf : Function.Surjective ⇑f
+x : ↥N'
+y : M
+h✝ : f y = ↑x
+⊢ ∃ a, (f.submonoidComap N') a = x
+Source line 10:
+  rcases hf x with ⟨y, rfl⟩
+                       ^^^
+Highlighted span: rfl
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:24-10:27
+Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  f y = ↑x
+
+M : Type u_1
+N : Type u_2
+inst✝¹ : MulOneClass M
+inst✝ : MulOneClass N
+f : M →* N
+N' : Submonoid N
+hf : Function.Surjective ⇑f
+x : ↥N'
+y : M
+h✝ : f y = ↑x
+⊢ ∃ a, (f.submonoidComap N') a = x
+Source line 10:
+  rcases hf x with ⟨y, rfl⟩
+                       ^^^
+Highlighted span: rfl
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+variable {F : Type*} [FunLike F M N] [mc : MonoidHomClass F M N]
+
+theorem submonoidComap_surjective_of_surjective (f : M →* N) (N' : Submonoid N) (hf : Function.Surjective f) :
+    Function.Surjective (f.submonoidComap N') := by
+  intro x
+  rcases hf x.1 with ⟨y, hy⟩
+  refine ⟨⟨y, ?_⟩, Subtype.ext ?_⟩
+  · simpa [Submonoid.mem_carrier] using x.2.trans_eq hy.symm
+  · simp [Submonoid.submonoidComap, hy]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:41-12:61
+Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  x.property
+has type `N'.toSubsemigroup.1 ↑x` which does not have the necessary form.
+Source line 12:
+  · simpa [Submonoid.mem_carrier] using x.2.trans_eq hy.symm
+                                        ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: x.2.trans_eq hy.symm
+
+ERROR .LspCheck.lean:13:11-13:35
+Unknown constant `Submonoid.submonoidComap`
+Source line 13:
+  · simp [Submonoid.submonoidComap, hy]
+          ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submonoid.submonoidComap
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:41-12:61
+Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  x.property
+has type `N'.toSubsemigroup.1 ↑x` which does not have the necessary form.
+Source line 12:
+  · simpa [Submonoid.mem_carrier] using x.2.trans_eq hy.symm
+                                        ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: x.2.trans_eq hy.symm
+
+ERROR .LspCheck.lean:13:11-13:35
+Unknown constant `Submonoid.submonoidComap`
+Source line 13:
+  · simp [Submonoid.submonoidComap, hy]
+          ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submonoid.submonoidComap
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+variable {F : Type*} [FunLike F M N] [mc : MonoidHomClass F M N]
+
+theorem submonoidComap_surjective_of_surjective (f : M →* N) (N' : Submonoid N) (hf : Function.Surjective f) :
+    Function.Surjective (f.submonoidComap N') := by
+  intro x
+  rcases hf x.1 with ⟨y, hy⟩
+  refine ⟨⟨y, by simpa [hy] using x.2⟩, ?_⟩
+  ext
+  exact hy
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

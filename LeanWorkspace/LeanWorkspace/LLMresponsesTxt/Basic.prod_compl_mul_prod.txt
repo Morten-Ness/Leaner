@@ -1,0 +1,187 @@
+FILE: Basic.prod_compl_mul_prod.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.prod_compl_mul_prod.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {ι κ G M : Type*} {s s₁ s₂ : Finset ι} {a : ι}
+
+variable [CommMonoid M] {f g : ι → M}
+
+theorem prod_compl_mul_prod [Fintype ι] [DecidableEq ι] (s : Finset ι) (f : ι → M) :
+    (∏ i ∈ sᶜ, f i) * ∏ i ∈ s, f i = ∏ i, f i := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι κ G M : Type*} {s s₁ s₂ : Finset ι} {a : ι}
+
+variable [CommMonoid M] {f g : ι → M}
+
+theorem prod_compl_mul_prod [Fintype ι] [DecidableEq ι] (s : Finset ι) (f : ι → M) :
+    (∏ i ∈ sᶜ, f i) * ∏ i ∈ s, f i = ∏ i, f i := by
+  simpa [Finset.prod_mul_distrib, Finset.mem_compl] using
+    (Finset.prod_filter_ne_mul_prod_filter_eq (s := univ) (f := f) (a := s))
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:6-10:46
+Unknown constant `Finset.prod_filter_ne_mul_prod_filter_eq`
+Source line 10:
+    (Finset.prod_filter_ne_mul_prod_filter_eq (s := univ) (f := f) (a := s))
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.prod_filter_ne_mul_prod_filter_eq
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:6-10:46
+Unknown constant `Finset.prod_filter_ne_mul_prod_filter_eq`
+Source line 10:
+    (Finset.prod_filter_ne_mul_prod_filter_eq (s := univ) (f := f) (a := s))
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.prod_filter_ne_mul_prod_filter_eq
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι κ G M : Type*} {s s₁ s₂ : Finset ι} {a : ι}
+
+variable [CommMonoid M] {f g : ι → M}
+
+theorem prod_compl_mul_prod [Fintype ι] [DecidableEq ι] (s : Finset ι) (f : ι → M) :
+    (∏ i ∈ sᶜ, f i) * ∏ i ∈ s, f i = ∏ i, f i := by
+  rw [← Finset.prod_attach_univ]
+  classical
+  let t : Finset {x // x ∈ (univ : Finset ι)} :=
+    (univ : Finset ι).attach.filter fun x => x.1 ∈ sᶜ
+  let u : Finset {x // x ∈ (univ : Finset ι)} :=
+    (univ : Finset ι).attach.filter fun x => x.1 ∈ s
+  have hdisj : Disjoint t u := by
+    refine Finset.disjoint_left.2 ?_
+    intro x hx hx'
+    simp only [t, u, Finset.mem_filter, Finset.mem_attach, true_and] at hx hx'
+    exact Finset.mem_compl.mp hx.2 hx'.2
+  have hunion : t ∪ u = (univ : Finset ι).attach := by
+    ext x
+    simp only [t, u, Finset.mem_union, Finset.mem_filter, Finset.mem_attach, true_and]
+    by_cases hx : x.1 ∈ s
+    · simp [hx]
+    · simp [hx, Finset.mem_compl.mpr hx]
+  rw [← Finset.prod_union hdisj, hunion]
+  · simp only [t, u, Finset.prod_filter, Finset.prod_attach]
+  all_goals
+    intro x hx
+    simp at hx
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:9:7-9:32
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∏ i, ?f ⟨i, ⋯⟩
+in the target expression
+  (∏ i ∈ sᶜ, f i) * ∏ i ∈ s, f i = ∏ i, f i
+
+ι : Type u_1
+M : Type u_4
+inst✝² : CommMonoid M
+inst✝¹ : Fintype ι
+inst✝ : DecidableEq ι
+s : Finset ι
+f : ι → M
+⊢ (∏ i ∈ sᶜ, f i) * ∏ i ∈ s, f i = ∏ i, f i
+Source line 9:
+  rw [← Finset.prod_attach_univ]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ← Finset.prod_attach_univ
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:9:7-9:32
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∏ i, ?f ⟨i, ⋯⟩
+in the target expression
+  (∏ i ∈ sᶜ, f i) * ∏ i ∈ s, f i = ∏ i, f i
+
+ι : Type u_1
+M : Type u_4
+inst✝² : CommMonoid M
+inst✝¹ : Fintype ι
+inst✝ : DecidableEq ι
+s : Finset ι
+f : ι → M
+⊢ (∏ i ∈ sᶜ, f i) * ∏ i ∈ s, f i = ∏ i, f i
+Source line 9:
+  rw [← Finset.prod_attach_univ]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ← Finset.prod_attach_univ
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι κ G M : Type*} {s s₁ s₂ : Finset ι} {a : ι}
+
+variable [CommMonoid M] {f g : ι → M}
+
+theorem prod_compl_mul_prod [Fintype ι] [DecidableEq ι] (s : Finset ι) (f : ι → M) :
+    (∏ i ∈ sᶜ, f i) * ∏ i ∈ s, f i = ∏ i, f i := by
+  classical
+  rw [← Finset.prod_union]
+  · simpa [Finset.mem_compl] using (Finset.prod_univ_diff (t := s) f).symm
+  · exact Finset.disjoint_compl_right
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:37-11:58
+Unknown constant `Finset.prod_univ_diff`
+Source line 11:
+  · simpa [Finset.mem_compl] using (Finset.prod_univ_diff (t := s) f).symm
+                                    ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.prod_univ_diff
+
+ERROR .LspCheck.lean:12:11-12:38
+Unknown constant `Finset.disjoint_compl_right`
+Source line 12:
+  · exact Finset.disjoint_compl_right
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.disjoint_compl_right
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:37-11:58
+Unknown constant `Finset.prod_univ_diff`
+Source line 11:
+  · simpa [Finset.mem_compl] using (Finset.prod_univ_diff (t := s) f).symm
+                                    ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.prod_univ_diff
+
+ERROR .LspCheck.lean:12:11-12:38
+Unknown constant `Finset.disjoint_compl_right`
+Source line 12:
+  · exact Finset.disjoint_compl_right
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.disjoint_compl_right

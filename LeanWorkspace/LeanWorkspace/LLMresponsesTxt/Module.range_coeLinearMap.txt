@@ -1,0 +1,424 @@
+FILE: Module.range_coeLinearMap.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Module.range_coeLinearMap.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R : Type u} [Semiring R]
+
+variable {ι : Type v} [dec_ι : DecidableEq ι]
+
+variable {M : Type*} [AddCommMonoid M] [Module R M]
+
+variable (A : ι → Submodule R M)
+
+theorem range_coeLinearMap : LinearMap.range (DirectSum.coeLinearMap A) = ⨆ i, A i := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type u} [Semiring R]
+
+variable {ι : Type v} [dec_ι : DecidableEq ι]
+
+variable {M : Type*} [AddCommMonoid M] [Module R M]
+
+variable (A : ι → Submodule R M)
+
+theorem range_coeLinearMap : LinearMap.range (DirectSum.coeLinearMap A) = ⨆ i, A i := by
+  ext x
+  constructor
+  · rintro ⟨y, rfl⟩
+    refine Submodule.iSup_induction ?_ ?_ ?_ y
+    · intro i xi
+      exact le_iSup A i xi
+    · simp
+    · intro a b ha hb
+      exact Submodule.add_mem _ ha hb
+  · intro hx
+    refine Submodule.iSup_induction ?_ ?_ ?_ hx
+    · intro i xi
+      refine ⟨DirectSum.lof R ι (fun i => A i) i xi, ?_⟩
+      simp [DirectSum.coeLinearMap, DirectSum.toModule_lof]
+    · exact ⟨0, by simp⟩
+    · intro a b ha hb
+      rcases ha with ⟨ya, rfl⟩
+      rcases hb with ⟨yb, rfl⟩
+      refine ⟨ya + yb, by simp⟩
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:12-15:47
+failed to elaborate eliminator, insufficient number of arguments, expected type:
+  (DirectSum.coeLinearMap A) y ∈ ⨆ i, A i
+Source line 15:
+    refine Submodule.iSup_induction ?_ ?_ ?_ y
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submodule.iSup_induction ?_ ?_ ?_ y
+
+ERROR .LspCheck.lean:15:46-15:47
+Type mismatch
+  y
+has type
+  DirectSum ι fun i ↦ ↥(A i)
+of sort `Type (max u_1 v)` but is expected to have type
+  ?m.67 0
+of sort `Prop`
+Source line 15:
+    refine Submodule.iSup_induction ?_ ?_ ?_ y
+                                             ^
+Highlighted span: y
+
+ERROR .LspCheck.lean:22:12-22:48
+failed to elaborate eliminator, insufficient number of arguments, expected type:
+  x ∈ (DirectSum.coeLinearMap A).range
+Source line 22:
+    refine Submodule.iSup_induction ?_ ?_ ?_ hx
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submodule.iSup_induction ?_ ?_ ?_ hx
+
+ERROR .LspCheck.lean:22:46-22:48
+Type mismatch
+  hx
+has type
+  x ∈ ⨆ i, A i
+but is expected to have type
+  ?m.84 0
+Source line 22:
+    refine Submodule.iSup_induction ?_ ?_ ?_ hx
+                                             ^^
+Highlighted span: hx
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:12-15:47
+failed to elaborate eliminator, insufficient number of arguments, expected type:
+  (DirectSum.coeLinearMap A) y ∈ ⨆ i, A i
+Source line 15:
+    refine Submodule.iSup_induction ?_ ?_ ?_ y
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submodule.iSup_induction ?_ ?_ ?_ y
+
+ERROR .LspCheck.lean:15:46-15:47
+Type mismatch
+  y
+has type
+  DirectSum ι fun i ↦ ↥(A i)
+of sort `Type (max u_1 v)` but is expected to have type
+  ?m.67 0
+of sort `Prop`
+Source line 15:
+    refine Submodule.iSup_induction ?_ ?_ ?_ y
+                                             ^
+Highlighted span: y
+
+ERROR .LspCheck.lean:22:12-22:48
+failed to elaborate eliminator, insufficient number of arguments, expected type:
+  x ∈ (DirectSum.coeLinearMap A).range
+Source line 22:
+    refine Submodule.iSup_induction ?_ ?_ ?_ hx
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submodule.iSup_induction ?_ ?_ ?_ hx
+
+ERROR .LspCheck.lean:22:46-22:48
+Type mismatch
+  hx
+has type
+  x ∈ ⨆ i, A i
+but is expected to have type
+  ?m.84 0
+Source line 22:
+    refine Submodule.iSup_induction ?_ ?_ ?_ hx
+                                             ^^
+Highlighted span: hx
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type u} [Semiring R]
+
+variable {ι : Type v} [dec_ι : DecidableEq ι]
+
+variable {M : Type*} [AddCommMonoid M] [Module R M]
+
+variable (A : ι → Submodule R M)
+
+theorem range_coeLinearMap : LinearMap.range (DirectSum.coeLinearMap A) = ⨆ i, A i := by
+  ext x
+  constructor
+  · rintro ⟨y, rfl⟩
+    refine DirectSum.induction_on y ?_ ?_ ?_
+    · simp
+    · intro i xi
+      exact le_iSup A i xi.2
+    · intro a b ha hb
+      exact Submodule.add_mem _ ha hb
+  · intro hx
+    refine Submodule.iSup_induction' hx ?_ ?_ ?_
+    · intro i xi
+      refine ⟨DirectSum.lof R ι (fun i => A i) i ⟨x, xi⟩, ?_⟩
+      simp [DirectSum.coeLinearMap]
+    · exact ⟨0, by simp [DirectSum.coeLinearMap]⟩
+    · intro a b ha hb
+      rcases ha with ⟨ya, rfl⟩
+      rcases hb with ⟨yb, rfl⟩
+      refine ⟨ya + yb, by simp [DirectSum.coeLinearMap]⟩
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:18:25-18:29
+Application type mismatch: The argument
+  xi.property
+has type
+  ↑xi ∈ A i
+but is expected to have type
+  (DirectSum.coeLinearMap A) ((DirectSum.of (fun i ↦ ↥(A i)) i) xi) ∈ A i
+in the application
+  le_iSup A i xi.property
+Source line 18:
+      exact le_iSup A i xi.2
+                        ^^^^
+Highlighted span: xi.2
+
+ERROR .LspCheck.lean:20:7-20:38
+Type mismatch
+  Submodule.add_mem (⨆ i, A i) ha hb
+has type
+  (DirectSum.coeLinearMap A) a + (DirectSum.coeLinearMap A) b ∈ ⨆ i, A i
+but is expected to have type
+  (DirectSum.coeLinearMap A) (a + b) ∈ ⨆ i, A i
+Source line 20:
+      exact Submodule.add_mem _ ha hb
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: exact Submodule.add_mem _ ha hb
+
+ERROR .LspCheck.lean:22:12-22:49
+failed to elaborate eliminator, insufficient number of arguments, expected type:
+  x ∈ (DirectSum.coeLinearMap A).range
+Source line 22:
+    refine Submodule.iSup_induction' hx ?_ ?_ ?_
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submodule.iSup_induction' hx ?_ ?_ ?_
+
+ERROR .LspCheck.lean:22:38-22:40
+Application type mismatch: The argument
+  hx
+has type
+  x ∈ ⨆ i, A i
+of sort `Prop` but is expected to have type
+  ?m.104 → Submodule ?m.99 ?m.100
+of sort
+  Sort (max ?u.7574.17758 (?u.7574.17759 + 1))
+in the application
+  @Submodule.iSup_induction' ?m.99 ?m.100 ?m.101 ?m.102 ?m.103 ?m.104 hx
+Source line 22:
+    refine Submodule.iSup_induction' hx ?_ ?_ ?_
+                                     ^^
+Highlighted span: hx
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:18:25-18:29
+Application type mismatch: The argument
+  xi.property
+has type
+  ↑xi ∈ A i
+but is expected to have type
+  (DirectSum.coeLinearMap A) ((DirectSum.of (fun i ↦ ↥(A i)) i) xi) ∈ A i
+in the application
+  le_iSup A i xi.property
+Source line 18:
+      exact le_iSup A i xi.2
+                        ^^^^
+Highlighted span: xi.2
+
+ERROR .LspCheck.lean:20:7-20:38
+Type mismatch
+  Submodule.add_mem (⨆ i, A i) ha hb
+has type
+  (DirectSum.coeLinearMap A) a + (DirectSum.coeLinearMap A) b ∈ ⨆ i, A i
+but is expected to have type
+  (DirectSum.coeLinearMap A) (a + b) ∈ ⨆ i, A i
+Source line 20:
+      exact Submodule.add_mem _ ha hb
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: exact Submodule.add_mem _ ha hb
+
+ERROR .LspCheck.lean:22:12-22:49
+failed to elaborate eliminator, insufficient number of arguments, expected type:
+  x ∈ (DirectSum.coeLinearMap A).range
+Source line 22:
+    refine Submodule.iSup_induction' hx ?_ ?_ ?_
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submodule.iSup_induction' hx ?_ ?_ ?_
+
+ERROR .LspCheck.lean:22:38-22:40
+Application type mismatch: The argument
+  hx
+has type
+  x ∈ ⨆ i, A i
+of sort `Prop` but is expected to have type
+  ?m.104 → Submodule ?m.99 ?m.100
+of sort
+  Sort (max ?u.7574.17758 (?u.7574.17759 + 1))
+in the application
+  @Submodule.iSup_induction' ?m.99 ?m.100 ?m.101 ?m.102 ?m.103 ?m.104 hx
+Source line 22:
+    refine Submodule.iSup_induction' hx ?_ ?_ ?_
+                                     ^^
+Highlighted span: hx
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type u} [Semiring R]
+
+variable {ι : Type v} [dec_ι : DecidableEq ι]
+
+variable {M : Type*} [AddCommMonoid M] [Module R M]
+
+variable (A : ι → Submodule R M)
+
+theorem range_coeLinearMap : LinearMap.range (DirectSum.coeLinearMap A) = ⨆ i, A i := by
+  ext x
+  constructor
+  · rintro ⟨y, rfl⟩
+    refine DirectSum.induction_on y ?_ ?_ ?_
+    · simp
+    · intro i xi
+      change ((DirectSum.coeLinearMap A) (DirectSum.lof R ι (fun i => A i) i xi)) ∈ ⨆ i, A i
+      simp [DirectSum.coeLinearMap]
+    · intro a b ha hb
+      simpa using Submodule.add_mem (⨆ i, A i) ha hb
+  · intro hx
+    rw [Submodule.mem_iSup_of_directed]
+    · rcases hx with ⟨s, hs, hx⟩
+      induction s using Finset.induction_on with
+      | empty =>
+          simp at hx
+          subst hx
+          exact ⟨0, by simp [DirectSum.coeLinearMap]⟩
+      | @insert i s his ih =>
+          rw [Finset.mem_insert, forall_eq_or_imp] at hs
+          rcases hs with ⟨hi, hs⟩
+          rw [Submodule.mem_sup] at hx
+          rcases hx with ⟨y, hy, z, hz, rfl⟩
+          rcases ih hs hz with ⟨w, rfl⟩
+          refine ⟨DirectSum.lof R ι (fun i => A i) i ⟨y, hi y hy⟩ + w, by simp [DirectSum.coeLinearMap]⟩
+    · intro i j
+      refine ⟨i ⊔ j, ?_, ?_⟩ <;> exact le_iSup (fun k => A k) _
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:17:5-18:1
+unsolved goals
+case h.mp.refine_2
+R : Type u
+inst✝² : Semiring R
+ι : Type v
+dec_ι : DecidableEq ι
+M : Type u_1
+inst✝¹ : AddCommMonoid M
+inst✝ : Module R M
+A : ι → Submodule R M
+y : DirectSum ι fun i ↦ ↥(A i)
+i : ι
+xi : ↥(A i)
+⊢ ↑xi ∈ ⨆ i, A i
+Source line 17:
+    · intro i xi
+    ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:23:9-23:39
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?x ∈ iSup ?S
+in the target expression
+  x ∈ (DirectSum.coeLinearMap A).range
+
+case h.mpr
+R : Type u
+inst✝² : Semiring R
+ι : Type v
+dec_ι : DecidableEq ι
+M : Type u_1
+inst✝¹ : AddCommMonoid M
+inst✝ : Module R M
+A : ι → Submodule R M
+x : M
+hx : x ∈ ⨆ i, A i
+⊢ x ∈ (DirectSum.coeLinearMap A).range
+Source line 23:
+    rw [Submodule.mem_iSup_of_directed]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submodule.mem_iSup_of_directed
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:17:5-18:1
+unsolved goals
+case h.mp.refine_2
+R : Type u
+inst✝² : Semiring R
+ι : Type v
+dec_ι : DecidableEq ι
+M : Type u_1
+inst✝¹ : AddCommMonoid M
+inst✝ : Module R M
+A : ι → Submodule R M
+y : DirectSum ι fun i ↦ ↥(A i)
+i : ι
+xi : ↥(A i)
+⊢ ↑xi ∈ ⨆ i, A i
+Source line 17:
+    · intro i xi
+    ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:23:9-23:39
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?x ∈ iSup ?S
+in the target expression
+  x ∈ (DirectSum.coeLinearMap A).range
+
+case h.mpr
+R : Type u
+inst✝² : Semiring R
+ι : Type v
+dec_ι : DecidableEq ι
+M : Type u_1
+inst✝¹ : AddCommMonoid M
+inst✝ : Module R M
+A : ι → Submodule R M
+x : M
+hx : x ∈ ⨆ i, A i
+⊢ x ∈ (DirectSum.coeLinearMap A).range
+Source line 23:
+    rw [Submodule.mem_iSup_of_directed]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submodule.mem_iSup_of_directed

@@ -1,0 +1,99 @@
+FILE: Defs.span_iUnion.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Defs.span_iUnion.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+  [S : AddTorsor V P] {ι : Sort*}
+
+variable (k V)
+
+variable (P)
+
+variable {k V P}
+
+variable (k V) {p₁ p₂ : P}
+
+theorem span_iUnion {ι : Type*} (s : ι → Set P) :
+    affineSpan k (⋃ i, s i) = ⨆ i, affineSpan k (s i) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+  [S : AddTorsor V P] {ι : Sort*}
+
+variable (k V)
+
+variable (P)
+
+variable {k V P}
+
+variable (k V) {p₁ p₂ : P}
+
+theorem span_iUnion {ι : Type*} (s : ι → Set P) :
+    affineSpan k (⋃ i, s i) = ⨆ i, affineSpan k (s i) := by
+  simpa using AffineSubspace.affineSpan_iUnion (k := k) s
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:15-16:47
+Unknown constant `AffineSubspace.affineSpan_iUnion`
+Source line 16:
+  simpa using AffineSubspace.affineSpan_iUnion (k := k) s
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.affineSpan_iUnion
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:15-16:47
+Unknown constant `AffineSubspace.affineSpan_iUnion`
+Source line 16:
+  simpa using AffineSubspace.affineSpan_iUnion (k := k) s
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.affineSpan_iUnion
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+  [S : AddTorsor V P] {ι : Sort*}
+
+variable (k V)
+
+variable (P)
+
+variable {k V P}
+
+variable (k V) {p₁ p₂ : P}
+
+theorem span_iUnion {ι : Type*} (s : ι → Set P) :
+    affineSpan k (⋃ i, s i) = ⨆ i, affineSpan k (s i) := by
+  classical
+  refine le_antisymm ?_ ?_
+  · refine affineSpan_le.2 ?_
+    intro p hp
+    rcases Set.mem_iUnion.mp hp with ⟨i, hi⟩
+    exact le_iSup (fun i => affineSpan k (s i)) i (subset_affineSpan k (s i) hi)
+  · refine iSup_le ?_
+    intro i
+    exact affineSpan_mono k (Set.subset_iUnion s i)
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

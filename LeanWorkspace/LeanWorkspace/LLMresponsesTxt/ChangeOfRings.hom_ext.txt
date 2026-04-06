@@ -1,0 +1,238 @@
+FILE: ChangeOfRings.hom_ext.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: ChangeOfRings.hom_ext.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R : Type u₁} {S : Type u₂} [CommRing R] [CommRing S] (f : R →+* S)
+
+set_option backward.isDefEq.respectTransparency false in
+theorem hom_ext {M : ModuleCat R} {N : ModuleCat S}
+    {α β : (ModuleCat.extendScalars f).obj M ⟶ N}
+    (h : ∀ (m : M), α ((1 : S) ⊗ₜ m) = β ((1 : S) ⊗ₜ m)) : α = β := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type u₁} {S : Type u₂} [CommRing R] [CommRing S] (f : R →+* S)
+
+set_option backward.isDefEq.respectTransparency false in
+theorem hom_ext {M : ModuleCat R} {N : ModuleCat S}
+    {α β : (ModuleCat.extendScalars f).obj M ⟶ N}
+    (h : ∀ (m : M), α ((1 : S) ⊗ₜ m) = β ((1 : S) ⊗ₜ m)) : α = β := by
+  ext x
+  refine TensorProduct.induction_on x ?_ ?_ ?_
+  · simpa using h 0
+  · intro s m
+    calc
+      α (s ⊗ₜ m) = α (s • ((1 : S) ⊗ₜ m)) := by
+        rw [← TensorProduct.smul_tmul', one_mul]
+      _ = s • α ((1 : S) ⊗ₜ m) := by
+        rw [LinearMap.map_smulₛₗ]
+      _ = s • β ((1 : S) ⊗ₜ m) := by rw [h m]
+      _ = β (s • ((1 : S) ⊗ₜ m)) := by rw [LinearMap.map_smulₛₗ]
+      _ = β (s ⊗ₜ m) := by
+        rw [← TensorProduct.smul_tmul', one_mul]
+  · intro x y hx hy
+    rw [map_add, map_add, hx, hy]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:37-10:38
+Application type mismatch: The argument
+  x
+has type
+  ↑M
+but is expected to have type
+  TensorProduct ?m.63 ?m.65 ?m.66
+in the application
+  TensorProduct.induction_on x
+Source line 10:
+  refine TensorProduct.induction_on x ?_ ?_ ?_
+                                    ^
+Highlighted span: x
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:37-10:38
+Application type mismatch: The argument
+  x
+has type
+  ↑M
+but is expected to have type
+  TensorProduct ?m.63 ?m.65 ?m.66
+in the application
+  TensorProduct.induction_on x
+Source line 10:
+  refine TensorProduct.induction_on x ?_ ?_ ?_
+                                    ^
+Highlighted span: x
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type u₁} {S : Type u₂} [CommRing R] [CommRing S] (f : R →+* S)
+
+set_option backward.isDefEq.respectTransparency false in
+theorem hom_ext {M : ModuleCat R} {N : ModuleCat S}
+    {α β : (ModuleCat.extendScalars f).obj M ⟶ N}
+    (h : ∀ (m : M), α ((1 : S) ⊗ₜ m) = β ((1 : S) ⊗ₜ m)) : α = β := by
+  ext m
+  change α.toLinearMap (((ModuleCat.ExtendScalars.obj f).obj M).1 m) =
+    β.toLinearMap (((ModuleCat.ExtendScalars.obj f).obj M).1 m)
+  let g : S ⊗[R] M →ₗ[S] N := α
+  let g' : S ⊗[R] M →ₗ[S] N := β
+  change g (((ModuleCat.ExtendScalars.obj f).obj M).1 m) =
+    g' (((ModuleCat.ExtendScalars.obj f).obj M).1 m)
+  dsimp [ModuleCat.ExtendScalars] at m ⊢
+  refine TensorProduct.induction_on m ?_ ?_ ?_
+  · simpa using h 0
+  · intro s m
+    calc
+      g (s ⊗ₜ m) = g (s • ((1 : S) ⊗ₜ m)) := by
+        rw [← TensorProduct.smul_tmul', one_mul]
+      _ = s • g ((1 : S) ⊗ₜ m) := by
+        rw [map_smul]
+      _ = s • g' ((1 : S) ⊗ₜ m) := by rw [h m]
+      _ = g' (s • ((1 : S) ⊗ₜ m)) := by rw [map_smul]
+      _ = g' (s ⊗ₜ m) := by
+        rw [← TensorProduct.smul_tmul', one_mul]
+  · intro x y hx hy
+    rw [map_add, map_add, hx, hy]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:12-10:23
+Invalid field `toLinearMap`: The environment does not contain `ModuleCat.Hom.toLinearMap`, so it is not possible to project the field `toLinearMap` from an expression
+  α
+of type
+  ((ModuleCat.extendScalars f).obj M).Hom N
+Source line 10:
+  change α.toLinearMap (((ModuleCat.ExtendScalars.obj f).obj M).1 m) =
+           ^^^^^^^^^^^
+Highlighted span: toLinearMap
+
+ERROR .LspCheck.lean:11:7-11:18
+Invalid field `toLinearMap`: The environment does not contain `ModuleCat.Hom.toLinearMap`, so it is not possible to project the field `toLinearMap` from an expression
+  β
+of type
+  ((ModuleCat.extendScalars f).obj M).Hom N
+Source line 11:
+    β.toLinearMap (((ModuleCat.ExtendScalars.obj f).obj M).1 m)
+      ^^^^^^^^^^^
+Highlighted span: toLinearMap
+
+ERROR .LspCheck.lean:12:13-12:13
+expected token
+Source line 12:
+  let g : S ⊗[R] M →ₗ[S] N := α
+            ^
+Highlighted span: ⊗
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:12-10:23
+Invalid field `toLinearMap`: The environment does not contain `ModuleCat.Hom.toLinearMap`, so it is not possible to project the field `toLinearMap` from an expression
+  α
+of type
+  ((ModuleCat.extendScalars f).obj M).Hom N
+Source line 10:
+  change α.toLinearMap (((ModuleCat.ExtendScalars.obj f).obj M).1 m) =
+           ^^^^^^^^^^^
+Highlighted span: toLinearMap
+
+ERROR .LspCheck.lean:11:7-11:18
+Invalid field `toLinearMap`: The environment does not contain `ModuleCat.Hom.toLinearMap`, so it is not possible to project the field `toLinearMap` from an expression
+  β
+of type
+  ((ModuleCat.extendScalars f).obj M).Hom N
+Source line 11:
+    β.toLinearMap (((ModuleCat.ExtendScalars.obj f).obj M).1 m)
+      ^^^^^^^^^^^
+Highlighted span: toLinearMap
+
+ERROR .LspCheck.lean:12:13-12:13
+expected token
+Source line 12:
+  let g : S ⊗[R] M →ₗ[S] N := α
+            ^
+Highlighted span: ⊗
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type u₁} {S : Type u₂} [CommRing R] [CommRing S] (f : R →+* S)
+
+set_option backward.isDefEq.respectTransparency false in
+theorem hom_ext {M : ModuleCat R} {N : ModuleCat S}
+    {α β : (ModuleCat.extendScalars f).obj M ⟶ N}
+    (h : ∀ (m : M), α ((1 : S) ⊗ₜ m) = β ((1 : S) ⊗ₜ m)) : α = β := by
+  ext x
+  induction x using TensorProduct.induction_on with
+  | zero =>
+      simpa using h 0
+  | tmul s m =>
+      calc
+        α (s ⊗ₜ m) = α (s • ((1 : S) ⊗ₜ m)) := by
+          rw [← TensorProduct.smul_tmul', one_mul]
+        _ = s • α ((1 : S) ⊗ₜ m) := by
+          rw [map_smul]
+        _ = s • β ((1 : S) ⊗ₜ m) := by rw [h m]
+        _ = β (s • ((1 : S) ⊗ₜ m)) := by rw [map_smul]
+        _ = β (s ⊗ₜ m) := by
+          rw [← TensorProduct.smul_tmul', one_mul]
+  | add x y hx hy =>
+      rw [map_add, map_add, hx, hy]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:3-11:1
+Invalid target:
+  x
+has type
+  ↑M
+but is expected to have type
+  TensorProduct ?m.63 ?m.65 ?m.66
+Source line 10:
+  induction x using TensorProduct.induction_on with
+  ^
+Highlighted span: i
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:3-11:1
+Invalid target:
+  x
+has type
+  ↑M
+but is expected to have type
+  TensorProduct ?m.63 ?m.65 ?m.66
+Source line 10:
+  induction x using TensorProduct.induction_on with
+  ^
+Highlighted span: i

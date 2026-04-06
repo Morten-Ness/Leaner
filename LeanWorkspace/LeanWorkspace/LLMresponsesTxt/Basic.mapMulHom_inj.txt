@@ -1,0 +1,142 @@
+FILE: Basic.mapMulHom_inj.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.mapMulHom_inj.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {α : Type u} {β : Type v} {γ : Type w}
+
+variable [Mul α] [Mul β] [Mul γ]
+
+theorem mapMulHom_inj {f g : α →ₙ* β} : WithOne.mapMulHom f = WithOne.mapMulHom g ↔ f = g := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α : Type u} {β : Type v} {γ : Type w}
+
+variable [Mul α] [Mul β] [Mul γ]
+
+theorem mapMulHom_inj {f g : α →ₙ* β} : WithOne.mapMulHom f = WithOne.mapMulHom g ↔ f = g := by
+  constructor
+  · intro h
+    ext a
+    have := congrArg (fun k => k (some a)) h
+    simpa using this
+  · intro h
+    cases h
+    rfl
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:5-12:21
+Type mismatch: After simplification, term
+  this
+ has type
+  (WithOne.mapMulHom f) (some a) = (WithOne.mapMulHom g) (some a)
+but is expected to have type
+  f a = g a
+Source line 12:
+    simpa using this
+    ^^^^^^^^^^^^^^^^
+Highlighted span: simpa using this
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:5-12:21
+Type mismatch: After simplification, term
+  this
+ has type
+  (WithOne.mapMulHom f) (some a) = (WithOne.mapMulHom g) (some a)
+but is expected to have type
+  f a = g a
+Source line 12:
+    simpa using this
+    ^^^^^^^^^^^^^^^^
+Highlighted span: simpa using this
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α : Type u} {β : Type v} {γ : Type w}
+
+variable [Mul α] [Mul β] [Mul γ]
+
+theorem mapMulHom_inj {f g : α →ₙ* β} : WithOne.mapMulHom f = WithOne.mapMulHom g ↔ f = g := by
+  constructor
+  · intro h
+    ext a
+    have h' := congrArg (fun k => k (some a)) h
+    exact h'
+  · intro h
+    cases h
+    rfl
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:5-12:13
+Type mismatch
+  h'
+has type
+  (fun k ↦ k (some a)) (WithOne.mapMulHom f) = (fun k ↦ k (some a)) (WithOne.mapMulHom g)
+but is expected to have type
+  f a = g a
+Source line 12:
+    exact h'
+    ^^^^^^^^
+Highlighted span: exact h'
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:5-12:13
+Type mismatch
+  h'
+has type
+  (fun k ↦ k (some a)) (WithOne.mapMulHom f) = (fun k ↦ k (some a)) (WithOne.mapMulHom g)
+but is expected to have type
+  f a = g a
+Source line 12:
+    exact h'
+    ^^^^^^^^
+Highlighted span: exact h'
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α : Type u} {β : Type v} {γ : Type w}
+
+variable [Mul α] [Mul β] [Mul γ]
+
+theorem mapMulHom_inj {f g : α →ₙ* β} : WithOne.mapMulHom f = WithOne.mapMulHom g ↔ f = g := by
+  constructor
+  · intro h
+    ext a
+    have h' := congrArg (fun k => k (some a)) h
+    change some (f a) = some (g a) at h'
+    exact Option.some.inj h'
+  · intro h
+    cases h
+    rfl
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

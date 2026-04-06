@@ -1,0 +1,118 @@
+FILE: Lattice.coe_eq_univ.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Lattice.coe_eq_univ.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G]
+
+variable (H K : Subgroup G)
+
+theorem coe_eq_univ {H : Subgroup G} : (H : Set G) = Set.univ ↔ H = ⊤ := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G]
+
+variable (H K : Subgroup G)
+
+theorem coe_eq_univ {H : Subgroup G} : (H : Set G) = Set.univ ↔ H = ⊤ := by
+  constructor
+  · intro h
+    ext x
+    change x ∈ H ↔ x ∈ (⊤ : Subgroup G)
+    rw [show (x ∈ H) = ((x : G) ∈ (Set.univ : Set G)) by
+      rw [h]
+      rfl]
+    simp
+  · intro h
+    rw [h]
+    ext x
+    simp
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:11-15:12
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑H
+in the target expression
+  (x ∈ H) = (x ∈ Set.univ)
+
+G : Type u_1
+inst✝ : Group G
+H : Subgroup G
+h : ↑H = Set.univ
+x : G
+⊢ (x ∈ H) = (x ∈ Set.univ)
+Source line 15:
+      rw [h]
+          ^
+Highlighted span: h
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:11-15:12
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑H
+in the target expression
+  (x ∈ H) = (x ∈ Set.univ)
+
+G : Type u_1
+inst✝ : Group G
+H : Subgroup G
+h : ↑H = Set.univ
+x : G
+⊢ (x ∈ H) = (x ∈ Set.univ)
+Source line 15:
+      rw [h]
+          ^
+Highlighted span: h
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G]
+
+variable (H K : Subgroup G)
+
+theorem coe_eq_univ {H : Subgroup G} : (H : Set G) = Set.univ ↔ H = ⊤ := by
+  constructor
+  · intro h
+    ext x
+    constructor
+    · intro hx
+      simp
+    · intro hx
+      have : x ∈ (H : Set G) := by
+        rw [h]
+        simp
+      exact this
+  · intro h
+    rw [h]
+    ext x
+    simp
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

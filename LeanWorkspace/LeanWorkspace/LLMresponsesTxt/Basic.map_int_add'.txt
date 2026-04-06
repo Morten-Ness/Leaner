@@ -1,0 +1,299 @@
+FILE: Basic.map_int_add'.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.map_int_add'.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_int_add' [AddCommGroupWithOne G] [AddGroup H] [AddConstMapClass F G H 1 b]
+    (f : F) (n : ℤ) (x : G) : f (↑n + x) = f x + n • b := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_int_add' [AddCommGroupWithOne G] [AddGroup H] [AddConstMapClass F G H 1 b]
+    (f : F) (n : ℤ) (x : G) : f (↑n + x) = f x + n • b := by
+  simpa [Int.cast_eq_zero, Int.cast_eq_one] using map_int_add (f := f) n x
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:7:51-7:62
+Unknown identifier `map_int_add`
+Source line 7:
+  simpa [Int.cast_eq_zero, Int.cast_eq_one] using map_int_add (f := f) n x
+                                                  ^^^^^^^^^^^
+Highlighted span: map_int_add
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:7:51-7:62
+Unknown identifier `map_int_add`
+Source line 7:
+  simpa [Int.cast_eq_zero, Int.cast_eq_one] using map_int_add (f := f) n x
+                                                  ^^^^^^^^^^^
+Highlighted span: map_int_add
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_int_add' [AddCommGroupWithOne G] [AddGroup H] [AddConstMapClass F G H 1 b]
+    (f : F) (n : ℤ) (x : G) : f (↑n + x) = f x + n • b := by
+  rcases Int.eq_nat_or_neg n with ⟨m, rfl⟩ | ⟨m, rfl⟩
+  · induction m with
+    | zero =>
+        simp
+    | succ m ih =>
+        rw [Int.ofNat_succ, Int.cast_add, Int.cast_one, add_assoc, map_add]
+        simpa [add_assoc, add_left_comm, add_comm, ih, one_nsmul]
+  · rw [Int.negSucc_eq]
+    induction m with
+    | zero =>
+        simp [sub_eq_add_neg, map_add]
+    | succ m ih =>
+        rw [Int.cast_sub, Int.cast_ofNat, Int.cast_one, sub_eq_add_neg, neg_add_rev, add_assoc, map_add]
+        simpa [sub_eq_add_neg, add_assoc, add_left_comm, add_comm, ih, one_nsmul, neg_add_rev, add_nsmul]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:8:15-8:16
+Unknown identifier `m`
+Source line 8:
+  · induction m with
+              ^
+Highlighted span: m
+
+ERROR .LspCheck.lean:8:5-9:1
+Tactic `induction` failed: major premise type is not an inductive type
+  ?m.60
+
+Explanation: the `induction` tactic is for constructor-based reasoning as well as for applying custom induction principles with a 'using' clause or a registered '@[induction_eliminator]' theorem. The above type neither is an inductive type nor has a registered theorem.
+
+case zero
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝³ : FunLike F G H
+b : H
+inst✝² : AddCommGroupWithOne G
+inst✝¹ : AddGroup H
+inst✝ : AddConstMapClass F G H 1 b
+f : F
+n : ℤ
+x : G
+h✝ : n = ↑0 ∨ n = -↑0
+x✝ : ?m.60
+⊢ f (↑n + x) = f x + n • b
+Source line 8:
+  · induction m with
+    ^
+Highlighted span: i
+
+ERROR .LspCheck.lean:14:9-14:23
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Int.negSucc ?n
+in the target expression
+  f (↑n + x) = f x + n • b
+
+case succ.zero
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝³ : FunLike F G H
+b : H
+inst✝² : AddCommGroupWithOne G
+inst✝¹ : AddGroup H
+inst✝ : AddConstMapClass F G H 1 b
+f : F
+n : ℤ
+x : G
+h✝ : n = ↑(0 + 1) ∨ n = -↑(0 + 1)
+⊢ f (↑n + x) = f x + n • b
+Source line 14:
+  · rw [Int.negSucc_eq]
+        ^^^^^^^^^^^^^^
+Highlighted span: Int.negSucc_eq
+
+ERROR .LspCheck.lean:6:59-7:1
+unsolved goals
+case succ.succ
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝³ : FunLike F G H
+b : H
+inst✝² : AddCommGroupWithOne G
+inst✝¹ : AddGroup H
+inst✝ : AddConstMapClass F G H 1 b
+f : F
+n : ℤ
+x : G
+n✝ : ℕ
+h✝ : n = ↑(n✝ + 1 + 1) ∨ n = -↑(n✝ + 1 + 1)
+⊢ f (↑n + x) = f x + n • b
+Source line 6:
+    (f : F) (n : ℤ) (x : G) : f (↑n + x) = f x + n • b := by
+                                                          ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:8:15-8:16
+Unknown identifier `m`
+Source line 8:
+  · induction m with
+              ^
+Highlighted span: m
+
+ERROR .LspCheck.lean:8:5-9:1
+Tactic `induction` failed: major premise type is not an inductive type
+  ?m.60
+
+Explanation: the `induction` tactic is for constructor-based reasoning as well as for applying custom induction principles with a 'using' clause or a registered '@[induction_eliminator]' theorem. The above type neither is an inductive type nor has a registered theorem.
+
+case zero
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝³ : FunLike F G H
+b : H
+inst✝² : AddCommGroupWithOne G
+inst✝¹ : AddGroup H
+inst✝ : AddConstMapClass F G H 1 b
+f : F
+n : ℤ
+x : G
+h✝ : n = ↑0 ∨ n = -↑0
+x✝ : ?m.60
+⊢ f (↑n + x) = f x + n • b
+Source line 8:
+  · induction m with
+    ^
+Highlighted span: i
+
+ERROR .LspCheck.lean:14:9-14:23
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Int.negSucc ?n
+in the target expression
+  f (↑n + x) = f x + n • b
+
+case succ.zero
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝³ : FunLike F G H
+b : H
+inst✝² : AddCommGroupWithOne G
+inst✝¹ : AddGroup H
+inst✝ : AddConstMapClass F G H 1 b
+f : F
+n : ℤ
+x : G
+h✝ : n = ↑(0 + 1) ∨ n = -↑(0 + 1)
+⊢ f (↑n + x) = f x + n • b
+Source line 14:
+  · rw [Int.negSucc_eq]
+        ^^^^^^^^^^^^^^
+Highlighted span: Int.negSucc_eq
+
+ERROR .LspCheck.lean:6:59-7:1
+unsolved goals
+case succ.succ
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝³ : FunLike F G H
+b : H
+inst✝² : AddCommGroupWithOne G
+inst✝¹ : AddGroup H
+inst✝ : AddConstMapClass F G H 1 b
+f : F
+n : ℤ
+x : G
+n✝ : ℕ
+h✝ : n = ↑(n✝ + 1 + 1) ∨ n = -↑(n✝ + 1 + 1)
+⊢ f (↑n + x) = f x + n • b
+Source line 6:
+    (f : F) (n : ℤ) (x : G) : f (↑n + x) = f x + n • b := by
+                                                          ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_int_add' [AddCommGroupWithOne G] [AddGroup H] [AddConstMapClass F G H 1 b]
+    (f : F) (n : ℤ) (x : G) : f (↑n + x) = f x + n • b := by
+  rw [Int.induction_on n]
+  · simp
+  · intro z hz
+    calc
+      f ((↑z.succ : G) + x)
+          = f (((↑z : G) + 1) + x) := by simp
+      _ = f ((↑z : G) + (1 + x)) := by abel
+      _ = f (1 + x) + z • b := by simpa using hz (1 + x)
+      _ = (f x + b) + z • b := by simpa [map_add, add_comm, add_left_comm, add_assoc, one_nsmul]
+      _ = f x + (z • b + b) := by abel
+      _ = f x + (Int.succ z) • b := by simp [Int.succ_eq_add_one, add_comm]
+  · intro z hz
+    calc
+      f ((↑(z - 1) : G) + x)
+          = f ((↑z : G) + (-1 + x)) := by
+              simp [sub_eq_add_neg, add_assoc, add_left_comm, add_comm]
+      _ = f (-1 + x) + z • b := by simpa using hz (-1 + x)
+      _ = (f x + (-b)) + z • b := by
+            have h := map_add (f := f) (-1 : G) x
+            simpa [show (-1 : G) = -((1 : G)) by simp, sub_eq_add_neg, add_comm, add_left_comm, add_assoc,
+              one_nsmul] using h
+      _ = f x + (z • b - b) := by abel
+      _ = f x + (z - 1) • b := by simp [sub_eq_add_neg]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:7:7-7:25
+Invalid rewrite argument: Expected an equality or iff proof or definition name, but `?m.25` is a value of type
+  ?m.24
+Source line 7:
+  rw [Int.induction_on n]
+      ^^^^^^^^^^^^^^^^^^
+Highlighted span: Int.induction_on n
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:7:7-7:25
+Invalid rewrite argument: Expected an equality or iff proof or definition name, but `?m.25` is a value of type
+  ?m.24
+Source line 7:
+  rw [Int.induction_on n]
+      ^^^^^^^^^^^^^^^^^^
+Highlighted span: Int.induction_on n

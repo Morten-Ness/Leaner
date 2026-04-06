@@ -1,0 +1,169 @@
+FILE: Exact.comp_injective.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Exact.comp_injective.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R M M' N N' P P' : Type*}
+
+variable (f : M → N) (g : N → P) (g' : P → P')
+
+theorem comp_injective [One P] [One P'] (mulExact : Function.MulExact f g)
+    (inj : Function.Injective g') (h0 : g' 1 = 1) :
+    Function.MulExact f (g' ∘ g) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R M M' N N' P P' : Type*}
+
+variable (f : M → N) (g : N → P) (g' : P → P')
+
+theorem comp_injective [One P] [One P'] (mulExact : Function.MulExact f g)
+    (inj : Function.Injective g') (h0 : g' 1 = 1) :
+    Function.MulExact f (g' ∘ g) := by
+  intro x
+  constructor
+  · intro hx
+    rcases mulExact x with ⟨h1, h2⟩
+    exact h1 hx
+  · intro hx
+    rcases mulExact x with ⟨h1, h2⟩
+    apply h2
+    apply inj
+    simpa [Function.comp, h0] using hx
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:14-14:16
+Application type mismatch: The argument
+  hx
+has type
+  Eq.{u_7 + 1} ((g' ∘ g) x) 1
+but is expected to have type
+  Eq.{u_6 + 1} (g x) 1
+in the application
+  h1 hx
+Source line 14:
+    exact h1 hx
+             ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:17:5-17:13
+Tactic `apply` failed: could not unify the conclusion of `h2`
+  Eq.{u_6 + 1} (g x) 1
+with the goal
+  Eq.{u_7 + 1} ((g' ∘ g) x) 1
+
+Note: The full type of `h2` is
+  x ∈ Set.range f → g x = 1
+
+case mpr
+M : Type u_2
+N : Type u_4
+P : Type u_6
+P' : Type u_7
+f : M → N
+g : N → P
+g' : P → P'
+inst✝¹ : One P
+inst✝ : One P'
+mulExact : Function.MulExact f g
+inj : Function.Injective g'
+h0 : g' 1 = 1
+x : N
+hx : x ∈ Set.range f
+h1 : g x = 1 → x ∈ Set.range f
+h2 : x ∈ Set.range f → g x = 1
+⊢ (g' ∘ g) x = 1
+Source line 17:
+    apply h2
+    ^^^^^^^^
+Highlighted span: apply h2
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:14-14:16
+Application type mismatch: The argument
+  hx
+has type
+  Eq.{u_7 + 1} ((g' ∘ g) x) 1
+but is expected to have type
+  Eq.{u_6 + 1} (g x) 1
+in the application
+  h1 hx
+Source line 14:
+    exact h1 hx
+             ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:17:5-17:13
+Tactic `apply` failed: could not unify the conclusion of `h2`
+  Eq.{u_6 + 1} (g x) 1
+with the goal
+  Eq.{u_7 + 1} ((g' ∘ g) x) 1
+
+Note: The full type of `h2` is
+  x ∈ Set.range f → g x = 1
+
+case mpr
+M : Type u_2
+N : Type u_4
+P : Type u_6
+P' : Type u_7
+f : M → N
+g : N → P
+g' : P → P'
+inst✝¹ : One P
+inst✝ : One P'
+mulExact : Function.MulExact f g
+inj : Function.Injective g'
+h0 : g' 1 = 1
+x : N
+hx : x ∈ Set.range f
+h1 : g x = 1 → x ∈ Set.range f
+h2 : x ∈ Set.range f → g x = 1
+⊢ (g' ∘ g) x = 1
+Source line 17:
+    apply h2
+    ^^^^^^^^
+Highlighted span: apply h2
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R M M' N N' P P' : Type*}
+
+variable (f : M → N) (g : N → P) (g' : P → P')
+
+theorem comp_injective [One P] [One P'] (mulExact : Function.MulExact f g)
+    (inj : Function.Injective g') (h0 : g' 1 = 1) :
+    Function.MulExact f (g' ∘ g) := by
+  intro x
+  constructor
+  · intro hx
+    rcases mulExact x with ⟨h1, _⟩
+    apply h1
+    apply inj
+    simpa [Function.comp, h0] using hx
+  · intro hx
+    rcases mulExact x with ⟨_, h2⟩
+    simpa [Function.comp, h0] using congrArg g' (h2 hx)
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

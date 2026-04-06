@@ -1,0 +1,523 @@
+FILE: Tower.coe_span_eq_span_of_surjective.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Tower.coe_span_eq_span_of_surjective.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable (R : Type u) (S : Type v) (A : Type w) (B : Type u₁) (M : Type v₁)
+
+variable [CommSemiring R] [Semiring A] [Algebra R A] [AddCommMonoid M]
+
+variable [Module R M] [Module A M] [IsScalarTower R A M]
+
+theorem coe_span_eq_span_of_surjective (h : Function.Surjective (algebraMap R A)) (s : Set M) :
+    (Submodule.span A s : Set M) = Submodule.span R s := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (R : Type u) (S : Type v) (A : Type w) (B : Type u₁) (M : Type v₁)
+
+variable [CommSemiring R] [Semiring A] [Algebra R A] [AddCommMonoid M]
+
+variable [Module R M] [Module A M] [IsScalarTower R A M]
+
+theorem coe_span_eq_span_of_surjective (h : Function.Surjective (algebraMap R A)) (s : Set M) :
+    (Submodule.span A s : Set M) = Submodule.span R s := by
+  ext x
+  constructor
+  · intro hx
+    exact Submodule.span_le.2 (by
+      intro y hy
+      exact Submodule.subset_span hy) hx
+  · intro hx
+    rw [Submodule.mem_span] at hx ⊢
+    refine fun p hp hs => ?_
+    obtain ⟨q, rfl⟩ := h p
+    exact hx q hp fun y hy => hs y hy
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:39-16:41
+Application type mismatch: The argument
+  hx
+has type
+  x ∈ ↑(Submodule.span A s)
+but is expected to have type
+  x ∈ Submodule.span R ?m.43
+in the application
+  Submodule.span_le.mpr ?m.47 hx
+Source line 16:
+      exact Submodule.subset_span hy) hx
+                                      ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:18:9-18:27
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.67 ∈ Submodule.span ?m.62 ?m.68
+in the target expression
+  x ∈ ↑(Submodule.span R s)
+
+case h.mpr
+R : Type u
+A : Type w
+M : Type v₁
+inst✝⁶ : CommSemiring R
+inst✝⁵ : Semiring A
+inst✝⁴ : Algebra R A
+inst✝³ : AddCommMonoid M
+inst✝² : Module R M
+inst✝¹ : Module A M
+inst✝ : IsScalarTower R A M
+h : Function.Surjective ⇑(algebraMap R A)
+s : Set M
+x : M
+hx : x ∈ ↑(Submodule.span R s)
+⊢ x ∈ ↑(Submodule.span A s)
+Source line 18:
+    rw [Submodule.mem_span] at hx ⊢
+        ^^^^^^^^^^^^^^^^^^
+Highlighted span: Submodule.mem_span
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:39-16:41
+Application type mismatch: The argument
+  hx
+has type
+  x ∈ ↑(Submodule.span A s)
+but is expected to have type
+  x ∈ Submodule.span R ?m.43
+in the application
+  Submodule.span_le.mpr ?m.47 hx
+Source line 16:
+      exact Submodule.subset_span hy) hx
+                                      ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:18:9-18:27
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.67 ∈ Submodule.span ?m.62 ?m.68
+in the target expression
+  x ∈ ↑(Submodule.span R s)
+
+case h.mpr
+R : Type u
+A : Type w
+M : Type v₁
+inst✝⁶ : CommSemiring R
+inst✝⁵ : Semiring A
+inst✝⁴ : Algebra R A
+inst✝³ : AddCommMonoid M
+inst✝² : Module R M
+inst✝¹ : Module A M
+inst✝ : IsScalarTower R A M
+h : Function.Surjective ⇑(algebraMap R A)
+s : Set M
+x : M
+hx : x ∈ ↑(Submodule.span R s)
+⊢ x ∈ ↑(Submodule.span A s)
+Source line 18:
+    rw [Submodule.mem_span] at hx ⊢
+        ^^^^^^^^^^^^^^^^^^
+Highlighted span: Submodule.mem_span
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (R : Type u) (S : Type v) (A : Type w) (B : Type u₁) (M : Type v₁)
+
+variable [CommSemiring R] [Semiring A] [Algebra R A] [AddCommMonoid M]
+
+variable [Module R M] [Module A M] [IsScalarTower R A M]
+
+theorem coe_span_eq_span_of_surjective (h : Function.Surjective (algebraMap R A)) (s : Set M) :
+    (Submodule.span A s : Set M) = Submodule.span R s := by
+  ext x
+  constructor
+  · intro hx
+    change x ∈ Submodule.restrictScalars R (Submodule.span A s)
+    exact Submodule.span_mono (R := R) (S := A) (s := s) (p := Submodule.span A s)
+      (by intro y hy; exact Submodule.subset_span hy) hx
+  · intro hx
+    exact Submodule.span_mono (R := R) (S := A) (s := s) (p := Submodule.span R s)
+      (by
+        intro y hy
+        exact Submodule.subset_span hy) hx
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:5-14:64
+'change' tactic failed, pattern
+  x ∈ Submodule.restrictScalars R (Submodule.span A s)
+is not definitionally equal to target
+  x ∈ ↑(Submodule.span R s)
+Source line 14:
+    change x ∈ Submodule.restrictScalars R (Submodule.span A s)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: change x ∈ Submodule.restrictScalars R (Submodule.span A s)
+
+ERROR .LspCheck.lean:18:40-18:48
+Invalid argument name `S` for function `Submodule.span_mono`
+
+Hint: Perhaps you meant one of the following parameter names:
+  • `M`: S̵M̲
+  • `t`: S̵t̲
+  • `h`: S̵h̲
+  • `x`: S̵x̲
+  • `t`: S̵t̲
+Source line 18:
+    exact Submodule.span_mono (R := R) (S := A) (s := s) (p := Submodule.span R s)
+                                       ^^^^^^^^
+Highlighted span: (S := A)
+
+ERROR .LspCheck.lean:19:8-20:1
+unsolved goals
+R : Type u
+A : Type w
+M : Type v₁
+inst✝⁶ : CommSemiring R
+inst✝⁵ : Semiring A
+inst✝⁴ : Algebra R A
+inst✝³ : AddCommMonoid M
+inst✝² : Module R M
+inst✝¹ : Module A M
+inst✝ : IsScalarTower R A M
+h : Function.Surjective ⇑(algebraMap R A)
+s : Set M
+x : M
+hx : x ∈ ↑(Submodule.span R s)
+y : M
+hy : y ∈ s
+⊢ y ∈ ↑(Submodule.span ?m.75 s)
+Source line 19:
+      (by
+       ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:5-14:64
+'change' tactic failed, pattern
+  x ∈ Submodule.restrictScalars R (Submodule.span A s)
+is not definitionally equal to target
+  x ∈ ↑(Submodule.span R s)
+Source line 14:
+    change x ∈ Submodule.restrictScalars R (Submodule.span A s)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: change x ∈ Submodule.restrictScalars R (Submodule.span A s)
+
+ERROR .LspCheck.lean:18:40-18:48
+Invalid argument name `S` for function `Submodule.span_mono`
+
+Hint: Perhaps you meant one of the following parameter names:
+  • `M`: S̵M̲
+  • `t`: S̵t̲
+  • `h`: S̵h̲
+  • `x`: S̵x̲
+  • `t`: S̵t̲
+Source line 18:
+    exact Submodule.span_mono (R := R) (S := A) (s := s) (p := Submodule.span R s)
+                                       ^^^^^^^^
+Highlighted span: (S := A)
+
+ERROR .LspCheck.lean:19:8-20:1
+unsolved goals
+R : Type u
+A : Type w
+M : Type v₁
+inst✝⁶ : CommSemiring R
+inst✝⁵ : Semiring A
+inst✝⁴ : Algebra R A
+inst✝³ : AddCommMonoid M
+inst✝² : Module R M
+inst✝¹ : Module A M
+inst✝ : IsScalarTower R A M
+h : Function.Surjective ⇑(algebraMap R A)
+s : Set M
+x : M
+hx : x ∈ ↑(Submodule.span R s)
+y : M
+hy : y ∈ s
+⊢ y ∈ ↑(Submodule.span ?m.75 s)
+Source line 19:
+      (by
+       ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (R : Type u) (S : Type v) (A : Type w) (B : Type u₁) (M : Type v₁)
+
+variable [CommSemiring R] [Semiring A] [Algebra R A] [AddCommMonoid M]
+
+variable [Module R M] [Module A M] [IsScalarTower R A M]
+
+theorem coe_span_eq_span_of_surjective (h : Function.Surjective (algebraMap R A)) (s : Set M) :
+    (Submodule.span A s : Set M) = Submodule.span R s := by
+  ext x
+  constructor
+  · intro hx
+    exact Submodule.span_induction hx
+      (fun y hy => Submodule.subset_span hy)
+      (by simpa using (Submodule.zero_mem (Submodule.span R s)))
+      (fun x y hx hy => Submodule.add_mem (Submodule.span R s) hx hy)
+      (fun a x hx => by
+        obtain ⟨r, rfl⟩ := h a
+        simpa [smul_assoc] using Submodule.smul_mem (Submodule.span R s) r hx)
+  · intro hx
+    exact Submodule.span_mono (by
+      intro y hy
+      exact Submodule.subset_span hy) hx
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:36-14:38
+Type mismatch
+  hx
+has type
+  x ∈ ↑(Submodule.span A s)
+but is expected to have type
+  ∀ x_1 ∈ ?m.43, x ∈ ↑(Submodule.span R s)
+Source line 14:
+    exact Submodule.span_induction hx
+                                   ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:15:20-15:44
+failed to synthesize instance of type class
+  AddCommMonoid (Set M)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 15:
+      (fun y hy => Submodule.subset_span hy)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submodule.subset_span hy
+
+ERROR .LspCheck.lean:17:25-17:69
+Type mismatch
+  Submodule.add_mem (Submodule.span R s) hx hy
+has type
+  y + x✝ ∈ Submodule.span R s
+but is expected to have type
+  x✝ ∈ ↑(Submodule.span R s)
+Source line 17:
+      (fun x y hx hy => Submodule.add_mem (Submodule.span R s) hx hy)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submodule.add_mem (Submodule.span R s) hx hy
+
+WARNING .LspCheck.lean:16:11-16:64
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 16:
+      (by simpa using (Submodule.zero_mem (Submodule.span R s)))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa using (Submodule.zero_mem (Submodule.span R s))
+
+ERROR .LspCheck.lean:19:30-19:31
+Application type mismatch: The argument
+  a
+has type
+  Set M
+of sort `Type v₁` but is expected to have type
+  A
+of sort `Type w` in the application
+  h a
+Source line 19:
+        obtain ⟨r, rfl⟩ := h a
+                             ^
+Highlighted span: a
+
+ERROR .LspCheck.lean:19:16-19:24
+Tactic `cases` failed with a nested error:
+Tactic `induction` failed: recursor `Exists.casesOn` can only eliminate into `Prop`
+
+R : Type u
+A : Type w
+M : Type v₁
+inst✝⁶ : CommSemiring R
+inst✝⁵ : Semiring A
+inst✝⁴ : Algebra R A
+inst✝³ : AddCommMonoid M
+inst✝² : Module R M
+inst✝¹ : Module A M
+inst✝ : IsScalarTower R A M
+h : Function.Surjective ⇑(algebraMap R A)
+s : Set M
+x✝¹ : M
+hx✝ : x✝¹ ∈ ↑(Submodule.span A s)
+a : Set M
+x : a ∈ Set.range fun s_1 ↦ ⋂ (_ : s_1 ∈ {p | s ⊆ ↑p}), ↑s_1
+hx : ?m.55 a x
+x✝ : ∃ a, (algebraMap R A) a = sorry
+⊢ ?m.56 a x hx
+Source line 19:
+        obtain ⟨r, rfl⟩ := h a
+               ^^^^^^^^
+Highlighted span: ⟨r, rfl⟩
+
+ERROR .LspCheck.lean:24:39-24:41
+Application type mismatch: The argument
+  hx
+has type
+  x ∈ ↑(Submodule.span R s)
+but is expected to have type
+  x ∈ Submodule.span A ?m.99
+in the application
+  Submodule.span_mono ?m.101 hx
+Source line 24:
+      exact Submodule.subset_span hy) hx
+                                      ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:24:7-24:37
+Type mismatch
+  Submodule.subset_span hy
+has type
+  y ∈ ↑(Submodule.span ?m.107 ?m.99)
+but is expected to have type
+  y ∈ s
+Source line 24:
+      exact Submodule.subset_span hy) hx
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: exact Submodule.subset_span hy
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:36-14:38
+Type mismatch
+  hx
+has type
+  x ∈ ↑(Submodule.span A s)
+but is expected to have type
+  ∀ x_1 ∈ ?m.43, x ∈ ↑(Submodule.span R s)
+Source line 14:
+    exact Submodule.span_induction hx
+                                   ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:15:20-15:44
+failed to synthesize instance of type class
+  AddCommMonoid (Set M)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 15:
+      (fun y hy => Submodule.subset_span hy)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submodule.subset_span hy
+
+ERROR .LspCheck.lean:17:25-17:69
+Type mismatch
+  Submodule.add_mem (Submodule.span R s) hx hy
+has type
+  y + x✝ ∈ Submodule.span R s
+but is expected to have type
+  x✝ ∈ ↑(Submodule.span R s)
+Source line 17:
+      (fun x y hx hy => Submodule.add_mem (Submodule.span R s) hx hy)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submodule.add_mem (Submodule.span R s) hx hy
+
+WARNING .LspCheck.lean:16:11-16:64
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 16:
+      (by simpa using (Submodule.zero_mem (Submodule.span R s)))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa using (Submodule.zero_mem (Submodule.span R s))
+
+ERROR .LspCheck.lean:19:30-19:31
+Application type mismatch: The argument
+  a
+has type
+  Set M
+of sort `Type v₁` but is expected to have type
+  A
+of sort `Type w` in the application
+  h a
+Source line 19:
+        obtain ⟨r, rfl⟩ := h a
+                             ^
+Highlighted span: a
+
+ERROR .LspCheck.lean:19:16-19:24
+Tactic `cases` failed with a nested error:
+Tactic `induction` failed: recursor `Exists.casesOn` can only eliminate into `Prop`
+
+R : Type u
+A : Type w
+M : Type v₁
+inst✝⁶ : CommSemiring R
+inst✝⁵ : Semiring A
+inst✝⁴ : Algebra R A
+inst✝³ : AddCommMonoid M
+inst✝² : Module R M
+inst✝¹ : Module A M
+inst✝ : IsScalarTower R A M
+h : Function.Surjective ⇑(algebraMap R A)
+s : Set M
+x✝¹ : M
+hx✝ : x✝¹ ∈ ↑(Submodule.span A s)
+a : Set M
+x : a ∈ Set.range fun s_1 ↦ ⋂ (_ : s_1 ∈ {p | s ⊆ ↑p}), ↑s_1
+hx : ?m.55 a x
+x✝ : ∃ a, (algebraMap R A) a = sorry
+⊢ ?m.56 a x hx
+Source line 19:
+        obtain ⟨r, rfl⟩ := h a
+               ^^^^^^^^
+Highlighted span: ⟨r, rfl⟩
+
+ERROR .LspCheck.lean:24:39-24:41
+Application type mismatch: The argument
+  hx
+has type
+  x ∈ ↑(Submodule.span R s)
+but is expected to have type
+  x ∈ Submodule.span A ?m.99
+in the application
+  Submodule.span_mono ?m.101 hx
+Source line 24:
+      exact Submodule.subset_span hy) hx
+                                      ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:24:7-24:37
+Type mismatch
+  Submodule.subset_span hy
+has type
+  y ∈ ↑(Submodule.span ?m.107 ?m.99)
+but is expected to have type
+  y ∈ s
+Source line 24:
+      exact Submodule.subset_span hy) hx
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: exact Submodule.subset_span hy

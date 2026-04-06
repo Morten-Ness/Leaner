@@ -1,0 +1,128 @@
+FILE: Lattice.closure_induction.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Lattice.closure_induction.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G]
+
+variable (H K : Subgroup G)
+
+variable {k : Set G}
+
+theorem closure_induction {p : (g : G) → g ∈ Subgroup.closure k → Prop}
+    (mem : ∀ x (hx : x ∈ k), p x (Subgroup.subset_closure hx)) (one : p 1 (one_mem _))
+    (mul : ∀ x y hx hy, p x hx → p y hy → p (x * y) (mul_mem hx hy))
+    (inv : ∀ x hx, p x hx → p x⁻¹ (inv_mem hx)) {x} (hx : x ∈ Subgroup.closure k) : p x hx := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G]
+
+variable (H K : Subgroup G)
+
+variable {k : Set G}
+
+theorem closure_induction {p : (g : G) → g ∈ Subgroup.closure k → Prop}
+    (mem : ∀ x (hx : x ∈ k), p x (Subgroup.subset_closure hx)) (one : p 1 (one_mem _))
+    (mul : ∀ x y hx hy, p x hx → p y hy → p (x * y) (mul_mem hx hy))
+    (inv : ∀ x hx, p x hx → p x⁻¹ (inv_mem hx)) {x} (hx : x ∈ Subgroup.closure k) : p x hx := by
+  let S : Subgroup G :=
+    { carrier := {x | ∃ hx : x ∈ Subgroup.closure k, p x hx}
+      one_mem' := ⟨one_mem _, one⟩
+      mul_mem' := by
+        intro x y hx hy
+        rcases hx with ⟨hx, hpx⟩
+        rcases hy with ⟨hy, hpy⟩
+        exact ⟨mul_mem hx hy, mul x y hx hy hpx hpy⟩
+      inv_mem' := by
+        intro x hx
+        rcases hx with ⟨hx, hpx⟩
+        exact ⟨inv_mem hx, inv x hx hpx⟩ }
+  have hk : k ⊆ S := by
+    intro x hxk
+    exact ⟨Subgroup.subset_closure hxk, mem x hxk⟩
+  have hclosure : Subgroup.closure k ≤ S := Subgroup.closure_le.2 hk
+  exact (hclosure hx).2
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:30:45-30:69
+Invalid projection: Projections cannot be used on functions, and
+  Subgroup.closure_le
+has function type
+  ∀ (K : Subgroup ?m.155) {k : Set ?m.155}, Subgroup.closure k ≤ K ↔ k ⊆ ↑K
+Source line 30:
+  have hclosure : Subgroup.closure k ≤ S := Subgroup.closure_le.2 hk
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subgroup.closure_le.2 hk
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:30:45-30:69
+Invalid projection: Projections cannot be used on functions, and
+  Subgroup.closure_le
+has function type
+  ∀ (K : Subgroup ?m.155) {k : Set ?m.155}, Subgroup.closure k ≤ K ↔ k ⊆ ↑K
+Source line 30:
+  have hclosure : Subgroup.closure k ≤ S := Subgroup.closure_le.2 hk
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subgroup.closure_le.2 hk
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G]
+
+variable (H K : Subgroup G)
+
+variable {k : Set G}
+
+theorem closure_induction {p : (g : G) → g ∈ Subgroup.closure k → Prop}
+    (mem : ∀ x (hx : x ∈ k), p x (Subgroup.subset_closure hx)) (one : p 1 (one_mem _))
+    (mul : ∀ x y hx hy, p x hx → p y hy → p (x * y) (mul_mem hx hy))
+    (inv : ∀ x hx, p x hx → p x⁻¹ (inv_mem hx)) {x} (hx : x ∈ Subgroup.closure k) : p x hx := by
+  let S : Subgroup G :=
+    { carrier := {x | ∃ hx : x ∈ Subgroup.closure k, p x hx}
+      one_mem' := ⟨one_mem _, one⟩
+      mul_mem' := by
+        intro x y hx hy
+        rcases hx with ⟨hx, hpx⟩
+        rcases hy with ⟨hy, hpy⟩
+        exact ⟨mul_mem hx hy, mul x y hx hy hpx hpy⟩
+      inv_mem' := by
+        intro x hx
+        rcases hx with ⟨hx, hpx⟩
+        exact ⟨inv_mem hx, inv x hx hpx⟩ }
+  have hk : k ⊆ S := by
+    intro x hxk
+    exact ⟨Subgroup.subset_closure hxk, mem x hxk⟩
+  have hclosure : Subgroup.closure k ≤ S := by
+    rw [Subgroup.closure_le]
+    exact hk
+  exact (hclosure hx).2
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

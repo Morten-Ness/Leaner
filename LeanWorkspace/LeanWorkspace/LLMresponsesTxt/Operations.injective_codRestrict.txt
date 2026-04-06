@@ -1,0 +1,199 @@
+FILE: Operations.injective_codRestrict.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Operations.injective_codRestrict.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+variable {F : Type*} [FunLike F M N] [mc : MonoidHomClass F M N]
+
+theorem injective_codRestrict {S} [SetLike S N] [SubmonoidClass S N] (f : M →* N) (s : S)
+    (h : ∀ x, f x ∈ s) : Function.Injective (f.codRestrict s h) ↔ Function.Injective f := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+variable {F : Type*} [FunLike F M N] [mc : MonoidHomClass F M N]
+
+theorem injective_codRestrict {S} [SetLike S N] [SubmonoidClass S N] (f : M →* N) (s : S)
+    (h : ∀ x, f x ∈ s) : Function.Injective (f.codRestrict s h) ↔ Function.Injective f := by
+  constructor
+  · intro hf x y hxy
+    apply hf
+    exact hxy
+  · intro hf x y hxy
+    apply hf
+    exact hxy
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:5-12:14
+Type mismatch
+  hxy
+has type
+  f x = f y
+but is expected to have type
+  (f.codRestrict s h) x = (f.codRestrict s h) y
+Source line 12:
+    exact hxy
+    ^^^^^^^^^
+Highlighted span: exact hxy
+
+ERROR .LspCheck.lean:15:5-15:14
+Type mismatch
+  hxy
+has type
+  (f.codRestrict s h) x = (f.codRestrict s h) y
+but is expected to have type
+  f x = f y
+Source line 15:
+    exact hxy
+    ^^^^^^^^^
+Highlighted span: exact hxy
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:5-12:14
+Type mismatch
+  hxy
+has type
+  f x = f y
+but is expected to have type
+  (f.codRestrict s h) x = (f.codRestrict s h) y
+Source line 12:
+    exact hxy
+    ^^^^^^^^^
+Highlighted span: exact hxy
+
+ERROR .LspCheck.lean:15:5-15:14
+Type mismatch
+  hxy
+has type
+  (f.codRestrict s h) x = (f.codRestrict s h) y
+but is expected to have type
+  f x = f y
+Source line 15:
+    exact hxy
+    ^^^^^^^^^
+Highlighted span: exact hxy
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+variable {F : Type*} [FunLike F M N] [mc : MonoidHomClass F M N]
+
+theorem injective_codRestrict {S} [SetLike S N] [SubmonoidClass S N] (f : M →* N) (s : S)
+    (h : ∀ x, f x ∈ s) : Function.Injective (f.codRestrict s h) ↔ Function.Injective f := by
+  constructor
+  · intro hf x y hxy
+    apply hf
+    ext
+    exact hxy
+  · intro hf x y hxy
+    apply hf
+    exact congrArg (fun z => (z : N)) hxy
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:39-16:42
+Application type mismatch: The argument
+  hxy
+has type
+  (f.codRestrict s h) x = (f.codRestrict s h) y
+but is expected to have type
+  f x = f y
+in the application
+  congrArg (fun z ↦ z) hxy
+Source line 16:
+    exact congrArg (fun z => (z : N)) hxy
+                                      ^^^
+Highlighted span: hxy
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:39-16:42
+Application type mismatch: The argument
+  hxy
+has type
+  (f.codRestrict s h) x = (f.codRestrict s h) y
+but is expected to have type
+  f x = f y
+in the application
+  congrArg (fun z ↦ z) hxy
+Source line 16:
+    exact congrArg (fun z => (z : N)) hxy
+                                      ^^^
+Highlighted span: hxy
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+variable {F : Type*} [FunLike F M N] [mc : MonoidHomClass F M N]
+
+theorem injective_codRestrict {S} [SetLike S N] [SubmonoidClass S N] (f : M →* N) (s : S)
+    (h : ∀ x, f x ∈ s) : Function.Injective (f.codRestrict s h) ↔ Function.Injective f := by
+  constructor
+  · intro hf x y hxy
+    apply hf
+    ext
+    exact hxy
+  · intro hf x y hxy
+    apply hf
+    change ((⟨f x, h x⟩ : s) = ⟨f y, h y⟩)
+    exact Subtype.ext hxy
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:5-16:43
+'change' tactic failed, pattern
+  ⟨f x, ⋯⟩ = ⟨f y, ⋯⟩
+is not definitionally equal to target
+  f x = f y
+Source line 16:
+    change ((⟨f x, h x⟩ : s) = ⟨f y, h y⟩)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: change ((⟨f x, h x⟩ : s) = ⟨f y, h y⟩)
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:5-16:43
+'change' tactic failed, pattern
+  ⟨f x, ⋯⟩ = ⟨f y, ⋯⟩
+is not definitionally equal to target
+  f x = f y
+Source line 16:
+    change ((⟨f x, h x⟩ : s) = ⟨f y, h y⟩)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: change ((⟨f x, h x⟩ : s) = ⟨f y, h y⟩)

@@ -1,0 +1,381 @@
+FILE: Basic.mem_sSup_of_directedOn.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.mem_sSup_of_directedOn.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {K : Type u} {L : Type v} {M : Type w}
+
+variable [DivisionRing K] [DivisionRing L] [DivisionRing M]
+
+theorem mem_sSup_of_directedOn {S : Set (Subfield K)} (Sne : S.Nonempty) (hS : DirectedOn (· ≤ ·) S)
+    {x : K} : x ∈ sSup S ↔ ∃ s ∈ S, x ∈ s := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {K : Type u} {L : Type v} {M : Type w}
+
+variable [DivisionRing K] [DivisionRing L] [DivisionRing M]
+
+theorem mem_sSup_of_directedOn {S : Set (Subfield K)} (Sne : S.Nonempty) (hS : DirectedOn (· ≤ ·) S)
+    {x : K} : x ∈ sSup S ↔ ∃ s ∈ S, x ∈ s := by
+  classical
+  constructor
+  · intro hx
+    let P : Subfield K := sSup S
+    have hP : P = sSup S := rfl
+    rw [← hP] at hx
+    refine Subfield.mem_sSup_of_directed ?_ Sne hS hx
+    intro s hs
+    exact hs
+  · rintro ⟨s, hsS, hxs⟩
+    exact show x ∈ sSup S from SetLike.exists.mp (Subfield.mem_sSup_of_nonempty Sne) s hsS hxs
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:12-15:41
+Unknown constant `Subfield.mem_sSup_of_directed`
+Source line 15:
+    refine Subfield.mem_sSup_of_directed ?_ Sne hS hx
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subfield.mem_sSup_of_directed
+
+ERROR .LspCheck.lean:16:11-16:12
+No goals to be solved
+Source line 16:
+    intro s hs
+          ^
+Highlighted span: s
+
+ERROR .LspCheck.lean:19:51-19:80
+Unknown constant `Subfield.mem_sSup_of_nonempty`
+Source line 19:
+    exact show x ∈ sSup S from SetLike.exists.mp (Subfield.mem_sSup_of_nonempty Sne) s hsS hxs
+                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subfield.mem_sSup_of_nonempty
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:12-15:41
+Unknown constant `Subfield.mem_sSup_of_directed`
+Source line 15:
+    refine Subfield.mem_sSup_of_directed ?_ Sne hS hx
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subfield.mem_sSup_of_directed
+
+ERROR .LspCheck.lean:16:11-16:12
+No goals to be solved
+Source line 16:
+    intro s hs
+          ^
+Highlighted span: s
+
+ERROR .LspCheck.lean:19:51-19:80
+Unknown constant `Subfield.mem_sSup_of_nonempty`
+Source line 19:
+    exact show x ∈ sSup S from SetLike.exists.mp (Subfield.mem_sSup_of_nonempty Sne) s hsS hxs
+                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subfield.mem_sSup_of_nonempty
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {K : Type u} {L : Type v} {M : Type w}
+
+variable [DivisionRing K] [DivisionRing L] [DivisionRing M]
+
+theorem mem_sSup_of_directedOn {S : Set (Subfield K)} (Sne : S.Nonempty) (hS : DirectedOn (· ≤ ·) S)
+    {x : K} : x ∈ sSup S ↔ ∃ s ∈ S, x ∈ s := by
+  classical
+  let U : Subfield K :=
+    { carrier := ⋃ s ∈ S, (s : Set K)
+      zero_mem' := by
+        rcases Sne with ⟨s, hs⟩
+        exact Set.mem_iUnion.2 ⟨s, Set.mem_iUnion.2 ⟨hs, s.zero_mem⟩⟩
+      one_mem' := by
+        rcases Sne with ⟨s, hs⟩
+        exact Set.mem_iUnion.2 ⟨s, Set.mem_iUnion.2 ⟨hs, s.one_mem⟩⟩
+      add_mem' := by
+        intro a b ha hb
+        rcases Set.mem_iUnion.1 ha with ⟨sa, ha⟩
+        rcases Set.mem_iUnion.1 ha with ⟨hsaS, hasa⟩
+        rcases Set.mem_iUnion.1 hb with ⟨sb, hb⟩
+        rcases Set.mem_iUnion.1 hb with ⟨hsbS, hbsb⟩
+        rcases hS hsaS hsbS with ⟨sc, hscS, hsa, hsb⟩
+        exact Set.mem_iUnion.2 ⟨sc, Set.mem_iUnion.2 ⟨hscS, sc.add_mem (hsa hasa) (hsb hbsb)⟩⟩
+      neg_mem' := by
+        intro a ha
+        rcases Set.mem_iUnion.1 ha with ⟨s, hs⟩
+        rcases Set.mem_iUnion.1 hs with ⟨hsS, has⟩
+        exact Set.mem_iUnion.2 ⟨s, Set.mem_iUnion.2 ⟨hsS, s.neg_mem has⟩⟩
+      mul_mem' := by
+        intro a b ha hb
+        rcases Set.mem_iUnion.1 ha with ⟨sa, ha⟩
+        rcases Set.mem_iUnion.1 ha with ⟨hsaS, hasa⟩
+        rcases Set.mem_iUnion.1 hb with ⟨sb, hb⟩
+        rcases Set.mem_iUnion.1 hb with ⟨hsbS, hbsb⟩
+        rcases hS hsaS hsbS with ⟨sc, hscS, hsa, hsb⟩
+        exact Set.mem_iUnion.2 ⟨sc, Set.mem_iUnion.2 ⟨hscS, sc.mul_mem (hsa hasa) (hsb hbsb)⟩⟩
+      inv_mem' := by
+        intro a ha
+        rcases Set.mem_iUnion.1 ha with ⟨s, hs⟩
+        rcases Set.mem_iUnion.1 hs with ⟨hsS, has⟩
+        exact Set.mem_iUnion.2 ⟨s, Set.mem_iUnion.2 ⟨hsS, s.inv_mem has⟩⟩ }
+  have hUle : ∀ s ∈ S, s ≤ U := by
+    intro s hs x hx
+    exact Set.mem_iUnion.2 ⟨s, Set.mem_iUnion.2 ⟨hs, hx⟩⟩
+  have hleU : ∀ T : Subfield K, (∀ s ∈ S, s ≤ T) → U ≤ T := by
+    intro T hT x hx
+    rcases Set.mem_iUnion.1 hx with ⟨s, hs⟩
+    rcases Set.mem_iUnion.1 hs with ⟨hsS, hxs⟩
+    exact hT s hsS hxs
+  have hsSup_eq : sSup S = U := by
+    apply le_antisymm
+    · exact sSup_le hleU
+    · exact le_sSup hUle
+  constructor
+  · intro hx
+    rw [hsSup_eq] at hx
+    rcases Set.mem_iUnion.1 hx with ⟨s, hs⟩
+    rcases Set.mem_iUnion.1 hs with ⟨hsS, hxs⟩
+    exact ⟨s, hsS, hxs⟩
+  · rintro ⟨s, hsS, hxs⟩
+    rw [hsSup_eq]
+    exact Set.mem_iUnion.2 ⟨s, Set.mem_iUnion.2 ⟨hsS, hxs⟩⟩
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:37:19-37:23
+Application type mismatch: The argument
+  hsaS
+has type
+  sa ∈ S
+of sort `Prop` but is expected to have type
+  Subfield K
+of sort `Type u` in the application
+  hS hsaS
+Source line 37:
+        rcases hS hsaS hsbS with ⟨sc, hscS, hsa, hsb⟩
+                  ^^^^
+Highlighted span: hsaS
+
+ERROR .LspCheck.lean:24:19-24:23
+Application type mismatch: The argument
+  hsaS
+has type
+  sa ∈ S
+of sort `Prop` but is expected to have type
+  Subfield K
+of sort `Type u` in the application
+  hS hsaS
+Source line 24:
+        rcases hS hsaS hsbS with ⟨sc, hscS, hsa, hsb⟩
+                  ^^^^
+Highlighted span: hsaS
+
+ERROR .LspCheck.lean:54:21-54:25
+Application type mismatch: The argument
+  hleU
+has type
+  ∀ (T : Subfield K), (∀ s ∈ S, s ≤ T) → U ≤ T
+but is expected to have type
+  ∀ b ∈ S, b ≤ U
+in the application
+  sSup_le hleU
+Source line 54:
+    · exact sSup_le hleU
+                    ^^^^
+Highlighted span: hleU
+
+ERROR .LspCheck.lean:55:21-55:25
+Application type mismatch: The argument
+  hUle
+has type
+  ∀ s ∈ S, s ≤ U
+but is expected to have type
+  U ∈ S
+in the application
+  le_sSup hUle
+Source line 55:
+    · exact le_sSup hUle
+                    ^^^^
+Highlighted span: hUle
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:37:19-37:23
+Application type mismatch: The argument
+  hsaS
+has type
+  sa ∈ S
+of sort `Prop` but is expected to have type
+  Subfield K
+of sort `Type u` in the application
+  hS hsaS
+Source line 37:
+        rcases hS hsaS hsbS with ⟨sc, hscS, hsa, hsb⟩
+                  ^^^^
+Highlighted span: hsaS
+
+ERROR .LspCheck.lean:24:19-24:23
+Application type mismatch: The argument
+  hsaS
+has type
+  sa ∈ S
+of sort `Prop` but is expected to have type
+  Subfield K
+of sort `Type u` in the application
+  hS hsaS
+Source line 24:
+        rcases hS hsaS hsbS with ⟨sc, hscS, hsa, hsb⟩
+                  ^^^^
+Highlighted span: hsaS
+
+ERROR .LspCheck.lean:54:21-54:25
+Application type mismatch: The argument
+  hleU
+has type
+  ∀ (T : Subfield K), (∀ s ∈ S, s ≤ T) → U ≤ T
+but is expected to have type
+  ∀ b ∈ S, b ≤ U
+in the application
+  sSup_le hleU
+Source line 54:
+    · exact sSup_le hleU
+                    ^^^^
+Highlighted span: hleU
+
+ERROR .LspCheck.lean:55:21-55:25
+Application type mismatch: The argument
+  hUle
+has type
+  ∀ s ∈ S, s ≤ U
+but is expected to have type
+  U ∈ S
+in the application
+  le_sSup hUle
+Source line 55:
+    · exact le_sSup hUle
+                    ^^^^
+Highlighted span: hUle
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {K : Type u} {L : Type v} {M : Type w}
+
+variable [DivisionRing K] [DivisionRing L] [DivisionRing M]
+
+theorem mem_sSup_of_directedOn {S : Set (Subfield K)} (Sne : S.Nonempty) (hS : DirectedOn (· ≤ ·) S)
+    {x : K} : x ∈ sSup S ↔ ∃ s ∈ S, x ∈ s := by
+  classical
+  let U : Subfield K :=
+    { carrier := ⋃ s ∈ S, (s : Set K)
+      zero_mem' := by
+        rcases Sne with ⟨s, hs⟩
+        exact Set.mem_iUnion.2 ⟨s, Set.mem_iUnion.2 ⟨hs, s.zero_mem⟩⟩
+      one_mem' := by
+        rcases Sne with ⟨s, hs⟩
+        exact Set.mem_iUnion.2 ⟨s, Set.mem_iUnion.2 ⟨hs, s.one_mem⟩⟩
+      add_mem' := by
+        intro a b ha hb
+        rcases Set.mem_iUnion.1 ha with ⟨sa, ha⟩
+        rcases Set.mem_iUnion.1 ha with ⟨hsaS, hasa⟩
+        rcases Set.mem_iUnion.1 hb with ⟨sb, hb⟩
+        rcases Set.mem_iUnion.1 hb with ⟨hsbS, hbsb⟩
+        rcases hS sa hsaS sb hsbS with ⟨sc, hscS, hsa, hsb⟩
+        exact Set.mem_iUnion.2 ⟨sc, Set.mem_iUnion.2 ⟨hscS, sc.add_mem (hsa hasa) (hsb hbsb)⟩⟩
+      neg_mem' := by
+        intro a ha
+        rcases Set.mem_iUnion.1 ha with ⟨s, hs⟩
+        rcases Set.mem_iUnion.1 hs with ⟨hsS, has⟩
+        exact Set.mem_iUnion.2 ⟨s, Set.mem_iUnion.2 ⟨hsS, s.neg_mem has⟩⟩
+      mul_mem' := by
+        intro a b ha hb
+        rcases Set.mem_iUnion.1 ha with ⟨sa, ha⟩
+        rcases Set.mem_iUnion.1 ha with ⟨hsaS, hasa⟩
+        rcases Set.mem_iUnion.1 hb with ⟨sb, hb⟩
+        rcases Set.mem_iUnion.1 hb with ⟨hsbS, hbsb⟩
+        rcases hS sa hsaS sb hsbS with ⟨sc, hscS, hsa, hsb⟩
+        exact Set.mem_iUnion.2 ⟨sc, Set.mem_iUnion.2 ⟨hscS, sc.mul_mem (hsa hasa) (hsb hbsb)⟩⟩
+      inv_mem' := by
+        intro a ha
+        rcases Set.mem_iUnion.1 ha with ⟨s, hs⟩
+        rcases Set.mem_iUnion.1 hs with ⟨hsS, has⟩
+        exact Set.mem_iUnion.2 ⟨s, Set.mem_iUnion.2 ⟨hsS, s.inv_mem has⟩⟩ }
+  have hUle : ∀ s ∈ S, s ≤ U := by
+    intro s hs x hx
+    exact Set.mem_iUnion.2 ⟨s, Set.mem_iUnion.2 ⟨hs, hx⟩⟩
+  have hleU : ∀ T : Subfield K, (∀ s ∈ S, s ≤ T) → U ≤ T := by
+    intro T hT x hx
+    rcases Set.mem_iUnion.1 hx with ⟨s, hs⟩
+    rcases Set.mem_iUnion.1 hs with ⟨hsS, hxs⟩
+    exact hT s hsS hxs
+  have hsSup_eq : sSup S = U := by
+    apply le_antisymm
+    · exact sSup_le fun s hs => hUle s hs
+    · refine sSup_le_iff.1 ?_
+      exact hleU U hUle
+  constructor
+  · intro hx
+    rw [hsSup_eq] at hx
+    rcases Set.mem_iUnion.1 hx with ⟨s, hs⟩
+    rcases Set.mem_iUnion.1 hs with ⟨hsS, hxs⟩
+    exact ⟨s, hsS, hxs⟩
+  · rintro ⟨s, hsS, hxs⟩
+    rw [hsSup_eq]
+    exact Set.mem_iUnion.2 ⟨s, Set.mem_iUnion.2 ⟨hsS, hxs⟩⟩
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:55:14-55:30
+typeclass instance problem is stuck
+  CompleteSemilatticeSup ?m.546
+
+Note: Lean will not try to resolve this typeclass instance problem because the type argument to `CompleteSemilatticeSup` is a metavariable. This argument must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+Source line 55:
+    · refine sSup_le_iff.1 ?_
+             ^^^^^^^^^^^^^^^^
+Highlighted span: sSup_le_iff.1 ?_
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:55:14-55:30
+typeclass instance problem is stuck
+  CompleteSemilatticeSup ?m.546
+
+Note: Lean will not try to resolve this typeclass instance problem because the type argument to `CompleteSemilatticeSup` is a metavariable. This argument must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+Source line 55:
+    · refine sSup_le_iff.1 ?_
+             ^^^^^^^^^^^^^^^^
+Highlighted span: sSup_le_iff.1 ?_

@@ -1,0 +1,381 @@
+FILE: Basic.units_smul_resolvent_self.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.units_smul_resolvent_self.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Pointwise Ring
+
+variable {R : Type u} {A : Type v}
+
+variable [CommSemiring R] [Ring A] [Algebra R A]
+
+theorem units_smul_resolvent_self {r : Rˣ} {a : A} :
+    r • resolvent a (r : R) = resolvent (r⁻¹ • a) (1 : R) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise Ring
+
+variable {R : Type u} {A : Type v}
+
+variable [CommSemiring R] [Ring A] [Algebra R A]
+
+theorem units_smul_resolvent_self {r : Rˣ} {a : A} :
+    r • resolvent a (r : R) = resolvent (r⁻¹ • a) (1 : R) := by
+  rw [resolvent_def, resolvent_def]
+  simp [smul_sub, invOf_mul_eq_iff_eq_mul₀, mul_comm, mul_left_comm, mul_assoc, sub_eq_add_neg,
+    smul_algebraMap, Units.smul_def]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:7-11:20
+Unknown identifier `resolvent_def`
+Source line 11:
+  rw [resolvent_def, resolvent_def]
+      ^^^^^^^^^^^^^
+Highlighted span: resolvent_def
+
+ERROR .LspCheck.lean:10:62-11:1
+unsolved goals
+R : Type u
+A : Type v
+inst✝² : CommSemiring R
+inst✝¹ : Ring A
+inst✝ : Algebra R A
+r : Rˣ
+a : A
+⊢ r • resolvent a ↑r = resolvent (r⁻¹ • a) 1
+Source line 10:
+    r • resolvent a (r : R) = resolvent (r⁻¹ • a) (1 : R) := by
+                                                             ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:7-11:20
+Unknown identifier `resolvent_def`
+Source line 11:
+  rw [resolvent_def, resolvent_def]
+      ^^^^^^^^^^^^^
+Highlighted span: resolvent_def
+
+ERROR .LspCheck.lean:10:62-11:1
+unsolved goals
+R : Type u
+A : Type v
+inst✝² : CommSemiring R
+inst✝¹ : Ring A
+inst✝ : Algebra R A
+r : Rˣ
+a : A
+⊢ r • resolvent a ↑r = resolvent (r⁻¹ • a) 1
+Source line 10:
+    r • resolvent a (r : R) = resolvent (r⁻¹ • a) (1 : R) := by
+                                                             ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise Ring
+
+variable {R : Type u} {A : Type v}
+
+variable [CommSemiring R] [Ring A] [Algebra R A]
+
+theorem units_smul_resolvent_self {r : Rˣ} {a : A} :
+    r • resolvent a (r : R) = resolvent (r⁻¹ • a) (1 : R) := by
+  simp [resolvent, Units.smul_def, smul_sub, smul_mul_assoc, Algebra.smul_def, mul_comm, mul_left_comm,
+    mul_assoc]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:62-11:1
+unsolved goals
+R : Type u
+A : Type v
+inst✝² : CommSemiring R
+inst✝¹ : Ring A
+inst✝ : Algebra R A
+r : Rˣ
+a : A
+⊢ (algebraMap R A) ↑r * ((algebraMap R A) ↑r - a)⁻¹ʳ = (1 - (algebraMap R A) ↑r⁻¹ * a)⁻¹ʳ
+Source line 10:
+    r • resolvent a (r : R) = resolvent (r⁻¹ • a) (1 : R) := by
+                                                             ^
+Highlighted span: b
+
+WARNING .LspCheck.lean:11:36-11:44
+This simp argument is unused:
+  smul_sub
+
+Hint: Omit it from the simp argument list.
+  simp [resolvent, Units.smul_def, smul_s̵u̵b̵,̵ ̵s̵mul_m̵u̵l̵_̵assoc, Algebra.smul_def, mul_comm, mul_left_comm,
+      mul_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 11:
+  simp [resolvent, Units.smul_def, smul_sub, smul_mul_assoc, Algebra.smul_def, mul_comm, mul_left_comm,
+                                   ^^^^^^^^
+Highlighted span: smul_sub
+
+WARNING .LspCheck.lean:11:46-11:60
+This simp argument is unused:
+  smul_mul_assoc
+
+Hint: Omit it from the simp argument list.
+  simp [resolvent, Units.smul_def, smul_sub, s̵m̵u̵l̵_̵m̵u̵l̵_̵a̵s̵s̵o̵c̵,̵ ̵Algebra.smul_def, mul_comm, mul_left_comm, mul_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 11:
+  simp [resolvent, Units.smul_def, smul_sub, smul_mul_assoc, Algebra.smul_def, mul_comm, mul_left_comm,
+                                             ^^^^^^^^^^^^^^
+Highlighted span: smul_mul_assoc
+
+WARNING .LspCheck.lean:11:80-11:88
+This simp argument is unused:
+  mul_comm
+
+Hint: Omit it from the simp argument list.
+  simp [resolvent, Units.smul_def, smul_sub, smul_mul_assoc, Algebra.smul_def, mul_c̵o̵m̵m̵,̵ ̵m̵u̵l_̵l̵eft_comm,
+      mul_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 11:
+  simp [resolvent, Units.smul_def, smul_sub, smul_mul_assoc, Algebra.smul_def, mul_comm, mul_left_comm,
+                                                                               ^^^^^^^^
+Highlighted span: mul_comm
+
+WARNING .LspCheck.lean:11:90-11:103
+This simp argument is unused:
+  mul_left_comm
+
+Hint: Omit it from the simp argument list.
+  simp [resolvent, Units.smul_def, smul_sub, smul_mul_assoc, Algebra.smul_def, mul_comm, mul_l̵e̵f̵t̵_̵c̵o̵m̵m̵,̵
+  ̵ ̵ ̵ ̵ ̵m̵u̵l̵_̵assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 11:
+  simp [resolvent, Units.smul_def, smul_sub, smul_mul_assoc, Algebra.smul_def, mul_comm, mul_left_comm,
+                                                                                         ^^^^^^^^^^^^^
+Highlighted span: mul_left_comm
+
+WARNING .LspCheck.lean:12:5-12:14
+This simp argument is unused:
+  mul_assoc
+
+Hint: Omit it from the simp argument list.
+  simp [resolvent, Units.smul_def, smul_sub, smul_mul_assoc, Algebra.smul_def, mul_comm,
+  ̲  ̲ ̲ ̲mul_left_comm,̵
+  ̵ ̵ ̵ ̵ ̵m̵u̵l̵_̵a̵s̵s̵o̵c̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 12:
+    mul_assoc]
+    ^^^^^^^^^
+Highlighted span: mul_assoc
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:62-11:1
+unsolved goals
+R : Type u
+A : Type v
+inst✝² : CommSemiring R
+inst✝¹ : Ring A
+inst✝ : Algebra R A
+r : Rˣ
+a : A
+⊢ (algebraMap R A) ↑r * ((algebraMap R A) ↑r - a)⁻¹ʳ = (1 - (algebraMap R A) ↑r⁻¹ * a)⁻¹ʳ
+Source line 10:
+    r • resolvent a (r : R) = resolvent (r⁻¹ • a) (1 : R) := by
+                                                             ^
+Highlighted span: b
+
+WARNING .LspCheck.lean:11:36-11:44
+This simp argument is unused:
+  smul_sub
+
+Hint: Omit it from the simp argument list.
+  simp [resolvent, Units.smul_def, smul_s̵u̵b̵,̵ ̵s̵mul_m̵u̵l̵_̵assoc, Algebra.smul_def, mul_comm, mul_left_comm,
+      mul_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 11:
+  simp [resolvent, Units.smul_def, smul_sub, smul_mul_assoc, Algebra.smul_def, mul_comm, mul_left_comm,
+                                   ^^^^^^^^
+Highlighted span: smul_sub
+
+WARNING .LspCheck.lean:11:46-11:60
+This simp argument is unused:
+  smul_mul_assoc
+
+Hint: Omit it from the simp argument list.
+  simp [resolvent, Units.smul_def, smul_sub, s̵m̵u̵l̵_̵m̵u̵l̵_̵a̵s̵s̵o̵c̵,̵ ̵Algebra.smul_def, mul_comm, mul_left_comm, mul_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 11:
+  simp [resolvent, Units.smul_def, smul_sub, smul_mul_assoc, Algebra.smul_def, mul_comm, mul_left_comm,
+                                             ^^^^^^^^^^^^^^
+Highlighted span: smul_mul_assoc
+
+WARNING .LspCheck.lean:11:80-11:88
+This simp argument is unused:
+  mul_comm
+
+Hint: Omit it from the simp argument list.
+  simp [resolvent, Units.smul_def, smul_sub, smul_mul_assoc, Algebra.smul_def, mul_c̵o̵m̵m̵,̵ ̵m̵u̵l_̵l̵eft_comm,
+      mul_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 11:
+  simp [resolvent, Units.smul_def, smul_sub, smul_mul_assoc, Algebra.smul_def, mul_comm, mul_left_comm,
+                                                                               ^^^^^^^^
+Highlighted span: mul_comm
+
+WARNING .LspCheck.lean:11:90-11:103
+This simp argument is unused:
+  mul_left_comm
+
+Hint: Omit it from the simp argument list.
+  simp [resolvent, Units.smul_def, smul_sub, smul_mul_assoc, Algebra.smul_def, mul_comm, mul_l̵e̵f̵t̵_̵c̵o̵m̵m̵,̵
+  ̵ ̵ ̵ ̵ ̵m̵u̵l̵_̵assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 11:
+  simp [resolvent, Units.smul_def, smul_sub, smul_mul_assoc, Algebra.smul_def, mul_comm, mul_left_comm,
+                                                                                         ^^^^^^^^^^^^^
+Highlighted span: mul_left_comm
+
+WARNING .LspCheck.lean:12:5-12:14
+This simp argument is unused:
+  mul_assoc
+
+Hint: Omit it from the simp argument list.
+  simp [resolvent, Units.smul_def, smul_sub, smul_mul_assoc, Algebra.smul_def, mul_comm,
+  ̲  ̲ ̲ ̲mul_left_comm,̵
+  ̵ ̵ ̵ ̵ ̵m̵u̵l̵_̵a̵s̵s̵o̵c̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 12:
+    mul_assoc]
+    ^^^^^^^^^
+Highlighted span: mul_assoc
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise Ring
+
+variable {R : Type u} {A : Type v}
+
+variable [CommSemiring R] [Ring A] [Algebra R A]
+
+theorem units_smul_resolvent_self {r : Rˣ} {a : A} :
+    r • resolvent a (r : R) = resolvent (r⁻¹ • a) (1 : R) := by
+  rw [resolvent, resolvent]
+  simp only [Units.smul_def, Algebra.smul_def]
+  have hr : algebraMap R A (↑r : R) * algebraMap R A (↑(↑r⁻¹) : R) = 1 := by
+    exact map_mul_of_inv _ r
+  have hsub :
+      algebraMap R A (↑r : R) - a =
+        algebraMap R A (↑r : R) * (1 - algebraMap R A (↑(↑r⁻¹) : R) * a) := by
+    rw [mul_sub, mul_one, ← mul_assoc, hr, one_mul]
+  rw [hsub]
+  rw [mul_inv₀]
+  simp [hr]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:11-14:25
+Unknown identifier `map_mul_of_inv`
+Source line 14:
+    exact map_mul_of_inv _ r
+          ^^^^^^^^^^^^^^
+Highlighted span: map_mul_of_inv
+
+ERROR .LspCheck.lean:20:7-20:15
+Unknown identifier `mul_inv₀`
+Source line 20:
+  rw [mul_inv₀]
+      ^^^^^^^^
+Highlighted span: mul_inv₀
+
+ERROR .LspCheck.lean:10:62-11:1
+unsolved goals
+R : Type u
+A : Type v
+inst✝² : CommSemiring R
+inst✝¹ : Ring A
+inst✝ : Algebra R A
+r : Rˣ
+a : A
+hr : (algebraMap R A) ↑r * (algebraMap R A) ↑r⁻¹ = 1
+hsub : (algebraMap R A) ↑r - a = (algebraMap R A) ↑r * (1 - (algebraMap R A) ↑r⁻¹ * a)
+⊢ (algebraMap R A) ↑r * ((algebraMap R A) ↑r * (1 - (algebraMap R A) ↑r⁻¹ * a))⁻¹ʳ =
+    ((algebraMap R A) 1 - (algebraMap R A) ↑r⁻¹ * a)⁻¹ʳ
+Source line 10:
+    r • resolvent a (r : R) = resolvent (r⁻¹ • a) (1 : R) := by
+                                                             ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:11-14:25
+Unknown identifier `map_mul_of_inv`
+Source line 14:
+    exact map_mul_of_inv _ r
+          ^^^^^^^^^^^^^^
+Highlighted span: map_mul_of_inv
+
+ERROR .LspCheck.lean:20:7-20:15
+Unknown identifier `mul_inv₀`
+Source line 20:
+  rw [mul_inv₀]
+      ^^^^^^^^
+Highlighted span: mul_inv₀
+
+ERROR .LspCheck.lean:10:62-11:1
+unsolved goals
+R : Type u
+A : Type v
+inst✝² : CommSemiring R
+inst✝¹ : Ring A
+inst✝ : Algebra R A
+r : Rˣ
+a : A
+hr : (algebraMap R A) ↑r * (algebraMap R A) ↑r⁻¹ = 1
+hsub : (algebraMap R A) ↑r - a = (algebraMap R A) ↑r * (1 - (algebraMap R A) ↑r⁻¹ * a)
+⊢ (algebraMap R A) ↑r * ((algebraMap R A) ↑r * (1 - (algebraMap R A) ↑r⁻¹ * a))⁻¹ʳ =
+    ((algebraMap R A) 1 - (algebraMap R A) ↑r⁻¹ * a)⁻¹ʳ
+Source line 10:
+    r • resolvent a (r : R) = resolvent (r⁻¹ • a) (1 : R) := by
+                                                             ^
+Highlighted span: b

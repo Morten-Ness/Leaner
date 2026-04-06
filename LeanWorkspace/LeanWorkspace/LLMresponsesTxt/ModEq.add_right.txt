@@ -1,0 +1,175 @@
+FILE: ModEq.add_right.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: ModEq.add_right.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {M : Type*} [AddCommMonoid M] {a b c d p : M}
+
+theorem add_right (c : M) (h : a ≡ b [PMOD p]) : a + c ≡ b + c [PMOD p] := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M : Type*} [AddCommMonoid M] {a b c d p : M}
+
+theorem add_right (c : M) (h : a ≡ b [PMOD p]) : a + c ≡ b + c [PMOD p] := by
+  simpa [add_comm, add_left_comm, add_assoc] using h.add c
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:6:58-6:59
+Application type mismatch: The argument
+  c
+has type
+  M
+of sort `Type u_1` but is expected to have type
+  ?m.18 ≡ ?m.19 [PMOD p]
+of sort `Prop` in the application
+  AddCommGroup.ModEq.add h c
+Source line 6:
+  simpa [add_comm, add_left_comm, add_assoc] using h.add c
+                                                         ^
+Highlighted span: c
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:6:58-6:59
+Application type mismatch: The argument
+  c
+has type
+  M
+of sort `Type u_1` but is expected to have type
+  ?m.18 ≡ ?m.19 [PMOD p]
+of sort `Prop` in the application
+  AddCommGroup.ModEq.add h c
+Source line 6:
+  simpa [add_comm, add_left_comm, add_assoc] using h.add c
+                                                         ^
+Highlighted span: c
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M : Type*} [AddCommMonoid M] {a b c d p : M}
+
+theorem add_right (c : M) (h : a ≡ b [PMOD p]) : a + c ≡ b + c [PMOD p] := by
+  rw [show a + c = c + a by ac_rfl, show b + c = c + b by ac_rfl]
+  exact c.add h
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:6:29-6:35
+Tactic `rfl` failed: equality lhs
+  a + c
+is not definitionally equal to rhs
+  c + a
+
+M : Type u_1
+inst✝ : AddCommMonoid M
+a b p c : M
+h : a ≡ b [PMOD p]
+⊢ a + c = c + a
+Source line 6:
+  rw [show a + c = c + a by ac_rfl, show b + c = c + b by ac_rfl]
+                            ^^^^^^
+Highlighted span: ac_rfl
+
+ERROR .LspCheck.lean:6:59-6:65
+Tactic `rfl` failed: equality lhs
+  b + c
+is not definitionally equal to rhs
+  c + b
+
+M : Type u_1
+inst✝ : AddCommMonoid M
+a b p c : M
+h : a ≡ b [PMOD p]
+⊢ b + c = c + b
+Source line 6:
+  rw [show a + c = c + a by ac_rfl, show b + c = c + b by ac_rfl]
+                                                          ^^^^^^
+Highlighted span: ac_rfl
+
+ERROR .LspCheck.lean:7:9-7:16
+Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  c
+has type `M` which does not have the necessary form.
+Source line 7:
+  exact c.add h
+        ^^^^^^^
+Highlighted span: c.add h
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:6:29-6:35
+Tactic `rfl` failed: equality lhs
+  a + c
+is not definitionally equal to rhs
+  c + a
+
+M : Type u_1
+inst✝ : AddCommMonoid M
+a b p c : M
+h : a ≡ b [PMOD p]
+⊢ a + c = c + a
+Source line 6:
+  rw [show a + c = c + a by ac_rfl, show b + c = c + b by ac_rfl]
+                            ^^^^^^
+Highlighted span: ac_rfl
+
+ERROR .LspCheck.lean:6:59-6:65
+Tactic `rfl` failed: equality lhs
+  b + c
+is not definitionally equal to rhs
+  c + b
+
+M : Type u_1
+inst✝ : AddCommMonoid M
+a b p c : M
+h : a ≡ b [PMOD p]
+⊢ b + c = c + b
+Source line 6:
+  rw [show a + c = c + a by ac_rfl, show b + c = c + b by ac_rfl]
+                                                          ^^^^^^
+Highlighted span: ac_rfl
+
+ERROR .LspCheck.lean:7:9-7:16
+Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  c
+has type `M` which does not have the necessary form.
+Source line 7:
+  exact c.add h
+        ^^^^^^^
+Highlighted span: c.add h
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M : Type*} [AddCommMonoid M] {a b c d p : M}
+
+theorem add_right (c : M) (h : a ≡ b [PMOD p]) : a + c ≡ b + c [PMOD p] := by
+  simpa [add_comm] using h.add_left c
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

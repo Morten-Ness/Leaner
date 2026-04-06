@@ -1,0 +1,150 @@
+FILE: ModEq.map_modEq_iff.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: ModEq.map_modEq_iff.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {M : Type*} [AddCommMonoid M] {a b c d p : M}
+
+theorem map_modEq_iff {N F : Type*} [AddCommMonoid N] [FunLike F M N] [AddMonoidHomClass F M N]
+    (f : F) (hf : Function.Injective f) : f a ≡ f b [PMOD f p] ↔ a ≡ b [PMOD p] := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M : Type*} [AddCommMonoid M] {a b c d p : M}
+
+theorem map_modEq_iff {N F : Type*} [AddCommMonoid N] [FunLike F M N] [AddMonoidHomClass F M N]
+    (f : F) (hf : Function.Injective f) : f a ≡ f b [PMOD f p] ↔ a ≡ b [PMOD p] := by
+  constructor
+  · intro h
+    rcases h with ⟨c, hc⟩
+    refine ⟨c, ?_⟩
+    apply hf
+    simpa using hc
+  · intro h
+    rcases h with ⟨c, hc⟩
+    refine ⟨c, ?_⟩
+    simpa using congrArg f hc
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:5-11:13
+Tactic `apply` failed: could not unify the conclusion of `hf`
+  ?a₁ = ?a₂
+with the goal
+  ∃ n, c • p + a = n • p + b
+
+Note: The full type of `hf` is
+  Function.Injective ⇑f
+
+case mp
+M : Type u_1
+inst✝³ : AddCommMonoid M
+a b p : M
+N : Type u_2
+F : Type u_3
+inst✝² : AddCommMonoid N
+inst✝¹ : FunLike F M N
+inst✝ : AddMonoidHomClass F M N
+f : F
+hf : Function.Injective ⇑f
+c : ℕ
+hc : ∃ n, c • f p + f a = n • f p + f b
+⊢ ∃ n, c • p + a = n • p + b
+Source line 11:
+    apply hf
+    ^^^^^^^^
+Highlighted span: apply hf
+
+ERROR .LspCheck.lean:16:28-16:30
+Application type mismatch: The argument
+  hc
+has type
+  ∃ n, c • p + a = n • p + b
+but is expected to have type
+  ?m.50 = ?m.51
+in the application
+  congrArg (⇑f) hc
+Source line 16:
+    simpa using congrArg f hc
+                           ^^
+Highlighted span: hc
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:5-11:13
+Tactic `apply` failed: could not unify the conclusion of `hf`
+  ?a₁ = ?a₂
+with the goal
+  ∃ n, c • p + a = n • p + b
+
+Note: The full type of `hf` is
+  Function.Injective ⇑f
+
+case mp
+M : Type u_1
+inst✝³ : AddCommMonoid M
+a b p : M
+N : Type u_2
+F : Type u_3
+inst✝² : AddCommMonoid N
+inst✝¹ : FunLike F M N
+inst✝ : AddMonoidHomClass F M N
+f : F
+hf : Function.Injective ⇑f
+c : ℕ
+hc : ∃ n, c • f p + f a = n • f p + f b
+⊢ ∃ n, c • p + a = n • p + b
+Source line 11:
+    apply hf
+    ^^^^^^^^
+Highlighted span: apply hf
+
+ERROR .LspCheck.lean:16:28-16:30
+Application type mismatch: The argument
+  hc
+has type
+  ∃ n, c • p + a = n • p + b
+but is expected to have type
+  ?m.50 = ?m.51
+in the application
+  congrArg (⇑f) hc
+Source line 16:
+    simpa using congrArg f hc
+                           ^^
+Highlighted span: hc
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M : Type*} [AddCommMonoid M] {a b c d p : M}
+
+theorem map_modEq_iff {N F : Type*} [AddCommMonoid N] [FunLike F M N] [AddMonoidHomClass F M N]
+    (f : F) (hf : Function.Injective f) : f a ≡ f b [PMOD f p] ↔ a ≡ b [PMOD p] := by
+  constructor
+  · rintro ⟨m, n, h⟩
+    refine ⟨m, n, ?_⟩
+    apply hf
+    simpa using h
+  · rintro ⟨m, n, h⟩
+    refine ⟨m, n, ?_⟩
+    simpa using congrArg f h
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

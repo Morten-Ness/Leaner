@@ -1,0 +1,93 @@
+FILE: Operations.gc_map_comap.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Operations.gc_map_comap.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+variable {F : Type*} [FunLike F M N] [mc : MonoidHomClass F M N]
+
+theorem gc_map_comap (f : F) : GaloisConnection (Submonoid.map f) (Submonoid.comap f) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+variable {F : Type*} [FunLike F M N] [mc : MonoidHomClass F M N]
+
+theorem gc_map_comap (f : F) : GaloisConnection (Submonoid.map f) (Submonoid.comap f) := by
+  intro A B
+  constructor
+  · intro h a ha
+    exact h ha
+  · intro h b hb
+    rcases hb with ⟨a, ha, rfl⟩
+    exact h ha
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:13-11:15
+Application type mismatch: The argument
+  ha
+has type
+  Membership.mem.{u_1, u_1} A a
+but is expected to have type
+  Membership.mem.{u_2, u_2} (Submonoid.map f A) (f a)
+in the application
+  h ha
+Source line 11:
+    exact h ha
+            ^^
+Highlighted span: ha
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:13-11:15
+Application type mismatch: The argument
+  ha
+has type
+  Membership.mem.{u_1, u_1} A a
+but is expected to have type
+  Membership.mem.{u_2, u_2} (Submonoid.map f A) (f a)
+in the application
+  h ha
+Source line 11:
+    exact h ha
+            ^^
+Highlighted span: ha
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+variable {F : Type*} [FunLike F M N] [mc : MonoidHomClass F M N]
+
+theorem gc_map_comap (f : F) : GaloisConnection (Submonoid.map f) (Submonoid.comap f) := by
+  intro A B
+  constructor
+  · intro h a ha
+    exact h ⟨a, ha, rfl⟩
+  · intro h b hb
+    rcases hb with ⟨a, ha, rfl⟩
+    exact h ha
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

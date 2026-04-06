@@ -1,0 +1,510 @@
+FILE: Exact.of_ladder_mulEquiv_of_mulExact'.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Exact.of_ladder_mulEquiv_of_mulExact'.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R M M' N N' P P' : Type*}
+
+variable [Group M] [Group N] [Group P] {f : M →* N} {g : N →* P}
+
+variable {X₁ X₂ X₃ Y₁ Y₂ Y₃ : Type*} [CommMonoid X₁] [CommMonoid X₂] [CommMonoid X₃]
+  [CommMonoid Y₁] [CommMonoid Y₂] [CommMonoid Y₃]
+  (e₁ : X₁ ≃* Y₁) (e₂ : X₂ ≃* Y₂) (e₃ : X₃ ≃* Y₃)
+  {f₁₂ : X₁ →* X₂} {f₂₃ : X₂ →* X₃} {g₁₂ : Y₁ →* Y₂} {g₂₃ : Y₂ →* Y₃}
+
+theorem of_ladder_mulEquiv_of_mulExact' (comm₁₂ : g₁₂.comp e₁ = MonoidHom.comp e₂ f₁₂)
+    (comm₂₃ : g₂₃.comp e₂ = MonoidHom.comp e₃ f₂₃) (H : Function.MulExact g₁₂ g₂₃) : Function.MulExact f₁₂ f₂₃ := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R M M' N N' P P' : Type*}
+
+variable [Group M] [Group N] [Group P] {f : M →* N} {g : N →* P}
+
+variable {X₁ X₂ X₃ Y₁ Y₂ Y₃ : Type*} [CommMonoid X₁] [CommMonoid X₂] [CommMonoid X₃]
+  [CommMonoid Y₁] [CommMonoid Y₂] [CommMonoid Y₃]
+  (e₁ : X₁ ≃* Y₁) (e₂ : X₂ ≃* Y₂) (e₃ : X₃ ≃* Y₃)
+  {f₁₂ : X₁ →* X₂} {f₂₃ : X₂ →* X₃} {g₁₂ : Y₁ →* Y₂} {g₂₃ : Y₂ →* Y₃}
+
+theorem of_ladder_mulEquiv_of_mulExact' (comm₁₂ : g₁₂.comp e₁ = MonoidHom.comp e₂ f₁₂)
+    (comm₂₃ : g₂₃.comp e₂ = MonoidHom.comp e₃ f₂₃) (H : Function.MulExact g₁₂ g₂₃) : Function.MulExact f₁₂ f₂₃ := by
+  rw [Function.MulExact_iff] at H ⊢
+  constructor
+  · intro x
+    have h := H.1 (e₂ x)
+    rw [← MonoidHom.comp_apply, comm₂₃, MonoidHom.comp_apply] at h
+    exact e₃.injective h
+  · intro x hx
+    have hx' : g₂₃ (e₂ x) = 1 := by
+      rw [← MonoidHom.comp_apply, comm₂₃, MonoidHom.comp_apply, hx, map_one]
+    rcases H.2 (e₂ x) hx' with ⟨y, hy⟩
+    refine ⟨e₁.symm y, ?_⟩
+    apply e₂.injective
+    rw [MonoidHom.map_mul, e₂.apply_symm_apply, map_inv, map_mul, ← hy]
+    rw [← MonoidHom.comp_apply, comm₁₂, MonoidHom.comp_apply]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:7-14:28
+Unknown identifier `Function.MulExact_iff`
+Source line 14:
+  rw [Function.MulExact_iff] at H ⊢
+      ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Function.MulExact_iff
+
+ERROR .LspCheck.lean:13:115-14:1
+unsolved goals
+X₁ : Type u_8
+X₂ : Type u_9
+X₃ : Type u_10
+Y₁ : Type u_11
+Y₂ : Type u_12
+Y₃ : Type u_13
+inst✝⁵ : CommMonoid X₁
+inst✝⁴ : CommMonoid X₂
+inst✝³ : CommMonoid X₃
+inst✝² : CommMonoid Y₁
+inst✝¹ : CommMonoid Y₂
+inst✝ : CommMonoid Y₃
+e₁ : X₁ ≃* Y₁
+e₂ : X₂ ≃* Y₂
+e₃ : X₃ ≃* Y₃
+f₁₂ : X₁ →* X₂
+f₂₃ : X₂ →* X₃
+g₁₂ : Y₁ →* Y₂
+g₂₃ : Y₂ →* Y₃
+comm₁₂ : g₁₂.comp ↑e₁ = (↑e₂).comp f₁₂
+comm₂₃ : g₂₃.comp ↑e₂ = (↑e₃).comp f₂₃
+H : Function.MulExact ⇑g₁₂ ⇑g₂₃
+⊢ Function.MulExact ⇑f₁₂ ⇑f₂₃
+Source line 13:
+    (comm₂₃ : g₂₃.comp e₂ = MonoidHom.comp e₃ f₂₃) (H : Function.MulExact g₁₂ g₂₃) : Function.MulExact f₁₂ f₂₃ := by
+                                                                                                                  ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:7-14:28
+Unknown identifier `Function.MulExact_iff`
+Source line 14:
+  rw [Function.MulExact_iff] at H ⊢
+      ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Function.MulExact_iff
+
+ERROR .LspCheck.lean:13:115-14:1
+unsolved goals
+X₁ : Type u_8
+X₂ : Type u_9
+X₃ : Type u_10
+Y₁ : Type u_11
+Y₂ : Type u_12
+Y₃ : Type u_13
+inst✝⁵ : CommMonoid X₁
+inst✝⁴ : CommMonoid X₂
+inst✝³ : CommMonoid X₃
+inst✝² : CommMonoid Y₁
+inst✝¹ : CommMonoid Y₂
+inst✝ : CommMonoid Y₃
+e₁ : X₁ ≃* Y₁
+e₂ : X₂ ≃* Y₂
+e₃ : X₃ ≃* Y₃
+f₁₂ : X₁ →* X₂
+f₂₃ : X₂ →* X₃
+g₁₂ : Y₁ →* Y₂
+g₂₃ : Y₂ →* Y₃
+comm₁₂ : g₁₂.comp ↑e₁ = (↑e₂).comp f₁₂
+comm₂₃ : g₂₃.comp ↑e₂ = (↑e₃).comp f₂₃
+H : Function.MulExact ⇑g₁₂ ⇑g₂₃
+⊢ Function.MulExact ⇑f₁₂ ⇑f₂₃
+Source line 13:
+    (comm₂₃ : g₂₃.comp e₂ = MonoidHom.comp e₃ f₂₃) (H : Function.MulExact g₁₂ g₂₃) : Function.MulExact f₁₂ f₂₃ := by
+                                                                                                                  ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R M M' N N' P P' : Type*}
+
+variable [Group M] [Group N] [Group P] {f : M →* N} {g : N →* P}
+
+variable {X₁ X₂ X₃ Y₁ Y₂ Y₃ : Type*} [CommMonoid X₁] [CommMonoid X₂] [CommMonoid X₃]
+  [CommMonoid Y₁] [CommMonoid Y₂] [CommMonoid Y₃]
+  (e₁ : X₁ ≃* Y₁) (e₂ : X₂ ≃* Y₂) (e₃ : X₃ ≃* Y₃)
+  {f₁₂ : X₁ →* X₂} {f₂₃ : X₂ →* X₃} {g₁₂ : Y₁ →* Y₂} {g₂₃ : Y₂ →* Y₃}
+
+theorem of_ladder_mulEquiv_of_mulExact' (comm₁₂ : g₁₂.comp e₁ = MonoidHom.comp e₂ f₁₂)
+    (comm₂₃ : g₂₃.comp e₂ = MonoidHom.comp e₃ f₂₃) (H : Function.MulExact g₁₂ g₂₃) : Function.MulExact f₁₂ f₂₃ := by
+  intro x
+  constructor
+  · intro hx
+    have hx' : g₂₃ (e₂ x) = 1 := by
+      rw [← MonoidHom.comp_apply, comm₂₃, MonoidHom.comp_apply, hx, map_one]
+    exact H.1 hx'
+  · intro hx
+    have hx' : f₂₃ x = 1 := by
+      apply e₃.injective
+      rw [map_one, ← MonoidHom.comp_apply, comm₂₃, MonoidHom.comp_apply]
+      exact hx
+    rcases H.2 (e₂ x) hx' with ⟨y, hy⟩
+    refine ⟨e₁.symm y, ?_⟩
+    apply e₂.injective
+    rw [MonoidHom.map_mul, e₂.apply_symm_apply, ← hy]
+    rw [← MonoidHom.comp_apply, comm₁₂, MonoidHom.comp_apply]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:18:11-18:33
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?g (?f ?x)
+in the target expression
+  g₂₃ (e₂ x) = 1
+
+X₁ : Type u_8
+X₂ : Type u_9
+X₃ : Type u_10
+Y₁ : Type u_11
+Y₂ : Type u_12
+Y₃ : Type u_13
+inst✝⁵ : CommMonoid X₁
+inst✝⁴ : CommMonoid X₂
+inst✝³ : CommMonoid X₃
+inst✝² : CommMonoid Y₁
+inst✝¹ : CommMonoid Y₂
+inst✝ : CommMonoid Y₃
+e₁ : X₁ ≃* Y₁
+e₂ : X₂ ≃* Y₂
+e₃ : X₃ ≃* Y₃
+f₁₂ : X₁ →* X₂
+f₂₃ : X₂ →* X₃
+g₁₂ : Y₁ →* Y₂
+g₂₃ : Y₂ →* Y₃
+comm₁₂ : g₁₂.comp ↑e₁ = (↑e₂).comp f₁₂
+comm₂₃ : g₂₃.comp ↑e₂ = (↑e₃).comp f₂₃
+H : Function.MulExact ⇑g₁₂ ⇑g₂₃
+x : X₂
+hx : f₂₃ x = 1
+⊢ g₂₃ (e₂ x) = 1
+Source line 18:
+      rw [← MonoidHom.comp_apply, comm₂₃, MonoidHom.comp_apply, hx, map_one]
+          ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ← MonoidHom.comp_apply
+
+ERROR .LspCheck.lean:19:11-19:18
+Invalid projection: Projections cannot be used on functions, and
+  H
+has function type
+  ∀ (y : Y₂), g₂₃ y = 1 ↔ y ∈ Set.range ⇑g₁₂
+Source line 19:
+    exact H.1 hx'
+          ^^^^^^^
+Highlighted span: H.1 hx'
+
+ERROR .LspCheck.lean:23:20-23:42
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?g (?f ?x)
+in the target expression
+  e₃ (f₂₃ x) = 1
+
+case a
+X₁ : Type u_8
+X₂ : Type u_9
+X₃ : Type u_10
+Y₁ : Type u_11
+Y₂ : Type u_12
+Y₃ : Type u_13
+inst✝⁵ : CommMonoid X₁
+inst✝⁴ : CommMonoid X₂
+inst✝³ : CommMonoid X₃
+inst✝² : CommMonoid Y₁
+inst✝¹ : CommMonoid Y₂
+inst✝ : CommMonoid Y₃
+e₁ : X₁ ≃* Y₁
+e₂ : X₂ ≃* Y₂
+e₃ : X₃ ≃* Y₃
+f₁₂ : X₁ →* X₂
+f₂₃ : X₂ →* X₃
+g₁₂ : Y₁ →* Y₂
+g₂₃ : Y₂ →* Y₃
+comm₁₂ : g₁₂.comp ↑e₁ = (↑e₂).comp f₁₂
+comm₂₃ : g₂₃.comp ↑e₂ = (↑e₃).comp f₂₃
+H : Function.MulExact ⇑g₁₂ ⇑g₂₃
+x : X₂
+hx : x ∈ Set.range ⇑f₁₂
+⊢ e₃ (f₂₃ x) = 1
+Source line 23:
+      rw [map_one, ← MonoidHom.comp_apply, comm₂₃, MonoidHom.comp_apply]
+                   ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ← MonoidHom.comp_apply
+
+ERROR .LspCheck.lean:25:12-25:26
+Invalid projection: Projections cannot be used on functions, and
+  H
+has function type
+  ∀ (y : Y₂), g₂₃ y = 1 ↔ y ∈ Set.range ⇑g₁₂
+Source line 25:
+    rcases H.2 (e₂ x) hx' with ⟨y, hy⟩
+           ^^^^^^^^^^^^^^
+Highlighted span: H.2 (e₂ x) hx'
+
+ERROR .LspCheck.lean:25:32-25:39
+Tactic `rcases` failed: `x✝ : ?m.121` is not an inductive datatype
+Source line 25:
+    rcases H.2 (e₂ x) hx' with ⟨y, hy⟩
+                               ^^^^^^^
+Highlighted span: ⟨y, hy⟩
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:18:11-18:33
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?g (?f ?x)
+in the target expression
+  g₂₃ (e₂ x) = 1
+
+X₁ : Type u_8
+X₂ : Type u_9
+X₃ : Type u_10
+Y₁ : Type u_11
+Y₂ : Type u_12
+Y₃ : Type u_13
+inst✝⁵ : CommMonoid X₁
+inst✝⁴ : CommMonoid X₂
+inst✝³ : CommMonoid X₃
+inst✝² : CommMonoid Y₁
+inst✝¹ : CommMonoid Y₂
+inst✝ : CommMonoid Y₃
+e₁ : X₁ ≃* Y₁
+e₂ : X₂ ≃* Y₂
+e₃ : X₃ ≃* Y₃
+f₁₂ : X₁ →* X₂
+f₂₃ : X₂ →* X₃
+g₁₂ : Y₁ →* Y₂
+g₂₃ : Y₂ →* Y₃
+comm₁₂ : g₁₂.comp ↑e₁ = (↑e₂).comp f₁₂
+comm₂₃ : g₂₃.comp ↑e₂ = (↑e₃).comp f₂₃
+H : Function.MulExact ⇑g₁₂ ⇑g₂₃
+x : X₂
+hx : f₂₃ x = 1
+⊢ g₂₃ (e₂ x) = 1
+Source line 18:
+      rw [← MonoidHom.comp_apply, comm₂₃, MonoidHom.comp_apply, hx, map_one]
+          ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ← MonoidHom.comp_apply
+
+ERROR .LspCheck.lean:19:11-19:18
+Invalid projection: Projections cannot be used on functions, and
+  H
+has function type
+  ∀ (y : Y₂), g₂₃ y = 1 ↔ y ∈ Set.range ⇑g₁₂
+Source line 19:
+    exact H.1 hx'
+          ^^^^^^^
+Highlighted span: H.1 hx'
+
+ERROR .LspCheck.lean:23:20-23:42
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?g (?f ?x)
+in the target expression
+  e₃ (f₂₃ x) = 1
+
+case a
+X₁ : Type u_8
+X₂ : Type u_9
+X₃ : Type u_10
+Y₁ : Type u_11
+Y₂ : Type u_12
+Y₃ : Type u_13
+inst✝⁵ : CommMonoid X₁
+inst✝⁴ : CommMonoid X₂
+inst✝³ : CommMonoid X₃
+inst✝² : CommMonoid Y₁
+inst✝¹ : CommMonoid Y₂
+inst✝ : CommMonoid Y₃
+e₁ : X₁ ≃* Y₁
+e₂ : X₂ ≃* Y₂
+e₃ : X₃ ≃* Y₃
+f₁₂ : X₁ →* X₂
+f₂₃ : X₂ →* X₃
+g₁₂ : Y₁ →* Y₂
+g₂₃ : Y₂ →* Y₃
+comm₁₂ : g₁₂.comp ↑e₁ = (↑e₂).comp f₁₂
+comm₂₃ : g₂₃.comp ↑e₂ = (↑e₃).comp f₂₃
+H : Function.MulExact ⇑g₁₂ ⇑g₂₃
+x : X₂
+hx : x ∈ Set.range ⇑f₁₂
+⊢ e₃ (f₂₃ x) = 1
+Source line 23:
+      rw [map_one, ← MonoidHom.comp_apply, comm₂₃, MonoidHom.comp_apply]
+                   ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ← MonoidHom.comp_apply
+
+ERROR .LspCheck.lean:25:12-25:26
+Invalid projection: Projections cannot be used on functions, and
+  H
+has function type
+  ∀ (y : Y₂), g₂₃ y = 1 ↔ y ∈ Set.range ⇑g₁₂
+Source line 25:
+    rcases H.2 (e₂ x) hx' with ⟨y, hy⟩
+           ^^^^^^^^^^^^^^
+Highlighted span: H.2 (e₂ x) hx'
+
+ERROR .LspCheck.lean:25:32-25:39
+Tactic `rcases` failed: `x✝ : ?m.121` is not an inductive datatype
+Source line 25:
+    rcases H.2 (e₂ x) hx' with ⟨y, hy⟩
+                               ^^^^^^^
+Highlighted span: ⟨y, hy⟩
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R M M' N N' P P' : Type*}
+
+variable [Group M] [Group N] [Group P] {f : M →* N} {g : N →* P}
+
+variable {X₁ X₂ X₃ Y₁ Y₂ Y₃ : Type*} [CommMonoid X₁] [CommMonoid X₂] [CommMonoid X₃]
+  [CommMonoid Y₁] [CommMonoid Y₂] [CommMonoid Y₃]
+  (e₁ : X₁ ≃* Y₁) (e₂ : X₂ ≃* Y₂) (e₃ : X₃ ≃* Y₃)
+  {f₁₂ : X₁ →* X₂} {f₂₃ : X₂ →* X₃} {g₁₂ : Y₁ →* Y₂} {g₂₃ : Y₂ →* Y₃}
+
+theorem of_ladder_mulEquiv_of_mulExact' (comm₁₂ : g₁₂.comp e₁ = MonoidHom.comp e₂ f₁₂)
+    (comm₂₃ : g₂₃.comp e₂ = MonoidHom.comp e₃ f₂₃) (H : Function.MulExact g₁₂ g₂₃) : Function.MulExact f₁₂ f₂₃ := by
+  intro x
+  constructor
+  · intro hx
+    have hx' : g₂₃ (e₂ x) = 1 := by
+      calc
+        g₂₃ (e₂ x) = e₃ (f₂₃ x) := by
+          have h := congrArg (fun h : X₂ →* Y₃ => h x) comm₂₃
+          simpa using h
+        _ = e₃ 1 := by simpa [hx]
+        _ = 1 := map_one e₃
+    exact (H (e₂ x)).mp hx'
+  · intro hx
+    have hx' : g₂₃ (e₂ x) = 1 := by
+      have : e₂ x ∈ Set.range g₁₂ := by
+        rcases hx with ⟨y, rfl⟩
+        refine ⟨e₁ y, ?_⟩
+        have h := congrArg (fun h : X₁ →* Y₂ => h y) comm₁₂
+        simpa using h
+      exact (H (e₂ x)).mpr this
+    have hx'' : f₂₃ x = 1 := by
+      apply e₃.injective
+      calc
+        e₃ (f₂₃ x) = g₂₃ (e₂ x) := by
+          have h := congrArg (fun h : X₂ →* Y₃ => h x) comm₂₃
+          simpa using h.symm
+        _ = 1 := hx'
+        _ = e₃ 1 := by rw [map_one]
+    refine ⟨e₁.symm ((H (e₂ x)).mp hx'), ?_⟩
+    rcases (H (e₂ x)).mp hx' with ⟨y, hy⟩
+    refine ⟨e₁.symm y, ?_⟩
+    apply e₂.injective
+    calc
+      e₂ (f₁₂ (e₁.symm y)) = g₁₂ (e₁ (e₁.symm y)) := by
+        have h := congrArg (fun h : X₁ →* Y₂ => h (e₁.symm y)) comm₁₂
+        simpa using h.symm
+      _ = g₁₂ y := by simp
+      _ = e₂ x := hy
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+WARNING .LspCheck.lean:22:24-22:34
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 22:
+        _ = e₃ 1 := by simpa [hx]
+                       ^^^^^^^^^^
+Highlighted span: simpa [hx]
+
+ERROR .LspCheck.lean:24:5-24:28
+Type mismatch
+  (H (e₂ x)).mp hx'
+has type
+  Membership.mem.{u_12, u_12} (Set.range ⇑g₁₂) (e₂ x)
+but is expected to have type
+  Membership.mem.{u_9, u_9} (Set.range ⇑f₁₂) x
+Source line 24:
+    exact (H (e₂ x)).mp hx'
+    ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: exact (H (e₂ x)).mp hx'
+
+ERROR .LspCheck.lean:41:12-41:45
+Insufficient number of fields for `⟨...⟩` constructor: Constructor `Eq.refl` does not have explicit fields, but 2 were provided
+Source line 41:
+    refine ⟨e₁.symm ((H (e₂ x)).mp hx'), ?_⟩
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ⟨e₁.symm ((H (e₂ x)).mp hx'), ?_⟩
+
+ERROR .LspCheck.lean:42:5-42:42
+No goals to be solved
+Source line 42:
+    rcases (H (e₂ x)).mp hx' with ⟨y, hy⟩
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: rcases (H (e₂ x)).mp hx' with ⟨y, hy⟩
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+WARNING .LspCheck.lean:22:24-22:34
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 22:
+        _ = e₃ 1 := by simpa [hx]
+                       ^^^^^^^^^^
+Highlighted span: simpa [hx]
+
+ERROR .LspCheck.lean:24:5-24:28
+Type mismatch
+  (H (e₂ x)).mp hx'
+has type
+  Membership.mem.{u_12, u_12} (Set.range ⇑g₁₂) (e₂ x)
+but is expected to have type
+  Membership.mem.{u_9, u_9} (Set.range ⇑f₁₂) x
+Source line 24:
+    exact (H (e₂ x)).mp hx'
+    ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: exact (H (e₂ x)).mp hx'
+
+ERROR .LspCheck.lean:41:12-41:45
+Insufficient number of fields for `⟨...⟩` constructor: Constructor `Eq.refl` does not have explicit fields, but 2 were provided
+Source line 41:
+    refine ⟨e₁.symm ((H (e₂ x)).mp hx'), ?_⟩
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ⟨e₁.symm ((H (e₂ x)).mp hx'), ?_⟩
+
+ERROR .LspCheck.lean:42:5-42:42
+No goals to be solved
+Source line 42:
+    rcases (H (e₂ x)).mp hx' with ⟨y, hy⟩
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: rcases (H (e₂ x)).mp hx' with ⟨y, hy⟩

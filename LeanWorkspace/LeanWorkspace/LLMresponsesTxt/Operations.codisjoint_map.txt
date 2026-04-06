@@ -1,0 +1,250 @@
+FILE: Operations.codisjoint_map.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Operations.codisjoint_map.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+theorem codisjoint_map {F : Type*} [FunLike F M N] [MonoidHomClass F M N] {f : F}
+    (hf : Function.Surjective f) {H K : Submonoid M} (h : Codisjoint H K) :
+    Codisjoint (H.map f) (K.map f) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+theorem codisjoint_map {F : Type*} [FunLike F M N] [MonoidHomClass F M N] {f : F}
+    (hf : Function.Surjective f) {H K : Submonoid M} (h : Codisjoint H K) :
+    Codisjoint (H.map f) (K.map f) := by
+  rw [codisjoint_iff]
+  ext y
+  constructor
+  · intro hy
+    trivial
+  · intro _
+    rcases hf y with ⟨x, rfl⟩
+    rcases (show x ∈ H ⊔ K by
+      rw [← codisjoint_iff] at h
+      simpa using h) with ⟨a, ha, b, hb, rfl⟩
+    exact ⟨f a, ⟨a, ha, rfl⟩, f b, ⟨b, hb, rfl⟩, map_mul f a b⟩
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:11-16:27
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.83 ⊔ ?m.84 = ⊤
+in the target expression
+  Codisjoint H K
+
+M : Type u_1
+N : Type u_2
+inst✝³ : MulOneClass M
+inst✝² : MulOneClass N
+F : Type u_4
+inst✝¹ : FunLike F M N
+inst✝ : MonoidHomClass F M N
+f : F
+hf : Function.Surjective ⇑f
+H K : Submonoid M
+h : Codisjoint H K
+x : M
+a✝ : f x ∈ ⊤
+⊢ x ∈ H ⊔ K
+Source line 16:
+      rw [← codisjoint_iff] at h
+          ^^^^^^^^^^^^^^^^
+Highlighted span: ← codisjoint_iff
+
+ERROR .LspCheck.lean:17:27-17:46
+Tactic `rcases` failed: `x✝ : ∀ t ∈ Set.range fun t ↦ ⋂ (_ : t ∈ {x | H ≤ x ∧ K ≤ x}), ↑t,
+  x ∈ t` is not an inductive datatype
+Source line 17:
+      simpa using h) with ⟨a, ha, b, hb, rfl⟩
+                          ^^^^^^^^^^^^^^^^^^^
+Highlighted span: ⟨a, ha, b, hb, rfl⟩
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:11-16:27
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.83 ⊔ ?m.84 = ⊤
+in the target expression
+  Codisjoint H K
+
+M : Type u_1
+N : Type u_2
+inst✝³ : MulOneClass M
+inst✝² : MulOneClass N
+F : Type u_4
+inst✝¹ : FunLike F M N
+inst✝ : MonoidHomClass F M N
+f : F
+hf : Function.Surjective ⇑f
+H K : Submonoid M
+h : Codisjoint H K
+x : M
+a✝ : f x ∈ ⊤
+⊢ x ∈ H ⊔ K
+Source line 16:
+      rw [← codisjoint_iff] at h
+          ^^^^^^^^^^^^^^^^
+Highlighted span: ← codisjoint_iff
+
+ERROR .LspCheck.lean:17:27-17:46
+Tactic `rcases` failed: `x✝ : ∀ t ∈ Set.range fun t ↦ ⋂ (_ : t ∈ {x | H ≤ x ∧ K ≤ x}), ↑t,
+  x ∈ t` is not an inductive datatype
+Source line 17:
+      simpa using h) with ⟨a, ha, b, hb, rfl⟩
+                          ^^^^^^^^^^^^^^^^^^^
+Highlighted span: ⟨a, ha, b, hb, rfl⟩
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+theorem codisjoint_map {F : Type*} [FunLike F M N] [MonoidHomClass F M N] {f : F}
+    (hf : Function.Surjective f) {H K : Submonoid M} (h : Codisjoint H K) :
+    Codisjoint (H.map f) (K.map f) := by
+  rw [codisjoint_iff]
+  ext y
+  constructor
+  · intro hy
+    trivial
+  · intro _
+    rcases hf y with ⟨x, rfl⟩
+    have hx : x ∈ H ⊔ K := by
+      have : H ⊔ K = ⊤ := by
+        simpa [codisjoint_iff] using h
+      simpa [this]
+    rcases Submonoid.mem_sup.mp hx with ⟨a, ha, b, hb, rfl⟩
+    exact Submonoid.mem_sup.mpr ⟨f a, ⟨a, ha, rfl⟩, f b, ⟨b, hb, rfl⟩, by simp⟩
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+WARNING .LspCheck.lean:18:7-18:19
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 18:
+      simpa [this]
+      ^^^^^^^^^^^^
+Highlighted span: simpa [this]
+
+ERROR .LspCheck.lean:19:33-19:35
+Application type mismatch: The argument
+  hx
+has type
+  x ∈ H ⊔ K
+but is expected to have type
+  ?m.99 ∈ ?m.97 ⊔ ?m.98
+in the application
+  Submonoid.mem_sup.mp hx
+Source line 19:
+    rcases Submonoid.mem_sup.mp hx with ⟨a, ha, b, hb, rfl⟩
+                                ^^
+Highlighted span: hx
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+WARNING .LspCheck.lean:18:7-18:19
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 18:
+      simpa [this]
+      ^^^^^^^^^^^^
+Highlighted span: simpa [this]
+
+ERROR .LspCheck.lean:19:33-19:35
+Application type mismatch: The argument
+  hx
+has type
+  x ∈ H ⊔ K
+but is expected to have type
+  ?m.99 ∈ ?m.97 ⊔ ?m.98
+in the application
+  Submonoid.mem_sup.mp hx
+Source line 19:
+    rcases Submonoid.mem_sup.mp hx with ⟨a, ha, b, hb, rfl⟩
+                                ^^
+Highlighted span: hx
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+theorem codisjoint_map {F : Type*} [FunLike F M N] [MonoidHomClass F M N] {f : F}
+    (hf : Function.Surjective f) {H K : Submonoid M} (h : Codisjoint H K) :
+    Codisjoint (H.map f) (K.map f) := by
+  rw [codisjoint_iff]
+  ext y
+  constructor
+  · intro hy
+    trivial
+  · intro _
+    rcases hf y with ⟨x, rfl⟩
+    have htop : H ⊔ K = ⊤ := by
+      simpa [codisjoint_iff] using h
+    have hx : x ∈ (H ⊔ K : Submonoid M) := by
+      simp [htop]
+    rcases show ∃ a ∈ H, ∃ b ∈ K, a * b = x from Submonoid.mem_sup.mp hx with
+      ⟨a, ha, b, hb, habx⟩
+    exact Submonoid.mem_sup.mpr ⟨f a, ⟨a, ha, rfl⟩, f b, ⟨b, hb, rfl⟩, by
+      simpa [habx] using map_mul f a b⟩
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:19:50-19:73
+Type mismatch
+  Submonoid.mem_sup.mp ?m.119
+has type
+  ∃ y ∈ ?m.114, ∃ z ∈ ?m.115, y * z = ?m.116
+but is expected to have type
+  ∃ a ∈ H, ∃ b ∈ K, a * b = x
+Source line 19:
+    rcases show ∃ a ∈ H, ∃ b ∈ K, a * b = x from Submonoid.mem_sup.mp hx with
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submonoid.mem_sup.mp hx
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:19:50-19:73
+Type mismatch
+  Submonoid.mem_sup.mp ?m.119
+has type
+  ∃ y ∈ ?m.114, ∃ z ∈ ?m.115, y * z = ?m.116
+but is expected to have type
+  ∃ a ∈ H, ∃ b ∈ K, a * b = x
+Source line 19:
+    rcases show ∃ a ∈ H, ∃ b ∈ K, a * b = x from Submonoid.mem_sup.mp hx with
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submonoid.mem_sup.mp hx

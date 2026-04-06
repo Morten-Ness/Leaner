@@ -1,0 +1,224 @@
+FILE: Defs.mem_direction_iff_eq_vsub_left.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Defs.mem_direction_iff_eq_vsub_left.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable (k : Type*) {V : Type*} (P : Type*) [Ring k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {k P}
+
+theorem mem_direction_iff_eq_vsub_left {s : AffineSubspace k P} {p : P} (hp : p ∈ s) (v : V) :
+    v ∈ s.direction ↔ ∃ p₂ ∈ s, v = p -ᵥ p₂ := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (k : Type*) {V : Type*} (P : Type*) [Ring k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {k P}
+
+theorem mem_direction_iff_eq_vsub_left {s : AffineSubspace k P} {p : P} (hp : p ∈ s) (v : V) :
+    v ∈ s.direction ↔ ∃ p₂ ∈ s, v = p -ᵥ p₂ := by
+  constructor
+  · intro hv
+    rcases s.nonempty_of_mem hp with ⟨p1, hp1⟩
+    rcases s.vsub_mem_direction hv hp with ⟨p₂, hp₂, hEq⟩
+    refine ⟨p₂, hp₂, ?_⟩
+    rw [hEq]
+    simpa [vsub_eq_sub] using (vsub_rev p p₂)
+  · rintro ⟨p₂, hp₂, rfl⟩
+    simpa using s.vsub_mem_direction hp hp₂
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:14-12:29
+Invalid field `nonempty_of_mem`: The environment does not contain `AffineSubspace.nonempty_of_mem`, so it is not possible to project the field `nonempty_of_mem` from an expression
+  s
+of type `AffineSubspace k P`
+Source line 12:
+    rcases s.nonempty_of_mem hp with ⟨p1, hp1⟩
+             ^^^^^^^^^^^^^^^
+Highlighted span: nonempty_of_mem
+
+ERROR .LspCheck.lean:12:38-12:47
+Tactic `rcases` failed: `x✝ : ?m.38` is not an inductive datatype
+Source line 12:
+    rcases s.nonempty_of_mem hp with ⟨p1, hp1⟩
+                                     ^^^^^^^^^
+Highlighted span: ⟨p1, hp1⟩
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:14-12:29
+Invalid field `nonempty_of_mem`: The environment does not contain `AffineSubspace.nonempty_of_mem`, so it is not possible to project the field `nonempty_of_mem` from an expression
+  s
+of type `AffineSubspace k P`
+Source line 12:
+    rcases s.nonempty_of_mem hp with ⟨p1, hp1⟩
+             ^^^^^^^^^^^^^^^
+Highlighted span: nonempty_of_mem
+
+ERROR .LspCheck.lean:12:38-12:47
+Tactic `rcases` failed: `x✝ : ?m.38` is not an inductive datatype
+Source line 12:
+    rcases s.nonempty_of_mem hp with ⟨p1, hp1⟩
+                                     ^^^^^^^^^
+Highlighted span: ⟨p1, hp1⟩
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (k : Type*) {V : Type*} (P : Type*) [Ring k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {k P}
+
+theorem mem_direction_iff_eq_vsub_left {s : AffineSubspace k P} {p : P} (hp : p ∈ s) (v : V) :
+    v ∈ s.direction ↔ ∃ p₂ ∈ s, v = p -ᵥ p₂ := by
+  constructor
+  · intro hv
+    rw [AffineSubspace.mem_direction_iff_eq_vsub_right hp] at hv
+    rcases hv with ⟨p₂, hp₂, h⟩
+    refine ⟨p₂, hp₂, ?_⟩
+    rw [h]
+    simpa using vsub_rev p₂ p
+  · rintro ⟨p₂, hp₂, h⟩
+    rw [AffineSubspace.mem_direction_iff_eq_vsub_right hp]
+    refine ⟨p₂, hp₂, ?_⟩
+    rw [h]
+    simpa using vsub_rev p p₂
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:17-16:25
+Unknown identifier `vsub_rev`
+Source line 16:
+    simpa using vsub_rev p₂ p
+                ^^^^^^^^
+Highlighted span: vsub_rev
+
+ERROR .LspCheck.lean:21:17-21:25
+Unknown identifier `vsub_rev`
+Source line 21:
+    simpa using vsub_rev p p₂
+                ^^^^^^^^
+Highlighted span: vsub_rev
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:17-16:25
+Unknown identifier `vsub_rev`
+Source line 16:
+    simpa using vsub_rev p₂ p
+                ^^^^^^^^
+Highlighted span: vsub_rev
+
+ERROR .LspCheck.lean:21:17-21:25
+Unknown identifier `vsub_rev`
+Source line 21:
+    simpa using vsub_rev p p₂
+                ^^^^^^^^
+Highlighted span: vsub_rev
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (k : Type*) {V : Type*} (P : Type*) [Ring k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {k P}
+
+theorem mem_direction_iff_eq_vsub_left {s : AffineSubspace k P} {p : P} (hp : p ∈ s) (v : V) :
+    v ∈ s.direction ↔ ∃ p₂ ∈ s, v = p -ᵥ p₂ := by
+  constructor
+  · intro hv
+    rw [AffineSubspace.mem_direction_iff_eq_vsub_right hp] at hv
+    rcases hv with ⟨p₂, hp₂, h⟩
+    refine ⟨p₂, hp₂, ?_⟩
+    rw [h]
+    exact neg_vsub_eq_vsub_rev p₂ p
+  · rintro ⟨p₂, hp₂, h⟩
+    rw [AffineSubspace.mem_direction_iff_eq_vsub_right hp]
+    refine ⟨p₂, hp₂, ?_⟩
+    rw [h]
+    exact neg_vsub_eq_vsub_rev p p₂
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:5-16:36
+Type mismatch
+  neg_vsub_eq_vsub_rev p₂ p
+has type
+  -(p₂ -ᵥ p) = p -ᵥ p₂
+but is expected to have type
+  p₂ -ᵥ p = p -ᵥ p₂
+Source line 16:
+    exact neg_vsub_eq_vsub_rev p₂ p
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: exact neg_vsub_eq_vsub_rev p₂ p
+
+ERROR .LspCheck.lean:21:5-21:36
+Type mismatch
+  neg_vsub_eq_vsub_rev p p₂
+has type
+  -(p -ᵥ p₂) = p₂ -ᵥ p
+but is expected to have type
+  p -ᵥ p₂ = p₂ -ᵥ p
+Source line 21:
+    exact neg_vsub_eq_vsub_rev p p₂
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: exact neg_vsub_eq_vsub_rev p p₂
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:5-16:36
+Type mismatch
+  neg_vsub_eq_vsub_rev p₂ p
+has type
+  -(p₂ -ᵥ p) = p -ᵥ p₂
+but is expected to have type
+  p₂ -ᵥ p = p -ᵥ p₂
+Source line 16:
+    exact neg_vsub_eq_vsub_rev p₂ p
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: exact neg_vsub_eq_vsub_rev p₂ p
+
+ERROR .LspCheck.lean:21:5-21:36
+Type mismatch
+  neg_vsub_eq_vsub_rev p p₂
+has type
+  -(p -ᵥ p₂) = p₂ -ᵥ p
+but is expected to have type
+  p -ᵥ p₂ = p₂ -ᵥ p
+Source line 21:
+    exact neg_vsub_eq_vsub_rev p p₂
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: exact neg_vsub_eq_vsub_rev p p₂

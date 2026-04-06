@@ -1,0 +1,93 @@
+FILE: Units.isUnit_iff.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Units.isUnit_iff.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {u v : ℤ}
+
+theorem isUnit_iff : IsUnit u ↔ u = 1 ∨ u = -1 := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {u v : ℤ}
+
+theorem isUnit_iff : IsUnit u ↔ u = 1 ∨ u = -1 := by
+  constructor
+  · rintro ⟨a, rfl⟩
+    rcases Int.units_eq_one_or u with h | h
+    · left
+      exact h
+    · right
+      exact h
+  · rintro (rfl | rfl)
+    · exact isUnit_one
+    · exact isUnit_neg isUnit_one
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:8:32-8:33
+Unknown identifier `u`
+Source line 8:
+    rcases Int.units_eq_one_or u with h | h
+                               ^
+Highlighted span: u
+
+ERROR .LspCheck.lean:15:13-15:23
+Unknown identifier `isUnit_neg`
+Source line 15:
+    · exact isUnit_neg isUnit_one
+            ^^^^^^^^^^
+Highlighted span: isUnit_neg
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:8:32-8:33
+Unknown identifier `u`
+Source line 8:
+    rcases Int.units_eq_one_or u with h | h
+                               ^
+Highlighted span: u
+
+ERROR .LspCheck.lean:15:13-15:23
+Unknown identifier `isUnit_neg`
+Source line 15:
+    · exact isUnit_neg isUnit_one
+            ^^^^^^^^^^
+Highlighted span: isUnit_neg
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {u v : ℤ}
+
+theorem isUnit_iff : IsUnit u ↔ u = 1 ∨ u = -1 := by
+  constructor
+  · rintro ⟨a, rfl⟩
+    rcases Int.units_eq_one_or a with h | h
+    · left
+      simpa using congrArg (fun x : ℤˣ => (x : ℤ)) h
+    · right
+      simpa using congrArg (fun x : ℤˣ => (x : ℤ)) h
+  · rintro (rfl | rfl)
+    · exact isUnit_one
+    · refine ⟨-1, rfl⟩
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

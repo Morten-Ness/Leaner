@@ -1,0 +1,180 @@
+FILE: Basic.sub_le_iff.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.sub_le_iff.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {n : ℕ}
+
+theorem sub_le_iff {n : ℕ} {a b : Fin n} : a - b ≤ a ↔ b ≤ a := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {n : ℕ}
+
+theorem sub_le_iff {n : ℕ} {a b : Fin n} : a - b ≤ a ↔ b ≤ a := by
+  constructor
+  · intro _
+    exact Fin.sub_le_iff_le_add.mp (by simpa using le_rfl)
+  · intro h
+    exact le_rfl
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:8:11-8:35
+Unknown constant `Fin.sub_le_iff_le_add.mp`
+Source line 8:
+    exact Fin.sub_le_iff_le_add.mp (by simpa using le_rfl)
+          ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Fin.sub_le_iff_le_add.mp
+
+ERROR .LspCheck.lean:10:5-10:17
+Type mismatch
+  le_rfl
+has type
+  ?m.20 ≤ ?m.20
+but is expected to have type
+  a - b ≤ a
+Source line 10:
+    exact le_rfl
+    ^^^^^^^^^^^^
+Highlighted span: exact le_rfl
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:8:11-8:35
+Unknown constant `Fin.sub_le_iff_le_add.mp`
+Source line 8:
+    exact Fin.sub_le_iff_le_add.mp (by simpa using le_rfl)
+          ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Fin.sub_le_iff_le_add.mp
+
+ERROR .LspCheck.lean:10:5-10:17
+Type mismatch
+  le_rfl
+has type
+  ?m.20 ≤ ?m.20
+but is expected to have type
+  a - b ≤ a
+Source line 10:
+    exact le_rfl
+    ^^^^^^^^^^^^
+Highlighted span: exact le_rfl
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {n : ℕ}
+
+theorem sub_le_iff {n : ℕ} {a b : Fin n} : a - b ≤ a ↔ b ≤ a := by
+  constructor
+  · intro h
+    exact by
+      contrapose! h
+      exact Fin.sub_eq_zero_iff_le.mpr h
+  · intro h
+    rw [Fin.sub_eq_zero_iff_le.mpr h]
+    exact le_rfl
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:13-10:39
+Unknown constant `Fin.sub_eq_zero_iff_le.mpr`
+Source line 10:
+      exact Fin.sub_eq_zero_iff_le.mpr h
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Fin.sub_eq_zero_iff_le.mpr
+
+ERROR .LspCheck.lean:12:9-12:35
+Unknown constant `Fin.sub_eq_zero_iff_le.mpr`
+Source line 12:
+    rw [Fin.sub_eq_zero_iff_le.mpr h]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Fin.sub_eq_zero_iff_le.mpr
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:13-10:39
+Unknown constant `Fin.sub_eq_zero_iff_le.mpr`
+Source line 10:
+      exact Fin.sub_eq_zero_iff_le.mpr h
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Fin.sub_eq_zero_iff_le.mpr
+
+ERROR .LspCheck.lean:12:9-12:35
+Unknown constant `Fin.sub_eq_zero_iff_le.mpr`
+Source line 12:
+    rw [Fin.sub_eq_zero_iff_le.mpr h]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Fin.sub_eq_zero_iff_le.mpr
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {n : ℕ}
+
+theorem sub_le_iff {n : ℕ} {a b : Fin n} : a - b ≤ a ↔ b ≤ a := by
+  constructor
+  · intro _
+    exact le_of_lt_succ (show a.1 < b.1 + 1 ∨ b.1 ≤ a.1 from by
+      exact Or.inr ‹a - b ≤ a›)
+  · intro _
+    exact Fin.sub_natCast_le_self a b.1
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:8:11-8:24
+Unknown identifier `le_of_lt_succ`
+Source line 8:
+    exact le_of_lt_succ (show a.1 < b.1 + 1 ∨ b.1 ≤ a.1 from by
+          ^^^^^^^^^^^^^
+Highlighted span: le_of_lt_succ
+
+ERROR .LspCheck.lean:11:11-11:34
+Unknown constant `Fin.sub_natCast_le_self`
+Source line 11:
+    exact Fin.sub_natCast_le_self a b.1
+          ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Fin.sub_natCast_le_self
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:8:11-8:24
+Unknown identifier `le_of_lt_succ`
+Source line 8:
+    exact le_of_lt_succ (show a.1 < b.1 + 1 ∨ b.1 ≤ a.1 from by
+          ^^^^^^^^^^^^^
+Highlighted span: le_of_lt_succ
+
+ERROR .LspCheck.lean:11:11-11:34
+Unknown constant `Fin.sub_natCast_le_self`
+Source line 11:
+    exact Fin.sub_natCast_le_self a b.1
+          ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Fin.sub_natCast_le_self

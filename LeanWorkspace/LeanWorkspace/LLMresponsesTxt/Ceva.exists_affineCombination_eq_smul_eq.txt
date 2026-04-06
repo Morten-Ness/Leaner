@@ -1,0 +1,886 @@
+FILE: Ceva.exists_affineCombination_eq_smul_eq.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Ceva.exists_affineCombination_eq_smul_eq.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {k V P ι : Type*}
+
+variable [Ring k] [AddCommGroup V] [Module k V] [AddTorsor V P]
+
+private theorem exists_affineCombination_eq_smul_eq_aux {p : ι → P} (hp : AffineIndependent k p)
+    {s : Set ι} (hs : s.Nonempty) {fs : s → Finset ι} (hfs : ∀ i, (i : ι) ∈ fs i) {w : s → ι → k}
+    (hw : ∀ i, ∑ j ∈ fs i, w i j = 1) {p' : P}
+    (hp' : ∀ i : s, p' ∈ line[k, p i, (fs i).affineCombination k p (w i)]) :
+    ∃ (w' : ι → k) (fs' : Finset ι), (∑ j ∈ fs', w' j = 1) ∧ fs'.affineCombination k p w' = p' ∧
+      ∀ i : s, ∃ r, ∀ j, r * Set.indicator ((fs i : Set ι) \ {(i : ι)}) (w i) j =
+        Set.indicator ((fs' : Set ι) \ {(i : ι)}) w' j := by
+  classical
+  have hp'' : ∀ i : s, ∃ r : k, (fs i).affineCombination k p
+      (AffineMap.lineMap (Finset.affineCombinationSingleWeights k (i : ι)) (w i) r) = p' := by
+    intro i
+    simp_rw [mem_affineSpan_pair_iff_exists_lineMap_eq] at hp'
+    obtain ⟨r, rfl⟩ := hp' i
+    exact ⟨r, by simp [hfs]⟩
+  obtain ⟨i', hi'⟩ := hs
+  obtain ⟨ri', hri'⟩ := hp'' ⟨i', hi'⟩
+  let w' : ι → k :=
+    AffineMap.lineMap (Finset.affineCombinationSingleWeights k i') (w ⟨i', hi'⟩) ri'
+  refine ⟨w', fs ⟨i', hi'⟩, ?_, ?_, ?_⟩
+  · simp [w', AffineMap.lineMap_apply_module, Finset.sum_add_distrib, ← Finset.mul_sum, hw, hfs]
+  · simp [w', hri']
+  · intro i
+    obtain ⟨r, hr⟩ := hp'' i
+    refine ⟨r, ?_⟩
+    rw [← hri'] at hr
+    simp only [AffineMap.lineMap_apply_module] at hr
+    have hind := hp.indicator_eq_of_affineCombination_eq _ _ _ _ ?_ ?_ hr
+    · intro j
+      by_cases hj : j = i
+      · simp [hj]
+      replace hind := congr_fun hind j
+      convert hind using 1
+      · simp [Set.indicator_apply, hj]
+      · simp [Set.indicator_apply, hj, w', AffineMap.lineMap_apply_module]
+    · simp [Finset.sum_add_distrib, ← Finset.mul_sum, hw, hfs]
+    · simp [Finset.sum_add_distrib, ← Finset.mul_sum, hw, hfs]
+
+
+theorem exists_affineCombination_eq_smul_eq {p : ι → P} (hp : AffineIndependent k p) {s : Set ι}
+    (hs : s.Nonempty) {fs : s → Finset ι} {w : s → ι → k} (hw : ∀ i, ∑ j ∈ fs i, w i j = 1) {p' : P}
+    (hp' : ∀ i : s, p' ∈ line[k, p i, (fs i).affineCombination k p (w i)]) :
+    ∃ (w' : ι → k) (fs' : Finset ι), (∑ j ∈ fs', w' j = 1) ∧ fs'.affineCombination k p w' = p' ∧
+      ∀ i : s, ∃ r, ∀ j, r * Set.indicator ((fs i : Set ι) \ {(i : ι)}) (w i) j =
+        Set.indicator ((fs' : Set ι) \ {(i : ι)}) w' j := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k V P ι : Type*}
+
+variable [Ring k] [AddCommGroup V] [Module k V] [AddTorsor V P]
+
+private theorem exists_affineCombination_eq_smul_eq_aux {p : ι → P} (hp : AffineIndependent k p)
+    {s : Set ι} (hs : s.Nonempty) {fs : s → Finset ι} (hfs : ∀ i, (i : ι) ∈ fs i) {w : s → ι → k}
+    (hw : ∀ i, ∑ j ∈ fs i, w i j = 1) {p' : P}
+    (hp' : ∀ i : s, p' ∈ line[k, p i, (fs i).affineCombination k p (w i)]) :
+    ∃ (w' : ι → k) (fs' : Finset ι), (∑ j ∈ fs', w' j = 1) ∧ fs'.affineCombination k p w' = p' ∧
+      ∀ i : s, ∃ r, ∀ j, r * Set.indicator ((fs i : Set ι) \ {(i : ι)}) (w i) j =
+        Set.indicator ((fs' : Set ι) \ {(i : ι)}) w' j := by
+  classical
+  have hp'' : ∀ i : s, ∃ r : k, (fs i).affineCombination k p
+      (AffineMap.lineMap (Finset.affineCombinationSingleWeights k (i : ι)) (w i) r) = p' := by
+    intro i
+    simp_rw [mem_affineSpan_pair_iff_exists_lineMap_eq] at hp'
+    obtain ⟨r, rfl⟩ := hp' i
+    exact ⟨r, by simp [hfs]⟩
+  obtain ⟨i', hi'⟩ := hs
+  obtain ⟨ri', hri'⟩ := hp'' ⟨i', hi'⟩
+  let w' : ι → k :=
+    AffineMap.lineMap (Finset.affineCombinationSingleWeights k i') (w ⟨i', hi'⟩) ri'
+  refine ⟨w', fs ⟨i', hi'⟩, ?_, ?_, ?_⟩
+  · simp [w', AffineMap.lineMap_apply_module, Finset.sum_add_distrib, ← Finset.mul_sum, hw, hfs]
+  · simp [w', hri']
+  · intro i
+    obtain ⟨r, hr⟩ := hp'' i
+    refine ⟨r, ?_⟩
+    rw [← hri'] at hr
+    simp only [AffineMap.lineMap_apply_module] at hr
+    have hind := hp.indicator_eq_of_affineCombination_eq _ _ _ _ ?_ ?_ hr
+    · intro j
+      by_cases hj : j = i
+      · simp [hj]
+      replace hind := congr_fun hind j
+      convert hind using 1
+      · simp [Set.indicator_apply, hj]
+      · simp [Set.indicator_apply, hj, w', AffineMap.lineMap_apply_module]
+    · simp [Finset.sum_add_distrib, ← Finset.mul_sum, hw, hfs]
+    · simp [Finset.sum_add_distrib, ← Finset.mul_sum, hw, hfs]
+
+
+theorem exists_affineCombination_eq_smul_eq {p : ι → P} (hp : AffineIndependent k p) {s : Set ι}
+    (hs : s.Nonempty) {fs : s → Finset ι} {w : s → ι → k} (hw : ∀ i, ∑ j ∈ fs i, w i j = 1) {p' : P}
+    (hp' : ∀ i : s, p' ∈ line[k, p i, (fs i).affineCombination k p (w i)]) :
+    ∃ (w' : ι → k) (fs' : Finset ι), (∑ j ∈ fs', w' j = 1) ∧ fs'.affineCombination k p w' = p' ∧
+      ∀ i : s, ∃ r, ∀ j, r * Set.indicator ((fs i : Set ι) \ {(i : ι)}) (w i) j =
+        Set.indicator ((fs' : Set ι) \ {(i : ι)}) w' j := by
+  classical
+  by_cases hfs : ∀ i : s, ((i : ι) ∈ fs i)
+  · exact exists_affineCombination_eq_smul_eq_aux hp hs hfs hw hp'
+  · push_neg at hfs
+    obtain ⟨i, hi⟩ := hfs
+    refine ⟨fun j => if j = (i : ι) then 1 else 0, {i}, ?_, ?_, ?_⟩
+    · simp
+    · simp [Finset.affineCombination_eq_weightedVSubOfPoint_vadd, hi]
+    · intro j
+      refine ⟨0, ?_⟩
+      intro t
+      by_cases ht : t = (j : ι)
+      · subst ht
+        simp [Set.indicator_of_not_mem, hi]
+      · by_cases hti : t = (i : ι)
+        · subst hti
+          simp [ht, hi]
+        · simp [Set.indicator_apply, ht, hti]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+WARNING .LspCheck.lean:54:5-54:20
+`push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+Source line 54:
+  · push_neg at hfs
+    ^^^^^^^^^^^^^^^
+Highlighted span: push_neg at hfs
+
+ERROR .LspCheck.lean:56:52-56:55
+overloaded, errors 
+  failed to synthesize instance of type class
+    Singleton (↑s) (Finset ι)
+  
+  Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+  
+  56:52 `i` is not a field of structure `Finset`
+Source line 56:
+    refine ⟨fun j => if j = (i : ι) then 1 else 0, {i}, ?_, ?_, ?_⟩
+                                                   ^^^
+Highlighted span: {i}
+
+ERROR .LspCheck.lean:57:5-57:11
+unsolved goals
+case neg.refine_1
+k : Type u_1
+V : Type u_2
+P : Type u_3
+ι : Type u_4
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+inst✝ : AddTorsor V P
+p : ι → P
+hp : AffineIndependent k p
+s : Set ι
+hs : s.Nonempty
+fs : ↑s → Finset ι
+w : ↑s → ι → k
+hw : ∀ (i : ↑s), ∑ j ∈ fs i, w i j = 1
+p' : P
+hp' : ∀ (i : ↑s), p' ∈ affineSpan k {p ↑i, (Finset.affineCombination k (fs i) p) (w i)}
+i : ↑s
+hi : ↑i ∉ fs i
+⊢ ↑i ∉ sorry () → 0 = 1
+Source line 57:
+    · simp
+    ^^^^^^
+Highlighted span: · simp
+
+ERROR .LspCheck.lean:58:13-58:65
+Unknown constant `Finset.affineCombination_eq_weightedVSubOfPoint_vadd`
+Source line 58:
+    · simp [Finset.affineCombination_eq_weightedVSubOfPoint_vadd, hi]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.affineCombination_eq_weightedVSubOfPoint_vadd
+
+ERROR .LspCheck.lean:58:5-58:70
+unsolved goals
+case neg.refine_2
+k : Type u_1
+V : Type u_2
+P : Type u_3
+ι : Type u_4
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+inst✝ : AddTorsor V P
+p : ι → P
+hp : AffineIndependent k p
+s : Set ι
+hs : s.Nonempty
+fs : ↑s → Finset ι
+w : ↑s → ι → k
+hw : ∀ (i : ↑s), ∑ j ∈ fs i, w i j = 1
+p' : P
+hp' : ∀ (i : ↑s), p' ∈ affineSpan k {p ↑i, (Finset.affineCombination k (fs i) p) (w i)}
+i : ↑s
+hi : ↑i ∉ fs i
+⊢ ((Finset.affineCombination k (sorry ()) p) fun j ↦ if j = ↑i then 1 else 0) = p'
+Source line 58:
+    · simp [Finset.affineCombination_eq_weightedVSubOfPoint_vadd, hi]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simp [Finset.affineCombination_eq_weightedVSubOfPoint_vadd, hi]
+
+ERROR .LspCheck.lean:64:15-64:39
+Unknown constant `Set.indicator_of_not_mem`
+Source line 64:
+        simp [Set.indicator_of_not_mem, hi]
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Set.indicator_of_not_mem
+
+ERROR .LspCheck.lean:66:9-67:1
+unsolved goals
+case pos
+k : Type u_1
+V : Type u_2
+P : Type u_3
+ι : Type u_4
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+inst✝ : AddTorsor V P
+p : ι → P
+hp : AffineIndependent k p
+s : Set ι
+hs : s.Nonempty
+fs : ↑s → Finset ι
+w : ↑s → ι → k
+hw : ∀ (i : ↑s), ∑ j ∈ fs i, w i j = 1
+p' : P
+hp' : ∀ (i : ↑s), p' ∈ affineSpan k {p ↑i, (Finset.affineCombination k (fs i) p) (w i)}
+i : ↑s
+hi : ↑i ∉ fs i
+j : ↑s
+ht : ¬↑i = ↑j
+⊢ 0 = (↑(sorry ()) \ {↑j}).indicator (fun j ↦ if j = ↑i then 1 else 0) ↑i
+Source line 66:
+        · subst hti
+        ^
+Highlighted span: ·
+
+INFORMATION .LspCheck.lean:7:9-8:1
+Goals accomplished!
+Source line 7:
+private theorem exists_affineCombination_eq_smul_eq_aux {p : ι → P} (hp : AffineIndependent k p)
+        ^
+Highlighted span: t
+
+WARNING .LspCheck.lean:58:67-58:69
+This simp argument is unused:
+  hi
+
+Hint: Omit it from the simp argument list.
+  simp [Finset.affineCombination_eq_weightedVSubOfPoint_vadd,̵ ̵h̵i̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 58:
+    · simp [Finset.affineCombination_eq_weightedVSubOfPoint_vadd, hi]
+                                                                  ^^
+Highlighted span: hi
+
+WARNING .LspCheck.lean:64:41-64:43
+This simp argument is unused:
+  hi
+
+Hint: Omit it from the simp argument list.
+  simp [Set.indicator_of_not_mem,̵ ̵h̵i̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 64:
+        simp [Set.indicator_of_not_mem, hi]
+                                        ^^
+Highlighted span: hi
+
+WARNING .LspCheck.lean:67:17-67:19
+This simp argument is unused:
+  ht
+
+Hint: Omit it from the simp argument list.
+  simp [ht̵,̵ ̵h̵i]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 67:
+          simp [ht, hi]
+                ^^
+Highlighted span: ht
+
+WARNING .LspCheck.lean:67:21-67:23
+This simp argument is unused:
+  hi
+
+Hint: Omit it from the simp argument list.
+  simp [ht,̵ ̵h̵i̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 67:
+          simp [ht, hi]
+                    ^^
+Highlighted span: hi
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+WARNING .LspCheck.lean:54:5-54:20
+`push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+Source line 54:
+  · push_neg at hfs
+    ^^^^^^^^^^^^^^^
+Highlighted span: push_neg at hfs
+
+ERROR .LspCheck.lean:56:52-56:55
+overloaded, errors 
+  failed to synthesize instance of type class
+    Singleton (↑s) (Finset ι)
+  
+  Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+  
+  56:52 `i` is not a field of structure `Finset`
+Source line 56:
+    refine ⟨fun j => if j = (i : ι) then 1 else 0, {i}, ?_, ?_, ?_⟩
+                                                   ^^^
+Highlighted span: {i}
+
+ERROR .LspCheck.lean:57:5-57:11
+unsolved goals
+case neg.refine_1
+k : Type u_1
+V : Type u_2
+P : Type u_3
+ι : Type u_4
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+inst✝ : AddTorsor V P
+p : ι → P
+hp : AffineIndependent k p
+s : Set ι
+hs : s.Nonempty
+fs : ↑s → Finset ι
+w : ↑s → ι → k
+hw : ∀ (i : ↑s), ∑ j ∈ fs i, w i j = 1
+p' : P
+hp' : ∀ (i : ↑s), p' ∈ affineSpan k {p ↑i, (Finset.affineCombination k (fs i) p) (w i)}
+i : ↑s
+hi : ↑i ∉ fs i
+⊢ ↑i ∉ sorry () → 0 = 1
+Source line 57:
+    · simp
+    ^^^^^^
+Highlighted span: · simp
+
+ERROR .LspCheck.lean:58:13-58:65
+Unknown constant `Finset.affineCombination_eq_weightedVSubOfPoint_vadd`
+Source line 58:
+    · simp [Finset.affineCombination_eq_weightedVSubOfPoint_vadd, hi]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.affineCombination_eq_weightedVSubOfPoint_vadd
+
+ERROR .LspCheck.lean:58:5-58:70
+unsolved goals
+case neg.refine_2
+k : Type u_1
+V : Type u_2
+P : Type u_3
+ι : Type u_4
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+inst✝ : AddTorsor V P
+p : ι → P
+hp : AffineIndependent k p
+s : Set ι
+hs : s.Nonempty
+fs : ↑s → Finset ι
+w : ↑s → ι → k
+hw : ∀ (i : ↑s), ∑ j ∈ fs i, w i j = 1
+p' : P
+hp' : ∀ (i : ↑s), p' ∈ affineSpan k {p ↑i, (Finset.affineCombination k (fs i) p) (w i)}
+i : ↑s
+hi : ↑i ∉ fs i
+⊢ ((Finset.affineCombination k (sorry ()) p) fun j ↦ if j = ↑i then 1 else 0) = p'
+Source line 58:
+    · simp [Finset.affineCombination_eq_weightedVSubOfPoint_vadd, hi]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simp [Finset.affineCombination_eq_weightedVSubOfPoint_vadd, hi]
+
+ERROR .LspCheck.lean:64:15-64:39
+Unknown constant `Set.indicator_of_not_mem`
+Source line 64:
+        simp [Set.indicator_of_not_mem, hi]
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Set.indicator_of_not_mem
+
+ERROR .LspCheck.lean:66:9-67:1
+unsolved goals
+case pos
+k : Type u_1
+V : Type u_2
+P : Type u_3
+ι : Type u_4
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+inst✝ : AddTorsor V P
+p : ι → P
+hp : AffineIndependent k p
+s : Set ι
+hs : s.Nonempty
+fs : ↑s → Finset ι
+w : ↑s → ι → k
+hw : ∀ (i : ↑s), ∑ j ∈ fs i, w i j = 1
+p' : P
+hp' : ∀ (i : ↑s), p' ∈ affineSpan k {p ↑i, (Finset.affineCombination k (fs i) p) (w i)}
+i : ↑s
+hi : ↑i ∉ fs i
+j : ↑s
+ht : ¬↑i = ↑j
+⊢ 0 = (↑(sorry ()) \ {↑j}).indicator (fun j ↦ if j = ↑i then 1 else 0) ↑i
+Source line 66:
+        · subst hti
+        ^
+Highlighted span: ·
+
+INFORMATION .LspCheck.lean:7:9-8:1
+Goals accomplished!
+Source line 7:
+private theorem exists_affineCombination_eq_smul_eq_aux {p : ι → P} (hp : AffineIndependent k p)
+        ^
+Highlighted span: t
+
+WARNING .LspCheck.lean:58:67-58:69
+This simp argument is unused:
+  hi
+
+Hint: Omit it from the simp argument list.
+  simp [Finset.affineCombination_eq_weightedVSubOfPoint_vadd,̵ ̵h̵i̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 58:
+    · simp [Finset.affineCombination_eq_weightedVSubOfPoint_vadd, hi]
+                                                                  ^^
+Highlighted span: hi
+
+WARNING .LspCheck.lean:64:41-64:43
+This simp argument is unused:
+  hi
+
+Hint: Omit it from the simp argument list.
+  simp [Set.indicator_of_not_mem,̵ ̵h̵i̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 64:
+        simp [Set.indicator_of_not_mem, hi]
+                                        ^^
+Highlighted span: hi
+
+WARNING .LspCheck.lean:67:17-67:19
+This simp argument is unused:
+  ht
+
+Hint: Omit it from the simp argument list.
+  simp [ht̵,̵ ̵h̵i]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 67:
+          simp [ht, hi]
+                ^^
+Highlighted span: ht
+
+WARNING .LspCheck.lean:67:21-67:23
+This simp argument is unused:
+  hi
+
+Hint: Omit it from the simp argument list.
+  simp [ht,̵ ̵h̵i̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 67:
+          simp [ht, hi]
+                    ^^
+Highlighted span: hi
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k V P ι : Type*}
+
+variable [Ring k] [AddCommGroup V] [Module k V] [AddTorsor V P]
+
+private theorem exists_affineCombination_eq_smul_eq_aux {p : ι → P} (hp : AffineIndependent k p)
+    {s : Set ι} (hs : s.Nonempty) {fs : s → Finset ι} (hfs : ∀ i, (i : ι) ∈ fs i) {w : s → ι → k}
+    (hw : ∀ i, ∑ j ∈ fs i, w i j = 1) {p' : P}
+    (hp' : ∀ i : s, p' ∈ line[k, p i, (fs i).affineCombination k p (w i)]) :
+    ∃ (w' : ι → k) (fs' : Finset ι), (∑ j ∈ fs', w' j = 1) ∧ fs'.affineCombination k p w' = p' ∧
+      ∀ i : s, ∃ r, ∀ j, r * Set.indicator ((fs i : Set ι) \ {(i : ι)}) (w i) j =
+        Set.indicator ((fs' : Set ι) \ {(i : ι)}) w' j := by
+  classical
+  have hp'' : ∀ i : s, ∃ r : k, (fs i).affineCombination k p
+      (AffineMap.lineMap (Finset.affineCombinationSingleWeights k (i : ι)) (w i) r) = p' := by
+    intro i
+    simp_rw [mem_affineSpan_pair_iff_exists_lineMap_eq] at hp'
+    obtain ⟨r, rfl⟩ := hp' i
+    exact ⟨r, by simp [hfs]⟩
+  obtain ⟨i', hi'⟩ := hs
+  obtain ⟨ri', hri'⟩ := hp'' ⟨i', hi'⟩
+  let w' : ι → k :=
+    AffineMap.lineMap (Finset.affineCombinationSingleWeights k i') (w ⟨i', hi'⟩) ri'
+  refine ⟨w', fs ⟨i', hi'⟩, ?_, ?_, ?_⟩
+  · simp [w', AffineMap.lineMap_apply_module, Finset.sum_add_distrib, ← Finset.mul_sum, hw, hfs]
+  · simp [w', hri']
+  · intro i
+    obtain ⟨r, hr⟩ := hp'' i
+    refine ⟨r, ?_⟩
+    rw [← hri'] at hr
+    simp only [AffineMap.lineMap_apply_module] at hr
+    have hind := hp.indicator_eq_of_affineCombination_eq _ _ _ _ ?_ ?_ hr
+    · intro j
+      by_cases hj : j = i
+      · simp [hj]
+      replace hind := congr_fun hind j
+      convert hind using 1
+      · simp [Set.indicator_apply, hj]
+      · simp [Set.indicator_apply, hj, w', AffineMap.lineMap_apply_module]
+    · simp [Finset.sum_add_distrib, ← Finset.mul_sum, hw, hfs]
+    · simp [Finset.sum_add_distrib, ← Finset.mul_sum, hw, hfs]
+
+
+theorem exists_affineCombination_eq_smul_eq {p : ι → P} (hp : AffineIndependent k p) {s : Set ι}
+    (hs : s.Nonempty) {fs : s → Finset ι} {w : s → ι → k} (hw : ∀ i, ∑ j ∈ fs i, w i j = 1) {p' : P}
+    (hp' : ∀ i : s, p' ∈ line[k, p i, (fs i).affineCombination k p (w i)]) :
+    ∃ (w' : ι → k) (fs' : Finset ι), (∑ j ∈ fs', w' j = 1) ∧ fs'.affineCombination k p w' = p' ∧
+      ∀ i : s, ∃ r, ∀ j, r * Set.indicator ((fs i : Set ι) \ {(i : ι)}) (w i) j =
+        Set.indicator ((fs' : Set ι) \ {(i : ι)}) w' j := by
+  classical
+  by_cases hfs : ∀ i : s, ((i : ι) ∈ fs i)
+  · exact exists_affineCombination_eq_smul_eq_aux hp hs hfs hw hp'
+  · have hnot : ∃ i : s, (i : ι) ∉ fs i := by
+      simpa only [not_forall] using hfs
+    obtain ⟨i, hi⟩ := hnot
+    obtain ⟨r, hr⟩ := by
+      have hpi := hp' i
+      simpa [mem_affineSpan_pair_iff_exists_lineMap_eq] using hpi
+    refine ⟨AffineMap.lineMap (Finset.affineCombinationSingleWeights k (i : ι)) (w i) r, fs i, ?_, ?_, ?_⟩
+    · simp [AffineMap.lineMap_apply_module, Finset.sum_add_distrib, ← Finset.mul_sum, hw]
+    · simpa using hr
+    · intro j
+      refine ⟨r, ?_⟩
+      intro t
+      by_cases ht : t = (j : ι)
+      · subst ht
+        simp
+      · simp [Set.indicator_apply, ht, AffineMap.lineMap_apply_module]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+INFORMATION .LspCheck.lean:7:9-8:1
+Goals accomplished!
+Source line 7:
+private theorem exists_affineCombination_eq_smul_eq_aux {p : ι → P} (hp : AffineIndependent k p)
+        ^
+Highlighted span: t
+
+ERROR .LspCheck.lean:61:5-61:90
+unsolved goals
+case neg.refine_1
+k : Type u_1
+V : Type u_2
+P : Type u_3
+ι : Type u_4
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+inst✝ : AddTorsor V P
+p : ι → P
+hp : AffineIndependent k p
+s : Set ι
+hs : s.Nonempty
+fs : ↑s → Finset ι
+w : ↑s → ι → k
+hw : ∀ (i : ↑s), ∑ j ∈ fs i, w i j = 1
+p' : P
+hp' : ∀ (i : ↑s), p' ∈ affineSpan k {p ↑i, (Finset.affineCombination k (fs i) p) (w i)}
+hfs : ¬∀ (i : ↑s), ↑i ∈ fs i
+i : ↑s
+hi : ↑i ∉ fs i
+r : k
+hr : (AffineMap.lineMap (p ↑i) ((Finset.affineCombination k (fs i) p) (w i))) r = p'
+⊢ (1 - r) * ∑ i_1 ∈ fs i, Finset.affineCombinationSingleWeights k (↑i) i_1 + r = 1
+Source line 61:
+    · simp [AffineMap.lineMap_apply_module, Finset.sum_add_distrib, ← Finset.mul_sum, hw]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simp [AffineMap.lineMap_apply_module, Finset.sum_add_distrib, ← Finset.mul_sum, hw]
+
+ERROR .LspCheck.lean:62:7-62:21
+Type mismatch: After simplification, term
+  hr
+ has type
+  (AffineMap.lineMap (p ↑i) ((Finset.affineCombination k (fs i) p) (w i))) r = p'
+but is expected to have type
+  (AffineMap.lineMap ((Finset.affineCombination k (fs i) p) (Finset.affineCombinationSingleWeights k ↑i))
+        ((Finset.affineCombination k (fs i) p) (w i)))
+      r =
+    p'
+Source line 62:
+    · simpa using hr
+      ^^^^^^^^^^^^^^
+Highlighted span: simpa using hr
+
+ERROR .LspCheck.lean:69:7-69:71
+unsolved goals
+case neg
+k : Type u_1
+V : Type u_2
+P : Type u_3
+ι : Type u_4
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+inst✝ : AddTorsor V P
+p : ι → P
+hp : AffineIndependent k p
+s : Set ι
+hs : s.Nonempty
+fs : ↑s → Finset ι
+w : ↑s → ι → k
+hw : ∀ (i : ↑s), ∑ j ∈ fs i, w i j = 1
+p' : P
+hp' : ∀ (i : ↑s), p' ∈ affineSpan k {p ↑i, (Finset.affineCombination k (fs i) p) (w i)}
+hfs : ¬∀ (i : ↑s), ↑i ∈ fs i
+i : ↑s
+hi : ↑i ∉ fs i
+r : k
+hr : (AffineMap.lineMap (p ↑i) ((Finset.affineCombination k (fs i) p) (w i))) r = p'
+j : ↑s
+t : ι
+ht : ¬t = ↑j
+⊢ (if t ∈ fs j then r * w j t else 0) =
+    if t ∈ fs i then (1 - r) * Finset.affineCombinationSingleWeights k (↑i) t + r * w i t else 0
+Source line 69:
+      · simp [Set.indicator_apply, ht, AffineMap.lineMap_apply_module]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simp [Set.indicator_apply, ht, AffineMap.lineMap_apply_module]
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+INFORMATION .LspCheck.lean:7:9-8:1
+Goals accomplished!
+Source line 7:
+private theorem exists_affineCombination_eq_smul_eq_aux {p : ι → P} (hp : AffineIndependent k p)
+        ^
+Highlighted span: t
+
+ERROR .LspCheck.lean:61:5-61:90
+unsolved goals
+case neg.refine_1
+k : Type u_1
+V : Type u_2
+P : Type u_3
+ι : Type u_4
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+inst✝ : AddTorsor V P
+p : ι → P
+hp : AffineIndependent k p
+s : Set ι
+hs : s.Nonempty
+fs : ↑s → Finset ι
+w : ↑s → ι → k
+hw : ∀ (i : ↑s), ∑ j ∈ fs i, w i j = 1
+p' : P
+hp' : ∀ (i : ↑s), p' ∈ affineSpan k {p ↑i, (Finset.affineCombination k (fs i) p) (w i)}
+hfs : ¬∀ (i : ↑s), ↑i ∈ fs i
+i : ↑s
+hi : ↑i ∉ fs i
+r : k
+hr : (AffineMap.lineMap (p ↑i) ((Finset.affineCombination k (fs i) p) (w i))) r = p'
+⊢ (1 - r) * ∑ i_1 ∈ fs i, Finset.affineCombinationSingleWeights k (↑i) i_1 + r = 1
+Source line 61:
+    · simp [AffineMap.lineMap_apply_module, Finset.sum_add_distrib, ← Finset.mul_sum, hw]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simp [AffineMap.lineMap_apply_module, Finset.sum_add_distrib, ← Finset.mul_sum, hw]
+
+ERROR .LspCheck.lean:62:7-62:21
+Type mismatch: After simplification, term
+  hr
+ has type
+  (AffineMap.lineMap (p ↑i) ((Finset.affineCombination k (fs i) p) (w i))) r = p'
+but is expected to have type
+  (AffineMap.lineMap ((Finset.affineCombination k (fs i) p) (Finset.affineCombinationSingleWeights k ↑i))
+        ((Finset.affineCombination k (fs i) p) (w i)))
+      r =
+    p'
+Source line 62:
+    · simpa using hr
+      ^^^^^^^^^^^^^^
+Highlighted span: simpa using hr
+
+ERROR .LspCheck.lean:69:7-69:71
+unsolved goals
+case neg
+k : Type u_1
+V : Type u_2
+P : Type u_3
+ι : Type u_4
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+inst✝ : AddTorsor V P
+p : ι → P
+hp : AffineIndependent k p
+s : Set ι
+hs : s.Nonempty
+fs : ↑s → Finset ι
+w : ↑s → ι → k
+hw : ∀ (i : ↑s), ∑ j ∈ fs i, w i j = 1
+p' : P
+hp' : ∀ (i : ↑s), p' ∈ affineSpan k {p ↑i, (Finset.affineCombination k (fs i) p) (w i)}
+hfs : ¬∀ (i : ↑s), ↑i ∈ fs i
+i : ↑s
+hi : ↑i ∉ fs i
+r : k
+hr : (AffineMap.lineMap (p ↑i) ((Finset.affineCombination k (fs i) p) (w i))) r = p'
+j : ↑s
+t : ι
+ht : ¬t = ↑j
+⊢ (if t ∈ fs j then r * w j t else 0) =
+    if t ∈ fs i then (1 - r) * Finset.affineCombinationSingleWeights k (↑i) t + r * w i t else 0
+Source line 69:
+      · simp [Set.indicator_apply, ht, AffineMap.lineMap_apply_module]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simp [Set.indicator_apply, ht, AffineMap.lineMap_apply_module]
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k V P ι : Type*}
+
+variable [Ring k] [AddCommGroup V] [Module k V] [AddTorsor V P]
+
+private theorem exists_affineCombination_eq_smul_eq_aux {p : ι → P} (hp : AffineIndependent k p)
+    {s : Set ι} (hs : s.Nonempty) {fs : s → Finset ι} (hfs : ∀ i, (i : ι) ∈ fs i) {w : s → ι → k}
+    (hw : ∀ i, ∑ j ∈ fs i, w i j = 1) {p' : P}
+    (hp' : ∀ i : s, p' ∈ line[k, p i, (fs i).affineCombination k p (w i)]) :
+    ∃ (w' : ι → k) (fs' : Finset ι), (∑ j ∈ fs', w' j = 1) ∧ fs'.affineCombination k p w' = p' ∧
+      ∀ i : s, ∃ r, ∀ j, r * Set.indicator ((fs i : Set ι) \ {(i : ι)}) (w i) j =
+        Set.indicator ((fs' : Set ι) \ {(i : ι)}) w' j := by
+  classical
+  have hp'' : ∀ i : s, ∃ r : k, (fs i).affineCombination k p
+      (AffineMap.lineMap (Finset.affineCombinationSingleWeights k (i : ι)) (w i) r) = p' := by
+    intro i
+    simp_rw [mem_affineSpan_pair_iff_exists_lineMap_eq] at hp'
+    obtain ⟨r, rfl⟩ := hp' i
+    exact ⟨r, by simp [hfs]⟩
+  obtain ⟨i', hi'⟩ := hs
+  obtain ⟨ri', hri'⟩ := hp'' ⟨i', hi'⟩
+  let w' : ι → k :=
+    AffineMap.lineMap (Finset.affineCombinationSingleWeights k i') (w ⟨i', hi'⟩) ri'
+  refine ⟨w', fs ⟨i', hi'⟩, ?_, ?_, ?_⟩
+  · simp [w', AffineMap.lineMap_apply_module, Finset.sum_add_distrib, ← Finset.mul_sum, hw, hfs]
+  · simp [w', hri']
+  · intro i
+    obtain ⟨r, hr⟩ := hp'' i
+    refine ⟨r, ?_⟩
+    rw [← hri'] at hr
+    simp only [AffineMap.lineMap_apply_module] at hr
+    have hind := hp.indicator_eq_of_affineCombination_eq _ _ _ _ ?_ ?_ hr
+    · intro j
+      by_cases hj : j = i
+      · simp [hj]
+      replace hind := congr_fun hind j
+      convert hind using 1
+      · simp [Set.indicator_apply, hj]
+      · simp [Set.indicator_apply, hj, w', AffineMap.lineMap_apply_module]
+    · simp [Finset.sum_add_distrib, ← Finset.mul_sum, hw, hfs]
+    · simp [Finset.sum_add_distrib, ← Finset.mul_sum, hw, hfs]
+
+
+theorem exists_affineCombination_eq_smul_eq {p : ι → P} (hp : AffineIndependent k p) {s : Set ι}
+    (hs : s.Nonempty) {fs : s → Finset ι} {w : s → ι → k} (hw : ∀ i, ∑ j ∈ fs i, w i j = 1) {p' : P}
+    (hp' : ∀ i : s, p' ∈ line[k, p i, (fs i).affineCombination k p (w i)]) :
+    ∃ (w' : ι → k) (fs' : Finset ι), (∑ j ∈ fs', w' j = 1) ∧ fs'.affineCombination k p w' = p' ∧
+      ∀ i : s, ∃ r, ∀ j, r * Set.indicator ((fs i : Set ι) \ {(i : ι)}) (w i) j =
+        Set.indicator ((fs' : Set ι) \ {(i : ι)}) w' j := by
+  classical
+  by_cases hfs : ∀ i : s, (i : ι) ∈ fs i
+  · exact exists_affineCombination_eq_smul_eq_aux hp hs hfs hw hp'
+  · have hnot : ∃ i : s, (i : ι) ∉ fs i := by
+      simpa only [not_forall] using hfs
+    obtain ⟨i, hi⟩ := hnot
+    exact exists_affineCombination_eq_smul_eq_aux hp hs
+      (fun j =>
+        by
+          by_cases hj : (j : ι) ∈ fs j
+          · exact hj
+          · exfalso
+            exact hi hj)
+      hw hp'
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+INFORMATION .LspCheck.lean:7:9-8:1
+Goals accomplished!
+Source line 7:
+private theorem exists_affineCombination_eq_smul_eq_aux {p : ι → P} (hp : AffineIndependent k p)
+        ^
+Highlighted span: t
+
+ERROR .LspCheck.lean:63:22-63:24
+Application type mismatch: The argument
+  hj
+has type
+  ↑j ∉ fs j
+but is expected to have type
+  ↑i ∈ fs i
+in the application
+  hi hj
+Source line 63:
+            exact hi hj)
+                     ^^
+Highlighted span: hj
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+INFORMATION .LspCheck.lean:7:9-8:1
+Goals accomplished!
+Source line 7:
+private theorem exists_affineCombination_eq_smul_eq_aux {p : ι → P} (hp : AffineIndependent k p)
+        ^
+Highlighted span: t
+
+ERROR .LspCheck.lean:63:22-63:24
+Application type mismatch: The argument
+  hj
+has type
+  ↑j ∉ fs j
+but is expected to have type
+  ↑i ∈ fs i
+in the application
+  hi hj
+Source line 63:
+            exact hi hj)
+                     ^^
+Highlighted span: hj

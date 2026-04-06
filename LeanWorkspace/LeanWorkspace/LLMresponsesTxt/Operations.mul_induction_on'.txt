@@ -1,0 +1,645 @@
+FILE: Operations.mul_induction_on'.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Operations.mul_induction_on'.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R : Type u} [Semiring R] {A : Type v} [Semiring A] [Module R A]
+
+variable {M : Type*} [AddCommMonoid M] [Module R M] [Module A M] [IsScalarTower R A M]
+
+variable [IsScalarTower R A A]
+
+variable (S T : Set A) {M N P Q : Submodule R A} {m n : A}
+
+theorem mul_induction_on' {C : ∀ r, r ∈ M * N → Prop}
+    (mem_mul_mem : ∀ m (hm : m ∈ M) n (hn : n ∈ N), C (m * n) (Submodule.mul_mem_mul hm hn))
+    (add : ∀ x hx y hy, C x hx → C y hy → C (x + y) (add_mem hx hy)) {r : A} (hr : r ∈ M * N) :
+    C r hr := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type u} [Semiring R] {A : Type v} [Semiring A] [Module R A]
+
+variable {M : Type*} [AddCommMonoid M] [Module R M] [Module A M] [IsScalarTower R A M]
+
+variable [IsScalarTower R A A]
+
+variable (S T : Set A) {M N P Q : Submodule R A} {m n : A}
+
+theorem mul_induction_on' {C : ∀ r, r ∈ M * N → Prop}
+    (mem_mul_mem : ∀ m (hm : m ∈ M) n (hn : n ∈ N), C (m * n) (Submodule.mul_mem_mul hm hn))
+    (add : ∀ x hx y hy, C x hx → C y hy → C (x + y) (add_mem hx hy)) {r : A} (hr : r ∈ M * N) :
+    C r hr := by
+  rcases hr with ⟨r, hr, rfl⟩
+  refine Submodule.smul_induction_on hr ?_ ?_
+  · intro a ha b hb
+    simpa [smul_eq_mul] using mem_mul_mem a ha b hb
+  · intro x y hx hy hxC hyC
+    simpa [smul_eq_mul, add_mul] using add _ hx _ hy hxC hyC
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:18-15:30
+Tactic `rcases` failed: `hr : ∀
+  t ∈
+    Set.range fun t ↦
+      ⋂ (_ : t ∈ upperBounds (Set.range fun s ↦ AddSubmonoid.map (DistribSMul.toAddMonoidHom A ↑s) N.toAddSubmonoid)),
+        ↑t,
+  r ∈ t` is not an inductive datatype
+Source line 15:
+  rcases hr with ⟨r, hr, rfl⟩
+                 ^^^^^^^^^^^^
+Highlighted span: ⟨r, hr, rfl⟩
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:18-15:30
+Tactic `rcases` failed: `hr : ∀
+  t ∈
+    Set.range fun t ↦
+      ⋂ (_ : t ∈ upperBounds (Set.range fun s ↦ AddSubmonoid.map (DistribSMul.toAddMonoidHom A ↑s) N.toAddSubmonoid)),
+        ↑t,
+  r ∈ t` is not an inductive datatype
+Source line 15:
+  rcases hr with ⟨r, hr, rfl⟩
+                 ^^^^^^^^^^^^
+Highlighted span: ⟨r, hr, rfl⟩
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type u} [Semiring R] {A : Type v} [Semiring A] [Module R A]
+
+variable {M : Type*} [AddCommMonoid M] [Module R M] [Module A M] [IsScalarTower R A M]
+
+variable [IsScalarTower R A A]
+
+variable (S T : Set A) {M N P Q : Submodule R A} {m n : A}
+
+theorem mul_induction_on' {C : ∀ r, r ∈ M * N → Prop}
+    (mem_mul_mem : ∀ m (hm : m ∈ M) n (hn : n ∈ N), C (m * n) (Submodule.mul_mem_mul hm hn))
+    (add : ∀ x hx y hy, C x hx → C y hy → C (x + y) (add_mem hx hy)) {r : A} (hr : r ∈ M * N) :
+    C r hr := by
+  refine Submodule.mul_induction_on ?_ ?_ hr
+  · intro m hm n hn
+    exact mem_mul_mem m hm n hn
+  · intro x y hx hy hxC hyC
+    exact add x hx y hy hxC hyC
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:43-15:45
+Type mismatch
+  hr
+has type
+  r ∈ M * N
+but is expected to have type
+  ∀ (x y : ?m.81), C r hr → C r hr → C r hr
+Source line 15:
+  refine Submodule.mul_induction_on ?_ ?_ hr
+                                          ^^
+Highlighted span: hr
+
+ERROR .LspCheck.lean:16:11-16:12
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case refine_1
+R : Type u
+inst✝³ : Semiring R
+A : Type v
+inst✝² : Semiring A
+inst✝¹ : Module R A
+inst✝ : IsScalarTower R A A
+M N : Submodule R A
+C : (r : A) → r ∈ M * N → Prop
+mem_mul_mem : ∀ (m : A) (hm : m ∈ M) (n : A) (hn : n ∈ N), C (m * n) ⋯
+add : ∀ (x : A) (hx : x ∈ M * N) (y : A) (hy : y ∈ M * N), C x hx → C y hy → C (x + y) ⋯
+r : A
+hr : r ∈ M * N
+⊢ Type ?u.33108.9
+Source line 16:
+  · intro m hm n hn
+          ^
+Highlighted span: m
+
+ERROR .LspCheck.lean:18:11-18:12
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case refine_2
+R : Type u
+inst✝³ : Semiring R
+A : Type v
+inst✝² : Semiring A
+inst✝¹ : Module R A
+inst✝ : IsScalarTower R A A
+M N : Submodule R A
+C : (r : A) → r ∈ M * N → Prop
+mem_mul_mem : ∀ (m : A) (hm : m ∈ M) (n : A) (hn : n ∈ N), C (m * n) ⋯
+add : ∀ (x : A) (hx : x ∈ M * N) (y : A) (hy : y ∈ M * N), C x hx → C y hy → C (x + y) ⋯
+r : A
+hr : r ∈ M * N
+⊢ Semiring sorry
+Source line 18:
+  · intro x y hx hy hxC hyC
+          ^
+Highlighted span: x
+
+ERROR .LspCheck.lean:14:15-15:1
+unsolved goals
+case refine_3
+R : Type u
+inst✝³ : Semiring R
+A : Type v
+inst✝² : Semiring A
+inst✝¹ : Module R A
+inst✝ : IsScalarTower R A A
+M N : Submodule R A
+C : (r : A) → r ∈ M * N → Prop
+mem_mul_mem : ∀ (m : A) (hm : m ∈ M) (n : A) (hn : n ∈ N), C (m * n) ⋯
+add : ∀ (x : A) (hx : x ∈ M * N) (y : A) (hy : y ∈ M * N), C x hx → C y hy → C (x + y) ⋯
+r : A
+hr : r ∈ M * N
+⊢ Type ?u.33108.8
+
+case refine_4
+R : Type u
+inst✝³ : Semiring R
+A : Type v
+inst✝² : Semiring A
+inst✝¹ : Module R A
+inst✝ : IsScalarTower R A A
+M N : Submodule R A
+C : (r : A) → r ∈ M * N → Prop
+mem_mul_mem : ∀ (m : A) (hm : m ∈ M) (n : A) (hn : n ∈ N), C (m * n) ⋯
+add : ∀ (x : A) (hx : x ∈ M * N) (y : A) (hy : y ∈ M * N), C x hx → C y hy → C (x + y) ⋯
+r : A
+hr : r ∈ M * N
+⊢ Semiring ?refine_3
+
+case refine_5
+R : Type u
+inst✝³ : Semiring R
+A : Type v
+inst✝² : Semiring A
+inst✝¹ : Module R A
+inst✝ : IsScalarTower R A A
+M N : Submodule R A
+C : (r : A) → r ∈ M * N → Prop
+mem_mul_mem : ∀ (m : A) (hm : m ∈ M) (n : A) (hn : n ∈ N), C (m * n) ⋯
+add : ∀ (x : A) (hx : x ∈ M * N) (y : A) (hy : y ∈ M * N), C x hx → C y hy → C (x + y) ⋯
+r : A
+hr : r ∈ M * N
+⊢ Module sorry ?refine_3
+
+case refine_6
+R : Type u
+inst✝³ : Semiring R
+A : Type v
+inst✝² : Semiring A
+inst✝¹ : Module R A
+inst✝ : IsScalarTower R A A
+M N : Submodule R A
+C : (r : A) → r ∈ M * N → Prop
+mem_mul_mem : ∀ (m : A) (hm : m ∈ M) (n : A) (hn : n ∈ N), C (m * n) ⋯
+add : ∀ (x : A) (hx : x ∈ M * N) (y : A) (hy : y ∈ M * N), C x hx → C y hy → C (x + y) ⋯
+r : A
+hr : r ∈ M * N
+⊢ IsScalarTower sorry ?refine_3 ?refine_3
+
+case refine_7
+R : Type u
+inst✝³ : Semiring R
+A : Type v
+inst✝² : Semiring A
+inst✝¹ : Module R A
+inst✝ : IsScalarTower R A A
+M N : Submodule R A
+C : (r : A) → r ∈ M * N → Prop
+mem_mul_mem : ∀ (m : A) (hm : m ∈ M) (n : A) (hn : n ∈ N), C (m * n) ⋯
+add : ∀ (x : A) (hx : x ∈ M * N) (y : A) (hy : y ∈ M * N), C x hx → C y hy → C (x + y) ⋯
+r : A
+hr : r ∈ M * N
+⊢ Submodule sorry ?refine_3
+
+case refine_8
+R : Type u
+inst✝³ : Semiring R
+A : Type v
+inst✝² : Semiring A
+inst✝¹ : Module R A
+inst✝ : IsScalarTower R A A
+M N : Submodule R A
+C : (r : A) → r ∈ M * N → Prop
+mem_mul_mem : ∀ (m : A) (hm : m ∈ M) (n : A) (hn : n ∈ N), C (m * n) ⋯
+add : ∀ (x : A) (hx : x ∈ M * N) (y : A) (hy : y ∈ M * N), C x hx → C y hy → C (x + y) ⋯
+r : A
+hr : r ∈ M * N
+⊢ Submodule sorry ?refine_3
+
+case refine_9
+R : Type u
+inst✝³ : Semiring R
+A : Type v
+inst✝² : Semiring A
+inst✝¹ : Module R A
+inst✝ : IsScalarTower R A A
+M N : Submodule R A
+C : (r : A) → r ∈ M * N → Prop
+mem_mul_mem : ∀ (m : A) (hm : m ∈ M) (n : A) (hn : n ∈ N), C (m * n) ⋯
+add : ∀ (x : A) (hx : x ∈ M * N) (y : A) (hy : y ∈ M * N), C x hx → C y hy → C (x + y) ⋯
+r : A
+hr : r ∈ M * N
+⊢ ?refine_3
+
+case refine_10
+R : Type u
+inst✝³ : Semiring R
+A : Type v
+inst✝² : Semiring A
+inst✝¹ : Module R A
+inst✝ : IsScalarTower R A A
+M N : Submodule R A
+C : (r : A) → r ∈ M * N → Prop
+mem_mul_mem : ∀ (m : A) (hm : m ∈ M) (n : A) (hn : n ∈ N), C (m * n) ⋯
+add : ∀ (x : A) (hx : x ∈ M * N) (y : A) (hy : y ∈ M * N), C x hx → C y hy → C (x + y) ⋯
+r : A
+hr : r ∈ M * N
+⊢ ?refine_9 ∈ ?refine_7 * ?refine_8
+
+case refine_11
+R : Type u
+inst✝³ : Semiring R
+A : Type v
+inst✝² : Semiring A
+inst✝¹ : Module R A
+inst✝ : IsScalarTower R A A
+M N : Submodule R A
+C : (r : A) → r ∈ M * N → Prop
+mem_mul_mem : ∀ (m : A) (hm : m ∈ M) (n : A) (hn : n ∈ N), C (m * n) ⋯
+add : ∀ (x : A) (hx : x ∈ M * N) (y : A) (hy : y ∈ M * N), C x hx → C y hy → C (x + y) ⋯
+r : A
+hr : r ∈ M * N
+⊢ ∀ (x y : ?refine_3), C r hr → C r hr → C r hr
+
+case refine_12
+R : Type u
+inst✝³ : Semiring R
+A : Type v
+inst✝² : Semiring A
+inst✝¹ : Module R A
+inst✝ : IsScalarTower R A A
+M N : Submodule R A
+C : (r : A) → r ∈ M * N → Prop
+mem_mul_mem : ∀ (m : A) (hm : m ∈ M) (n : A) (hn : n ∈ N), C (m * n) ⋯
+add : ∀ (x : A) (hx : x ∈ M * N) (y : A) (hy : y ∈ M * N), C x hx → C y hy → C (x + y) ⋯
+r : A
+hr : r ∈ M * N
+⊢ ∀ m ∈ ?refine_7, ∀ n ∈ ?refine_8, C r hr
+Source line 14:
+    C r hr := by
+              ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:43-15:45
+Type mismatch
+  hr
+has type
+  r ∈ M * N
+but is expected to have type
+  ∀ (x y : ?m.81), C r hr → C r hr → C r hr
+Source line 15:
+  refine Submodule.mul_induction_on ?_ ?_ hr
+                                          ^^
+Highlighted span: hr
+
+ERROR .LspCheck.lean:16:11-16:12
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case refine_1
+R : Type u
+inst✝³ : Semiring R
+A : Type v
+inst✝² : Semiring A
+inst✝¹ : Module R A
+inst✝ : IsScalarTower R A A
+M N : Submodule R A
+C : (r : A) → r ∈ M * N → Prop
+mem_mul_mem : ∀ (m : A) (hm : m ∈ M) (n : A) (hn : n ∈ N), C (m * n) ⋯
+add : ∀ (x : A) (hx : x ∈ M * N) (y : A) (hy : y ∈ M * N), C x hx → C y hy → C (x + y) ⋯
+r : A
+hr : r ∈ M * N
+⊢ Type ?u.33108.9
+Source line 16:
+  · intro m hm n hn
+          ^
+Highlighted span: m
+
+ERROR .LspCheck.lean:18:11-18:12
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case refine_2
+R : Type u
+inst✝³ : Semiring R
+A : Type v
+inst✝² : Semiring A
+inst✝¹ : Module R A
+inst✝ : IsScalarTower R A A
+M N : Submodule R A
+C : (r : A) → r ∈ M * N → Prop
+mem_mul_mem : ∀ (m : A) (hm : m ∈ M) (n : A) (hn : n ∈ N), C (m * n) ⋯
+add : ∀ (x : A) (hx : x ∈ M * N) (y : A) (hy : y ∈ M * N), C x hx → C y hy → C (x + y) ⋯
+r : A
+hr : r ∈ M * N
+⊢ Semiring sorry
+Source line 18:
+  · intro x y hx hy hxC hyC
+          ^
+Highlighted span: x
+
+ERROR .LspCheck.lean:14:15-15:1
+unsolved goals
+case refine_3
+R : Type u
+inst✝³ : Semiring R
+A : Type v
+inst✝² : Semiring A
+inst✝¹ : Module R A
+inst✝ : IsScalarTower R A A
+M N : Submodule R A
+C : (r : A) → r ∈ M * N → Prop
+mem_mul_mem : ∀ (m : A) (hm : m ∈ M) (n : A) (hn : n ∈ N), C (m * n) ⋯
+add : ∀ (x : A) (hx : x ∈ M * N) (y : A) (hy : y ∈ M * N), C x hx → C y hy → C (x + y) ⋯
+r : A
+hr : r ∈ M * N
+⊢ Type ?u.33108.8
+
+case refine_4
+R : Type u
+inst✝³ : Semiring R
+A : Type v
+inst✝² : Semiring A
+inst✝¹ : Module R A
+inst✝ : IsScalarTower R A A
+M N : Submodule R A
+C : (r : A) → r ∈ M * N → Prop
+mem_mul_mem : ∀ (m : A) (hm : m ∈ M) (n : A) (hn : n ∈ N), C (m * n) ⋯
+add : ∀ (x : A) (hx : x ∈ M * N) (y : A) (hy : y ∈ M * N), C x hx → C y hy → C (x + y) ⋯
+r : A
+hr : r ∈ M * N
+⊢ Semiring ?refine_3
+
+case refine_5
+R : Type u
+inst✝³ : Semiring R
+A : Type v
+inst✝² : Semiring A
+inst✝¹ : Module R A
+inst✝ : IsScalarTower R A A
+M N : Submodule R A
+C : (r : A) → r ∈ M * N → Prop
+mem_mul_mem : ∀ (m : A) (hm : m ∈ M) (n : A) (hn : n ∈ N), C (m * n) ⋯
+add : ∀ (x : A) (hx : x ∈ M * N) (y : A) (hy : y ∈ M * N), C x hx → C y hy → C (x + y) ⋯
+r : A
+hr : r ∈ M * N
+⊢ Module sorry ?refine_3
+
+case refine_6
+R : Type u
+inst✝³ : Semiring R
+A : Type v
+inst✝² : Semiring A
+inst✝¹ : Module R A
+inst✝ : IsScalarTower R A A
+M N : Submodule R A
+C : (r : A) → r ∈ M * N → Prop
+mem_mul_mem : ∀ (m : A) (hm : m ∈ M) (n : A) (hn : n ∈ N), C (m * n) ⋯
+add : ∀ (x : A) (hx : x ∈ M * N) (y : A) (hy : y ∈ M * N), C x hx → C y hy → C (x + y) ⋯
+r : A
+hr : r ∈ M * N
+⊢ IsScalarTower sorry ?refine_3 ?refine_3
+
+case refine_7
+R : Type u
+inst✝³ : Semiring R
+A : Type v
+inst✝² : Semiring A
+inst✝¹ : Module R A
+inst✝ : IsScalarTower R A A
+M N : Submodule R A
+C : (r : A) → r ∈ M * N → Prop
+mem_mul_mem : ∀ (m : A) (hm : m ∈ M) (n : A) (hn : n ∈ N), C (m * n) ⋯
+add : ∀ (x : A) (hx : x ∈ M * N) (y : A) (hy : y ∈ M * N), C x hx → C y hy → C (x + y) ⋯
+r : A
+hr : r ∈ M * N
+⊢ Submodule sorry ?refine_3
+
+case refine_8
+R : Type u
+inst✝³ : Semiring R
+A : Type v
+inst✝² : Semiring A
+inst✝¹ : Module R A
+inst✝ : IsScalarTower R A A
+M N : Submodule R A
+C : (r : A) → r ∈ M * N → Prop
+mem_mul_mem : ∀ (m : A) (hm : m ∈ M) (n : A) (hn : n ∈ N), C (m * n) ⋯
+add : ∀ (x : A) (hx : x ∈ M * N) (y : A) (hy : y ∈ M * N), C x hx → C y hy → C (x + y) ⋯
+r : A
+hr : r ∈ M * N
+⊢ Submodule sorry ?refine_3
+
+case refine_9
+R : Type u
+inst✝³ : Semiring R
+A : Type v
+inst✝² : Semiring A
+inst✝¹ : Module R A
+inst✝ : IsScalarTower R A A
+M N : Submodule R A
+C : (r : A) → r ∈ M * N → Prop
+mem_mul_mem : ∀ (m : A) (hm : m ∈ M) (n : A) (hn : n ∈ N), C (m * n) ⋯
+add : ∀ (x : A) (hx : x ∈ M * N) (y : A) (hy : y ∈ M * N), C x hx → C y hy → C (x + y) ⋯
+r : A
+hr : r ∈ M * N
+⊢ ?refine_3
+
+case refine_10
+R : Type u
+inst✝³ : Semiring R
+A : Type v
+inst✝² : Semiring A
+inst✝¹ : Module R A
+inst✝ : IsScalarTower R A A
+M N : Submodule R A
+C : (r : A) → r ∈ M * N → Prop
+mem_mul_mem : ∀ (m : A) (hm : m ∈ M) (n : A) (hn : n ∈ N), C (m * n) ⋯
+add : ∀ (x : A) (hx : x ∈ M * N) (y : A) (hy : y ∈ M * N), C x hx → C y hy → C (x + y) ⋯
+r : A
+hr : r ∈ M * N
+⊢ ?refine_9 ∈ ?refine_7 * ?refine_8
+
+case refine_11
+R : Type u
+inst✝³ : Semiring R
+A : Type v
+inst✝² : Semiring A
+inst✝¹ : Module R A
+inst✝ : IsScalarTower R A A
+M N : Submodule R A
+C : (r : A) → r ∈ M * N → Prop
+mem_mul_mem : ∀ (m : A) (hm : m ∈ M) (n : A) (hn : n ∈ N), C (m * n) ⋯
+add : ∀ (x : A) (hx : x ∈ M * N) (y : A) (hy : y ∈ M * N), C x hx → C y hy → C (x + y) ⋯
+r : A
+hr : r ∈ M * N
+⊢ ∀ (x y : ?refine_3), C r hr → C r hr → C r hr
+
+case refine_12
+R : Type u
+inst✝³ : Semiring R
+A : Type v
+inst✝² : Semiring A
+inst✝¹ : Module R A
+inst✝ : IsScalarTower R A A
+M N : Submodule R A
+C : (r : A) → r ∈ M * N → Prop
+mem_mul_mem : ∀ (m : A) (hm : m ∈ M) (n : A) (hn : n ∈ N), C (m * n) ⋯
+add : ∀ (x : A) (hx : x ∈ M * N) (y : A) (hy : y ∈ M * N), C x hx → C y hy → C (x + y) ⋯
+r : A
+hr : r ∈ M * N
+⊢ ∀ m ∈ ?refine_7, ∀ n ∈ ?refine_8, C r hr
+Source line 14:
+    C r hr := by
+              ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type u} [Semiring R] {A : Type v} [Semiring A] [Module R A]
+
+variable {M : Type*} [AddCommMonoid M] [Module R M] [Module A M] [IsScalarTower R A M]
+
+variable [IsScalarTower R A A]
+
+variable (S T : Set A) {M N P Q : Submodule R A} {m n : A}
+
+theorem mul_induction_on' {C : ∀ r, r ∈ M * N → Prop}
+    (mem_mul_mem : ∀ m (hm : m ∈ M) n (hn : n ∈ N), C (m * n) (Submodule.mul_mem_mul hm hn))
+    (add : ∀ x hx y hy, C x hx → C y hy → C (x + y) (add_mem hx hy)) {r : A} (hr : r ∈ M * N) :
+    C r hr := by
+  let P : Submodule R A := { x | ∃ hx : x ∈ M * N, C x hx }
+  have hPmul : ∀ m (hm : m ∈ M) n (hn : n ∈ N), m * n ∈ P := by
+    intro m hm n hn
+    exact ⟨Submodule.mul_mem_mul hm hn, mem_mul_mem m hm n hn⟩
+  have hPadd : ∀ x y, x ∈ P → y ∈ P → x + y ∈ P := by
+    intro x y hx hy
+    rcases hx with ⟨hx', hxC⟩
+    rcases hy with ⟨hy', hyC⟩
+    exact ⟨add_mem hx' hy', add x hx' y hy' hxC hyC⟩
+  have hrP : r ∈ P := by
+    exact Submodule.mul_induction_on hr hPmul hPadd
+  rcases hrP with ⟨hr', hCr⟩
+  exact hCr
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:28-15:60
+Type mismatch
+  {x | ∃ (hx : x ∈ M * N), C x hx}
+has type
+  Set A
+but is expected to have type
+  Submodule R A
+Source line 15:
+  let P : Submodule R A := { x | ∃ hx : x ∈ M * N, C x hx }
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: { x | ∃ hx : x ∈ M * N, C x hx }
+
+ERROR .LspCheck.lean:18:11-18:63
+Invalid `⟨...⟩` notation: The expected type `P.toAddSubsemigroup.1 (m * n)` is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+Source line 18:
+    exact ⟨Submodule.mul_mem_mul hm hn, mem_mul_mem m hm n hn⟩
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ⟨Submodule.mul_mem_mul hm hn, mem_mul_mem m hm n hn⟩
+
+ERROR .LspCheck.lean:21:20-21:30
+Tactic `rcases` failed: `hx : P.toAddSubsemigroup.1 x` is not an inductive datatype
+Source line 21:
+    rcases hx with ⟨hx', hxC⟩
+                   ^^^^^^^^^^
+Highlighted span: ⟨hx', hxC⟩
+
+ERROR .LspCheck.lean:26:19-26:29
+Tactic `rcases` failed: `hrP : P.toAddSubsemigroup.1 r` is not an inductive datatype
+Source line 26:
+  rcases hrP with ⟨hr', hCr⟩
+                  ^^^^^^^^^^
+Highlighted span: ⟨hr', hCr⟩
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:28-15:60
+Type mismatch
+  {x | ∃ (hx : x ∈ M * N), C x hx}
+has type
+  Set A
+but is expected to have type
+  Submodule R A
+Source line 15:
+  let P : Submodule R A := { x | ∃ hx : x ∈ M * N, C x hx }
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: { x | ∃ hx : x ∈ M * N, C x hx }
+
+ERROR .LspCheck.lean:18:11-18:63
+Invalid `⟨...⟩` notation: The expected type `P.toAddSubsemigroup.1 (m * n)` is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+Source line 18:
+    exact ⟨Submodule.mul_mem_mul hm hn, mem_mul_mem m hm n hn⟩
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ⟨Submodule.mul_mem_mul hm hn, mem_mul_mem m hm n hn⟩
+
+ERROR .LspCheck.lean:21:20-21:30
+Tactic `rcases` failed: `hx : P.toAddSubsemigroup.1 x` is not an inductive datatype
+Source line 21:
+    rcases hx with ⟨hx', hxC⟩
+                   ^^^^^^^^^^
+Highlighted span: ⟨hx', hxC⟩
+
+ERROR .LspCheck.lean:26:19-26:29
+Tactic `rcases` failed: `hrP : P.toAddSubsemigroup.1 r` is not an inductive datatype
+Source line 26:
+  rcases hrP with ⟨hr', hCr⟩
+                  ^^^^^^^^^^
+Highlighted span: ⟨hr', hCr⟩

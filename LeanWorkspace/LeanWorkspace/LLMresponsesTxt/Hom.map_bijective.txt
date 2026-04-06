@@ -1,0 +1,183 @@
+FILE: Hom.map_bijective.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Hom.map_bijective.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {M : Type u} {N : Type v} {P : Type w} [Monoid M] [Monoid N] [Monoid P]
+
+theorem map_bijective {f : M →* N} (hf : Function.Bijective f) : Function.Bijective <| Units.map f := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M : Type u} {N : Type v} {P : Type w} [Monoid M] [Monoid N] [Monoid P]
+
+theorem map_bijective {f : M →* N} (hf : Function.Bijective f) : Function.Bijective <| Units.map f := by
+  rcases hf with ⟨hf_inj, hf_surj⟩
+  constructor
+  · intro u v h
+    apply Units.ext
+    apply hf_inj
+    exact congrArg Units.val h
+  · intro u
+    rcases hf_surj u with ⟨x, rfl⟩
+    rcases hf_surj ↑(u⁻¹) with ⟨y, hy⟩
+    refine ⟨⟨x, y, ?_, ?_⟩, ?_⟩
+    · apply hf_inj
+      rw [map_mul, hy, Units.val_inv_eq_inv_val, Units.val_mul, Units.inv_mul]
+    · apply hf_inj
+      rw [map_mul, hy, Units.val_inv_eq_inv_val, Units.mul_inv]
+    · apply Units.ext
+      rfl
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:31-13:34
+Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  f x = ↑u
+
+case right
+M : Type u
+N : Type v
+inst✝¹ : Monoid M
+inst✝ : Monoid N
+f : M →* N
+hf_inj : Function.Injective ⇑f
+hf_surj : Function.Surjective ⇑f
+u : Nˣ
+x : M
+h✝ : f x = ↑u
+⊢ ∃ a, (Units.map f) a = u
+Source line 13:
+    rcases hf_surj u with ⟨x, rfl⟩
+                              ^^^
+Highlighted span: rfl
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:31-13:34
+Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  f x = ↑u
+
+case right
+M : Type u
+N : Type v
+inst✝¹ : Monoid M
+inst✝ : Monoid N
+f : M →* N
+hf_inj : Function.Injective ⇑f
+hf_surj : Function.Surjective ⇑f
+u : Nˣ
+x : M
+h✝ : f x = ↑u
+⊢ ∃ a, (Units.map f) a = u
+Source line 13:
+    rcases hf_surj u with ⟨x, rfl⟩
+                              ^^^
+Highlighted span: rfl
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M : Type u} {N : Type v} {P : Type w} [Monoid M] [Monoid N] [Monoid P]
+
+theorem map_bijective {f : M →* N} (hf : Function.Bijective f) : Function.Bijective <| Units.map f := by
+  rcases hf with ⟨hf_inj, hf_surj⟩
+  constructor
+  · intro u v h
+    apply Units.ext
+    apply hf_inj
+    exact congrArg Units.val h
+  · intro u
+    rcases hf_surj (u : N) with ⟨x, hx⟩
+    rcases hf_surj ((↑(u⁻¹)) : N) with ⟨y, hy⟩
+    refine ⟨⟨x, y, ?_, ?_⟩, ?_⟩
+    · apply hf_inj
+      rw [map_mul, hx, hy]
+      exact Units.val_mul_inv u
+    · apply hf_inj
+      rw [map_mul, hy, hx]
+      exact Units.val_inv_mul u
+    · apply Units.ext
+      exact hx
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:18:13-18:30
+Unknown constant `Units.val_mul_inv`
+Source line 18:
+      exact Units.val_mul_inv u
+            ^^^^^^^^^^^^^^^^^
+Highlighted span: Units.val_mul_inv
+
+ERROR .LspCheck.lean:21:13-21:30
+Unknown constant `Units.val_inv_mul`
+Source line 21:
+      exact Units.val_inv_mul u
+            ^^^^^^^^^^^^^^^^^
+Highlighted span: Units.val_inv_mul
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:18:13-18:30
+Unknown constant `Units.val_mul_inv`
+Source line 18:
+      exact Units.val_mul_inv u
+            ^^^^^^^^^^^^^^^^^
+Highlighted span: Units.val_mul_inv
+
+ERROR .LspCheck.lean:21:13-21:30
+Unknown constant `Units.val_inv_mul`
+Source line 21:
+      exact Units.val_inv_mul u
+            ^^^^^^^^^^^^^^^^^
+Highlighted span: Units.val_inv_mul
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M : Type u} {N : Type v} {P : Type w} [Monoid M] [Monoid N] [Monoid P]
+
+theorem map_bijective {f : M →* N} (hf : Function.Bijective f) : Function.Bijective <| Units.map f := by
+  rcases hf with ⟨hf_inj, hf_surj⟩
+  constructor
+  · intro u v h
+    apply Units.ext
+    apply hf_inj
+    exact congrArg Units.val h
+  · intro u
+    rcases hf_surj (u : N) with ⟨x, hx⟩
+    rcases hf_surj ((↑(u⁻¹)) : N) with ⟨y, hy⟩
+    refine ⟨⟨x, y, ?_, ?_⟩, ?_⟩
+    · apply hf_inj
+      rw [map_mul, hx, hy]
+      simpa using u.mul_inv
+    · apply hf_inj
+      rw [map_mul, hy, hx]
+      simpa using u.inv_mul
+    · apply Units.ext
+      exact hx
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

@@ -1,0 +1,257 @@
+FILE: Basis.exists_affineBasis.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basis.exists_affineBasis.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {ι ι' G G' k V P : Type*} [AddCommGroup V] [AddTorsor V P]
+
+variable [DivisionRing k] [Module k V]
+
+variable (k V P)
+
+theorem exists_affineBasis : ∃ (s : Set P) (b : AffineBasis (↥s) k P), ⇑b = ((↑) : s → P) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι ι' G G' k V P : Type*} [AddCommGroup V] [AddTorsor V P]
+
+variable [DivisionRing k] [Module k V]
+
+variable (k V P)
+
+theorem exists_affineBasis : ∃ (s : Set P) (b : AffineBasis (↥s) k P), ⇑b = ((↑) : s → P) := by
+  classical
+  let b : AffineBasis (AffineSpace.Origin k V P × Basis (Basis.ofVectorSpace k V).Index k V).fst ⁻¹' Set.univ ∪
+      {Classical.choice (Classical.decEq P |> by infer_instance) |> False.elim ?_} k P := by
+    exact AffineBasis.ofVectorSpace k P
+  refine ⟨Set.range b, b.reindex (Equiv.ofInjective b b.injective), ?_⟩
+  ext x
+  rfl
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:24-11:42
+Unknown identifier `AffineSpace.Origin`
+Source line 11:
+  let b : AffineBasis (AffineSpace.Origin k V P × Basis (Basis.ofVectorSpace k V).Index k V).fst ⁻¹' Set.univ ∪
+                       ^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSpace.Origin
+
+ERROR .LspCheck.lean:11:51-11:56
+Unknown identifier `Basis`
+Source line 11:
+  let b : AffineBasis (AffineSpace.Origin k V P × Basis (Basis.ofVectorSpace k V).Index k V).fst ⁻¹' Set.univ ∪
+                                                  ^^^^^
+Highlighted span: Basis
+
+ERROR .LspCheck.lean:11:11-12:1
+failed to synthesize instance of type class
+  Union (Type ?u.3858.58)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 11:
+  let b : AffineBasis (AffineSpace.Origin k V P × Basis (Basis.ofVectorSpace k V).Index k V).fst ⁻¹' Set.univ ∪
+          ^
+Highlighted span: A
+
+ERROR .LspCheck.lean:12:8-12:82
+Function expected at
+  False.elim ?m.32
+but this term has type
+  ?m.31
+
+Note: Expected a function because this term is being applied to the argument
+  Classical.choice (Classical.decEq P |> by infer_instance)
+Source line 12:
+      {Classical.choice (Classical.decEq P |> by infer_instance) |> False.elim ?_} k P := by
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Classical.choice (Classical.decEq P |> by infer_instance) |> False.elim ?_
+
+ERROR .LspCheck.lean:13:11-13:36
+Unknown constant `AffineBasis.ofVectorSpace`
+Source line 13:
+    exact AffineBasis.ofVectorSpace k P
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineBasis.ofVectorSpace
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:24-11:42
+Unknown identifier `AffineSpace.Origin`
+Source line 11:
+  let b : AffineBasis (AffineSpace.Origin k V P × Basis (Basis.ofVectorSpace k V).Index k V).fst ⁻¹' Set.univ ∪
+                       ^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSpace.Origin
+
+ERROR .LspCheck.lean:11:51-11:56
+Unknown identifier `Basis`
+Source line 11:
+  let b : AffineBasis (AffineSpace.Origin k V P × Basis (Basis.ofVectorSpace k V).Index k V).fst ⁻¹' Set.univ ∪
+                                                  ^^^^^
+Highlighted span: Basis
+
+ERROR .LspCheck.lean:11:11-12:1
+failed to synthesize instance of type class
+  Union (Type ?u.3858.58)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 11:
+  let b : AffineBasis (AffineSpace.Origin k V P × Basis (Basis.ofVectorSpace k V).Index k V).fst ⁻¹' Set.univ ∪
+          ^
+Highlighted span: A
+
+ERROR .LspCheck.lean:12:8-12:82
+Function expected at
+  False.elim ?m.32
+but this term has type
+  ?m.31
+
+Note: Expected a function because this term is being applied to the argument
+  Classical.choice (Classical.decEq P |> by infer_instance)
+Source line 12:
+      {Classical.choice (Classical.decEq P |> by infer_instance) |> False.elim ?_} k P := by
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Classical.choice (Classical.decEq P |> by infer_instance) |> False.elim ?_
+
+ERROR .LspCheck.lean:13:11-13:36
+Unknown constant `AffineBasis.ofVectorSpace`
+Source line 13:
+    exact AffineBasis.ofVectorSpace k P
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineBasis.ofVectorSpace
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι ι' G G' k V P : Type*} [AddCommGroup V] [AddTorsor V P]
+
+variable [DivisionRing k] [Module k V]
+
+variable (k V P)
+
+theorem exists_affineBasis : ∃ (s : Set P) (b : AffineBasis (↥s) k P), ⇑b = ((↑) : s → P) := by
+  classical
+  let b : AffineBasis P k P := AffineBasis.id k P
+  refine ⟨Set.univ, ?_, ?_⟩
+  · let e : P ≃ Set.univ := Equiv.Set.univ P
+    exact b.reindex e.symm
+  · ext x
+    rfl
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:32-11:46
+Unknown constant `AffineBasis.id`
+Source line 11:
+  let b : AffineBasis P k P := AffineBasis.id k P
+                               ^^^^^^^^^^^^^^
+Highlighted span: AffineBasis.id
+
+ERROR .LspCheck.lean:13:29-13:45
+Type mismatch
+  Equiv.Set.univ P
+has type
+  ↑Set.univ ≃ P
+but is expected to have type
+  P ≃ ↑Set.univ
+Source line 13:
+  · let e : P ≃ Set.univ := Equiv.Set.univ P
+                            ^^^^^^^^^^^^^^^^
+Highlighted span: Equiv.Set.univ P
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:32-11:46
+Unknown constant `AffineBasis.id`
+Source line 11:
+  let b : AffineBasis P k P := AffineBasis.id k P
+                               ^^^^^^^^^^^^^^
+Highlighted span: AffineBasis.id
+
+ERROR .LspCheck.lean:13:29-13:45
+Type mismatch
+  Equiv.Set.univ P
+has type
+  ↑Set.univ ≃ P
+but is expected to have type
+  P ≃ ↑Set.univ
+Source line 13:
+  · let e : P ≃ Set.univ := Equiv.Set.univ P
+                            ^^^^^^^^^^^^^^^^
+Highlighted span: Equiv.Set.univ P
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι ι' G G' k V P : Type*} [AddCommGroup V] [AddTorsor V P]
+
+variable [DivisionRing k] [Module k V]
+
+variable (k V P)
+
+theorem exists_affineBasis : ∃ (s : Set P) (b : AffineBasis (↥s) k P), ⇑b = ((↑) : s → P) := by
+  classical
+  obtain ⟨b⟩ := AffineIndependent.exists_affineBasis (k := k) (P := P) (s := (Set.univ : Set P))
+    (by simpa [Set.affineSpan_univ] using (submodule_span_eq : Submodule.span k (Set.univ : Set V) = ⊤))
+  refine ⟨Set.range b, b.reindex (Equiv.ofInjective b b.injective), ?_⟩
+  ext x
+  rfl
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:17-11:53
+Unknown constant `AffineIndependent.exists_affineBasis`
+Source line 11:
+  obtain ⟨b⟩ := AffineIndependent.exists_affineBasis (k := k) (P := P) (s := (Set.univ : Set P))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineIndependent.exists_affineBasis
+
+ERROR .LspCheck.lean:11:10-11:13
+Tactic `rcases` failed: `x✝ : ?m.17` is not an inductive datatype
+Source line 11:
+  obtain ⟨b⟩ := AffineIndependent.exists_affineBasis (k := k) (P := P) (s := (Set.univ : Set P))
+         ^^^
+Highlighted span: ⟨b⟩
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:17-11:53
+Unknown constant `AffineIndependent.exists_affineBasis`
+Source line 11:
+  obtain ⟨b⟩ := AffineIndependent.exists_affineBasis (k := k) (P := P) (s := (Set.univ : Set P))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineIndependent.exists_affineBasis
+
+ERROR .LspCheck.lean:11:10-11:13
+Tactic `rcases` failed: `x✝ : ?m.17` is not an inductive datatype
+Source line 11:
+  obtain ⟨b⟩ := AffineIndependent.exists_affineBasis (k := k) (P := P) (s := (Set.univ : Set P))
+         ^^^
+Highlighted span: ⟨b⟩

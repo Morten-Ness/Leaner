@@ -1,0 +1,41 @@
+FILE: Idempotent.mul_of_commute.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Idempotent.mul_of_commute.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {M N S : Type*}
+
+variable [Semigroup S] {a b : S}
+
+theorem mul_of_commute (hab : Commute a b) (ha : IsIdempotentElem a) (hb : IsIdempotentElem b) :
+    IsIdempotentElem (a * b) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M N S : Type*}
+
+variable [Semigroup S] {a b : S}
+
+theorem mul_of_commute (hab : Commute a b) (ha : IsIdempotentElem a) (hb : IsIdempotentElem b) :
+    IsIdempotentElem (a * b) := by
+  dsimp [IsIdempotentElem] at ha hb ⊢
+  calc
+    (a * b) * (a * b) = a * (b * a) * b := by simp [mul_assoc]
+    _ = a * (a * b) * b := by rw [hab.eq]
+    _ = (a * a) * (b * b) := by simp [mul_assoc]
+    _ = a * b := by rw [ha, hb]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+PASS

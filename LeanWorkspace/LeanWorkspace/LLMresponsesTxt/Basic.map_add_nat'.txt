@@ -1,0 +1,167 @@
+FILE: Basic.map_add_nat'.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.map_add_nat'.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_add_nat' [AddMonoidWithOne G] [AddMonoid H] [AddConstMapClass F G H 1 b]
+    (f : F) (x : G) (n : ℕ) : f (x + n) = f x + n • b := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_add_nat' [AddMonoidWithOne G] [AddMonoid H] [AddConstMapClass F G H 1 b]
+    (f : F) (x : G) (n : ℕ) : f (x + n) = f x + n • b := by
+  simpa only [nsmul_eq_mul] using map_nat_add (f := f) (n := n) (a := x)
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:7:35-7:46
+Unknown identifier `map_nat_add`
+Source line 7:
+  simpa only [nsmul_eq_mul] using map_nat_add (f := f) (n := n) (a := x)
+                                  ^^^^^^^^^^^
+Highlighted span: map_nat_add
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:7:35-7:46
+Unknown identifier `map_nat_add`
+Source line 7:
+  simpa only [nsmul_eq_mul] using map_nat_add (f := f) (n := n) (a := x)
+                                  ^^^^^^^^^^^
+Highlighted span: map_nat_add
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_add_nat' [AddMonoidWithOne G] [AddMonoid H] [AddConstMapClass F G H 1 b]
+    (f : F) (x : G) (n : ℕ) : f (x + n) = f x + n • b := by
+  induction n with
+  | zero =>
+      simp
+  | succ n ih =>
+      rw [Nat.succ_eq_add_one, ← add_assoc, map_add, ih, add_nsmul, one_nsmul, add_assoc]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:11-11:30
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Nat.succ ?n
+in the target expression
+  f (x + ↑(n + 1)) = f x + (n + 1) • b
+
+case succ
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝³ : FunLike F G H
+b : H
+inst✝² : AddMonoidWithOne G
+inst✝¹ : AddMonoid H
+inst✝ : AddConstMapClass F G H 1 b
+f : F
+x : G
+n : ℕ
+ih : f (x + ↑n) = f x + n • b
+⊢ f (x + ↑(n + 1)) = f x + (n + 1) • b
+Source line 11:
+      rw [Nat.succ_eq_add_one, ← add_assoc, map_add, ih, add_nsmul, one_nsmul, add_assoc]
+          ^^^^^^^^^^^^^^^^^^^
+Highlighted span: Nat.succ_eq_add_one
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:11-11:30
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Nat.succ ?n
+in the target expression
+  f (x + ↑(n + 1)) = f x + (n + 1) • b
+
+case succ
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝³ : FunLike F G H
+b : H
+inst✝² : AddMonoidWithOne G
+inst✝¹ : AddMonoid H
+inst✝ : AddConstMapClass F G H 1 b
+f : F
+x : G
+n : ℕ
+ih : f (x + ↑n) = f x + n • b
+⊢ f (x + ↑(n + 1)) = f x + (n + 1) • b
+Source line 11:
+      rw [Nat.succ_eq_add_one, ← add_assoc, map_add, ih, add_nsmul, one_nsmul, add_assoc]
+          ^^^^^^^^^^^^^^^^^^^
+Highlighted span: Nat.succ_eq_add_one
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_add_nat' [AddMonoidWithOne G] [AddMonoid H] [AddConstMapClass F G H 1 b]
+    (f : F) (x : G) (n : ℕ) : f (x + n) = f x + n • b := by
+  induction n with
+  | zero =>
+      simp
+  | succ n ih =>
+      change f ((x + n) + 1) = f x + (n + 1) • b
+      rw [map_add, ih, succ_nsmul, add_assoc]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:7-11:49
+'change' tactic failed, pattern
+  f (x + ↑n + 1) = f x + (n + 1) • b
+is not definitionally equal to target
+  f (x + ↑(n + 1)) = f x + (n + 1) • b
+Source line 11:
+      change f ((x + n) + 1) = f x + (n + 1) • b
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: change f ((x + n) + 1) = f x + (n + 1) • b
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:7-11:49
+'change' tactic failed, pattern
+  f (x + ↑n + 1) = f x + (n + 1) • b
+is not definitionally equal to target
+  f (x + ↑(n + 1)) = f x + (n + 1) • b
+Source line 11:
+      change f ((x + n) + 1) = f x + (n + 1) • b
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: change f ((x + n) + 1) = f x + (n + 1) • b

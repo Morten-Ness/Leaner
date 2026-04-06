@@ -1,0 +1,359 @@
+FILE: Basic.prod_of_injective.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.prod_of_injective.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {ι κ G M : Type*} {s s₁ s₂ : Finset ι} {a : ι}
+
+variable {ι κ ι : Type*} [Fintype ι] [Fintype κ]
+
+variable [CommMonoid M]
+
+theorem prod_of_injective (e : ι → κ) (he : Function.Injective e) (f : ι → M) (g : κ → M)
+    (h' : ∀ i ∉ Set.range e, g i = 1) (h : ∀ i, f i = g (e i)) : ∏ i, f i = ∏ j, g j := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι κ G M : Type*} {s s₁ s₂ : Finset ι} {a : ι}
+
+variable {ι κ ι : Type*} [Fintype ι] [Fintype κ]
+
+variable [CommMonoid M]
+
+theorem prod_of_injective (e : ι → κ) (he : Function.Injective e) (f : ι → M) (g : κ → M)
+    (h' : ∀ i ∉ Set.range e, g i = 1) (h : ∀ i, f i = g (e i)) : ∏ i, f i = ∏ j, g j := by
+  rw [show (∏ i, f i) = ∏ i, g (e i) by
+    congr with i
+    exact h i]
+  classical
+  rw [Fintype.prod_equiv (Equiv.ofInjective e he)]
+  exact Finset.prod_attach (s := (Fintype.elems κ).filter fun j => j ∉ Set.range e) g ▸ by
+    rw [← Finset.prod_filter, Finset.prod_filter]
+    refine Finset.prod_congr rfl ?_
+    intro x hx
+    by_cases hx' : x.1 ∈ Set.range e
+    · simp at hx
+    · simp [h' x.1 hx']
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:35-16:50
+Function expected at
+  Fintype.elems
+but this term has type
+  Finset ?m.82
+
+Note: Expected a function because this term is being applied to the argument
+  κ
+Source line 16:
+  exact Finset.prod_attach (s := (Fintype.elems κ).filter fun j => j ∉ Set.range e) g ▸ by
+                                  ^^^^^^^^^^^^^^^
+Highlighted span: Fintype.elems κ
+
+ERROR .LspCheck.lean:16:89-17:1
+invalid 'by' tactic, expected type has not been provided
+Source line 16:
+  exact Finset.prod_attach (s := (Fintype.elems κ).filter fun j => j ∉ Set.range e) g ▸ by
+                                                                                        ^
+Highlighted span: b
+
+ERROR .LspCheck.lean:10:89-11:1
+unsolved goals
+case g
+M : Type u_4
+κ : Type u_6
+ι : Type u_7
+inst✝² : Fintype ι
+inst✝¹ : Fintype κ
+inst✝ : CommMonoid M
+e : ι → κ
+he : Function.Injective e
+f : ι → M
+g : κ → M
+h' : ∀ i ∉ Set.range e, g i = 1
+h : ∀ (i : ι), f i = g (e i)
+⊢ ↑(Set.range e) → M
+
+case h
+M : Type u_4
+κ : Type u_6
+ι : Type u_7
+inst✝² : Fintype ι
+inst✝¹ : Fintype κ
+inst✝ : CommMonoid M
+e : ι → κ
+he : Function.Injective e
+f : ι → M
+g : κ → M
+h' : ∀ i ∉ Set.range e, g i = 1
+h : ∀ (i : ι), f i = g (e i)
+⊢ ∀ (x : ι), g (e x) = ?g ((Equiv.ofInjective e he) x)
+Source line 10:
+    (h' : ∀ i ∉ Set.range e, g i = 1) (h : ∀ i, f i = g (e i)) : ∏ i, f i = ∏ j, g j := by
+                                                                                        ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:35-16:50
+Function expected at
+  Fintype.elems
+but this term has type
+  Finset ?m.82
+
+Note: Expected a function because this term is being applied to the argument
+  κ
+Source line 16:
+  exact Finset.prod_attach (s := (Fintype.elems κ).filter fun j => j ∉ Set.range e) g ▸ by
+                                  ^^^^^^^^^^^^^^^
+Highlighted span: Fintype.elems κ
+
+ERROR .LspCheck.lean:16:89-17:1
+invalid 'by' tactic, expected type has not been provided
+Source line 16:
+  exact Finset.prod_attach (s := (Fintype.elems κ).filter fun j => j ∉ Set.range e) g ▸ by
+                                                                                        ^
+Highlighted span: b
+
+ERROR .LspCheck.lean:10:89-11:1
+unsolved goals
+case g
+M : Type u_4
+κ : Type u_6
+ι : Type u_7
+inst✝² : Fintype ι
+inst✝¹ : Fintype κ
+inst✝ : CommMonoid M
+e : ι → κ
+he : Function.Injective e
+f : ι → M
+g : κ → M
+h' : ∀ i ∉ Set.range e, g i = 1
+h : ∀ (i : ι), f i = g (e i)
+⊢ ↑(Set.range e) → M
+
+case h
+M : Type u_4
+κ : Type u_6
+ι : Type u_7
+inst✝² : Fintype ι
+inst✝¹ : Fintype κ
+inst✝ : CommMonoid M
+e : ι → κ
+he : Function.Injective e
+f : ι → M
+g : κ → M
+h' : ∀ i ∉ Set.range e, g i = 1
+h : ∀ (i : ι), f i = g (e i)
+⊢ ∀ (x : ι), g (e x) = ?g ((Equiv.ofInjective e he) x)
+Source line 10:
+    (h' : ∀ i ∉ Set.range e, g i = 1) (h : ∀ i, f i = g (e i)) : ∏ i, f i = ∏ j, g j := by
+                                                                                        ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι κ G M : Type*} {s s₁ s₂ : Finset ι} {a : ι}
+
+variable {ι κ ι : Type*} [Fintype ι] [Fintype κ]
+
+variable [CommMonoid M]
+
+theorem prod_of_injective (e : ι → κ) (he : Function.Injective e) (f : ι → M) (g : κ → M)
+    (h' : ∀ i ∉ Set.range e, g i = 1) (h : ∀ i, f i = g (e i)) : ∏ i, f i = ∏ j, g j := by
+  classical
+  rw [show (∏ i, f i) = ∏ i, g (e i) by
+    refine Finset.prod_congr rfl ?_
+    intro i hi
+    exact h i]
+  let s : Finset κ := Finset.univ.filter (fun j => j ∈ Set.range e)
+  have hs : s = Finset.univ.map ⟨e, he⟩ := by
+    ext j
+    simp [s]
+  rw [← hs]
+  rw [Finset.prod_map]
+  let t : Finset κ := Finset.univ.filter (fun j => j ∉ Set.range e)
+  have hsplit : (Finset.univ.map ⟨e, he⟩).disjUnion t (by
+      refine Finset.disjoint_left.2 ?_
+      intro x hx1 hx2
+      simp [t] at hx2
+      exact hx2 ((Finset.mem_map' _).1 hx1 |> by
+        rintro ⟨i, -, rfl⟩
+        exact ⟨i, rfl⟩)) = Finset.univ := by
+    ext j
+    simp [t, hs]
+    by_cases hj : j ∈ Set.range e <;> simp [hj]
+  have ht : ∏ x in t, g x = 1 := by
+    refine Finset.prod_eq_one ?_
+    intro x hx
+    exact h' x (by simpa [t] using hx)
+  calc
+    ∏ x : ι, g (e x) = ∏ y in Finset.univ.map ⟨e, he⟩, g y := by
+      rw [Finset.prod_map]
+    _ = (∏ y in (Finset.univ.map ⟨e, he⟩).disjUnion t (by
+          refine Finset.disjoint_left.2 ?_
+          intro x hx1 hx2
+          simp [t] at hx2
+          exact hx2 ((Finset.mem_map' _).1 hx1 |> by
+            rintro ⟨i, -, rfl⟩
+            exact ⟨i, rfl⟩)), g y) := by
+      rw [Finset.prod_disjUnion, ht, mul_one]
+    _ = ∏ y : κ, g y := by
+      simpa [hsplit]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:33:16-33:19
+unexpected token 'in'; expected ','
+Source line 33:
+  have ht : ∏ x in t, g x = 1 := by
+               ^^^
+Highlighted span:  in
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:33:16-33:19
+unexpected token 'in'; expected ','
+Source line 33:
+  have ht : ∏ x in t, g x = 1 := by
+               ^^^
+Highlighted span:  in
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι κ G M : Type*} {s s₁ s₂ : Finset ι} {a : ι}
+
+variable {ι κ ι : Type*} [Fintype ι] [Fintype κ]
+
+variable [CommMonoid M]
+
+theorem prod_of_injective (e : ι → κ) (he : Function.Injective e) (f : ι → M) (g : κ → M)
+    (h' : ∀ i ∉ Set.range e, g i = 1) (h : ∀ i, f i = g (e i)) : ∏ i, f i = ∏ j, g j := by
+  classical
+  rw [show (∏ i, f i) = ∏ i, g (e i) by
+    refine Finset.prod_congr rfl ?_
+    intro i hi
+    exact h i]
+  let s : Finset κ := Finset.univ.filter (fun j => j ∈ Set.range e)
+  have hs : s = Finset.univ.map ⟨e, he⟩ := by
+    ext j
+    simp [s]
+  let t : Finset κ := Finset.univ.filter (fun j => j ∉ Set.range e)
+  have hdisj : Disjoint (Finset.univ.map ⟨e, he⟩) t := by
+    refine Finset.disjoint_left.2 ?_
+    intro x hx1 hx2
+    have hx2' : x ∉ Set.range e := by
+      simpa [t] using hx2
+    have hx1' : x ∈ Set.range e := by
+      rcases (Finset.mem_map.mp hx1) with ⟨i, -, rfl⟩
+      exact ⟨i, rfl⟩
+    exact hx2' hx1'
+  have hunion : (Finset.univ.map ⟨e, he⟩).disjUnion t hdisj = Finset.univ := by
+    ext j
+    simp [t]
+    by_cases hj : j ∈ Set.range e <;> simp [hj, hs]
+  have ht : ∏ x ∈ t, g x = 1 := by
+    refine Finset.prod_induction ?hbase ?hstep t
+    · simp
+    · intro a s ha hsdisj ih
+      simp only [Finset.prod_insert ha]
+      have ha' : a ∉ Set.range e := by
+        simpa [t] using Finset.mem_filter.mp (by
+          exact Finset.mem_insert_self a s)
+      rw [h' a ha', ih, mul_one]
+  calc
+    ∏ x : ι, g (e x) = ∏ y in Finset.univ.map ⟨e, he⟩, g y := by
+      rw [Finset.prod_map]
+    _ = (∏ y in (Finset.univ.map ⟨e, he⟩).disjUnion t hdisj, g y) := by
+      rw [Finset.prod_disjUnion hdisj, ht, mul_one]
+    _ = ∏ y : κ, g y := by
+      simpa [hunion]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:44:27-44:30
+unexpected token 'in'; expected ','
+Source line 44:
+    ∏ x : ι, g (e x) = ∏ y in Finset.univ.map ⟨e, he⟩, g y := by
+                          ^^^
+Highlighted span:  in
+
+ERROR .LspCheck.lean:33:39-33:52
+`simp` made no progress
+Source line 33:
+    by_cases hj : j ∈ Set.range e <;> simp [hj, hs]
+                                      ^^^^^^^^^^^^^
+Highlighted span: simp [hj, hs]
+
+ERROR .LspCheck.lean:35:48-35:49
+Application type mismatch: The argument
+  t
+has type
+  Finset κ
+of sort `Type u_6` but is expected to have type
+  ∀ (a b : ?m.233), ?hstep a → ?hstep b → ?hstep (a * b)
+of sort `Prop` in the application
+  Finset.prod_induction ?hbase ?hstep t
+Source line 35:
+    refine Finset.prod_induction ?hbase ?hstep t
+                                               ^
+Highlighted span: t
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:44:27-44:30
+unexpected token 'in'; expected ','
+Source line 44:
+    ∏ x : ι, g (e x) = ∏ y in Finset.univ.map ⟨e, he⟩, g y := by
+                          ^^^
+Highlighted span:  in
+
+ERROR .LspCheck.lean:33:39-33:52
+`simp` made no progress
+Source line 33:
+    by_cases hj : j ∈ Set.range e <;> simp [hj, hs]
+                                      ^^^^^^^^^^^^^
+Highlighted span: simp [hj, hs]
+
+ERROR .LspCheck.lean:35:48-35:49
+Application type mismatch: The argument
+  t
+has type
+  Finset κ
+of sort `Type u_6` but is expected to have type
+  ∀ (a b : ?m.233), ?hstep a → ?hstep b → ?hstep (a * b)
+of sort `Prop` in the application
+  Finset.prod_induction ?hbase ?hstep t
+Source line 35:
+    refine Finset.prod_induction ?hbase ?hstep t
+                                               ^
+Highlighted span: t

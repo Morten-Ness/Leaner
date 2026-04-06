@@ -1,0 +1,236 @@
+FILE: Map.codisjoint_map.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Map.codisjoint_map.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable (H K : Subgroup G) {k : Set G}
+
+variable {N : Type*} [Group N] {P : Type*} [Group P]
+
+theorem codisjoint_map {f : G →* N} (hf : Function.Surjective f)
+    {H K : Subgroup G} (h : Codisjoint H K) : Codisjoint (H.map f) (K.map f) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable (H K : Subgroup G) {k : Set G}
+
+variable {N : Type*} [Group N] {P : Type*} [Group P]
+
+theorem codisjoint_map {f : G →* N} (hf : Function.Surjective f)
+    {H K : Subgroup G} (h : Codisjoint H K) : Codisjoint (H.map f) (K.map f) := by
+  rw [Subgroup.codisjoint_iff]
+  ext n
+  constructor
+  · intro _
+    exact Subgroup.mem_sup_right (K := H.map f) (show n ∈ (K.map f) from by
+      rcases hf n with ⟨g, rfl⟩
+      exact ⟨g, Subgroup.mem_top g, rfl⟩)
+  · intro _
+    trivial
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:7-15:30
+Unknown constant `Subgroup.codisjoint_iff`
+Source line 15:
+  rw [Subgroup.codisjoint_iff]
+      ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subgroup.codisjoint_iff
+
+ERROR .LspCheck.lean:14:81-15:1
+unsolved goals
+G : Type u_1
+inst✝¹ : Group G
+N : Type u_5
+inst✝ : Group N
+f : G →* N
+hf : Function.Surjective ⇑f
+H K : Subgroup G
+h : Codisjoint H K
+⊢ Codisjoint (Subgroup.map f H) (Subgroup.map f K)
+Source line 14:
+    {H K : Subgroup G} (h : Codisjoint H K) : Codisjoint (H.map f) (K.map f) := by
+                                                                                ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:7-15:30
+Unknown constant `Subgroup.codisjoint_iff`
+Source line 15:
+  rw [Subgroup.codisjoint_iff]
+      ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subgroup.codisjoint_iff
+
+ERROR .LspCheck.lean:14:81-15:1
+unsolved goals
+G : Type u_1
+inst✝¹ : Group G
+N : Type u_5
+inst✝ : Group N
+f : G →* N
+hf : Function.Surjective ⇑f
+H K : Subgroup G
+h : Codisjoint H K
+⊢ Codisjoint (Subgroup.map f H) (Subgroup.map f K)
+Source line 14:
+    {H K : Subgroup G} (h : Codisjoint H K) : Codisjoint (H.map f) (K.map f) := by
+                                                                                ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable (H K : Subgroup G) {k : Set G}
+
+variable {N : Type*} [Group N] {P : Type*} [Group P]
+
+theorem codisjoint_map {f : G →* N} (hf : Function.Surjective f)
+    {H K : Subgroup G} (h : Codisjoint H K) : Codisjoint (H.map f) (K.map f) := by
+  rw [codisjoint_iff]
+  ext n
+  constructor
+  · intro _
+    trivial
+  · intro _
+    rcases hf n with ⟨g, rfl⟩
+    exact ⟨g, Subgroup.mem_top g, rfl⟩
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:22:11-22:39
+Invalid `⟨...⟩` notation: The expected type
+  ∀ t ∈ Set.range fun S ↦ ⋂ (_ : S ∈ {x | Subgroup.map f H ≤ x ∧ Subgroup.map f K ≤ x}), ↑S, f g ∈ t
+is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+Source line 22:
+    exact ⟨g, Subgroup.mem_top g, rfl⟩
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ⟨g, Subgroup.mem_top g, rfl⟩
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:22:11-22:39
+Invalid `⟨...⟩` notation: The expected type
+  ∀ t ∈ Set.range fun S ↦ ⋂ (_ : S ∈ {x | Subgroup.map f H ≤ x ∧ Subgroup.map f K ≤ x}), ↑S, f g ∈ t
+is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+Source line 22:
+    exact ⟨g, Subgroup.mem_top g, rfl⟩
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ⟨g, Subgroup.mem_top g, rfl⟩
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable (H K : Subgroup G) {k : Set G}
+
+variable {N : Type*} [Group N] {P : Type*} [Group P]
+
+theorem codisjoint_map {f : G →* N} (hf : Function.Surjective f)
+    {H K : Subgroup G} (h : Codisjoint H K) : Codisjoint (H.map f) (K.map f) := by
+  rw [show H ⊔ K = ⊤ from codisjoint_iff.mp h]
+  ext n
+  constructor
+  · intro _
+    trivial
+  · intro _
+    rcases hf n with ⟨g, rfl⟩
+    exact Subgroup.mem_map.2 ⟨g, by simp, rfl⟩
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:7-15:46
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  H ⊔ K
+in the target expression
+  Codisjoint (Subgroup.map f H) (Subgroup.map f K)
+
+G : Type u_1
+inst✝¹ : Group G
+N : Type u_5
+inst✝ : Group N
+f : G →* N
+hf : Function.Surjective ⇑f
+H K : Subgroup G
+h : Codisjoint H K
+⊢ Codisjoint (Subgroup.map f H) (Subgroup.map f K)
+Source line 15:
+  rw [show H ⊔ K = ⊤ from codisjoint_iff.mp h]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: show H ⊔ K = ⊤ from codisjoint_iff.mp h
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:7-15:46
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  H ⊔ K
+in the target expression
+  Codisjoint (Subgroup.map f H) (Subgroup.map f K)
+
+G : Type u_1
+inst✝¹ : Group G
+N : Type u_5
+inst✝ : Group N
+f : G →* N
+hf : Function.Surjective ⇑f
+H K : Subgroup G
+h : Codisjoint H K
+⊢ Codisjoint (Subgroup.map f H) (Subgroup.map f K)
+Source line 15:
+  rw [show H ⊔ K = ⊤ from codisjoint_iff.mp h]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: show H ⊔ K = ⊤ from codisjoint_iff.mp h

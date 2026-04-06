@@ -1,0 +1,724 @@
+FILE: Quotient.zmultiples_nsmul_eq_nsmul_iff.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Quotient.zmultiples_nsmul_eq_nsmul_iff.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R : Type*} [DivisionRing R] [CharZero R] {p : R}
+
+theorem zmultiples_nsmul_eq_nsmul_iff {ψ θ : R ⧸ AddSubgroup.zmultiples p} {n : ℕ} (hz : n ≠ 0) :
+    n • ψ = n • θ ↔ ∃ k : Fin n, ψ = θ + (k : ℕ) • (p / n : R) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type*} [DivisionRing R] [CharZero R] {p : R}
+
+theorem zmultiples_nsmul_eq_nsmul_iff {ψ θ : R ⧸ AddSubgroup.zmultiples p} {n : ℕ} (hz : n ≠ 0) :
+    n • ψ = n • θ ↔ ∃ k : Fin n, ψ = θ + (k : ℕ) • (p / n : R) := by
+  constructor
+  · intro h
+    refine ⟨0, ?_⟩
+    simp
+  · rintro ⟨k, hk⟩
+    subst hk
+    simp [nsmul_add, hz, smul_eq_mul, mul_assoc, Nat.cast_fin, div_eq_mul_inv, add_comm, add_left_comm,
+      add_assoc]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:9:13-9:14
+failed to synthesize instance of type class
+  OfNat (Fin n) 0
+numerals are polymorphic in Lean, but the numeral `0` cannot be used in a context where the expected type is
+  Fin n
+due to the absence of the instance above
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 9:
+    refine ⟨0, ?_⟩
+            ^
+Highlighted span: 0
+
+ERROR .LspCheck.lean:8:3-9:1
+unsolved goals
+case mp
+R : Type u_1
+inst✝¹ : DivisionRing R
+inst✝ : CharZero R
+p : R
+ψ θ : R ⧸ AddSubgroup.zmultiples p
+n : ℕ
+hz : n ≠ 0
+h : n • ψ = n • θ
+⊢ ψ = θ + ↑(sorry ()) • ↑(p / ↑n)
+Source line 8:
+  · intro h
+  ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:13:50-13:62
+Unknown constant `Nat.cast_fin`
+Source line 13:
+    simp [nsmul_add, hz, smul_eq_mul, mul_assoc, Nat.cast_fin, div_eq_mul_inv, add_comm, add_left_comm,
+                                                 ^^^^^^^^^^^^
+Highlighted span: Nat.cast_fin
+
+ERROR .LspCheck.lean:11:3-12:1
+unsolved goals
+case mpr
+R : Type u_1
+inst✝¹ : DivisionRing R
+inst✝ : CharZero R
+p : R
+θ : R ⧸ AddSubgroup.zmultiples p
+n : ℕ
+hz : n ≠ 0
+k : Fin n
+⊢ n • ↑k • ↑(p * (↑n)⁻¹) = 0
+Source line 11:
+  · rintro ⟨k, hk⟩
+  ^
+Highlighted span: ·
+
+WARNING .LspCheck.lean:13:11-13:20
+This simp argument is unused:
+  nsmul_add
+
+Hint: Omit it from the simp argument list.
+  simp [n̵s̵m̵u̵l̵_̵a̵d̵d̵,̵ ̵hz, smul_eq_mul, mul_assoc, Nat.cast_fin, div_eq_mul_inv, add_comm, add_left_comm,
+        add_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 13:
+    simp [nsmul_add, hz, smul_eq_mul, mul_assoc, Nat.cast_fin, div_eq_mul_inv, add_comm, add_left_comm,
+          ^^^^^^^^^
+Highlighted span: nsmul_add
+
+WARNING .LspCheck.lean:13:22-13:24
+This simp argument is unused:
+  hz
+
+Hint: Omit it from the simp argument list.
+  simp [nsmul_add, h̵z̵,̵ ̵smul_eq_mul, mul_assoc, Nat.cast_fin, div_eq_mul_inv, add_comm, add_left_comm,
+        add_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 13:
+    simp [nsmul_add, hz, smul_eq_mul, mul_assoc, Nat.cast_fin, div_eq_mul_inv, add_comm, add_left_comm,
+                     ^^
+Highlighted span: hz
+
+WARNING .LspCheck.lean:13:26-13:37
+This simp argument is unused:
+  smul_eq_mul
+
+Hint: Omit it from the simp argument list.
+  simp [nsmul_add, hz, s̵mul_e̵q̵_̵m̵u̵l̵,̵ ̵m̵u̵l̵_̵assoc, Nat.cast_fin, div_eq_mul_inv, add_comm, add_left_comm,
+        add_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 13:
+    simp [nsmul_add, hz, smul_eq_mul, mul_assoc, Nat.cast_fin, div_eq_mul_inv, add_comm, add_left_comm,
+                         ^^^^^^^^^^^
+Highlighted span: smul_eq_mul
+
+WARNING .LspCheck.lean:13:39-13:48
+This simp argument is unused:
+  mul_assoc
+
+Hint: Omit it from the simp argument list.
+  simp [nsmul_add, hz, smul_eq_mul, m̵u̵l̵_̵a̵s̵s̵o̵c̵,̵ ̵Nat.cast_fin, div_eq_mul_inv, add_comm, add_left_comm,
+        add_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 13:
+    simp [nsmul_add, hz, smul_eq_mul, mul_assoc, Nat.cast_fin, div_eq_mul_inv, add_comm, add_left_comm,
+                                      ^^^^^^^^^
+Highlighted span: mul_assoc
+
+WARNING .LspCheck.lean:13:80-13:88
+This simp argument is unused:
+  add_comm
+
+Hint: Omit it from the simp argument list.
+  simp [nsmul_add, hz, smul_eq_mul, mul_assoc, Nat.cast_fin, div_eq_mul_inv, add_c̵o̵m̵m̵,̵ ̵a̵d̵d̵_̵left_comm,
+        add_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 13:
+    simp [nsmul_add, hz, smul_eq_mul, mul_assoc, Nat.cast_fin, div_eq_mul_inv, add_comm, add_left_comm,
+                                                                               ^^^^^^^^
+Highlighted span: add_comm
+
+WARNING .LspCheck.lean:13:90-13:103
+This simp argument is unused:
+  add_left_comm
+
+Hint: Omit it from the simp argument list.
+  simp [nsmul_add, hz, smul_eq_mul, mul_assoc, Nat.cast_fin, div_eq_mul_inv, add_comm, a̵d̵d̵_̵l̵e̵f̵t̵_̵c̵o̵m̵m̵,̵add_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 13:
+    simp [nsmul_add, hz, smul_eq_mul, mul_assoc, Nat.cast_fin, div_eq_mul_inv, add_comm, add_left_comm,
+                                                                                         ^^^^^^^^^^^^^
+Highlighted span: add_left_comm
+
+WARNING .LspCheck.lean:14:7-14:16
+This simp argument is unused:
+  add_assoc
+
+Hint: Omit it from the simp argument list.
+  simp [nsmul_add, hz, smul_eq_mul, mul_assoc, Nat.cast_fin, div_eq_mul_inv, add_comm,
+  ̲  ̲ ̲ ̲ ̲ ̲a̵d̵d̵_̵l̵e̵f̵t̵_̵c̵o̵m̵m̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵a̵d̵d̵_̵a̵s̵s̵o̵c̵]̵a̲d̲d̲_̲l̲e̲f̲t̲_̲c̲o̲m̲m̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 14:
+      add_assoc]
+      ^^^^^^^^^
+Highlighted span: add_assoc
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:9:13-9:14
+failed to synthesize instance of type class
+  OfNat (Fin n) 0
+numerals are polymorphic in Lean, but the numeral `0` cannot be used in a context where the expected type is
+  Fin n
+due to the absence of the instance above
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 9:
+    refine ⟨0, ?_⟩
+            ^
+Highlighted span: 0
+
+ERROR .LspCheck.lean:8:3-9:1
+unsolved goals
+case mp
+R : Type u_1
+inst✝¹ : DivisionRing R
+inst✝ : CharZero R
+p : R
+ψ θ : R ⧸ AddSubgroup.zmultiples p
+n : ℕ
+hz : n ≠ 0
+h : n • ψ = n • θ
+⊢ ψ = θ + ↑(sorry ()) • ↑(p / ↑n)
+Source line 8:
+  · intro h
+  ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:13:50-13:62
+Unknown constant `Nat.cast_fin`
+Source line 13:
+    simp [nsmul_add, hz, smul_eq_mul, mul_assoc, Nat.cast_fin, div_eq_mul_inv, add_comm, add_left_comm,
+                                                 ^^^^^^^^^^^^
+Highlighted span: Nat.cast_fin
+
+ERROR .LspCheck.lean:11:3-12:1
+unsolved goals
+case mpr
+R : Type u_1
+inst✝¹ : DivisionRing R
+inst✝ : CharZero R
+p : R
+θ : R ⧸ AddSubgroup.zmultiples p
+n : ℕ
+hz : n ≠ 0
+k : Fin n
+⊢ n • ↑k • ↑(p * (↑n)⁻¹) = 0
+Source line 11:
+  · rintro ⟨k, hk⟩
+  ^
+Highlighted span: ·
+
+WARNING .LspCheck.lean:13:11-13:20
+This simp argument is unused:
+  nsmul_add
+
+Hint: Omit it from the simp argument list.
+  simp [n̵s̵m̵u̵l̵_̵a̵d̵d̵,̵ ̵hz, smul_eq_mul, mul_assoc, Nat.cast_fin, div_eq_mul_inv, add_comm, add_left_comm,
+        add_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 13:
+    simp [nsmul_add, hz, smul_eq_mul, mul_assoc, Nat.cast_fin, div_eq_mul_inv, add_comm, add_left_comm,
+          ^^^^^^^^^
+Highlighted span: nsmul_add
+
+WARNING .LspCheck.lean:13:22-13:24
+This simp argument is unused:
+  hz
+
+Hint: Omit it from the simp argument list.
+  simp [nsmul_add, h̵z̵,̵ ̵smul_eq_mul, mul_assoc, Nat.cast_fin, div_eq_mul_inv, add_comm, add_left_comm,
+        add_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 13:
+    simp [nsmul_add, hz, smul_eq_mul, mul_assoc, Nat.cast_fin, div_eq_mul_inv, add_comm, add_left_comm,
+                     ^^
+Highlighted span: hz
+
+WARNING .LspCheck.lean:13:26-13:37
+This simp argument is unused:
+  smul_eq_mul
+
+Hint: Omit it from the simp argument list.
+  simp [nsmul_add, hz, s̵mul_e̵q̵_̵m̵u̵l̵,̵ ̵m̵u̵l̵_̵assoc, Nat.cast_fin, div_eq_mul_inv, add_comm, add_left_comm,
+        add_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 13:
+    simp [nsmul_add, hz, smul_eq_mul, mul_assoc, Nat.cast_fin, div_eq_mul_inv, add_comm, add_left_comm,
+                         ^^^^^^^^^^^
+Highlighted span: smul_eq_mul
+
+WARNING .LspCheck.lean:13:39-13:48
+This simp argument is unused:
+  mul_assoc
+
+Hint: Omit it from the simp argument list.
+  simp [nsmul_add, hz, smul_eq_mul, m̵u̵l̵_̵a̵s̵s̵o̵c̵,̵ ̵Nat.cast_fin, div_eq_mul_inv, add_comm, add_left_comm,
+        add_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 13:
+    simp [nsmul_add, hz, smul_eq_mul, mul_assoc, Nat.cast_fin, div_eq_mul_inv, add_comm, add_left_comm,
+                                      ^^^^^^^^^
+Highlighted span: mul_assoc
+
+WARNING .LspCheck.lean:13:80-13:88
+This simp argument is unused:
+  add_comm
+
+Hint: Omit it from the simp argument list.
+  simp [nsmul_add, hz, smul_eq_mul, mul_assoc, Nat.cast_fin, div_eq_mul_inv, add_c̵o̵m̵m̵,̵ ̵a̵d̵d̵_̵left_comm,
+        add_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 13:
+    simp [nsmul_add, hz, smul_eq_mul, mul_assoc, Nat.cast_fin, div_eq_mul_inv, add_comm, add_left_comm,
+                                                                               ^^^^^^^^
+Highlighted span: add_comm
+
+WARNING .LspCheck.lean:13:90-13:103
+This simp argument is unused:
+  add_left_comm
+
+Hint: Omit it from the simp argument list.
+  simp [nsmul_add, hz, smul_eq_mul, mul_assoc, Nat.cast_fin, div_eq_mul_inv, add_comm, a̵d̵d̵_̵l̵e̵f̵t̵_̵c̵o̵m̵m̵,̵add_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 13:
+    simp [nsmul_add, hz, smul_eq_mul, mul_assoc, Nat.cast_fin, div_eq_mul_inv, add_comm, add_left_comm,
+                                                                                         ^^^^^^^^^^^^^
+Highlighted span: add_left_comm
+
+WARNING .LspCheck.lean:14:7-14:16
+This simp argument is unused:
+  add_assoc
+
+Hint: Omit it from the simp argument list.
+  simp [nsmul_add, hz, smul_eq_mul, mul_assoc, Nat.cast_fin, div_eq_mul_inv, add_comm,
+  ̲  ̲ ̲ ̲ ̲ ̲a̵d̵d̵_̵l̵e̵f̵t̵_̵c̵o̵m̵m̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵a̵d̵d̵_̵a̵s̵s̵o̵c̵]̵a̲d̲d̲_̲l̲e̲f̲t̲_̲c̲o̲m̲m̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 14:
+      add_assoc]
+      ^^^^^^^^^
+Highlighted span: add_assoc
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type*} [DivisionRing R] [CharZero R] {p : R}
+
+theorem zmultiples_nsmul_eq_nsmul_iff {ψ θ : R ⧸ AddSubgroup.zmultiples p} {n : ℕ} (hz : n ≠ 0) :
+    n • ψ = n • θ ↔ ∃ k : Fin n, ψ = θ + (k : ℕ) • (p / n : R) := by
+  constructor
+  · intro h
+    rcases QuotientAddGroup.eq.mp h with ⟨m, hm⟩
+    have hp : ψ = θ + m • QuotientAddGroup.mk p := by
+      rw [← sub_eq_iff_eq_add, QuotientAddGroup.eq]
+      exact ⟨m, by simpa using hm.symm⟩
+    have hn : (n : R) ≠ 0 := by exact_mod_cast hz
+    let kNat := Int.emod m n
+    have hkNat_lt : kNat.natAbs < n := by
+      exact Int.emod_lt_of_pos m (Int.ofNat_pos.mpr hz)
+    have hkdecomp : m = Int.ediv m n * n + kNat := by
+      exact (Int.ediv_add_emod m n).symm
+    refine ⟨⟨kNat.natAbs, hkNat_lt⟩, ?_⟩
+    have hkcast : ((kNat.natAbs : ℕ) : R) = kNat := by
+      have hk_nonneg : 0 ≤ kNat := Int.emod_nonneg _ (by exact_mod_cast hz)
+      rw [Int.toNat_of_nonneg hk_nonneg]
+      norm_num
+    have hq : (m : R) = (Int.ediv m n : R) * n + ((↑⟨kNat.natAbs, hkNat_lt⟩ : Fin n) : ℕ) := by
+      norm_num [hkdecomp, Int.cast_add, Int.cast_mul]
+    have hmul : (m : R) * p = (((Int.ediv m n : R) * n + ((↑⟨kNat.natAbs, hkNat_lt⟩ : Fin n) : ℕ)) : R) * p := by
+      simpa [hq]
+    have hz' : (n : R) ≠ 0 := by exact_mod_cast hz
+    have hmod : m • QuotientAddGroup.mk p =
+        ((↑⟨kNat.natAbs, hkNat_lt⟩ : Fin n) : ℕ) • QuotientAddGroup.mk (p / n : R) := by
+      apply Quotient.sound
+      rw [AddSubgroup.zmultiples_eq_closure]
+      refine ⟨Int.ediv m n, ?_⟩
+      change ((m : R) - (((↑⟨kNat.natAbs, hkNat_lt⟩ : Fin n) : ℕ) : R) * (p / n)) * p ∈ AddSubgroup.zmultiples p
+      refine ⟨Int.ediv m n, ?_⟩
+      field_simp [hz', hkdecomp, Int.cast_add, Int.cast_mul]
+    calc
+      ψ = θ + m • QuotientAddGroup.mk p := hp
+      _ = θ + ((↑⟨kNat.natAbs, hkNat_lt⟩ : Fin n) : ℕ) • (p / n : R) := by simpa using congrArg (fun x => θ + x) hmod
+  · rintro ⟨k, hk⟩
+    subst hk
+    rw [nsmul_add, sub_eq_iff_eq_add]
+    suffices n • (((k : ℕ) • ((p / n : R) : R ⧸ AddSubgroup.zmultiples p))) = 0 by simpa [this]
+    rw [nsmul_eq_mul, nsmul_eq_mul, ← mul_assoc, div_mul_cancel₀ _ (by exact_mod_cast hz)]
+    change (k : ℕ) • (QuotientAddGroup.mk p : R ⧸ AddSubgroup.zmultiples p) = 0
+    apply QuotientAddGroup.eq_zero_iff.mpr
+    refine ⟨k, rfl⟩
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:9:35-9:36
+Application type mismatch: The argument
+  h
+has type
+  n • ψ = n • θ
+but is expected to have type
+  ↑?m.46 = ↑?m.47
+in the application
+  QuotientAddGroup.eq.mp h
+Source line 9:
+    rcases QuotientAddGroup.eq.mp h with ⟨m, hm⟩
+                                  ^
+Highlighted span: h
+
+ERROR .LspCheck.lean:9:42-9:49
+Tactic `rcases` failed: `x✝ : (AddSubgroup.toAddSubmonoid ?m.45).toAddSubsemigroup.1
+  (-?m.46 + ?m.47)` is not an inductive datatype
+Source line 9:
+    rcases QuotientAddGroup.eq.mp h with ⟨m, hm⟩
+                                         ^^^^^^^
+Highlighted span: ⟨m, hm⟩
+
+ERROR .LspCheck.lean:42:20-42:37
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.76 - ?m.77 = ?m.78
+in the target expression
+  n • θ + n • ↑k • ↑(p / ↑n) = n • θ
+
+case mpr
+R : Type u_1
+inst✝¹ : DivisionRing R
+inst✝ : CharZero R
+p : R
+θ : R ⧸ AddSubgroup.zmultiples p
+n : ℕ
+hz : n ≠ 0
+k : Fin n
+⊢ n • θ + n • ↑k • ↑(p / ↑n) = n • θ
+Source line 42:
+    rw [nsmul_add, sub_eq_iff_eq_add]
+                   ^^^^^^^^^^^^^^^^^
+Highlighted span: sub_eq_iff_eq_add
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:9:35-9:36
+Application type mismatch: The argument
+  h
+has type
+  n • ψ = n • θ
+but is expected to have type
+  ↑?m.46 = ↑?m.47
+in the application
+  QuotientAddGroup.eq.mp h
+Source line 9:
+    rcases QuotientAddGroup.eq.mp h with ⟨m, hm⟩
+                                  ^
+Highlighted span: h
+
+ERROR .LspCheck.lean:9:42-9:49
+Tactic `rcases` failed: `x✝ : (AddSubgroup.toAddSubmonoid ?m.45).toAddSubsemigroup.1
+  (-?m.46 + ?m.47)` is not an inductive datatype
+Source line 9:
+    rcases QuotientAddGroup.eq.mp h with ⟨m, hm⟩
+                                         ^^^^^^^
+Highlighted span: ⟨m, hm⟩
+
+ERROR .LspCheck.lean:42:20-42:37
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.76 - ?m.77 = ?m.78
+in the target expression
+  n • θ + n • ↑k • ↑(p / ↑n) = n • θ
+
+case mpr
+R : Type u_1
+inst✝¹ : DivisionRing R
+inst✝ : CharZero R
+p : R
+θ : R ⧸ AddSubgroup.zmultiples p
+n : ℕ
+hz : n ≠ 0
+k : Fin n
+⊢ n • θ + n • ↑k • ↑(p / ↑n) = n • θ
+Source line 42:
+    rw [nsmul_add, sub_eq_iff_eq_add]
+                   ^^^^^^^^^^^^^^^^^
+Highlighted span: sub_eq_iff_eq_add
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type*} [DivisionRing R] [CharZero R] {p : R}
+
+theorem zmultiples_nsmul_eq_nsmul_iff {ψ θ : R ⧸ AddSubgroup.zmultiples p} {n : ℕ} (hz : n ≠ 0) :
+    n • ψ = n • θ ↔ ∃ k : Fin n, ψ = θ + (k : ℕ) • (p / n : R) := by
+  classical
+  by_cases hp : p = 0
+  · subst hp
+    constructor
+    · intro h
+      refine ⟨⟨0, hz.bot_lt⟩, ?_⟩
+      simp
+    · rintro ⟨k, hk⟩
+      simp [hk]
+  · constructor
+    · intro h
+      have h' : n • (ψ - θ) = 0 := by
+        simpa [nsmul_sub] using sub_eq_zero.mp h
+      have htors :
+          ∃ t : R ⧸ AddSubgroup.zmultiples p, n • t = 0 ∧ ψ = θ + t := by
+        refine ⟨ψ - θ, ?_, by abel⟩
+        simpa [h']
+      rcases htors with ⟨t, ht, rfl⟩
+      let k : Fin n := ⟨0, Nat.pos_of_ne_zero hz⟩
+      refine ⟨k, ?_⟩
+      have : t = 0 := by
+        have hn : (n : R) ≠ 0 := by exact_mod_cast hz
+        refine Quotient.inductionOn t ?_ t
+        intro x
+        change QuotientAddGroup.mk (n • x : R) = 0 at ht
+        have hx : n • x ∈ AddSubgroup.zmultiples p := by
+          simpa [QuotientAddGroup.eq_zero_iff] using ht
+        rcases hx with ⟨m, hm⟩
+        have hm' : (n : R) * x = m * p := by
+          simpa [zsmul_eq_mul, smul_eq_mul, mul_comm, mul_left_comm, mul_assoc] using hm
+        have : x = (m / n) * p := by
+          apply (mul_right_inj' hn).mp
+          rw [mul_assoc, div_mul_cancel₀ _ hn, hm', mul_assoc]
+        apply Quotient.sound
+        rw [this]
+        refine ⟨m / n, ?_⟩
+        ring
+      simp [this]
+    · rintro ⟨k, hk⟩
+      subst hk
+      rw [nsmul_add]
+      congr 1
+      change n • (((k : ℕ) • ((p / n : R) : R ⧸ AddSubgroup.zmultiples p))) = 0
+      rw [← nsmul_eq_mul, ← nsmul_eq_mul, smul_smul]
+      change ((n * (k : ℕ)) : ℕ) • ((p / n : R) : R ⧸ AddSubgroup.zmultiples p) = 0
+      rw [QuotientAddGroup.eq_zero_iff]
+      refine ⟨k, ?_⟩
+      change (((n * (k : ℕ)) : ℤ) • (p / n : R)) = (k : ℤ) • p
+      rw [zsmul_eq_mul, zsmul_eq_mul]
+      norm_num [div_eq_mul_inv, mul_assoc, mul_left_comm, mul_comm]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:5-12:1
+unsolved goals
+case pos.mp
+R : Type u_1
+inst✝¹ : DivisionRing R
+inst✝ : CharZero R
+n : ℕ
+hz : n ≠ 0
+ψ θ : R ⧸ AddSubgroup.zmultiples 0
+h : n • ψ = n • θ
+⊢ ψ = θ
+Source line 11:
+    · intro h
+    ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:19:48-19:49
+Application type mismatch: The argument
+  h
+has type
+  n • ψ = n • θ
+but is expected to have type
+  n • ψ - n • θ - 0 = 0
+in the application
+  sub_eq_zero.mp h
+Source line 19:
+        simpa [nsmul_sub] using sub_eq_zero.mp h
+                                               ^
+Highlighted span: h
+
+WARNING .LspCheck.lean:23:9-23:19
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 23:
+        simpa [h']
+        ^^^^^^^^^^
+Highlighted span: simpa [h']
+
+ERROR .LspCheck.lean:31:9-31:57
+'change' tactic failed, pattern
+  ↑(n • x) = 0
+is not definitionally equal to target
+  n • t = 0
+Source line 31:
+        change QuotientAddGroup.mk (n • x : R) = 0 at ht
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: change QuotientAddGroup.mk (n • x : R) = 0 at ht
+
+ERROR .LspCheck.lean:17:5-18:1
+unsolved goals
+case neg.mp
+R : Type u_1
+inst✝¹ : DivisionRing R
+inst✝ : CharZero R
+p : R
+θ : R ⧸ AddSubgroup.zmultiples p
+n : ℕ
+hz : n ≠ 0
+hp : ¬p = 0
+t : R ⧸ AddSubgroup.zmultiples p
+ht : n • t = 0
+h : n • (θ + t) = n • θ
+h' : n • (θ + t - θ) = 0
+k : Fin n := ⟨0, ⋯⟩
+this : t = 0
+⊢ ↑k • ↑(p / ↑n) = 0
+Source line 17:
+    · intro h
+    ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:49:7-49:80
+'change' tactic failed, pattern
+  n • ↑k • ↑(p / ↑n) = 0
+is not definitionally equal to target
+  n • θ + n • ↑k • ↑(p / ↑n) = n • θ
+Source line 49:
+      change n • (((k : ℕ) • ((p / n : R) : R ⧸ AddSubgroup.zmultiples p))) = 0
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: change n • (((k : ℕ) • ((p / n : R) : R ⧸ AddSubgroup.zmultiples p))) = 0
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:5-12:1
+unsolved goals
+case pos.mp
+R : Type u_1
+inst✝¹ : DivisionRing R
+inst✝ : CharZero R
+n : ℕ
+hz : n ≠ 0
+ψ θ : R ⧸ AddSubgroup.zmultiples 0
+h : n • ψ = n • θ
+⊢ ψ = θ
+Source line 11:
+    · intro h
+    ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:19:48-19:49
+Application type mismatch: The argument
+  h
+has type
+  n • ψ = n • θ
+but is expected to have type
+  n • ψ - n • θ - 0 = 0
+in the application
+  sub_eq_zero.mp h
+Source line 19:
+        simpa [nsmul_sub] using sub_eq_zero.mp h
+                                               ^
+Highlighted span: h
+
+WARNING .LspCheck.lean:23:9-23:19
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 23:
+        simpa [h']
+        ^^^^^^^^^^
+Highlighted span: simpa [h']
+
+ERROR .LspCheck.lean:31:9-31:57
+'change' tactic failed, pattern
+  ↑(n • x) = 0
+is not definitionally equal to target
+  n • t = 0
+Source line 31:
+        change QuotientAddGroup.mk (n • x : R) = 0 at ht
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: change QuotientAddGroup.mk (n • x : R) = 0 at ht
+
+ERROR .LspCheck.lean:17:5-18:1
+unsolved goals
+case neg.mp
+R : Type u_1
+inst✝¹ : DivisionRing R
+inst✝ : CharZero R
+p : R
+θ : R ⧸ AddSubgroup.zmultiples p
+n : ℕ
+hz : n ≠ 0
+hp : ¬p = 0
+t : R ⧸ AddSubgroup.zmultiples p
+ht : n • t = 0
+h : n • (θ + t) = n • θ
+h' : n • (θ + t - θ) = 0
+k : Fin n := ⟨0, ⋯⟩
+this : t = 0
+⊢ ↑k • ↑(p / ↑n) = 0
+Source line 17:
+    · intro h
+    ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:49:7-49:80
+'change' tactic failed, pattern
+  n • ↑k • ↑(p / ↑n) = 0
+is not definitionally equal to target
+  n • θ + n • ↑k • ↑(p / ↑n) = n • θ
+Source line 49:
+      change n • (((k : ℕ) • ((p / n : R) : R ⧸ AddSubgroup.zmultiples p))) = 0
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: change n • (((k : ℕ) • ((p / n : R) : R ⧸ AddSubgroup.zmultiples p))) = 0

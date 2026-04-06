@@ -1,0 +1,153 @@
+FILE: Pointwise.smul_mem_pointwise_smul.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Pointwise.smul_mem_pointwise_smul.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Pointwise
+
+variable {G₀ G M A : Type*} [Monoid M] [AddMonoid A]
+
+variable [DistribMulAction M A]
+
+theorem smul_mem_pointwise_smul (a : A) (m : M) (S : AddSubmonoid A) : a ∈ S → m • a ∈ m • S := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise
+
+variable {G₀ G M A : Type*} [Monoid M] [AddMonoid A]
+
+variable [DistribMulAction M A]
+
+theorem smul_mem_pointwise_smul (a : A) (m : M) (S : AddSubmonoid A) : a ∈ S → m • a ∈ m • S := by
+  intro ha
+  exact Set.mem_smul_set ha
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:9-11:28
+Function expected at
+  Set.mem_smul_set
+but this term has type
+  ?m.26 ∈ ?m.25 • ?m.24 ↔ ∃ y ∈ ?m.24, ?m.25 • y = ?m.26
+
+Note: Expected a function because this term is being applied to the argument
+  ha
+Source line 11:
+  exact Set.mem_smul_set ha
+        ^^^^^^^^^^^^^^^^^^^
+Highlighted span: Set.mem_smul_set ha
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:9-11:28
+Function expected at
+  Set.mem_smul_set
+but this term has type
+  ?m.26 ∈ ?m.25 • ?m.24 ↔ ∃ y ∈ ?m.24, ?m.25 • y = ?m.26
+
+Note: Expected a function because this term is being applied to the argument
+  ha
+Source line 11:
+  exact Set.mem_smul_set ha
+        ^^^^^^^^^^^^^^^^^^^
+Highlighted span: Set.mem_smul_set ha
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise
+
+variable {G₀ G M A : Type*} [Monoid M] [AddMonoid A]
+
+variable [DistribMulAction M A]
+
+theorem smul_mem_pointwise_smul (a : A) (m : M) (S : AddSubmonoid A) : a ∈ S → m • a ∈ m • S := by
+  intro ha
+  rw [Set.mem_smul_set]
+  exact ⟨a, ha, rfl⟩
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:7-11:23
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.26 ∈ ?m.25 • ?m.24
+in the target expression
+  m • a ∈ m • S
+
+M : Type u_3
+A : Type u_4
+inst✝² : Monoid M
+inst✝¹ : AddMonoid A
+inst✝ : DistribMulAction M A
+a : A
+m : M
+S : AddSubmonoid A
+ha : a ∈ S
+⊢ m • a ∈ m • S
+Source line 11:
+  rw [Set.mem_smul_set]
+      ^^^^^^^^^^^^^^^^
+Highlighted span: Set.mem_smul_set
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:7-11:23
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.26 ∈ ?m.25 • ?m.24
+in the target expression
+  m • a ∈ m • S
+
+M : Type u_3
+A : Type u_4
+inst✝² : Monoid M
+inst✝¹ : AddMonoid A
+inst✝ : DistribMulAction M A
+a : A
+m : M
+S : AddSubmonoid A
+ha : a ∈ S
+⊢ m • a ∈ m • S
+Source line 11:
+  rw [Set.mem_smul_set]
+      ^^^^^^^^^^^^^^^^
+Highlighted span: Set.mem_smul_set
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise
+
+variable {G₀ G M A : Type*} [Monoid M] [AddMonoid A]
+
+variable [DistribMulAction M A]
+
+theorem smul_mem_pointwise_smul (a : A) (m : M) (S : AddSubmonoid A) : a ∈ S → m • a ∈ m • S := by
+  intro ha
+  change m • a ∈ (m • (S : Set A))
+  exact ⟨a, ha, rfl⟩
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

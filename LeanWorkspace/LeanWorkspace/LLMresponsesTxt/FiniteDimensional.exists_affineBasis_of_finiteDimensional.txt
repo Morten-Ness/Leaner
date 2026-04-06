@@ -1,0 +1,392 @@
+FILE: FiniteDimensional.exists_affineBasis_of_finiteDimensional.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: FiniteDimensional.exists_affineBasis_of_finiteDimensional.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {ι : Type u₁} {k : Type u₂} {V : Type u₃} {P : Type u₄}
+
+variable [AddCommGroup V] [AddTorsor V P]
+
+variable [DivisionRing k] [Module k V]
+
+theorem exists_affineBasis_of_finiteDimensional [Fintype ι] [FiniteDimensional k V]
+    (h : Fintype.card ι = Module.finrank k V + 1) : Nonempty (AffineBasis ι k P) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι : Type u₁} {k : Type u₂} {V : Type u₃} {P : Type u₄}
+
+variable [AddCommGroup V] [AddTorsor V P]
+
+variable [DivisionRing k] [Module k V]
+
+theorem exists_affineBasis_of_finiteDimensional [Fintype ι] [FiniteDimensional k V]
+    (h : Fintype.card ι = Module.finrank k V + 1) : Nonempty (AffineBasis ι k P) := by
+  classical
+  simpa [h] using (AffineBasis.ofFiniteDimensional (k := k) (P := P) (ι := ι))
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:20-12:51
+Unknown constant `AffineBasis.ofFiniteDimensional`
+Source line 12:
+  simpa [h] using (AffineBasis.ofFiniteDimensional (k := k) (P := P) (ι := ι))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineBasis.ofFiniteDimensional
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:20-12:51
+Unknown constant `AffineBasis.ofFiniteDimensional`
+Source line 12:
+  simpa [h] using (AffineBasis.ofFiniteDimensional (k := k) (P := P) (ι := ι))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineBasis.ofFiniteDimensional
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι : Type u₁} {k : Type u₂} {V : Type u₃} {P : Type u₄}
+
+variable [AddCommGroup V] [AddTorsor V P]
+
+variable [DivisionRing k] [Module k V]
+
+theorem exists_affineBasis_of_finiteDimensional [Fintype ι] [FiniteDimensional k V]
+    (h : Fintype.card ι = Module.finrank k V + 1) : Nonempty (AffineBasis ι k P) := by
+  classical
+  let v : Fin (Module.finrank k V) → V := Basis.ofVectorSpace k V
+  obtain ⟨p⟩ := AddTorsor.nonempty P
+  let s : Fin (Module.finrank k V + 1) → P :=
+    fun i =>
+      if h0 : (i : ℕ) = 0 then
+        p
+      else
+        p +ᵥ v ⟨i.1 - 1, by
+          have hi : i.1 < Module.finrank k V + 1 := i.2
+          have hi' : i.1 ≤ Module.finrank k V := Nat.lt_succ_iff.mp hi
+          have hpos : 0 < i.1 := Nat.pos_of_ne_zero h0
+          exact tsub_lt_iff_right.mp <| by
+            simpa [hpos] using hi
+        ⟩
+  have hs : AffineIndependent k s := by
+    rw [affineIndependent_iff_linearIndependent_vsub k p s]
+    let e : Fin (Module.finrank k V) ≃ {i : Fin (Module.finrank k V + 1) // i ≠ 0} where
+      toFun i := ⟨⟨i.1 + 1, Nat.succ_lt_succ i.2⟩, by simp⟩
+      invFun i :=
+        ⟨i.1.1 - 1, by
+          have hi : i.1.1 < Module.finrank k V + 1 := i.1.2
+          have hne : i.1.1 ≠ 0 := by
+            simpa using i.2
+          have hpos : 0 < i.1.1 := Nat.pos_of_ne_zero hne
+          exact tsub_lt_iff_right.mp <| by
+            simpa [hpos] using hi
+        ⟩
+      left_inv := by
+        intro i
+        ext
+        simp
+      right_inv := by
+        intro i
+        ext
+        have hne : i.1.1 ≠ 0 := by simpa using i.2
+        exact Nat.succ_pred_eq_of_pos (Nat.pos_of_ne_zero hne)
+    have hv :
+        (fun i : {i : Fin (Module.finrank k V + 1) // i ≠ 0} => p -ᵥ s i.1) =
+          fun i => -v (e.invFun i) := by
+      funext i
+      dsimp [s]
+      have h0 : ¬((i.1 : Fin (Module.finrank k V + 1)) : ℕ) = 0 := by
+        simpa using i.2
+      simp [h0, vsub_vadd]
+    rw [hv]
+    exact (Basis.ofVectorSpace k V).linearIndependent.neg.comp_embedding e.toEmbedding
+  refine ⟨AffineBasis.mk hs ?_⟩
+  intro q
+  refine ⟨0, ?_⟩
+  simp [s]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:29:18-29:60
+Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+Source line 29:
+      toFun i := ⟨⟨i.1 + 1, Nat.succ_lt_succ i.2⟩, by simp⟩
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ⟨⟨i.1 + 1, Nat.succ_lt_succ i.2⟩, by simp⟩
+
+ERROR .LspCheck.lean:31:9-32:1
+Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+Source line 31:
+        ⟨i.1.1 - 1, by
+        ^
+Highlighted span: ⟨
+
+ERROR .LspCheck.lean:40:15-40:16
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+ι : Type u₁
+k : Type u₂
+V : Type u₃
+P : Type u₄
+inst✝⁵ : AddCommGroup V
+inst✝⁴ : AddTorsor V P
+inst✝³ : DivisionRing k
+inst✝² : Module k V
+inst✝¹ : Fintype ι
+inst✝ : FiniteDimensional k V
+h : Fintype.card ι = Module.finrank k V + 1
+⊢ ?m.31
+Source line 40:
+        intro i
+              ^
+Highlighted span: i
+
+ERROR .LspCheck.lean:44:15-44:16
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+ι : Type u₁
+k : Type u₂
+V : Type u₃
+P : Type u₄
+inst✝⁵ : AddCommGroup V
+inst✝⁴ : AddTorsor V P
+inst✝³ : DivisionRing k
+inst✝² : Module k V
+inst✝¹ : Fintype ι
+inst✝ : FiniteDimensional k V
+h : Fintype.card ι = Module.finrank k V + 1
+⊢ ?m.33
+Source line 44:
+        intro i
+              ^
+Highlighted span: i
+
+ERROR .LspCheck.lean:12:43-12:62
+Unknown identifier `Basis.ofVectorSpace`
+Source line 12:
+  let v : Fin (Module.finrank k V) → V := Basis.ofVectorSpace k V
+                                          ^^^^^^^^^^^^^^^^^^^
+Highlighted span: Basis.ofVectorSpace
+
+ERROR .LspCheck.lean:13:17-13:37
+Function expected at
+  AddTorsor.nonempty
+but this term has type
+  Nonempty ?m.50
+
+Note: Expected a function because this term is being applied to the argument
+  P
+Source line 13:
+  obtain ⟨p⟩ := AddTorsor.nonempty P
+                ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AddTorsor.nonempty P
+
+ERROR .LspCheck.lean:13:10-13:13
+Tactic `rcases` failed: `x✝ : ?m.54` is not an inductive datatype
+Source line 13:
+  obtain ⟨p⟩ := AddTorsor.nonempty P
+         ^^^
+Highlighted span: ⟨p⟩
+
+ERROR .LspCheck.lean:9:1-10:1
+internal exception #3
+Source line 9:
+theorem exists_affineBasis_of_finiteDimensional [Fintype ι] [FiniteDimensional k V]
+^
+Highlighted span: t
+
+ERROR .LspCheck.lean:48:5-48:9
+unexpected token 'have'; expected command
+Source line 48:
+    have hv :
+    ^^^^
+Highlighted span: have
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:29:18-29:60
+Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+Source line 29:
+      toFun i := ⟨⟨i.1 + 1, Nat.succ_lt_succ i.2⟩, by simp⟩
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ⟨⟨i.1 + 1, Nat.succ_lt_succ i.2⟩, by simp⟩
+
+ERROR .LspCheck.lean:31:9-32:1
+Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+Source line 31:
+        ⟨i.1.1 - 1, by
+        ^
+Highlighted span: ⟨
+
+ERROR .LspCheck.lean:40:15-40:16
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+ι : Type u₁
+k : Type u₂
+V : Type u₃
+P : Type u₄
+inst✝⁵ : AddCommGroup V
+inst✝⁴ : AddTorsor V P
+inst✝³ : DivisionRing k
+inst✝² : Module k V
+inst✝¹ : Fintype ι
+inst✝ : FiniteDimensional k V
+h : Fintype.card ι = Module.finrank k V + 1
+⊢ ?m.31
+Source line 40:
+        intro i
+              ^
+Highlighted span: i
+
+ERROR .LspCheck.lean:44:15-44:16
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+ι : Type u₁
+k : Type u₂
+V : Type u₃
+P : Type u₄
+inst✝⁵ : AddCommGroup V
+inst✝⁴ : AddTorsor V P
+inst✝³ : DivisionRing k
+inst✝² : Module k V
+inst✝¹ : Fintype ι
+inst✝ : FiniteDimensional k V
+h : Fintype.card ι = Module.finrank k V + 1
+⊢ ?m.33
+Source line 44:
+        intro i
+              ^
+Highlighted span: i
+
+ERROR .LspCheck.lean:12:43-12:62
+Unknown identifier `Basis.ofVectorSpace`
+Source line 12:
+  let v : Fin (Module.finrank k V) → V := Basis.ofVectorSpace k V
+                                          ^^^^^^^^^^^^^^^^^^^
+Highlighted span: Basis.ofVectorSpace
+
+ERROR .LspCheck.lean:13:17-13:37
+Function expected at
+  AddTorsor.nonempty
+but this term has type
+  Nonempty ?m.50
+
+Note: Expected a function because this term is being applied to the argument
+  P
+Source line 13:
+  obtain ⟨p⟩ := AddTorsor.nonempty P
+                ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AddTorsor.nonempty P
+
+ERROR .LspCheck.lean:13:10-13:13
+Tactic `rcases` failed: `x✝ : ?m.54` is not an inductive datatype
+Source line 13:
+  obtain ⟨p⟩ := AddTorsor.nonempty P
+         ^^^
+Highlighted span: ⟨p⟩
+
+ERROR .LspCheck.lean:9:1-10:1
+internal exception #3
+Source line 9:
+theorem exists_affineBasis_of_finiteDimensional [Fintype ι] [FiniteDimensional k V]
+^
+Highlighted span: t
+
+ERROR .LspCheck.lean:48:5-48:9
+unexpected token 'have'; expected command
+Source line 48:
+    have hv :
+    ^^^^
+Highlighted span: have
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι : Type u₁} {k : Type u₂} {V : Type u₃} {P : Type u₄}
+
+variable [AddCommGroup V] [AddTorsor V P]
+
+variable [DivisionRing k] [Module k V]
+
+theorem exists_affineBasis_of_finiteDimensional [Fintype ι] [FiniteDimensional k V]
+    (h : Fintype.card ι = Module.finrank k V + 1) : Nonempty (AffineBasis ι k P) := by
+  classical
+  let e : Fin (Module.finrank k V + 1) ≃ ι :=
+    Fintype.equivOfCardEq h.symm
+  let b : AffineBasis (Fin (Module.finrank k V + 1)) k P := by
+    simpa using (AffineSpace.affineBasisOfFiniteDimensional (k := k) (P := P))
+  exact ⟨b.reindex e⟩
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:27-13:33
+Application type mismatch: The argument
+  Eq.symm h
+has type
+  Module.finrank k V + 1 = Fintype.card ι
+but is expected to have type
+  Fintype.card (Fin (Module.finrank k V + 1)) = Fintype.card ι
+in the application
+  Fintype.equivOfCardEq ⋯
+Source line 13:
+    Fintype.equivOfCardEq h.symm
+                          ^^^^^^
+Highlighted span: h.symm
+
+ERROR .LspCheck.lean:15:18-15:60
+Unknown identifier `AffineSpace.affineBasisOfFiniteDimensional`
+Source line 15:
+    simpa using (AffineSpace.affineBasisOfFiniteDimensional (k := k) (P := P))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSpace.affineBasisOfFiniteDimensional
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:27-13:33
+Application type mismatch: The argument
+  Eq.symm h
+has type
+  Module.finrank k V + 1 = Fintype.card ι
+but is expected to have type
+  Fintype.card (Fin (Module.finrank k V + 1)) = Fintype.card ι
+in the application
+  Fintype.equivOfCardEq ⋯
+Source line 13:
+    Fintype.equivOfCardEq h.symm
+                          ^^^^^^
+Highlighted span: h.symm
+
+ERROR .LspCheck.lean:15:18-15:60
+Unknown identifier `AffineSpace.affineBasisOfFiniteDimensional`
+Source line 15:
+    simpa using (AffineSpace.affineBasisOfFiniteDimensional (k := k) (P := P))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSpace.affineBasisOfFiniteDimensional

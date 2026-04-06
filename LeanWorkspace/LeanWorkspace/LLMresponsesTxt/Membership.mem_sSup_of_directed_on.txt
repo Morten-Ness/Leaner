@@ -1,0 +1,357 @@
+FILE: Membership.mem_sSup_of_directed_on.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Membership.mem_sSup_of_directed_on.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {ι : Sort*} {M : Type*}
+
+variable [Mul M]
+
+theorem mem_sSup_of_directed_on {S : Set (Subsemigroup M)} (hS : DirectedOn (· ≤ ·) S) {x : M} :
+    x ∈ sSup S ↔ ∃ s ∈ S, x ∈ s := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι : Sort*} {M : Type*}
+
+variable [Mul M]
+
+theorem mem_sSup_of_directed_on {S : Set (Subsemigroup M)} (hS : DirectedOn (· ≤ ·) S) {x : M} :
+    x ∈ sSup S ↔ ∃ s ∈ S, x ∈ s := by
+  constructor
+  · intro hx
+    change x ∈ Subsemigroup.closure (⋃ s ∈ S, (s : Set M)) at hx
+    rw [Subsemigroup.mem_closure] at hx
+    rcases hx with ⟨y, hy, rfl⟩
+    refine List.rec ?base ?step y
+    · simp
+    · intro a l ih
+      rcases ih with ⟨s, hsS, hsl⟩
+      rcases hy a (by simp) with ⟨sa, hsaS, hsa⟩
+      rcases hS hsS hsaS with ⟨t, htS, hst, hsat⟩
+      refine ⟨t, htS, ?_⟩
+      exact t.mul_mem (hst hsl) (hsat hsa)
+  · rintro ⟨s, hs, hx⟩
+    change x ∈ Subsemigroup.closure (⋃ s ∈ S, (s : Set M))
+    rw [Subsemigroup.subset_closure]
+    exact Set.mem_iUnion₂.mpr ⟨s, hs, hx⟩
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:5-11:65
+'change' tactic failed, pattern
+  x ∈ Subsemigroup.closure (⋃ s ∈ S, ↑s)
+is not definitionally equal to target
+  x ∈ sSup S
+Source line 11:
+    change x ∈ Subsemigroup.closure (⋃ s ∈ S, (s : Set M)) at hx
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: change x ∈ Subsemigroup.closure (⋃ s ∈ S, (s : Set M)) at hx
+
+ERROR .LspCheck.lean:23:5-23:59
+'change' tactic failed, pattern
+  x ∈ Subsemigroup.closure (⋃ s ∈ S, ↑s)
+is not definitionally equal to target
+  x ∈ sSup S
+Source line 23:
+    change x ∈ Subsemigroup.closure (⋃ s ∈ S, (s : Set M))
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: change x ∈ Subsemigroup.closure (⋃ s ∈ S, (s : Set M))
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:5-11:65
+'change' tactic failed, pattern
+  x ∈ Subsemigroup.closure (⋃ s ∈ S, ↑s)
+is not definitionally equal to target
+  x ∈ sSup S
+Source line 11:
+    change x ∈ Subsemigroup.closure (⋃ s ∈ S, (s : Set M)) at hx
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: change x ∈ Subsemigroup.closure (⋃ s ∈ S, (s : Set M)) at hx
+
+ERROR .LspCheck.lean:23:5-23:59
+'change' tactic failed, pattern
+  x ∈ Subsemigroup.closure (⋃ s ∈ S, ↑s)
+is not definitionally equal to target
+  x ∈ sSup S
+Source line 23:
+    change x ∈ Subsemigroup.closure (⋃ s ∈ S, (s : Set M))
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: change x ∈ Subsemigroup.closure (⋃ s ∈ S, (s : Set M))
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι : Sort*} {M : Type*}
+
+variable [Mul M]
+
+theorem mem_sSup_of_directed_on {S : Set (Subsemigroup M)} (hS : DirectedOn (· ≤ ·) S) {x : M} :
+    x ∈ sSup S ↔ ∃ s ∈ S, x ∈ s := by
+  classical
+  simpa [Subsemigroup.sSup_eq_closure, Subsemigroup.mem_closure] using
+    (show (∃ y : List M, (∀ z, z ∈ y → ∃ s ∈ S, z ∈ s) ∧ y.prod = x) ↔ ∃ s ∈ S, x ∈ s by
+      constructor
+      · rintro ⟨y, hy, rfl⟩
+        induction y with
+        | nil =>
+            refine ⟨⊥, ?_, by simp⟩
+            rcases Set.nonempty_of_mem hS with ⟨s, hs⟩
+            exact by simpa using (show (⊥ : Subsemigroup M) ≤ s from bot_le)
+        | cons a y ih =>
+            rcases ih ?_ with ⟨s, hsS, hsy⟩
+            · rcases hy a (by simp) with ⟨sa, hsaS, hasa⟩
+              rcases hS hsS hsaS with ⟨t, htS, hst, hsat⟩
+              refine ⟨t, htS, ?_⟩
+              simpa using t.mul_mem (hsat hasa) (hst hsy)
+            · intro z hz
+              exact hy z (by simp [hz])
+      · rintro ⟨s, hs, hx⟩
+        refine ⟨[x], ?_, by simp⟩
+        intro z hz
+        simp only [List.mem_singleton] at hz
+        subst hz
+        exact ⟨s, hs, hx⟩)
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:10-10:38
+Unknown constant `Subsemigroup.sSup_eq_closure`
+Source line 10:
+  simpa [Subsemigroup.sSup_eq_closure, Subsemigroup.mem_closure] using
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subsemigroup.sSup_eq_closure
+
+ERROR .LspCheck.lean:11:58-11:64
+failed to synthesize instance of type class
+  One M
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 11:
+    (show (∃ y : List M, (∀ z, z ∈ y → ∃ s ∈ S, z ∈ s) ∧ y.prod = x) ↔ ∃ s ∈ S, x ∈ s by
+                                                         ^^^^^^
+Highlighted span: y.prod
+
+ERROR .LspCheck.lean:16:28-16:35
+unsolved goals
+M : Type u_2
+inst✝ : Mul M
+S : Set (Subsemigroup M)
+hS : DirectedOn (fun x1 x2 ↦ x1 ≤ x2) S
+hy : ∀ z ∈ [], ∃ s ∈ S, z ∈ s
+⊢ sorry () ∈ ⊥
+Source line 16:
+            refine ⟨⊥, ?_, by simp⟩
+                           ^^^^^^^
+Highlighted span: by simp
+
+ERROR .LspCheck.lean:17:40-17:42
+Application type mismatch: The argument
+  hS
+has type
+  DirectedOn (fun x1 x2 ↦ x1 ≤ x2) S
+but is expected to have type
+  ?m.110 ∈ ?m.109
+in the application
+  Set.nonempty_of_mem hS
+Source line 17:
+            rcases Set.nonempty_of_mem hS with ⟨s, hs⟩
+                                       ^^
+Highlighted span: hS
+
+ERROR .LspCheck.lean:22:25-22:28
+Application type mismatch: The argument
+  hsS
+has type
+  s ∈ S
+of sort `Prop` but is expected to have type
+  Subsemigroup M
+of sort `Type u_2` in the application
+  hS hsS
+Source line 22:
+              rcases hS hsS hsaS with ⟨t, htS, hst, hsat⟩
+                        ^^^
+Highlighted span: hsS
+
+ERROR .LspCheck.lean:25:13-26:1
+No goals to be solved
+Source line 25:
+            · intro z hz
+            ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:28:26-28:33
+unsolved goals
+M : Type u_2
+inst✝ : Mul M
+S : Set (Subsemigroup M)
+hS : DirectedOn (fun x1 x2 ↦ x1 ≤ x2) S
+x : M
+s : Subsemigroup M
+hs : s ∈ S
+hx : x ∈ s
+⊢ sorry () = x
+Source line 28:
+        refine ⟨[x], ?_, by simp⟩
+                         ^^^^^^^
+Highlighted span: by simp
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:10-10:38
+Unknown constant `Subsemigroup.sSup_eq_closure`
+Source line 10:
+  simpa [Subsemigroup.sSup_eq_closure, Subsemigroup.mem_closure] using
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subsemigroup.sSup_eq_closure
+
+ERROR .LspCheck.lean:11:58-11:64
+failed to synthesize instance of type class
+  One M
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 11:
+    (show (∃ y : List M, (∀ z, z ∈ y → ∃ s ∈ S, z ∈ s) ∧ y.prod = x) ↔ ∃ s ∈ S, x ∈ s by
+                                                         ^^^^^^
+Highlighted span: y.prod
+
+ERROR .LspCheck.lean:16:28-16:35
+unsolved goals
+M : Type u_2
+inst✝ : Mul M
+S : Set (Subsemigroup M)
+hS : DirectedOn (fun x1 x2 ↦ x1 ≤ x2) S
+hy : ∀ z ∈ [], ∃ s ∈ S, z ∈ s
+⊢ sorry () ∈ ⊥
+Source line 16:
+            refine ⟨⊥, ?_, by simp⟩
+                           ^^^^^^^
+Highlighted span: by simp
+
+ERROR .LspCheck.lean:17:40-17:42
+Application type mismatch: The argument
+  hS
+has type
+  DirectedOn (fun x1 x2 ↦ x1 ≤ x2) S
+but is expected to have type
+  ?m.110 ∈ ?m.109
+in the application
+  Set.nonempty_of_mem hS
+Source line 17:
+            rcases Set.nonempty_of_mem hS with ⟨s, hs⟩
+                                       ^^
+Highlighted span: hS
+
+ERROR .LspCheck.lean:22:25-22:28
+Application type mismatch: The argument
+  hsS
+has type
+  s ∈ S
+of sort `Prop` but is expected to have type
+  Subsemigroup M
+of sort `Type u_2` in the application
+  hS hsS
+Source line 22:
+              rcases hS hsS hsaS with ⟨t, htS, hst, hsat⟩
+                        ^^^
+Highlighted span: hsS
+
+ERROR .LspCheck.lean:25:13-26:1
+No goals to be solved
+Source line 25:
+            · intro z hz
+            ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:28:26-28:33
+unsolved goals
+M : Type u_2
+inst✝ : Mul M
+S : Set (Subsemigroup M)
+hS : DirectedOn (fun x1 x2 ↦ x1 ≤ x2) S
+x : M
+s : Subsemigroup M
+hs : s ∈ S
+hx : x ∈ s
+⊢ sorry () = x
+Source line 28:
+        refine ⟨[x], ?_, by simp⟩
+                         ^^^^^^^
+Highlighted span: by simp
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι : Sort*} {M : Type*}
+
+variable [Mul M]
+
+theorem mem_sSup_of_directed_on {S : Set (Subsemigroup M)} (hS : DirectedOn (· ≤ ·) S) {x : M} :
+    x ∈ sSup S ↔ ∃ s ∈ S, x ∈ s := by
+  constructor
+  · intro hx
+    rw [Subsemigroup.mem_sSup_of_directedOn hS] at hx
+    simpa using hx
+  · rintro ⟨s, hs, hx⟩
+    rw [Subsemigroup.mem_sSup_of_directedOn hS]
+    exact ⟨s, hs, hx⟩
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:9-11:44
+Unknown constant `Subsemigroup.mem_sSup_of_directedOn`
+Source line 11:
+    rw [Subsemigroup.mem_sSup_of_directedOn hS] at hx
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subsemigroup.mem_sSup_of_directedOn
+
+ERROR .LspCheck.lean:14:9-14:44
+Unknown constant `Subsemigroup.mem_sSup_of_directedOn`
+Source line 14:
+    rw [Subsemigroup.mem_sSup_of_directedOn hS]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subsemigroup.mem_sSup_of_directedOn
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:9-11:44
+Unknown constant `Subsemigroup.mem_sSup_of_directedOn`
+Source line 11:
+    rw [Subsemigroup.mem_sSup_of_directedOn hS] at hx
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subsemigroup.mem_sSup_of_directedOn
+
+ERROR .LspCheck.lean:14:9-14:44
+Unknown constant `Subsemigroup.mem_sSup_of_directedOn`
+Source line 14:
+    rw [Subsemigroup.mem_sSup_of_directedOn hS]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subsemigroup.mem_sSup_of_directedOn

@@ -1,0 +1,112 @@
+FILE: Basic.prod_unique.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.prod_unique.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {α ι γ A B C : Type*} [AddCommMonoid A] [AddCommMonoid B] [AddCommMonoid C]
+
+variable {t : ι → A → C}
+
+variable {s : Finset α} {f : α → ι →₀ A} (i : ι)
+
+variable (g : ι →₀ A) (k : ι → A → γ → B) (x : γ)
+
+variable {β M M' N P G H R S : Type*}
+
+variable [Zero M] [Zero M'] [CommMonoid N]
+
+theorem prod_unique [Unique α] {f : α →₀ M} {g : α → M → N} (h₁ : f default = 0 → g default 0 = 1) :
+    f.prod g = g default (f default) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α ι γ A B C : Type*} [AddCommMonoid A] [AddCommMonoid B] [AddCommMonoid C]
+
+variable {t : ι → A → C}
+
+variable {s : Finset α} {f : α → ι →₀ A} (i : ι)
+
+variable (g : ι →₀ A) (k : ι → A → γ → B) (x : γ)
+
+variable {β M M' N P G H R S : Type*}
+
+variable [Zero M] [Zero M'] [CommMonoid N]
+
+theorem prod_unique [Unique α] {f : α →₀ M} {g : α → M → N} (h₁ : f default = 0 → g default 0 = 1) :
+    f.prod g = g default (f default) := by
+  classical
+  rw [Finsupp.prod]
+  simp only [Finsupp.support_single_ne_zero, Finset.prod_ite, Finset.mem_univ, if_true]
+  by_cases h : f default = 0
+  · simp [h, h₁ h]
+  · simp [h]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:19:3-19:88
+`simp` made no progress
+Source line 19:
+  simp only [Finsupp.support_single_ne_zero, Finset.prod_ite, Finset.mem_univ, if_true]
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simp only [Finsupp.support_single_ne_zero, Finset.prod_ite, Finset.mem_univ, if_true]
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:19:3-19:88
+`simp` made no progress
+Source line 19:
+  simp only [Finsupp.support_single_ne_zero, Finset.prod_ite, Finset.mem_univ, if_true]
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simp only [Finsupp.support_single_ne_zero, Finset.prod_ite, Finset.mem_univ, if_true]
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α ι γ A B C : Type*} [AddCommMonoid A] [AddCommMonoid B] [AddCommMonoid C]
+
+variable {t : ι → A → C}
+
+variable {s : Finset α} {f : α → ι →₀ A} (i : ι)
+
+variable (g : ι →₀ A) (k : ι → A → γ → B) (x : γ)
+
+variable {β M M' N P G H R S : Type*}
+
+variable [Zero M] [Zero M'] [CommMonoid N]
+
+theorem prod_unique [Unique α] {f : α →₀ M} {g : α → M → N} (h₁ : f default = 0 → g default 0 = 1) :
+    f.prod g = g default (f default) := by
+  classical
+  by_cases h : f default = 0
+  · have hs : f.support = ∅ := by
+      ext a
+      have : a = default := Subsingleton.elim _ _
+      simp [Finsupp.mem_support_iff, this, h]
+    rw [Finsupp.prod]
+    simp [hs, h, h₁ h]
+  · have hs : f.support = {default} := by
+      ext a
+      have : a = default := Subsingleton.elim _ _
+      simp [Finsupp.mem_support_iff, this, h]
+    rw [Finsupp.prod]
+    simp [hs, h]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

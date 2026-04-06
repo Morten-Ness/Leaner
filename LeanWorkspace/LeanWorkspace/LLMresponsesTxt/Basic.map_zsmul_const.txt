@@ -1,0 +1,202 @@
+FILE: Basic.map_zsmul_const.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.map_zsmul_const.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_zsmul_const [AddGroup G] [AddGroup H] [AddConstMapClass F G H a b]
+    (f : F) (n : ℤ) : f (n • a) = f 0 + n • b := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_zsmul_const [AddGroup G] [AddGroup H] [AddConstMapClass F G H a b]
+    (f : F) (n : ℤ) : f (n • a) = f 0 + n • b := by
+  simpa using map_zsmulₛₗ (f := f) (n := n) (a := a)
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:7:15-7:26
+Unknown identifier `map_zsmulₛₗ`
+Source line 7:
+  simpa using map_zsmulₛₗ (f := f) (n := n) (a := a)
+              ^^^^^^^^^^^
+Highlighted span: map_zsmulₛₗ
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:7:15-7:26
+Unknown identifier `map_zsmulₛₗ`
+Source line 7:
+  simpa using map_zsmulₛₗ (f := f) (n := n) (a := a)
+              ^^^^^^^^^^^
+Highlighted span: map_zsmulₛₗ
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_zsmul_const [AddGroup G] [AddGroup H] [AddConstMapClass F G H a b]
+    (f : F) (n : ℤ) : f (n • a) = f 0 + n • b := by
+  induction n with
+  | ofNat m =>
+      induction m with
+      | zero =>
+          simp
+      | succ m hm =>
+          rw [Int.ofNat_eq_coe, Int.natCast_zsmul]
+          rw [succ_nsmul]
+          rw [map_add_const]
+          rw [hm]
+          simp [succ_nsmul, add_assoc, add_left_comm, add_comm]
+  | negSucc m =>
+      rw [Int.negSucc_eq]
+      rw [zsmul_neg']
+      induction m with
+      | zero =>
+          simp
+      | succ m hm =>
+          rw [Nat.succ_eq_add_one, add_comm, add_assoc]
+          rw [Int.ofNat_eq_coe, Int.natCast_add, Int.natCast_one, add_zsmul]
+          simp only [one_zsmul]
+          rw [map_add_const]
+          rw [hm]
+          abel
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:8:3-9:1
+Invalid alternative name `ofNat`: Expected `zero`, `succ`, or `pred`
+Source line 8:
+  | ofNat m =>
+  ^
+Highlighted span: |
+
+ERROR .LspCheck.lean:18:3-19:1
+Invalid alternative name `negSucc`: Expected `zero`, `succ`, or `pred`
+Source line 18:
+  | negSucc m =>
+  ^
+Highlighted span: |
+
+ERROR .LspCheck.lean:7:3-7:12
+Alternative `zero` has not been provided
+Source line 7:
+  induction n with
+  ^^^^^^^^^
+Highlighted span: induction
+
+ERROR .LspCheck.lean:7:3-7:12
+Alternative `succ` has not been provided
+Source line 7:
+  induction n with
+  ^^^^^^^^^
+Highlighted span: induction
+
+ERROR .LspCheck.lean:7:3-7:12
+Alternative `pred` has not been provided
+Source line 7:
+  induction n with
+  ^^^^^^^^^
+Highlighted span: induction
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:8:3-9:1
+Invalid alternative name `ofNat`: Expected `zero`, `succ`, or `pred`
+Source line 8:
+  | ofNat m =>
+  ^
+Highlighted span: |
+
+ERROR .LspCheck.lean:18:3-19:1
+Invalid alternative name `negSucc`: Expected `zero`, `succ`, or `pred`
+Source line 18:
+  | negSucc m =>
+  ^
+Highlighted span: |
+
+ERROR .LspCheck.lean:7:3-7:12
+Alternative `zero` has not been provided
+Source line 7:
+  induction n with
+  ^^^^^^^^^
+Highlighted span: induction
+
+ERROR .LspCheck.lean:7:3-7:12
+Alternative `succ` has not been provided
+Source line 7:
+  induction n with
+  ^^^^^^^^^
+Highlighted span: induction
+
+ERROR .LspCheck.lean:7:3-7:12
+Alternative `pred` has not been provided
+Source line 7:
+  induction n with
+  ^^^^^^^^^
+Highlighted span: induction
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_zsmul_const [AddGroup G] [AddGroup H] [AddConstMapClass F G H a b]
+    (f : F) (n : ℤ) : f (n • a) = f 0 + n • b := by
+  simpa only [sub_eq_add_neg, zsmul_eq_mul, Int.cast_id] using
+    AddMonoidHom.map_intCast_zsmul
+      ({ toFun := fun x => f x - f 0
+         map_zero' := by simp
+         map_add' := by
+           intro x y
+           rw [map_add_const, map_add_const]
+           abel } : G →+ H) n a
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:8:5-8:35
+Unknown constant `AddMonoidHom.map_intCast_zsmul`
+Source line 8:
+    AddMonoidHom.map_intCast_zsmul
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AddMonoidHom.map_intCast_zsmul
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:8:5-8:35
+Unknown constant `AddMonoidHom.map_intCast_zsmul`
+Source line 8:
+    AddMonoidHom.map_intCast_zsmul
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AddMonoidHom.map_intCast_zsmul

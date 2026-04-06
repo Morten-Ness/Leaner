@@ -1,0 +1,158 @@
+FILE: ModEq.add_modEq_left.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: ModEq.add_modEq_left.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {M : Type*} [AddCancelCommMonoid M] {a b c d p : M}
+
+theorem add_modEq_left : a + b ≡ a [PMOD p] ↔ b ≡ 0 [PMOD p] := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M : Type*} [AddCancelCommMonoid M] {a b c d p : M}
+
+theorem add_modEq_left : a + b ≡ a [PMOD p] ↔ b ≡ 0 [PMOD p] := by
+  simpa [AddCommMagma.modEq_iff_eq_dvd] using
+    (show a + b = a ↔ ∃ t, b = t + p from by
+      constructor
+      · intro h
+        refine ⟨0, ?_⟩
+        simpa [h]
+      · rintro ⟨t, ht⟩
+        rw [ht, add_assoc]
+        have : t + p = 0 := by
+          simpa [AddCommMonoid.dvd_iff_exists_eq_add] using ht
+        simpa [this])
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:6:10-6:39
+Unknown constant `AddCommMagma.modEq_iff_eq_dvd`
+Source line 6:
+  simpa [AddCommMagma.modEq_iff_eq_dvd] using
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AddCommMagma.modEq_iff_eq_dvd
+
+WARNING .LspCheck.lean:6:3-7:1
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 6:
+  simpa [AddCommMagma.modEq_iff_eq_dvd] using
+  ^
+Highlighted span: s
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:6:10-6:39
+Unknown constant `AddCommMagma.modEq_iff_eq_dvd`
+Source line 6:
+  simpa [AddCommMagma.modEq_iff_eq_dvd] using
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AddCommMagma.modEq_iff_eq_dvd
+
+WARNING .LspCheck.lean:6:3-7:1
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 6:
+  simpa [AddCommMagma.modEq_iff_eq_dvd] using
+  ^
+Highlighted span: s
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M : Type*} [AddCancelCommMonoid M] {a b c d p : M}
+
+theorem add_modEq_left : a + b ≡ a [PMOD p] ↔ b ≡ 0 [PMOD p] := by
+  constructor
+  · intro h
+    rcases h with ⟨t, ht⟩
+    refine ⟨t, ?_⟩
+    exact add_left_cancel ht
+  · intro h
+    rcases h with ⟨t, ht⟩
+    refine ⟨t, ?_⟩
+    rw [ht, add_assoc]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:27-10:29
+Application type mismatch: The argument
+  ht
+has type
+  ∃ n, t • p + (a + b) = n • p + a
+but is expected to have type
+  ?m.32 + ?m.33 = ?m.32 + ?m.34
+in the application
+  add_left_cancel ht
+Source line 10:
+    exact add_left_cancel ht
+                          ^^
+Highlighted span: ht
+
+ERROR .LspCheck.lean:14:9-14:11
+Invalid rewrite argument: Expected an equality or iff proof or definition name, but `ht` is a proof of
+  ∃ n, t • p + b = n • p + 0
+Source line 14:
+    rw [ht, add_assoc]
+        ^^
+Highlighted span: ht
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:27-10:29
+Application type mismatch: The argument
+  ht
+has type
+  ∃ n, t • p + (a + b) = n • p + a
+but is expected to have type
+  ?m.32 + ?m.33 = ?m.32 + ?m.34
+in the application
+  add_left_cancel ht
+Source line 10:
+    exact add_left_cancel ht
+                          ^^
+Highlighted span: ht
+
+ERROR .LspCheck.lean:14:9-14:11
+Invalid rewrite argument: Expected an equality or iff proof or definition name, but `ht` is a proof of
+  ∃ n, t • p + b = n • p + 0
+Source line 14:
+    rw [ht, add_assoc]
+        ^^
+Highlighted span: ht
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M : Type*} [AddCancelCommMonoid M] {a b c d p : M}
+
+theorem add_modEq_left : a + b ≡ a [PMOD p] ↔ b ≡ 0 [PMOD p] := by
+  simpa using (modEq_add_fac_left (a := b) (b := 0) (c := a) (n := p))
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

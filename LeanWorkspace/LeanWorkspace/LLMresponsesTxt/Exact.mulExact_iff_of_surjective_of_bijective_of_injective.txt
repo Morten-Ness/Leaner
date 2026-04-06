@@ -1,0 +1,643 @@
+FILE: Exact.mulExact_iff_of_surjective_of_bijective_of_injective.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Exact.mulExact_iff_of_surjective_of_bijective_of_injective.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R M M' N N' P P' : Type*}
+
+variable [Group M] [Group N] [Group P] {f : M →* N} {g : N →* P}
+
+theorem mulExact_iff_of_surjective_of_bijective_of_injective
+    {M₁ M₂ M₃ N₁ N₂ N₃ : Type*} [CommMonoid M₁] [CommMonoid M₂] [CommMonoid M₃]
+    [CommMonoid N₁] [CommMonoid N₂] [CommMonoid N₃]
+    (f : M₁ →* M₂) (g : M₂ →* M₃) (f' : N₁ →* N₂) (g' : N₂ →* N₃)
+    (τ₁ : M₁ →* N₁) (τ₂ : M₂ →* N₂) (τ₃ : M₃ →* N₃)
+    (comm₁₂ : f'.comp τ₁ = τ₂.comp f)
+    (comm₂₃ : g'.comp τ₂ = τ₃.comp g)
+    (h₁ : Function.Surjective τ₁) (h₂ : Function.Bijective τ₂) (h₃ : Function.Injective τ₃) :
+    Function.MulExact f g ↔ Function.MulExact f' g' := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R M M' N N' P P' : Type*}
+
+variable [Group M] [Group N] [Group P] {f : M →* N} {g : N →* P}
+
+theorem mulExact_iff_of_surjective_of_bijective_of_injective
+    {M₁ M₂ M₃ N₁ N₂ N₃ : Type*} [CommMonoid M₁] [CommMonoid M₂] [CommMonoid M₃]
+    [CommMonoid N₁] [CommMonoid N₂] [CommMonoid N₃]
+    (f : M₁ →* M₂) (g : M₂ →* M₃) (f' : N₁ →* N₂) (g' : N₂ →* N₃)
+    (τ₁ : M₁ →* N₁) (τ₂ : M₂ →* N₂) (τ₃ : M₃ →* N₃)
+    (comm₁₂ : f'.comp τ₁ = τ₂.comp f)
+    (comm₂₃ : g'.comp τ₂ = τ₃.comp g)
+    (h₁ : Function.Surjective τ₁) (h₂ : Function.Bijective τ₂) (h₃ : Function.Injective τ₃) :
+    Function.MulExact f g ↔ Function.MulExact f' g' := by
+  rcases h₂ with ⟨h₂inj, h₂surj⟩
+  rw [Function.mulExact_iff]
+  rw [Function.mulExact_iff]
+  constructor
+  · intro h
+    constructor
+    · ext x
+      apply h₃
+      have := congrArg (fun k : M₂ →* N₃ => k x) comm₂₃
+      have := congrArg (fun k : N₁ →* N₃ => k (τ₁ x)) this
+      simpa [MonoidHom.comp_apply, h.1 x]
+    · intro y hy
+      rcases h₂surj y with ⟨x, rfl⟩
+      have hx : g x = 1 := by
+        apply h₃
+        rw [← MonoidHom.comp_apply, comm₂₃, MonoidHom.comp_apply, hy, map_one]
+      rcases h.2 x hx with ⟨z, rfl⟩
+      rcases h₁ z with ⟨w, rfl⟩
+      refine ⟨τ₁ w, ?_⟩
+      have := congrArg (fun k : M₁ →* N₂ => k w) comm₁₂
+      simpa [MonoidHom.comp_apply]
+  · intro h
+    constructor
+    · ext x
+      apply h₂inj
+      have := congrArg (fun k : M₂ →* N₃ => k (g x)) comm₂₃
+      have := congrArg (fun k : N₂ →* N₃ => k (τ₂ x)) this
+      simpa [MonoidHom.comp_apply, h.1 (τ₂ x)]
+    · intro x hx
+      have hτ : f' (τ₁ x) = 1 := by
+        apply h₂inj
+        rw [← MonoidHom.comp_apply, comm₁₂, MonoidHom.comp_apply, hx, map_one]
+      rcases h.2 (τ₁ x) hτ with ⟨y, hy⟩
+      rcases h₂surj y with ⟨z, rfl⟩
+      refine ⟨z, ?_⟩
+      apply h₂inj
+      rw [← hy]
+      have := congrArg (fun k : M₁ →* N₂ => k z) comm₁₂
+      simpa [MonoidHom.comp_apply]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:17:7-17:28
+Unknown identifier `Function.mulExact_iff`
+Source line 17:
+  rw [Function.mulExact_iff]
+      ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Function.mulExact_iff
+
+ERROR .LspCheck.lean:15:56-16:1
+unsolved goals
+M₁ : Type u_8
+M₂ : Type u_9
+M₃ : Type u_10
+N₁ : Type u_11
+N₂ : Type u_12
+N₃ : Type u_13
+inst✝⁵ : CommMonoid M₁
+inst✝⁴ : CommMonoid M₂
+inst✝³ : CommMonoid M₃
+inst✝² : CommMonoid N₁
+inst✝¹ : CommMonoid N₂
+inst✝ : CommMonoid N₃
+f : M₁ →* M₂
+g : M₂ →* M₃
+f' : N₁ →* N₂
+g' : N₂ →* N₃
+τ₁ : M₁ →* N₁
+τ₂ : M₂ →* N₂
+τ₃ : M₃ →* N₃
+comm₁₂ : f'.comp τ₁ = τ₂.comp f
+comm₂₃ : g'.comp τ₂ = τ₃.comp g
+h₁ : Function.Surjective ⇑τ₁
+h₃ : Function.Injective ⇑τ₃
+h₂inj : Function.Injective ⇑τ₂
+h₂surj : Function.Surjective ⇑τ₂
+⊢ Function.MulExact ⇑f ⇑g ↔ Function.MulExact ⇑f' ⇑g'
+Source line 15:
+    Function.MulExact f g ↔ Function.MulExact f' g' := by
+                                                       ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:17:7-17:28
+Unknown identifier `Function.mulExact_iff`
+Source line 17:
+  rw [Function.mulExact_iff]
+      ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Function.mulExact_iff
+
+ERROR .LspCheck.lean:15:56-16:1
+unsolved goals
+M₁ : Type u_8
+M₂ : Type u_9
+M₃ : Type u_10
+N₁ : Type u_11
+N₂ : Type u_12
+N₃ : Type u_13
+inst✝⁵ : CommMonoid M₁
+inst✝⁴ : CommMonoid M₂
+inst✝³ : CommMonoid M₃
+inst✝² : CommMonoid N₁
+inst✝¹ : CommMonoid N₂
+inst✝ : CommMonoid N₃
+f : M₁ →* M₂
+g : M₂ →* M₃
+f' : N₁ →* N₂
+g' : N₂ →* N₃
+τ₁ : M₁ →* N₁
+τ₂ : M₂ →* N₂
+τ₃ : M₃ →* N₃
+comm₁₂ : f'.comp τ₁ = τ₂.comp f
+comm₂₃ : g'.comp τ₂ = τ₃.comp g
+h₁ : Function.Surjective ⇑τ₁
+h₃ : Function.Injective ⇑τ₃
+h₂inj : Function.Injective ⇑τ₂
+h₂surj : Function.Surjective ⇑τ₂
+⊢ Function.MulExact ⇑f ⇑g ↔ Function.MulExact ⇑f' ⇑g'
+Source line 15:
+    Function.MulExact f g ↔ Function.MulExact f' g' := by
+                                                       ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R M M' N N' P P' : Type*}
+
+variable [Group M] [Group N] [Group P] {f : M →* N} {g : N →* P}
+
+theorem mulExact_iff_of_surjective_of_bijective_of_injective
+    {M₁ M₂ M₃ N₁ N₂ N₃ : Type*} [CommMonoid M₁] [CommMonoid M₂] [CommMonoid M₃]
+    [CommMonoid N₁] [CommMonoid N₂] [CommMonoid N₃]
+    (f : M₁ →* M₂) (g : M₂ →* M₃) (f' : N₁ →* N₂) (g' : N₂ →* N₃)
+    (τ₁ : M₁ →* N₁) (τ₂ : M₂ →* N₂) (τ₃ : M₃ →* N₃)
+    (comm₁₂ : f'.comp τ₁ = τ₂.comp f)
+    (comm₂₃ : g'.comp τ₂ = τ₃.comp g)
+    (h₁ : Function.Surjective τ₁) (h₂ : Function.Bijective τ₂) (h₃ : Function.Injective τ₃) :
+    Function.MulExact f g ↔ Function.MulExact f' g' := by
+  rcases h₂ with ⟨h₂inj, h₂surj⟩
+  constructor
+  · intro h
+    rcases h with ⟨hcomp, hexact⟩
+    refine ⟨?_, ?_⟩
+    · intro x
+      apply h₃
+      have hcomm := congrArg (fun k : M₂ →* N₃ => k x) comm₂₃
+      simpa [MonoidHom.comp_apply, hcomp x] using hcomm
+    · intro y hy
+      rcases h₂surj y with ⟨x, rfl⟩
+      have hx : g x = 1 := by
+        apply h₃
+        have hcomm := congrArg (fun k : M₂ →* N₃ => k x) comm₂₃
+        simpa [MonoidHom.comp_apply, hy] using hcomm
+      rcases hexact x hx with ⟨z, rfl⟩
+      rcases h₁ z with ⟨w, rfl⟩
+      refine ⟨τ₁ w, ?_⟩
+      have hcomm := congrArg (fun k : M₁ →* N₂ => k w) comm₁₂
+      simpa [MonoidHom.comp_apply] using hcomm
+  · intro h
+    rcases h with ⟨hcomp, hexact⟩
+    refine ⟨?_, ?_⟩
+    · intro x
+      apply h₂inj
+      have hcomm := congrArg (fun k : M₂ →* N₃ => k x) comm₂₃
+      simpa [MonoidHom.comp_apply, hcomp (τ₂ x)] using hcomm
+    · intro x hx
+      have hτ : f' (τ₁ x) = 1 := by
+        apply h₂inj
+        have hcomm := congrArg (fun k : M₁ →* N₂ => k x) comm₁₂
+        simpa [MonoidHom.comp_apply, hx] using hcomm
+      rcases hexact (τ₁ x) hτ with ⟨y, hy⟩
+      rcases h₂surj y with ⟨z, rfl⟩
+      refine ⟨z, ?_⟩
+      apply h₂inj
+      rw [← hy]
+      have hcomm := congrArg (fun k : M₁ →* N₂ => k z) comm₁₂
+      simpa [MonoidHom.comp_apply] using hcomm
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:19:19-19:34
+Tactic `rcases` failed: `h : ∀ (y : M₂), g y = 1 ↔ y ∈ Set.range ⇑f` is not an inductive datatype
+Source line 19:
+    rcases h with ⟨hcomp, hexact⟩
+                  ^^^^^^^^^^^^^^^
+Highlighted span: ⟨hcomp, hexact⟩
+
+ERROR .LspCheck.lean:37:19-37:34
+Tactic `rcases` failed: `h : ∀ (y : N₂), g' y = 1 ↔ y ∈ Set.range ⇑f'` is not an inductive datatype
+Source line 37:
+    rcases h with ⟨hcomp, hexact⟩
+                  ^^^^^^^^^^^^^^^
+Highlighted span: ⟨hcomp, hexact⟩
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:19:19-19:34
+Tactic `rcases` failed: `h : ∀ (y : M₂), g y = 1 ↔ y ∈ Set.range ⇑f` is not an inductive datatype
+Source line 19:
+    rcases h with ⟨hcomp, hexact⟩
+                  ^^^^^^^^^^^^^^^
+Highlighted span: ⟨hcomp, hexact⟩
+
+ERROR .LspCheck.lean:37:19-37:34
+Tactic `rcases` failed: `h : ∀ (y : N₂), g' y = 1 ↔ y ∈ Set.range ⇑f'` is not an inductive datatype
+Source line 37:
+    rcases h with ⟨hcomp, hexact⟩
+                  ^^^^^^^^^^^^^^^
+Highlighted span: ⟨hcomp, hexact⟩
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R M M' N N' P P' : Type*}
+
+variable [Group M] [Group N] [Group P] {f : M →* N} {g : N →* P}
+
+theorem mulExact_iff_of_surjective_of_bijective_of_injective
+    {M₁ M₂ M₃ N₁ N₂ N₃ : Type*} [CommMonoid M₁] [CommMonoid M₂] [CommMonoid M₃]
+    [CommMonoid N₁] [CommMonoid N₂] [CommMonoid N₃]
+    (f : M₁ →* M₂) (g : M₂ →* M₃) (f' : N₁ →* N₂) (g' : N₂ →* N₃)
+    (τ₁ : M₁ →* N₁) (τ₂ : M₂ →* N₂) (τ₃ : M₃ →* N₃)
+    (comm₁₂ : f'.comp τ₁ = τ₂.comp f)
+    (comm₂₃ : g'.comp τ₂ = τ₃.comp g)
+    (h₁ : Function.Surjective τ₁) (h₂ : Function.Bijective τ₂) (h₃ : Function.Injective τ₃) :
+    Function.MulExact f g ↔ Function.MulExact f' g' := by
+  rcases h₂ with ⟨h₂inj, h₂surj⟩
+  constructor
+  · intro h
+    intro y
+    constructor
+    · intro hy
+      rcases h₂surj y with ⟨x, rfl⟩
+      have hx : g x = 1 := by
+        apply h₃
+        have hcomm := congrArg (fun k : M₂ →* N₃ => k x) comm₂₃
+        simpa [MonoidHom.comp_apply, hy] using hcomm
+      rcases (h x).1 hx with ⟨z, rfl⟩
+      rcases h₁ z with ⟨w, rfl⟩
+      refine ⟨τ₁ w, ?_⟩
+      have hcomm := congrArg (fun k : M₁ →* N₂ => k w) comm₁₂
+      simpa [MonoidHom.comp_apply] using hcomm
+    · rintro ⟨x, rfl⟩
+      have hcomm := congrArg (fun k : M₂ →* N₃ => k (f x)) comm₂₃
+      apply h₃
+      simpa [MonoidHom.comp_apply] using hcomm
+  · intro h
+    intro x
+    constructor
+    · intro hx
+      have hτ : f' (τ₁ x) ∈ Set.range f' := by
+        apply (h (τ₂ x)).mp
+        apply h₂inj
+        have hcomm := congrArg (fun k : M₂ →* N₃ => k x) comm₂₃
+        simpa [MonoidHom.comp_apply, hx] using hcomm
+      rcases hτ with ⟨y, hy⟩
+      rcases h₂surj y with ⟨z, rfl⟩
+      refine ⟨z, ?_⟩
+      apply h₂inj
+      rw [← hy]
+      have hcomm := congrArg (fun k : M₁ →* N₂ => k z) comm₁₂
+      simpa [MonoidHom.comp_apply] using hcomm
+    · rintro ⟨y, rfl⟩
+      apply h₂inj
+      have hcomm := congrArg (fun k : M₂ →* N₃ => k (f y)) comm₂₃
+      simpa [MonoidHom.comp_apply] using hcomm
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:26:9-26:53
+Type mismatch: After simplification, term
+  hcomm
+ has type
+  1 = τ₃ (g x)
+but is expected to have type
+  τ₃ (g x) = 1
+Source line 26:
+        simpa [MonoidHom.comp_apply, hy] using hcomm
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [MonoidHom.comp_apply, hy] using hcomm
+
+ERROR .LspCheck.lean:28:17-28:18
+Application type mismatch: The argument
+  z
+has type
+  M₁
+of sort `Type u_8` but is expected to have type
+  N₁
+of sort `Type u_11` in the application
+  h₁ z
+Source line 28:
+      rcases h₁ z with ⟨w, rfl⟩
+                ^
+Highlighted span: z
+
+ERROR .LspCheck.lean:33:56-33:57
+Application type mismatch: The argument
+  x
+has type
+  N₁
+of sort `Type u_11` but is expected to have type
+  M₁
+of sort `Type u_8` in the application
+  f x
+Source line 33:
+      have hcomm := congrArg (fun k : M₂ →* N₃ => k (f x)) comm₂₃
+                                                       ^
+Highlighted span: x
+
+ERROR .LspCheck.lean:34:7-34:15
+Tactic `apply` failed: could not unify the conclusion of `h₃`
+  Eq.{u_10 + 1} ?a₁ ?a₂
+with the goal
+  Eq.{u_13 + 1} (g' (f' x)) 1
+
+Note: The full type of `h₃` is
+  Function.Injective ⇑τ₃
+
+case mp.mpr
+M₁ : Type u_8
+M₂ : Type u_9
+M₃ : Type u_10
+N₁ : Type u_11
+N₂ : Type u_12
+N₃ : Type u_13
+inst✝⁵ : CommMonoid M₁
+inst✝⁴ : CommMonoid M₂
+inst✝³ : CommMonoid M₃
+inst✝² : CommMonoid N₁
+inst✝¹ : CommMonoid N₂
+inst✝ : CommMonoid N₃
+f : M₁ →* M₂
+g : M₂ →* M₃
+f' : N₁ →* N₂
+g' : N₂ →* N₃
+τ₁ : M₁ →* N₁
+τ₂ : M₂ →* N₂
+τ₃ : M₃ →* N₃
+comm₁₂ : f'.comp τ₁ = τ₂.comp f
+comm₂₃ : g'.comp τ₂ = τ₃.comp g
+h₁ : Function.Surjective ⇑τ₁
+h₃ : Function.Injective ⇑τ₃
+h₂inj : Function.Injective ⇑τ₂
+h₂surj : Function.Surjective ⇑τ₂
+h : Function.MulExact ⇑f ⇑g
+x : N₁
+hcomm : (fun k ↦ k (f sorry)) (g'.comp τ₂) = (fun k ↦ k (f sorry)) (τ₃.comp g)
+⊢ g' (f' x) = 1
+Source line 34:
+      apply h₃
+      ^^^^^^^^
+Highlighted span: apply h₃
+
+ERROR .LspCheck.lean:40:24-40:25
+Application type mismatch: The argument
+  x
+has type
+  M₂
+of sort `Type u_9` but is expected to have type
+  M₁
+of sort `Type u_8` in the application
+  τ₁ x
+Source line 40:
+      have hτ : f' (τ₁ x) ∈ Set.range f' := by
+                       ^
+Highlighted span: x
+
+ERROR .LspCheck.lean:46:21-46:22
+Application type mismatch: The argument
+  y
+has type
+  N₁
+of sort `Type u_11` but is expected to have type
+  N₂
+of sort `Type u_12` in the application
+  h₂surj y
+Source line 46:
+      rcases h₂surj y with ⟨z, rfl⟩
+                    ^
+Highlighted span: y
+
+ERROR .LspCheck.lean:53:7-53:18
+Tactic `apply` failed: could not unify the conclusion of `h₂inj`
+  Eq.{u_9 + 1} ?a₁ ?a₂
+with the goal
+  Eq.{u_10 + 1} (g (f y)) 1
+
+Note: The full type of `h₂inj` is
+  Function.Injective ⇑τ₂
+
+case mpr.mpr
+M₁ : Type u_8
+M₂ : Type u_9
+M₃ : Type u_10
+N₁ : Type u_11
+N₂ : Type u_12
+N₃ : Type u_13
+inst✝⁵ : CommMonoid M₁
+inst✝⁴ : CommMonoid M₂
+inst✝³ : CommMonoid M₃
+inst✝² : CommMonoid N₁
+inst✝¹ : CommMonoid N₂
+inst✝ : CommMonoid N₃
+f : M₁ →* M₂
+g : M₂ →* M₃
+f' : N₁ →* N₂
+g' : N₂ →* N₃
+τ₁ : M₁ →* N₁
+τ₂ : M₂ →* N₂
+τ₃ : M₃ →* N₃
+comm₁₂ : f'.comp τ₁ = τ₂.comp f
+comm₂₃ : g'.comp τ₂ = τ₃.comp g
+h₁ : Function.Surjective ⇑τ₁
+h₃ : Function.Injective ⇑τ₃
+h₂inj : Function.Injective ⇑τ₂
+h₂surj : Function.Surjective ⇑τ₂
+h : Function.MulExact ⇑f' ⇑g'
+y : M₁
+⊢ g (f y) = 1
+Source line 53:
+      apply h₂inj
+      ^^^^^^^^^^^
+Highlighted span: apply h₂inj
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:26:9-26:53
+Type mismatch: After simplification, term
+  hcomm
+ has type
+  1 = τ₃ (g x)
+but is expected to have type
+  τ₃ (g x) = 1
+Source line 26:
+        simpa [MonoidHom.comp_apply, hy] using hcomm
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [MonoidHom.comp_apply, hy] using hcomm
+
+ERROR .LspCheck.lean:28:17-28:18
+Application type mismatch: The argument
+  z
+has type
+  M₁
+of sort `Type u_8` but is expected to have type
+  N₁
+of sort `Type u_11` in the application
+  h₁ z
+Source line 28:
+      rcases h₁ z with ⟨w, rfl⟩
+                ^
+Highlighted span: z
+
+ERROR .LspCheck.lean:33:56-33:57
+Application type mismatch: The argument
+  x
+has type
+  N₁
+of sort `Type u_11` but is expected to have type
+  M₁
+of sort `Type u_8` in the application
+  f x
+Source line 33:
+      have hcomm := congrArg (fun k : M₂ →* N₃ => k (f x)) comm₂₃
+                                                       ^
+Highlighted span: x
+
+ERROR .LspCheck.lean:34:7-34:15
+Tactic `apply` failed: could not unify the conclusion of `h₃`
+  Eq.{u_10 + 1} ?a₁ ?a₂
+with the goal
+  Eq.{u_13 + 1} (g' (f' x)) 1
+
+Note: The full type of `h₃` is
+  Function.Injective ⇑τ₃
+
+case mp.mpr
+M₁ : Type u_8
+M₂ : Type u_9
+M₃ : Type u_10
+N₁ : Type u_11
+N₂ : Type u_12
+N₃ : Type u_13
+inst✝⁵ : CommMonoid M₁
+inst✝⁴ : CommMonoid M₂
+inst✝³ : CommMonoid M₃
+inst✝² : CommMonoid N₁
+inst✝¹ : CommMonoid N₂
+inst✝ : CommMonoid N₃
+f : M₁ →* M₂
+g : M₂ →* M₃
+f' : N₁ →* N₂
+g' : N₂ →* N₃
+τ₁ : M₁ →* N₁
+τ₂ : M₂ →* N₂
+τ₃ : M₃ →* N₃
+comm₁₂ : f'.comp τ₁ = τ₂.comp f
+comm₂₃ : g'.comp τ₂ = τ₃.comp g
+h₁ : Function.Surjective ⇑τ₁
+h₃ : Function.Injective ⇑τ₃
+h₂inj : Function.Injective ⇑τ₂
+h₂surj : Function.Surjective ⇑τ₂
+h : Function.MulExact ⇑f ⇑g
+x : N₁
+hcomm : (fun k ↦ k (f sorry)) (g'.comp τ₂) = (fun k ↦ k (f sorry)) (τ₃.comp g)
+⊢ g' (f' x) = 1
+Source line 34:
+      apply h₃
+      ^^^^^^^^
+Highlighted span: apply h₃
+
+ERROR .LspCheck.lean:40:24-40:25
+Application type mismatch: The argument
+  x
+has type
+  M₂
+of sort `Type u_9` but is expected to have type
+  M₁
+of sort `Type u_8` in the application
+  τ₁ x
+Source line 40:
+      have hτ : f' (τ₁ x) ∈ Set.range f' := by
+                       ^
+Highlighted span: x
+
+ERROR .LspCheck.lean:46:21-46:22
+Application type mismatch: The argument
+  y
+has type
+  N₁
+of sort `Type u_11` but is expected to have type
+  N₂
+of sort `Type u_12` in the application
+  h₂surj y
+Source line 46:
+      rcases h₂surj y with ⟨z, rfl⟩
+                    ^
+Highlighted span: y
+
+ERROR .LspCheck.lean:53:7-53:18
+Tactic `apply` failed: could not unify the conclusion of `h₂inj`
+  Eq.{u_9 + 1} ?a₁ ?a₂
+with the goal
+  Eq.{u_10 + 1} (g (f y)) 1
+
+Note: The full type of `h₂inj` is
+  Function.Injective ⇑τ₂
+
+case mpr.mpr
+M₁ : Type u_8
+M₂ : Type u_9
+M₃ : Type u_10
+N₁ : Type u_11
+N₂ : Type u_12
+N₃ : Type u_13
+inst✝⁵ : CommMonoid M₁
+inst✝⁴ : CommMonoid M₂
+inst✝³ : CommMonoid M₃
+inst✝² : CommMonoid N₁
+inst✝¹ : CommMonoid N₂
+inst✝ : CommMonoid N₃
+f : M₁ →* M₂
+g : M₂ →* M₃
+f' : N₁ →* N₂
+g' : N₂ →* N₃
+τ₁ : M₁ →* N₁
+τ₂ : M₂ →* N₂
+τ₃ : M₃ →* N₃
+comm₁₂ : f'.comp τ₁ = τ₂.comp f
+comm₂₃ : g'.comp τ₂ = τ₃.comp g
+h₁ : Function.Surjective ⇑τ₁
+h₃ : Function.Injective ⇑τ₃
+h₂inj : Function.Injective ⇑τ₂
+h₂surj : Function.Surjective ⇑τ₂
+h : Function.MulExact ⇑f' ⇑g'
+y : M₁
+⊢ g (f y) = 1
+Source line 53:
+      apply h₂inj
+      ^^^^^^^^^^^
+Highlighted span: apply h₂inj

@@ -1,0 +1,119 @@
+FILE: Basic.map_mem_map.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.map_mem_map.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {K : Type u} {L : Type v} {M : Type w}
+
+variable [DivisionRing K] [DivisionRing L] [DivisionRing M]
+
+variable (s t : Subfield K)
+
+variable (f : K →+* L)
+
+theorem map_mem_map (f : K →+* L) {s : Subfield K} {x : K} : f x ∈ s.map f ↔ x ∈ s := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {K : Type u} {L : Type v} {M : Type w}
+
+variable [DivisionRing K] [DivisionRing L] [DivisionRing M]
+
+variable (s t : Subfield K)
+
+variable (f : K →+* L)
+
+theorem map_mem_map (f : K →+* L) {s : Subfield K} {x : K} : f x ∈ s.map f ↔ x ∈ s := by
+  constructor
+  · rintro ⟨y, hy, hfy⟩
+    rw [← f.injective.eq_iff] at hfy
+    rwa [hfy] at hy
+  · intro hx
+    exact ⟨x, hx, rfl⟩
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:9-14:29
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Eq.{u + 1} ?m.49 ?m.50
+in the target expression
+  Eq.{v + 1} (f y) (f x)
+
+case mp
+K : Type u
+L : Type v
+inst✝¹ : DivisionRing K
+inst✝ : DivisionRing L
+f : K →+* L
+s : Subfield K
+x y : K
+hy : y ∈ s.carrier
+hfy : f y = f x
+⊢ x ∈ s
+Source line 14:
+    rw [← f.injective.eq_iff] at hfy
+        ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ← f.injective.eq_iff
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:9-14:29
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Eq.{u + 1} ?m.49 ?m.50
+in the target expression
+  Eq.{v + 1} (f y) (f x)
+
+case mp
+K : Type u
+L : Type v
+inst✝¹ : DivisionRing K
+inst✝ : DivisionRing L
+f : K →+* L
+s : Subfield K
+x y : K
+hy : y ∈ s.carrier
+hfy : f y = f x
+⊢ x ∈ s
+Source line 14:
+    rw [← f.injective.eq_iff] at hfy
+        ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ← f.injective.eq_iff
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {K : Type u} {L : Type v} {M : Type w}
+
+variable [DivisionRing K] [DivisionRing L] [DivisionRing M]
+
+variable (s t : Subfield K)
+
+variable (f : K →+* L)
+
+theorem map_mem_map (f : K →+* L) {s : Subfield K} {x : K} : f x ∈ s.map f ↔ x ∈ s := by
+  constructor
+  · rintro ⟨y, hy, hfy⟩
+    have : y = x := f.injective hfy
+    rwa [this] at hy
+  · intro hx
+    exact ⟨x, hx, rfl⟩
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

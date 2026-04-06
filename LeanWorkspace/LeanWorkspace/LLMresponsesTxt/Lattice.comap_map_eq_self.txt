@@ -1,0 +1,385 @@
+FILE: Lattice.comap_map_eq_self.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Lattice.comap_map_eq_self.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+
+variable [CommSemiring R] [Ring A] [Algebra R A] [Ring B] [Algebra R B]
+
+theorem comap_map_eq_self {f : A →ₐ[R] B} {S : Subalgebra R A}
+    (h : f ⁻¹' {0} ⊆ S) : (S.map f).comap f = S := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+
+variable [CommSemiring R] [Ring A] [Algebra R A] [Ring B] [Algebra R B]
+
+theorem comap_map_eq_self {f : A →ₐ[R] B} {S : Subalgebra R A}
+    (h : f ⁻¹' {0} ⊆ S) : (S.map f).comap f = S := by
+  ext x
+  constructor
+  · intro hx
+    rcases hx with ⟨y, hyS, hyEq⟩
+    have hxy : x - y ∈ S := by
+      apply h
+      simp only [Set.mem_preimage, Set.mem_singleton_iff]
+      rw [show f (x - y) = f x - f y by simp]
+      rw [hyEq]
+      simp
+    have hy : y ∈ S := hyS
+    have : x = (x - y) + y := by ring
+    rw [this]
+    exact S.add_mem hxy hy
+  · intro hx
+    exact ⟨x, hx, rfl⟩
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:3:20-3:22
+unknown universe level `uR`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                   ^^
+Highlighted span: uR
+
+ERROR .LspCheck.lean:3:34-3:36
+unknown universe level `uS`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                                 ^^
+Highlighted span: uS
+
+ERROR .LspCheck.lean:3:48-3:50
+unknown universe level `uA`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                                               ^^
+Highlighted span: uA
+
+ERROR .LspCheck.lean:3:62-3:64
+unknown universe level `uB`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                                                             ^^
+Highlighted span: uB
+
+ERROR .LspCheck.lean:16:11-16:45
+unsolved goals
+inst✝⁴ : CommSemiring sorry
+inst✝³ : Ring sorry
+inst✝² : Algebra sorry sorry
+inst✝¹ : Ring sorry
+inst✝ : Algebra sorry sorry
+f : sorry →ₐ[sorry] sorry
+S : Subalgebra sorry sorry
+h : ⇑f ⁻¹' {0} ⊆ ↑S
+x y : sorry
+hyS : y ∈ ↑S.toSubsemiring
+hyEq : ↑f y = ↑f x
+⊢ f (x - y) = f x - f y
+Source line 16:
+      rw [show f (x - y) = f x - f y by simp]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: show f (x - y) = f x - f y by simp
+
+INFORMATION .LspCheck.lean:20:34-20:38
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+Source line 20:
+    have : x = (x - y) + y := by ring
+                                 ^^^^
+Highlighted span: ring
+
+ERROR .LspCheck.lean:20:31-20:38
+unsolved goals
+inst✝⁴ : CommSemiring sorry
+inst✝³ : Ring sorry
+inst✝² : Algebra sorry sorry
+inst✝¹ : Ring sorry
+inst✝ : Algebra sorry sorry
+f : sorry →ₐ[sorry] sorry
+S : Subalgebra sorry sorry
+h : ⇑f ⁻¹' {0} ⊆ ↑S
+x y : sorry
+hyS : y ∈ ↑S.toSubsemiring
+hyEq : ↑f y = ↑f x
+hxy : x - y ∈ S
+hy : y ∈ S
+⊢ x = x - y + y + 0
+Source line 20:
+    have : x = (x - y) + y := by ring
+                              ^^^^^^^
+Highlighted span: by ring
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:3:20-3:22
+unknown universe level `uR`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                   ^^
+Highlighted span: uR
+
+ERROR .LspCheck.lean:3:34-3:36
+unknown universe level `uS`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                                 ^^
+Highlighted span: uS
+
+ERROR .LspCheck.lean:3:48-3:50
+unknown universe level `uA`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                                               ^^
+Highlighted span: uA
+
+ERROR .LspCheck.lean:3:62-3:64
+unknown universe level `uB`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                                                             ^^
+Highlighted span: uB
+
+ERROR .LspCheck.lean:16:11-16:45
+unsolved goals
+inst✝⁴ : CommSemiring sorry
+inst✝³ : Ring sorry
+inst✝² : Algebra sorry sorry
+inst✝¹ : Ring sorry
+inst✝ : Algebra sorry sorry
+f : sorry →ₐ[sorry] sorry
+S : Subalgebra sorry sorry
+h : ⇑f ⁻¹' {0} ⊆ ↑S
+x y : sorry
+hyS : y ∈ ↑S.toSubsemiring
+hyEq : ↑f y = ↑f x
+⊢ f (x - y) = f x - f y
+Source line 16:
+      rw [show f (x - y) = f x - f y by simp]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: show f (x - y) = f x - f y by simp
+
+INFORMATION .LspCheck.lean:20:34-20:38
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+Source line 20:
+    have : x = (x - y) + y := by ring
+                                 ^^^^
+Highlighted span: ring
+
+ERROR .LspCheck.lean:20:31-20:38
+unsolved goals
+inst✝⁴ : CommSemiring sorry
+inst✝³ : Ring sorry
+inst✝² : Algebra sorry sorry
+inst✝¹ : Ring sorry
+inst✝ : Algebra sorry sorry
+f : sorry →ₐ[sorry] sorry
+S : Subalgebra sorry sorry
+h : ⇑f ⁻¹' {0} ⊆ ↑S
+x y : sorry
+hyS : y ∈ ↑S.toSubsemiring
+hyEq : ↑f y = ↑f x
+hxy : x - y ∈ S
+hy : y ∈ S
+⊢ x = x - y + y + 0
+Source line 20:
+    have : x = (x - y) + y := by ring
+                              ^^^^^^^
+Highlighted span: by ring
+
+===== ASSISTANT =====
+import Mathlib
+
+universe uR uS uA uB
+
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+
+variable [CommSemiring R] [Ring A] [Algebra R A] [Ring B] [Algebra R B]
+
+theorem comap_map_eq_self {f : A →ₐ[R] B} {S : Subalgebra R A}
+    (h : f ⁻¹' {0} ⊆ S) : (S.map f).comap f = S := by
+  ext x
+  constructor
+  · intro hx
+    rcases hx with ⟨y, hyS, hyEq⟩
+    have hxy : x - y ∈ S := by
+      apply h
+      simp only [Set.mem_preimage, Set.mem_singleton_iff]
+      change f x - f y = 0
+      rw [hyEq]
+      simp
+    have hx' : x = (x - y) + y := sub_add_cancel x y
+    rw [hx']
+    exact S.add_mem hxy hyS
+  · intro hx
+    exact ⟨x, hx, rfl⟩
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:18:7-18:27
+'change' tactic failed, pattern
+  f x - f y = 0
+is not definitionally equal to target
+  f (x - y) = 0
+Source line 18:
+      change f x - f y = 0
+      ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: change f x - f y = 0
+
+ERROR .LspCheck.lean:21:35-21:53
+Type mismatch
+  sub_add_cancel x y
+has type
+  x - y + y = x
+but is expected to have type
+  x = x - y + y
+Source line 21:
+    have hx' : x = (x - y) + y := sub_add_cancel x y
+                                  ^^^^^^^^^^^^^^^^^^
+Highlighted span: sub_add_cancel x y
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:18:7-18:27
+'change' tactic failed, pattern
+  f x - f y = 0
+is not definitionally equal to target
+  f (x - y) = 0
+Source line 18:
+      change f x - f y = 0
+      ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: change f x - f y = 0
+
+ERROR .LspCheck.lean:21:35-21:53
+Type mismatch
+  sub_add_cancel x y
+has type
+  x - y + y = x
+but is expected to have type
+  x = x - y + y
+Source line 21:
+    have hx' : x = (x - y) + y := sub_add_cancel x y
+                                  ^^^^^^^^^^^^^^^^^^
+Highlighted span: sub_add_cancel x y
+
+===== ASSISTANT =====
+import Mathlib
+
+universe uR uS uA uB
+
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+
+variable [CommSemiring R] [Ring A] [Algebra R A] [Ring B] [Algebra R B]
+
+theorem comap_map_eq_self {f : A →ₐ[R] B} {S : Subalgebra R A}
+    (h : f ⁻¹' {0} ⊆ S) : (S.map f).comap f = S := by
+  ext x
+  constructor
+  · intro hx
+    rcases hx with ⟨y, hyS, hyEq⟩
+    have hxy : x - y ∈ S := by
+      apply h
+      simp only [Set.mem_preimage, Set.mem_singleton_iff]
+      rw [map_sub, hyEq, sub_self]
+    have hx' : x = (x - y) + y := (sub_add_cancel x y).symm
+    rw [hx']
+    exact S.add_mem hxy hyS
+  · intro hx
+    exact ⟨x, hx, rfl⟩
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:18:20-18:24
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑f y
+in the target expression
+  f x - f y = 0
+
+case a
+R : Type uR
+A : Type uA
+B : Type uB
+inst✝⁴ : CommSemiring R
+inst✝³ : Ring A
+inst✝² : Algebra R A
+inst✝¹ : Ring B
+inst✝ : Algebra R B
+f : A →ₐ[R] B
+S : Subalgebra R A
+h : ⇑f ⁻¹' {0} ⊆ ↑S
+x y : A
+hyS : y ∈ ↑S.toSubsemiring
+hyEq : ↑f y = ↑f x
+⊢ f x - f y = 0
+Source line 18:
+      rw [map_sub, hyEq, sub_self]
+                   ^^^^
+Highlighted span: hyEq
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:18:20-18:24
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑f y
+in the target expression
+  f x - f y = 0
+
+case a
+R : Type uR
+A : Type uA
+B : Type uB
+inst✝⁴ : CommSemiring R
+inst✝³ : Ring A
+inst✝² : Algebra R A
+inst✝¹ : Ring B
+inst✝ : Algebra R B
+f : A →ₐ[R] B
+S : Subalgebra R A
+h : ⇑f ⁻¹' {0} ⊆ ↑S
+x y : A
+hyS : y ∈ ↑S.toSubsemiring
+hyEq : ↑f y = ↑f x
+⊢ f x - f y = 0
+Source line 18:
+      rw [map_sub, hyEq, sub_self]
+                   ^^^^
+Highlighted span: hyEq

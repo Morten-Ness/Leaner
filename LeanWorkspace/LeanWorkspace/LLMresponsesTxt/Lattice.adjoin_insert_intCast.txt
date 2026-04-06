@@ -1,0 +1,246 @@
+FILE: Lattice.adjoin_insert_intCast.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Lattice.adjoin_insert_intCast.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+
+variable [CommRing R] [Ring A]
+
+variable [Algebra R A] {s t : Set A}
+
+theorem adjoin_insert_intCast (n : ℤ) (s : Set A) : Algebra.adjoin R (insert (n : A) s) = Algebra.adjoin R s := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+
+variable [CommRing R] [Ring A]
+
+variable [Algebra R A] {s t : Set A}
+
+theorem adjoin_insert_intCast (n : ℤ) (s : Set A) : Algebra.adjoin R (insert (n : A) s) = Algebra.adjoin R s := by
+  rw [Algebra.adjoin_insert]
+  suffices (n : A) ∈ Algebra.adjoin R s by
+    rw [if_pos this]
+  exact subset_adjoin (show (n : A) ∈ Set.range (algebraMap R A) by
+    refine ⟨algebraMap ℤ R n, ?_⟩
+    rw [← Int.cast_algebraMap])
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:3:20-3:22
+unknown universe level `uR`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                   ^^
+Highlighted span: uR
+
+ERROR .LspCheck.lean:3:34-3:36
+unknown universe level `uS`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                                 ^^
+Highlighted span: uS
+
+ERROR .LspCheck.lean:3:48-3:50
+unknown universe level `uA`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                                               ^^
+Highlighted span: uA
+
+ERROR .LspCheck.lean:3:62-3:64
+unknown universe level `uB`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                                                             ^^
+Highlighted span: uB
+
+ERROR .LspCheck.lean:10:7-10:28
+Unknown constant `Algebra.adjoin_insert`
+Source line 10:
+  rw [Algebra.adjoin_insert]
+      ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Algebra.adjoin_insert
+
+ERROR .LspCheck.lean:9:113-10:1
+unsolved goals
+inst✝² : CommRing sorry
+inst✝¹ : Ring sorry
+inst✝ : Algebra sorry sorry
+n : ℤ
+s : Set sorry
+⊢ Algebra.adjoin sorry (insert sorry s) = Algebra.adjoin sorry s
+Source line 9:
+theorem adjoin_insert_intCast (n : ℤ) (s : Set A) : Algebra.adjoin R (insert (n : A) s) = Algebra.adjoin R s := by
+                                                                                                                ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:3:20-3:22
+unknown universe level `uR`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                   ^^
+Highlighted span: uR
+
+ERROR .LspCheck.lean:3:34-3:36
+unknown universe level `uS`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                                 ^^
+Highlighted span: uS
+
+ERROR .LspCheck.lean:3:48-3:50
+unknown universe level `uA`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                                               ^^
+Highlighted span: uA
+
+ERROR .LspCheck.lean:3:62-3:64
+unknown universe level `uB`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                                                             ^^
+Highlighted span: uB
+
+ERROR .LspCheck.lean:10:7-10:28
+Unknown constant `Algebra.adjoin_insert`
+Source line 10:
+  rw [Algebra.adjoin_insert]
+      ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Algebra.adjoin_insert
+
+ERROR .LspCheck.lean:9:113-10:1
+unsolved goals
+inst✝² : CommRing sorry
+inst✝¹ : Ring sorry
+inst✝ : Algebra sorry sorry
+n : ℤ
+s : Set sorry
+⊢ Algebra.adjoin sorry (insert sorry s) = Algebra.adjoin sorry s
+Source line 9:
+theorem adjoin_insert_intCast (n : ℤ) (s : Set A) : Algebra.adjoin R (insert (n : A) s) = Algebra.adjoin R s := by
+                                                                                                                ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+universe uR uS uA uB
+
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+
+variable [CommRing R] [Ring A]
+
+variable [Algebra R A] {s t : Set A}
+
+theorem adjoin_insert_intCast (n : ℤ) (s : Set A) : Algebra.adjoin R (insert (n : A) s) = Algebra.adjoin R s := by
+  apply le_antisymm
+  · refine Algebra.adjoin_le ?_
+    intro x hx
+    rcases hx with rfl | hx
+    · exact Int.cast_mem <| Algebra.adjoin R s
+    · exact subset_adjoin hx
+  · exact Algebra.adjoin_mono (Set.subset_insert _ _)
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:13-16:25
+Unknown constant `Int.cast_mem`
+Source line 16:
+    · exact Int.cast_mem <| Algebra.adjoin R s
+            ^^^^^^^^^^^^
+Highlighted span: Int.cast_mem
+
+ERROR .LspCheck.lean:17:13-17:26
+Unknown identifier `subset_adjoin`
+Source line 17:
+    · exact subset_adjoin hx
+            ^^^^^^^^^^^^^
+Highlighted span: subset_adjoin
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:13-16:25
+Unknown constant `Int.cast_mem`
+Source line 16:
+    · exact Int.cast_mem <| Algebra.adjoin R s
+            ^^^^^^^^^^^^
+Highlighted span: Int.cast_mem
+
+ERROR .LspCheck.lean:17:13-17:26
+Unknown identifier `subset_adjoin`
+Source line 17:
+    · exact subset_adjoin hx
+            ^^^^^^^^^^^^^
+Highlighted span: subset_adjoin
+
+===== ASSISTANT =====
+import Mathlib
+
+universe uR uS uA uB
+
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+
+variable [CommRing R] [Ring A]
+
+variable [Algebra R A] {s t : Set A}
+
+theorem adjoin_insert_intCast (n : ℤ) (s : Set A) : Algebra.adjoin R (insert (n : A) s) = Algebra.adjoin R s := by
+  apply le_antisymm
+  · refine Algebra.adjoin_le ?_
+    intro x hx
+    rcases hx with rfl | hx
+    · change (n : A) ∈ Algebra.adjoin R s
+      exact Subsemiring.intCast_mem (Algebra.adjoin R s) n
+    · exact Algebra.subset_adjoin hx
+  · exact Algebra.adjoin_mono (Set.subset_insert _ _)
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:17:13-17:36
+Unknown constant `Subsemiring.intCast_mem`
+Source line 17:
+      exact Subsemiring.intCast_mem (Algebra.adjoin R s) n
+            ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subsemiring.intCast_mem
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:17:13-17:36
+Unknown constant `Subsemiring.intCast_mem`
+Source line 17:
+      exact Subsemiring.intCast_mem (Algebra.adjoin R s) n
+            ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subsemiring.intCast_mem

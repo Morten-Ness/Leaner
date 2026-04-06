@@ -1,0 +1,281 @@
+FILE: EvenFunction.Odd.sum_eq_zero.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: EvenFunction.Odd.sum_eq_zero.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {α β : Type*} [Neg α]
+
+variable {α β : Type*} [AddCommGroup β] [IsAddTorsionFree β] {f : α → β}
+
+theorem Odd.sum_eq_zero [Fintype α] [InvolutiveNeg α] {f : α → β} (hf : f.Odd) : ∑ a, f a = 0 := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α β : Type*} [Neg α]
+
+variable {α β : Type*} [AddCommGroup β] [IsAddTorsionFree β] {f : α → β}
+
+theorem Odd.sum_eq_zero [Fintype α] [InvolutiveNeg α] {f : α → β} (hf : f.Odd) : ∑ a, f a = 0 := by
+  classical
+  let s : Equiv.Perm α := Neg.neg
+  have hs : s.IsSwapOrFixed := by
+    intro a
+    dsimp [s]
+    by_cases h : -a = a
+    · exact Or.inr h
+    · exact Or.inl ⟨h, by simp [s]⟩
+  have hsum :
+      ∑ a, f a = ∑ a in (Finset.univ.image fun a => ({a, -a} : Finset α)), ∑ b in a, f b := by
+    symm
+    refine Finset.sum_image ?_ ?_
+    · intro x hx y hy hxy
+      simp only [Finset.mem_image, Finset.mem_univ, true_and] at hx hy
+      rcases hx with ⟨a, rfl⟩
+      rcases hy with ⟨b, rfl⟩
+      simp at hxy
+      rcases hxy with h | h
+      · simpa [h]
+      · simpa [h]
+    · intro x hx
+      simp only [Finset.mem_image, Finset.mem_univ, true_and] at hx
+      rcases hx with ⟨a, rfl⟩
+      rw [Finset.sum_pair]
+      · simp [hf.eq]
+      · intro h
+        exact hf.eq a h
+  rw [hsum]
+  refine Finset.sum_eq_zero ?_
+  intro x hx
+  simp only [Finset.mem_image, Finset.mem_univ, true_and] at hx
+  rcases hx with ⟨a, rfl⟩
+  rw [Finset.sum_pair]
+  · simp [hf.eq]
+  · intro h
+    exact hf.eq a h
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:17:21-17:24
+unexpected token 'in'; expected ','
+Source line 17:
+      ∑ a, f a = ∑ a in (Finset.univ.image fun a => ({a, -a} : Finset α)), ∑ b in a, f b := by
+                    ^^^
+Highlighted span:  in
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:17:21-17:24
+unexpected token 'in'; expected ','
+Source line 17:
+      ∑ a, f a = ∑ a in (Finset.univ.image fun a => ({a, -a} : Finset α)), ∑ b in a, f b := by
+                    ^^^
+Highlighted span:  in
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α β : Type*} [Neg α]
+
+variable {α β : Type*} [AddCommGroup β] [IsAddTorsionFree β] {f : α → β}
+
+theorem Odd.sum_eq_zero [Fintype α] [InvolutiveNeg α] {f : α → β} (hf : f.Odd) : ∑ a, f a = 0 := by
+  classical
+  have hneg : ∑ a, f (-a) = ∑ a, f a := by
+    simpa using Fintype.sum_bijective (fun a : α => -a) Neg.neg_bijective f
+  have hodd : ∑ a, f (-a) = - ∑ a, f a := by
+    simp [hf.neg_eq]
+  have htwo : (2 : ℤ) • (∑ a, f a) = 0 := by
+    calc
+      (2 : ℤ) • (∑ a, f a) = (∑ a, f a) + (∑ a, f a) := by simp
+      _ = (∑ a, f a) + (∑ a, f (-a)) := by rw [hneg]
+      _ = 0 := by rw [hodd]; abel
+  exact two_nsmul_eq_zero.mp <| by simpa [two_nsmul] using htwo
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:57-10:74
+Unknown constant `Neg.neg_bijective`
+Source line 10:
+    simpa using Fintype.sum_bijective (fun a : α => -a) Neg.neg_bijective f
+                                                        ^^^^^^^^^^^^^^^^^
+Highlighted span: Neg.neg_bijective
+
+ERROR .LspCheck.lean:12:14-12:20
+Invalid field `neg_eq`: The environment does not contain `Function.neg_eq`, so it is not possible to project the field `neg_eq` from an expression
+  hf
+of type `∀ (a : α), f (-a) = -f a`
+Source line 12:
+    simp [hf.neg_eq]
+             ^^^^^^
+Highlighted span: neg_eq
+
+ERROR .LspCheck.lean:12:5-12:21
+`simp` made no progress
+Source line 12:
+    simp [hf.neg_eq]
+    ^^^^^^^^^^^^^^^^
+Highlighted span: simp [hf.neg_eq]
+
+ERROR .LspCheck.lean:15:60-15:64
+`simp` made no progress
+Source line 15:
+      (2 : ℤ) • (∑ a, f a) = (∑ a, f a) + (∑ a, f a) := by simp
+                                                           ^^^^
+Highlighted span: simp
+
+ERROR .LspCheck.lean:18:36-18:64
+Type mismatch: After simplification, term
+  htwo
+ has type
+  ∑ a, f a = 0
+but is expected to have type
+  ∑ a, f a + ∑ a, f a = 0
+Source line 18:
+  exact two_nsmul_eq_zero.mp <| by simpa [two_nsmul] using htwo
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [two_nsmul] using htwo
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:57-10:74
+Unknown constant `Neg.neg_bijective`
+Source line 10:
+    simpa using Fintype.sum_bijective (fun a : α => -a) Neg.neg_bijective f
+                                                        ^^^^^^^^^^^^^^^^^
+Highlighted span: Neg.neg_bijective
+
+ERROR .LspCheck.lean:12:14-12:20
+Invalid field `neg_eq`: The environment does not contain `Function.neg_eq`, so it is not possible to project the field `neg_eq` from an expression
+  hf
+of type `∀ (a : α), f (-a) = -f a`
+Source line 12:
+    simp [hf.neg_eq]
+             ^^^^^^
+Highlighted span: neg_eq
+
+ERROR .LspCheck.lean:12:5-12:21
+`simp` made no progress
+Source line 12:
+    simp [hf.neg_eq]
+    ^^^^^^^^^^^^^^^^
+Highlighted span: simp [hf.neg_eq]
+
+ERROR .LspCheck.lean:15:60-15:64
+`simp` made no progress
+Source line 15:
+      (2 : ℤ) • (∑ a, f a) = (∑ a, f a) + (∑ a, f a) := by simp
+                                                           ^^^^
+Highlighted span: simp
+
+ERROR .LspCheck.lean:18:36-18:64
+Type mismatch: After simplification, term
+  htwo
+ has type
+  ∑ a, f a = 0
+but is expected to have type
+  ∑ a, f a + ∑ a, f a = 0
+Source line 18:
+  exact two_nsmul_eq_zero.mp <| by simpa [two_nsmul] using htwo
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [two_nsmul] using htwo
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α β : Type*} [Neg α]
+
+variable {α β : Type*} [AddCommGroup β] [IsAddTorsionFree β] {f : α → β}
+
+theorem Odd.sum_eq_zero [Fintype α] [InvolutiveNeg α] {f : α → β} (hf : f.Odd) : ∑ a, f a = 0 := by
+  classical
+  let e : α ≃ α :=
+    { toFun := fun a => -a
+      invFun := fun a => -a
+      left_inv := by intro a; simp
+      right_inv := by intro a; simp }
+  have hneg : ∑ a, f (-a) = ∑ a, f a := by
+    simpa [e] using Fintype.sum_bijective e f
+  have hodd : ∑ a, f (-a) = -∑ a, f a := by
+    rw [show (∑ a, f (-a)) = ∑ a, (-f a) by
+      refine Finset.sum_congr rfl ?_
+      intro a ha
+      exact hf a]
+    rw [Finset.sum_neg_distrib]
+  have hadd : ∑ a, f a + ∑ a, f a = 0 := by
+    calc
+      ∑ a, f a + ∑ a, f a = ∑ a, f a + ∑ a, f (-a) := by rw [hneg.symm]
+      _ = 0 := by rw [hodd]; abel
+  exact eq_zero_of_two_eq_zero hadd
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:45-15:46
+Application type mismatch: The argument
+  f
+has type
+  α → β
+of sort `Type (max u_3 u_4)` but is expected to have type
+  Function.Bijective ⇑e
+of sort `Prop` in the application
+  Fintype.sum_bijective (⇑e) f
+Source line 15:
+    simpa [e] using Fintype.sum_bijective e f
+                                            ^
+Highlighted span: f
+
+ERROR .LspCheck.lean:26:9-26:31
+Unknown identifier `eq_zero_of_two_eq_zero`
+Source line 26:
+  exact eq_zero_of_two_eq_zero hadd
+        ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: eq_zero_of_two_eq_zero
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:45-15:46
+Application type mismatch: The argument
+  f
+has type
+  α → β
+of sort `Type (max u_3 u_4)` but is expected to have type
+  Function.Bijective ⇑e
+of sort `Prop` in the application
+  Fintype.sum_bijective (⇑e) f
+Source line 15:
+    simpa [e] using Fintype.sum_bijective e f
+                                            ^
+Highlighted span: f
+
+ERROR .LspCheck.lean:26:9-26:31
+Unknown identifier `eq_zero_of_two_eq_zero`
+Source line 26:
+  exact eq_zero_of_two_eq_zero hadd
+        ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: eq_zero_of_two_eq_zero

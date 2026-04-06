@@ -1,0 +1,153 @@
+FILE: Operations.submonoidMap_surjective.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Operations.submonoidMap_surjective.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+variable {F : Type*} [FunLike F M N] [mc : MonoidHomClass F M N]
+
+theorem submonoidMap_surjective (f : M →* N) (M' : Submonoid M) :
+    Function.Surjective (f.submonoidMap M') := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+variable {F : Type*} [FunLike F M N] [mc : MonoidHomClass F M N]
+
+theorem submonoidMap_surjective (f : M →* N) (M' : Submonoid M) :
+    Function.Surjective (f.submonoidMap M') := by
+  intro x
+  refine ⟨⟨x.1, ?_⟩, rfl⟩
+  rcases x.2 with ⟨y, hy, rfl⟩
+  exact ⟨y, hy, rfl⟩
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:12-10:15
+Application type mismatch: The argument
+  ↑x
+has type
+  N
+of sort `Type u_2` but is expected to have type
+  M
+of sort `Type u_1` in the application
+  Subtype.mk ↑x
+Source line 10:
+  refine ⟨⟨x.1, ?_⟩, rfl⟩
+           ^^^
+Highlighted span: x.1
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:12-10:15
+Application type mismatch: The argument
+  ↑x
+has type
+  N
+of sort `Type u_2` but is expected to have type
+  M
+of sort `Type u_1` in the application
+  Subtype.mk ↑x
+Source line 10:
+  refine ⟨⟨x.1, ?_⟩, rfl⟩
+           ^^^
+Highlighted span: x.1
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+variable {F : Type*} [FunLike F M N] [mc : MonoidHomClass F M N]
+
+theorem submonoidMap_surjective (f : M →* N) (M' : Submonoid M) :
+    Function.Surjective (f.submonoidMap M') := by
+  intro x
+  rcases x.2 with ⟨y, hy, rfl⟩
+  refine ⟨⟨y, hy⟩, ?_⟩
+  rfl
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:27-10:30
+Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  f y = ↑x
+
+M : Type u_1
+N : Type u_2
+inst✝¹ : MulOneClass M
+inst✝ : MulOneClass N
+f : M →* N
+M' : Submonoid M
+x : ↥(Submonoid.map f M')
+y : M
+hy : y ∈ ↑M'
+right✝ : f y = ↑x
+⊢ ∃ a, (f.submonoidMap M') a = x
+Source line 10:
+  rcases x.2 with ⟨y, hy, rfl⟩
+                          ^^^
+Highlighted span: rfl
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:27-10:30
+Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  f y = ↑x
+
+M : Type u_1
+N : Type u_2
+inst✝¹ : MulOneClass M
+inst✝ : MulOneClass N
+f : M →* N
+M' : Submonoid M
+x : ↥(Submonoid.map f M')
+y : M
+hy : y ∈ ↑M'
+right✝ : f y = ↑x
+⊢ ∃ a, (f.submonoidMap M') a = x
+Source line 10:
+  rcases x.2 with ⟨y, hy, rfl⟩
+                          ^^^
+Highlighted span: rfl
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+variable {F : Type*} [FunLike F M N] [mc : MonoidHomClass F M N]
+
+theorem submonoidMap_surjective (f : M →* N) (M' : Submonoid M) :
+    Function.Surjective (f.submonoidMap M') := by
+  intro x
+  rcases x.2 with ⟨y, hy, hfy⟩
+  refine ⟨⟨y, hy⟩, Subtype.ext ?_⟩
+  exact hfy
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

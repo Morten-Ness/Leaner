@@ -1,0 +1,372 @@
+FILE: NonUnitalSubalgebra.map_sup.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: NonUnitalSubalgebra.map_sup.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {F : Type*} (R : Type u) {A : Type v} {B : Type w}
+
+variable [CommSemiring R] [NonUnitalNonAssocSemiring A] [Module R A]
+
+variable [NonUnitalNonAssocSemiring B] [Module R B]
+
+variable [FunLike F A B] [NonUnitalAlgHomClass F R A B]
+
+variable [IsScalarTower R A A] [SMulCommClass R A A]
+
+theorem map_sup [IsScalarTower R B B] [SMulCommClass R B B]
+    (f : F) (S T : NonUnitalSubalgebra R A) :
+    ((S ⊔ T).map f : NonUnitalSubalgebra R B) = S.map f ⊔ T.map f := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F : Type*} (R : Type u) {A : Type v} {B : Type w}
+
+variable [CommSemiring R] [NonUnitalNonAssocSemiring A] [Module R A]
+
+variable [NonUnitalNonAssocSemiring B] [Module R B]
+
+variable [FunLike F A B] [NonUnitalAlgHomClass F R A B]
+
+variable [IsScalarTower R A A] [SMulCommClass R A A]
+
+theorem map_sup [IsScalarTower R B B] [SMulCommClass R B B]
+    (f : F) (S T : NonUnitalSubalgebra R A) :
+    ((S ⊔ T).map f : NonUnitalSubalgebra R B) = S.map f ⊔ T.map f := by
+  ext x
+  constructor
+  · intro hx
+    rcases hx with ⟨y, hy, rfl⟩
+    exact NonUnitalSubsemiring.mem_sup.2
+      ⟨y, NonUnitalSubsemiring.mem_sup.2 hy, rfl⟩
+  · intro hx
+    rcases NonUnitalSubsemiring.mem_sup.1 hx with ⟨y, hy, rfl⟩
+    exact ⟨y, NonUnitalSubsemiring.mem_sup.2 hy, rfl⟩
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:20:11-20:39
+Unknown constant `NonUnitalSubsemiring.mem_sup`
+Source line 20:
+    exact NonUnitalSubsemiring.mem_sup.2
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: NonUnitalSubsemiring.mem_sup
+
+ERROR .LspCheck.lean:23:12-23:40
+Unknown constant `NonUnitalSubsemiring.mem_sup`
+Source line 23:
+    rcases NonUnitalSubsemiring.mem_sup.1 hx with ⟨y, hy, rfl⟩
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: NonUnitalSubsemiring.mem_sup
+
+ERROR .LspCheck.lean:23:51-23:63
+Tactic `rcases` failed: `x✝ : ?m.108` is not an inductive datatype
+Source line 23:
+    rcases NonUnitalSubsemiring.mem_sup.1 hx with ⟨y, hy, rfl⟩
+                                                  ^^^^^^^^^^^^
+Highlighted span: ⟨y, hy, rfl⟩
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:20:11-20:39
+Unknown constant `NonUnitalSubsemiring.mem_sup`
+Source line 20:
+    exact NonUnitalSubsemiring.mem_sup.2
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: NonUnitalSubsemiring.mem_sup
+
+ERROR .LspCheck.lean:23:12-23:40
+Unknown constant `NonUnitalSubsemiring.mem_sup`
+Source line 23:
+    rcases NonUnitalSubsemiring.mem_sup.1 hx with ⟨y, hy, rfl⟩
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: NonUnitalSubsemiring.mem_sup
+
+ERROR .LspCheck.lean:23:51-23:63
+Tactic `rcases` failed: `x✝ : ?m.108` is not an inductive datatype
+Source line 23:
+    rcases NonUnitalSubsemiring.mem_sup.1 hx with ⟨y, hy, rfl⟩
+                                                  ^^^^^^^^^^^^
+Highlighted span: ⟨y, hy, rfl⟩
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F : Type*} (R : Type u) {A : Type v} {B : Type w}
+
+variable [CommSemiring R] [NonUnitalNonAssocSemiring A] [Module R A]
+
+variable [NonUnitalNonAssocSemiring B] [Module R B]
+
+variable [FunLike F A B] [NonUnitalAlgHomClass F R A B]
+
+variable [IsScalarTower R A A] [SMulCommClass R A A]
+
+theorem map_sup [IsScalarTower R B B] [SMulCommClass R B B]
+    (f : F) (S T : NonUnitalSubalgebra R A) :
+    ((S ⊔ T).map f : NonUnitalSubalgebra R B) = S.map f ⊔ T.map f := by
+  ext x
+  simp [show ((↑f) '' ↑(S ⊔ T) : Set B) = ((↑f) '' ((↑S : Set A) + ↑T)) by rfl, Set.image_add]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:17:53-17:70
+failed to synthesize instance of type class
+  HAdd (Set A) (NonUnitalSubalgebra R A) (Set A)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 17:
+  simp [show ((↑f) '' ↑(S ⊔ T) : Set B) = ((↑f) '' ((↑S : Set A) + ↑T)) by rfl, Set.image_add]
+                                                    ^^^^^^^^^^^^^^^^^
+Highlighted span: (↑S : Set A) + ↑T
+
+ERROR .LspCheck.lean:17:76-17:79
+Tactic `rfl` failed: The left-hand side
+  ⇑f '' ↑(S ⊔ T)
+is not definitionally equal to the right-hand side
+  ⇑f '' (↑S + T)
+
+F : Type u_1
+R : Type u
+A : Type v
+B : Type w
+inst✝¹⁰ : CommSemiring R
+inst✝⁹ : NonUnitalNonAssocSemiring A
+inst✝⁸ : Module R A
+inst✝⁷ : NonUnitalNonAssocSemiring B
+inst✝⁶ : Module R B
+inst✝⁵ : FunLike F A B
+inst✝⁴ : NonUnitalAlgHomClass F R A B
+inst✝³ : IsScalarTower R A A
+inst✝² : SMulCommClass R A A
+inst✝¹ : IsScalarTower R B B
+inst✝ : SMulCommClass R B B
+f : F
+S T : NonUnitalSubalgebra R A
+x : B
+⊢ ⇑f '' ↑(S ⊔ T) = ⇑f '' (↑S + T)
+Source line 17:
+  simp [show ((↑f) '' ↑(S ⊔ T) : Set B) = ((↑f) '' ((↑S : Set A) + ↑T)) by rfl, Set.image_add]
+                                                                           ^^^
+Highlighted span: rfl
+
+ERROR .LspCheck.lean:15:70-16:1
+unsolved goals
+case h
+F : Type u_1
+R : Type u
+A : Type v
+B : Type w
+inst✝¹⁰ : CommSemiring R
+inst✝⁹ : NonUnitalNonAssocSemiring A
+inst✝⁸ : Module R A
+inst✝⁷ : NonUnitalNonAssocSemiring B
+inst✝⁶ : Module R B
+inst✝⁵ : FunLike F A B
+inst✝⁴ : NonUnitalAlgHomClass F R A B
+inst✝³ : IsScalarTower R A A
+inst✝² : SMulCommClass R A A
+inst✝¹ : IsScalarTower R B B
+inst✝ : SMulCommClass R B B
+f : F
+S T : NonUnitalSubalgebra R A
+x : B
+⊢ (∃ x_1 ∈ S ⊔ T, f x_1 = x) ↔ x ∈ NonUnitalSubalgebra.map f S ⊔ NonUnitalSubalgebra.map f T
+Source line 15:
+    ((S ⊔ T).map f : NonUnitalSubalgebra R B) = S.map f ⊔ T.map f := by
+                                                                     ^
+Highlighted span: b
+
+WARNING .LspCheck.lean:17:81-17:94
+This simp argument is unused:
+  Set.image_add
+
+Hint: Omit it from the simp argument list.
+  simp [show ((↑f) '' ↑(S ⊔ T) : Set B) = ((↑f) '' ((↑S : Set A) + ↑T)) by rfl,̵ ̵S̵e̵t̵.̵i̵m̵a̵g̵e̵_̵a̵d̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 17:
+  simp [show ((↑f) '' ↑(S ⊔ T) : Set B) = ((↑f) '' ((↑S : Set A) + ↑T)) by rfl, Set.image_add]
+                                                                                ^^^^^^^^^^^^^
+Highlighted span: Set.image_add
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:17:53-17:70
+failed to synthesize instance of type class
+  HAdd (Set A) (NonUnitalSubalgebra R A) (Set A)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 17:
+  simp [show ((↑f) '' ↑(S ⊔ T) : Set B) = ((↑f) '' ((↑S : Set A) + ↑T)) by rfl, Set.image_add]
+                                                    ^^^^^^^^^^^^^^^^^
+Highlighted span: (↑S : Set A) + ↑T
+
+ERROR .LspCheck.lean:17:76-17:79
+Tactic `rfl` failed: The left-hand side
+  ⇑f '' ↑(S ⊔ T)
+is not definitionally equal to the right-hand side
+  ⇑f '' (↑S + T)
+
+F : Type u_1
+R : Type u
+A : Type v
+B : Type w
+inst✝¹⁰ : CommSemiring R
+inst✝⁹ : NonUnitalNonAssocSemiring A
+inst✝⁸ : Module R A
+inst✝⁷ : NonUnitalNonAssocSemiring B
+inst✝⁶ : Module R B
+inst✝⁵ : FunLike F A B
+inst✝⁴ : NonUnitalAlgHomClass F R A B
+inst✝³ : IsScalarTower R A A
+inst✝² : SMulCommClass R A A
+inst✝¹ : IsScalarTower R B B
+inst✝ : SMulCommClass R B B
+f : F
+S T : NonUnitalSubalgebra R A
+x : B
+⊢ ⇑f '' ↑(S ⊔ T) = ⇑f '' (↑S + T)
+Source line 17:
+  simp [show ((↑f) '' ↑(S ⊔ T) : Set B) = ((↑f) '' ((↑S : Set A) + ↑T)) by rfl, Set.image_add]
+                                                                           ^^^
+Highlighted span: rfl
+
+ERROR .LspCheck.lean:15:70-16:1
+unsolved goals
+case h
+F : Type u_1
+R : Type u
+A : Type v
+B : Type w
+inst✝¹⁰ : CommSemiring R
+inst✝⁹ : NonUnitalNonAssocSemiring A
+inst✝⁸ : Module R A
+inst✝⁷ : NonUnitalNonAssocSemiring B
+inst✝⁶ : Module R B
+inst✝⁵ : FunLike F A B
+inst✝⁴ : NonUnitalAlgHomClass F R A B
+inst✝³ : IsScalarTower R A A
+inst✝² : SMulCommClass R A A
+inst✝¹ : IsScalarTower R B B
+inst✝ : SMulCommClass R B B
+f : F
+S T : NonUnitalSubalgebra R A
+x : B
+⊢ (∃ x_1 ∈ S ⊔ T, f x_1 = x) ↔ x ∈ NonUnitalSubalgebra.map f S ⊔ NonUnitalSubalgebra.map f T
+Source line 15:
+    ((S ⊔ T).map f : NonUnitalSubalgebra R B) = S.map f ⊔ T.map f := by
+                                                                     ^
+Highlighted span: b
+
+WARNING .LspCheck.lean:17:81-17:94
+This simp argument is unused:
+  Set.image_add
+
+Hint: Omit it from the simp argument list.
+  simp [show ((↑f) '' ↑(S ⊔ T) : Set B) = ((↑f) '' ((↑S : Set A) + ↑T)) by rfl,̵ ̵S̵e̵t̵.̵i̵m̵a̵g̵e̵_̵a̵d̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 17:
+  simp [show ((↑f) '' ↑(S ⊔ T) : Set B) = ((↑f) '' ((↑S : Set A) + ↑T)) by rfl, Set.image_add]
+                                                                                ^^^^^^^^^^^^^
+Highlighted span: Set.image_add
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F : Type*} (R : Type u) {A : Type v} {B : Type w}
+
+variable [CommSemiring R] [NonUnitalNonAssocSemiring A] [Module R A]
+
+variable [NonUnitalNonAssocSemiring B] [Module R B]
+
+variable [FunLike F A B] [NonUnitalAlgHomClass F R A B]
+
+variable [IsScalarTower R A A] [SMulCommClass R A A]
+
+theorem map_sup [IsScalarTower R B B] [SMulCommClass R B B]
+    (f : F) (S T : NonUnitalSubalgebra R A) :
+    ((S ⊔ T).map f : NonUnitalSubalgebra R B) = S.map f ⊔ T.map f := by
+  rw [eq_iff_le_not_lt]
+  constructor
+  · intro h
+    exact le_sup_of_le_left <| map_mono f <| le_sup_left
+  · intro h
+    exact le_sup_of_le_right <| map_mono f <| le_sup_right
+  · intro h
+    have hST : S.map f ⊔ T.map f ≤ (S ⊔ T).map f := by
+      exact sup_le (map_mono f le_sup_left) (map_mono f le_sup_right)
+    exact h (le_antisymm hST (sup_le (map_mono f le_sup_left) (map_mono f le_sup_right)))
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:19:32-19:40
+Unknown identifier `map_mono`
+Source line 19:
+    exact le_sup_of_le_left <| map_mono f <| le_sup_left
+                               ^^^^^^^^
+Highlighted span: map_mono
+
+ERROR .LspCheck.lean:21:33-21:41
+Unknown identifier `map_mono`
+Source line 21:
+    exact le_sup_of_le_right <| map_mono f <| le_sup_right
+                                ^^^^^^^^
+Highlighted span: map_mono
+
+ERROR .LspCheck.lean:22:3-23:1
+No goals to be solved
+Source line 22:
+  · intro h
+  ^
+Highlighted span: ·
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:19:32-19:40
+Unknown identifier `map_mono`
+Source line 19:
+    exact le_sup_of_le_left <| map_mono f <| le_sup_left
+                               ^^^^^^^^
+Highlighted span: map_mono
+
+ERROR .LspCheck.lean:21:33-21:41
+Unknown identifier `map_mono`
+Source line 21:
+    exact le_sup_of_le_right <| map_mono f <| le_sup_right
+                                ^^^^^^^^
+Highlighted span: map_mono
+
+ERROR .LspCheck.lean:22:3-23:1
+No goals to be solved
+Source line 22:
+  · intro h
+  ^
+Highlighted span: ·

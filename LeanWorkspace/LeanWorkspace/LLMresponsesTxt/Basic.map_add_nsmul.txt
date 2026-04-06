@@ -1,0 +1,196 @@
+FILE: Basic.map_add_nsmul.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.map_add_nsmul.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_add_nsmul [AddMonoid G] [AddMonoid H] [AddConstMapClass F G H a b]
+    (f : F) (x : G) (n : ℕ) : f (x + n • a) = f x + n • b := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_add_nsmul [AddMonoid G] [AddMonoid H] [AddConstMapClass F G H a b]
+    (f : F) (x : G) (n : ℕ) : f (x + n • a) = f x + n • b := by
+  induction n with
+  | zero =>
+      simp
+  | succ n ih =>
+      rw [succ_nsmul, add_assoc, map_add_const, ih, succ_nsmul, add_assoc]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:23-11:32
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?a + ?b + ?c
+in the target expression
+  f (x + (n • a + a)) = f x + (n + 1) • b
+
+case succ
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝³ : FunLike F G H
+a : G
+b : H
+inst✝² : AddMonoid G
+inst✝¹ : AddMonoid H
+inst✝ : AddConstMapClass F G H a b
+f : F
+x : G
+n : ℕ
+ih : f (x + n • a) = f x + n • b
+⊢ f (x + (n • a + a)) = f x + (n + 1) • b
+Source line 11:
+      rw [succ_nsmul, add_assoc, map_add_const, ih, succ_nsmul, add_assoc]
+                      ^^^^^^^^^
+Highlighted span: add_assoc
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:23-11:32
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?a + ?b + ?c
+in the target expression
+  f (x + (n • a + a)) = f x + (n + 1) • b
+
+case succ
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝³ : FunLike F G H
+a : G
+b : H
+inst✝² : AddMonoid G
+inst✝¹ : AddMonoid H
+inst✝ : AddConstMapClass F G H a b
+f : F
+x : G
+n : ℕ
+ih : f (x + n • a) = f x + n • b
+⊢ f (x + (n • a + a)) = f x + (n + 1) • b
+Source line 11:
+      rw [succ_nsmul, add_assoc, map_add_const, ih, succ_nsmul, add_assoc]
+                      ^^^^^^^^^
+Highlighted span: add_assoc
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_add_nsmul [AddMonoid G] [AddMonoid H] [AddConstMapClass F G H a b]
+    (f : F) (x : G) (n : ℕ) : f (x + n • a) = f x + n • b := by
+  induction n with
+  | zero =>
+      simp
+  | succ n ih =>
+      rw [succ_nsmul, ← add_assoc, map_add_const, ih, succ_nsmul]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:36-11:49
+Unknown identifier `map_add_const`
+Source line 11:
+      rw [succ_nsmul, ← add_assoc, map_add_const, ih, succ_nsmul]
+                                   ^^^^^^^^^^^^^
+Highlighted span: map_add_const
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:36-11:49
+Unknown identifier `map_add_const`
+Source line 11:
+      rw [succ_nsmul, ← add_assoc, map_add_const, ih, succ_nsmul]
+                                   ^^^^^^^^^^^^^
+Highlighted span: map_add_const
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_add_nsmul [AddMonoid G] [AddMonoid H] [AddConstMapClass F G H a b]
+    (f : F) (x : G) (n : ℕ) : f (x + n • a) = f x + n • b := by
+  induction n with
+  | zero =>
+      simp
+  | succ n ih =>
+      rw [succ_nsmul, ← add_assoc, AddConstMapClass.map_add_const, ih, succ_nsmul]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:15-11:1
+unsolved goals
+case succ
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝³ : FunLike F G H
+a : G
+b : H
+inst✝² : AddMonoid G
+inst✝¹ : AddMonoid H
+inst✝ : AddConstMapClass F G H a b
+f : F
+x : G
+n : ℕ
+ih : f (x + n • a) = f x + n • b
+⊢ f x + n • b + b = f x + (n • b + b)
+Source line 10:
+  | succ n ih =>
+              ^
+Highlighted span: =
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:15-11:1
+unsolved goals
+case succ
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝³ : FunLike F G H
+a : G
+b : H
+inst✝² : AddMonoid G
+inst✝¹ : AddMonoid H
+inst✝ : AddConstMapClass F G H a b
+f : F
+x : G
+n : ℕ
+ih : f (x + n • a) = f x + n • b
+⊢ f x + n • b + b = f x + (n • b + b)
+Source line 10:
+  | succ n ih =>
+              ^
+Highlighted span: =

@@ -1,0 +1,121 @@
+FILE: Module.ext_component_iff.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Module.ext_component_iff.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped DirectSum
+
+variable {R : Type u} [Semiring R]
+
+variable {ι : Type v}
+
+variable {M : ι → Type w} [∀ i, AddCommMonoid (M i)] [∀ i, Module R (M i)]
+
+theorem ext_component_iff {f g : ⨁ i, M i} :
+    f = g ↔ ∀ i, DirectSum.component R ι M i f = DirectSum.component R ι M i g := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped DirectSum
+
+variable {R : Type u} [Semiring R]
+
+variable {ι : Type v}
+
+variable {M : ι → Type w} [∀ i, AddCommMonoid (M i)] [∀ i, Module R (M i)]
+
+theorem ext_component_iff {f g : ⨁ i, M i} :
+    f = g ↔ ∀ i, DirectSum.component R ι M i f = DirectSum.component R ι M i g := by
+  constructor
+  · intro h i
+    simpa [h]
+  · intro h
+    exact DirectSum.ext fun i => h i
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+WARNING .LspCheck.lean:15:5-15:14
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 15:
+    simpa [h]
+    ^^^^^^^^^
+Highlighted span: simpa [h]
+
+ERROR .LspCheck.lean:17:34-17:37
+Type mismatch
+  h i
+has type
+  (DirectSum.component R ι M i) f = (DirectSum.component R ι M i) g
+of sort `Prop` but is expected to have type
+  Type ?u.471.107
+of sort `Type (?u.471.107 + 1)`
+Source line 17:
+    exact DirectSum.ext fun i => h i
+                                 ^^^
+Highlighted span: h i
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+WARNING .LspCheck.lean:15:5-15:14
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 15:
+    simpa [h]
+    ^^^^^^^^^
+Highlighted span: simpa [h]
+
+ERROR .LspCheck.lean:17:34-17:37
+Type mismatch
+  h i
+has type
+  (DirectSum.component R ι M i) f = (DirectSum.component R ι M i) g
+of sort `Prop` but is expected to have type
+  Type ?u.471.107
+of sort `Type (?u.471.107 + 1)`
+Source line 17:
+    exact DirectSum.ext fun i => h i
+                                 ^^^
+Highlighted span: h i
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped DirectSum
+
+variable {R : Type u} [Semiring R]
+
+variable {ι : Type v}
+
+variable {M : ι → Type w} [∀ i, AddCommMonoid (M i)] [∀ i, Module R (M i)]
+
+theorem ext_component_iff {f g : ⨁ i, M i} :
+    f = g ↔ ∀ i, DirectSum.component R ι M i f = DirectSum.component R ι M i g := by
+  constructor
+  · intro h i
+    simp [h]
+  · intro h
+    ext i
+    exact h i
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

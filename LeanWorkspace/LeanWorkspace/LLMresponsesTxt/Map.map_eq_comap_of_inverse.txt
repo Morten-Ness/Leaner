@@ -1,0 +1,106 @@
+FILE: Map.map_eq_comap_of_inverse.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Map.map_eq_comap_of_inverse.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N] (f : G →* N)
+
+theorem map_eq_comap_of_inverse {f : G →* N} {g : N →* G} (hl : Function.LeftInverse g f)
+    (hr : Function.RightInverse g f) (H : Subgroup G) : Subgroup.map f H = Subgroup.comap g H := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N] (f : G →* N)
+
+theorem map_eq_comap_of_inverse {f : G →* N} {g : N →* G} (hl : Function.LeftInverse g f)
+    (hr : Function.RightInverse g f) (H : Subgroup G) : Subgroup.map f H = Subgroup.comap g H := by
+  ext x
+  constructor
+  · rintro ⟨y, hy, rfl⟩
+    exact hy
+  · intro hx
+    refine ⟨g x, hx, ?_⟩
+    exact hr x
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:5-16:13
+Type mismatch
+  hy
+has type
+  Membership.mem.{u_1, u_1} (↑H) y
+but is expected to have type
+  Membership.mem.{u_5, u_5} (Subgroup.comap g H) (f y)
+Source line 16:
+    exact hy
+    ^^^^^^^^
+Highlighted span: exact hy
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:5-16:13
+Type mismatch
+  hy
+has type
+  Membership.mem.{u_1, u_1} (↑H) y
+but is expected to have type
+  Membership.mem.{u_5, u_5} (Subgroup.comap g H) (f y)
+Source line 16:
+    exact hy
+    ^^^^^^^^
+Highlighted span: exact hy
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N] (f : G →* N)
+
+theorem map_eq_comap_of_inverse {f : G →* N} {g : N →* G} (hl : Function.LeftInverse g f)
+    (hr : Function.RightInverse g f) (H : Subgroup G) : Subgroup.map f H = Subgroup.comap g H := by
+  ext x
+  constructor
+  · rintro ⟨y, hy, rfl⟩
+    change g (f y) ∈ H
+    simpa [hl y] using hy
+  · intro hx
+    refine ⟨g x, ?_, ?_⟩
+    · exact hx
+    · exact hr x
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

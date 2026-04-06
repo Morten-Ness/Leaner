@@ -1,0 +1,395 @@
+FILE: Basic.prod_ite_eq.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.prod_ite_eq.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {α ι γ A B C : Type*} [AddCommMonoid A] [AddCommMonoid B] [AddCommMonoid C]
+
+variable {t : ι → A → C}
+
+variable {s : Finset α} {f : α → ι →₀ A} (i : ι)
+
+variable (g : ι →₀ A) (k : ι → A → γ → B) (x : γ)
+
+variable {β M M' N P G H R S : Type*}
+
+variable [Zero M] [Zero M'] [CommMonoid N]
+
+theorem prod_ite_eq [DecidableEq α] (f : α →₀ M) (a : α) (b : α → M → N) :
+    (f.prod fun x v => ite (a = x) (b x v) 1) = ite (a ∈ f.support) (b a (f a)) 1 := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α ι γ A B C : Type*} [AddCommMonoid A] [AddCommMonoid B] [AddCommMonoid C]
+
+variable {t : ι → A → C}
+
+variable {s : Finset α} {f : α → ι →₀ A} (i : ι)
+
+variable (g : ι →₀ A) (k : ι → A → γ → B) (x : γ)
+
+variable {β M M' N P G H R S : Type*}
+
+variable [Zero M] [Zero M'] [CommMonoid N]
+
+theorem prod_ite_eq [DecidableEq α] (f : α →₀ M) (a : α) (b : α → M → N) :
+    (f.prod fun x v => ite (a = x) (b x v) 1) = ite (a ∈ f.support) (b a (f a)) 1 := by
+  classical
+  by_cases ha : a ∈ f.support
+  · rw [Finset.prod_eq_single a]
+    · simp [ha]
+    · intro x hx hxa
+      simp [hxa]
+    · intro hna
+      exfalso
+      exact hna ha
+  · rw [show ite (a ∈ f.support) (b a (f a)) 1 = (1 : N) by simp [ha]]
+    refine Finsupp.prod_eq_one ?_
+    intro x hx
+    by_cases hax : a = x
+    · subst hax
+      exfalso
+      exact ha hx
+    · simp [hax]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:19:9-19:32
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∏ x ∈ ?m.49, ?m.50 x
+in the target expression
+  (f.prod fun x v ↦ if a = x then b x v else 1) = if a ∈ f.support then b a (f a) else 1
+
+case pos
+α : Type u_1
+M : Type u_8
+N : Type u_10
+inst✝² : Zero M
+inst✝¹ : CommMonoid N
+inst✝ : DecidableEq α
+f : α →₀ M
+a : α
+b : α → M → N
+ha : a ∈ f.support
+⊢ (f.prod fun x v ↦ if a = x then b x v else 1) = if a ∈ f.support then b a (f a) else 1
+Source line 19:
+  · rw [Finset.prod_eq_single a]
+        ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.prod_eq_single a
+
+ERROR .LspCheck.lean:27:12-27:31
+Unknown constant `Finsupp.prod_eq_one`
+Source line 27:
+    refine Finsupp.prod_eq_one ?_
+           ^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finsupp.prod_eq_one
+
+ERROR .LspCheck.lean:28:11-28:12
+No goals to be solved
+Source line 28:
+    intro x hx
+          ^
+Highlighted span: x
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:19:9-19:32
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∏ x ∈ ?m.49, ?m.50 x
+in the target expression
+  (f.prod fun x v ↦ if a = x then b x v else 1) = if a ∈ f.support then b a (f a) else 1
+
+case pos
+α : Type u_1
+M : Type u_8
+N : Type u_10
+inst✝² : Zero M
+inst✝¹ : CommMonoid N
+inst✝ : DecidableEq α
+f : α →₀ M
+a : α
+b : α → M → N
+ha : a ∈ f.support
+⊢ (f.prod fun x v ↦ if a = x then b x v else 1) = if a ∈ f.support then b a (f a) else 1
+Source line 19:
+  · rw [Finset.prod_eq_single a]
+        ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.prod_eq_single a
+
+ERROR .LspCheck.lean:27:12-27:31
+Unknown constant `Finsupp.prod_eq_one`
+Source line 27:
+    refine Finsupp.prod_eq_one ?_
+           ^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finsupp.prod_eq_one
+
+ERROR .LspCheck.lean:28:11-28:12
+No goals to be solved
+Source line 28:
+    intro x hx
+          ^
+Highlighted span: x
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α ι γ A B C : Type*} [AddCommMonoid A] [AddCommMonoid B] [AddCommMonoid C]
+
+variable {t : ι → A → C}
+
+variable {s : Finset α} {f : α → ι →₀ A} (i : ι)
+
+variable (g : ι →₀ A) (k : ι → A → γ → B) (x : γ)
+
+variable {β M M' N P G H R S : Type*}
+
+variable [Zero M] [Zero M'] [CommMonoid N]
+
+theorem prod_ite_eq [DecidableEq α] (f : α →₀ M) (a : α) (b : α → M → N) :
+    (f.prod fun x v => ite (a = x) (b x v) 1) = ite (a ∈ f.support) (b a (f a)) 1 := by
+  classical
+  by_cases ha : a ∈ f.support
+  · rw [Finsupp.prod]
+    rw [Finset.prod_eq_single a]
+    · simp [ha]
+    · intro x hx hne
+      simp [hne]
+    · intro hna
+      exfalso
+      exact hna ha
+  · rw [Finsupp.prod]
+    simp only [ha, if_false]
+    refine Finset.prod_eq_one ?_
+    intro x hx
+    by_cases hax : a = x
+    · subst x
+      exfalso
+      exact ha hx
+    · simp [hax]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:22:5-23:1
+unsolved goals
+case pos.h₀
+α : Type u_1
+M : Type u_8
+N : Type u_10
+inst✝² : Zero M
+inst✝¹ : CommMonoid N
+inst✝ : DecidableEq α
+f : α →₀ M
+a : α
+b : α → M → N
+ha : a ∈ f.support
+x : α
+hx : x ∈ f.support
+hne : x ≠ a
+⊢ a = x → b x (f x) = 1
+Source line 22:
+    · intro x hx hne
+    ^
+Highlighted span: ·
+
+WARNING .LspCheck.lean:23:13-23:16
+This simp argument is unused:
+  hne
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵n̵e̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 23:
+      simp [hne]
+            ^^^
+Highlighted span: hne
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:22:5-23:1
+unsolved goals
+case pos.h₀
+α : Type u_1
+M : Type u_8
+N : Type u_10
+inst✝² : Zero M
+inst✝¹ : CommMonoid N
+inst✝ : DecidableEq α
+f : α →₀ M
+a : α
+b : α → M → N
+ha : a ∈ f.support
+x : α
+hx : x ∈ f.support
+hne : x ≠ a
+⊢ a = x → b x (f x) = 1
+Source line 22:
+    · intro x hx hne
+    ^
+Highlighted span: ·
+
+WARNING .LspCheck.lean:23:13-23:16
+This simp argument is unused:
+  hne
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵n̵e̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 23:
+      simp [hne]
+            ^^^
+Highlighted span: hne
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α ι γ A B C : Type*} [AddCommMonoid A] [AddCommMonoid B] [AddCommMonoid C]
+
+variable {t : ι → A → C}
+
+variable {s : Finset α} {f : α → ι →₀ A} (i : ι)
+
+variable (g : ι →₀ A) (k : ι → A → γ → B) (x : γ)
+
+variable {β M M' N P G H R S : Type*}
+
+variable [Zero M] [Zero M'] [CommMonoid N]
+
+theorem prod_ite_eq [DecidableEq α] (f : α →₀ M) (a : α) (b : α → M → N) :
+    (f.prod fun x v => ite (a = x) (b x v) 1) = ite (a ∈ f.support) (b a (f a)) 1 := by
+  classical
+  rw [Finsupp.prod]
+  by_cases ha : a ∈ f.support
+  · rw [Finset.prod_eq_single a]
+    · simp [ha]
+    · intro x hx hxa
+      simp [eq_comm.mp hxa]
+    · intro hna
+      exfalso
+      exact hna ha
+  · simp [ha]
+    refine Finset.prod_eq_one ?_
+    intro x hx
+    by_cases hax : a = x
+    · subst x
+      exfalso
+      exact ha hx
+    · simp [hax]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:23:24-23:27
+Application type mismatch: The argument
+  hxa
+has type
+  x ≠ a
+but is expected to have type
+  ?m.69 = ?m.70
+in the application
+  eq_comm.mp hxa
+Source line 23:
+      simp [eq_comm.mp hxa]
+                       ^^^
+Highlighted span: hxa
+
+ERROR .LspCheck.lean:22:5-23:1
+unsolved goals
+case pos.h₀
+α : Type u_1
+M : Type u_8
+N : Type u_10
+inst✝² : Zero M
+inst✝¹ : CommMonoid N
+inst✝ : DecidableEq α
+f : α →₀ M
+a : α
+b : α → M → N
+ha : a ∈ f.support
+x : α
+hx : x ∈ f.support
+hxa : x ≠ a
+⊢ a = x → b x (f x) = 1
+Source line 22:
+    · intro x hx hxa
+    ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:28:5-28:33
+No goals to be solved
+Source line 28:
+    refine Finset.prod_eq_one ?_
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: refine Finset.prod_eq_one ?_
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:23:24-23:27
+Application type mismatch: The argument
+  hxa
+has type
+  x ≠ a
+but is expected to have type
+  ?m.69 = ?m.70
+in the application
+  eq_comm.mp hxa
+Source line 23:
+      simp [eq_comm.mp hxa]
+                       ^^^
+Highlighted span: hxa
+
+ERROR .LspCheck.lean:22:5-23:1
+unsolved goals
+case pos.h₀
+α : Type u_1
+M : Type u_8
+N : Type u_10
+inst✝² : Zero M
+inst✝¹ : CommMonoid N
+inst✝ : DecidableEq α
+f : α →₀ M
+a : α
+b : α → M → N
+ha : a ∈ f.support
+x : α
+hx : x ∈ f.support
+hxa : x ≠ a
+⊢ a = x → b x (f x) = 1
+Source line 22:
+    · intro x hx hxa
+    ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:28:5-28:33
+No goals to be solved
+Source line 28:
+    refine Finset.prod_eq_one ?_
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: refine Finset.prod_eq_one ?_

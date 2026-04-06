@@ -1,0 +1,313 @@
+FILE: Lattice.surjective_algebraMap_iff.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Lattice.surjective_algebraMap_iff.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable (R : Type u) {A : Type v} {B : Type w}
+
+variable [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B]
+
+theorem surjective_algebraMap_iff :
+    Function.Surjective (algebraMap R A) ↔ (⊤ : Subalgebra R A) = ⊥ := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (R : Type u) {A : Type v} {B : Type w}
+
+variable [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B]
+
+theorem surjective_algebraMap_iff :
+    Function.Surjective (algebraMap R A) ↔ (⊤ : Subalgebra R A) = ⊥ := by
+  constructor
+  · intro h
+    ext x
+    constructor
+    · intro _
+      exact Subalgebra.mem_bot R
+    · intro hx
+      simp at hx
+  · intro h
+    intro a
+    refine ⟨0, ?_⟩
+    have h' : a ∈ (⊥ : Subalgebra R A) := by
+      rw [← h]
+      simp
+    simpa using h'
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:13-14:31
+Unknown constant `Subalgebra.mem_bot`
+Source line 14:
+      exact Subalgebra.mem_bot R
+            ^^^^^^^^^^^^^^^^^^
+Highlighted span: Subalgebra.mem_bot
+
+ERROR .LspCheck.lean:15:5-16:1
+unsolved goals
+case mp.h.mpr
+R : Type u
+A : Type v
+inst✝² : CommSemiring R
+inst✝¹ : Semiring A
+inst✝ : Algebra R A
+h : Function.Surjective ⇑(algebraMap R A)
+x : A
+hx : x ∈ ⊥
+⊢ x ∈ ⊤
+Source line 15:
+    · intro hx
+    ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:23:5-23:19
+Type mismatch: After simplification, term
+  h'
+ has type
+  a ∈ ⊥
+but is expected to have type
+  0 = a
+Source line 23:
+    simpa using h'
+    ^^^^^^^^^^^^^^
+Highlighted span: simpa using h'
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:13-14:31
+Unknown constant `Subalgebra.mem_bot`
+Source line 14:
+      exact Subalgebra.mem_bot R
+            ^^^^^^^^^^^^^^^^^^
+Highlighted span: Subalgebra.mem_bot
+
+ERROR .LspCheck.lean:15:5-16:1
+unsolved goals
+case mp.h.mpr
+R : Type u
+A : Type v
+inst✝² : CommSemiring R
+inst✝¹ : Semiring A
+inst✝ : Algebra R A
+h : Function.Surjective ⇑(algebraMap R A)
+x : A
+hx : x ∈ ⊥
+⊢ x ∈ ⊤
+Source line 15:
+    · intro hx
+    ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:23:5-23:19
+Type mismatch: After simplification, term
+  h'
+ has type
+  a ∈ ⊥
+but is expected to have type
+  0 = a
+Source line 23:
+    simpa using h'
+    ^^^^^^^^^^^^^^
+Highlighted span: simpa using h'
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (R : Type u) {A : Type v} {B : Type w}
+
+variable [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B]
+
+theorem surjective_algebraMap_iff :
+    Function.Surjective (algebraMap R A) ↔ (⊤ : Subalgebra R A) = ⊥ := by
+  constructor
+  · intro h
+    ext x
+    constructor
+    · intro _
+      change x = 0
+      rcases h x with ⟨r, hr⟩
+      rw [← hr]
+      simp
+    · intro hx
+      simp
+  · intro h
+    intro a
+    refine ⟨0, ?_⟩
+    have : a = 0 := by
+      have ha : a ∈ (⊥ : Subalgebra R A) := by
+        rw [← h]
+        simp
+      simpa using ha
+    simpa [this]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:7-14:19
+'change' tactic failed, pattern
+  x = 0
+is not definitionally equal to target
+  x ∈ ⊥
+Source line 14:
+      change x = 0
+      ^^^^^^^^^^^^
+Highlighted span: change x = 0
+
+ERROR .LspCheck.lean:27:7-27:21
+Type mismatch: After simplification, term
+  ha
+ has type
+  a ∈ ⊥
+but is expected to have type
+  a = 0
+Source line 27:
+      simpa using ha
+      ^^^^^^^^^^^^^^
+Highlighted span: simpa using ha
+
+WARNING .LspCheck.lean:28:5-28:17
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 28:
+    simpa [this]
+    ^^^^^^^^^^^^
+Highlighted span: simpa [this]
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:7-14:19
+'change' tactic failed, pattern
+  x = 0
+is not definitionally equal to target
+  x ∈ ⊥
+Source line 14:
+      change x = 0
+      ^^^^^^^^^^^^
+Highlighted span: change x = 0
+
+ERROR .LspCheck.lean:27:7-27:21
+Type mismatch: After simplification, term
+  ha
+ has type
+  a ∈ ⊥
+but is expected to have type
+  a = 0
+Source line 27:
+      simpa using ha
+      ^^^^^^^^^^^^^^
+Highlighted span: simpa using ha
+
+WARNING .LspCheck.lean:28:5-28:17
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 28:
+    simpa [this]
+    ^^^^^^^^^^^^
+Highlighted span: simpa [this]
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (R : Type u) {A : Type v} {B : Type w}
+
+variable [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B]
+
+theorem surjective_algebraMap_iff :
+    Function.Surjective (algebraMap R A) ↔ (⊤ : Subalgebra R A) = ⊥ := by
+  constructor
+  · intro h
+    apply top_eq_bot_iff.mp
+    intro x hx
+    rcases h x with ⟨r, rfl⟩
+    simp
+  · intro h
+    intro a
+    refine ⟨0, ?_⟩
+    have : a ∈ (⊥ : Subalgebra R A) := by
+      rw [← h]
+      simp
+    simpa using this
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:11-11:28
+Unknown identifier `top_eq_bot_iff.mp`
+Source line 11:
+    apply top_eq_bot_iff.mp
+          ^^^^^^^^^^^^^^^^^
+Highlighted span: top_eq_bot_iff.mp
+
+ERROR .LspCheck.lean:12:11-12:12
+No goals to be solved
+Source line 12:
+    intro x hx
+          ^
+Highlighted span: x
+
+ERROR .LspCheck.lean:21:5-21:21
+Type mismatch: After simplification, term
+  this
+ has type
+  a ∈ ⊥
+but is expected to have type
+  0 = a
+Source line 21:
+    simpa using this
+    ^^^^^^^^^^^^^^^^
+Highlighted span: simpa using this
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:11-11:28
+Unknown identifier `top_eq_bot_iff.mp`
+Source line 11:
+    apply top_eq_bot_iff.mp
+          ^^^^^^^^^^^^^^^^^
+Highlighted span: top_eq_bot_iff.mp
+
+ERROR .LspCheck.lean:12:11-12:12
+No goals to be solved
+Source line 12:
+    intro x hx
+          ^
+Highlighted span: x
+
+ERROR .LspCheck.lean:21:5-21:21
+Type mismatch: After simplification, term
+  this
+ has type
+  a ∈ ⊥
+but is expected to have type
+  0 = a
+Source line 21:
+    simpa using this
+    ^^^^^^^^^^^^^^^^
+Highlighted span: simpa using this

@@ -1,0 +1,242 @@
+FILE: Centroid.centroid_eq_smul_vsub_vadd_point.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Centroid.centroid_eq_smul_vsub_vadd_point.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [DivisionRing k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {n : ℕ}
+
+variable [NeZero n]
+
+theorem centroid_eq_smul_vsub_vadd_point [CharZero k] (s : Affine.Simplex k P n) (i : Fin (n + 1)) :
+    s.centroid = (n : k) • (s.faceOppositeCentroid i -ᵥ s.centroid) +ᵥ s.points i := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [DivisionRing k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {n : ℕ}
+
+variable [NeZero n]
+
+theorem centroid_eq_smul_vsub_vadd_point [CharZero k] (s : Affine.Simplex k P n) (i : Fin (n + 1)) :
+    s.centroid = (n : k) • (s.faceOppositeCentroid i -ᵥ s.centroid) +ᵥ s.points i := by
+  rw [Affine.Simplex.faceOppositeCentroid_eq_centroid_vadd, vsub_vadd]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:7-12:59
+Unknown constant `Affine.Simplex.faceOppositeCentroid_eq_centroid_vadd`
+Source line 12:
+  rw [Affine.Simplex.faceOppositeCentroid_eq_centroid_vadd, vsub_vadd]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Affine.Simplex.faceOppositeCentroid_eq_centroid_vadd
+
+ERROR .LspCheck.lean:11:86-12:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝⁵ : DivisionRing k
+inst✝⁴ : AddCommGroup V
+inst✝³ : Module k V
+inst✝² : AddTorsor V P
+n : ℕ
+inst✝¹ : NeZero n
+inst✝ : CharZero k
+s : Affine.Simplex k P n
+i : Fin (n + 1)
+⊢ s.centroid = ↑n • (s.faceOppositeCentroid i -ᵥ s.centroid) +ᵥ s.points i
+Source line 11:
+    s.centroid = (n : k) • (s.faceOppositeCentroid i -ᵥ s.centroid) +ᵥ s.points i := by
+                                                                                     ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:7-12:59
+Unknown constant `Affine.Simplex.faceOppositeCentroid_eq_centroid_vadd`
+Source line 12:
+  rw [Affine.Simplex.faceOppositeCentroid_eq_centroid_vadd, vsub_vadd]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Affine.Simplex.faceOppositeCentroid_eq_centroid_vadd
+
+ERROR .LspCheck.lean:11:86-12:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝⁵ : DivisionRing k
+inst✝⁴ : AddCommGroup V
+inst✝³ : Module k V
+inst✝² : AddTorsor V P
+n : ℕ
+inst✝¹ : NeZero n
+inst✝ : CharZero k
+s : Affine.Simplex k P n
+i : Fin (n + 1)
+⊢ s.centroid = ↑n • (s.faceOppositeCentroid i -ᵥ s.centroid) +ᵥ s.points i
+Source line 11:
+    s.centroid = (n : k) • (s.faceOppositeCentroid i -ᵥ s.centroid) +ᵥ s.points i := by
+                                                                                     ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [DivisionRing k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {n : ℕ}
+
+variable [NeZero n]
+
+theorem centroid_eq_smul_vsub_vadd_point [CharZero k] (s : Affine.Simplex k P n) (i : Fin (n + 1)) :
+    s.centroid = (n : k) • (s.faceOppositeCentroid i -ᵥ s.centroid) +ᵥ s.points i := by
+  rw [← s.centroid_eq_smul_faceOppositeCentroid_vadd_point i]
+  congr 1
+  rw [smul_sub, one_smul, sub_eq_iff_eq_add]
+  norm_num
+  abel
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:11-12:59
+Invalid field `centroid_eq_smul_faceOppositeCentroid_vadd_point`: The environment does not contain `Affine.Simplex.centroid_eq_smul_faceOppositeCentroid_vadd_point`, so it is not possible to project the field `centroid_eq_smul_faceOppositeCentroid_vadd_point` from an expression
+  s
+of type `Affine.Simplex k P n`
+Source line 12:
+  rw [← s.centroid_eq_smul_faceOppositeCentroid_vadd_point i]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: centroid_eq_smul_faceOppositeCentroid_vadd_point
+
+ERROR .LspCheck.lean:11:86-12:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝⁵ : DivisionRing k
+inst✝⁴ : AddCommGroup V
+inst✝³ : Module k V
+inst✝² : AddTorsor V P
+n : ℕ
+inst✝¹ : NeZero n
+inst✝ : CharZero k
+s : Affine.Simplex k P n
+i : Fin (n + 1)
+⊢ s.centroid = ↑n • (s.faceOppositeCentroid i -ᵥ s.centroid) +ᵥ s.points i
+Source line 11:
+    s.centroid = (n : k) • (s.faceOppositeCentroid i -ᵥ s.centroid) +ᵥ s.points i := by
+                                                                                     ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:11-12:59
+Invalid field `centroid_eq_smul_faceOppositeCentroid_vadd_point`: The environment does not contain `Affine.Simplex.centroid_eq_smul_faceOppositeCentroid_vadd_point`, so it is not possible to project the field `centroid_eq_smul_faceOppositeCentroid_vadd_point` from an expression
+  s
+of type `Affine.Simplex k P n`
+Source line 12:
+  rw [← s.centroid_eq_smul_faceOppositeCentroid_vadd_point i]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: centroid_eq_smul_faceOppositeCentroid_vadd_point
+
+ERROR .LspCheck.lean:11:86-12:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝⁵ : DivisionRing k
+inst✝⁴ : AddCommGroup V
+inst✝³ : Module k V
+inst✝² : AddTorsor V P
+n : ℕ
+inst✝¹ : NeZero n
+inst✝ : CharZero k
+s : Affine.Simplex k P n
+i : Fin (n + 1)
+⊢ s.centroid = ↑n • (s.faceOppositeCentroid i -ᵥ s.centroid) +ᵥ s.points i
+Source line 11:
+    s.centroid = (n : k) • (s.faceOppositeCentroid i -ᵥ s.centroid) +ᵥ s.points i := by
+                                                                                     ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [DivisionRing k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {n : ℕ}
+
+variable [NeZero n]
+
+theorem centroid_eq_smul_vsub_vadd_point [CharZero k] (s : Affine.Simplex k P n) (i : Fin (n + 1)) :
+    s.centroid = (n : k) • (s.faceOppositeCentroid i -ᵥ s.centroid) +ᵥ s.points i := by
+  classical
+  rw [eq_comm]
+  refine eq_of_vsub_eq_vsub_right ?p (s.points i)
+  rw [vsub_vadd, vsub_vadd]
+  simpa using s.centroid_vsub_point_eq_inv_card_smul_sum_vsub (s.points i)
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:10-14:34
+Unknown identifier `eq_of_vsub_eq_vsub_right`
+Source line 14:
+  refine eq_of_vsub_eq_vsub_right ?p (s.points i)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: eq_of_vsub_eq_vsub_right
+
+ERROR .LspCheck.lean:15:7-15:16
+No goals to be solved
+Source line 15:
+  rw [vsub_vadd, vsub_vadd]
+      ^^^^^^^^^
+Highlighted span: vsub_vadd
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:10-14:34
+Unknown identifier `eq_of_vsub_eq_vsub_right`
+Source line 14:
+  refine eq_of_vsub_eq_vsub_right ?p (s.points i)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: eq_of_vsub_eq_vsub_right
+
+ERROR .LspCheck.lean:15:7-15:16
+No goals to be solved
+Source line 15:
+  rw [vsub_vadd, vsub_vadd]
+      ^^^^^^^^^
+Highlighted span: vsub_vadd

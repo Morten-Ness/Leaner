@@ -1,0 +1,274 @@
+FILE: NonUnitalSubalgebra.coe_iSup_of_directed.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: NonUnitalSubalgebra.coe_iSup_of_directed.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R : Type u} {A : Type v} {B : Type w}
+
+variable [CommSemiring R]
+
+variable [NonUnitalNonAssocSemiring A] [Module R A]
+
+variable (S : NonUnitalSubalgebra R A)
+
+variable [NonUnitalNonAssocSemiring B] [Module R B]
+
+variable [IsScalarTower R A A] [SMulCommClass R A A]
+
+variable {ι : Sort*}
+
+theorem coe_iSup_of_directed [Nonempty ι] {S : ι → NonUnitalSubalgebra R A}
+    (dir : Directed (· ≤ ·) S) : ↑(iSup S) = ⋃ i, (S i : Set A) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type u} {A : Type v} {B : Type w}
+
+variable [CommSemiring R]
+
+variable [NonUnitalNonAssocSemiring A] [Module R A]
+
+variable (S : NonUnitalSubalgebra R A)
+
+variable [NonUnitalNonAssocSemiring B] [Module R B]
+
+variable [IsScalarTower R A A] [SMulCommClass R A A]
+
+variable {ι : Sort*}
+
+theorem coe_iSup_of_directed [Nonempty ι] {S : ι → NonUnitalSubalgebra R A}
+    (dir : Directed (· ≤ ·) S) : ↑(iSup S) = ⋃ i, (S i : Set A) := by
+  ext x
+  simp only [Set.mem_iUnion]
+  constructor
+  · intro hx
+    rcases NonUnitalSubalgebra.mem_iSup_of_directed dir hx with ⟨i, hi⟩
+    exact ⟨i, hi⟩
+  · rintro ⟨i, hi⟩
+    exact NonUnitalSubalgebra.mem_iSup_of_mem i hi
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:23:12-23:52
+Unknown constant `NonUnitalSubalgebra.mem_iSup_of_directed`
+Source line 23:
+    rcases NonUnitalSubalgebra.mem_iSup_of_directed dir hx with ⟨i, hi⟩
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: NonUnitalSubalgebra.mem_iSup_of_directed
+
+ERROR .LspCheck.lean:23:65-23:72
+Tactic `rcases` failed: `x✝ : ?m.47` is not an inductive datatype
+Source line 23:
+    rcases NonUnitalSubalgebra.mem_iSup_of_directed dir hx with ⟨i, hi⟩
+                                                                ^^^^^^^
+Highlighted span: ⟨i, hi⟩
+
+ERROR .LspCheck.lean:26:11-26:46
+Unknown constant `NonUnitalSubalgebra.mem_iSup_of_mem`
+Source line 26:
+    exact NonUnitalSubalgebra.mem_iSup_of_mem i hi
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: NonUnitalSubalgebra.mem_iSup_of_mem
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:23:12-23:52
+Unknown constant `NonUnitalSubalgebra.mem_iSup_of_directed`
+Source line 23:
+    rcases NonUnitalSubalgebra.mem_iSup_of_directed dir hx with ⟨i, hi⟩
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: NonUnitalSubalgebra.mem_iSup_of_directed
+
+ERROR .LspCheck.lean:23:65-23:72
+Tactic `rcases` failed: `x✝ : ?m.47` is not an inductive datatype
+Source line 23:
+    rcases NonUnitalSubalgebra.mem_iSup_of_directed dir hx with ⟨i, hi⟩
+                                                                ^^^^^^^
+Highlighted span: ⟨i, hi⟩
+
+ERROR .LspCheck.lean:26:11-26:46
+Unknown constant `NonUnitalSubalgebra.mem_iSup_of_mem`
+Source line 26:
+    exact NonUnitalSubalgebra.mem_iSup_of_mem i hi
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: NonUnitalSubalgebra.mem_iSup_of_mem
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type u} {A : Type v} {B : Type w}
+
+variable [CommSemiring R]
+
+variable [NonUnitalNonAssocSemiring A] [Module R A]
+
+variable (S : NonUnitalSubalgebra R A)
+
+variable [NonUnitalNonAssocSemiring B] [Module R B]
+
+variable [IsScalarTower R A A] [SMulCommClass R A A]
+
+variable {ι : Sort*}
+
+theorem coe_iSup_of_directed [Nonempty ι] {S : ι → NonUnitalSubalgebra R A}
+    (dir : Directed (· ≤ ·) S) : ↑(iSup S) = ⋃ i, (S i : Set A) := by
+  classical
+  ext x
+  simp only [Set.mem_iUnion]
+  constructor
+  · intro hx
+    rw [NonUnitalSubalgebra.mem_iSup_of_directed dir] at hx
+    exact hx
+  · intro hx
+    rw [NonUnitalSubalgebra.mem_iSup_of_directed dir]
+    exact hx
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:24:9-24:49
+Unknown constant `NonUnitalSubalgebra.mem_iSup_of_directed`
+Source line 24:
+    rw [NonUnitalSubalgebra.mem_iSup_of_directed dir] at hx
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: NonUnitalSubalgebra.mem_iSup_of_directed
+
+ERROR .LspCheck.lean:27:9-27:49
+Unknown constant `NonUnitalSubalgebra.mem_iSup_of_directed`
+Source line 27:
+    rw [NonUnitalSubalgebra.mem_iSup_of_directed dir]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: NonUnitalSubalgebra.mem_iSup_of_directed
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:24:9-24:49
+Unknown constant `NonUnitalSubalgebra.mem_iSup_of_directed`
+Source line 24:
+    rw [NonUnitalSubalgebra.mem_iSup_of_directed dir] at hx
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: NonUnitalSubalgebra.mem_iSup_of_directed
+
+ERROR .LspCheck.lean:27:9-27:49
+Unknown constant `NonUnitalSubalgebra.mem_iSup_of_directed`
+Source line 27:
+    rw [NonUnitalSubalgebra.mem_iSup_of_directed dir]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: NonUnitalSubalgebra.mem_iSup_of_directed
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type u} {A : Type v} {B : Type w}
+
+variable [CommSemiring R]
+
+variable [NonUnitalNonAssocSemiring A] [Module R A]
+
+variable (S : NonUnitalSubalgebra R A)
+
+variable [NonUnitalNonAssocSemiring B] [Module R B]
+
+variable [IsScalarTower R A A] [SMulCommClass R A A]
+
+variable {ι : Sort*}
+
+theorem coe_iSup_of_directed [Nonempty ι] {S : ι → NonUnitalSubalgebra R A}
+    (dir : Directed (· ≤ ·) S) : ↑(iSup S) = ⋃ i, (S i : Set A) := by
+  classical
+  rw [Set.ext_iff]
+  intro x
+  change x ∈ iSup S ↔ x ∈ ⋃ i, (S i : Set A)
+  rw [show iSup S = sSup (Set.range S) by simp [iSup]]
+  change x ∈ sSup (Set.range S) ↔ x ∈ ⋃ i, (S i : Set A)
+  rw [NonUnitalSubalgebra.mem_sSup_of_directed]
+  · simp only [Set.mem_range, Set.mem_iUnion, exists_exists_and_eq_and]
+  · intro a ha b hb
+    rcases ha with ⟨i, rfl⟩
+    rcases hb with ⟨j, rfl⟩
+    rcases dir i j with ⟨k, hik, hjk⟩
+    exact ⟨S k, ⟨k, rfl⟩, hik, hjk⟩
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:25:7-25:47
+Unknown constant `NonUnitalSubalgebra.mem_sSup_of_directed`
+Source line 25:
+  rw [NonUnitalSubalgebra.mem_sSup_of_directed]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: NonUnitalSubalgebra.mem_sSup_of_directed
+
+ERROR .LspCheck.lean:18:68-19:1
+unsolved goals
+R : Type u
+A : Type v
+inst✝⁵ : CommSemiring R
+inst✝⁴ : NonUnitalNonAssocSemiring A
+inst✝³ : Module R A
+inst✝² : IsScalarTower R A A
+inst✝¹ : SMulCommClass R A A
+ι : Sort u_1
+inst✝ : Nonempty ι
+S : ι → NonUnitalSubalgebra R A
+dir : Directed (fun x1 x2 ↦ x1 ≤ x2) S
+x : A
+⊢ x ∈ sSup (Set.range S) ↔ x ∈ ⋃ i, ↑(S i)
+Source line 18:
+    (dir : Directed (· ≤ ·) S) : ↑(iSup S) = ⋃ i, (S i : Set A) := by
+                                                                   ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:25:7-25:47
+Unknown constant `NonUnitalSubalgebra.mem_sSup_of_directed`
+Source line 25:
+  rw [NonUnitalSubalgebra.mem_sSup_of_directed]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: NonUnitalSubalgebra.mem_sSup_of_directed
+
+ERROR .LspCheck.lean:18:68-19:1
+unsolved goals
+R : Type u
+A : Type v
+inst✝⁵ : CommSemiring R
+inst✝⁴ : NonUnitalNonAssocSemiring A
+inst✝³ : Module R A
+inst✝² : IsScalarTower R A A
+inst✝¹ : SMulCommClass R A A
+ι : Sort u_1
+inst✝ : Nonempty ι
+S : ι → NonUnitalSubalgebra R A
+dir : Directed (fun x1 x2 ↦ x1 ≤ x2) S
+x : A
+⊢ x ∈ sSup (Set.range S) ↔ x ∈ ⋃ i, ↑(S i)
+Source line 18:
+    (dir : Directed (· ≤ ·) S) : ↑(iSup S) = ⋃ i, (S i : Set A) := by
+                                                                   ^
+Highlighted span: b

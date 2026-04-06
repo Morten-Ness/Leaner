@@ -1,0 +1,140 @@
+FILE: Basic.extend_mul.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.extend_mul.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {I : Type u}
+
+variable {α β γ : Type*}
+
+variable {f : I → Type v₁} {g : I → Type v₂} {h : I → Type v₃}
+
+variable (x y : ∀ i, f i) (i : I)
+
+theorem extend_mul [Mul γ] (f : α → β) (g₁ g₂ : α → γ) (e₁ e₂ : β → γ) :
+    Function.extend f (g₁ * g₂) (e₁ * e₂) = Function.extend f g₁ e₁ * Function.extend f g₂ e₂ := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {I : Type u}
+
+variable {α β γ : Type*}
+
+variable {f : I → Type v₁} {g : I → Type v₂} {h : I → Type v₃}
+
+variable (x y : ∀ i, f i) (i : I)
+
+theorem extend_mul [Mul γ] (f : α → β) (g₁ g₂ : α → γ) (e₁ e₂ : β → γ) :
+    Function.extend f (g₁ * g₂) (e₁ * e₂) = Function.extend f g₁ e₁ * Function.extend f g₂ e₂ := by
+  funext b
+  by_cases hfb : ∃ a, f a = b
+  · rcases hfb with ⟨a, rfl⟩
+    simp [Function.extend_apply]
+  · simp [Function.extend_apply, hfb]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:11-16:32
+Unknown identifier `Function.extend_apply`
+Source line 16:
+    simp [Function.extend_apply]
+          ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Function.extend_apply
+
+ERROR .LspCheck.lean:15:3-16:1
+unsolved goals
+case pos
+α : Type u_1
+β : Type u_2
+γ : Type u_3
+inst✝ : Mul γ
+f : α → β
+g₁ g₂ : α → γ
+e₁ e₂ : β → γ
+a : α
+⊢ Function.extend f (g₁ * g₂) (e₁ * e₂) (f a) = Function.extend f g₁ e₁ (f a) * Function.extend f g₂ e₂ (f a)
+Source line 15:
+  · rcases hfb with ⟨a, rfl⟩
+  ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:17:11-17:32
+Unknown identifier `Function.extend_apply`
+Source line 17:
+  · simp [Function.extend_apply, hfb]
+          ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Function.extend_apply
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:11-16:32
+Unknown identifier `Function.extend_apply`
+Source line 16:
+    simp [Function.extend_apply]
+          ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Function.extend_apply
+
+ERROR .LspCheck.lean:15:3-16:1
+unsolved goals
+case pos
+α : Type u_1
+β : Type u_2
+γ : Type u_3
+inst✝ : Mul γ
+f : α → β
+g₁ g₂ : α → γ
+e₁ e₂ : β → γ
+a : α
+⊢ Function.extend f (g₁ * g₂) (e₁ * e₂) (f a) = Function.extend f g₁ e₁ (f a) * Function.extend f g₂ e₂ (f a)
+Source line 15:
+  · rcases hfb with ⟨a, rfl⟩
+  ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:17:11-17:32
+Unknown identifier `Function.extend_apply`
+Source line 17:
+  · simp [Function.extend_apply, hfb]
+          ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Function.extend_apply
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {I : Type u}
+
+variable {α β γ : Type*}
+
+variable {f : I → Type v₁} {g : I → Type v₂} {h : I → Type v₃}
+
+variable (x y : ∀ i, f i) (i : I)
+
+theorem extend_mul [Mul γ] (f : α → β) (g₁ g₂ : α → γ) (e₁ e₂ : β → γ) :
+    Function.extend f (g₁ * g₂) (e₁ * e₂) = Function.extend f g₁ e₁ * Function.extend f g₂ e₂ := by
+  classical
+  funext b
+  unfold Function.extend
+  split_ifs with h
+  · rcases h with ⟨a, rfl⟩
+    simp
+  · simp [h]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

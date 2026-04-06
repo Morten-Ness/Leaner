@@ -1,0 +1,242 @@
+FILE: Finset.mem_inv_smul_finset_iff.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Finset.mem_inv_smul_finset_iff.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Pointwise
+
+variable {F α β γ : Type*}
+
+variable [DecidableEq β] [Group α] [MulAction α β] {s t : Finset β} {a : α} {b : β}
+
+theorem mem_inv_smul_finset_iff : b ∈ a⁻¹ • s ↔ a • b ∈ s := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise
+
+variable {F α β γ : Type*}
+
+variable [DecidableEq β] [Group α] [MulAction α β] {s t : Finset β} {a : α} {b : β}
+
+theorem mem_inv_smul_finset_iff : b ∈ a⁻¹ • s ↔ a • b ∈ s := by
+  simp [Finset.mem_smul_finset]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:9:62-10:1
+unsolved goals
+α : Type u_2
+β : Type u_3
+inst✝² : DecidableEq β
+inst✝¹ : Group α
+inst✝ : MulAction α β
+s : Finset β
+a : α
+b : β
+⊢ (∃ y ∈ s, a⁻¹ • y = b) ↔ a • b ∈ s
+Source line 9:
+theorem mem_inv_smul_finset_iff : b ∈ a⁻¹ • s ↔ a • b ∈ s := by
+                                                             ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:9:62-10:1
+unsolved goals
+α : Type u_2
+β : Type u_3
+inst✝² : DecidableEq β
+inst✝¹ : Group α
+inst✝ : MulAction α β
+s : Finset β
+a : α
+b : β
+⊢ (∃ y ∈ s, a⁻¹ • y = b) ↔ a • b ∈ s
+Source line 9:
+theorem mem_inv_smul_finset_iff : b ∈ a⁻¹ • s ↔ a • b ∈ s := by
+                                                             ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise
+
+variable {F α β γ : Type*}
+
+variable [DecidableEq β] [Group α] [MulAction α β] {s t : Finset β} {a : α} {b : β}
+
+theorem mem_inv_smul_finset_iff : b ∈ a⁻¹ • s ↔ a • b ∈ s := by
+  constructor
+  · intro hb
+    rcases Finset.mem_smul_finset.mp hb with ⟨y, hy, hya⟩
+    rw [← hya, smul_smul, inv_mul_cancel, one_smul]
+    exact hy
+  · intro hb
+    exact Finset.mem_smul_finset.mpr ⟨a • b, hb, by rw [smul_smul, inv_mul_cancel, one_smul]⟩
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:27-13:41
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?a⁻¹ * ?a
+in the target expression
+  (a * a⁻¹) • y ∈ s
+
+case mp
+α : Type u_2
+β : Type u_3
+inst✝² : DecidableEq β
+inst✝¹ : Group α
+inst✝ : MulAction α β
+s : Finset β
+a : α
+b : β
+hb : b ∈ a⁻¹ • s
+y : β
+hy : y ∈ s
+hya : a⁻¹ • y = b
+⊢ (a * a⁻¹) • y ∈ s
+Source line 13:
+    rw [← hya, smul_smul, inv_mul_cancel, one_smul]
+                          ^^^^^^^^^^^^^^
+Highlighted span: inv_mul_cancel
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:27-13:41
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?a⁻¹ * ?a
+in the target expression
+  (a * a⁻¹) • y ∈ s
+
+case mp
+α : Type u_2
+β : Type u_3
+inst✝² : DecidableEq β
+inst✝¹ : Group α
+inst✝ : MulAction α β
+s : Finset β
+a : α
+b : β
+hb : b ∈ a⁻¹ • s
+y : β
+hy : y ∈ s
+hya : a⁻¹ • y = b
+⊢ (a * a⁻¹) • y ∈ s
+Source line 13:
+    rw [← hya, smul_smul, inv_mul_cancel, one_smul]
+                          ^^^^^^^^^^^^^^
+Highlighted span: inv_mul_cancel
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise
+
+variable {F α β γ : Type*}
+
+variable [DecidableEq β] [Group α] [MulAction α β] {s t : Finset β} {a : α} {b : β}
+
+theorem mem_inv_smul_finset_iff : b ∈ a⁻¹ • s ↔ a • b ∈ s := by
+  constructor
+  · intro hb
+    rcases Finset.mem_smul_finset.mp hb with ⟨y, hy, hya⟩
+    rw [← hya, smul_smul, mul_left_inv, one_smul]
+    exact hy
+  · intro hb
+    exact Finset.mem_smul_finset.mpr ⟨a • b, hb, by rw [smul_smul, mul_left_inv, one_smul]⟩
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:27-13:39
+Unknown identifier `mul_left_inv`
+Source line 13:
+    rw [← hya, smul_smul, mul_left_inv, one_smul]
+                          ^^^^^^^^^^^^
+Highlighted span: mul_left_inv
+
+ERROR .LspCheck.lean:16:68-16:80
+Unknown identifier `mul_left_inv`
+Source line 16:
+    exact Finset.mem_smul_finset.mpr ⟨a • b, hb, by rw [smul_smul, mul_left_inv, one_smul]⟩
+                                                                   ^^^^^^^^^^^^
+Highlighted span: mul_left_inv
+
+ERROR .LspCheck.lean:16:50-16:91
+unsolved goals
+α : Type u_2
+β : Type u_3
+inst✝² : DecidableEq β
+inst✝¹ : Group α
+inst✝ : MulAction α β
+s : Finset β
+a : α
+b : β
+hb : a • b ∈ s
+⊢ (a⁻¹ * a) • b = b
+Source line 16:
+    exact Finset.mem_smul_finset.mpr ⟨a • b, hb, by rw [smul_smul, mul_left_inv, one_smul]⟩
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: by rw [smul_smul, mul_left_inv, one_smul]
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:27-13:39
+Unknown identifier `mul_left_inv`
+Source line 13:
+    rw [← hya, smul_smul, mul_left_inv, one_smul]
+                          ^^^^^^^^^^^^
+Highlighted span: mul_left_inv
+
+ERROR .LspCheck.lean:16:68-16:80
+Unknown identifier `mul_left_inv`
+Source line 16:
+    exact Finset.mem_smul_finset.mpr ⟨a • b, hb, by rw [smul_smul, mul_left_inv, one_smul]⟩
+                                                                   ^^^^^^^^^^^^
+Highlighted span: mul_left_inv
+
+ERROR .LspCheck.lean:16:50-16:91
+unsolved goals
+α : Type u_2
+β : Type u_3
+inst✝² : DecidableEq β
+inst✝¹ : Group α
+inst✝ : MulAction α β
+s : Finset β
+a : α
+b : β
+hb : a • b ∈ s
+⊢ (a⁻¹ * a) • b = b
+Source line 16:
+    exact Finset.mem_smul_finset.mpr ⟨a • b, hb, by rw [smul_smul, mul_left_inv, one_smul]⟩
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: by rw [smul_smul, mul_left_inv, one_smul]

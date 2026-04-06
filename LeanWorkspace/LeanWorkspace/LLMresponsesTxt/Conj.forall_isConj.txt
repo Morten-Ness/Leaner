@@ -1,0 +1,39 @@
+FILE: Conj.forall_isConj.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Conj.forall_isConj.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {α : Type u} {β : Type v}
+
+variable [Monoid α] [Monoid β]
+
+theorem forall_isConj {p : ConjClasses α → Prop} : (∀ a, p a) ↔ ∀ a, p (ConjClasses.mk a) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α : Type u} {β : Type v}
+
+variable [Monoid α] [Monoid β]
+
+theorem forall_isConj {p : ConjClasses α → Prop} : (∀ a, p a) ↔ ∀ a, p (ConjClasses.mk a) := by
+  constructor
+  · intro h a
+    exact h (ConjClasses.mk a)
+  · intro h a
+    rcases Quotient.exists_rep a with ⟨x, rfl⟩
+    exact h x
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+PASS

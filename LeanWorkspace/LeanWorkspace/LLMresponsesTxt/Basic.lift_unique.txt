@@ -1,0 +1,181 @@
+FILE: Basic.lift_unique.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.lift_unique.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {α : Type u} {β : Type v} {γ : Type w}
+
+variable [Mul α] [MulOneClass β]
+
+variable (f : α →ₙ* β)
+
+theorem lift_unique (f : WithOne α →* β) : f = WithOne.lift (f.toMulHom.comp WithOne.coeMulHom) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α : Type u} {β : Type v} {γ : Type w}
+
+variable [Mul α] [MulOneClass β]
+
+variable (f : α →ₙ* β)
+
+theorem lift_unique (f : WithOne α →* β) : f = WithOne.lift (f.toMulHom.comp WithOne.coeMulHom) := by
+  ext x <;> cases x <;> rfl
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:25-10:28
+Tactic `rfl` failed: The left-hand side
+  f 1
+is not definitionally equal to the right-hand side
+  (WithOne.lift ((↑f).comp WithOne.coeMulHom)) 1
+
+case h.one
+α : Type u
+β : Type v
+inst✝¹ : Mul α
+inst✝ : MulOneClass β
+f : WithOne α →* β
+⊢ f 1 = (WithOne.lift ((↑f).comp WithOne.coeMulHom)) 1
+Source line 10:
+  ext x <;> cases x <;> rfl
+                        ^^^
+Highlighted span: rfl
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:25-10:28
+Tactic `rfl` failed: The left-hand side
+  f 1
+is not definitionally equal to the right-hand side
+  (WithOne.lift ((↑f).comp WithOne.coeMulHom)) 1
+
+case h.one
+α : Type u
+β : Type v
+inst✝¹ : Mul α
+inst✝ : MulOneClass β
+f : WithOne α →* β
+⊢ f 1 = (WithOne.lift ((↑f).comp WithOne.coeMulHom)) 1
+Source line 10:
+  ext x <;> cases x <;> rfl
+                        ^^^
+Highlighted span: rfl
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α : Type u} {β : Type v} {γ : Type w}
+
+variable [Mul α] [MulOneClass β]
+
+variable (f : α →ₙ* β)
+
+theorem lift_unique (f : WithOne α →* β) : f = WithOne.lift (f.toMulHom.comp WithOne.coeMulHom) := by
+  ext x <;> cases x with
+  | none =>
+      simp [WithOne.lift]
+  | some a =>
+      rfl
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:3-12:1
+Invalid alternative name `none`: Expected `one` or `coe`
+Source line 11:
+  | none =>
+  ^
+Highlighted span: |
+
+ERROR .LspCheck.lean:13:3-14:1
+Invalid alternative name `some`: Expected `one` or `coe`
+Source line 13:
+  | some a =>
+  ^
+Highlighted span: |
+
+ERROR .LspCheck.lean:10:13-10:18
+Alternative `one` has not been provided
+Source line 10:
+  ext x <;> cases x with
+            ^^^^^
+Highlighted span: cases
+
+ERROR .LspCheck.lean:10:13-10:18
+Alternative `coe` has not been provided
+Source line 10:
+  ext x <;> cases x with
+            ^^^^^
+Highlighted span: cases
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:3-12:1
+Invalid alternative name `none`: Expected `one` or `coe`
+Source line 11:
+  | none =>
+  ^
+Highlighted span: |
+
+ERROR .LspCheck.lean:13:3-14:1
+Invalid alternative name `some`: Expected `one` or `coe`
+Source line 13:
+  | some a =>
+  ^
+Highlighted span: |
+
+ERROR .LspCheck.lean:10:13-10:18
+Alternative `one` has not been provided
+Source line 10:
+  ext x <;> cases x with
+            ^^^^^
+Highlighted span: cases
+
+ERROR .LspCheck.lean:10:13-10:18
+Alternative `coe` has not been provided
+Source line 10:
+  ext x <;> cases x with
+            ^^^^^
+Highlighted span: cases
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α : Type u} {β : Type v} {γ : Type w}
+
+variable [Mul α] [MulOneClass β]
+
+variable (f : α →ₙ* β)
+
+theorem lift_unique (f : WithOne α →* β) : f = WithOne.lift (f.toMulHom.comp WithOne.coeMulHom) := by
+  ext x
+  cases x with
+  | one =>
+      simp [WithOne.lift]
+  | coe a =>
+      rfl
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

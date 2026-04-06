@@ -1,0 +1,116 @@
+FILE: Map.subgroupComap_surjective_of_surjective.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Map.subgroupComap_surjective_of_surjective.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N]
+
+theorem subgroupComap_surjective_of_surjective (f : G →* G') (H' : Subgroup G') (hf : Function.Surjective f) :
+    Function.Surjective (f.subgroupComap H') := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N]
+
+theorem subgroupComap_surjective_of_surjective (f : G →* G') (H' : Subgroup G') (hf : Function.Surjective f) :
+    Function.Surjective (f.subgroupComap H') := by
+  intro x
+  rcases hf x.1 with ⟨y, rfl⟩
+  refine ⟨⟨y, x.2⟩, ?_⟩
+  rfl
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:26-14:29
+Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  f y = ↑x
+
+G : Type u_1
+G' : Type u_2
+inst✝¹ : Group G
+inst✝ : Group G'
+f : G →* G'
+H' : Subgroup G'
+hf : Function.Surjective ⇑f
+x : ↥H'
+y : G
+h✝ : f y = ↑x
+⊢ ∃ a, (f.subgroupComap H') a = x
+Source line 14:
+  rcases hf x.1 with ⟨y, rfl⟩
+                         ^^^
+Highlighted span: rfl
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:26-14:29
+Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  f y = ↑x
+
+G : Type u_1
+G' : Type u_2
+inst✝¹ : Group G
+inst✝ : Group G'
+f : G →* G'
+H' : Subgroup G'
+hf : Function.Surjective ⇑f
+x : ↥H'
+y : G
+h✝ : f y = ↑x
+⊢ ∃ a, (f.subgroupComap H') a = x
+Source line 14:
+  rcases hf x.1 with ⟨y, rfl⟩
+                         ^^^
+Highlighted span: rfl
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N]
+
+theorem subgroupComap_surjective_of_surjective (f : G →* G') (H' : Subgroup G') (hf : Function.Surjective f) :
+    Function.Surjective (f.subgroupComap H') := by
+  intro x
+  rcases hf x.1 with ⟨y, hy⟩
+  refine ⟨⟨y, ?_⟩, ?_⟩
+  · simpa [hy] using x.2
+  · ext
+    exact hy
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

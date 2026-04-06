@@ -1,0 +1,263 @@
+FILE: Matrix.matrix.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Matrix.matrix.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped TensorProduct
+
+variable (R n : Type*) [CommSemiring R] [Fintype n] [DecidableEq n]
+
+theorem matrix [Nonempty n] : IsAzumaya R (Matrix n n R) where
+  eq_of_smul_eq_smul := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped TensorProduct
+
+variable (R n : Type*) [CommSemiring R] [Fintype n] [DecidableEq n]
+
+theorem matrix [Nonempty n] : IsAzumaya R (Matrix n n R) where
+  eq_of_smul_eq_smul := by
+    intro a b h
+    simpa using congrArg (fun f => f 1) h
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:7:58-8:1
+Fields missing: `bij`
+Source line 7:
+theorem matrix [Nonempty n] : IsAzumaya R (Matrix n n R) where
+                                                         ^
+Highlighted span: w
+
+ERROR .LspCheck.lean:10:41-10:42
+Application type mismatch: The argument
+  h
+has type
+  ∀ (a_1 : Matrix n n R), a • a_1 = b • a_1
+but is expected to have type
+  ?m.19 = ?m.20
+in the application
+  congrArg (fun f ↦ ?m.22) h
+Source line 10:
+    simpa using congrArg (fun f => f 1) h
+                                        ^
+Highlighted span: h
+
+ERROR .LspCheck.lean:10:36-10:39
+Function expected at
+  f
+but this term has type
+  ?m.17
+
+Note: Expected a function because this term is being applied to the argument
+  1
+Source line 10:
+    simpa using congrArg (fun f => f 1) h
+                                   ^^^
+Highlighted span: f 1
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:7:58-8:1
+Fields missing: `bij`
+Source line 7:
+theorem matrix [Nonempty n] : IsAzumaya R (Matrix n n R) where
+                                                         ^
+Highlighted span: w
+
+ERROR .LspCheck.lean:10:41-10:42
+Application type mismatch: The argument
+  h
+has type
+  ∀ (a_1 : Matrix n n R), a • a_1 = b • a_1
+but is expected to have type
+  ?m.19 = ?m.20
+in the application
+  congrArg (fun f ↦ ?m.22) h
+Source line 10:
+    simpa using congrArg (fun f => f 1) h
+                                        ^
+Highlighted span: h
+
+ERROR .LspCheck.lean:10:36-10:39
+Function expected at
+  f
+but this term has type
+  ?m.17
+
+Note: Expected a function because this term is being applied to the argument
+  1
+Source line 10:
+    simpa using congrArg (fun f => f 1) h
+                                   ^^^
+Highlighted span: f 1
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped TensorProduct
+
+variable (R n : Type*) [CommSemiring R] [Fintype n] [DecidableEq n]
+
+theorem matrix [Nonempty n] : IsAzumaya R (Matrix n n R) where
+  bij := by
+    classical
+    let e : Matrix n n R ⊗[R] (Matrix n n R)ᵐᵒᵖ →ₐ[R] Module.End R (Matrix n n R) :=
+      IsCentralSimple.bijective_of_basis (M := Matrix n n R)
+        (Pi.basisFun R n).matrix (Pi.basisFun R n).matrix
+    exact e.bijective
+  eq_of_smul_eq_smul := by
+    intro a b h
+    let x : Matrix n n R := 1
+    have hx : a * x = b * x := h x
+    simpa using hx
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:17:15-17:20
+failed to synthesize instance of type class
+  HMul R (Matrix n n R) ?m.23
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 17:
+    have hx : a * x = b * x := h x
+              ^^^^^
+Highlighted span: a * x
+
+ERROR .LspCheck.lean:11:7-11:41
+Unknown identifier `IsCentralSimple.bijective_of_basis`
+Source line 11:
+      IsCentralSimple.bijective_of_basis (M := Matrix n n R)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: IsCentralSimple.bijective_of_basis
+
+ERROR .LspCheck.lean:13:11-13:22
+Application type mismatch: The argument
+  e
+has type
+  Matrix n n R ⊗[R] (Matrix n n R)ᵐᵒᵖ →ₐ[R] Module.End R (Matrix n n R)
+but is expected to have type
+  ?m.50 →ₐ[?m.49] ?m.50
+in the application
+  AlgHom.bijective e
+Source line 13:
+    exact e.bijective
+          ^^^^^^^^^^^
+Highlighted span: e.bijective
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:17:15-17:20
+failed to synthesize instance of type class
+  HMul R (Matrix n n R) ?m.23
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 17:
+    have hx : a * x = b * x := h x
+              ^^^^^
+Highlighted span: a * x
+
+ERROR .LspCheck.lean:11:7-11:41
+Unknown identifier `IsCentralSimple.bijective_of_basis`
+Source line 11:
+      IsCentralSimple.bijective_of_basis (M := Matrix n n R)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: IsCentralSimple.bijective_of_basis
+
+ERROR .LspCheck.lean:13:11-13:22
+Application type mismatch: The argument
+  e
+has type
+  Matrix n n R ⊗[R] (Matrix n n R)ᵐᵒᵖ →ₐ[R] Module.End R (Matrix n n R)
+but is expected to have type
+  ?m.50 →ₐ[?m.49] ?m.50
+in the application
+  AlgHom.bijective e
+Source line 13:
+    exact e.bijective
+          ^^^^^^^^^^^
+Highlighted span: e.bijective
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped TensorProduct
+
+variable (R n : Type*) [CommSemiring R] [Fintype n] [DecidableEq n]
+
+theorem matrix [Nonempty n] : IsAzumaya R (Matrix n n R) where
+  bij := by
+    simpa using (isAzumaya_matrix (R := R) (n := n)).bij
+  eq_of_smul_eq_smul := by
+    intro a b h
+    simpa using h 1
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:5-12:20
+Type mismatch: After simplification, term
+  h 1
+ has type
+  Eq.{(max u_1 u_2) + 1} (a • 1) (b • 1)
+but is expected to have type
+  Eq.{u_1 + 1} a b
+Source line 12:
+    simpa using h 1
+    ^^^^^^^^^^^^^^^
+Highlighted span: simpa using h 1
+
+ERROR .LspCheck.lean:9:18-9:34
+Unknown identifier `isAzumaya_matrix`
+Source line 9:
+    simpa using (isAzumaya_matrix (R := R) (n := n)).bij
+                 ^^^^^^^^^^^^^^^^
+Highlighted span: isAzumaya_matrix
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:5-12:20
+Type mismatch: After simplification, term
+  h 1
+ has type
+  Eq.{(max u_1 u_2) + 1} (a • 1) (b • 1)
+but is expected to have type
+  Eq.{u_1 + 1} a b
+Source line 12:
+    simpa using h 1
+    ^^^^^^^^^^^^^^^
+Highlighted span: simpa using h 1
+
+ERROR .LspCheck.lean:9:18-9:34
+Unknown identifier `isAzumaya_matrix`
+Source line 9:
+    simpa using (isAzumaya_matrix (R := R) (n := n)).bij
+                 ^^^^^^^^^^^^^^^^
+Highlighted span: isAzumaya_matrix

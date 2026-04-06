@@ -1,0 +1,198 @@
+FILE: Map.iSup_comap_le.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Map.iSup_comap_le.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable (H K : Subgroup G) {k : Set G}
+
+variable {N : Type*} [Group N] {P : Type*} [Group P]
+
+theorem iSup_comap_le {ι : Sort*} (f : G →* N) (s : ι → Subgroup N) :
+    ⨆ i, (s i).comap f ≤ (iSup s).comap f := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable (H K : Subgroup G) {k : Set G}
+
+variable {N : Type*} [Group N] {P : Type*} [Group P]
+
+theorem iSup_comap_le {ι : Sort*} (f : G →* N) (s : ι → Subgroup N) :
+    ⨆ i, (s i).comap f ≤ (iSup s).comap f := by
+  intro x hx
+  rw [Subgroup.mem_comap] at ⊢ hx
+  exact show f x ∈ iSup s from le_iSup (fun i => s i) hx
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:7-16:25
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.36 ∈ Subgroup.comap ?m.35 ?m.34
+in the target expression
+  x ∈ ⨆ i, Subgroup.comap f (s i)
+
+G : Type u_1
+inst✝¹ : Group G
+N : Type u_5
+inst✝ : Group N
+ι : Sort u_7
+f : G →* N
+s : ι → Subgroup N
+x : G
+hx : x ∈ ⨆ i, Subgroup.comap f (s i)
+⊢ x ∈ Subgroup.comap f (iSup s)
+Source line 16:
+  rw [Subgroup.mem_comap] at ⊢ hx
+      ^^^^^^^^^^^^^^^^^^
+Highlighted span: Subgroup.mem_comap
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:7-16:25
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.36 ∈ Subgroup.comap ?m.35 ?m.34
+in the target expression
+  x ∈ ⨆ i, Subgroup.comap f (s i)
+
+G : Type u_1
+inst✝¹ : Group G
+N : Type u_5
+inst✝ : Group N
+ι : Sort u_7
+f : G →* N
+s : ι → Subgroup N
+x : G
+hx : x ∈ ⨆ i, Subgroup.comap f (s i)
+⊢ x ∈ Subgroup.comap f (iSup s)
+Source line 16:
+  rw [Subgroup.mem_comap] at ⊢ hx
+      ^^^^^^^^^^^^^^^^^^
+Highlighted span: Subgroup.mem_comap
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable (H K : Subgroup G) {k : Set G}
+
+variable {N : Type*} [Group N] {P : Type*} [Group P]
+
+theorem iSup_comap_le {ι : Sort*} (f : G →* N) (s : ι → Subgroup N) :
+    ⨆ i, (s i).comap f ≤ (iSup s).comap f := by
+  intro x hx
+  rw [Subgroup.mem_iSup] at hx ⊢
+  rcases hx with ⟨i, hi⟩
+  exact ⟨i, hi⟩
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:7-16:24
+Unknown constant `Subgroup.mem_iSup`
+Source line 16:
+  rw [Subgroup.mem_iSup] at hx ⊢
+      ^^^^^^^^^^^^^^^^^
+Highlighted span: Subgroup.mem_iSup
+
+ERROR .LspCheck.lean:14:46-15:1
+unsolved goals
+G : Type u_1
+inst✝¹ : Group G
+N : Type u_5
+inst✝ : Group N
+ι : Sort u_7
+f : G →* N
+s : ι → Subgroup N
+x : G
+hx : x ∈ ⨆ i, Subgroup.comap f (s i)
+⊢ x ∈ Subgroup.comap f (iSup s)
+Source line 14:
+    ⨆ i, (s i).comap f ≤ (iSup s).comap f := by
+                                             ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:7-16:24
+Unknown constant `Subgroup.mem_iSup`
+Source line 16:
+  rw [Subgroup.mem_iSup] at hx ⊢
+      ^^^^^^^^^^^^^^^^^
+Highlighted span: Subgroup.mem_iSup
+
+ERROR .LspCheck.lean:14:46-15:1
+unsolved goals
+G : Type u_1
+inst✝¹ : Group G
+N : Type u_5
+inst✝ : Group N
+ι : Sort u_7
+f : G →* N
+s : ι → Subgroup N
+x : G
+hx : x ∈ ⨆ i, Subgroup.comap f (s i)
+⊢ x ∈ Subgroup.comap f (iSup s)
+Source line 14:
+    ⨆ i, (s i).comap f ≤ (iSup s).comap f := by
+                                             ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable (H K : Subgroup G) {k : Set G}
+
+variable {N : Type*} [Group N] {P : Type*} [Group P]
+
+theorem iSup_comap_le {ι : Sort*} (f : G →* N) (s : ι → Subgroup N) :
+    ⨆ i, (s i).comap f ≤ (iSup s).comap f := by
+  refine iSup_le ?_
+  intro i
+  intro x hx
+  exact show f x ∈ iSup s from le_iSup s i hx
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

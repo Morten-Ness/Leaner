@@ -1,0 +1,101 @@
+FILE: Lattice.sup_eq_closure.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Lattice.sup_eq_closure.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G]
+
+variable (H K : Subgroup G)
+
+variable {k : Set G}
+
+theorem sup_eq_closure (H H' : Subgroup G) : H ⊔ H' = Subgroup.closure ((H : Set G) ∪ (H' : Set G)) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G]
+
+variable (H K : Subgroup G)
+
+variable {k : Set G}
+
+theorem sup_eq_closure (H H' : Subgroup G) : H ⊔ H' = Subgroup.closure ((H : Set G) ∪ (H' : Set G)) := by
+  rw [Subgroup.closure_eq]
+  ext g
+  constructor
+  · intro hg
+    exact Subgroup.sup_eq_closure.mp hg
+  · intro hg
+    exact Subgroup.sup_eq_closure.mpr hg
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:7-12:26
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Subgroup.closure ↑?K
+in the target expression
+  H ⊔ H' = Subgroup.closure (↑H ∪ ↑H')
+
+G : Type u_1
+inst✝ : Group G
+H H' : Subgroup G
+⊢ H ⊔ H' = Subgroup.closure (↑H ∪ ↑H')
+Source line 12:
+  rw [Subgroup.closure_eq]
+      ^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subgroup.closure_eq
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:7-12:26
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Subgroup.closure ↑?K
+in the target expression
+  H ⊔ H' = Subgroup.closure (↑H ∪ ↑H')
+
+G : Type u_1
+inst✝ : Group G
+H H' : Subgroup G
+⊢ H ⊔ H' = Subgroup.closure (↑H ∪ ↑H')
+Source line 12:
+  rw [Subgroup.closure_eq]
+      ^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subgroup.closure_eq
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G]
+
+variable (H K : Subgroup G)
+
+variable {k : Set G}
+
+theorem sup_eq_closure (H H' : Subgroup G) : H ⊔ H' = Subgroup.closure ((H : Set G) ∪ (H' : Set G)) := by
+  exact Subgroup.sup_eq_closure H H'
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

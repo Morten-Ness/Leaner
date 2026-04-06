@@ -1,0 +1,223 @@
+FILE: Basic.map_add_int'.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.map_add_int'.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_add_int' [AddGroupWithOne G] [AddGroup H] [AddConstMapClass F G H 1 b]
+    (f : F) (x : G) (n : ℤ) : f (x + n) = f x + n • b := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_add_int' [AddGroupWithOne G] [AddGroup H] [AddConstMapClass F G H 1 b]
+    (f : F) (x : G) (n : ℤ) : f (x + n) = f x + n • b := by
+  simpa only [Int.cast_ofNat, Int.cast_negSucc, add_assoc, zsmul_neg, zsmul_natCast,
+    add_left_neg, zero_add, add_comm, add_left_comm, add_neg_cancel_right] using
+    map_int_add f x n
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:7:71-7:84
+Unknown identifier `zsmul_natCast`
+Source line 7:
+  simpa only [Int.cast_ofNat, Int.cast_negSucc, add_assoc, zsmul_neg, zsmul_natCast,
+                                                                      ^^^^^^^^^^^^^
+Highlighted span: zsmul_natCast
+
+ERROR .LspCheck.lean:8:5-8:17
+Unknown identifier `add_left_neg`
+Source line 8:
+    add_left_neg, zero_add, add_comm, add_left_comm, add_neg_cancel_right] using
+    ^^^^^^^^^^^^
+Highlighted span: add_left_neg
+
+ERROR .LspCheck.lean:9:5-9:16
+Unknown identifier `map_int_add`
+Source line 9:
+    map_int_add f x n
+    ^^^^^^^^^^^
+Highlighted span: map_int_add
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:7:71-7:84
+Unknown identifier `zsmul_natCast`
+Source line 7:
+  simpa only [Int.cast_ofNat, Int.cast_negSucc, add_assoc, zsmul_neg, zsmul_natCast,
+                                                                      ^^^^^^^^^^^^^
+Highlighted span: zsmul_natCast
+
+ERROR .LspCheck.lean:8:5-8:17
+Unknown identifier `add_left_neg`
+Source line 8:
+    add_left_neg, zero_add, add_comm, add_left_comm, add_neg_cancel_right] using
+    ^^^^^^^^^^^^
+Highlighted span: add_left_neg
+
+ERROR .LspCheck.lean:9:5-9:16
+Unknown identifier `map_int_add`
+Source line 9:
+    map_int_add f x n
+    ^^^^^^^^^^^
+Highlighted span: map_int_add
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_add_int' [AddGroupWithOne G] [AddGroup H] [AddConstMapClass F G H 1 b]
+    (f : F) (x : G) (n : ℤ) : f (x + n) = f x + n • b := by
+  induction n with
+  | ofNat m =>
+      simpa [zsmul_natCast] using map_nat_add (f := f) x m
+  | negSucc m =>
+      rw [Int.cast_negSucc, add_assoc, map_add, map_one, nsmul_eq_mul, ← zsmul_natCast]
+      simp [zsmul_eq_mul, add_assoc]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:8:3-9:1
+Invalid alternative name `ofNat`: Expected `zero`, `succ`, or `pred`
+Source line 8:
+  | ofNat m =>
+  ^
+Highlighted span: |
+
+ERROR .LspCheck.lean:10:3-11:1
+Invalid alternative name `negSucc`: Expected `zero`, `succ`, or `pred`
+Source line 10:
+  | negSucc m =>
+  ^
+Highlighted span: |
+
+ERROR .LspCheck.lean:7:3-7:12
+Alternative `zero` has not been provided
+Source line 7:
+  induction n with
+  ^^^^^^^^^
+Highlighted span: induction
+
+ERROR .LspCheck.lean:7:3-7:12
+Alternative `succ` has not been provided
+Source line 7:
+  induction n with
+  ^^^^^^^^^
+Highlighted span: induction
+
+ERROR .LspCheck.lean:7:3-7:12
+Alternative `pred` has not been provided
+Source line 7:
+  induction n with
+  ^^^^^^^^^
+Highlighted span: induction
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:8:3-9:1
+Invalid alternative name `ofNat`: Expected `zero`, `succ`, or `pred`
+Source line 8:
+  | ofNat m =>
+  ^
+Highlighted span: |
+
+ERROR .LspCheck.lean:10:3-11:1
+Invalid alternative name `negSucc`: Expected `zero`, `succ`, or `pred`
+Source line 10:
+  | negSucc m =>
+  ^
+Highlighted span: |
+
+ERROR .LspCheck.lean:7:3-7:12
+Alternative `zero` has not been provided
+Source line 7:
+  induction n with
+  ^^^^^^^^^
+Highlighted span: induction
+
+ERROR .LspCheck.lean:7:3-7:12
+Alternative `succ` has not been provided
+Source line 7:
+  induction n with
+  ^^^^^^^^^
+Highlighted span: induction
+
+ERROR .LspCheck.lean:7:3-7:12
+Alternative `pred` has not been provided
+Source line 7:
+  induction n with
+  ^^^^^^^^^
+Highlighted span: induction
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_add_int' [AddGroupWithOne G] [AddGroup H] [AddConstMapClass F G H 1 b]
+    (f : F) (x : G) (n : ℤ) : f (x + n) = f x + n • b := by
+  cases n using Int.inductionOn with
+  | hz =>
+      simp
+  | hp n ih =>
+      simpa [Int.ofNat_eq_coe, add_assoc, add_left_comm, add_comm, zsmul_intNatEq_natCast_mul] using
+        (by
+          rw [show x + (n : ℤ) + 1 = (x + (n : ℤ)) + 1 by abel]
+          rw [map_add, ih, map_one]
+          abel)
+  | hn n ih =>
+      simpa [Int.negSucc_eq, add_assoc, add_left_comm, add_comm] using
+        (by
+          rw [show x + Int.negSucc n = (x + (Int.ofNat (n + 1) : ℤ)) + (-1) by
+            simp [Int.negSucc_eq, add_assoc, add_left_comm, add_comm]]
+          rw [map_add, map_neg_eq_sub, map_one, ih]
+          simp [Int.negSucc_eq, add_assoc, add_left_comm, add_comm, sub_eq_add_neg, zsmul_neg]
+          abel)
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:7:17-7:32
+Unknown constant `Int.inductionOn`
+Source line 7:
+  cases n using Int.inductionOn with
+                ^^^^^^^^^^^^^^^
+Highlighted span: Int.inductionOn
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:7:17-7:32
+Unknown constant `Int.inductionOn`
+Source line 7:
+  cases n using Int.inductionOn with
+                ^^^^^^^^^^^^^^^
+Highlighted span: Int.inductionOn

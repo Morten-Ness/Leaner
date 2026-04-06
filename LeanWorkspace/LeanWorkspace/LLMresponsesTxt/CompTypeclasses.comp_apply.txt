@@ -1,0 +1,80 @@
+FILE: CompTypeclasses.comp_apply.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: CompTypeclasses.comp_apply.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {M N P : Type*} [Monoid M] [Monoid N] [Monoid P]
+
+theorem comp_apply
+    {φ : M →* N} {ψ : N →* P} {χ : M →* P} (h : MonoidHom.CompTriple φ ψ χ) (x : M) :
+    ψ (φ x) = χ x := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M N P : Type*} [Monoid M] [Monoid N] [Monoid P]
+
+theorem comp_apply
+    {φ : M →* N} {ψ : N →* P} {χ : M →* P} (h : MonoidHom.CompTriple φ ψ χ) (x : M) :
+    ψ (φ x) = χ x := by
+  exact h x
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:8:9-8:12
+Function expected at
+  h
+but this term has type
+  φ.CompTriple ψ χ
+
+Note: Expected a function because this term is being applied to the argument
+  x
+Source line 8:
+  exact h x
+        ^^^
+Highlighted span: h x
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:8:9-8:12
+Function expected at
+  h
+but this term has type
+  φ.CompTriple ψ χ
+
+Note: Expected a function because this term is being applied to the argument
+  x
+Source line 8:
+  exact h x
+        ^^^
+Highlighted span: h x
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M N P : Type*} [Monoid M] [Monoid N] [Monoid P]
+
+theorem comp_apply
+    {φ : M →* N} {ψ : N →* P} {χ : M →* P} (h : MonoidHom.CompTriple φ ψ χ) (x : M) :
+    ψ (φ x) = χ x := by
+  change (ψ.comp φ) x = χ x
+  simpa [MonoidHom.CompTriple] using congrArg (fun f : M →* P => f x) h
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

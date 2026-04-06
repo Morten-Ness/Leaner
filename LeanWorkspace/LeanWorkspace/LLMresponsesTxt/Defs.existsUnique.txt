@@ -1,0 +1,79 @@
+FILE: Defs.existsUnique.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Defs.existsUnique.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable (R : Type*)
+
+variable [NonAssocSemiring R]
+
+theorem existsUnique : ∃! p, CharP R p := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (R : Type*)
+
+variable [NonAssocSemiring R]
+
+theorem existsUnique : ∃! p, CharP R p := by
+  simpa using (ringChar.spec R)
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:8:3-8:32
+Type mismatch: After simplification, term
+  ringChar.spec R
+ has type
+  ∀ (x : ℕ), ↑x = 0 ↔ ringChar R ∣ x
+but is expected to have type
+  ∃! p, CharP R p
+Source line 8:
+  simpa using (ringChar.spec R)
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa using (ringChar.spec R)
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:8:3-8:32
+Type mismatch: After simplification, term
+  ringChar.spec R
+ has type
+  ∀ (x : ℕ), ↑x = 0 ↔ ringChar R ∣ x
+but is expected to have type
+  ∃! p, CharP R p
+Source line 8:
+  simpa using (ringChar.spec R)
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa using (ringChar.spec R)
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (R : Type*)
+
+variable [NonAssocSemiring R]
+
+theorem existsUnique : ∃! p, CharP R p := by
+  refine ⟨ringChar R, ringChar.charP R, ?_⟩
+  intro q hq
+  exact CharP.eq R hq (ringChar.charP R)
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

@@ -1,0 +1,365 @@
+FILE: Ker.map_eq_map_iff.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Ker.map_eq_map_iff.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N] (H : Subgroup G)
+
+variable (f : G →* N)
+
+theorem map_eq_map_iff {f : G →* N} {H K : Subgroup G} :
+    H.map f = K.map f ↔ H ⊔ f.ker = K ⊔ f.ker := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N] (H : Subgroup G)
+
+variable (f : G →* N)
+
+theorem map_eq_map_iff {f : G →* N} {H K : Subgroup G} :
+    H.map f = K.map f ↔ H ⊔ f.ker = K ⊔ f.ker := by
+  constructor
+  · intro h
+    ext x
+    constructor
+    · intro hx
+      rcases hx with ⟨hmem, kmem⟩
+      have hxmap : f x ∈ K.map f := by
+        rw [← h]
+        exact ⟨x, hmem, rfl⟩
+      rcases hxmap with ⟨y, hymem, hyfx⟩
+      refine mem_sup.2 ?_
+      refine ⟨y, ?_⟩
+      constructor
+      · exact hymem
+      · have hker : y⁻¹ * x ∈ f.ker := by
+          rw [Subgroup.mem_ker]
+          change f (y⁻¹ * x) = 1
+          rw [map_mul, map_inv, hyfx]
+      · simpa [mul_assoc] using hker
+    · intro hx
+      rcases hx with ⟨kmem, hkmem⟩
+      have hxmap : f x ∈ H.map f := by
+        rw [h]
+        exact ⟨x, kmem, rfl⟩
+      rcases hxmap with ⟨y, hymem, hyfx⟩
+      refine mem_sup.2 ?_
+      refine ⟨y, ?_⟩
+      constructor
+      · exact hymem
+      · have hker : y⁻¹ * x ∈ f.ker := by
+          rw [Subgroup.mem_ker]
+          change f (y⁻¹ * x) = 1
+          rw [map_mul, map_inv, hyfx]
+      · simpa [mul_assoc] using hker
+  · intro h
+    apply le_antisymm
+    · rw [Subgroup.map_le_iff_le_comap]
+      intro x hx
+      have : x ∈ K ⊔ f.ker := by
+        rw [← h]
+        exact show x ∈ H ⊔ f.ker from mem_sup.2 ⟨x, hx, by simpa using Subgroup.one_mem f.ker⟩
+      rcases mem_sup.1 this with ⟨y, hymem, hyker⟩
+      refine ⟨y, hymem, ?_⟩
+      have hyx : y * (y⁻¹ * x) = x := by simp [mul_assoc]
+      have hfk : f (y⁻¹ * x) = 1 := by
+        exact hyker
+      calc
+        f y = f (y * (y⁻¹ * x)) := by rw [hyx]
+        _ = f y * f (y⁻¹ * x) := by rw [map_mul]
+        _ = f x := by rw [hfk, mul_one]
+    · rw [Subgroup.map_le_iff_le_comap]
+      intro x hx
+      have : x ∈ H ⊔ f.ker := by
+        rw [h]
+        exact show x ∈ K ⊔ f.ker from mem_sup.2 ⟨x, hx, by simpa using Subgroup.one_mem f.ker⟩
+      rcases mem_sup.1 this with ⟨y, hymem, hyker⟩
+      refine ⟨y, hymem, ?_⟩
+      have hyx : y * (y⁻¹ * x) = x := by simp [mul_assoc]
+      have hfk : f (y⁻¹ * x) = 1 := by
+        exact hyker
+      calc
+        f y = f (y * (y⁻¹ * x)) := by rw [hyx]
+        _ = f y * f (y⁻¹ * x) := by rw [map_mul]
+        _ = f x := by rw [hfk, mul_one]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:20:22-20:34
+Tactic `rcases` failed: `hx : ∀ t ∈ Set.range fun S ↦ ⋂ (_ : S ∈ {x | H ≤ x ∧ f.ker ≤ x}), ↑S,
+  x ∈ t` is not an inductive datatype
+Source line 20:
+      rcases hx with ⟨hmem, kmem⟩
+                     ^^^^^^^^^^^^
+Highlighted span: ⟨hmem, kmem⟩
+
+ERROR .LspCheck.lean:35:22-35:35
+Tactic `rcases` failed: `hx : ∀ t ∈ Set.range fun S ↦ ⋂ (_ : S ∈ {x | K ≤ x ∧ f.ker ≤ x}), ↑S,
+  x ∈ t` is not an inductive datatype
+Source line 35:
+      rcases hx with ⟨kmem, hkmem⟩
+                     ^^^^^^^^^^^^^
+Highlighted span: ⟨kmem, hkmem⟩
+
+ERROR .LspCheck.lean:55:39-55:46
+Unknown identifier `mem_sup`
+Source line 55:
+        exact show x ∈ H ⊔ f.ker from mem_sup.2 ⟨x, hx, by simpa using Subgroup.one_mem f.ker⟩
+                                      ^^^^^^^
+Highlighted span: mem_sup
+
+ERROR .LspCheck.lean:56:14-56:21
+Unknown identifier `mem_sup`
+Source line 56:
+      rcases mem_sup.1 this with ⟨y, hymem, hyker⟩
+             ^^^^^^^
+Highlighted span: mem_sup
+
+ERROR .LspCheck.lean:56:34-56:51
+Tactic `rcases` failed: `x✝ : ?m.97` is not an inductive datatype
+Source line 56:
+      rcases mem_sup.1 this with ⟨y, hymem, hyker⟩
+                                 ^^^^^^^^^^^^^^^^^
+Highlighted span: ⟨y, hymem, hyker⟩
+
+ERROR .LspCheck.lean:69:39-69:46
+Unknown identifier `mem_sup`
+Source line 69:
+        exact show x ∈ K ⊔ f.ker from mem_sup.2 ⟨x, hx, by simpa using Subgroup.one_mem f.ker⟩
+                                      ^^^^^^^
+Highlighted span: mem_sup
+
+ERROR .LspCheck.lean:70:14-70:21
+Unknown identifier `mem_sup`
+Source line 70:
+      rcases mem_sup.1 this with ⟨y, hymem, hyker⟩
+             ^^^^^^^
+Highlighted span: mem_sup
+
+ERROR .LspCheck.lean:70:34-70:51
+Tactic `rcases` failed: `x✝ : ?m.136` is not an inductive datatype
+Source line 70:
+      rcases mem_sup.1 this with ⟨y, hymem, hyker⟩
+                                 ^^^^^^^^^^^^^^^^^
+Highlighted span: ⟨y, hymem, hyker⟩
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:20:22-20:34
+Tactic `rcases` failed: `hx : ∀ t ∈ Set.range fun S ↦ ⋂ (_ : S ∈ {x | H ≤ x ∧ f.ker ≤ x}), ↑S,
+  x ∈ t` is not an inductive datatype
+Source line 20:
+      rcases hx with ⟨hmem, kmem⟩
+                     ^^^^^^^^^^^^
+Highlighted span: ⟨hmem, kmem⟩
+
+ERROR .LspCheck.lean:35:22-35:35
+Tactic `rcases` failed: `hx : ∀ t ∈ Set.range fun S ↦ ⋂ (_ : S ∈ {x | K ≤ x ∧ f.ker ≤ x}), ↑S,
+  x ∈ t` is not an inductive datatype
+Source line 35:
+      rcases hx with ⟨kmem, hkmem⟩
+                     ^^^^^^^^^^^^^
+Highlighted span: ⟨kmem, hkmem⟩
+
+ERROR .LspCheck.lean:55:39-55:46
+Unknown identifier `mem_sup`
+Source line 55:
+        exact show x ∈ H ⊔ f.ker from mem_sup.2 ⟨x, hx, by simpa using Subgroup.one_mem f.ker⟩
+                                      ^^^^^^^
+Highlighted span: mem_sup
+
+ERROR .LspCheck.lean:56:14-56:21
+Unknown identifier `mem_sup`
+Source line 56:
+      rcases mem_sup.1 this with ⟨y, hymem, hyker⟩
+             ^^^^^^^
+Highlighted span: mem_sup
+
+ERROR .LspCheck.lean:56:34-56:51
+Tactic `rcases` failed: `x✝ : ?m.97` is not an inductive datatype
+Source line 56:
+      rcases mem_sup.1 this with ⟨y, hymem, hyker⟩
+                                 ^^^^^^^^^^^^^^^^^
+Highlighted span: ⟨y, hymem, hyker⟩
+
+ERROR .LspCheck.lean:69:39-69:46
+Unknown identifier `mem_sup`
+Source line 69:
+        exact show x ∈ K ⊔ f.ker from mem_sup.2 ⟨x, hx, by simpa using Subgroup.one_mem f.ker⟩
+                                      ^^^^^^^
+Highlighted span: mem_sup
+
+ERROR .LspCheck.lean:70:14-70:21
+Unknown identifier `mem_sup`
+Source line 70:
+      rcases mem_sup.1 this with ⟨y, hymem, hyker⟩
+             ^^^^^^^
+Highlighted span: mem_sup
+
+ERROR .LspCheck.lean:70:34-70:51
+Tactic `rcases` failed: `x✝ : ?m.136` is not an inductive datatype
+Source line 70:
+      rcases mem_sup.1 this with ⟨y, hymem, hyker⟩
+                                 ^^^^^^^^^^^^^^^^^
+Highlighted span: ⟨y, hymem, hyker⟩
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N] (H : Subgroup G)
+
+variable (f : G →* N)
+
+theorem map_eq_map_iff {f : G →* N} {H K : Subgroup G} :
+    H.map f = K.map f ↔ H ⊔ f.ker = K ⊔ f.ker := by
+  rw [Subgroup.eq_comm, Subgroup.map_eq_map_iff]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:7-15:23
+Unknown constant `Subgroup.eq_comm`
+Source line 15:
+  rw [Subgroup.eq_comm, Subgroup.map_eq_map_iff]
+      ^^^^^^^^^^^^^^^^
+Highlighted span: Subgroup.eq_comm
+
+ERROR .LspCheck.lean:14:50-15:1
+unsolved goals
+G : Type u_1
+inst✝¹ : Group G
+N : Type u_5
+inst✝ : Group N
+f : G →* N
+H K : Subgroup G
+⊢ Subgroup.map f H = Subgroup.map f K ↔ H ⊔ f.ker = K ⊔ f.ker
+Source line 14:
+    H.map f = K.map f ↔ H ⊔ f.ker = K ⊔ f.ker := by
+                                                 ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:7-15:23
+Unknown constant `Subgroup.eq_comm`
+Source line 15:
+  rw [Subgroup.eq_comm, Subgroup.map_eq_map_iff]
+      ^^^^^^^^^^^^^^^^
+Highlighted span: Subgroup.eq_comm
+
+ERROR .LspCheck.lean:14:50-15:1
+unsolved goals
+G : Type u_1
+inst✝¹ : Group G
+N : Type u_5
+inst✝ : Group N
+f : G →* N
+H K : Subgroup G
+⊢ Subgroup.map f H = Subgroup.map f K ↔ H ⊔ f.ker = K ⊔ f.ker
+Source line 14:
+    H.map f = K.map f ↔ H ⊔ f.ker = K ⊔ f.ker := by
+                                                 ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N] (H : Subgroup G)
+
+variable (f : G →* N)
+
+theorem map_eq_map_iff {f : G →* N} {H K : Subgroup G} :
+    H.map f = K.map f ↔ H ⊔ f.ker = K ⊔ f.ker := by
+  constructor
+  · intro h
+    simpa [h]
+  · intro h
+    exact Subgroup.map_eq_map_iff.2 h
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:17:5-17:14
+Tactic `assumption` failed
+
+case mp
+G : Type u_1
+inst✝¹ : Group G
+N : Type u_5
+inst✝ : Group N
+f : G →* N
+H K : Subgroup G
+h : Subgroup.map f H = Subgroup.map f K
+⊢ H ⊔ f.ker = K ⊔ f.ker
+Source line 17:
+    simpa [h]
+    ^^^^^^^^^
+Highlighted span: simpa [h]
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:17:5-17:14
+Tactic `assumption` failed
+
+case mp
+G : Type u_1
+inst✝¹ : Group G
+N : Type u_5
+inst✝ : Group N
+f : G →* N
+H K : Subgroup G
+h : Subgroup.map f H = Subgroup.map f K
+⊢ H ⊔ f.ker = K ⊔ f.ker
+Source line 17:
+    simpa [h]
+    ^^^^^^^^^
+Highlighted span: simpa [h]

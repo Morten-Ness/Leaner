@@ -1,0 +1,671 @@
+FILE: Finite.pi_mem_of_mulSingle_mem.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Finite.pi_mem_of_mulSingle_mem.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {G : Type*} [Group G]
+
+variable {A : Type*} [AddGroup A]
+
+variable {η : Type*} {f : η → Type*} [∀ i, Group (f i)]
+
+theorem pi_mem_of_mulSingle_mem [Finite η] [DecidableEq η] {H : Subgroup (∀ i, f i)} (x : ∀ i, f i)
+    (h : ∀ i, Pi.mulSingle i (x i) ∈ H) : x ∈ H := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G : Type*} [Group G]
+
+variable {A : Type*} [AddGroup A]
+
+variable {η : Type*} {f : η → Type*} [∀ i, Group (f i)]
+
+theorem pi_mem_of_mulSingle_mem [Finite η] [DecidableEq η] {H : Subgroup (∀ i, f i)} (x : ∀ i, f i)
+    (h : ∀ i, Pi.mulSingle i (x i) ∈ H) : x ∈ H := by
+  classical
+  let s : Finset η := Finset.univ
+  have hs :
+      ∏ i in s, Pi.mulSingle i (x i) = x := by
+    ext j
+    simp [s]
+  rw [← hs]
+  exact Subgroup.prod_mem _ (fun i _ => h i)
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:10-14:13
+unexpected token 'in'; expected ','
+Source line 14:
+      ∏ i in s, Pi.mulSingle i (x i) = x := by
+         ^^^
+Highlighted span:  in
+
+ERROR .LspCheck.lean:12:23-12:34
+failed to synthesize instance of type class
+  Fintype η
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 12:
+  let s : Finset η := Finset.univ
+                      ^^^^^^^^^^^
+Highlighted span: Finset.univ
+
+ERROR .LspCheck.lean:14:7-14:10
+failed to synthesize instance of type class
+  CommMonoid (Sort ?u.2580.627)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 14:
+      ∏ i in s, Pi.mulSingle i (x i) = x := by
+      ^^^
+Highlighted span: ∏ i
+
+ERROR .LspCheck.lean:10:52-11:1
+unsolved goals
+case hs
+η : Type u_3
+f : η → Type u_4
+inst✝² : (i : η) → Group (f i)
+inst✝¹ : Finite η
+inst✝ : DecidableEq η
+H : Subgroup ((i : η) → f i)
+x : (i : η) → f i
+h : ∀ (i : η), Pi.mulSingle i (x i) ∈ H
+s : Finset η := sorry
+⊢ sorry
+
+η : Type u_3
+f : η → Type u_4
+inst✝² : (i : η) → Group (f i)
+inst✝¹ : Finite η
+inst✝ : DecidableEq η
+H : Subgroup ((i : η) → f i)
+x : (i : η) → f i
+h : ∀ (i : η), Pi.mulSingle i (x i) ∈ H
+s : Finset η := sorry
+hs : sorry
+⊢ x ∈ H
+Source line 10:
+    (h : ∀ i, Pi.mulSingle i (x i) ∈ H) : x ∈ H := by
+                                                   ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:10-14:13
+unexpected token 'in'; expected ','
+Source line 14:
+      ∏ i in s, Pi.mulSingle i (x i) = x := by
+         ^^^
+Highlighted span:  in
+
+ERROR .LspCheck.lean:12:23-12:34
+failed to synthesize instance of type class
+  Fintype η
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 12:
+  let s : Finset η := Finset.univ
+                      ^^^^^^^^^^^
+Highlighted span: Finset.univ
+
+ERROR .LspCheck.lean:14:7-14:10
+failed to synthesize instance of type class
+  CommMonoid (Sort ?u.2580.627)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 14:
+      ∏ i in s, Pi.mulSingle i (x i) = x := by
+      ^^^
+Highlighted span: ∏ i
+
+ERROR .LspCheck.lean:10:52-11:1
+unsolved goals
+case hs
+η : Type u_3
+f : η → Type u_4
+inst✝² : (i : η) → Group (f i)
+inst✝¹ : Finite η
+inst✝ : DecidableEq η
+H : Subgroup ((i : η) → f i)
+x : (i : η) → f i
+h : ∀ (i : η), Pi.mulSingle i (x i) ∈ H
+s : Finset η := sorry
+⊢ sorry
+
+η : Type u_3
+f : η → Type u_4
+inst✝² : (i : η) → Group (f i)
+inst✝¹ : Finite η
+inst✝ : DecidableEq η
+H : Subgroup ((i : η) → f i)
+x : (i : η) → f i
+h : ∀ (i : η), Pi.mulSingle i (x i) ∈ H
+s : Finset η := sorry
+hs : sorry
+⊢ x ∈ H
+Source line 10:
+    (h : ∀ i, Pi.mulSingle i (x i) ∈ H) : x ∈ H := by
+                                                   ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G : Type*} [Group G]
+
+variable {A : Type*} [AddGroup A]
+
+variable {η : Type*} {f : η → Type*} [∀ i, Group (f i)]
+
+theorem pi_mem_of_mulSingle_mem [Finite η] [DecidableEq η] {H : Subgroup (∀ i, f i)} (x : ∀ i, f i)
+    (h : ∀ i, Pi.mulSingle i (x i) ∈ H) : x ∈ H := by
+  classical
+  letI : Fintype η := Fintype.ofFinite η
+  have hs : (∏ i, Pi.mulSingle i (x i)) = x := by
+    ext j
+    simp [Pi.mulSingle]
+  rw [← hs]
+  exact Subgroup.list_prod_mem H ((Fintype.elems η).map fun i => Pi.mulSingle i (x i))
+    (by
+      intro y hy
+      rcases List.mem_map.mp hy with ⟨i, hi, rfl⟩
+      exact h i)
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:14-13:39
+failed to synthesize instance of type class
+  CommMonoid ((j : η) → f j)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 13:
+  have hs : (∏ i, Pi.mulSingle i (x i)) = x := by
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ∏ i, Pi.mulSingle i (x i)
+
+ERROR .LspCheck.lean:13:48-14:1
+unsolved goals
+case h
+η : Type u_3
+f : η → Type u_4
+inst✝² : (i : η) → Group (f i)
+inst✝¹ : Finite η
+inst✝ : DecidableEq η
+H : Subgroup ((i : η) → f i)
+x : (i : η) → f i
+h : ∀ (i : η), Pi.mulSingle i (x i) ∈ H
+this : Fintype η := Fintype.ofFinite η
+j : η
+⊢ sorry () j = x j
+Source line 13:
+  have hs : (∏ i, Pi.mulSingle i (x i)) = x := by
+                                               ^
+Highlighted span: b
+
+ERROR .LspCheck.lean:17:9-18:1
+Function expected at
+  Subgroup.list_prod_mem H ?m.50
+but this term has type
+  List.prod ?m.49 ∈ H
+
+Note: Expected a function because this term is being applied to the argument
+  (by
+    intro y hy
+    rcases List.mem_map.mp hy with ⟨i, hi, rfl⟩
+    exact h i)
+Source line 17:
+  exact Subgroup.list_prod_mem H ((Fintype.elems η).map fun i => Pi.mulSingle i (x i))
+        ^
+Highlighted span: S
+
+ERROR .LspCheck.lean:17:36-17:51
+Function expected at
+  Fintype.elems
+but this term has type
+  Finset ?m.52
+
+Note: Expected a function because this term is being applied to the argument
+  η
+Source line 17:
+  exact Subgroup.list_prod_mem H ((Fintype.elems η).map fun i => Pi.mulSingle i (x i))
+                                   ^^^^^^^^^^^^^^^
+Highlighted span: Fintype.elems η
+
+WARNING .LspCheck.lean:15:11-15:23
+This simp argument is unused:
+  Pi.mulSingle
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵P̵i̵.̵m̵u̵l̵S̵i̵n̵g̵l̵e̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 15:
+    simp [Pi.mulSingle]
+          ^^^^^^^^^^^^
+Highlighted span: Pi.mulSingle
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:14-13:39
+failed to synthesize instance of type class
+  CommMonoid ((j : η) → f j)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 13:
+  have hs : (∏ i, Pi.mulSingle i (x i)) = x := by
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ∏ i, Pi.mulSingle i (x i)
+
+ERROR .LspCheck.lean:13:48-14:1
+unsolved goals
+case h
+η : Type u_3
+f : η → Type u_4
+inst✝² : (i : η) → Group (f i)
+inst✝¹ : Finite η
+inst✝ : DecidableEq η
+H : Subgroup ((i : η) → f i)
+x : (i : η) → f i
+h : ∀ (i : η), Pi.mulSingle i (x i) ∈ H
+this : Fintype η := Fintype.ofFinite η
+j : η
+⊢ sorry () j = x j
+Source line 13:
+  have hs : (∏ i, Pi.mulSingle i (x i)) = x := by
+                                               ^
+Highlighted span: b
+
+ERROR .LspCheck.lean:17:9-18:1
+Function expected at
+  Subgroup.list_prod_mem H ?m.50
+but this term has type
+  List.prod ?m.49 ∈ H
+
+Note: Expected a function because this term is being applied to the argument
+  (by
+    intro y hy
+    rcases List.mem_map.mp hy with ⟨i, hi, rfl⟩
+    exact h i)
+Source line 17:
+  exact Subgroup.list_prod_mem H ((Fintype.elems η).map fun i => Pi.mulSingle i (x i))
+        ^
+Highlighted span: S
+
+ERROR .LspCheck.lean:17:36-17:51
+Function expected at
+  Fintype.elems
+but this term has type
+  Finset ?m.52
+
+Note: Expected a function because this term is being applied to the argument
+  η
+Source line 17:
+  exact Subgroup.list_prod_mem H ((Fintype.elems η).map fun i => Pi.mulSingle i (x i))
+                                   ^^^^^^^^^^^^^^^
+Highlighted span: Fintype.elems η
+
+WARNING .LspCheck.lean:15:11-15:23
+This simp argument is unused:
+  Pi.mulSingle
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵P̵i̵.̵m̵u̵l̵S̵i̵n̵g̵l̵e̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 15:
+    simp [Pi.mulSingle]
+          ^^^^^^^^^^^^
+Highlighted span: Pi.mulSingle
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G : Type*} [Group G]
+
+variable {A : Type*} [AddGroup A]
+
+variable {η : Type*} {f : η → Type*} [∀ i, Group (f i)]
+
+theorem pi_mem_of_mulSingle_mem [Finite η] [DecidableEq η] {H : Subgroup (∀ i, f i)} (x : ∀ i, f i)
+    (h : ∀ i, Pi.mulSingle i (x i) ∈ H) : x ∈ H := by
+  classical
+  letI : Fintype η := Fintype.ofFinite η
+  classical
+  induction Fintype.elems η using Finset.induction_on with
+  | empty =>
+      simp
+  | @insert i s hi hs =>
+      have hmul : Pi.mulSingle i (x i) * ∏ j ∈ s, Pi.mulSingle j (x j) ∈ H := by
+        exact H.mul_mem (h i) hs
+      have hprod :
+          (Pi.mulSingle i (x i) * ∏ j ∈ s, Pi.mulSingle j (x j)) = x := by
+        ext j
+        by_cases hji : j = i
+        · subst hji
+          simp [hi]
+        · simp [Finset.prod_mul_distrib, hji, hi]
+      simpa [Finset.prod_insert, hi] using hmul
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:13-14:28
+Function expected at
+  Fintype.elems
+but this term has type
+  Finset ?m.22
+
+Note: Expected a function because this term is being applied to the argument
+  η
+Source line 14:
+  induction Fintype.elems η using Finset.induction_on with
+            ^^^^^^^^^^^^^^^
+Highlighted span: Fintype.elems η
+
+ERROR .LspCheck.lean:16:7-16:11
+`simp` made no progress
+Source line 16:
+      simp
+      ^^^^
+Highlighted span: simp
+
+ERROR .LspCheck.lean:18:42-18:71
+failed to synthesize instance of type class
+  CommMonoid ((j : η) → f j)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 18:
+      have hmul : Pi.mulSingle i (x i) * ∏ j ∈ s, Pi.mulSingle j (x j) ∈ H := by
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ∏ j ∈ s, Pi.mulSingle j (x j)
+
+ERROR .LspCheck.lean:21:35-21:64
+failed to synthesize instance of type class
+  CommMonoid ((j : η) → f j)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 21:
+          (Pi.mulSingle i (x i) * ∏ j ∈ s, Pi.mulSingle j (x j)) = x := by
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ∏ j ∈ s, Pi.mulSingle j (x j)
+
+ERROR .LspCheck.lean:24:9-25:1
+unsolved goals
+case pos
+η : Type u_3
+f : η → Type u_4
+inst✝² : (i : η) → Group (f i)
+inst✝¹ : Finite η
+inst✝ : DecidableEq η
+H : Subgroup ((i : η) → f i)
+x : (i : η) → f i
+h : ∀ (i : η), Pi.mulSingle i (x i) ∈ H
+this : Fintype η := Fintype.ofFinite η
+s : Finset η
+hs : x ∈ H
+j : η
+hi : j ∉ s
+hmul : Pi.mulSingle j (x j) * sorry ∈ H
+⊢ sorry () j = 1
+Source line 24:
+        · subst hji
+        ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:26:9-26:50
+unsolved goals
+case neg
+η : Type u_3
+f : η → Type u_4
+inst✝² : (i : η) → Group (f i)
+inst✝¹ : Finite η
+inst✝ : DecidableEq η
+H : Subgroup ((i : η) → f i)
+x : (i : η) → f i
+h : ∀ (i : η), Pi.mulSingle i (x i) ∈ H
+this : Fintype η := Fintype.ofFinite η
+i : η
+s : Finset η
+hi : i ∉ s
+hs : x ∈ H
+hmul : Pi.mulSingle i (x i) * sorry ∈ H
+j : η
+hji : ¬j = i
+⊢ sorry () j = x j
+Source line 26:
+        · simp [Finset.prod_mul_distrib, hji, hi]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simp [Finset.prod_mul_distrib, hji, hi]
+
+ERROR .LspCheck.lean:10:52-11:1
+unsolved goals
+case inst
+η : Type u_3
+f : η → Type u_4
+inst✝² : (i : η) → Group (f i)
+inst✝¹ : Finite η
+inst✝ : DecidableEq η
+H : Subgroup ((i : η) → f i)
+x : (i : η) → f i
+h : ∀ (i : η), Pi.mulSingle i (x i) ∈ H
+this : Fintype η := Fintype.ofFinite η
+x✝ : Finset η
+⊢ DecidableEq η
+Source line 10:
+    (h : ∀ i, Pi.mulSingle i (x i) ∈ H) : x ∈ H := by
+                                                   ^
+Highlighted span: b
+
+WARNING .LspCheck.lean:25:17-25:19
+This simp argument is unused:
+  hi
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵i̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 25:
+          simp [hi]
+                ^^
+Highlighted span: hi
+
+WARNING .LspCheck.lean:26:17-26:40
+This simp argument is unused:
+  Finset.prod_mul_distrib
+
+Hint: Omit it from the simp argument list.
+  simp [F̵i̵n̵s̵e̵t̵.̵p̵r̵o̵d̵_̵m̵u̵l̵_̵d̵i̵s̵t̵r̵i̵b̵,̵ ̵hji, hi]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 26:
+        · simp [Finset.prod_mul_distrib, hji, hi]
+                ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.prod_mul_distrib
+
+WARNING .LspCheck.lean:26:47-26:49
+This simp argument is unused:
+  hi
+
+Hint: Omit it from the simp argument list.
+  simp [Finset.prod_mul_distrib, hji,̵ ̵h̵i̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 26:
+        · simp [Finset.prod_mul_distrib, hji, hi]
+                                              ^^
+Highlighted span: hi
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:13-14:28
+Function expected at
+  Fintype.elems
+but this term has type
+  Finset ?m.22
+
+Note: Expected a function because this term is being applied to the argument
+  η
+Source line 14:
+  induction Fintype.elems η using Finset.induction_on with
+            ^^^^^^^^^^^^^^^
+Highlighted span: Fintype.elems η
+
+ERROR .LspCheck.lean:16:7-16:11
+`simp` made no progress
+Source line 16:
+      simp
+      ^^^^
+Highlighted span: simp
+
+ERROR .LspCheck.lean:18:42-18:71
+failed to synthesize instance of type class
+  CommMonoid ((j : η) → f j)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 18:
+      have hmul : Pi.mulSingle i (x i) * ∏ j ∈ s, Pi.mulSingle j (x j) ∈ H := by
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ∏ j ∈ s, Pi.mulSingle j (x j)
+
+ERROR .LspCheck.lean:21:35-21:64
+failed to synthesize instance of type class
+  CommMonoid ((j : η) → f j)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 21:
+          (Pi.mulSingle i (x i) * ∏ j ∈ s, Pi.mulSingle j (x j)) = x := by
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ∏ j ∈ s, Pi.mulSingle j (x j)
+
+ERROR .LspCheck.lean:24:9-25:1
+unsolved goals
+case pos
+η : Type u_3
+f : η → Type u_4
+inst✝² : (i : η) → Group (f i)
+inst✝¹ : Finite η
+inst✝ : DecidableEq η
+H : Subgroup ((i : η) → f i)
+x : (i : η) → f i
+h : ∀ (i : η), Pi.mulSingle i (x i) ∈ H
+this : Fintype η := Fintype.ofFinite η
+s : Finset η
+hs : x ∈ H
+j : η
+hi : j ∉ s
+hmul : Pi.mulSingle j (x j) * sorry ∈ H
+⊢ sorry () j = 1
+Source line 24:
+        · subst hji
+        ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:26:9-26:50
+unsolved goals
+case neg
+η : Type u_3
+f : η → Type u_4
+inst✝² : (i : η) → Group (f i)
+inst✝¹ : Finite η
+inst✝ : DecidableEq η
+H : Subgroup ((i : η) → f i)
+x : (i : η) → f i
+h : ∀ (i : η), Pi.mulSingle i (x i) ∈ H
+this : Fintype η := Fintype.ofFinite η
+i : η
+s : Finset η
+hi : i ∉ s
+hs : x ∈ H
+hmul : Pi.mulSingle i (x i) * sorry ∈ H
+j : η
+hji : ¬j = i
+⊢ sorry () j = x j
+Source line 26:
+        · simp [Finset.prod_mul_distrib, hji, hi]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simp [Finset.prod_mul_distrib, hji, hi]
+
+ERROR .LspCheck.lean:10:52-11:1
+unsolved goals
+case inst
+η : Type u_3
+f : η → Type u_4
+inst✝² : (i : η) → Group (f i)
+inst✝¹ : Finite η
+inst✝ : DecidableEq η
+H : Subgroup ((i : η) → f i)
+x : (i : η) → f i
+h : ∀ (i : η), Pi.mulSingle i (x i) ∈ H
+this : Fintype η := Fintype.ofFinite η
+x✝ : Finset η
+⊢ DecidableEq η
+Source line 10:
+    (h : ∀ i, Pi.mulSingle i (x i) ∈ H) : x ∈ H := by
+                                                   ^
+Highlighted span: b
+
+WARNING .LspCheck.lean:25:17-25:19
+This simp argument is unused:
+  hi
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵i̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 25:
+          simp [hi]
+                ^^
+Highlighted span: hi
+
+WARNING .LspCheck.lean:26:17-26:40
+This simp argument is unused:
+  Finset.prod_mul_distrib
+
+Hint: Omit it from the simp argument list.
+  simp [F̵i̵n̵s̵e̵t̵.̵p̵r̵o̵d̵_̵m̵u̵l̵_̵d̵i̵s̵t̵r̵i̵b̵,̵ ̵hji, hi]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 26:
+        · simp [Finset.prod_mul_distrib, hji, hi]
+                ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.prod_mul_distrib
+
+WARNING .LspCheck.lean:26:47-26:49
+This simp argument is unused:
+  hi
+
+Hint: Omit it from the simp argument list.
+  simp [Finset.prod_mul_distrib, hji,̵ ̵h̵i̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 26:
+        · simp [Finset.prod_mul_distrib, hji, hi]
+                                              ^^
+Highlighted span: hi

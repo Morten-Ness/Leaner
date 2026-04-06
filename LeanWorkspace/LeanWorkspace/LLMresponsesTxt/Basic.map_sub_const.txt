@@ -1,0 +1,166 @@
+FILE: Basic.map_sub_const.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.map_sub_const.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_sub_const [AddGroup G] [AddGroup H] [AddConstMapClass F G H a b]
+    (f : F) (x : G) : f (x - a) = f x - b := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_sub_const [AddGroup G] [AddGroup H] [AddConstMapClass F G H a b]
+    (f : F) (x : G) : f (x - a) = f x - b := by
+  simpa [sub_eq_add_neg] using (map_add_const (f := f) (a := x) (b := -a))
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:7:33-7:46
+Unknown identifier `map_add_const`
+Source line 7:
+  simpa [sub_eq_add_neg] using (map_add_const (f := f) (a := x) (b := -a))
+                                ^^^^^^^^^^^^^
+Highlighted span: map_add_const
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:7:33-7:46
+Unknown identifier `map_add_const`
+Source line 7:
+  simpa [sub_eq_add_neg] using (map_add_const (f := f) (a := x) (b := -a))
+                                ^^^^^^^^^^^^^
+Highlighted span: map_add_const
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_sub_const [AddGroup G] [AddGroup H] [AddConstMapClass F G H a b]
+    (f : F) (x : G) : f (x - a) = f x - b := by
+  rw [sub_eq_add_neg, map_add_const, sub_eq_add_neg]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:7:23-7:36
+Unknown identifier `map_add_const`
+Source line 7:
+  rw [sub_eq_add_neg, map_add_const, sub_eq_add_neg]
+                      ^^^^^^^^^^^^^
+Highlighted span: map_add_const
+
+ERROR .LspCheck.lean:6:46-7:1
+unsolved goals
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝³ : FunLike F G H
+a : G
+b : H
+inst✝² : AddGroup G
+inst✝¹ : AddGroup H
+inst✝ : AddConstMapClass F G H a b
+f : F
+x : G
+⊢ f (x + -a) = f x - b
+Source line 6:
+    (f : F) (x : G) : f (x - a) = f x - b := by
+                                             ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:7:23-7:36
+Unknown identifier `map_add_const`
+Source line 7:
+  rw [sub_eq_add_neg, map_add_const, sub_eq_add_neg]
+                      ^^^^^^^^^^^^^
+Highlighted span: map_add_const
+
+ERROR .LspCheck.lean:6:46-7:1
+unsolved goals
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝³ : FunLike F G H
+a : G
+b : H
+inst✝² : AddGroup G
+inst✝¹ : AddGroup H
+inst✝ : AddConstMapClass F G H a b
+f : F
+x : G
+⊢ f (x + -a) = f x - b
+Source line 6:
+    (f : F) (x : G) : f (x - a) = f x - b := by
+                                             ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_sub_const [AddGroup G] [AddGroup H] [AddConstMapClass F G H a b]
+    (f : F) (x : G) : f (x - a) = f x - b := by
+  simpa [sub_eq_add_neg] using AddConstMapClass.map_const_add (F := F) (G := G) (H := H) (a := a) (b := b) f (-a) x
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:7:32-7:116
+Function expected at
+  AddConstMapClass.map_const_add f (-a)
+but this term has type
+  f (a + -a) = f (-a) + b
+
+Note: Expected a function because this term is being applied to the argument
+  x
+Source line 7:
+  simpa [sub_eq_add_neg] using AddConstMapClass.map_const_add (F := F) (G := G) (H := H) (a := a) (b := b) f (-a) x
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AddConstMapClass.map_const_add (F := F) (G := G) (H := H) (a := a) (b := b) f (-a) x
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:7:32-7:116
+Function expected at
+  AddConstMapClass.map_const_add f (-a)
+but this term has type
+  f (a + -a) = f (-a) + b
+
+Note: Expected a function because this term is being applied to the argument
+  x
+Source line 7:
+  simpa [sub_eq_add_neg] using AddConstMapClass.map_const_add (F := F) (G := G) (H := H) (a := a) (b := b) f (-a) x
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AddConstMapClass.map_const_add (F := F) (G := G) (H := H) (a := a) (b := b) f (-a) x

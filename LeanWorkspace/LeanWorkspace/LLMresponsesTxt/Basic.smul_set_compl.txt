@@ -1,0 +1,110 @@
+FILE: Basic.smul_set_compl.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.smul_set_compl.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Pointwise
+
+variable {F α β γ : Type*}
+
+variable [Group α] [MulAction α β] {s t A B : Set β} {a b : α} {x : β}
+
+theorem smul_set_compl : a • sᶜ = (a • s)ᶜ := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise
+
+variable {F α β γ : Type*}
+
+variable [Group α] [MulAction α β] {s t A B : Set β} {a b : α} {x : β}
+
+theorem smul_set_compl : a • sᶜ = (a • s)ᶜ := by
+  ext x
+  simp only [Set.mem_smul_set, Set.mem_compl_iff]
+  constructor
+  · rintro ⟨y, hy, rfl⟩ h
+    exact hy h
+  · intro hx
+    refine ⟨a⁻¹ • x, ?_, ?_⟩
+    · intro hs
+      apply hx
+      exact ⟨a⁻¹ • x, hs, by simp [smul_smul]⟩
+    · simp [smul_smul]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:14-14:15
+Application type mismatch: The argument
+  h
+has type
+  ∃ y_1 ∈ s, a • y_1 = a • y
+but is expected to have type
+  y ∈ s
+in the application
+  hy h
+Source line 14:
+    exact hy h
+             ^
+Highlighted span: h
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:14-14:15
+Application type mismatch: The argument
+  h
+has type
+  ∃ y_1 ∈ s, a • y_1 = a • y
+but is expected to have type
+  y ∈ s
+in the application
+  hy h
+Source line 14:
+    exact hy h
+             ^
+Highlighted span: h
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise
+
+variable {F α β γ : Type*}
+
+variable [Group α] [MulAction α β] {s t A B : Set β} {a b : α} {x : β}
+
+theorem smul_set_compl : a • sᶜ = (a • s)ᶜ := by
+  ext x
+  constructor
+  · rintro ⟨y, hy, rfl⟩ hx
+    apply hy
+    rcases hx with ⟨z, hz, hz_eq⟩
+    have : z = y := by
+      apply smul_left_cancel a
+      simpa [hz_eq]
+    simpa [this] using hz
+  · intro hx
+    refine ⟨a⁻¹ • x, ?_, by simp [smul_smul]⟩
+    intro hs
+    apply hx
+    refine ⟨a⁻¹ • x, hs, by simp [smul_smul]⟩
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

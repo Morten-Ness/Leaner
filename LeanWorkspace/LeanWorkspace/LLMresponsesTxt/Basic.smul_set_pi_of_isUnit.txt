@@ -1,0 +1,403 @@
+FILE: Basic.smul_set_pi_of_isUnit.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.smul_set_pi_of_isUnit.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Pointwise
+
+variable {F α β γ : Type*}
+
+theorem smul_set_pi_of_isUnit {M ι : Type*} {α : ι → Type*} [Monoid M] [∀ i, MulAction M (α i)]
+    {c : M} (hc : IsUnit c) (I : Set ι) (s : ∀ i, Set (α i)) : c • I.pi s = I.pi (c • s) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise
+
+variable {F α β γ : Type*}
+
+theorem smul_set_pi_of_isUnit {M ι : Type*} {α : ι → Type*} [Monoid M] [∀ i, MulAction M (α i)]
+    {c : M} (hc : IsUnit c) (I : Set ι) (s : ∀ i, Set (α i)) : c • I.pi s = I.pi (c • s) := by
+  rcases hc with ⟨u, rfl⟩
+  ext x
+  constructor
+  · rintro ⟨y, hy, rfl⟩ i hi
+    exact ⟨y i, hy i hi, rfl⟩
+  · intro hx
+    refine ⟨fun i => ↑(u⁻¹) • x i, ?_, ?_⟩
+    · intro i hi
+      rcases hx i hi with ⟨yi, hyi, hyi'⟩
+      rw [← hyi']
+      change ↑(u⁻¹) • (↑u • yi) ∈ s i
+      simpa using hyi
+    · ext i
+      simp
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:18:11-18:17
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  x i
+in the target expression
+  (fun i ↦ u⁻¹ • x i) i ∈ s i
+
+case h.mpr.refine_1
+M : Type u_5
+ι : Type u_6
+α : ι → Type u_7
+inst✝¹ : Monoid M
+inst✝ : (i : ι) → MulAction M (α i)
+I : Set ι
+s : (i : ι) → Set (α i)
+u : Mˣ
+x : (i : ι) → α i
+hx : x ∈ I.pi (↑u • s)
+i : ι
+hi : i ∈ I
+yi : α i
+hyi : yi ∈ s i
+hyi' : (fun x ↦ ↑u • x) yi = x i
+⊢ (fun i ↦ u⁻¹ • x i) i ∈ s i
+Source line 18:
+      rw [← hyi']
+          ^^^^^^
+Highlighted span: ← hyi'
+
+ERROR .LspCheck.lean:21:5-22:1
+unsolved goals
+case h.mpr.refine_2.h
+M : Type u_5
+ι : Type u_6
+α : ι → Type u_7
+inst✝¹ : Monoid M
+inst✝ : (i : ι) → MulAction M (α i)
+I : Set ι
+s : (i : ι) → Set (α i)
+u : Mˣ
+x : (i : ι) → α i
+hx : x ∈ I.pi (↑u • s)
+i : ι
+⊢ ↑u • u⁻¹ • x i = x i
+Source line 21:
+    · ext i
+    ^
+Highlighted span: ·
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:18:11-18:17
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  x i
+in the target expression
+  (fun i ↦ u⁻¹ • x i) i ∈ s i
+
+case h.mpr.refine_1
+M : Type u_5
+ι : Type u_6
+α : ι → Type u_7
+inst✝¹ : Monoid M
+inst✝ : (i : ι) → MulAction M (α i)
+I : Set ι
+s : (i : ι) → Set (α i)
+u : Mˣ
+x : (i : ι) → α i
+hx : x ∈ I.pi (↑u • s)
+i : ι
+hi : i ∈ I
+yi : α i
+hyi : yi ∈ s i
+hyi' : (fun x ↦ ↑u • x) yi = x i
+⊢ (fun i ↦ u⁻¹ • x i) i ∈ s i
+Source line 18:
+      rw [← hyi']
+          ^^^^^^
+Highlighted span: ← hyi'
+
+ERROR .LspCheck.lean:21:5-22:1
+unsolved goals
+case h.mpr.refine_2.h
+M : Type u_5
+ι : Type u_6
+α : ι → Type u_7
+inst✝¹ : Monoid M
+inst✝ : (i : ι) → MulAction M (α i)
+I : Set ι
+s : (i : ι) → Set (α i)
+u : Mˣ
+x : (i : ι) → α i
+hx : x ∈ I.pi (↑u • s)
+i : ι
+⊢ ↑u • u⁻¹ • x i = x i
+Source line 21:
+    · ext i
+    ^
+Highlighted span: ·
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise
+
+variable {F α β γ : Type*}
+
+theorem smul_set_pi_of_isUnit {M ι : Type*} {α : ι → Type*} [Monoid M] [∀ i, MulAction M (α i)]
+    {c : M} (hc : IsUnit c) (I : Set ι) (s : ∀ i, Set (α i)) : c • I.pi s = I.pi (c • s) := by
+  rcases hc with ⟨u, rfl⟩
+  ext x
+  constructor
+  · rintro ⟨y, hy, rfl⟩ i hi
+    exact ⟨y i, hy i hi, rfl⟩
+  · intro hx
+    refine ⟨fun i => ↑(u⁻¹) • x i, ?_, ?_⟩
+    · intro i hi
+      rcases hx i hi with ⟨yi, hyi, hyi'⟩
+      change ↑(u⁻¹) • x i ∈ s i
+      rw [← hyi']
+      simpa [smul_smul] using hyi
+    · ext i
+      change ↑u • (↑(u⁻¹) • x i) = x i
+      simpa [smul_smul] using (one_smul M (x i))
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:20:7-20:34
+Type mismatch: After simplification, term
+  hyi
+ has type
+  yi ∈ s i
+but is expected to have type
+  u⁻¹ • ↑u • yi ∈ s i
+Source line 20:
+      simpa [smul_smul] using hyi
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [smul_smul] using hyi
+
+WARNING .LspCheck.lean:23:7-23:49
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 23:
+      simpa [smul_smul] using (one_smul M (x i))
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [smul_smul] using (one_smul M (x i))
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:20:7-20:34
+Type mismatch: After simplification, term
+  hyi
+ has type
+  yi ∈ s i
+but is expected to have type
+  u⁻¹ • ↑u • yi ∈ s i
+Source line 20:
+      simpa [smul_smul] using hyi
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [smul_smul] using hyi
+
+WARNING .LspCheck.lean:23:7-23:49
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 23:
+      simpa [smul_smul] using (one_smul M (x i))
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [smul_smul] using (one_smul M (x i))
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise
+
+variable {F α β γ : Type*}
+
+theorem smul_set_pi_of_isUnit {M ι : Type*} {α : ι → Type*} [Monoid M] [∀ i, MulAction M (α i)]
+    {c : M} (hc : IsUnit c) (I : Set ι) (s : ∀ i, Set (α i)) : c • I.pi s = I.pi (c • s) := by
+  rcases hc with ⟨u, rfl⟩
+  ext x
+  constructor
+  · rintro ⟨y, hy, rfl⟩ i hi
+    exact ⟨y i, hy i hi, rfl⟩
+  · intro hx
+    refine ⟨fun i => ↑(u⁻¹) • x i, ?_, ?_⟩
+    · intro i hi
+      rcases hx i hi with ⟨yi, hyi, hyi'⟩
+      change ↑(u⁻¹) • x i ∈ s i
+      rw [← hyi']
+      simpa only [Units.val_inv_eq_inv_val, smul_smul, Units.inv_mul, one_smul] using hyi
+    · ext i
+      change ↑u • (↑(u⁻¹) • x i) = x i
+      simp only [Units.val_inv_eq_inv_val, smul_smul, Units.mul_inv, one_smul]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:20:7-20:90
+Type mismatch: After simplification, term
+  hyi
+ has type
+  yi ∈ s i
+but is expected to have type
+  u⁻¹ • ↑u • yi ∈ s i
+Source line 20:
+      simpa only [Units.val_inv_eq_inv_val, smul_smul, Units.inv_mul, one_smul] using hyi
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa only [Units.val_inv_eq_inv_val, smul_smul, Units.inv_mul, one_smul] using hyi
+
+ERROR .LspCheck.lean:21:5-22:1
+unsolved goals
+case h.mpr.refine_2.h
+M : Type u_5
+ι : Type u_6
+α : ι → Type u_7
+inst✝¹ : Monoid M
+inst✝ : (i : ι) → MulAction M (α i)
+I : Set ι
+s : (i : ι) → Set (α i)
+u : Mˣ
+x : (i : ι) → α i
+hx : x ∈ I.pi (↑u • s)
+i : ι
+⊢ (u * u⁻¹) • x i = x i
+Source line 21:
+    · ext i
+    ^
+Highlighted span: ·
+
+WARNING .LspCheck.lean:23:18-23:42
+This simp argument is unused:
+  Units.val_inv_eq_inv_val
+
+Hint: Omit it from the simp argument list.
+  simp only [̵U̵n̵i̵t̵s̵.̵v̵a̵l̵_̵i̵n̵v̵_̵e̵q̵_̵i̵n̵v̵_̵v̵a̵l̵,̵ ̵s̵m̵u̵l̵_̵s̵m̵u̵l̵,̵[̲s̲m̲u̲l̲_̲s̲m̲u̲l̲,̲ Units.mul_inv, one_smul]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 23:
+      simp only [Units.val_inv_eq_inv_val, smul_smul, Units.mul_inv, one_smul]
+                 ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Units.val_inv_eq_inv_val
+
+WARNING .LspCheck.lean:23:55-23:68
+This simp argument is unused:
+  Units.mul_inv
+
+Hint: Omit it from the simp argument list.
+  simp only [Units.val_inv_eq_inv_val, smul_smul, U̵n̵i̵t̵s̵.̵m̵u̵l̵_̵i̵n̵v̵,̵ ̵one_smul]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 23:
+      simp only [Units.val_inv_eq_inv_val, smul_smul, Units.mul_inv, one_smul]
+                                                      ^^^^^^^^^^^^^
+Highlighted span: Units.mul_inv
+
+WARNING .LspCheck.lean:23:70-23:78
+This simp argument is unused:
+  one_smul
+
+Hint: Omit it from the simp argument list.
+  simp only [Units.val_inv_eq_inv_val, smul_smul, Units.mul_inv,̵ ̵o̵n̵e̵_̵s̵m̵u̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 23:
+      simp only [Units.val_inv_eq_inv_val, smul_smul, Units.mul_inv, one_smul]
+                                                                     ^^^^^^^^
+Highlighted span: one_smul
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:20:7-20:90
+Type mismatch: After simplification, term
+  hyi
+ has type
+  yi ∈ s i
+but is expected to have type
+  u⁻¹ • ↑u • yi ∈ s i
+Source line 20:
+      simpa only [Units.val_inv_eq_inv_val, smul_smul, Units.inv_mul, one_smul] using hyi
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa only [Units.val_inv_eq_inv_val, smul_smul, Units.inv_mul, one_smul] using hyi
+
+ERROR .LspCheck.lean:21:5-22:1
+unsolved goals
+case h.mpr.refine_2.h
+M : Type u_5
+ι : Type u_6
+α : ι → Type u_7
+inst✝¹ : Monoid M
+inst✝ : (i : ι) → MulAction M (α i)
+I : Set ι
+s : (i : ι) → Set (α i)
+u : Mˣ
+x : (i : ι) → α i
+hx : x ∈ I.pi (↑u • s)
+i : ι
+⊢ (u * u⁻¹) • x i = x i
+Source line 21:
+    · ext i
+    ^
+Highlighted span: ·
+
+WARNING .LspCheck.lean:23:18-23:42
+This simp argument is unused:
+  Units.val_inv_eq_inv_val
+
+Hint: Omit it from the simp argument list.
+  simp only [̵U̵n̵i̵t̵s̵.̵v̵a̵l̵_̵i̵n̵v̵_̵e̵q̵_̵i̵n̵v̵_̵v̵a̵l̵,̵ ̵s̵m̵u̵l̵_̵s̵m̵u̵l̵,̵[̲s̲m̲u̲l̲_̲s̲m̲u̲l̲,̲ Units.mul_inv, one_smul]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 23:
+      simp only [Units.val_inv_eq_inv_val, smul_smul, Units.mul_inv, one_smul]
+                 ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Units.val_inv_eq_inv_val
+
+WARNING .LspCheck.lean:23:55-23:68
+This simp argument is unused:
+  Units.mul_inv
+
+Hint: Omit it from the simp argument list.
+  simp only [Units.val_inv_eq_inv_val, smul_smul, U̵n̵i̵t̵s̵.̵m̵u̵l̵_̵i̵n̵v̵,̵ ̵one_smul]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 23:
+      simp only [Units.val_inv_eq_inv_val, smul_smul, Units.mul_inv, one_smul]
+                                                      ^^^^^^^^^^^^^
+Highlighted span: Units.mul_inv
+
+WARNING .LspCheck.lean:23:70-23:78
+This simp argument is unused:
+  one_smul
+
+Hint: Omit it from the simp argument list.
+  simp only [Units.val_inv_eq_inv_val, smul_smul, Units.mul_inv,̵ ̵o̵n̵e̵_̵s̵m̵u̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 23:
+      simp only [Units.val_inv_eq_inv_val, smul_smul, Units.mul_inv, one_smul]
+                                                                     ^^^^^^^^
+Highlighted span: one_smul

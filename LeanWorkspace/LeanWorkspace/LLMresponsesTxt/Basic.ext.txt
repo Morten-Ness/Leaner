@@ -1,0 +1,156 @@
+FILE: Basic.ext.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.ext.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable (k : Type*) {V V₂ V₃ : Type*} (P P₂ P₃ : Type*)
+
+variable [Ring k] [AddCommGroup V] [AddCommGroup V₂] [AddCommGroup V₃]
+
+variable [Module k V] [Module k V₂] [Module k V₃]
+
+variable [AddTorsor V P] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃]
+
+variable {P P₂ P₃}
+
+variable {k}
+
+theorem ext {n : ℕ} {s1 s2 : Affine.Simplex k P n} (h : ∀ i, s1.points i = s2.points i) : s1 = s2 := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (k : Type*) {V V₂ V₃ : Type*} (P P₂ P₃ : Type*)
+
+variable [Ring k] [AddCommGroup V] [AddCommGroup V₂] [AddCommGroup V₃]
+
+variable [Module k V] [Module k V₂] [Module k V₃]
+
+variable [AddTorsor V P] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃]
+
+variable {P P₂ P₃}
+
+variable {k}
+
+theorem ext {n : ℕ} {s1 s2 : Affine.Simplex k P n} (h : ∀ i, s1.points i = s2.points i) : s1 = s2 := by
+  cases s1
+  cases s2
+  simp at h
+  simp [h]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:102-16:1
+unsolved goals
+case mk.mk
+k : Type u_1
+V : Type u_2
+P : Type u_5
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+inst✝ : AddTorsor V P
+n : ℕ
+points✝¹ : Fin (n + 1) → P
+independent✝¹ : AffineIndependent k points✝¹
+points✝ : Fin (n + 1) → P
+independent✝ : AffineIndependent k points✝
+h : ∀ (i : Fin (n + 1)), points✝¹ i = points✝ i
+⊢ points✝¹ = points✝
+Source line 15:
+theorem ext {n : ℕ} {s1 s2 : Affine.Simplex k P n} (h : ∀ i, s1.points i = s2.points i) : s1 = s2 := by
+                                                                                                     ^
+Highlighted span: b
+
+WARNING .LspCheck.lean:19:9-19:10
+This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 19:
+  simp [h]
+        ^
+Highlighted span: h
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:102-16:1
+unsolved goals
+case mk.mk
+k : Type u_1
+V : Type u_2
+P : Type u_5
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+inst✝ : AddTorsor V P
+n : ℕ
+points✝¹ : Fin (n + 1) → P
+independent✝¹ : AffineIndependent k points✝¹
+points✝ : Fin (n + 1) → P
+independent✝ : AffineIndependent k points✝
+h : ∀ (i : Fin (n + 1)), points✝¹ i = points✝ i
+⊢ points✝¹ = points✝
+Source line 15:
+theorem ext {n : ℕ} {s1 s2 : Affine.Simplex k P n} (h : ∀ i, s1.points i = s2.points i) : s1 = s2 := by
+                                                                                                     ^
+Highlighted span: b
+
+WARNING .LspCheck.lean:19:9-19:10
+This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 19:
+  simp [h]
+        ^
+Highlighted span: h
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (k : Type*) {V V₂ V₃ : Type*} (P P₂ P₃ : Type*)
+
+variable [Ring k] [AddCommGroup V] [AddCommGroup V₂] [AddCommGroup V₃]
+
+variable [Module k V] [Module k V₂] [Module k V₃]
+
+variable [AddTorsor V P] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃]
+
+variable {P P₂ P₃}
+
+variable {k}
+
+theorem ext {n : ℕ} {s1 s2 : Affine.Simplex k P n} (h : ∀ i, s1.points i = s2.points i) : s1 = s2 := by
+  cases s1 with
+  | mk points1 indep1 =>
+    cases s2 with
+    | mk points2 indep2 =>
+      have hfun : points1 = points2 := funext h
+      subst hfun
+      simp
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

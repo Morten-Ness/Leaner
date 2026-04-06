@@ -1,0 +1,75 @@
+FILE: Defs.of_not_dvd.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Defs.of_not_dvd.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable (R : Type*)
+
+variable [AddMonoidWithOne R] {r : R} {n p : ℕ}
+
+theorem of_not_dvd [CharP R p] (h : ¬p ∣ n) : NeZero (n : R) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (R : Type*)
+
+variable [AddMonoidWithOne R] {r : R} {n p : ℕ}
+
+theorem of_not_dvd [CharP R p] (h : ¬p ∣ n) : NeZero (n : R) := by
+  rw [NeZero]
+  intro hn
+  apply h
+  exact (CharP.cast_eq_zero_iff (R := R) p n).mp hn
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:8:7-8:13
+Invalid rewrite argument: Expected an equality or iff proof or definition name, but `NeZero ?n` is a value of type
+  Prop
+Source line 8:
+  rw [NeZero]
+      ^^^^^^
+Highlighted span: NeZero
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:8:7-8:13
+Invalid rewrite argument: Expected an equality or iff proof or definition name, but `NeZero ?n` is a value of type
+  Prop
+Source line 8:
+  rw [NeZero]
+      ^^^^^^
+Highlighted span: NeZero
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (R : Type*)
+
+variable [AddMonoidWithOne R] {r : R} {n p : ℕ}
+
+theorem of_not_dvd [CharP R p] (h : ¬p ∣ n) : NeZero (n : R) := by
+  refine ⟨?_⟩
+  intro hn
+  apply h
+  exact (CharP.cast_eq_zero_iff (R := R) p n).mp hn
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

@@ -1,0 +1,273 @@
+FILE: Operations.smul_induction_on'.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Operations.smul_induction_on'.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R : Type u} [Semiring R] {A : Type v} [Semiring A] [Module R A]
+
+variable {M : Type*} [AddCommMonoid M] [Module R M] [Module A M] [IsScalarTower R A M]
+
+variable {I J : Submodule R A} {N P : Submodule R M}
+
+theorem smul_induction_on' {x : M} (hx : x ∈ I • N) {p : ∀ x, x ∈ I • N → Prop}
+    (smul : ∀ (r : A) (hr : r ∈ I) (n : M) (hn : n ∈ N), p (r • n) (Submodule.smul_mem_smul hr hn))
+    (add : ∀ x hx y hy, p x hx → p y hy → p (x + y) (add_mem ‹_› ‹_›)) : p x hx := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type u} [Semiring R] {A : Type v} [Semiring A] [Module R A]
+
+variable {M : Type*} [AddCommMonoid M] [Module R M] [Module A M] [IsScalarTower R A M]
+
+variable {I J : Submodule R A} {N P : Submodule R M}
+
+theorem smul_induction_on' {x : M} (hx : x ∈ I • N) {p : ∀ x, x ∈ I • N → Prop}
+    (smul : ∀ (r : A) (hr : r ∈ I) (n : M) (hn : n ∈ N), p (r • n) (Submodule.smul_mem_smul hr hn))
+    (add : ∀ x hx y hy, p x hx → p y hy → p (x + y) (add_mem ‹_› ‹_›)) : p x hx := by
+  rw [Submodule.smul_span] at hx
+  induction hx using Submodule.span_induction with
+  | mem y hy =>
+      rcases hy with ⟨z, hz, rfl⟩
+      rcases hz with ⟨r, hr, n, hn, rfl⟩
+      simpa using smul r hr n hn
+  | zero =>
+      simpa using add 0 (Submodule.zero_mem _) 0 (Submodule.zero_mem _)
+        (smul 0 I.zero_mem 0 N.zero_mem) (smul 0 I.zero_mem 0 N.zero_mem)
+  | add x y hx hy ihx ihy =>
+      exact add x hx y hy ihx ihy
+  | smul a x hx ih =>
+      rcases ih with ih
+      rcases hx with hx
+      rw [Submodule.smul_span] at hx ⊢
+      exact Submodule.subset_span ⟨a, hx, rfl⟩
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:7-12:26
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?a • Submodule.span ?m.87 ?s
+in the target expression
+  x ∈ I • N
+
+R : Type u
+inst✝⁶ : Semiring R
+A : Type v
+inst✝⁵ : Semiring A
+inst✝⁴ : Module R A
+M : Type u_1
+inst✝³ : AddCommMonoid M
+inst✝² : Module R M
+inst✝¹ : Module A M
+inst✝ : IsScalarTower R A M
+I : Submodule R A
+N : Submodule R M
+x : M
+hx : x ∈ I • N
+p : (x : M) → x ∈ I • N → Prop
+smul : ∀ (r : A) (hr : r ∈ I) (n : M) (hn : n ∈ N), p (r • n) ⋯
+add : ∀ (x : M) (hx : x ∈ I • N) (y : M) (hy : y ∈ I • N), p x hx → p y hy → p (x + y) ⋯
+⊢ p x hx
+Source line 12:
+  rw [Submodule.smul_span] at hx
+      ^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submodule.smul_span
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:7-12:26
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?a • Submodule.span ?m.87 ?s
+in the target expression
+  x ∈ I • N
+
+R : Type u
+inst✝⁶ : Semiring R
+A : Type v
+inst✝⁵ : Semiring A
+inst✝⁴ : Module R A
+M : Type u_1
+inst✝³ : AddCommMonoid M
+inst✝² : Module R M
+inst✝¹ : Module A M
+inst✝ : IsScalarTower R A M
+I : Submodule R A
+N : Submodule R M
+x : M
+hx : x ∈ I • N
+p : (x : M) → x ∈ I • N → Prop
+smul : ∀ (r : A) (hr : r ∈ I) (n : M) (hn : n ∈ N), p (r • n) ⋯
+add : ∀ (x : M) (hx : x ∈ I • N) (y : M) (hy : y ∈ I • N), p x hx → p y hy → p (x + y) ⋯
+⊢ p x hx
+Source line 12:
+  rw [Submodule.smul_span] at hx
+      ^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submodule.smul_span
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type u} [Semiring R] {A : Type v} [Semiring A] [Module R A]
+
+variable {M : Type*} [AddCommMonoid M] [Module R M] [Module A M] [IsScalarTower R A M]
+
+variable {I J : Submodule R A} {N P : Submodule R M}
+
+theorem smul_induction_on' {x : M} (hx : x ∈ I • N) {p : ∀ x, x ∈ I • N → Prop}
+    (smul : ∀ (r : A) (hr : r ∈ I) (n : M) (hn : n ∈ N), p (r • n) (Submodule.smul_mem_smul hr hn))
+    (add : ∀ x hx y hy, p x hx → p y hy → p (x + y) (add_mem ‹_› ‹_›)) : p x hx := by
+  refine Submodule.smul_induction_on hx ?smul ?add
+  · intro r hr n hn
+    simpa using smul r hr n hn
+  · intro x hx' y hy' hxpy hypy
+    exact add x hx' y hy' hxpy hypy
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:10-12:51
+failed to elaborate eliminator, motive is not type correct:
+  fun x ↦ p x hx
+Source line 12:
+  refine Submodule.smul_induction_on hx ?smul ?add
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submodule.smul_induction_on hx ?smul ?add
+
+ERROR .LspCheck.lean:13:3-14:1
+No goals to be solved
+Source line 13:
+  · intro r hr n hn
+  ^
+Highlighted span: ·
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:10-12:51
+failed to elaborate eliminator, motive is not type correct:
+  fun x ↦ p x hx
+Source line 12:
+  refine Submodule.smul_induction_on hx ?smul ?add
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submodule.smul_induction_on hx ?smul ?add
+
+ERROR .LspCheck.lean:13:3-14:1
+No goals to be solved
+Source line 13:
+  · intro r hr n hn
+  ^
+Highlighted span: ·
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type u} [Semiring R] {A : Type v} [Semiring A] [Module R A]
+
+variable {M : Type*} [AddCommMonoid M] [Module R M] [Module A M] [IsScalarTower R A M]
+
+variable {I J : Submodule R A} {N P : Submodule R M}
+
+theorem smul_induction_on' {x : M} (hx : x ∈ I • N) {p : ∀ x, x ∈ I • N → Prop}
+    (smul : ∀ (r : A) (hr : r ∈ I) (n : M) (hn : n ∈ N), p (r • n) (Submodule.smul_mem_smul hr hn))
+    (add : ∀ x hx y hy, p x hx → p y hy → p (x + y) (add_mem ‹_› ‹_›)) : p x hx := by
+  classical
+  let q : M → Prop := fun y => ∀ hy : y ∈ I • N, p y hy
+  have hq : q x := by
+    refine Submodule.smul_induction_on (p := q) hx ?_ ?_
+    · intro r hr n hn hy
+      simpa using smul r hr n hn
+    · intro y hy z hz hyq hzq hyz
+      exact add y hy z hz (hyq hy) (hzq hz)
+  exact hq hx
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:18:27-18:30
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case refine_2
+R : Type u
+inst✝⁶ : Semiring R
+A : Type v
+inst✝⁵ : Semiring A
+inst✝⁴ : Module R A
+M : Type u_1
+inst✝³ : AddCommMonoid M
+inst✝² : Module R M
+inst✝¹ : Module A M
+inst✝ : IsScalarTower R A M
+I : Submodule R A
+N : Submodule R M
+x : M
+hx : x ∈ I • N
+p : (x : M) → x ∈ I • N → Prop
+smul : ∀ (r : A) (hr : r ∈ I) (n : M) (hn : n ∈ N), p (r • n) ⋯
+add : ∀ (x : M) (hx : x ∈ I • N) (y : M) (hy : y ∈ I • N), p x hx → p y hy → p (x + y) ⋯
+q : M → Prop := fun y ↦ ∀ (hy : y ∈ I • N), p y hy
+y hy : M
+z : q y
+hz : q hy
+hyq : y + hy ∈ I • N
+⊢ p (y + hy) hyq
+Source line 18:
+    · intro y hy z hz hyq hzq hyz
+                          ^^^
+Highlighted span: hzq
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:18:27-18:30
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case refine_2
+R : Type u
+inst✝⁶ : Semiring R
+A : Type v
+inst✝⁵ : Semiring A
+inst✝⁴ : Module R A
+M : Type u_1
+inst✝³ : AddCommMonoid M
+inst✝² : Module R M
+inst✝¹ : Module A M
+inst✝ : IsScalarTower R A M
+I : Submodule R A
+N : Submodule R M
+x : M
+hx : x ∈ I • N
+p : (x : M) → x ∈ I • N → Prop
+smul : ∀ (r : A) (hr : r ∈ I) (n : M) (hn : n ∈ N), p (r • n) ⋯
+add : ∀ (x : M) (hx : x ∈ I • N) (y : M) (hy : y ∈ I • N), p x hx → p y hy → p (x + y) ⋯
+q : M → Prop := fun y ↦ ∀ (hy : y ∈ I • N), p y hy
+y hy : M
+z : q y
+hz : q hy
+hyq : y + hy ∈ I • N
+⊢ p (y + hy) hyq
+Source line 18:
+    · intro y hy z hz hyq hzq hyz
+                          ^^^
+Highlighted span: hzq

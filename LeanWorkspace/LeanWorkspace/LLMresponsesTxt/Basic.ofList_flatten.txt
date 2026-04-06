@@ -1,0 +1,34 @@
+FILE: Basic.ofList_flatten.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.ofList_flatten.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {α : Type*} {β : Type*} {γ : Type*} {M : Type*} [Monoid M] {N : Type*} [Monoid N]
+
+theorem ofList_flatten (xs : List (List α)) : FreeMonoid.ofList xs.flatten = (xs.map FreeMonoid.ofList).prod := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α : Type*} {β : Type*} {γ : Type*} {M : Type*} [Monoid M] {N : Type*} [Monoid N]
+
+theorem ofList_flatten (xs : List (List α)) : FreeMonoid.ofList xs.flatten = (xs.map FreeMonoid.ofList).prod := by
+  induction xs with
+  | nil =>
+      simp
+  | cons x xs ih =>
+      simp [ih, FreeMonoid.ofList_append, List.flatten]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+PASS

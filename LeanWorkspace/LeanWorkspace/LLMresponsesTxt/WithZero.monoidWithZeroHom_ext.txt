@@ -1,0 +1,111 @@
+FILE: WithZero.monoidWithZeroHom_ext.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: WithZero.monoidWithZeroHom_ext.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {α β γ : Type*}
+
+variable [MulOneClass α]
+
+variable [MulZeroOneClass β]
+
+theorem monoidWithZeroHom_ext ⦃f g : WithZero α →*₀ β⦄
+    (h : f.toMonoidHom.comp WithZero.coeMonoidHom = g.toMonoidHom.comp WithZero.coeMonoidHom) :
+    f = g := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α β γ : Type*}
+
+variable [MulOneClass α]
+
+variable [MulZeroOneClass β]
+
+theorem monoidWithZeroHom_ext ⦃f g : WithZero α →*₀ β⦄
+    (h : f.toMonoidHom.comp WithZero.coeMonoidHom = g.toMonoidHom.comp WithZero.coeMonoidHom) :
+    f = g := by
+  ext x
+  cases x with
+  | none =>
+      exact map_zero f
+  | some a =>
+      exact congrArg (fun k : α →* β => k a) h
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:3-14:1
+Tactic `cases` failed: major premise type is not an inductive type
+  α
+
+Explanation: the `cases` tactic is for constructor-based reasoning as well as for applying custom cases principles with a 'using' clause or a registered '@[cases_eliminator]' theorem. The above type neither is an inductive type nor has a registered theorem.
+
+case h.h
+α : Type u_1
+β : Type u_2
+inst✝¹ : MulOneClass α
+inst✝ : MulZeroOneClass β
+f g : WithZero α →*₀ β
+h : (↑f).comp WithZero.coeMonoidHom = (↑g).comp WithZero.coeMonoidHom
+x : α
+⊢ ((↑f).comp WithZero.coeMonoidHom) x = ((↑g).comp WithZero.coeMonoidHom) x
+Source line 13:
+  cases x with
+  ^
+Highlighted span: c
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:3-14:1
+Tactic `cases` failed: major premise type is not an inductive type
+  α
+
+Explanation: the `cases` tactic is for constructor-based reasoning as well as for applying custom cases principles with a 'using' clause or a registered '@[cases_eliminator]' theorem. The above type neither is an inductive type nor has a registered theorem.
+
+case h.h
+α : Type u_1
+β : Type u_2
+inst✝¹ : MulOneClass α
+inst✝ : MulZeroOneClass β
+f g : WithZero α →*₀ β
+h : (↑f).comp WithZero.coeMonoidHom = (↑g).comp WithZero.coeMonoidHom
+x : α
+⊢ ((↑f).comp WithZero.coeMonoidHom) x = ((↑g).comp WithZero.coeMonoidHom) x
+Source line 13:
+  cases x with
+  ^
+Highlighted span: c
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α β γ : Type*}
+
+variable [MulOneClass α]
+
+variable [MulZeroOneClass β]
+
+theorem monoidWithZeroHom_ext ⦃f g : WithZero α →*₀ β⦄
+    (h : f.toMonoidHom.comp WithZero.coeMonoidHom = g.toMonoidHom.comp WithZero.coeMonoidHom) :
+    f = g := by
+  ext x <;> simp
+  exact congrArg (fun k : α →* β => k x) h
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

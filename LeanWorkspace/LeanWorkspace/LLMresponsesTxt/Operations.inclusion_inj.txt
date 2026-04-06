@@ -1,0 +1,90 @@
+FILE: Operations.inclusion_inj.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Operations.inclusion_inj.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+theorem inclusion_inj {S T : Submonoid M} (h : S ≤ T) {x y : S} :
+    Submonoid.inclusion h x = Submonoid.inclusion h y ↔ x = y := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+theorem inclusion_inj {S T : Submonoid M} (h : S ≤ T) {x y : S} :
+    Submonoid.inclusion h x = Submonoid.inclusion h y ↔ x = y := by
+  constructor
+  · intro hxy
+    ext
+    exact congrArg Subtype.val hxy
+  · intro hxy
+    cases hxy
+    rfl
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:32-10:35
+Application type mismatch: The argument
+  hxy
+has type
+  (Submonoid.inclusion h) x = (Submonoid.inclusion h) y
+but is expected to have type
+  x = y
+in the application
+  congrArg Subtype.val hxy
+Source line 10:
+    exact congrArg Subtype.val hxy
+                               ^^^
+Highlighted span: hxy
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:32-10:35
+Application type mismatch: The argument
+  hxy
+has type
+  (Submonoid.inclusion h) x = (Submonoid.inclusion h) y
+but is expected to have type
+  x = y
+in the application
+  congrArg Subtype.val hxy
+Source line 10:
+    exact congrArg Subtype.val hxy
+                               ^^^
+Highlighted span: hxy
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+theorem inclusion_inj {S T : Submonoid M} (h : S ≤ T) {x y : S} :
+    Submonoid.inclusion h x = Submonoid.inclusion h y ↔ x = y := by
+  constructor
+  · intro hxy
+    apply Subtype.ext
+    exact congrArg (fun z : T => z.1) hxy
+  · intro hxy
+    cases hxy
+    rfl
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

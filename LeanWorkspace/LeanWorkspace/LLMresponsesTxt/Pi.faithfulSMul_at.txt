@@ -1,0 +1,245 @@
+FILE: Pi.faithfulSMul_at.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Pi.faithfulSMul_at.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {ι M N : Type*} {α β γ : ι → Type*} (i : ι)
+
+theorem faithfulSMul_at [∀ i, SMul M (α i)] [∀ i, Nonempty (α i)] (i : ι) [FaithfulSMul M (α i)] :
+    FaithfulSMul M (∀ i, α i) where
+  eq_of_smul_eq_smul h := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι M N : Type*} {α β γ : ι → Type*} (i : ι)
+
+theorem faithfulSMul_at [∀ i, SMul M (α i)] [∀ i, Nonempty (α i)] (i : ι) [FaithfulSMul M (α i)] :
+    FaithfulSMul M (∀ i, α i) where
+  eq_of_smul_eq_smul h := by
+    apply FaithfulSMul.eq_of_smul_eq_smul (α := α i)
+    intro x
+    let y : ∀ j, α j := fun j =>
+      if hji : j = i then
+        hji.rec x
+      else
+        Classical.choice (inferInstance : Nonempty (α j))
+    have := congrFun h y
+    simpa [y] using this i
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:7-12:1
+failed to synthesize instance of type class
+  Decidable (j = i)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 11:
+      if hji : j = i then
+      ^
+Highlighted span: i
+
+ERROR .LspCheck.lean:12:17-12:18
+Type mismatch
+  x
+has type
+  α i
+but is expected to have type
+  α j
+Source line 12:
+        hji.rec x
+                ^
+Highlighted span: x
+
+ERROR .LspCheck.lean:15:22-15:23
+Application type mismatch: The argument
+  h
+has type
+  ∀ (a : (i : ι) → α i), m₁✝ • a = m₂✝ • a
+but is expected to have type
+  ?m.43 = ?m.44
+in the application
+  congrFun h
+Source line 15:
+    have := congrFun h y
+                     ^
+Highlighted span: h
+
+ERROR .LspCheck.lean:7:27-8:1
+unsolved goals
+ι : Type u_1
+M : Type u_2
+α : ι → Type u_4
+inst✝² : (i : ι) → SMul M (α i)
+inst✝¹ : ∀ (i : ι), Nonempty (α i)
+i : ι
+inst✝ : FaithfulSMul M (α i)
+m₁✝ m₂✝ : M
+h : ∀ (a : (i : ι) → α i), m₁✝ • a = m₂✝ • a
+x : α i
+y : (j : ι) → α j := fun j ↦ sorry
+⊢ m₁✝ • x = m₂✝ • x
+Source line 7:
+  eq_of_smul_eq_smul h := by
+                          ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:7-12:1
+failed to synthesize instance of type class
+  Decidable (j = i)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 11:
+      if hji : j = i then
+      ^
+Highlighted span: i
+
+ERROR .LspCheck.lean:12:17-12:18
+Type mismatch
+  x
+has type
+  α i
+but is expected to have type
+  α j
+Source line 12:
+        hji.rec x
+                ^
+Highlighted span: x
+
+ERROR .LspCheck.lean:15:22-15:23
+Application type mismatch: The argument
+  h
+has type
+  ∀ (a : (i : ι) → α i), m₁✝ • a = m₂✝ • a
+but is expected to have type
+  ?m.43 = ?m.44
+in the application
+  congrFun h
+Source line 15:
+    have := congrFun h y
+                     ^
+Highlighted span: h
+
+ERROR .LspCheck.lean:7:27-8:1
+unsolved goals
+ι : Type u_1
+M : Type u_2
+α : ι → Type u_4
+inst✝² : (i : ι) → SMul M (α i)
+inst✝¹ : ∀ (i : ι), Nonempty (α i)
+i : ι
+inst✝ : FaithfulSMul M (α i)
+m₁✝ m₂✝ : M
+h : ∀ (a : (i : ι) → α i), m₁✝ • a = m₂✝ • a
+x : α i
+y : (j : ι) → α j := fun j ↦ sorry
+⊢ m₁✝ • x = m₂✝ • x
+Source line 7:
+  eq_of_smul_eq_smul h := by
+                          ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι M N : Type*} {α β γ : ι → Type*} (i : ι)
+
+theorem faithfulSMul_at [∀ i, SMul M (α i)] [∀ i, Nonempty (α i)] (i : ι) [FaithfulSMul M (α i)] :
+    FaithfulSMul M (∀ i, α i) where
+  eq_of_smul_eq_smul h := by
+    apply FaithfulSMul.eq_of_smul_eq_smul (α := α i)
+    intro x
+    let y : ∀ j, α j := Function.update (fun j => Classical.choice (inferInstance : Nonempty (α j))) i x
+    have hy := h y
+    exact congrFun hy i
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:25-10:105
+failed to synthesize instance of type class
+  DecidableEq ι
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 10:
+    let y : ∀ j, α j := Function.update (fun j => Classical.choice (inferInstance : Nonempty (α j))) i x
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Function.update (fun j => Classical.choice (inferInstance : Nonempty (α j))) i x
+
+ERROR .LspCheck.lean:12:5-12:24
+Type mismatch
+  congrFun hy i
+has type
+  (m₁✝ • y) i = (m₂✝ • y) i
+but is expected to have type
+  m₁✝ • x = m₂✝ • x
+Source line 12:
+    exact congrFun hy i
+    ^^^^^^^^^^^^^^^^^^^
+Highlighted span: exact congrFun hy i
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:25-10:105
+failed to synthesize instance of type class
+  DecidableEq ι
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 10:
+    let y : ∀ j, α j := Function.update (fun j => Classical.choice (inferInstance : Nonempty (α j))) i x
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Function.update (fun j => Classical.choice (inferInstance : Nonempty (α j))) i x
+
+ERROR .LspCheck.lean:12:5-12:24
+Type mismatch
+  congrFun hy i
+has type
+  (m₁✝ • y) i = (m₂✝ • y) i
+but is expected to have type
+  m₁✝ • x = m₂✝ • x
+Source line 12:
+    exact congrFun hy i
+    ^^^^^^^^^^^^^^^^^^^
+Highlighted span: exact congrFun hy i
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Classical
+
+variable {ι M N : Type*} {α β γ : ι → Type*} (i : ι)
+
+theorem faithfulSMul_at [∀ i, SMul M (α i)] [∀ i, Nonempty (α i)] (i : ι) [FaithfulSMul M (α i)] :
+    FaithfulSMul M (∀ i, α i) where
+  eq_of_smul_eq_smul h := by
+    classical
+    apply FaithfulSMul.eq_of_smul_eq_smul (α := α i)
+    intro x
+    let y : ∀ j, α j := Function.update (fun j => Classical.choice (inferInstance : Nonempty (α j))) i x
+    have hy := congrFun (h y) i
+    simpa [y] using hy
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

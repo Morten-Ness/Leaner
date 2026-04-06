@@ -1,0 +1,165 @@
+FILE: Exact.of_comp_eq_one_of_ker_in_range.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Exact.of_comp_eq_one_of_ker_in_range.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R M M' N N' P P' : Type*}
+
+variable (f : M → N) (g : N → P) (g' : P → P')
+
+theorem of_comp_eq_one_of_ker_in_range [One P] (hc : g.comp f = 1)
+    (hr : ∀ y, g y = 1 → y ∈ Set.range f) :
+    Function.MulExact f g := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R M M' N N' P P' : Type*}
+
+variable (f : M → N) (g : N → P) (g' : P → P')
+
+theorem of_comp_eq_one_of_ker_in_range [One P] (hc : g.comp f = 1)
+    (hr : ∀ y, g y = 1 → y ∈ Set.range f) :
+    Function.MulExact f g := by
+  constructor
+  · ext x
+    change g (f x) = 1
+    simpa [Function.comp] using congrFun hc x
+  · intro y hy
+    exact hr y hy
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:3-10:14
+Tactic `constructor` failed: target is not an inductive datatype
+
+M : Type u_2
+N : Type u_4
+P : Type u_6
+f : M → N
+g : N → P
+inst✝ : One P
+hc : g ∘ f = 1
+hr : ∀ (y : N), g y = 1 → y ∈ Set.range f
+⊢ Function.MulExact f g
+Source line 10:
+  constructor
+  ^^^^^^^^^^^
+Highlighted span: constructor
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:3-10:14
+Tactic `constructor` failed: target is not an inductive datatype
+
+M : Type u_2
+N : Type u_4
+P : Type u_6
+f : M → N
+g : N → P
+inst✝ : One P
+hc : g ∘ f = 1
+hr : ∀ (y : N), g y = 1 → y ∈ Set.range f
+⊢ Function.MulExact f g
+Source line 10:
+  constructor
+  ^^^^^^^^^^^
+Highlighted span: constructor
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R M M' N N' P P' : Type*}
+
+variable (f : M → N) (g : N → P) (g' : P → P')
+
+theorem of_comp_eq_one_of_ker_in_range [One P] (hc : g.comp f = 1)
+    (hr : ∀ y, g y = 1 → y ∈ Set.range f) :
+    Function.MulExact f g := by
+  rw [Function.MulExact]
+  constructor
+  · ext x
+    change g (f x) = 1
+    simpa [Function.comp] using congrFun hc x
+  · exact hr
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:3-11:14
+Tactic `constructor` failed: target is not an inductive datatype
+
+M : Type u_2
+N : Type u_4
+P : Type u_6
+f : M → N
+g : N → P
+inst✝ : One P
+hc : g ∘ f = 1
+hr : ∀ (y : N), g y = 1 → y ∈ Set.range f
+⊢ ∀ (y : N), g y = 1 ↔ y ∈ Set.range f
+Source line 11:
+  constructor
+  ^^^^^^^^^^^
+Highlighted span: constructor
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:3-11:14
+Tactic `constructor` failed: target is not an inductive datatype
+
+M : Type u_2
+N : Type u_4
+P : Type u_6
+f : M → N
+g : N → P
+inst✝ : One P
+hc : g ∘ f = 1
+hr : ∀ (y : N), g y = 1 → y ∈ Set.range f
+⊢ ∀ (y : N), g y = 1 ↔ y ∈ Set.range f
+Source line 11:
+  constructor
+  ^^^^^^^^^^^
+Highlighted span: constructor
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R M M' N N' P P' : Type*}
+
+variable (f : M → N) (g : N → P) (g' : P → P')
+
+theorem of_comp_eq_one_of_ker_in_range [One P] (hc : g.comp f = 1)
+    (hr : ∀ y, g y = 1 → y ∈ Set.range f) :
+    Function.MulExact f g := by
+  rw [Function.MulExact]
+  intro y
+  constructor
+  · intro hy
+    exact hr y hy
+  · rintro ⟨x, rfl⟩
+    change g (f x) = 1
+    simpa [Function.comp] using congrFun hc x
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

@@ -1,0 +1,202 @@
+FILE: Basic.map_nsmul_const.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.map_nsmul_const.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_nsmul_const [AddMonoid G] [AddMonoid H] [AddConstMapClass F G H a b]
+    (f : F) (n : ℕ) : f (n • a) = f 0 + n • b := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_nsmul_const [AddMonoid G] [AddMonoid H] [AddConstMapClass F G H a b]
+    (f : F) (n : ℕ) : f (n • a) = f 0 + n • b := by
+  induction n with
+  | zero =>
+      simp
+  | succ n ih =>
+      rw [succ_nsmul, map_add, ih, add_nsmul, one_nsmul]
+      simp [add_assoc]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:23-11:30
+failed to synthesize instance of type class
+  AddHomClass F G H
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 11:
+      rw [succ_nsmul, map_add, ih, add_nsmul, one_nsmul]
+                      ^^^^^^^
+Highlighted span: map_add
+
+ERROR .LspCheck.lean:10:15-11:1
+unsolved goals
+case succ
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝³ : FunLike F G H
+a : G
+b : H
+inst✝² : AddMonoid G
+inst✝¹ : AddMonoid H
+inst✝ : AddConstMapClass F G H a b
+f : F
+n : ℕ
+ih : f (n • a) = f 0 + n • b
+⊢ f 0 + (n • b + f a) = f 0 + (n • b + b)
+
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝³ : FunLike F G H
+a : G
+b : H
+inst✝² : AddMonoid G
+inst✝¹ : AddMonoid H
+inst✝ : AddConstMapClass F G H a b
+f : F
+n : ℕ
+ih : f (n • a) = f 0 + n • b
+⊢ AddHomClass F G H
+Source line 10:
+  | succ n ih =>
+              ^
+Highlighted span: =
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:23-11:30
+failed to synthesize instance of type class
+  AddHomClass F G H
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 11:
+      rw [succ_nsmul, map_add, ih, add_nsmul, one_nsmul]
+                      ^^^^^^^
+Highlighted span: map_add
+
+ERROR .LspCheck.lean:10:15-11:1
+unsolved goals
+case succ
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝³ : FunLike F G H
+a : G
+b : H
+inst✝² : AddMonoid G
+inst✝¹ : AddMonoid H
+inst✝ : AddConstMapClass F G H a b
+f : F
+n : ℕ
+ih : f (n • a) = f 0 + n • b
+⊢ f 0 + (n • b + f a) = f 0 + (n • b + b)
+
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝³ : FunLike F G H
+a : G
+b : H
+inst✝² : AddMonoid G
+inst✝¹ : AddMonoid H
+inst✝ : AddConstMapClass F G H a b
+f : F
+n : ℕ
+ih : f (n • a) = f 0 + n • b
+⊢ AddHomClass F G H
+Source line 10:
+  | succ n ih =>
+              ^
+Highlighted span: =
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_nsmul_const [AddMonoid G] [AddMonoid H] [AddConstMapClass F G H a b]
+    (f : F) (n : ℕ) : f (n • a) = f 0 + n • b := by
+  simpa using AddConstMapClass.map_nsmul (F := F) (G := G) (H := H) (a := a) (b := b) f n
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:7:15-7:41
+Unknown constant `AddConstMapClass.map_nsmul`
+Source line 7:
+  simpa using AddConstMapClass.map_nsmul (F := F) (G := G) (H := H) (a := a) (b := b) f n
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AddConstMapClass.map_nsmul
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:7:15-7:41
+Unknown constant `AddConstMapClass.map_nsmul`
+Source line 7:
+  simpa using AddConstMapClass.map_nsmul (F := F) (G := G) (H := H) (a := a) (b := b) f n
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AddConstMapClass.map_nsmul
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_nsmul_const [AddMonoid G] [AddMonoid H] [AddConstMapClass F G H a b]
+    (f : F) (n : ℕ) : f (n • a) = f 0 + n • b := by
+  induction n with
+  | zero =>
+      simp
+  | succ n ih =>
+      rw [succ_nsmul, map_add_const, ih]
+      simp [add_assoc]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:23-11:36
+Unknown identifier `map_add_const`
+Source line 11:
+      rw [succ_nsmul, map_add_const, ih]
+                      ^^^^^^^^^^^^^
+Highlighted span: map_add_const
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:23-11:36
+Unknown identifier `map_add_const`
+Source line 11:
+      rw [succ_nsmul, map_add_const, ih]
+                      ^^^^^^^^^^^^^
+Highlighted span: map_add_const

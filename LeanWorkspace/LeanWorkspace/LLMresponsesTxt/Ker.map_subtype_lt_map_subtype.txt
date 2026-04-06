@@ -1,0 +1,432 @@
+FILE: Ker.map_subtype_lt_map_subtype.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Ker.map_subtype_lt_map_subtype.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N] (H : Subgroup G)
+
+variable (f : G →* N)
+
+theorem map_subtype_lt_map_subtype {G' : Subgroup G} {H K : Subgroup G'} :
+    H.map G'.subtype < K.map G'.subtype ↔ H < K := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N] (H : Subgroup G)
+
+variable (f : G →* N)
+
+theorem map_subtype_lt_map_subtype {G' : Subgroup G} {H K : Subgroup G'} :
+    H.map G'.subtype < K.map G'.subtype ↔ H < K := by
+  constructor
+  · intro h
+    refine lt_iff_le_not_le.mpr ?_
+    rcases h with ⟨hHK, hne⟩
+    constructor
+    · intro x hx
+      exact hHK hx
+    · intro hKleH
+      apply hne
+      ext x
+      constructor <;> intro hx
+      · exact hHK hx
+      · exact hKleH hx
+  · intro h
+    refine lt_iff_le_not_le.mpr ?_
+    rcases h with ⟨hHK, hne⟩
+    constructor
+    · intro x hx
+      rcases hx with ⟨y, hy, rfl⟩
+      exact ⟨y, hHK hy, rfl⟩
+    · intro hmap
+      apply hne
+      intro x hx
+      have hx' : G'.subtype x ∈ H.map G'.subtype := ⟨x, hx, rfl⟩
+      have hx'' : G'.subtype x ∈ K.map G'.subtype := hmap hx'
+      rcases hx'' with ⟨y, hy, hyx⟩
+      change (y : G) = (x : G) at hyx
+      have : y = x := Subtype.ext hyx
+      simpa [this] using hy
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:17:12-17:32
+Unknown identifier `lt_iff_le_not_le.mpr`
+Source line 17:
+    refine lt_iff_le_not_le.mpr ?_
+           ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: lt_iff_le_not_le.mpr
+
+ERROR .LspCheck.lean:18:5-18:29
+No goals to be solved
+Source line 18:
+    rcases h with ⟨hHK, hne⟩
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: rcases h with ⟨hHK, hne⟩
+
+ERROR .LspCheck.lean:29:12-29:32
+Unknown identifier `lt_iff_le_not_le.mpr`
+Source line 29:
+    refine lt_iff_le_not_le.mpr ?_
+           ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: lt_iff_le_not_le.mpr
+
+ERROR .LspCheck.lean:30:5-30:29
+No goals to be solved
+Source line 30:
+    rcases h with ⟨hHK, hne⟩
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: rcases h with ⟨hHK, hne⟩
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:17:12-17:32
+Unknown identifier `lt_iff_le_not_le.mpr`
+Source line 17:
+    refine lt_iff_le_not_le.mpr ?_
+           ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: lt_iff_le_not_le.mpr
+
+ERROR .LspCheck.lean:18:5-18:29
+No goals to be solved
+Source line 18:
+    rcases h with ⟨hHK, hne⟩
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: rcases h with ⟨hHK, hne⟩
+
+ERROR .LspCheck.lean:29:12-29:32
+Unknown identifier `lt_iff_le_not_le.mpr`
+Source line 29:
+    refine lt_iff_le_not_le.mpr ?_
+           ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: lt_iff_le_not_le.mpr
+
+ERROR .LspCheck.lean:30:5-30:29
+No goals to be solved
+Source line 30:
+    rcases h with ⟨hHK, hne⟩
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: rcases h with ⟨hHK, hne⟩
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N] (H : Subgroup G)
+
+variable (f : G →* N)
+
+theorem map_subtype_lt_map_subtype {G' : Subgroup G} {H K : Subgroup G'} :
+    H.map G'.subtype < K.map G'.subtype ↔ H < K := by
+  constructor
+  · intro h
+    constructor
+    · intro x hx
+      exact h.1 hx
+    · intro hKH
+      apply h.2
+      ext x
+      constructor <;> intro hx
+      · exact h.1 hx
+      · exact hKH hx
+  · intro h
+    constructor
+    · intro x hx
+      rcases hx with ⟨y, hy, rfl⟩
+      exact ⟨y, h.1 hy, rfl⟩
+    · intro hmap
+      apply h.2
+      intro x hx
+      have hx' : (x : G) ∈ H.map G'.subtype := ⟨x, hx, rfl⟩
+      have hx'' : (x : G) ∈ K.map G'.subtype := hmap hx'
+      rcases hx'' with ⟨y, hy, hyx⟩
+      have : y = x := Subtype.ext hyx
+      simpa [this] using hy
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:19:17-19:19
+Application type mismatch: The argument
+  hx
+has type
+  x ∈ ↑H
+but is expected to have type
+  ?m.40 ∈ ↑(Subgroup.map G'.subtype H)
+in the application
+  h.left hx
+Source line 19:
+      exact h.1 hx
+                ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:22:7-22:12
+This extensionality tactic only applies to equalities, not
+  ∀ ⦃a : G⦄, a ∈ ↑(Subgroup.map G'.subtype K) → a ∈ ↑(Subgroup.map G'.subtype H)
+Source line 22:
+      ext x
+      ^^^^^
+Highlighted span: ext x
+
+ERROR .LspCheck.lean:34:52-34:54
+Application type mismatch: The argument
+  hx
+has type
+  x ∈ ↑K
+but is expected to have type
+  x ∈ ↑H
+in the application
+  And.intro hx
+Source line 34:
+      have hx' : (x : G) ∈ H.map G'.subtype := ⟨x, hx, rfl⟩
+                                                   ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:35:49-35:57
+Type mismatch
+  hmap ?m.123
+has type
+  ?m.122 ∈ ↑(Subgroup.map G'.subtype H)
+but is expected to have type
+  ↑x ∈ Subgroup.map G'.subtype K
+Source line 35:
+      have hx'' : (x : G) ∈ K.map G'.subtype := hmap hx'
+                                                ^^^^^^^^
+Highlighted span: hmap hx'
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:19:17-19:19
+Application type mismatch: The argument
+  hx
+has type
+  x ∈ ↑H
+but is expected to have type
+  ?m.40 ∈ ↑(Subgroup.map G'.subtype H)
+in the application
+  h.left hx
+Source line 19:
+      exact h.1 hx
+                ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:22:7-22:12
+This extensionality tactic only applies to equalities, not
+  ∀ ⦃a : G⦄, a ∈ ↑(Subgroup.map G'.subtype K) → a ∈ ↑(Subgroup.map G'.subtype H)
+Source line 22:
+      ext x
+      ^^^^^
+Highlighted span: ext x
+
+ERROR .LspCheck.lean:34:52-34:54
+Application type mismatch: The argument
+  hx
+has type
+  x ∈ ↑K
+but is expected to have type
+  x ∈ ↑H
+in the application
+  And.intro hx
+Source line 34:
+      have hx' : (x : G) ∈ H.map G'.subtype := ⟨x, hx, rfl⟩
+                                                   ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:35:49-35:57
+Type mismatch
+  hmap ?m.123
+has type
+  ?m.122 ∈ ↑(Subgroup.map G'.subtype H)
+but is expected to have type
+  ↑x ∈ Subgroup.map G'.subtype K
+Source line 35:
+      have hx'' : (x : G) ∈ K.map G'.subtype := hmap hx'
+                                                ^^^^^^^^
+Highlighted span: hmap hx'
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N] (H : Subgroup G)
+
+variable (f : G →* N)
+
+theorem map_subtype_lt_map_subtype {G' : Subgroup G} {H K : Subgroup G'} :
+    H.map G'.subtype < K.map G'.subtype ↔ H < K := by
+  constructor
+  · intro h
+    refine ⟨?_, ?_⟩
+    · intro x hx
+      have hx' : (x : G) ∈ H.map G'.subtype := ⟨x, hx, rfl⟩
+      exact h.1 hx'
+    · intro hKH
+      apply h.2
+      apply le_antisymm
+      · exact h.1
+      · intro x hx
+        rcases hx with ⟨y, hy, hyx⟩
+        have : y ∈ H := hKH hy
+        rcases Subtype.ext_iff.mp hyx with hyx'
+        simpa [hyx'] using this
+  · intro h
+    refine ⟨?_, ?_⟩
+    · intro x hx
+      rcases hx with ⟨y, hy, rfl⟩
+      exact ⟨y, h.1 hy, rfl⟩
+    · intro hmap
+      apply h.2
+      intro x hx
+      have hx' : (x : G) ∈ K.map G'.subtype := ⟨x, hx, rfl⟩
+      have hx'' : (x : G) ∈ H.map G'.subtype := hmap hx'
+      rcases hx'' with ⟨y, hy, hyx⟩
+      rcases Subtype.ext_iff.mp hyx with hyx'
+      simpa [hyx'] using hy
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:20:7-20:20
+Type mismatch
+  h.left hx'
+has type
+  ↑x ∈ ↑(Subgroup.map G'.subtype K)
+but is expected to have type
+  x ∈ ↑K
+Source line 20:
+      exact h.1 hx'
+      ^^^^^^^^^^^^^
+Highlighted span: exact h.1 hx'
+
+ERROR .LspCheck.lean:23:7-23:24
+Tactic `apply` failed: could not unify the conclusion of `@le_antisymm`
+  ?a ≤ ?b → ?b ≤ ?a → ?a = ?b
+with the goal
+  ↑(Subgroup.map G'.subtype K) ⊆ ↑(Subgroup.map G'.subtype H)
+
+Note: The full type of `@le_antisymm` is
+  ∀ {α : Type ?u.3284.700} [inst : PartialOrder α] {a b : α}, a ≤ b → b ≤ a → a = b
+
+case mp.refine_2
+G : Type u_1
+inst✝ : Group G
+G' : Subgroup G
+H K : Subgroup ↥G'
+h : Subgroup.map G'.subtype H < Subgroup.map G'.subtype K
+hKH : ↑K ⊆ ↑H
+⊢ ↑(Subgroup.map G'.subtype K) ⊆ ↑(Subgroup.map G'.subtype H)
+Source line 23:
+      apply le_antisymm
+      ^^^^^^^^^^^^^^^^^
+Highlighted span: apply le_antisymm
+
+ERROR .LspCheck.lean:41:33-41:36
+Application type mismatch: The argument
+  hyx
+has type
+  G'.subtype y = ↑x
+but is expected to have type
+  ?m.162 = ?m.163
+in the application
+  Subtype.ext_iff.mp hyx
+Source line 41:
+      rcases Subtype.ext_iff.mp hyx with hyx'
+                                ^^^
+Highlighted span: hyx
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:20:7-20:20
+Type mismatch
+  h.left hx'
+has type
+  ↑x ∈ ↑(Subgroup.map G'.subtype K)
+but is expected to have type
+  x ∈ ↑K
+Source line 20:
+      exact h.1 hx'
+      ^^^^^^^^^^^^^
+Highlighted span: exact h.1 hx'
+
+ERROR .LspCheck.lean:23:7-23:24
+Tactic `apply` failed: could not unify the conclusion of `@le_antisymm`
+  ?a ≤ ?b → ?b ≤ ?a → ?a = ?b
+with the goal
+  ↑(Subgroup.map G'.subtype K) ⊆ ↑(Subgroup.map G'.subtype H)
+
+Note: The full type of `@le_antisymm` is
+  ∀ {α : Type ?u.3284.700} [inst : PartialOrder α] {a b : α}, a ≤ b → b ≤ a → a = b
+
+case mp.refine_2
+G : Type u_1
+inst✝ : Group G
+G' : Subgroup G
+H K : Subgroup ↥G'
+h : Subgroup.map G'.subtype H < Subgroup.map G'.subtype K
+hKH : ↑K ⊆ ↑H
+⊢ ↑(Subgroup.map G'.subtype K) ⊆ ↑(Subgroup.map G'.subtype H)
+Source line 23:
+      apply le_antisymm
+      ^^^^^^^^^^^^^^^^^
+Highlighted span: apply le_antisymm
+
+ERROR .LspCheck.lean:41:33-41:36
+Application type mismatch: The argument
+  hyx
+has type
+  G'.subtype y = ↑x
+but is expected to have type
+  ?m.162 = ?m.163
+in the application
+  Subtype.ext_iff.mp hyx
+Source line 41:
+      rcases Subtype.ext_iff.mp hyx with hyx'
+                                ^^^
+Highlighted span: hyx

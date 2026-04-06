@@ -1,0 +1,134 @@
+FILE: Indecomposable.pairwise_div_notMem_range'.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Indecomposable.pairwise_div_notMem_range'.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {ι M G S : Type*} [Monoid M] [CommGroup G] [LinearOrder S]
+
+theorem pairwise_div_notMem_range' [InvolutiveInv ι] [CommGroup S] [IsOrderedMonoid S]
+    (v : ι → G) (hv_inv : ∀ i, v i⁻¹ = (v i)⁻¹)
+    (f : G →* S) (hf : ∀ i, f (v i) ≠ 1)
+    (s : Set ι) (hst : s ⊆ {j | IsMulIndecomposable v {i | 1 < f (v i)} j}) :
+    s.Pairwise fun i j ↦ v i / v j ∉ Set.range v := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι M G S : Type*} [Monoid M] [CommGroup G] [LinearOrder S]
+
+theorem pairwise_div_notMem_range' [InvolutiveInv ι] [CommGroup S] [IsOrderedMonoid S]
+    (v : ι → G) (hv_inv : ∀ i, v i⁻¹ = (v i)⁻¹)
+    (f : G →* S) (hf : ∀ i, f (v i) ≠ 1)
+    (s : Set ι) (hst : s ⊆ {j | IsMulIndecomposable v {i | 1 < f (v i)} j}) :
+    s.Pairwise fun i j ↦ v i / v j ∉ Set.range v := by
+  intro i hi j hj hij
+  exact (hst hi).div_notMem_range (hst hj) hv_inv f hf hij
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:18-11:34
+Invalid field `div_notMem_range`: The environment does not contain `And.div_notMem_range`, so it is not possible to project the field `div_notMem_range` from an expression
+  hst hi
+of type
+  i ∈ {i | 1 < f (v i)} ∧ ∀ j ∈ {i | 1 < f (v i)}, ∀ k ∈ {i | 1 < f (v i)}, v i = v j * v k → v j = 1 ∨ v k = 1
+Source line 11:
+  exact (hst hi).div_notMem_range (hst hj) hv_inv f hf hij
+                 ^^^^^^^^^^^^^^^^
+Highlighted span: div_notMem_range
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:18-11:34
+Invalid field `div_notMem_range`: The environment does not contain `And.div_notMem_range`, so it is not possible to project the field `div_notMem_range` from an expression
+  hst hi
+of type
+  i ∈ {i | 1 < f (v i)} ∧ ∀ j ∈ {i | 1 < f (v i)}, ∀ k ∈ {i | 1 < f (v i)}, v i = v j * v k → v j = 1 ∨ v k = 1
+Source line 11:
+  exact (hst hi).div_notMem_range (hst hj) hv_inv f hf hij
+                 ^^^^^^^^^^^^^^^^
+Highlighted span: div_notMem_range
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι M G S : Type*} [Monoid M] [CommGroup G] [LinearOrder S]
+
+theorem pairwise_div_notMem_range' [InvolutiveInv ι] [CommGroup S] [IsOrderedMonoid S]
+    (v : ι → G) (hv_inv : ∀ i, v i⁻¹ = (v i)⁻¹)
+    (f : G →* S) (hf : ∀ i, f (v i) ≠ 1)
+    (s : Set ι) (hst : s ⊆ {j | IsMulIndecomposable v {i | 1 < f (v i)} j}) :
+    s.Pairwise fun i j ↦ v i / v j ∉ Set.range v := by
+  intro i hi j hj hij
+  simpa [Set.Pairwise] using
+    IsMulIndecomposable.pairwise_div_notMem_range' (v := v) (hv_inv := hv_inv)
+      (f := f) (hf := hf) (s := s) hst i hi j hj hij
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:40-13:41
+Application type mismatch: The argument
+  i
+has type
+  ι
+of sort `Type u_1` but is expected to have type
+  ?m.62 ∈ s
+of sort `Prop` in the application
+  IsMulIndecomposable.pairwise_div_notMem_range' v hv_inv f hf s hst i
+Source line 13:
+      (f := f) (hf := hf) (s := s) hst i hi j hj hij
+                                       ^
+Highlighted span: i
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:40-13:41
+Application type mismatch: The argument
+  i
+has type
+  ι
+of sort `Type u_1` but is expected to have type
+  ?m.62 ∈ s
+of sort `Prop` in the application
+  IsMulIndecomposable.pairwise_div_notMem_range' v hv_inv f hf s hst i
+Source line 13:
+      (f := f) (hf := hf) (s := s) hst i hi j hj hij
+                                       ^
+Highlighted span: i
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι M G S : Type*} [Monoid M] [CommGroup G] [LinearOrder S]
+
+theorem pairwise_div_notMem_range' [InvolutiveInv ι] [CommGroup S] [IsOrderedMonoid S]
+    (v : ι → G) (hv_inv : ∀ i, v i⁻¹ = (v i)⁻¹)
+    (f : G →* S) (hf : ∀ i, f (v i) ≠ 1)
+    (s : Set ι) (hst : s ⊆ {j | IsMulIndecomposable v {i | 1 < f (v i)} j}) :
+    s.Pairwise fun i j ↦ v i / v j ∉ Set.range v := by
+  simpa using
+    IsMulIndecomposable.pairwise_div_notMem_range' (v := v) (hv_inv := hv_inv)
+      (f := f) (hf := hf) (s := s) hst
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

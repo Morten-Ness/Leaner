@@ -1,0 +1,166 @@
+FILE: Basic.map_sub_nat'.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.map_sub_nat'.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_sub_nat' [AddGroupWithOne G] [AddGroup H] [AddConstMapClass F G H 1 b]
+    (f : F) (x : G) (n : ℕ) : f (x - n) = f x - n • b := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_sub_nat' [AddGroupWithOne G] [AddGroup H] [AddConstMapClass F G H 1 b]
+    (f : F) (x : G) (n : ℕ) : f (x - n) = f x - n • b := by
+  induction n with
+  | zero =>
+      simp
+  | succ n ih =>
+      rw [Nat.succ_eq_add_one, Nat.cast_add, Nat.cast_one, sub_eq_add_neg, add_assoc]
+      rw [map_add_const]
+      simp [ih, add_assoc, sub_eq_add_neg]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:11-11:30
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Nat.succ ?n
+in the target expression
+  f (x - ↑(n + 1)) = f x - (n + 1) • b
+
+case succ
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝³ : FunLike F G H
+b : H
+inst✝² : AddGroupWithOne G
+inst✝¹ : AddGroup H
+inst✝ : AddConstMapClass F G H 1 b
+f : F
+x : G
+n : ℕ
+ih : f (x - ↑n) = f x - n • b
+⊢ f (x - ↑(n + 1)) = f x - (n + 1) • b
+Source line 11:
+      rw [Nat.succ_eq_add_one, Nat.cast_add, Nat.cast_one, sub_eq_add_neg, add_assoc]
+          ^^^^^^^^^^^^^^^^^^^
+Highlighted span: Nat.succ_eq_add_one
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:11-11:30
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Nat.succ ?n
+in the target expression
+  f (x - ↑(n + 1)) = f x - (n + 1) • b
+
+case succ
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝³ : FunLike F G H
+b : H
+inst✝² : AddGroupWithOne G
+inst✝¹ : AddGroup H
+inst✝ : AddConstMapClass F G H 1 b
+f : F
+x : G
+n : ℕ
+ih : f (x - ↑n) = f x - n • b
+⊢ f (x - ↑(n + 1)) = f x - (n + 1) • b
+Source line 11:
+      rw [Nat.succ_eq_add_one, Nat.cast_add, Nat.cast_one, sub_eq_add_neg, add_assoc]
+          ^^^^^^^^^^^^^^^^^^^
+Highlighted span: Nat.succ_eq_add_one
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_sub_nat' [AddGroupWithOne G] [AddGroup H] [AddConstMapClass F G H 1 b]
+    (f : F) (x : G) (n : ℕ) : f (x - n) = f x - n • b := by
+  induction n with
+  | zero =>
+      simp
+  | succ n ih =>
+      rw [show ((n.succ : ℕ) : G) = (n : G) + 1 by simp]
+      rw [sub_eq_add_neg, neg_add_rev]
+      rw [map_add_const]
+      rw [ih]
+      simp [sub_eq_add_neg, add_assoc]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:11-13:24
+Unknown identifier `map_add_const`
+Source line 13:
+      rw [map_add_const]
+          ^^^^^^^^^^^^^
+Highlighted span: map_add_const
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:11-13:24
+Unknown identifier `map_add_const`
+Source line 13:
+      rw [map_add_const]
+          ^^^^^^^^^^^^^
+Highlighted span: map_add_const
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_sub_nat' [AddGroupWithOne G] [AddGroup H] [AddConstMapClass F G H 1 b]
+    (f : F) (x : G) (n : ℕ) : f (x - n) = f x - n • b := by
+  simpa [sub_eq_add_neg] using map_nat_add (f := f) (a := x - n) (n := n)
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:7:32-7:43
+Unknown identifier `map_nat_add`
+Source line 7:
+  simpa [sub_eq_add_neg] using map_nat_add (f := f) (a := x - n) (n := n)
+                               ^^^^^^^^^^^
+Highlighted span: map_nat_add
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:7:32-7:43
+Unknown identifier `map_nat_add`
+Source line 7:
+  simpa [sub_eq_add_neg] using map_nat_add (f := f) (a := x - n) (n := n)
+                               ^^^^^^^^^^^
+Highlighted span: map_nat_add

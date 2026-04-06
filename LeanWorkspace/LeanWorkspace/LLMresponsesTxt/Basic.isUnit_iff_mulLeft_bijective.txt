@@ -1,0 +1,188 @@
+FILE: Basic.isUnit_iff_mulLeft_bijective.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.isUnit_iff_mulLeft_bijective.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {α : Type u}
+
+variable {M : Type*}
+
+variable [Monoid M] {a b c : M}
+
+theorem isUnit_iff_mulLeft_bijective {a : M} :
+    IsUnit a ↔ Function.Bijective (a * ·) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α : Type u}
+
+variable {M : Type*}
+
+variable [Monoid M] {a b c : M}
+
+theorem isUnit_iff_mulLeft_bijective {a : M} :
+    IsUnit a ↔ Function.Bijective (a * ·) := by
+  constructor
+  · rintro ⟨u, rfl⟩
+    refine Function.bijective_iff_has_inverse.mpr ?_
+    refine ⟨(↑u⁻¹ * ·), ?_, ?_⟩
+    · intro x
+      simp [mul_assoc]
+    · intro x
+      simp [mul_assoc]
+  · intro h
+    rcases h with ⟨hinj, hsurj⟩
+    rcases hsurj 1 with ⟨b, hb⟩
+    have hba : b * a = 1 := by
+      apply hinj
+      calc
+        a * (b * a) = (a * b) * a := by simp [mul_assoc]
+        _ = 1 * a := by rw [hb]
+        _ = a := by simp
+        _ = a * 1 := by simp
+    exact ⟨⟨a, b, hb, hba⟩, rfl⟩
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:26:29-26:31
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (fun x ↦ a * x) b
+in the target expression
+  a * b * a = 1 * a
+
+M : Type u_1
+inst✝ : Monoid M
+a : M
+hinj : Function.Injective fun x ↦ a * x
+hsurj : Function.Surjective fun x ↦ a * x
+b : M
+hb : (fun x ↦ a * x) b = 1
+⊢ a * b * a = 1 * a
+Source line 26:
+        _ = 1 * a := by rw [hb]
+                            ^^
+Highlighted span: hb
+
+WARNING .LspCheck.lean:16:13-16:22
+This simp argument is unused:
+  mul_assoc
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵m̵u̵l̵_̵a̵s̵s̵o̵c̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 16:
+      simp [mul_assoc]
+            ^^^^^^^^^
+Highlighted span: mul_assoc
+
+WARNING .LspCheck.lean:18:13-18:22
+This simp argument is unused:
+  mul_assoc
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵m̵u̵l̵_̵a̵s̵s̵o̵c̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 18:
+      simp [mul_assoc]
+            ^^^^^^^^^
+Highlighted span: mul_assoc
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:26:29-26:31
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (fun x ↦ a * x) b
+in the target expression
+  a * b * a = 1 * a
+
+M : Type u_1
+inst✝ : Monoid M
+a : M
+hinj : Function.Injective fun x ↦ a * x
+hsurj : Function.Surjective fun x ↦ a * x
+b : M
+hb : (fun x ↦ a * x) b = 1
+⊢ a * b * a = 1 * a
+Source line 26:
+        _ = 1 * a := by rw [hb]
+                            ^^
+Highlighted span: hb
+
+WARNING .LspCheck.lean:16:13-16:22
+This simp argument is unused:
+  mul_assoc
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵m̵u̵l̵_̵a̵s̵s̵o̵c̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 16:
+      simp [mul_assoc]
+            ^^^^^^^^^
+Highlighted span: mul_assoc
+
+WARNING .LspCheck.lean:18:13-18:22
+This simp argument is unused:
+  mul_assoc
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵m̵u̵l̵_̵a̵s̵s̵o̵c̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 18:
+      simp [mul_assoc]
+            ^^^^^^^^^
+Highlighted span: mul_assoc
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α : Type u}
+
+variable {M : Type*}
+
+variable [Monoid M] {a b c : M}
+
+theorem isUnit_iff_mulLeft_bijective {a : M} :
+    IsUnit a ↔ Function.Bijective (a * ·) := by
+  constructor
+  · rintro ⟨u, rfl⟩
+    refine Function.bijective_iff_has_inverse.mpr ?_
+    refine ⟨(↑u⁻¹ * ·), ?_, ?_⟩
+    · intro x
+      simp
+    · intro x
+      simp
+  · intro h
+    rcases h with ⟨hinj, hsurj⟩
+    rcases hsurj 1 with ⟨b, hb⟩
+    have hba : b * a = 1 := by
+      apply hinj
+      calc
+        a * (b * a) = (a * b) * a := by simp [mul_assoc]
+        _ = 1 * a := by simpa using congrArg (fun x => x * a) hb
+        _ = a := by simp
+        _ = a * 1 := by simp
+    exact ⟨⟨a, b, hb, hba⟩, rfl⟩
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

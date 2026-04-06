@@ -1,0 +1,150 @@
+FILE: TerminatedStable.terminated_stable.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: TerminatedStable.terminated_stable.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {K : Type*} {g : GenContFract K} {n m : ℕ}
+
+theorem terminated_stable (n_le_m : n ≤ m) (terminatedAt_n : g.TerminatedAt n) :
+    g.TerminatedAt m := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {K : Type*} {g : GenContFract K} {n m : ℕ}
+
+theorem terminated_stable (n_le_m : n ≤ m) (terminatedAt_n : g.TerminatedAt n) :
+    g.TerminatedAt m := by
+  rcases terminatedAt_n with ⟨h, rfl⟩
+  exact ⟨Nat.le_trans h n_le_m, rfl⟩
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:7:30-7:38
+Tactic `cases` failed with a nested error:
+Dependent elimination failed: Failed to solve equation
+  none = g.s.1 n
+at case `Eq.refl`
+Source line 7:
+  rcases terminatedAt_n with ⟨h, rfl⟩
+                             ^^^^^^^^
+Highlighted span: ⟨h, rfl⟩
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:7:30-7:38
+Tactic `cases` failed with a nested error:
+Dependent elimination failed: Failed to solve equation
+  none = g.s.1 n
+at case `Eq.refl`
+Source line 7:
+  rcases terminatedAt_n with ⟨h, rfl⟩
+                             ^^^^^^^^
+Highlighted span: ⟨h, rfl⟩
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {K : Type*} {g : GenContFract K} {n m : ℕ}
+
+theorem terminated_stable (n_le_m : n ≤ m) (terminatedAt_n : g.TerminatedAt n) :
+    g.TerminatedAt m := by
+  rw [GenContFract.terminatedAt_iff_s_none] at terminatedAt_n ⊢
+  exact Option.eq_none_of_forall_not_mem fun gp hgp => terminatedAt_n <| g.s.monotone n_le_m hgp
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:8:9-8:41
+Unknown constant `Option.eq_none_of_forall_not_mem`
+Source line 8:
+  exact Option.eq_none_of_forall_not_mem fun gp hgp => terminatedAt_n <| g.s.monotone n_le_m hgp
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Option.eq_none_of_forall_not_mem
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:8:9-8:41
+Unknown constant `Option.eq_none_of_forall_not_mem`
+Source line 8:
+  exact Option.eq_none_of_forall_not_mem fun gp hgp => terminatedAt_n <| g.s.monotone n_le_m hgp
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Option.eq_none_of_forall_not_mem
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {K : Type*} {g : GenContFract K} {n m : ℕ}
+
+theorem terminated_stable (n_le_m : n ≤ m) (terminatedAt_n : g.TerminatedAt n) :
+    g.TerminatedAt m := by
+  rw [GenContFract.terminatedAt_iff_s_none] at terminatedAt_n ⊢
+  by_contra hm
+  rw [Option.ne_none_iff_exists] at hm
+  rcases hm with ⟨gp, hgp⟩
+  exact terminatedAt_n <| g.s.monotone n_le_m hgp
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:9:7-9:32
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.23 ≠ none
+in the target expression
+  ¬g.s.get? m = none
+
+K : Type u_1
+g : GenContFract K
+n m : ℕ
+n_le_m : n ≤ m
+terminatedAt_n : g.s.get? n = none
+hm : ¬g.s.get? m = none
+⊢ False
+Source line 9:
+  rw [Option.ne_none_iff_exists] at hm
+      ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Option.ne_none_iff_exists
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:9:7-9:32
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.23 ≠ none
+in the target expression
+  ¬g.s.get? m = none
+
+K : Type u_1
+g : GenContFract K
+n m : ℕ
+n_le_m : n ≤ m
+terminatedAt_n : g.s.get? n = none
+hm : ¬g.s.get? m = none
+⊢ False
+Source line 9:
+  rw [Option.ne_none_iff_exists] at hm
+      ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Option.ne_none_iff_exists

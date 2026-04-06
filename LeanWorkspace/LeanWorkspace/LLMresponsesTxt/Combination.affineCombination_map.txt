@@ -1,0 +1,373 @@
+FILE: Combination.affineCombination_map.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Combination.affineCombination_map.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+variable (k)
+
+variable {k}
+
+theorem affineCombination_map (e : ι₂ ↪ ι) (w : ι → k) (p : ι → P) :
+    (s₂.map e).affineCombination k p w = s₂.affineCombination k (p ∘ e) (w ∘ e) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+variable (k)
+
+variable {k}
+
+theorem affineCombination_map (e : ι₂ ↪ ι) (w : ι → k) (p : ι → P) :
+    (s₂.map e).affineCombination k p w = s₂.affineCombination k (p ∘ e) (w ∘ e) := by
+  classical
+  unfold Finset.affineCombination
+  rw [Finset.centerMass_map]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:19:7-19:28
+Unknown constant `Finset.centerMass_map`
+Source line 19:
+  rw [Finset.centerMass_map]
+      ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.centerMass_map
+
+ERROR .LspCheck.lean:16:84-17:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+ι₂ : Type u_5
+s₂ : Finset ι₂
+e : ι₂ ↪ ι
+w : ι → k
+p : ι → P
+⊢ { toFun := fun w ↦ ((Finset.map e s₂).weightedVSubOfPoint p (Classical.choice ⋯)) w +ᵥ Classical.choice ⋯,
+        linear := (Finset.map e s₂).weightedVSub p, map_vadd' := ⋯ }
+      w =
+    { toFun := fun w ↦ (s₂.weightedVSubOfPoint (p ∘ ⇑e) (Classical.choice ⋯)) w +ᵥ Classical.choice ⋯,
+        linear := s₂.weightedVSub (p ∘ ⇑e), map_vadd' := ⋯ }
+      (w ∘ ⇑e)
+Source line 16:
+    (s₂.map e).affineCombination k p w = s₂.affineCombination k (p ∘ e) (w ∘ e) := by
+                                                                                   ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:19:7-19:28
+Unknown constant `Finset.centerMass_map`
+Source line 19:
+  rw [Finset.centerMass_map]
+      ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.centerMass_map
+
+ERROR .LspCheck.lean:16:84-17:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+ι₂ : Type u_5
+s₂ : Finset ι₂
+e : ι₂ ↪ ι
+w : ι → k
+p : ι → P
+⊢ { toFun := fun w ↦ ((Finset.map e s₂).weightedVSubOfPoint p (Classical.choice ⋯)) w +ᵥ Classical.choice ⋯,
+        linear := (Finset.map e s₂).weightedVSub p, map_vadd' := ⋯ }
+      w =
+    { toFun := fun w ↦ (s₂.weightedVSubOfPoint (p ∘ ⇑e) (Classical.choice ⋯)) w +ᵥ Classical.choice ⋯,
+        linear := s₂.weightedVSub (p ∘ ⇑e), map_vadd' := ⋯ }
+      (w ∘ ⇑e)
+Source line 16:
+    (s₂.map e).affineCombination k p w = s₂.affineCombination k (p ∘ e) (w ∘ e) := by
+                                                                                   ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+variable (k)
+
+variable {k}
+
+theorem affineCombination_map (e : ι₂ ↪ ι) (w : ι → k) (p : ι → P) :
+    (s₂.map e).affineCombination k p w = s₂.affineCombination k (p ∘ e) (w ∘ e) := by
+  classical
+  by_cases hs : s₂.Nonempty
+  · rcases hs with ⟨i, hi⟩
+    rw [Finset.affineCombination_eq_weightedVSubOfPoint_vadd_of_nonempty _ hi,
+      Finset.affineCombination_eq_weightedVSubOfPoint_vadd_of_nonempty _ (Finset.mem_map.mpr ⟨i, hi, rfl⟩)]
+    congr 1
+    ext j
+    simp [Finset.weightedVSubOfPoint_apply, Finset.mem_map, e.injective.eq_iff]
+  · rw [Finset.not_nonempty_iff_eq_empty] at hs
+    subst hs
+    simp
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:20:9-20:73
+Unknown constant `Finset.affineCombination_eq_weightedVSubOfPoint_vadd_of_nonempty`
+Source line 20:
+    rw [Finset.affineCombination_eq_weightedVSubOfPoint_vadd_of_nonempty _ hi,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.affineCombination_eq_weightedVSubOfPoint_vadd_of_nonempty
+
+ERROR .LspCheck.lean:25:3-26:1
+unsolved goals
+case neg
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+ι₂ : Type u_5
+e : ι₂ ↪ ι
+w : ι → k
+p : ι → P
+⊢ (Finset.affineCombination k ∅ p) w = (Finset.affineCombination k ∅ (p ∘ ⇑e)) (w ∘ ⇑e)
+Source line 25:
+  · rw [Finset.not_nonempty_iff_eq_empty] at hs
+  ^
+Highlighted span: ·
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:20:9-20:73
+Unknown constant `Finset.affineCombination_eq_weightedVSubOfPoint_vadd_of_nonempty`
+Source line 20:
+    rw [Finset.affineCombination_eq_weightedVSubOfPoint_vadd_of_nonempty _ hi,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.affineCombination_eq_weightedVSubOfPoint_vadd_of_nonempty
+
+ERROR .LspCheck.lean:25:3-26:1
+unsolved goals
+case neg
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+ι₂ : Type u_5
+e : ι₂ ↪ ι
+w : ι → k
+p : ι → P
+⊢ (Finset.affineCombination k ∅ p) w = (Finset.affineCombination k ∅ (p ∘ ⇑e)) (w ∘ ⇑e)
+Source line 25:
+  · rw [Finset.not_nonempty_iff_eq_empty] at hs
+  ^
+Highlighted span: ·
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+variable (k)
+
+variable {k}
+
+theorem affineCombination_map (e : ι₂ ↪ ι) (w : ι → k) (p : ι → P) :
+    (s₂.map e).affineCombination k p w = s₂.affineCombination k (p ∘ e) (w ∘ e) := by
+  classical
+  induction s₂ using Finset.induction_on with
+  | empty =>
+      simp [Finset.affineCombination]
+  | @insert i s hi ih =>
+      simp only [Finset.map_insert, hi, Finset.affineCombination_insert, ih]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:22:41-22:72
+Unknown constant `Finset.affineCombination_insert`
+Source line 22:
+      simp only [Finset.map_insert, hi, Finset.affineCombination_insert, ih]
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.affineCombination_insert
+
+ERROR .LspCheck.lean:21:23-22:1
+unsolved goals
+case insert
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+ι₂ : Type u_5
+s₂ : Finset ι₂
+e : ι₂ ↪ ι
+w : ι → k
+p : ι → P
+i : ι₂
+s : Finset ι₂
+hi : i ∉ s
+ih : (Finset.affineCombination k (Finset.map e s) p) w = (Finset.affineCombination k s (p ∘ ⇑e)) (w ∘ ⇑e)
+⊢ (Finset.affineCombination k (insert (e i) (Finset.map e s)) p) w =
+    (Finset.affineCombination k (insert i s) (p ∘ ⇑e)) (w ∘ ⇑e)
+Source line 21:
+  | @insert i s hi ih =>
+                      ^
+Highlighted span: =
+
+WARNING .LspCheck.lean:22:37-22:39
+This simp argument is unused:
+  hi
+
+Hint: Omit it from the simp argument list.
+  simp only [Finset.map_insert, h̵i̵,̵ ̵Finset.affineCombination_insert, ih]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 22:
+      simp only [Finset.map_insert, hi, Finset.affineCombination_insert, ih]
+                                    ^^
+Highlighted span: hi
+
+WARNING .LspCheck.lean:22:74-22:76
+This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp only [Finset.map_insert, hi, Finset.affineCombination_insert,̵ ̵i̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 22:
+      simp only [Finset.map_insert, hi, Finset.affineCombination_insert, ih]
+                                                                         ^^
+Highlighted span: ih
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:22:41-22:72
+Unknown constant `Finset.affineCombination_insert`
+Source line 22:
+      simp only [Finset.map_insert, hi, Finset.affineCombination_insert, ih]
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.affineCombination_insert
+
+ERROR .LspCheck.lean:21:23-22:1
+unsolved goals
+case insert
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+ι₂ : Type u_5
+s₂ : Finset ι₂
+e : ι₂ ↪ ι
+w : ι → k
+p : ι → P
+i : ι₂
+s : Finset ι₂
+hi : i ∉ s
+ih : (Finset.affineCombination k (Finset.map e s) p) w = (Finset.affineCombination k s (p ∘ ⇑e)) (w ∘ ⇑e)
+⊢ (Finset.affineCombination k (insert (e i) (Finset.map e s)) p) w =
+    (Finset.affineCombination k (insert i s) (p ∘ ⇑e)) (w ∘ ⇑e)
+Source line 21:
+  | @insert i s hi ih =>
+                      ^
+Highlighted span: =
+
+WARNING .LspCheck.lean:22:37-22:39
+This simp argument is unused:
+  hi
+
+Hint: Omit it from the simp argument list.
+  simp only [Finset.map_insert, h̵i̵,̵ ̵Finset.affineCombination_insert, ih]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 22:
+      simp only [Finset.map_insert, hi, Finset.affineCombination_insert, ih]
+                                    ^^
+Highlighted span: hi
+
+WARNING .LspCheck.lean:22:74-22:76
+This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp only [Finset.map_insert, hi, Finset.affineCombination_insert,̵ ̵i̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 22:
+      simp only [Finset.map_insert, hi, Finset.affineCombination_insert, ih]
+                                                                         ^^
+Highlighted span: ih

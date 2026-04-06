@@ -1,0 +1,357 @@
+FILE: GradedMonoid.prod_pow_mem_graded.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: GradedMonoid.prod_pow_mem_graded.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {ι : Type*}
+
+variable {ι R S : Type*} [SetLike S R] [CommMonoid R] [AddCommMonoid ι]
+
+variable (A : ι → S) [SetLike.GradedMonoid A]
+
+variable {κ : Type*} (i : κ → ι) (g : κ → R) {F : Finset κ}
+
+theorem prod_pow_mem_graded (n : κ → ℕ) (hF : ∀ k ∈ F, g k ∈ A (i k)) :
+    ∏ k ∈ F, g k ^ n k ∈ A (∑ k ∈ F, n k • i k) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι : Type*}
+
+variable {ι R S : Type*} [SetLike S R] [CommMonoid R] [AddCommMonoid ι]
+
+variable (A : ι → S) [SetLike.GradedMonoid A]
+
+variable {κ : Type*} (i : κ → ι) (g : κ → R) {F : Finset κ}
+
+theorem prod_pow_mem_graded (n : κ → ℕ) (hF : ∀ k ∈ F, g k ∈ A (i k)) :
+    ∏ k ∈ F, g k ^ n k ∈ A (∑ k ∈ F, n k • i k) := by
+  classical
+  refine Finset.induction_on F ?_ ?_
+  · simp [SetLike.GradedMonoid.one_mem]
+  · intro a s ha hs
+    simp only [Finset.prod_insert ha, Finset.sum_insert ha]
+    have hmem : g a ∈ A (i a) := hF a (Finset.mem_insert_self a s)
+    have hp : g a ^ n a ∈ A (n a • i a) := by
+      simpa using SetLike.GradedMonoid.pow_mem (A := A) (r := g a) (i := i a) (n := n a) hmem
+    have hs' : ∏ x ∈ s, g x ^ n x ∈ A (∑ x ∈ s, n x • i x) := by
+      apply hs
+      intro k hk
+      exact hF k (Finset.mem_insert_of_mem hk)
+    exact SetLike.GradedMonoid.mul_mem hp hs'
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:11-15:39
+Unknown constant `SetLike.GradedMonoid.one_mem`
+Source line 15:
+  · simp [SetLike.GradedMonoid.one_mem]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: SetLike.GradedMonoid.one_mem
+
+ERROR .LspCheck.lean:15:3-15:40
+unsolved goals
+case refine_1
+ι : Type u_2
+R : Type u_3
+S : Type u_4
+inst✝³ : SetLike S R
+inst✝² : CommMonoid R
+inst✝¹ : AddCommMonoid ι
+A : ι → S
+inst✝ : SetLike.GradedMonoid A
+κ : Type u_5
+i : κ → ι
+g : κ → R
+F : Finset κ
+n : κ → ℕ
+hF : ∀ k ∈ F, g k ∈ A (i k)
+⊢ 1 ∈ A 0
+Source line 15:
+  · simp [SetLike.GradedMonoid.one_mem]
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simp [SetLike.GradedMonoid.one_mem]
+
+ERROR .LspCheck.lean:18:39-18:67
+Application type mismatch: The argument
+  Finset.mem_insert_self a s
+has type
+  a ∈ insert a s
+but is expected to have type
+  a ∈ F
+in the application
+  hF a (Finset.mem_insert_self a s)
+Source line 18:
+    have hmem : g a ∈ A (i a) := hF a (Finset.mem_insert_self a s)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (Finset.mem_insert_self a s)
+
+ERROR .LspCheck.lean:20:19-20:47
+Unknown constant `SetLike.GradedMonoid.pow_mem`
+Source line 20:
+      simpa using SetLike.GradedMonoid.pow_mem (A := A) (r := g a) (i := i a) (n := n a) hmem
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: SetLike.GradedMonoid.pow_mem
+
+ERROR .LspCheck.lean:23:13-23:14
+No goals to be solved
+Source line 23:
+      intro k hk
+            ^
+Highlighted span: k
+
+ERROR .LspCheck.lean:25:11-25:39
+Unknown constant `SetLike.GradedMonoid.mul_mem`
+Source line 25:
+    exact SetLike.GradedMonoid.mul_mem hp hs'
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: SetLike.GradedMonoid.mul_mem
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:11-15:39
+Unknown constant `SetLike.GradedMonoid.one_mem`
+Source line 15:
+  · simp [SetLike.GradedMonoid.one_mem]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: SetLike.GradedMonoid.one_mem
+
+ERROR .LspCheck.lean:15:3-15:40
+unsolved goals
+case refine_1
+ι : Type u_2
+R : Type u_3
+S : Type u_4
+inst✝³ : SetLike S R
+inst✝² : CommMonoid R
+inst✝¹ : AddCommMonoid ι
+A : ι → S
+inst✝ : SetLike.GradedMonoid A
+κ : Type u_5
+i : κ → ι
+g : κ → R
+F : Finset κ
+n : κ → ℕ
+hF : ∀ k ∈ F, g k ∈ A (i k)
+⊢ 1 ∈ A 0
+Source line 15:
+  · simp [SetLike.GradedMonoid.one_mem]
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simp [SetLike.GradedMonoid.one_mem]
+
+ERROR .LspCheck.lean:18:39-18:67
+Application type mismatch: The argument
+  Finset.mem_insert_self a s
+has type
+  a ∈ insert a s
+but is expected to have type
+  a ∈ F
+in the application
+  hF a (Finset.mem_insert_self a s)
+Source line 18:
+    have hmem : g a ∈ A (i a) := hF a (Finset.mem_insert_self a s)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (Finset.mem_insert_self a s)
+
+ERROR .LspCheck.lean:20:19-20:47
+Unknown constant `SetLike.GradedMonoid.pow_mem`
+Source line 20:
+      simpa using SetLike.GradedMonoid.pow_mem (A := A) (r := g a) (i := i a) (n := n a) hmem
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: SetLike.GradedMonoid.pow_mem
+
+ERROR .LspCheck.lean:23:13-23:14
+No goals to be solved
+Source line 23:
+      intro k hk
+            ^
+Highlighted span: k
+
+ERROR .LspCheck.lean:25:11-25:39
+Unknown constant `SetLike.GradedMonoid.mul_mem`
+Source line 25:
+    exact SetLike.GradedMonoid.mul_mem hp hs'
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: SetLike.GradedMonoid.mul_mem
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι : Type*}
+
+variable {ι R S : Type*} [SetLike S R] [CommMonoid R] [AddCommMonoid ι]
+
+variable (A : ι → S) [SetLike.GradedMonoid A]
+
+variable {κ : Type*} (i : κ → ι) (g : κ → R) {F : Finset κ}
+
+theorem prod_pow_mem_graded (n : κ → ℕ) (hF : ∀ k ∈ F, g k ∈ A (i k)) :
+    ∏ k ∈ F, g k ^ n k ∈ A (∑ k ∈ F, n k • i k) := by
+  classical
+  induction F using Finset.induction_on with
+  | empty =>
+      simpa using (SetLike.GradedMonoid.gradedOne (A := A))
+  | @insert a s ha ih =>
+      simp only [Finset.prod_insert ha, Finset.sum_insert ha]
+      have hmem : g a ∈ A (i a) := hF a (by simp [ha])
+      have hp : g a ^ n a ∈ A (n a • i a) := by
+        induction n a with
+        | zero =>
+            simpa using (SetLike.GradedMonoid.gradedOne (A := A))
+        | succ m hm =>
+            simpa [pow_succ, succ_nsmul] using
+              SetLike.GradedMonoid.gradedMul (A := A) hm hmem
+      have hs' : ∏ x ∈ s, g x ^ n x ∈ A (∑ x ∈ s, n x • i x) := by
+        apply ih
+        intro k hk
+        exact hF k (by simp [hk, ha])
+      simpa [add_comm, add_left_comm, add_assoc] using
+        SetLike.GradedMonoid.gradedMul (A := A) hp hs'
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:20-16:50
+Unknown constant `SetLike.GradedMonoid.gradedOne`
+Source line 16:
+      simpa using (SetLike.GradedMonoid.gradedOne (A := A))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: SetLike.GradedMonoid.gradedOne
+
+ERROR .LspCheck.lean:23:26-23:56
+Unknown constant `SetLike.GradedMonoid.gradedOne`
+Source line 23:
+            simpa using (SetLike.GradedMonoid.gradedOne (A := A))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: SetLike.GradedMonoid.gradedOne
+
+ERROR .LspCheck.lean:26:15-26:45
+Unknown constant `SetLike.GradedMonoid.gradedMul`
+Source line 26:
+              SetLike.GradedMonoid.gradedMul (A := A) hm hmem
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: SetLike.GradedMonoid.gradedMul
+
+ERROR .LspCheck.lean:32:9-32:39
+Unknown constant `SetLike.GradedMonoid.gradedMul`
+Source line 32:
+        SetLike.GradedMonoid.gradedMul (A := A) hp hs'
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: SetLike.GradedMonoid.gradedMul
+
+WARNING .LspCheck.lean:30:34-30:36
+This simp argument is unused:
+  ha
+
+Hint: Omit it from the simp argument list.
+  simp [hk,̵ ̵h̵a̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 30:
+        exact hF k (by simp [hk, ha])
+                                 ^^
+Highlighted span: ha
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:20-16:50
+Unknown constant `SetLike.GradedMonoid.gradedOne`
+Source line 16:
+      simpa using (SetLike.GradedMonoid.gradedOne (A := A))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: SetLike.GradedMonoid.gradedOne
+
+ERROR .LspCheck.lean:23:26-23:56
+Unknown constant `SetLike.GradedMonoid.gradedOne`
+Source line 23:
+            simpa using (SetLike.GradedMonoid.gradedOne (A := A))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: SetLike.GradedMonoid.gradedOne
+
+ERROR .LspCheck.lean:26:15-26:45
+Unknown constant `SetLike.GradedMonoid.gradedMul`
+Source line 26:
+              SetLike.GradedMonoid.gradedMul (A := A) hm hmem
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: SetLike.GradedMonoid.gradedMul
+
+ERROR .LspCheck.lean:32:9-32:39
+Unknown constant `SetLike.GradedMonoid.gradedMul`
+Source line 32:
+        SetLike.GradedMonoid.gradedMul (A := A) hp hs'
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: SetLike.GradedMonoid.gradedMul
+
+WARNING .LspCheck.lean:30:34-30:36
+This simp argument is unused:
+  ha
+
+Hint: Omit it from the simp argument list.
+  simp [hk,̵ ̵h̵a̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 30:
+        exact hF k (by simp [hk, ha])
+                                 ^^
+Highlighted span: ha
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι : Type*}
+
+variable {ι R S : Type*} [SetLike S R] [CommMonoid R] [AddCommMonoid ι]
+
+variable (A : ι → S) [SetLike.GradedMonoid A]
+
+variable {κ : Type*} (i : κ → ι) (g : κ → R) {F : Finset κ}
+
+theorem prod_pow_mem_graded (n : κ → ℕ) (hF : ∀ k ∈ F, g k ∈ A (i k)) :
+    ∏ k ∈ F, g k ^ n k ∈ A (∑ k ∈ F, n k • i k) := by
+  classical
+  simpa only [Finset.prod_pow_eq_pow_sum, Finset.sum_map] using
+    SetLike.mem_gradedMonoid_finset_prod_pow (A := A) (s := F) (ι := i) (r := g) n hF
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:5-15:45
+Unknown constant `SetLike.mem_gradedMonoid_finset_prod_pow`
+Source line 15:
+    SetLike.mem_gradedMonoid_finset_prod_pow (A := A) (s := F) (ι := i) (r := g) n hF
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: SetLike.mem_gradedMonoid_finset_prod_pow
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:5-15:45
+Unknown constant `SetLike.mem_gradedMonoid_finset_prod_pow`
+Source line 15:
+    SetLike.mem_gradedMonoid_finset_prod_pow (A := A) (s := F) (ι := i) (r := g) n hF
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: SetLike.mem_gradedMonoid_finset_prod_pow

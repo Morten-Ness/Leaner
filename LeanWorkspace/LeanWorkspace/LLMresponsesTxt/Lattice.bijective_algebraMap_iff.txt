@@ -1,0 +1,515 @@
+FILE: Lattice.bijective_algebraMap_iff.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Lattice.bijective_algebraMap_iff.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable (R : Type u) {A : Type v} {B : Type w}
+
+variable [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B]
+
+theorem bijective_algebraMap_iff {R A : Type*} [Field R] [Semiring A] [Nontrivial A]
+    [Algebra R A] : Function.Bijective (algebraMap R A) ↔ (⊤ : Subalgebra R A) = ⊥ := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (R : Type u) {A : Type v} {B : Type w}
+
+variable [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B]
+
+theorem bijective_algebraMap_iff {R A : Type*} [Field R] [Semiring A] [Nontrivial A]
+    [Algebra R A] : Function.Bijective (algebraMap R A) ↔ (⊤ : Subalgebra R A) = ⊥ := by
+  constructor
+  · intro h
+    ext x
+    constructor
+    · intro hx
+      trivial
+    · intro hx
+      rcases h.2 x with ⟨r, rfl⟩
+      exact Subalgebra.mem_bot R
+  · intro h
+    constructor
+    · exact (NoZeroSMulDivisors.algebraMap_injective R A)
+    · intro x
+      rw [h] at *
+      exact show x ∈ (⊥ : Subalgebra R A) from by trivial |> fun hx =>
+        let y : ⊥ := ⟨x, hx⟩
+        ⟨y.1, by simp⟩
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:7-14:14
+Tactic `assumption` failed
+
+case mp.h.mp
+R : Type u_1
+A : Type u_2
+inst✝³ : Field R
+inst✝² : Semiring A
+inst✝¹ : Nontrivial A
+inst✝ : Algebra R A
+h : Function.Bijective ⇑(algebraMap R A)
+x : A
+hx : x ∈ ⊤
+⊢ x ∈ ⊥
+Source line 14:
+      trivial
+      ^^^^^^^
+Highlighted span: trivial
+
+ERROR .LspCheck.lean:17:13-17:31
+Unknown constant `Subalgebra.mem_bot`
+Source line 17:
+      exact Subalgebra.mem_bot R
+            ^^^^^^^^^^^^^^^^^^
+Highlighted span: Subalgebra.mem_bot
+
+ERROR .LspCheck.lean:20:14-20:53
+Unknown constant `NoZeroSMulDivisors.algebraMap_injective`
+Source line 20:
+    · exact (NoZeroSMulDivisors.algebraMap_injective R A)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: NoZeroSMulDivisors.algebraMap_injective
+
+ERROR .LspCheck.lean:24:22-24:29
+Invalid `⟨...⟩` notation: The expected type `False` has no constructors
+Source line 24:
+        let y : ⊥ := ⟨x, hx⟩
+                     ^^^^^^^
+Highlighted span: ⟨x, hx⟩
+
+ERROR .LspCheck.lean:25:10-25:13
+Invalid projection: Projection operates on structure-like types with fields. The expression
+  y
+has type `False` which does not have fields.
+Source line 25:
+        ⟨y.1, by simp⟩
+         ^^^
+Highlighted span: y.1
+
+ERROR .LspCheck.lean:23:51-23:58
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+Source line 23:
+      exact show x ∈ (⊥ : Subalgebra R A) from by trivial |> fun hx =>
+                                                  ^^^^^^^
+Highlighted span: trivial
+
+ERROR .LspCheck.lean:25:15-25:22
+unsolved goals
+R : Type u_1
+A : Type u_2
+inst✝³ : Field R
+inst✝² : Semiring A
+inst✝¹ : Nontrivial A
+inst✝ : Algebra R A
+h : ⊥ = ⊥
+x : A
+hx :
+  ((((((((((((((((((((((((((((((((((((((((((((((((((⋯ ∧ ⋯) ∧ sorry) ∧ sorry) ∧ sorry) ∧ sorry) ∧ sorry) ∧ sorry) ∧
+                                                                                          sorry) ∧
+                                                                                        sorry) ∧
+                                                                                      sorry) ∧
+                                                                                    sorry) ∧
+                                                                                  sorry) ∧
+                                                                                sorry) ∧
+                                                                              sorry) ∧
+                                                                            sorry) ∧
+                                                                          sorry) ∧
+                                                                        sorry) ∧
+                                                                      sorry) ∧
+                                                                    sorry) ∧
+                                                                  sorry) ∧
+                                                                sorry) ∧
+                                                              sorry) ∧
+                                                            sorry) ∧
+                                                          sorry) ∧
+                                                        sorry) ∧
+                                                      sorry) ∧
+                                                    sorry) ∧
+                                                  sorry) ∧
+                                                sorry) ∧
+                                              sorry) ∧
+                                            sorry) ∧
+                                          sorry) ∧
+                                        sorry) ∧
+                                      sorry) ∧
+                                    sorry) ∧
+                                  sorry) ∧
+                                sorry) ∧
+                              sorry) ∧
+                            sorry) ∧
+                          sorry) ∧
+                        sorry) ∧
+                      sorry) ∧
+                    sorry) ∧
+                  sorry) ∧
+                sorry) ∧
+              sorry) ∧
+            sorry) ∧
+          sorry) ∧
+        sorry) ∧
+      sorry) ∧
+    sorry
+y : ⊥ := sorry
+⊢ (algebraMap R A) (sorry ()) = x
+Source line 25:
+        ⟨y.1, by simp⟩
+              ^^^^^^^
+Highlighted span: by simp
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:7-14:14
+Tactic `assumption` failed
+
+case mp.h.mp
+R : Type u_1
+A : Type u_2
+inst✝³ : Field R
+inst✝² : Semiring A
+inst✝¹ : Nontrivial A
+inst✝ : Algebra R A
+h : Function.Bijective ⇑(algebraMap R A)
+x : A
+hx : x ∈ ⊤
+⊢ x ∈ ⊥
+Source line 14:
+      trivial
+      ^^^^^^^
+Highlighted span: trivial
+
+ERROR .LspCheck.lean:17:13-17:31
+Unknown constant `Subalgebra.mem_bot`
+Source line 17:
+      exact Subalgebra.mem_bot R
+            ^^^^^^^^^^^^^^^^^^
+Highlighted span: Subalgebra.mem_bot
+
+ERROR .LspCheck.lean:20:14-20:53
+Unknown constant `NoZeroSMulDivisors.algebraMap_injective`
+Source line 20:
+    · exact (NoZeroSMulDivisors.algebraMap_injective R A)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: NoZeroSMulDivisors.algebraMap_injective
+
+ERROR .LspCheck.lean:24:22-24:29
+Invalid `⟨...⟩` notation: The expected type `False` has no constructors
+Source line 24:
+        let y : ⊥ := ⟨x, hx⟩
+                     ^^^^^^^
+Highlighted span: ⟨x, hx⟩
+
+ERROR .LspCheck.lean:25:10-25:13
+Invalid projection: Projection operates on structure-like types with fields. The expression
+  y
+has type `False` which does not have fields.
+Source line 25:
+        ⟨y.1, by simp⟩
+         ^^^
+Highlighted span: y.1
+
+ERROR .LspCheck.lean:23:51-23:58
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+Source line 23:
+      exact show x ∈ (⊥ : Subalgebra R A) from by trivial |> fun hx =>
+                                                  ^^^^^^^
+Highlighted span: trivial
+
+ERROR .LspCheck.lean:25:15-25:22
+unsolved goals
+R : Type u_1
+A : Type u_2
+inst✝³ : Field R
+inst✝² : Semiring A
+inst✝¹ : Nontrivial A
+inst✝ : Algebra R A
+h : ⊥ = ⊥
+x : A
+hx :
+  ((((((((((((((((((((((((((((((((((((((((((((((((((⋯ ∧ ⋯) ∧ sorry) ∧ sorry) ∧ sorry) ∧ sorry) ∧ sorry) ∧ sorry) ∧
+                                                                                          sorry) ∧
+                                                                                        sorry) ∧
+                                                                                      sorry) ∧
+                                                                                    sorry) ∧
+                                                                                  sorry) ∧
+                                                                                sorry) ∧
+                                                                              sorry) ∧
+                                                                            sorry) ∧
+                                                                          sorry) ∧
+                                                                        sorry) ∧
+                                                                      sorry) ∧
+                                                                    sorry) ∧
+                                                                  sorry) ∧
+                                                                sorry) ∧
+                                                              sorry) ∧
+                                                            sorry) ∧
+                                                          sorry) ∧
+                                                        sorry) ∧
+                                                      sorry) ∧
+                                                    sorry) ∧
+                                                  sorry) ∧
+                                                sorry) ∧
+                                              sorry) ∧
+                                            sorry) ∧
+                                          sorry) ∧
+                                        sorry) ∧
+                                      sorry) ∧
+                                    sorry) ∧
+                                  sorry) ∧
+                                sorry) ∧
+                              sorry) ∧
+                            sorry) ∧
+                          sorry) ∧
+                        sorry) ∧
+                      sorry) ∧
+                    sorry) ∧
+                  sorry) ∧
+                sorry) ∧
+              sorry) ∧
+            sorry) ∧
+          sorry) ∧
+        sorry) ∧
+      sorry) ∧
+    sorry
+y : ⊥ := sorry
+⊢ (algebraMap R A) (sorry ()) = x
+Source line 25:
+        ⟨y.1, by simp⟩
+              ^^^^^^^
+Highlighted span: by simp
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (R : Type u) {A : Type v} {B : Type w}
+
+variable [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B]
+
+theorem bijective_algebraMap_iff {R A : Type*} [Field R] [Semiring A] [Nontrivial A]
+    [Algebra R A] : Function.Bijective (algebraMap R A) ↔ (⊤ : Subalgebra R A) = ⊥ := by
+  constructor
+  · intro h
+    have hs : Set.SurjOn (algebraMap R A) Set.univ (⊤ : Subalgebra R A) := by
+      intro x hx
+      rcases h.2 x with ⟨r, rfl⟩
+      exact ⟨r, by simp, by simp⟩
+    exact (Subalgebra.eq_bot_iff).2 hs
+  · intro h
+    have htop : (⊤ : Subalgebra R A) = ⊥ := h
+    have hs : Set.SurjOn (algebraMap R A) Set.univ (⊤ : Subalgebra R A) := by
+      rw [htop]
+      intro x hx
+      have hx' : x = 0 := by simpa using hx
+      refine ⟨0, by simp, ?_⟩
+      simpa [hx']
+    have hinj : Function.Injective (algebraMap R A) := RingHom.injective (algebraMap R A)
+    exact ⟨hinj, fun x => hs (by trivial)⟩
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:12-15:33
+Unknown constant `Subalgebra.eq_bot_iff`
+Source line 15:
+    exact (Subalgebra.eq_bot_iff).2 hs
+           ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subalgebra.eq_bot_iff
+
+ERROR .LspCheck.lean:21:30-21:44
+Type mismatch: After simplification, term
+  hx
+ has type
+  ∃ y, (algebraMap R A) y = x
+but is expected to have type
+  x = 0
+Source line 21:
+      have hx' : x = 0 := by simpa using hx
+                             ^^^^^^^^^^^^^^
+Highlighted span: simpa using hx
+
+WARNING .LspCheck.lean:23:7-23:18
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 23:
+      simpa [hx']
+      ^^^^^^^^^^^
+Highlighted span: simpa [hx']
+
+ERROR .LspCheck.lean:25:27-25:42
+Type mismatch
+  hs True.intro
+has type
+  ?m.150 ∈ ⇑(algebraMap R A) '' Set.univ
+but is expected to have type
+  ∃ a, (algebraMap R A) a = x
+Source line 25:
+    exact ⟨hinj, fun x => hs (by trivial)⟩
+                          ^^^^^^^^^^^^^^^
+Highlighted span: hs (by trivial)
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:12-15:33
+Unknown constant `Subalgebra.eq_bot_iff`
+Source line 15:
+    exact (Subalgebra.eq_bot_iff).2 hs
+           ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subalgebra.eq_bot_iff
+
+ERROR .LspCheck.lean:21:30-21:44
+Type mismatch: After simplification, term
+  hx
+ has type
+  ∃ y, (algebraMap R A) y = x
+but is expected to have type
+  x = 0
+Source line 21:
+      have hx' : x = 0 := by simpa using hx
+                             ^^^^^^^^^^^^^^
+Highlighted span: simpa using hx
+
+WARNING .LspCheck.lean:23:7-23:18
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 23:
+      simpa [hx']
+      ^^^^^^^^^^^
+Highlighted span: simpa [hx']
+
+ERROR .LspCheck.lean:25:27-25:42
+Type mismatch
+  hs True.intro
+has type
+  ?m.150 ∈ ⇑(algebraMap R A) '' Set.univ
+but is expected to have type
+  ∃ a, (algebraMap R A) a = x
+Source line 25:
+    exact ⟨hinj, fun x => hs (by trivial)⟩
+                          ^^^^^^^^^^^^^^^
+Highlighted span: hs (by trivial)
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (R : Type u) {A : Type v} {B : Type w}
+
+variable [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B]
+
+theorem bijective_algebraMap_iff {R A : Type*} [Field R] [Semiring A] [Nontrivial A]
+    [Algebra R A] : Function.Bijective (algebraMap R A) ↔ (⊤ : Subalgebra R A) = ⊥ := by
+  constructor
+  · intro h
+    apply le_antisymm
+    · intro x hx
+      rcases h.2 x with ⟨r, rfl⟩
+      change algebraMap R A r = 0
+      simp
+    · exact bot_le
+  · intro h
+    constructor
+    · exact FaithfulSMul.algebraMap_injective R A
+    · intro x
+      have hx : x = 0 := by
+        have : x ∈ (⊤ : Subalgebra R A) := by simp
+        rw [h] at this
+        simpa using this
+      refine ⟨0, ?_⟩
+      simpa [hx]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:7-14:34
+'change' tactic failed, pattern
+  (algebraMap R A) r = 0
+is not definitionally equal to target
+  (algebraMap R A) r ∈ ⊥
+Source line 14:
+      change algebraMap R A r = 0
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: change algebraMap R A r = 0
+
+ERROR .LspCheck.lean:24:9-24:25
+Type mismatch: After simplification, term
+  this
+ has type
+  x ∈ ⊥
+but is expected to have type
+  x = 0
+Source line 24:
+        simpa using this
+        ^^^^^^^^^^^^^^^^
+Highlighted span: simpa using this
+
+WARNING .LspCheck.lean:26:7-26:17
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 26:
+      simpa [hx]
+      ^^^^^^^^^^
+Highlighted span: simpa [hx]
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:7-14:34
+'change' tactic failed, pattern
+  (algebraMap R A) r = 0
+is not definitionally equal to target
+  (algebraMap R A) r ∈ ⊥
+Source line 14:
+      change algebraMap R A r = 0
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: change algebraMap R A r = 0
+
+ERROR .LspCheck.lean:24:9-24:25
+Type mismatch: After simplification, term
+  this
+ has type
+  x ∈ ⊥
+but is expected to have type
+  x = 0
+Source line 24:
+        simpa using this
+        ^^^^^^^^^^^^^^^^
+Highlighted span: simpa using this
+
+WARNING .LspCheck.lean:26:7-26:17
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 26:
+      simpa [hx]
+      ^^^^^^^^^^
+Highlighted span: simpa [hx]

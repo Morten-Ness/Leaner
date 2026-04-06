@@ -1,0 +1,374 @@
+FILE: Basic.exists_iff_exists_existsUnique.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.exists_iff_exists_existsUnique.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {G H : Type*} [Mul G] [Mul H] {A B : Finset G} {a0 b0 : G}
+
+theorem exists_iff_exists_existsUnique :
+    (∃ a0 b0 : G, a0 ∈ A ∧ b0 ∈ B ∧ UniqueMul A B a0 b0) ↔
+      ∃ g : G, ∃! ab, ab ∈ A ×ˢ B ∧ ab.1 * ab.2 = g := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G H : Type*} [Mul G] [Mul H] {A B : Finset G} {a0 b0 : G}
+
+theorem exists_iff_exists_existsUnique :
+    (∃ a0 b0 : G, a0 ∈ A ∧ b0 ∈ B ∧ UniqueMul A B a0 b0) ↔
+      ∃ g : G, ∃! ab, ab ∈ A ×ˢ B ∧ ab.1 * ab.2 = g := by
+  constructor
+  · rintro ⟨a0, b0, ha0, hb0, huniq⟩
+    refine ⟨a0 * b0, ⟨(a0, b0), ?_, ?_⟩⟩
+    · exact ⟨by simp [ha0, hb0], rfl⟩
+    · intro ab hab
+      rcases hab with ⟨habmem, habeq⟩
+      rcases mem_product.mp habmem with ⟨ha, hb⟩
+      have h' := huniq ha hb habeq
+      rcases Prod.mk.inj h' with ⟨rfl, rfl⟩
+      rfl
+  · rintro ⟨g, ⟨ab0, hab0, huniq⟩⟩
+    rcases ab0 with ⟨a0, b0⟩
+    rcases hab0 with ⟨habmem, hg⟩
+    rcases mem_product.mp habmem with ⟨ha0, hb0⟩
+    refine ⟨a0, b0, ha0, hb0, ?_⟩
+    intro a b ha hb habeq
+    have hab : (a, b) ∈ A ×ˢ B ∧ a * b = g := ⟨by simp [ha, hb], habeq.trans hg.symm⟩
+    have hEq : (a, b) = (a0, b0) := huniq (a, b) hab
+    simpa using hEq
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:14-14:28
+Unknown identifier `mem_product.mp`
+Source line 14:
+      rcases mem_product.mp habmem with ⟨ha, hb⟩
+             ^^^^^^^^^^^^^^
+Highlighted span: mem_product.mp
+
+ERROR .LspCheck.lean:14:41-14:49
+Tactic `rcases` failed: `x✝ : ?m.96` is not an inductive datatype
+Source line 14:
+      rcases mem_product.mp habmem with ⟨ha, hb⟩
+                                        ^^^^^^^^
+Highlighted span: ⟨ha, hb⟩
+
+ERROR .LspCheck.lean:21:12-21:26
+Unknown identifier `mem_product.mp`
+Source line 21:
+    rcases mem_product.mp habmem with ⟨ha0, hb0⟩
+           ^^^^^^^^^^^^^^
+Highlighted span: mem_product.mp
+
+ERROR .LspCheck.lean:21:39-21:49
+Tactic `rcases` failed: `x✝ : ?m.141` is not an inductive datatype
+Source line 21:
+    rcases mem_product.mp habmem with ⟨ha0, hb0⟩
+                                      ^^^^^^^^^^
+Highlighted span: ⟨ha0, hb0⟩
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:14-14:28
+Unknown identifier `mem_product.mp`
+Source line 14:
+      rcases mem_product.mp habmem with ⟨ha, hb⟩
+             ^^^^^^^^^^^^^^
+Highlighted span: mem_product.mp
+
+ERROR .LspCheck.lean:14:41-14:49
+Tactic `rcases` failed: `x✝ : ?m.96` is not an inductive datatype
+Source line 14:
+      rcases mem_product.mp habmem with ⟨ha, hb⟩
+                                        ^^^^^^^^
+Highlighted span: ⟨ha, hb⟩
+
+ERROR .LspCheck.lean:21:12-21:26
+Unknown identifier `mem_product.mp`
+Source line 21:
+    rcases mem_product.mp habmem with ⟨ha0, hb0⟩
+           ^^^^^^^^^^^^^^
+Highlighted span: mem_product.mp
+
+ERROR .LspCheck.lean:21:39-21:49
+Tactic `rcases` failed: `x✝ : ?m.141` is not an inductive datatype
+Source line 21:
+    rcases mem_product.mp habmem with ⟨ha0, hb0⟩
+                                      ^^^^^^^^^^
+Highlighted span: ⟨ha0, hb0⟩
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G H : Type*} [Mul G] [Mul H] {A B : Finset G} {a0 b0 : G}
+
+theorem exists_iff_exists_existsUnique :
+    (∃ a0 b0 : G, a0 ∈ A ∧ b0 ∈ B ∧ UniqueMul A B a0 b0) ↔
+      ∃ g : G, ∃! ab, ab ∈ A ×ˢ B ∧ ab.1 * ab.2 = g := by
+  constructor
+  · rintro ⟨a0, b0, ha0, hb0, huniq⟩
+    refine ⟨a0 * b0, ⟨(a0, b0), ?_, ?_⟩⟩
+    · exact ⟨by simp [ha0, hb0], rfl⟩
+    · intro ab hab
+      rcases hab with ⟨habmem, habeq⟩
+      have ha : ab.1 ∈ A := by simpa using habmem.1
+      have hb : ab.2 ∈ B := by simpa using habmem.2
+      have h' : (ab.1, ab.2) = (a0, b0) := huniq ha hb habeq
+      cases ab
+      simpa using h'
+  · rintro ⟨g, ⟨ab0, hab0, huniq⟩⟩
+    rcases ab0 with ⟨a0, b0⟩
+    rcases hab0 with ⟨habmem, hg⟩
+    have ha0 : a0 ∈ A := by simpa using habmem.1
+    have hb0 : b0 ∈ B := by simpa using habmem.2
+    refine ⟨a0, b0, ha0, hb0, ?_⟩
+    intro a b ha hb habeq
+    have hab : (a, b) ∈ A ×ˢ B ∧ a * b = g := ⟨by simp [ha, hb], habeq.trans hg.symm⟩
+    have hEq : (a, b) = (a0, b0) := huniq (a, b) hab
+    simpa using hEq
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:44-14:52
+Invalid projection: Projection operates on structure-like types with fields. The expression
+  habmem
+has type
+  Quot.lift (fun l ↦ ab ∈ l) ⋯ (A ×ˢ B).val
+which does not have fields.
+Source line 14:
+      have ha : ab.1 ∈ A := by simpa using habmem.1
+                                           ^^^^^^^^
+Highlighted span: habmem.1
+
+ERROR .LspCheck.lean:15:44-15:52
+Invalid projection: Projection operates on structure-like types with fields. The expression
+  habmem
+has type
+  Quot.lift (fun l ↦ ab ∈ l) ⋯ (A ×ˢ B).val
+which does not have fields.
+Source line 15:
+      have hb : ab.2 ∈ B := by simpa using habmem.2
+                                           ^^^^^^^^
+Highlighted span: habmem.2
+
+ERROR .LspCheck.lean:16:44-16:61
+Type mismatch
+  huniq ha hb habeq
+has type
+  ab.1 = a0 ∧ ab.2 = b0
+but is expected to have type
+  (ab.1, ab.2) = (a0, b0)
+Source line 16:
+      have h' : (ab.1, ab.2) = (a0, b0) := huniq ha hb habeq
+                                           ^^^^^^^^^^^^^^^^^
+Highlighted span: huniq ha hb habeq
+
+ERROR .LspCheck.lean:22:41-22:49
+Invalid projection: Projection operates on structure-like types with fields. The expression
+  habmem
+has type
+  Quot.lift (fun l ↦ (a0, b0) ∈ l) ⋯ (A ×ˢ B).val
+which does not have fields.
+Source line 22:
+    have ha0 : a0 ∈ A := by simpa using habmem.1
+                                        ^^^^^^^^
+Highlighted span: habmem.1
+
+ERROR .LspCheck.lean:23:41-23:49
+Invalid projection: Projection operates on structure-like types with fields. The expression
+  habmem
+has type
+  Quot.lift (fun l ↦ (a0, b0) ∈ l) ⋯ (A ×ˢ B).val
+which does not have fields.
+Source line 23:
+    have hb0 : b0 ∈ B := by simpa using habmem.2
+                                        ^^^^^^^^
+Highlighted span: habmem.2
+
+ERROR .LspCheck.lean:26:78-26:85
+Application type mismatch: The argument
+  Eq.symm hg
+has type
+  g = (a0, b0).1 * (a0, b0).2
+but is expected to have type
+  a0 * b0 = g
+in the application
+  Eq.trans habeq (Eq.symm hg)
+Source line 26:
+    have hab : (a, b) ∈ A ×ˢ B ∧ a * b = g := ⟨by simp [ha, hb], habeq.trans hg.symm⟩
+                                                                             ^^^^^^^
+Highlighted span: hg.symm
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:44-14:52
+Invalid projection: Projection operates on structure-like types with fields. The expression
+  habmem
+has type
+  Quot.lift (fun l ↦ ab ∈ l) ⋯ (A ×ˢ B).val
+which does not have fields.
+Source line 14:
+      have ha : ab.1 ∈ A := by simpa using habmem.1
+                                           ^^^^^^^^
+Highlighted span: habmem.1
+
+ERROR .LspCheck.lean:15:44-15:52
+Invalid projection: Projection operates on structure-like types with fields. The expression
+  habmem
+has type
+  Quot.lift (fun l ↦ ab ∈ l) ⋯ (A ×ˢ B).val
+which does not have fields.
+Source line 15:
+      have hb : ab.2 ∈ B := by simpa using habmem.2
+                                           ^^^^^^^^
+Highlighted span: habmem.2
+
+ERROR .LspCheck.lean:16:44-16:61
+Type mismatch
+  huniq ha hb habeq
+has type
+  ab.1 = a0 ∧ ab.2 = b0
+but is expected to have type
+  (ab.1, ab.2) = (a0, b0)
+Source line 16:
+      have h' : (ab.1, ab.2) = (a0, b0) := huniq ha hb habeq
+                                           ^^^^^^^^^^^^^^^^^
+Highlighted span: huniq ha hb habeq
+
+ERROR .LspCheck.lean:22:41-22:49
+Invalid projection: Projection operates on structure-like types with fields. The expression
+  habmem
+has type
+  Quot.lift (fun l ↦ (a0, b0) ∈ l) ⋯ (A ×ˢ B).val
+which does not have fields.
+Source line 22:
+    have ha0 : a0 ∈ A := by simpa using habmem.1
+                                        ^^^^^^^^
+Highlighted span: habmem.1
+
+ERROR .LspCheck.lean:23:41-23:49
+Invalid projection: Projection operates on structure-like types with fields. The expression
+  habmem
+has type
+  Quot.lift (fun l ↦ (a0, b0) ∈ l) ⋯ (A ×ˢ B).val
+which does not have fields.
+Source line 23:
+    have hb0 : b0 ∈ B := by simpa using habmem.2
+                                        ^^^^^^^^
+Highlighted span: habmem.2
+
+ERROR .LspCheck.lean:26:78-26:85
+Application type mismatch: The argument
+  Eq.symm hg
+has type
+  g = (a0, b0).1 * (a0, b0).2
+but is expected to have type
+  a0 * b0 = g
+in the application
+  Eq.trans habeq (Eq.symm hg)
+Source line 26:
+    have hab : (a, b) ∈ A ×ˢ B ∧ a * b = g := ⟨by simp [ha, hb], habeq.trans hg.symm⟩
+                                                                             ^^^^^^^
+Highlighted span: hg.symm
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G H : Type*} [Mul G] [Mul H] {A B : Finset G} {a0 b0 : G}
+
+theorem exists_iff_exists_existsUnique :
+    (∃ a0 b0 : G, a0 ∈ A ∧ b0 ∈ B ∧ UniqueMul A B a0 b0) ↔
+      ∃ g : G, ∃! ab, ab ∈ A ×ˢ B ∧ ab.1 * ab.2 = g := by
+  constructor
+  · rintro ⟨a0, b0, ha0, hb0, huniq⟩
+    refine ⟨a0 * b0, ⟨(a0, b0), ?_, ?_⟩⟩
+    · exact ⟨by simp [Finset.mem_product, ha0, hb0], rfl⟩
+    · intro ab hab
+      rcases hab with ⟨habmem, habeq⟩
+      rw [Finset.mem_product] at habmem
+      rcases habmem with ⟨ha, hb⟩
+      rcases huniq ha hb habeq with ⟨h1, h2⟩
+      cases ab
+      simp at h1 h2
+      simp [h1, h2]
+  · rintro ⟨g, ⟨ab0, hab0, huniq⟩⟩
+    rcases ab0 with ⟨a0, b0⟩
+    rcases hab0 with ⟨habmem, hg⟩
+    rw [Finset.mem_product] at habmem
+    rcases habmem with ⟨ha0, hb0⟩
+    refine ⟨a0, b0, ha0, hb0, ?_⟩
+    intro a b ha hb habeq
+    have hab : (a, b) ∈ A ×ˢ B ∧ (a, b).1 * (a, b).2 = g := by
+      refine ⟨?_, ?_⟩
+      · simp [Finset.mem_product, ha, hb]
+      · simpa using habeq
+    have hEq : (a, b) = (a0, b0) := huniq (a, b) hab
+    exact Prod.mk.inj_iff.mp hEq
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:30:9-30:26
+Type mismatch: After simplification, term
+  habeq
+ has type
+  a * b = a0 * b0
+but is expected to have type
+  a * b = g
+Source line 30:
+      · simpa using habeq
+        ^^^^^^^^^^^^^^^^^
+Highlighted span: simpa using habeq
+
+ERROR .LspCheck.lean:32:11-32:29
+Unknown constant `Prod.mk.inj_iff.mp`
+Source line 32:
+    exact Prod.mk.inj_iff.mp hEq
+          ^^^^^^^^^^^^^^^^^^
+Highlighted span: Prod.mk.inj_iff.mp
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:30:9-30:26
+Type mismatch: After simplification, term
+  habeq
+ has type
+  a * b = a0 * b0
+but is expected to have type
+  a * b = g
+Source line 30:
+      · simpa using habeq
+        ^^^^^^^^^^^^^^^^^
+Highlighted span: simpa using habeq
+
+ERROR .LspCheck.lean:32:11-32:29
+Unknown constant `Prod.mk.inj_iff.mp`
+Source line 32:
+    exact Prod.mk.inj_iff.mp hEq
+          ^^^^^^^^^^^^^^^^^^
+Highlighted span: Prod.mk.inj_iff.mp

@@ -1,0 +1,412 @@
+FILE: Basic.extend_div.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.extend_div.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {I : Type u}
+
+variable {α β γ : Type*}
+
+variable {f : I → Type v₁} {g : I → Type v₂} {h : I → Type v₃}
+
+variable (x y : ∀ i, f i) (i : I)
+
+theorem extend_div [Div γ] (f : α → β) (g₁ g₂ : α → γ) (e₁ e₂ : β → γ) :
+    Function.extend f (g₁ / g₂) (e₁ / e₂) = Function.extend f g₁ e₁ / Function.extend f g₂ e₂ := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {I : Type u}
+
+variable {α β γ : Type*}
+
+variable {f : I → Type v₁} {g : I → Type v₂} {h : I → Type v₃}
+
+variable (x y : ∀ i, f i) (i : I)
+
+theorem extend_div [Div γ] (f : α → β) (g₁ g₂ : α → γ) (e₁ e₂ : β → γ) :
+    Function.extend f (g₁ / g₂) (e₁ / e₂) = Function.extend f g₁ e₁ / Function.extend f g₂ e₂ := by
+  funext b
+  by_cases hfb : ∃ a, f a = b
+  · rcases hfb with ⟨a, rfl⟩
+    simp [Function.extend_apply]
+  · simp [Function.extend_apply, hfb]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:11-16:32
+Unknown identifier `Function.extend_apply`
+Source line 16:
+    simp [Function.extend_apply]
+          ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Function.extend_apply
+
+ERROR .LspCheck.lean:15:3-16:1
+unsolved goals
+case pos
+α : Type u_1
+β : Type u_2
+γ : Type u_3
+inst✝ : Div γ
+f : α → β
+g₁ g₂ : α → γ
+e₁ e₂ : β → γ
+a : α
+⊢ Function.extend f (g₁ / g₂) (e₁ / e₂) (f a) = Function.extend f g₁ e₁ (f a) / Function.extend f g₂ e₂ (f a)
+Source line 15:
+  · rcases hfb with ⟨a, rfl⟩
+  ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:17:11-17:32
+Unknown identifier `Function.extend_apply`
+Source line 17:
+  · simp [Function.extend_apply, hfb]
+          ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Function.extend_apply
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:11-16:32
+Unknown identifier `Function.extend_apply`
+Source line 16:
+    simp [Function.extend_apply]
+          ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Function.extend_apply
+
+ERROR .LspCheck.lean:15:3-16:1
+unsolved goals
+case pos
+α : Type u_1
+β : Type u_2
+γ : Type u_3
+inst✝ : Div γ
+f : α → β
+g₁ g₂ : α → γ
+e₁ e₂ : β → γ
+a : α
+⊢ Function.extend f (g₁ / g₂) (e₁ / e₂) (f a) = Function.extend f g₁ e₁ (f a) / Function.extend f g₂ e₂ (f a)
+Source line 15:
+  · rcases hfb with ⟨a, rfl⟩
+  ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:17:11-17:32
+Unknown identifier `Function.extend_apply`
+Source line 17:
+  · simp [Function.extend_apply, hfb]
+          ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Function.extend_apply
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {I : Type u}
+
+variable {α β γ : Type*}
+
+variable {f : I → Type v₁} {g : I → Type v₂} {h : I → Type v₃}
+
+variable (x y : ∀ i, f i) (i : I)
+
+theorem extend_div [Div γ] (f : α → β) (g₁ g₂ : α → γ) (e₁ e₂ : β → γ) :
+    Function.extend f (g₁ / g₂) (e₁ / e₂) = Function.extend f g₁ e₁ / Function.extend f g₂ e₂ := by
+  classical
+  funext b
+  simp only [Function.extend, Pi.div_apply]
+  split_ifs with h1 h2
+  · rcases h1 with ⟨a, rfl⟩
+    simp only [dif_pos ⟨a, rfl⟩]
+  · exfalso
+    exact h2 h1
+  · exfalso
+    exact h1 h2
+  · rfl
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+WARNING .LspCheck.lean:16:21-16:23
+unused name: h2
+Source line 16:
+  split_ifs with h1 h2
+                    ^^
+Highlighted span: h2
+
+ERROR .LspCheck.lean:18:24-18:32
+Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+Source line 18:
+    simp only [dif_pos ⟨a, rfl⟩]
+                       ^^^^^^^^
+Highlighted span: ⟨a, rfl⟩
+
+ERROR .LspCheck.lean:20:11-20:13
+Unknown identifier `h2`
+Source line 20:
+    exact h2 h1
+          ^^
+Highlighted span: h2
+
+ERROR .LspCheck.lean:21:3-22:1
+No goals to be solved
+Source line 21:
+  · exfalso
+  ^
+Highlighted span: ·
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+WARNING .LspCheck.lean:16:21-16:23
+unused name: h2
+Source line 16:
+  split_ifs with h1 h2
+                    ^^
+Highlighted span: h2
+
+ERROR .LspCheck.lean:18:24-18:32
+Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+Source line 18:
+    simp only [dif_pos ⟨a, rfl⟩]
+                       ^^^^^^^^
+Highlighted span: ⟨a, rfl⟩
+
+ERROR .LspCheck.lean:20:11-20:13
+Unknown identifier `h2`
+Source line 20:
+    exact h2 h1
+          ^^
+Highlighted span: h2
+
+ERROR .LspCheck.lean:21:3-22:1
+No goals to be solved
+Source line 21:
+  · exfalso
+  ^
+Highlighted span: ·
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {I : Type u}
+
+variable {α β γ : Type*}
+
+variable {f : I → Type v₁} {g : I → Type v₂} {h : I → Type v₃}
+
+variable (x y : ∀ i, f i) (i : I)
+
+theorem extend_div [Div γ] (f : α → β) (g₁ g₂ : α → γ) (e₁ e₂ : β → γ) :
+    Function.extend f (g₁ / g₂) (e₁ / e₂) = Function.extend f g₁ e₁ / Function.extend f g₂ e₂ := by
+  classical
+  funext b
+  by_cases h : Injective f
+  · simp [Function.extend_apply, h, Pi.div_apply]
+  · simp [Function.extend_apply', h, Pi.div_apply]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:16-15:25
+Unknown identifier `Injective`
+Source line 15:
+  by_cases h : Injective f
+               ^^^^^^^^^
+Highlighted span: Injective
+
+ERROR .LspCheck.lean:16:11-16:32
+Unknown identifier `Function.extend_apply`
+Source line 16:
+  · simp [Function.extend_apply, h, Pi.div_apply]
+          ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Function.extend_apply
+
+ERROR .LspCheck.lean:16:3-16:50
+unsolved goals
+case pos
+α : Type u_1
+β : Type u_2
+γ : Type u_3
+inst✝ : Div γ
+f : α → β
+g₁ g₂ : α → γ
+e₁ e₂ : β → γ
+b : β
+h : sorry
+⊢ Function.extend f (g₁ / g₂) (e₁ / e₂) b = Function.extend f g₁ e₁ b / Function.extend f g₂ e₂ b
+Source line 16:
+  · simp [Function.extend_apply, h, Pi.div_apply]
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simp [Function.extend_apply, h, Pi.div_apply]
+
+ERROR .LspCheck.lean:17:3-17:51
+unsolved goals
+case neg
+α : Type u_1
+β : Type u_2
+γ : Type u_3
+inst✝ : Div γ
+f : α → β
+g₁ g₂ : α → γ
+e₁ e₂ : β → γ
+b : β
+h : ¬sorry
+⊢ Function.extend f (g₁ / g₂) (e₁ / e₂) b = Function.extend f g₁ e₁ b / Function.extend f g₂ e₂ b
+Source line 17:
+  · simp [Function.extend_apply', h, Pi.div_apply]
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simp [Function.extend_apply', h, Pi.div_apply]
+
+WARNING .LspCheck.lean:16:34-16:35
+This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [Function.extend_apply, h̵,̵ ̵Pi.div_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 16:
+  · simp [Function.extend_apply, h, Pi.div_apply]
+                                 ^
+Highlighted span: h
+
+WARNING .LspCheck.lean:17:11-17:33
+This simp argument is unused:
+  Function.extend_apply'
+
+Hint: Omit it from the simp argument list.
+  simp [F̵u̵n̵c̵t̵i̵o̵n̵.̵e̵x̵t̵e̵n̵d̵_̵a̵p̵p̵l̵y̵'̵,̵ ̵h, Pi.div_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 17:
+  · simp [Function.extend_apply', h, Pi.div_apply]
+          ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Function.extend_apply'
+
+WARNING .LspCheck.lean:17:35-17:36
+This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [Function.extend_apply', h̵,̵ ̵Pi.div_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 17:
+  · simp [Function.extend_apply', h, Pi.div_apply]
+                                  ^
+Highlighted span: h
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:16-15:25
+Unknown identifier `Injective`
+Source line 15:
+  by_cases h : Injective f
+               ^^^^^^^^^
+Highlighted span: Injective
+
+ERROR .LspCheck.lean:16:11-16:32
+Unknown identifier `Function.extend_apply`
+Source line 16:
+  · simp [Function.extend_apply, h, Pi.div_apply]
+          ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Function.extend_apply
+
+ERROR .LspCheck.lean:16:3-16:50
+unsolved goals
+case pos
+α : Type u_1
+β : Type u_2
+γ : Type u_3
+inst✝ : Div γ
+f : α → β
+g₁ g₂ : α → γ
+e₁ e₂ : β → γ
+b : β
+h : sorry
+⊢ Function.extend f (g₁ / g₂) (e₁ / e₂) b = Function.extend f g₁ e₁ b / Function.extend f g₂ e₂ b
+Source line 16:
+  · simp [Function.extend_apply, h, Pi.div_apply]
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simp [Function.extend_apply, h, Pi.div_apply]
+
+ERROR .LspCheck.lean:17:3-17:51
+unsolved goals
+case neg
+α : Type u_1
+β : Type u_2
+γ : Type u_3
+inst✝ : Div γ
+f : α → β
+g₁ g₂ : α → γ
+e₁ e₂ : β → γ
+b : β
+h : ¬sorry
+⊢ Function.extend f (g₁ / g₂) (e₁ / e₂) b = Function.extend f g₁ e₁ b / Function.extend f g₂ e₂ b
+Source line 17:
+  · simp [Function.extend_apply', h, Pi.div_apply]
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simp [Function.extend_apply', h, Pi.div_apply]
+
+WARNING .LspCheck.lean:16:34-16:35
+This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [Function.extend_apply, h̵,̵ ̵Pi.div_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 16:
+  · simp [Function.extend_apply, h, Pi.div_apply]
+                                 ^
+Highlighted span: h
+
+WARNING .LspCheck.lean:17:11-17:33
+This simp argument is unused:
+  Function.extend_apply'
+
+Hint: Omit it from the simp argument list.
+  simp [F̵u̵n̵c̵t̵i̵o̵n̵.̵e̵x̵t̵e̵n̵d̵_̵a̵p̵p̵l̵y̵'̵,̵ ̵h, Pi.div_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 17:
+  · simp [Function.extend_apply', h, Pi.div_apply]
+          ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Function.extend_apply'
+
+WARNING .LspCheck.lean:17:35-17:36
+This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [Function.extend_apply', h̵,̵ ̵Pi.div_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 17:
+  · simp [Function.extend_apply', h, Pi.div_apply]
+                                  ^
+Highlighted span: h

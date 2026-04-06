@@ -1,0 +1,161 @@
+FILE: ModEq.nsmul.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: ModEq.nsmul.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {M : Type*} [AddCommMonoid M] {a b c d p : M}
+
+theorem nsmul {n : ℕ} (h : a ≡ b [PMOD p]) : n • a ≡ n • b [PMOD n • p] := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M : Type*} [AddCommMonoid M] {a b c d p : M}
+
+theorem nsmul {n : ℕ} (h : a ≡ b [PMOD p]) : n • a ≡ n • b [PMOD n • p] := by
+  rcases h with ⟨c, hc⟩
+  refine ⟨c, ?_⟩
+  rw [hc]
+  simp [nsmul_add]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:8:7-8:9
+Invalid rewrite argument: Expected an equality or iff proof or definition name, but `hc` is a proof of
+  ∃ n, c • p + a = n • p + b
+Source line 8:
+  rw [hc]
+      ^^
+Highlighted span: hc
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:8:7-8:9
+Invalid rewrite argument: Expected an equality or iff proof or definition name, but `hc` is a proof of
+  ∃ n, c • p + a = n • p + b
+Source line 8:
+  rw [hc]
+      ^^
+Highlighted span: hc
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M : Type*} [AddCommMonoid M] {a b c d p : M}
+
+theorem nsmul {n : ℕ} (h : a ≡ b [PMOD p]) : n • a ≡ n • b [PMOD n • p] := by
+  rcases h with ⟨k, hk⟩
+  rcases hk with ⟨m, hm⟩
+  refine ⟨k * m, ?_⟩
+  rw [nsmul_eq_mul, nsmul_eq_mul, nsmul_eq_mul]
+  calc
+    (k * m) • (n • p) + n • a
+        = n • ((k * m) • p + a) := by
+            simp [nsmul_add, mul_assoc]
+    _ = n • (m • p + b) := by rw [hm]
+    _ = (k * m) • (n • p) + n • b := by
+            simp [nsmul_add, mul_assoc]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:9:7-9:19
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?n • ?a
+in the target expression
+  ∃ n_1, (k * m) • n • p + n • a = n_1 • n • p + n • b
+
+M : Type u_1
+inst✝ : AddCommMonoid M
+a b p : M
+n k m : ℕ
+hm : k • p + a = m • p + b
+⊢ ∃ n_1, (k * m) • n • p + n • a = n_1 • n • p + n • b
+Source line 9:
+  rw [nsmul_eq_mul, nsmul_eq_mul, nsmul_eq_mul]
+      ^^^^^^^^^^^^
+Highlighted span: nsmul_eq_mul
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:9:7-9:19
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?n • ?a
+in the target expression
+  ∃ n_1, (k * m) • n • p + n • a = n_1 • n • p + n • b
+
+M : Type u_1
+inst✝ : AddCommMonoid M
+a b p : M
+n k m : ℕ
+hm : k • p + a = m • p + b
+⊢ ∃ n_1, (k * m) • n • p + n • a = n_1 • n • p + n • b
+Source line 9:
+  rw [nsmul_eq_mul, nsmul_eq_mul, nsmul_eq_mul]
+      ^^^^^^^^^^^^
+Highlighted span: nsmul_eq_mul
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M : Type*} [AddCommMonoid M] {a b c d p : M}
+
+theorem nsmul {n : ℕ} (h : a ≡ b [PMOD p]) : n • a ≡ n • b [PMOD n • p] := by
+  rcases h with ⟨k, hk⟩
+  rcases hk with ⟨m, hm⟩
+  refine ⟨m, ?_⟩
+  calc
+    m • (n • p) + n • a = n • (m • p + a) := by
+      simp [nsmul_add, add_comm, add_left_comm, add_assoc]
+    _ = n • (k • p + b) := by rw [hm]
+    _ = k • (n • p) + n • b := by
+      simp [nsmul_add, add_comm, add_left_comm, add_assoc]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:9:3-9:7
+'calc' expression has type
+  m • n • p + n • a = k • n • p + n • b
+but is expected to have type
+  ∃ n_1, m • n • p + n • a = n_1 • n • p + n • b
+Source line 9:
+  calc
+  ^^^^
+Highlighted span: calc
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:9:3-9:7
+'calc' expression has type
+  m • n • p + n • a = k • n • p + n • b
+but is expected to have type
+  ∃ n_1, m • n • p + n • a = n_1 • n • p + n • b
+Source line 9:
+  calc
+  ^^^^
+Highlighted span: calc

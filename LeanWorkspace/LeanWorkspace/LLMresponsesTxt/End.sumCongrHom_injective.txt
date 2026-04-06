@@ -1,0 +1,186 @@
+FILE: End.sumCongrHom_injective.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: End.sumCongrHom_injective.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {A M G α β γ : Type*}
+
+theorem sumCongrHom_injective {α β : Type*} : Function.Injective (Equiv.Perm.sumCongrHom α β) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {A M G α β γ : Type*}
+
+theorem sumCongrHom_injective {α β : Type*} : Function.Injective (Equiv.Perm.sumCongrHom α β) := by
+  intro f g h
+  ext x <;> have := congr_fun h (Sum.inl x) <;> simpa using this
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:7:31-7:32
+Application type mismatch: The argument
+  h
+has type
+  (Equiv.Perm.sumCongrHom α β) f = (Equiv.Perm.sumCongrHom α β) g
+but is expected to have type
+  ?m.32 = ?m.33
+in the application
+  congr_fun h
+Source line 7:
+  ext x <;> have := congr_fun h (Sum.inl x) <;> simpa using this
+                              ^
+Highlighted span: h
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:7:31-7:32
+Application type mismatch: The argument
+  h
+has type
+  (Equiv.Perm.sumCongrHom α β) f = (Equiv.Perm.sumCongrHom α β) g
+but is expected to have type
+  ?m.32 = ?m.33
+in the application
+  congr_fun h
+Source line 7:
+  ext x <;> have := congr_fun h (Sum.inl x) <;> simpa using this
+                              ^
+Highlighted span: h
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {A M G α β γ : Type*}
+
+theorem sumCongrHom_injective {α β : Type*} : Function.Injective (Equiv.Perm.sumCongrHom α β) := by
+  intro f g h
+  ext x
+  have h' := Equiv.ext_iff.mp h (Sum.inl x)
+  simpa using h'
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:5:98-6:1
+unsolved goals
+case snd.H
+α : Type u_7
+β : Type u_8
+f g : Equiv.Perm α × Equiv.Perm β
+h : (Equiv.Perm.sumCongrHom α β) f = (Equiv.Perm.sumCongrHom α β) g
+x : β
+⊢ f.2 x = g.2 x
+Source line 5:
+theorem sumCongrHom_injective {α β : Type*} : Function.Injective (Equiv.Perm.sumCongrHom α β) := by
+                                                                                                 ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:5:98-6:1
+unsolved goals
+case snd.H
+α : Type u_7
+β : Type u_8
+f g : Equiv.Perm α × Equiv.Perm β
+h : (Equiv.Perm.sumCongrHom α β) f = (Equiv.Perm.sumCongrHom α β) g
+x : β
+⊢ f.2 x = g.2 x
+Source line 5:
+theorem sumCongrHom_injective {α β : Type*} : Function.Injective (Equiv.Perm.sumCongrHom α β) := by
+                                                                                                 ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {A M G α β γ : Type*}
+
+theorem sumCongrHom_injective {α β : Type*} : Function.Injective (Equiv.Perm.sumCongrHom α β) := by
+  intro f g h
+  rcases f with ⟨f₁, f₂⟩
+  rcases g with ⟨g₁, g₂⟩
+  dsimp at h
+  congr
+  · ext x
+    exact Equiv.ext_iff.mp h (Sum.inl x)
+  · ext x
+    exact Equiv.ext_iff.mp h (Sum.inr x)
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:5-12:41
+Type mismatch
+  Equiv.ext_iff.mp h (Sum.inl x)
+has type
+  Eq.{max (u_7 + 1) (u_8 + 1)} ((f₁.sumCongr f₂) (Sum.inl x)) ((g₁.sumCongr g₂) (Sum.inl x))
+but is expected to have type
+  Eq.{u_7 + 1} (f₁ x) (g₁ x)
+Source line 12:
+    exact Equiv.ext_iff.mp h (Sum.inl x)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: exact Equiv.ext_iff.mp h (Sum.inl x)
+
+ERROR .LspCheck.lean:14:5-14:41
+Type mismatch
+  Equiv.ext_iff.mp h (Sum.inr x)
+has type
+  Eq.{max (u_7 + 1) (u_8 + 1)} ((f₁.sumCongr f₂) (Sum.inr x)) ((g₁.sumCongr g₂) (Sum.inr x))
+but is expected to have type
+  Eq.{u_8 + 1} (f₂ x) (g₂ x)
+Source line 14:
+    exact Equiv.ext_iff.mp h (Sum.inr x)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: exact Equiv.ext_iff.mp h (Sum.inr x)
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:5-12:41
+Type mismatch
+  Equiv.ext_iff.mp h (Sum.inl x)
+has type
+  Eq.{max (u_7 + 1) (u_8 + 1)} ((f₁.sumCongr f₂) (Sum.inl x)) ((g₁.sumCongr g₂) (Sum.inl x))
+but is expected to have type
+  Eq.{u_7 + 1} (f₁ x) (g₁ x)
+Source line 12:
+    exact Equiv.ext_iff.mp h (Sum.inl x)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: exact Equiv.ext_iff.mp h (Sum.inl x)
+
+ERROR .LspCheck.lean:14:5-14:41
+Type mismatch
+  Equiv.ext_iff.mp h (Sum.inr x)
+has type
+  Eq.{max (u_7 + 1) (u_8 + 1)} ((f₁.sumCongr f₂) (Sum.inr x)) ((g₁.sumCongr g₂) (Sum.inr x))
+but is expected to have type
+  Eq.{u_8 + 1} (f₂ x) (g₂ x)
+Source line 14:
+    exact Equiv.ext_iff.mp h (Sum.inr x)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: exact Equiv.ext_iff.mp h (Sum.inr x)

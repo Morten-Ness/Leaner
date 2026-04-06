@@ -1,0 +1,180 @@
+FILE: Centroid.centroid_weighted_vsub_eq_zero.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Centroid.centroid_weighted_vsub_eq_zero.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [DivisionRing k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {n : ℕ}
+
+theorem centroid_weighted_vsub_eq_zero [CharZero k] (s : Affine.Simplex k P n) :
+    ∑ i, (s.points i -ᵥ s.centroid) = 0 := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [DivisionRing k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {n : ℕ}
+
+theorem centroid_weighted_vsub_eq_zero [CharZero k] (s : Affine.Simplex k P n) :
+    ∑ i, (s.points i -ᵥ s.centroid) = 0 := by
+  simpa [Affine.Simplex.centroid, sub_eq_add_neg, add_comm, add_left_comm, add_assoc,
+    Finset.sum_sub_distrib, Finset.smul_sum] using s.centroid_eq_affineCombination_vsub_eq_zero
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:54-11:96
+Invalid field `centroid_eq_affineCombination_vsub_eq_zero`: The environment does not contain `Affine.Simplex.centroid_eq_affineCombination_vsub_eq_zero`, so it is not possible to project the field `centroid_eq_affineCombination_vsub_eq_zero` from an expression
+  s
+of type `Affine.Simplex k P n`
+Source line 11:
+    Finset.sum_sub_distrib, Finset.smul_sum] using s.centroid_eq_affineCombination_vsub_eq_zero
+                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: centroid_eq_affineCombination_vsub_eq_zero
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:54-11:96
+Invalid field `centroid_eq_affineCombination_vsub_eq_zero`: The environment does not contain `Affine.Simplex.centroid_eq_affineCombination_vsub_eq_zero`, so it is not possible to project the field `centroid_eq_affineCombination_vsub_eq_zero` from an expression
+  s
+of type `Affine.Simplex k P n`
+Source line 11:
+    Finset.sum_sub_distrib, Finset.smul_sum] using s.centroid_eq_affineCombination_vsub_eq_zero
+                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: centroid_eq_affineCombination_vsub_eq_zero
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [DivisionRing k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {n : ℕ}
+
+theorem centroid_weighted_vsub_eq_zero [CharZero k] (s : Affine.Simplex k P n) :
+    ∑ i, (s.points i -ᵥ s.centroid) = 0 := by
+  simpa [Affine.Simplex.centroid] using s.sum_vsub_centroid_eq_zero
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:43-10:68
+Invalid field `sum_vsub_centroid_eq_zero`: The environment does not contain `Affine.Simplex.sum_vsub_centroid_eq_zero`, so it is not possible to project the field `sum_vsub_centroid_eq_zero` from an expression
+  s
+of type `Affine.Simplex k P n`
+Source line 10:
+  simpa [Affine.Simplex.centroid] using s.sum_vsub_centroid_eq_zero
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: sum_vsub_centroid_eq_zero
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:43-10:68
+Invalid field `sum_vsub_centroid_eq_zero`: The environment does not contain `Affine.Simplex.sum_vsub_centroid_eq_zero`, so it is not possible to project the field `sum_vsub_centroid_eq_zero` from an expression
+  s
+of type `Affine.Simplex k P n`
+Source line 10:
+  simpa [Affine.Simplex.centroid] using s.sum_vsub_centroid_eq_zero
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: sum_vsub_centroid_eq_zero
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [DivisionRing k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {n : ℕ}
+
+theorem centroid_weighted_vsub_eq_zero [CharZero k] (s : Affine.Simplex k P n) :
+    ∑ i, (s.points i -ᵥ s.centroid) = 0 := by
+  classical
+  rw [Affine.Simplex.centroid]
+  let w : Fin (n + 1) → k := fun _ => ((n + 1 : ℕ) : k)⁻¹
+  have hw : Finset.univ.sum w = (1 : k) := by
+    simp [w]
+  simpa [w] using AffineMap.weightedVSub_vadd_eq_weightedVSubOfPoint_vadd hw s.points s.points 0
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:44-14:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝⁴ : DivisionRing k
+inst✝³ : AddCommGroup V
+inst✝² : Module k V
+inst✝¹ : AddTorsor V P
+n : ℕ
+inst✝ : CharZero k
+s : Affine.Simplex k P n
+w : Fin (n + 1) → k := fun x ↦ (↑(n + 1))⁻¹
+⊢ (↑n + 1) * (↑n + 1)⁻¹ = 1
+Source line 13:
+  have hw : Finset.univ.sum w = (1 : k) := by
+                                           ^
+Highlighted span: b
+
+ERROR .LspCheck.lean:15:19-15:74
+Unknown constant `AffineMap.weightedVSub_vadd_eq_weightedVSubOfPoint_vadd`
+Source line 15:
+  simpa [w] using AffineMap.weightedVSub_vadd_eq_weightedVSubOfPoint_vadd hw s.points s.points 0
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineMap.weightedVSub_vadd_eq_weightedVSubOfPoint_vadd
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:44-14:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝⁴ : DivisionRing k
+inst✝³ : AddCommGroup V
+inst✝² : Module k V
+inst✝¹ : AddTorsor V P
+n : ℕ
+inst✝ : CharZero k
+s : Affine.Simplex k P n
+w : Fin (n + 1) → k := fun x ↦ (↑(n + 1))⁻¹
+⊢ (↑n + 1) * (↑n + 1)⁻¹ = 1
+Source line 13:
+  have hw : Finset.univ.sum w = (1 : k) := by
+                                           ^
+Highlighted span: b
+
+ERROR .LspCheck.lean:15:19-15:74
+Unknown constant `AffineMap.weightedVSub_vadd_eq_weightedVSubOfPoint_vadd`
+Source line 15:
+  simpa [w] using AffineMap.weightedVSub_vadd_eq_weightedVSubOfPoint_vadd hw s.points s.points 0
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineMap.weightedVSub_vadd_eq_weightedVSubOfPoint_vadd

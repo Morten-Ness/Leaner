@@ -1,0 +1,88 @@
+FILE: ModEq.add_zsmul_modEq.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: ModEq.add_zsmul_modEq.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {G : Type*} [AddCommGroup G] {p a a₁ a₂ b b₁ b₂ c : G} {n : ℕ} {z : ℤ}
+
+theorem add_zsmul_modEq (z : ℤ) : a + z • p ≡ a [PMOD p] := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G : Type*} [AddCommGroup G] {p a a₁ a₂ b b₁ b₂ c : G} {n : ℕ} {z : ℤ}
+
+theorem add_zsmul_modEq (z : ℤ) : a + z • p ≡ a [PMOD p] := by
+  rw [AddCommGroup.modEq_iff_eq_dvd]
+  refine ⟨z, ?_⟩
+  abel
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:6:7-6:36
+Unknown constant `AddCommGroup.modEq_iff_eq_dvd`
+Source line 6:
+  rw [AddCommGroup.modEq_iff_eq_dvd]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AddCommGroup.modEq_iff_eq_dvd
+
+ERROR .LspCheck.lean:5:61-6:1
+unsolved goals
+G : Type u_1
+inst✝ : AddCommGroup G
+p a : G
+z : ℤ
+⊢ a + z • p ≡ a [PMOD p]
+Source line 5:
+theorem add_zsmul_modEq (z : ℤ) : a + z • p ≡ a [PMOD p] := by
+                                                            ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:6:7-6:36
+Unknown constant `AddCommGroup.modEq_iff_eq_dvd`
+Source line 6:
+  rw [AddCommGroup.modEq_iff_eq_dvd]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AddCommGroup.modEq_iff_eq_dvd
+
+ERROR .LspCheck.lean:5:61-6:1
+unsolved goals
+G : Type u_1
+inst✝ : AddCommGroup G
+p a : G
+z : ℤ
+⊢ a + z • p ≡ a [PMOD p]
+Source line 5:
+theorem add_zsmul_modEq (z : ℤ) : a + z • p ≡ a [PMOD p] := by
+                                                            ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G : Type*} [AddCommGroup G] {p a a₁ a₂ b b₁ b₂ c : G} {n : ℕ} {z : ℤ}
+
+theorem add_zsmul_modEq (z : ℤ) : a + z • p ≡ a [PMOD p] := by
+  simpa [sub_eq_add_neg, add_comm, add_left_comm, add_assoc] using
+    (Int.modEq_iff_dvd' (a + z • p) a p).2 ⟨z, by abel⟩
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

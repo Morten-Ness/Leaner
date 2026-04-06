@@ -1,0 +1,1105 @@
+FILE: Defs.subset_union.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Defs.subset_union.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G] {A : Type*} [AddGroup A]
+
+variable {M S : Type*} [DivInvMonoid M] [SetLike S M] [hSM : SubgroupClass S M] {H K : S}
+
+variable [SetLike S G] [SubgroupClass S G]
+
+theorem subset_union [LE S] [IsConcreteLE S G] {H K L : S} :
+    (H : Set G) ⊆ K ∪ L ↔ H ≤ K ∨ H ≤ L := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G] {A : Type*} [AddGroup A]
+
+variable {M S : Type*} [DivInvMonoid M] [SetLike S M] [hSM : SubgroupClass S M] {H K : S}
+
+variable [SetLike S G] [SubgroupClass S G]
+
+theorem subset_union [LE S] [IsConcreteLE S G] {H K L : S} :
+    (H : Set G) ⊆ K ∪ L ↔ H ≤ K ∨ H ≤ L := by
+  constructor
+  · intro h
+    by_cases hHK : H ≤ K
+    · exact Or.inl hHK
+    · right
+      intro x hx
+      have hxKL : x ∈ (K : Set G) ∪ (L : Set G) := h hx
+      cases hxKL with
+      | inl hxK =>
+          exfalso
+          apply hHK
+          intro y hy
+          have hyKL : y ∈ (K : Set G) ∪ (L : Set G) := h hy
+          cases hyKL with
+          | inl hyK =>
+              exact hyK
+          | inr hyL =>
+              have hx_inv : x⁻¹ ∈ H := H.inv_mem hx
+              have hmul : x⁻¹ * y ∈ H := H.mul_mem hx_inv hy
+              have hmulKL : x⁻¹ * y ∈ (K : Set G) ∪ (L : Set G) := h hmul
+              cases hmulKL with
+              | inl hkm =>
+                  exact K.mul_mem hxK hkm
+              | inr hlm =>
+                  have : y = x * (x⁻¹ * y) := by simp
+                  rw [this]
+                  exact L.mul_mem (by
+                    have : x ∈ L := by exact hyL
+                    exact this) hlm
+      | inr hxL =>
+          exact hxL
+  · intro h
+    rcases h with hH | hH
+    · intro x hx
+      exact Or.inl (hH hx)
+    · intro x hx
+      exact Or.inr (hH hx)
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:18:13-18:14
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case neg.h
+G : Type u_1
+inst✝⁴ : Group G
+S : Type u_4
+inst✝³ : SetLike S G
+inst✝² : SubgroupClass S G
+inst✝¹ : LE S
+inst✝ : IsConcreteLE S G
+H K L : S
+h : ↑H ⊆ ↑K ∪ ↑L
+hHK : ¬H ≤ K
+⊢ H ≤ L
+Source line 18:
+      intro x hx
+            ^
+Highlighted span: x
+
+ERROR .LspCheck.lean:47:21-47:26
+Function expected at
+  hH
+but this term has type
+  H ≤ K
+
+Note: Expected a function because this term is being applied to the argument
+  hx
+Source line 47:
+      exact Or.inl (hH hx)
+                    ^^^^^
+Highlighted span: hH hx
+
+ERROR .LspCheck.lean:49:21-49:26
+Function expected at
+  hH
+but this term has type
+  H ≤ L
+
+Note: Expected a function because this term is being applied to the argument
+  hx
+Source line 49:
+      exact Or.inr (hH hx)
+                    ^^^^^
+Highlighted span: hH hx
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:18:13-18:14
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case neg.h
+G : Type u_1
+inst✝⁴ : Group G
+S : Type u_4
+inst✝³ : SetLike S G
+inst✝² : SubgroupClass S G
+inst✝¹ : LE S
+inst✝ : IsConcreteLE S G
+H K L : S
+h : ↑H ⊆ ↑K ∪ ↑L
+hHK : ¬H ≤ K
+⊢ H ≤ L
+Source line 18:
+      intro x hx
+            ^
+Highlighted span: x
+
+ERROR .LspCheck.lean:47:21-47:26
+Function expected at
+  hH
+but this term has type
+  H ≤ K
+
+Note: Expected a function because this term is being applied to the argument
+  hx
+Source line 47:
+      exact Or.inl (hH hx)
+                    ^^^^^
+Highlighted span: hH hx
+
+ERROR .LspCheck.lean:49:21-49:26
+Function expected at
+  hH
+but this term has type
+  H ≤ L
+
+Note: Expected a function because this term is being applied to the argument
+  hx
+Source line 49:
+      exact Or.inr (hH hx)
+                    ^^^^^
+Highlighted span: hH hx
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G] {A : Type*} [AddGroup A]
+
+variable {M S : Type*} [DivInvMonoid M] [SetLike S M] [hSM : SubgroupClass S M] {H K : S}
+
+variable [SetLike S G] [SubgroupClass S G]
+
+theorem subset_union [LE S] [IsConcreteLE S G] {H K L : S} :
+    (H : Set G) ⊆ K ∪ L ↔ H ≤ K ∨ H ≤ L := by
+  constructor
+  · intro h
+    by_cases hHK : H ≤ K
+    · exact Or.inl hHK
+    · right
+      rw [show H ≤ L ↔ ∀ x : G, x ∈ H → x ∈ L by rfl]
+      intro x hx
+      have hxKL : x ∈ (K : Set G) ∪ (L : Set G) := h hx
+      cases hxKL with
+      | inr hxL =>
+          exact hxL
+      | inl hxK =>
+          by_cases hHL : H ≤ L
+          · rw [show H ≤ L ↔ ∀ y : G, y ∈ H → y ∈ L by rfl] at hHL
+            exact hHL x hx
+          · exfalso
+            apply hHK
+            rw [show H ≤ K ↔ ∀ y : G, y ∈ H → y ∈ K by rfl]
+            intro y hy
+            have hyKL : y ∈ (K : Set G) ∪ (L : Set G) := h hy
+            cases hyKL with
+            | inl hyK =>
+                exact hyK
+            | inr hyL =>
+                have hxinvhy : x⁻¹ * y ∈ H := H.mul_mem (H.inv_mem hx) hy
+                have hxinvhyKL : x⁻¹ * y ∈ (K : Set G) ∪ (L : Set G) := h hxinvhy
+                cases hxinvhyKL with
+                | inl hK' =>
+                    exact K.mul_mem hxK hK'
+                | inr hL' =>
+                    have hy_in_L : y ∈ L := by
+                      have : y = x * (x⁻¹ * y) := by simp
+                      rw [this]
+                      exact L.mul_mem hxL hL'
+                    exfalso
+                    apply hHL
+                    rw [show H ≤ L ↔ ∀ z : G, z ∈ H → z ∈ L by rfl]
+                    intro z hz
+                    have hzKL : z ∈ (K : Set G) ∪ (L : Set G) := h hz
+                    cases hzKL with
+                    | inr hzL =>
+                        exact hzL
+                    | inl hzK =>
+                        have hxinvz : x⁻¹ * z ∈ H := H.mul_mem (H.inv_mem hx) hz
+                        have hxinvzKL : x⁻¹ * z ∈ (K : Set G) ∪ (L : Set G) := h hxinvz
+                        cases hxinvzKL with
+                        | inl hK'' =>
+                            have : z ∈ K := by
+                              have hz_eq : z = x * (x⁻¹ * z) := by simp
+                              rw [hz_eq]
+                              exact K.mul_mem hxK hK''
+                            exact False.elim (hHK (by
+                              rw [show H ≤ K ↔ ∀ w : G, w ∈ H → w ∈ K by rfl]
+                              intro w hw
+                              have hwKL : w ∈ (K : Set G) ∪ (L : Set G) := h hw
+                              cases hwKL with
+                              | inl hwK => exact hwK
+                              | inr hwL =>
+                                  have hxinvw : x⁻¹ * w ∈ H := H.mul_mem (H.inv_mem hx) hw
+                                  have hxinvwKL : x⁻¹ * w ∈ (K : Set G) ∪ (L : Set G) := h hxinvw
+                                  cases hxinvwKL with
+                                  | inl hKw =>
+                                      have hw_eq : w = x * (x⁻¹ * w) := by simp
+                                      rw [hw_eq]
+                                      exact K.mul_mem hxK hKw
+                                  | inr hLw =>
+                                      have hw_in_L : w ∈ L := by
+                                        have hw_eq : w = x * (x⁻¹ * w) := by simp
+                                        rw [hw_eq]
+                                        exact L.mul_mem hxL hLw
+                                      exact False.elim (hHL (by
+                                        rw [show H ≤ L ↔ ∀ u : G, u ∈ H → u ∈ L by rfl]
+                                        intro u hu
+                                        have huKL : u ∈ (K : Set G) ∪ (L : Set G) := h hu
+                                        cases huKL with
+                                        | inr huL => exact huL
+                                        | inl huK =>
+                                            have hxinvu : x⁻¹ * u ∈ H := H.mul_mem (H.inv_mem hx) hu
+                                            have hxinvuKL : x⁻¹ * u ∈ (K : Set G) ∪ (L : Set G) := h hxinvu
+                                            cases hxinvuKL with
+                                            | inl hKu =>
+                                                have hu_eq : u = x * (x⁻¹ * u) := by simp
+                                                rw [hu_eq]
+                                                exact False.elim (hHK (by
+                                                  rw [show H ≤ K ↔ ∀ t : G, t ∈ H → t ∈ K by rfl]
+                                                  intro t ht
+                                                  have htKL : t ∈ (K : Set G) ∪ (L : Set G) := h ht
+                                                  exact htKL.elim id (fun htL => by
+                                                    have hxinvt : x⁻¹ * t ∈ H := H.mul_mem (H.inv_mem hx) ht
+                                                    have hxinvtKL : x⁻¹ * t ∈ (K : Set G) ∪ (L : Set G) := h hxinvt
+                                                    exact hxinvtKL.elim
+                                                      (fun hKt => by
+                                                        have ht_eq : t = x * (x⁻¹ * t) := by simp
+                                                        rw [ht_eq]
+                                                        exact K.mul_mem hxK hKt)
+                                                      (fun _ => hxK)))
+                                                ))
+                                            | inr hLu =>
+                                                have hu_eq : u = x * (x⁻¹ * u) := by simp
+                                                rw [hu_eq]
+                                                exact L.mul_mem hxL hLu
+                                      ))
+                        | inr hL'' =>
+                            have hz_eq : z = x * (x⁻¹ * z) := by simp
+                            rw [hz_eq]
+                            exact L.mul_mem hxL hL''
+  · intro h
+    rcases h with hH | hH
+    · intro x hx
+      exact Or.inl (hH hx)
+    · intro x hx
+      exact Or.inr (hH hx)
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:109:51-110:46
+unexpected token '|'; expected ')', ',' or ':'
+Source line 109:
+                                                ))
+                                                  ^
+Highlighted span: 
+
+ERROR .LspCheck.lean:18:50-18:53
+Tactic `rfl` failed: The left-hand side
+  H ≤ L
+is not definitionally equal to the right-hand side
+  ∀ x ∈ H, x ∈ L
+
+G : Type u_1
+inst✝⁴ : Group G
+S : Type u_4
+inst✝³ : SetLike S G
+inst✝² : SubgroupClass S G
+inst✝¹ : LE S
+inst✝ : IsConcreteLE S G
+H K L : S
+h : ↑H ⊆ ↑K ∪ ↑L
+hHK : ¬H ≤ K
+⊢ H ≤ L ↔ ∀ x ∈ H, x ∈ L
+Source line 18:
+      rw [show H ≤ L ↔ ∀ x : G, x ∈ H → x ∈ L by rfl]
+                                                 ^^^
+Highlighted span: rfl
+
+ERROR .LspCheck.lean:26:56-26:59
+Tactic `rfl` failed: The left-hand side
+  H ≤ L
+is not definitionally equal to the right-hand side
+  ∀ y ∈ H, y ∈ L
+
+G : Type u_1
+inst✝⁴ : Group G
+S : Type u_4
+inst✝³ : SetLike S G
+inst✝² : SubgroupClass S G
+inst✝¹ : LE S
+inst✝ : IsConcreteLE S G
+H K L : S
+h : ↑H ⊆ ↑K ∪ ↑L
+hHK : ¬H ≤ K
+x : G
+hx : x ∈ H
+hxK : x ∈ ↑K
+hHL : H ≤ L
+⊢ H ≤ L ↔ ∀ y ∈ H, y ∈ L
+Source line 26:
+          · rw [show H ≤ L ↔ ∀ y : G, y ∈ H → y ∈ L by rfl] at hHL
+                                                       ^^^
+Highlighted span: rfl
+
+ERROR .LspCheck.lean:30:56-30:59
+Tactic `rfl` failed: The left-hand side
+  H ≤ K
+is not definitionally equal to the right-hand side
+  ∀ y ∈ H, y ∈ K
+
+G : Type u_1
+inst✝⁴ : Group G
+S : Type u_4
+inst✝³ : SetLike S G
+inst✝² : SubgroupClass S G
+inst✝¹ : LE S
+inst✝ : IsConcreteLE S G
+H K L : S
+h : ↑H ⊆ ↑K ∪ ↑L
+hHK : ¬H ≤ K
+x : G
+hx : x ∈ H
+hxK : x ∈ ↑K
+hHL : ¬H ≤ L
+⊢ H ≤ K ↔ ∀ y ∈ H, y ∈ K
+Source line 30:
+            rw [show H ≤ K ↔ ∀ y : G, y ∈ H → y ∈ K by rfl]
+                                                       ^^^
+Highlighted span: rfl
+
+ERROR .LspCheck.lean:37:47-37:74
+Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  H
+has type `S` which does not have the necessary form.
+Source line 37:
+                have hxinvhy : x⁻¹ * y ∈ H := H.mul_mem (H.inv_mem hx) hy
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: H.mul_mem (H.inv_mem hx) hy
+
+ERROR .LspCheck.lean:41:27-41:44
+Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  K
+has type `S` which does not have the necessary form.
+Source line 41:
+                    exact K.mul_mem hxK hK'
+                          ^^^^^^^^^^^^^^^^^
+Highlighted span: K.mul_mem hxK hK'
+
+ERROR .LspCheck.lean:46:29-46:46
+Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  L
+has type `S` which does not have the necessary form.
+Source line 46:
+                      exact L.mul_mem hxL hL'
+                            ^^^^^^^^^^^^^^^^^
+Highlighted span: L.mul_mem hxL hL'
+
+ERROR .LspCheck.lean:49:64-49:67
+Tactic `rfl` failed: The left-hand side
+  H ≤ L
+is not definitionally equal to the right-hand side
+  ∀ z ∈ H, z ∈ L
+
+G : Type u_1
+inst✝⁴ : Group G
+S : Type u_4
+inst✝³ : SetLike S G
+inst✝² : SubgroupClass S G
+inst✝¹ : LE S
+inst✝ : IsConcreteLE S G
+H K L : S
+h : ↑H ⊆ ↑K ∪ ↑L
+hHK : ¬H ≤ K
+x : G
+hx : x ∈ H
+hxK : x ∈ ↑K
+hHL : ¬H ≤ L
+y : G
+hy : y ∈ H
+hyL : y ∈ ↑L
+hxinvhy : x⁻¹ * y ∈ H
+hL' : x⁻¹ * y ∈ ↑L
+hy_in_L : y ∈ L
+⊢ H ≤ L ↔ ∀ z ∈ H, z ∈ L
+Source line 49:
+                    rw [show H ≤ L ↔ ∀ z : G, z ∈ H → z ∈ L by rfl]
+                                                               ^^^
+Highlighted span: rfl
+
+ERROR .LspCheck.lean:56:54-56:81
+Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  H
+has type `S` which does not have the necessary form.
+Source line 56:
+                        have hxinvz : x⁻¹ * z ∈ H := H.mul_mem (H.inv_mem hx) hz
+                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: H.mul_mem (H.inv_mem hx) hz
+
+ERROR .LspCheck.lean:63:37-63:55
+Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  K
+has type `S` which does not have the necessary form.
+Source line 63:
+                              exact K.mul_mem hxK hK''
+                                    ^^^^^^^^^^^^^^^^^^
+Highlighted span: K.mul_mem hxK hK''
+
+ERROR .LspCheck.lean:65:74-65:77
+Tactic `rfl` failed: The left-hand side
+  H ≤ K
+is not definitionally equal to the right-hand side
+  ∀ w ∈ H, w ∈ K
+
+G : Type u_1
+inst✝⁴ : Group G
+S : Type u_4
+inst✝³ : SetLike S G
+inst✝² : SubgroupClass S G
+inst✝¹ : LE S
+inst✝ : IsConcreteLE S G
+H K L : S
+h : ↑H ⊆ ↑K ∪ ↑L
+hHK : ¬H ≤ K
+x : G
+hx : x ∈ H
+hxK : x ∈ ↑K
+hHL : ¬H ≤ L
+y : G
+hy : y ∈ H
+hyL : y ∈ ↑L
+hxinvhy : x⁻¹ * y ∈ H
+hL' : x⁻¹ * y ∈ ↑L
+hy_in_L : y ∈ L
+z : G
+hz : z ∈ H
+hzK : z ∈ ↑K
+hxinvz : x⁻¹ * z ∈ H
+hK'' : x⁻¹ * z ∈ ↑K
+this : z ∈ K
+⊢ H ≤ K ↔ ∀ w ∈ H, w ∈ K
+Source line 65:
+                              rw [show H ≤ K ↔ ∀ w : G, w ∈ H → w ∈ K by rfl]
+                                                                         ^^^
+Highlighted span: rfl
+
+ERROR .LspCheck.lean:71:64-71:91
+Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  H
+has type `S` which does not have the necessary form.
+Source line 71:
+                                  have hxinvw : x⁻¹ * w ∈ H := H.mul_mem (H.inv_mem hx) hw
+                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: H.mul_mem (H.inv_mem hx) hw
+
+ERROR .LspCheck.lean:77:45-77:62
+Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  K
+has type `S` which does not have the necessary form.
+Source line 77:
+                                      exact K.mul_mem hxK hKw
+                                            ^^^^^^^^^^^^^^^^^
+Highlighted span: K.mul_mem hxK hKw
+
+ERROR .LspCheck.lean:82:47-82:64
+Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  L
+has type `S` which does not have the necessary form.
+Source line 82:
+                                        exact L.mul_mem hxL hLw
+                                              ^^^^^^^^^^^^^^^^^
+Highlighted span: L.mul_mem hxL hLw
+
+ERROR .LspCheck.lean:84:84-84:87
+Tactic `rfl` failed: The left-hand side
+  H ≤ L
+is not definitionally equal to the right-hand side
+  ∀ u ∈ H, u ∈ L
+
+G : Type u_1
+inst✝⁴ : Group G
+S : Type u_4
+inst✝³ : SetLike S G
+inst✝² : SubgroupClass S G
+inst✝¹ : LE S
+inst✝ : IsConcreteLE S G
+H K L : S
+h : ↑H ⊆ ↑K ∪ ↑L
+hHK : ¬H ≤ K
+x : G
+hx : x ∈ H
+hxK : x ∈ ↑K
+hHL : ¬H ≤ L
+y : G
+hy : y ∈ H
+hyL : y ∈ ↑L
+hxinvhy : x⁻¹ * y ∈ H
+hL' : x⁻¹ * y ∈ ↑L
+hy_in_L : y ∈ L
+z : G
+hz : z ∈ H
+hzK : z ∈ ↑K
+hxinvz : x⁻¹ * z ∈ H
+hK'' : x⁻¹ * z ∈ ↑K
+this : z ∈ K
+w : G
+hw : w ∈ H
+hwL : w ∈ ↑L
+hxinvw : x⁻¹ * w ∈ H
+hLw : x⁻¹ * w ∈ ↑L
+hw_in_L : w ∈ L
+⊢ H ≤ L ↔ ∀ u ∈ H, u ∈ L
+Source line 84:
+                                        rw [show H ≤ L ↔ ∀ u : G, u ∈ H → u ∈ L by rfl]
+                                                                                   ^^^
+Highlighted span: rfl
+
+ERROR .LspCheck.lean:90:74-90:101
+Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  H
+has type `S` which does not have the necessary form.
+Source line 90:
+                                            have hxinvu : x⁻¹ * u ∈ H := H.mul_mem (H.inv_mem hx) hu
+                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: H.mul_mem (H.inv_mem hx) hu
+
+ERROR .LspCheck.lean:97:94-97:97
+Tactic `rfl` failed: The left-hand side
+  H ≤ K
+is not definitionally equal to the right-hand side
+  ∀ t ∈ H, t ∈ K
+
+G : Type u_1
+inst✝⁴ : Group G
+S : Type u_4
+inst✝³ : SetLike S G
+inst✝² : SubgroupClass S G
+inst✝¹ : LE S
+inst✝ : IsConcreteLE S G
+H K L : S
+h : ↑H ⊆ ↑K ∪ ↑L
+hHK : ¬H ≤ K
+x : G
+hx : x ∈ H
+hxK : x ∈ ↑K
+hHL : ¬H ≤ L
+y : G
+hy : y ∈ H
+hyL : y ∈ ↑L
+hxinvhy : x⁻¹ * y ∈ H
+hL' : x⁻¹ * y ∈ ↑L
+hy_in_L : y ∈ L
+z : G
+hz : z ∈ H
+hzK : z ∈ ↑K
+hxinvz : x⁻¹ * z ∈ H
+hK'' : x⁻¹ * z ∈ ↑K
+this : z ∈ K
+w : G
+hw : w ∈ H
+hwL : w ∈ ↑L
+hxinvw : x⁻¹ * w ∈ H
+hLw : x⁻¹ * w ∈ ↑L
+hw_in_L : w ∈ L
+u : G
+hu : u ∈ H
+huK : u ∈ ↑K
+hxinvu : x⁻¹ * u ∈ H
+hKu : x⁻¹ * u ∈ ↑K
+hu_eq : u = x * (x⁻¹ * u)
+⊢ H ≤ K ↔ ∀ t ∈ H, t ∈ K
+Source line 97:
+                                                  rw [show H ≤ K ↔ ∀ t : G, t ∈ H → t ∈ K by rfl]
+                                                                                             ^^^
+Highlighted span: rfl
+
+ERROR .LspCheck.lean:101:82-101:109
+Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  H
+has type `S` which does not have the necessary form.
+Source line 101:
+                                                    have hxinvt : x⁻¹ * t ∈ H := H.mul_mem (H.inv_mem hx) ht
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: H.mul_mem (H.inv_mem hx) ht
+
+ERROR .LspCheck.lean:108:65-108:68
+Type mismatch
+  hxK
+has type
+  Membership.mem.{u_1, u_1} (↑K) x
+but is expected to have type
+  Membership.mem.{u_1, u_4} K t
+Source line 108:
+                                                      (fun _ => hxK)))
+                                                                ^^^
+Highlighted span: hxK
+
+ERROR .LspCheck.lean:107:63-107:80
+Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  K
+has type `S` which does not have the necessary form.
+Source line 107:
+                                                        exact K.mul_mem hxK hKt)
+                                                              ^^^^^^^^^^^^^^^^^
+Highlighted span: K.mul_mem hxK hKt
+
+ERROR .LspCheck.lean:92:45-92:50
+Alternative `inr` has not been provided
+Source line 92:
+                                            cases hxinvuKL with
+                                            ^^^^^
+Highlighted span: cases
+
+ERROR .LspCheck.lean:58:25-58:30
+Alternative `inr` has not been provided
+Source line 58:
+                        cases hxinvzKL with
+                        ^^^^^
+Highlighted span: cases
+
+ERROR .LspCheck.lean:12:44-13:1
+unsolved goals
+case mpr
+G : Type u_1
+inst✝⁴ : Group G
+S : Type u_4
+inst✝³ : SetLike S G
+inst✝² : SubgroupClass S G
+inst✝¹ : LE S
+inst✝ : IsConcreteLE S G
+H K L : S
+⊢ H ≤ K ∨ H ≤ L → ↑H ⊆ ↑K ∪ ↑L
+Source line 12:
+    (H : Set G) ⊆ K ∪ L ↔ H ≤ K ∨ H ≤ L := by
+                                           ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:109:51-110:46
+unexpected token '|'; expected ')', ',' or ':'
+Source line 109:
+                                                ))
+                                                  ^
+Highlighted span: 
+
+ERROR .LspCheck.lean:18:50-18:53
+Tactic `rfl` failed: The left-hand side
+  H ≤ L
+is not definitionally equal to the right-hand side
+  ∀ x ∈ H, x ∈ L
+
+G : Type u_1
+inst✝⁴ : Group G
+S : Type u_4
+inst✝³ : SetLike S G
+inst✝² : SubgroupClass S G
+inst✝¹ : LE S
+inst✝ : IsConcreteLE S G
+H K L : S
+h : ↑H ⊆ ↑K ∪ ↑L
+hHK : ¬H ≤ K
+⊢ H ≤ L ↔ ∀ x ∈ H, x ∈ L
+Source line 18:
+      rw [show H ≤ L ↔ ∀ x : G, x ∈ H → x ∈ L by rfl]
+                                                 ^^^
+Highlighted span: rfl
+
+ERROR .LspCheck.lean:26:56-26:59
+Tactic `rfl` failed: The left-hand side
+  H ≤ L
+is not definitionally equal to the right-hand side
+  ∀ y ∈ H, y ∈ L
+
+G : Type u_1
+inst✝⁴ : Group G
+S : Type u_4
+inst✝³ : SetLike S G
+inst✝² : SubgroupClass S G
+inst✝¹ : LE S
+inst✝ : IsConcreteLE S G
+H K L : S
+h : ↑H ⊆ ↑K ∪ ↑L
+hHK : ¬H ≤ K
+x : G
+hx : x ∈ H
+hxK : x ∈ ↑K
+hHL : H ≤ L
+⊢ H ≤ L ↔ ∀ y ∈ H, y ∈ L
+Source line 26:
+          · rw [show H ≤ L ↔ ∀ y : G, y ∈ H → y ∈ L by rfl] at hHL
+                                                       ^^^
+Highlighted span: rfl
+
+ERROR .LspCheck.lean:30:56-30:59
+Tactic `rfl` failed: The left-hand side
+  H ≤ K
+is not definitionally equal to the right-hand side
+  ∀ y ∈ H, y ∈ K
+
+G : Type u_1
+inst✝⁴ : Group G
+S : Type u_4
+inst✝³ : SetLike S G
+inst✝² : SubgroupClass S G
+inst✝¹ : LE S
+inst✝ : IsConcreteLE S G
+H K L : S
+h : ↑H ⊆ ↑K ∪ ↑L
+hHK : ¬H ≤ K
+x : G
+hx : x ∈ H
+hxK : x ∈ ↑K
+hHL : ¬H ≤ L
+⊢ H ≤ K ↔ ∀ y ∈ H, y ∈ K
+Source line 30:
+            rw [show H ≤ K ↔ ∀ y : G, y ∈ H → y ∈ K by rfl]
+                                                       ^^^
+Highlighted span: rfl
+
+ERROR .LspCheck.lean:37:47-37:74
+Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  H
+has type `S` which does not have the necessary form.
+Source line 37:
+                have hxinvhy : x⁻¹ * y ∈ H := H.mul_mem (H.inv_mem hx) hy
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: H.mul_mem (H.inv_mem hx) hy
+
+ERROR .LspCheck.lean:41:27-41:44
+Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  K
+has type `S` which does not have the necessary form.
+Source line 41:
+                    exact K.mul_mem hxK hK'
+                          ^^^^^^^^^^^^^^^^^
+Highlighted span: K.mul_mem hxK hK'
+
+ERROR .LspCheck.lean:46:29-46:46
+Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  L
+has type `S` which does not have the necessary form.
+Source line 46:
+                      exact L.mul_mem hxL hL'
+                            ^^^^^^^^^^^^^^^^^
+Highlighted span: L.mul_mem hxL hL'
+
+ERROR .LspCheck.lean:49:64-49:67
+Tactic `rfl` failed: The left-hand side
+  H ≤ L
+is not definitionally equal to the right-hand side
+  ∀ z ∈ H, z ∈ L
+
+G : Type u_1
+inst✝⁴ : Group G
+S : Type u_4
+inst✝³ : SetLike S G
+inst✝² : SubgroupClass S G
+inst✝¹ : LE S
+inst✝ : IsConcreteLE S G
+H K L : S
+h : ↑H ⊆ ↑K ∪ ↑L
+hHK : ¬H ≤ K
+x : G
+hx : x ∈ H
+hxK : x ∈ ↑K
+hHL : ¬H ≤ L
+y : G
+hy : y ∈ H
+hyL : y ∈ ↑L
+hxinvhy : x⁻¹ * y ∈ H
+hL' : x⁻¹ * y ∈ ↑L
+hy_in_L : y ∈ L
+⊢ H ≤ L ↔ ∀ z ∈ H, z ∈ L
+Source line 49:
+                    rw [show H ≤ L ↔ ∀ z : G, z ∈ H → z ∈ L by rfl]
+                                                               ^^^
+Highlighted span: rfl
+
+ERROR .LspCheck.lean:56:54-56:81
+Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  H
+has type `S` which does not have the necessary form.
+Source line 56:
+                        have hxinvz : x⁻¹ * z ∈ H := H.mul_mem (H.inv_mem hx) hz
+                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: H.mul_mem (H.inv_mem hx) hz
+
+ERROR .LspCheck.lean:63:37-63:55
+Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  K
+has type `S` which does not have the necessary form.
+Source line 63:
+                              exact K.mul_mem hxK hK''
+                                    ^^^^^^^^^^^^^^^^^^
+Highlighted span: K.mul_mem hxK hK''
+
+ERROR .LspCheck.lean:65:74-65:77
+Tactic `rfl` failed: The left-hand side
+  H ≤ K
+is not definitionally equal to the right-hand side
+  ∀ w ∈ H, w ∈ K
+
+G : Type u_1
+inst✝⁴ : Group G
+S : Type u_4
+inst✝³ : SetLike S G
+inst✝² : SubgroupClass S G
+inst✝¹ : LE S
+inst✝ : IsConcreteLE S G
+H K L : S
+h : ↑H ⊆ ↑K ∪ ↑L
+hHK : ¬H ≤ K
+x : G
+hx : x ∈ H
+hxK : x ∈ ↑K
+hHL : ¬H ≤ L
+y : G
+hy : y ∈ H
+hyL : y ∈ ↑L
+hxinvhy : x⁻¹ * y ∈ H
+hL' : x⁻¹ * y ∈ ↑L
+hy_in_L : y ∈ L
+z : G
+hz : z ∈ H
+hzK : z ∈ ↑K
+hxinvz : x⁻¹ * z ∈ H
+hK'' : x⁻¹ * z ∈ ↑K
+this : z ∈ K
+⊢ H ≤ K ↔ ∀ w ∈ H, w ∈ K
+Source line 65:
+                              rw [show H ≤ K ↔ ∀ w : G, w ∈ H → w ∈ K by rfl]
+                                                                         ^^^
+Highlighted span: rfl
+
+ERROR .LspCheck.lean:71:64-71:91
+Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  H
+has type `S` which does not have the necessary form.
+Source line 71:
+                                  have hxinvw : x⁻¹ * w ∈ H := H.mul_mem (H.inv_mem hx) hw
+                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: H.mul_mem (H.inv_mem hx) hw
+
+ERROR .LspCheck.lean:77:45-77:62
+Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  K
+has type `S` which does not have the necessary form.
+Source line 77:
+                                      exact K.mul_mem hxK hKw
+                                            ^^^^^^^^^^^^^^^^^
+Highlighted span: K.mul_mem hxK hKw
+
+ERROR .LspCheck.lean:82:47-82:64
+Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  L
+has type `S` which does not have the necessary form.
+Source line 82:
+                                        exact L.mul_mem hxL hLw
+                                              ^^^^^^^^^^^^^^^^^
+Highlighted span: L.mul_mem hxL hLw
+
+ERROR .LspCheck.lean:84:84-84:87
+Tactic `rfl` failed: The left-hand side
+  H ≤ L
+is not definitionally equal to the right-hand side
+  ∀ u ∈ H, u ∈ L
+
+G : Type u_1
+inst✝⁴ : Group G
+S : Type u_4
+inst✝³ : SetLike S G
+inst✝² : SubgroupClass S G
+inst✝¹ : LE S
+inst✝ : IsConcreteLE S G
+H K L : S
+h : ↑H ⊆ ↑K ∪ ↑L
+hHK : ¬H ≤ K
+x : G
+hx : x ∈ H
+hxK : x ∈ ↑K
+hHL : ¬H ≤ L
+y : G
+hy : y ∈ H
+hyL : y ∈ ↑L
+hxinvhy : x⁻¹ * y ∈ H
+hL' : x⁻¹ * y ∈ ↑L
+hy_in_L : y ∈ L
+z : G
+hz : z ∈ H
+hzK : z ∈ ↑K
+hxinvz : x⁻¹ * z ∈ H
+hK'' : x⁻¹ * z ∈ ↑K
+this : z ∈ K
+w : G
+hw : w ∈ H
+hwL : w ∈ ↑L
+hxinvw : x⁻¹ * w ∈ H
+hLw : x⁻¹ * w ∈ ↑L
+hw_in_L : w ∈ L
+⊢ H ≤ L ↔ ∀ u ∈ H, u ∈ L
+Source line 84:
+                                        rw [show H ≤ L ↔ ∀ u : G, u ∈ H → u ∈ L by rfl]
+                                                                                   ^^^
+Highlighted span: rfl
+
+ERROR .LspCheck.lean:90:74-90:101
+Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  H
+has type `S` which does not have the necessary form.
+Source line 90:
+                                            have hxinvu : x⁻¹ * u ∈ H := H.mul_mem (H.inv_mem hx) hu
+                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: H.mul_mem (H.inv_mem hx) hu
+
+ERROR .LspCheck.lean:97:94-97:97
+Tactic `rfl` failed: The left-hand side
+  H ≤ K
+is not definitionally equal to the right-hand side
+  ∀ t ∈ H, t ∈ K
+
+G : Type u_1
+inst✝⁴ : Group G
+S : Type u_4
+inst✝³ : SetLike S G
+inst✝² : SubgroupClass S G
+inst✝¹ : LE S
+inst✝ : IsConcreteLE S G
+H K L : S
+h : ↑H ⊆ ↑K ∪ ↑L
+hHK : ¬H ≤ K
+x : G
+hx : x ∈ H
+hxK : x ∈ ↑K
+hHL : ¬H ≤ L
+y : G
+hy : y ∈ H
+hyL : y ∈ ↑L
+hxinvhy : x⁻¹ * y ∈ H
+hL' : x⁻¹ * y ∈ ↑L
+hy_in_L : y ∈ L
+z : G
+hz : z ∈ H
+hzK : z ∈ ↑K
+hxinvz : x⁻¹ * z ∈ H
+hK'' : x⁻¹ * z ∈ ↑K
+this : z ∈ K
+w : G
+hw : w ∈ H
+hwL : w ∈ ↑L
+hxinvw : x⁻¹ * w ∈ H
+hLw : x⁻¹ * w ∈ ↑L
+hw_in_L : w ∈ L
+u : G
+hu : u ∈ H
+huK : u ∈ ↑K
+hxinvu : x⁻¹ * u ∈ H
+hKu : x⁻¹ * u ∈ ↑K
+hu_eq : u = x * (x⁻¹ * u)
+⊢ H ≤ K ↔ ∀ t ∈ H, t ∈ K
+Source line 97:
+                                                  rw [show H ≤ K ↔ ∀ t : G, t ∈ H → t ∈ K by rfl]
+                                                                                             ^^^
+Highlighted span: rfl
+
+ERROR .LspCheck.lean:101:82-101:109
+Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  H
+has type `S` which does not have the necessary form.
+Source line 101:
+                                                    have hxinvt : x⁻¹ * t ∈ H := H.mul_mem (H.inv_mem hx) ht
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: H.mul_mem (H.inv_mem hx) ht
+
+ERROR .LspCheck.lean:108:65-108:68
+Type mismatch
+  hxK
+has type
+  Membership.mem.{u_1, u_1} (↑K) x
+but is expected to have type
+  Membership.mem.{u_1, u_4} K t
+Source line 108:
+                                                      (fun _ => hxK)))
+                                                                ^^^
+Highlighted span: hxK
+
+ERROR .LspCheck.lean:107:63-107:80
+Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  K
+has type `S` which does not have the necessary form.
+Source line 107:
+                                                        exact K.mul_mem hxK hKt)
+                                                              ^^^^^^^^^^^^^^^^^
+Highlighted span: K.mul_mem hxK hKt
+
+ERROR .LspCheck.lean:92:45-92:50
+Alternative `inr` has not been provided
+Source line 92:
+                                            cases hxinvuKL with
+                                            ^^^^^
+Highlighted span: cases
+
+ERROR .LspCheck.lean:58:25-58:30
+Alternative `inr` has not been provided
+Source line 58:
+                        cases hxinvzKL with
+                        ^^^^^
+Highlighted span: cases
+
+ERROR .LspCheck.lean:12:44-13:1
+unsolved goals
+case mpr
+G : Type u_1
+inst✝⁴ : Group G
+S : Type u_4
+inst✝³ : SetLike S G
+inst✝² : SubgroupClass S G
+inst✝¹ : LE S
+inst✝ : IsConcreteLE S G
+H K L : S
+⊢ H ≤ K ∨ H ≤ L → ↑H ⊆ ↑K ∪ ↑L
+Source line 12:
+    (H : Set G) ⊆ K ∪ L ↔ H ≤ K ∨ H ≤ L := by
+                                           ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G] {A : Type*} [AddGroup A]
+
+variable {M S : Type*} [DivInvMonoid M] [SetLike S M] [hSM : SubgroupClass S M] {H K : S}
+
+variable [SetLike S G] [SubgroupClass S G]
+
+theorem subset_union [LE S] [IsConcreteLE S G] {H K L : S} :
+    (H : Set G) ⊆ K ∪ L ↔ H ≤ K ∨ H ≤ L := by
+  simpa [SetLike.coe_subset_coe, Set.subset_def] using SubgroupClass.subset_union (H := H) (K := K) (L := L)
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

@@ -1,0 +1,90 @@
+FILE: Ker.map_le_map_iff'.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Ker.map_le_map_iff'.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N] (H : Subgroup G)
+
+variable (f : G →* N)
+
+theorem map_le_map_iff' {f : G →* N} {H K : Subgroup G} :
+    H.map f ≤ K.map f ↔ H ⊔ f.ker ≤ K ⊔ f.ker := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N] (H : Subgroup G)
+
+variable (f : G →* N)
+
+theorem map_le_map_iff' {f : G →* N} {H K : Subgroup G} :
+    H.map f ≤ K.map f ↔ H ⊔ f.ker ≤ K ⊔ f.ker := by
+  simpa [Subgroup.map_le_iff_le_comap, Subgroup.le_def] using
+    (Subgroup.map_le_map_iff (f := f) (H := H) (K := K))
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:40-15:55
+Unknown constant `Subgroup.le_def`
+Source line 15:
+  simpa [Subgroup.map_le_iff_le_comap, Subgroup.le_def] using
+                                       ^^^^^^^^^^^^^^^
+Highlighted span: Subgroup.le_def
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:40-15:55
+Unknown constant `Subgroup.le_def`
+Source line 15:
+  simpa [Subgroup.map_le_iff_le_comap, Subgroup.le_def] using
+                                       ^^^^^^^^^^^^^^^
+Highlighted span: Subgroup.le_def
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N] (H : Subgroup G)
+
+variable (f : G →* N)
+
+theorem map_le_map_iff' {f : G →* N} {H K : Subgroup G} :
+    H.map f ≤ K.map f ↔ H ⊔ f.ker ≤ K ⊔ f.ker := by
+  simpa [Subgroup.map_le_iff_le_comap, Subgroup.comap_map_eq, sup_comm, sup_assoc] using
+    (Subgroup.map_le_map_iff (f := f) (H := H) (K := K))
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

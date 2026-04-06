@@ -1,0 +1,178 @@
+FILE: Quasispectrum.rightInvOn.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Quasispectrum.rightInvOn.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable (R : Type*) {A : Type*} [CommSemiring R] [NonUnitalRing A]
+  [Module R A]
+
+variable {R S A : Type*} [Semifield R] [Semifield S] [Ring A]
+
+variable [Algebra R S] [Algebra R A] [Algebra S A] {a : A} {f : S → R}
+
+theorem rightInvOn (h : SpectrumRestricts a f) : (spectrum S a).RightInvOn f (algebraMap R S) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (R : Type*) {A : Type*} [CommSemiring R] [NonUnitalRing A]
+  [Module R A]
+
+variable {R S A : Type*} [Semifield R] [Semifield S] [Ring A]
+
+variable [Algebra R S] [Algebra R A] [Algebra S A] {a : A} {f : S → R}
+
+theorem rightInvOn (h : SpectrumRestricts a f) : (spectrum S a).RightInvOn f (algebraMap R S) :=
+by
+  intro x hx
+  simpa [Set.RightInvOn] using h hx
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:32-13:36
+Function expected at
+  h
+but this term has type
+  SpectrumRestricts a f
+
+Note: Expected a function because this term is being applied to the argument
+  hx
+Source line 13:
+  simpa [Set.RightInvOn] using h hx
+                               ^^^^
+Highlighted span: h hx
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:32-13:36
+Function expected at
+  h
+but this term has type
+  SpectrumRestricts a f
+
+Note: Expected a function because this term is being applied to the argument
+  hx
+Source line 13:
+  simpa [Set.RightInvOn] using h hx
+                               ^^^^
+Highlighted span: h hx
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (R : Type*) {A : Type*} [CommSemiring R] [NonUnitalRing A]
+  [Module R A]
+
+variable {R S A : Type*} [Semifield R] [Semifield S] [Ring A]
+
+variable [Algebra R S] [Algebra R A] [Algebra S A] {a : A} {f : S → R}
+
+theorem rightInvOn (h : SpectrumRestricts a f) : (spectrum S a).RightInvOn f (algebraMap R S) :=
+by
+  intro x hx
+  exact h.2 x hx
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:13-13:14
+Application type mismatch: The argument
+  x
+has type
+  S
+of sort `Type u_4` but is expected to have type
+  R
+of sort `Type u_3` in the application
+  h.left_inv x
+Source line 13:
+  exact h.2 x hx
+            ^
+Highlighted span: x
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:13-13:14
+Application type mismatch: The argument
+  x
+has type
+  S
+of sort `Type u_4` but is expected to have type
+  R
+of sort `Type u_3` in the application
+  h.left_inv x
+Source line 13:
+  exact h.2 x hx
+            ^
+Highlighted span: x
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (R : Type*) {A : Type*} [CommSemiring R] [NonUnitalRing A]
+  [Module R A]
+
+variable {R S A : Type*} [Semifield R] [Semifield S] [Ring A]
+
+variable [Algebra R S] [Algebra R A] [Algebra S A] {a : A} {f : S → R}
+
+theorem rightInvOn (h : SpectrumRestricts a f) : (spectrum S a).RightInvOn f (algebraMap R S) :=
+by
+  intro x hx
+  exact h.1 hx
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:13-13:15
+Application type mismatch: The argument
+  hx
+has type
+  x ∈ spectrum S a
+but is expected to have type
+  x ∈ quasispectrum S a
+in the application
+  h.rightInvOn hx
+Source line 13:
+  exact h.1 hx
+            ^^
+Highlighted span: hx
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:13-13:15
+Application type mismatch: The argument
+  hx
+has type
+  x ∈ spectrum S a
+but is expected to have type
+  x ∈ quasispectrum S a
+in the application
+  h.rightInvOn hx
+Source line 13:
+  exact h.1 hx
+            ^^
+Highlighted span: hx

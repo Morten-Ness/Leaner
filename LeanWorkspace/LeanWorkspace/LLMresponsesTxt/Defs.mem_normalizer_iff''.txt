@@ -1,0 +1,734 @@
+FILE: Defs.mem_normalizer_iff''.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Defs.mem_normalizer_iff''.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G] {A : Type*} [AddGroup A]
+
+variable (H : Subgroup G)
+
+theorem mem_normalizer_iff'' {g : G} : g ∈ Subgroup.normalizer H ↔ ∀ h : G, h ∈ H ↔ g⁻¹ * h * g ∈ H := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G] {A : Type*} [AddGroup A]
+
+variable (H : Subgroup G)
+
+theorem mem_normalizer_iff'' {g : G} : g ∈ Subgroup.normalizer H ↔ ∀ h : G, h ∈ H ↔ g⁻¹ * h * g ∈ H := by
+  constructor
+  · intro hg h
+    constructor
+    · intro hh
+      have hmem : g⁻¹ * h * g * g⁻¹ ∈ H := hg hh
+      simpa [mul_assoc] using H.mul_mem hmem (H.inv_mem (H.one_mem))
+    · intro hh
+      have hg_inv : g⁻¹ ∈ Subgroup.normalizer H := by
+        rw [Subgroup.mem_normalizer_iff] at hg ⊢
+        intro x
+        constructor
+        · intro hx
+          have : g * x * g⁻¹ ∈ H := (hg (g * x * g⁻¹)).mp ?_
+          · simpa [mul_assoc] using this
+          · simpa [mul_assoc] using hx
+        · intro hx
+          have : g⁻¹ * x * g ∈ H := (hg x).mpr hx
+          simpa [mul_assoc] using this
+      have : g * h * g⁻¹ ∈ H := (Subgroup.mem_normalizer_iff.mp hg_inv h).mp hh
+      simpa [mul_assoc] using this
+  · intro hg
+    rw [Subgroup.mem_normalizer_iff]
+    intro h
+    exact hg h
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:47-14:49
+Application type mismatch: The argument
+  hh
+has type
+  h ∈ H
+of sort `Prop` but is expected to have type
+  G
+of sort `Type u_1` in the application
+  hg hh
+Source line 14:
+      have hmem : g⁻¹ * h * g * g⁻¹ ∈ H := hg hh
+                                              ^^
+Highlighted span: hh
+
+ERROR .LspCheck.lean:15:7-15:69
+Type mismatch: After simplification, term
+  Subgroup.mul_mem H hmem (Subgroup.inv_mem H (Subgroup.one_mem H))
+ has type
+  g⁻¹ * h ∈ H
+but is expected to have type
+  g⁻¹ * (h * g) ∈ H
+Source line 15:
+      simpa [mul_assoc] using H.mul_mem hmem (H.inv_mem (H.one_mem))
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [mul_assoc] using H.mul_mem hmem (H.inv_mem (H.one_mem))
+
+ERROR .LspCheck.lean:22:37-22:61
+Type mismatch
+  (hg (g * x * g⁻¹)).mp ?m.141
+has type
+  g * (g * x * g⁻¹) * g⁻¹ ∈ H
+but is expected to have type
+  g * x * g⁻¹ ∈ H
+Source line 22:
+          have : g * x * g⁻¹ ∈ H := (hg (g * x * g⁻¹)).mp ?_
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (hg (g * x * g⁻¹)).mp ?_
+
+ERROR .LspCheck.lean:23:13-23:41
+Type mismatch: After simplification, term
+  this
+ has type
+  g * (x * g⁻¹) ∈ H
+but is expected to have type
+  g⁻¹ * (x * g) ∈ H
+Source line 23:
+          · simpa [mul_assoc] using this
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [mul_assoc] using this
+
+ERROR .LspCheck.lean:24:11-24:39
+No goals to be solved
+Source line 24:
+          · simpa [mul_assoc] using hx
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simpa [mul_assoc] using hx
+
+ERROR .LspCheck.lean:26:48-26:50
+Application type mismatch: The argument
+  hx
+has type
+  g⁻¹ * x * g⁻¹⁻¹ ∈ H
+but is expected to have type
+  g * x * g⁻¹ ∈ H
+in the application
+  (hg x).mpr hx
+Source line 26:
+          have : g⁻¹ * x * g ∈ H := (hg x).mpr hx
+                                               ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:27:11-27:39
+Type mismatch: After simplification, term
+  this
+ has type
+  g⁻¹ * (x * g) ∈ H
+but is expected to have type
+  x ∈ H
+Source line 27:
+          simpa [mul_assoc] using this
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [mul_assoc] using this
+
+ERROR .LspCheck.lean:28:78-28:80
+Application type mismatch: The argument
+  hh
+has type
+  g⁻¹ * h * g ∈ H
+but is expected to have type
+  h ∈ H
+in the application
+  (Subgroup.mem_normalizer_iff.mp hg_inv h).mp hh
+Source line 28:
+      have : g * h * g⁻¹ ∈ H := (Subgroup.mem_normalizer_iff.mp hg_inv h).mp hh
+                                                                             ^^
+Highlighted span: hh
+
+ERROR .LspCheck.lean:29:7-29:35
+Type mismatch: After simplification, term
+  this
+ has type
+  g * (h * g⁻¹) ∈ H
+but is expected to have type
+  h ∈ H
+Source line 29:
+      simpa [mul_assoc] using this
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [mul_assoc] using this
+
+ERROR .LspCheck.lean:33:5-33:15
+Type mismatch
+  hg h
+has type
+  h ∈ H ↔ g⁻¹ * h * g ∈ H
+but is expected to have type
+  h ∈ H ↔ g * h * g⁻¹ ∈ H
+Source line 33:
+    exact hg h
+    ^^^^^^^^^^
+Highlighted span: exact hg h
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:47-14:49
+Application type mismatch: The argument
+  hh
+has type
+  h ∈ H
+of sort `Prop` but is expected to have type
+  G
+of sort `Type u_1` in the application
+  hg hh
+Source line 14:
+      have hmem : g⁻¹ * h * g * g⁻¹ ∈ H := hg hh
+                                              ^^
+Highlighted span: hh
+
+ERROR .LspCheck.lean:15:7-15:69
+Type mismatch: After simplification, term
+  Subgroup.mul_mem H hmem (Subgroup.inv_mem H (Subgroup.one_mem H))
+ has type
+  g⁻¹ * h ∈ H
+but is expected to have type
+  g⁻¹ * (h * g) ∈ H
+Source line 15:
+      simpa [mul_assoc] using H.mul_mem hmem (H.inv_mem (H.one_mem))
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [mul_assoc] using H.mul_mem hmem (H.inv_mem (H.one_mem))
+
+ERROR .LspCheck.lean:22:37-22:61
+Type mismatch
+  (hg (g * x * g⁻¹)).mp ?m.141
+has type
+  g * (g * x * g⁻¹) * g⁻¹ ∈ H
+but is expected to have type
+  g * x * g⁻¹ ∈ H
+Source line 22:
+          have : g * x * g⁻¹ ∈ H := (hg (g * x * g⁻¹)).mp ?_
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (hg (g * x * g⁻¹)).mp ?_
+
+ERROR .LspCheck.lean:23:13-23:41
+Type mismatch: After simplification, term
+  this
+ has type
+  g * (x * g⁻¹) ∈ H
+but is expected to have type
+  g⁻¹ * (x * g) ∈ H
+Source line 23:
+          · simpa [mul_assoc] using this
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [mul_assoc] using this
+
+ERROR .LspCheck.lean:24:11-24:39
+No goals to be solved
+Source line 24:
+          · simpa [mul_assoc] using hx
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simpa [mul_assoc] using hx
+
+ERROR .LspCheck.lean:26:48-26:50
+Application type mismatch: The argument
+  hx
+has type
+  g⁻¹ * x * g⁻¹⁻¹ ∈ H
+but is expected to have type
+  g * x * g⁻¹ ∈ H
+in the application
+  (hg x).mpr hx
+Source line 26:
+          have : g⁻¹ * x * g ∈ H := (hg x).mpr hx
+                                               ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:27:11-27:39
+Type mismatch: After simplification, term
+  this
+ has type
+  g⁻¹ * (x * g) ∈ H
+but is expected to have type
+  x ∈ H
+Source line 27:
+          simpa [mul_assoc] using this
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [mul_assoc] using this
+
+ERROR .LspCheck.lean:28:78-28:80
+Application type mismatch: The argument
+  hh
+has type
+  g⁻¹ * h * g ∈ H
+but is expected to have type
+  h ∈ H
+in the application
+  (Subgroup.mem_normalizer_iff.mp hg_inv h).mp hh
+Source line 28:
+      have : g * h * g⁻¹ ∈ H := (Subgroup.mem_normalizer_iff.mp hg_inv h).mp hh
+                                                                             ^^
+Highlighted span: hh
+
+ERROR .LspCheck.lean:29:7-29:35
+Type mismatch: After simplification, term
+  this
+ has type
+  g * (h * g⁻¹) ∈ H
+but is expected to have type
+  h ∈ H
+Source line 29:
+      simpa [mul_assoc] using this
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [mul_assoc] using this
+
+ERROR .LspCheck.lean:33:5-33:15
+Type mismatch
+  hg h
+has type
+  h ∈ H ↔ g⁻¹ * h * g ∈ H
+but is expected to have type
+  h ∈ H ↔ g * h * g⁻¹ ∈ H
+Source line 33:
+    exact hg h
+    ^^^^^^^^^^
+Highlighted span: exact hg h
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G] {A : Type*} [AddGroup A]
+
+variable (H : Subgroup G)
+
+theorem mem_normalizer_iff'' {g : G} : g ∈ Subgroup.normalizer H ↔ ∀ h : G, h ∈ H ↔ g⁻¹ * h * g ∈ H := by
+  constructor
+  · intro hg h
+    rw [Subgroup.mem_normalizer_iff] at hg
+    constructor
+    · intro hh
+      have h1 : g * (g⁻¹ * h * g) * g⁻¹ ∈ H := (hg (g⁻¹ * h * g)).mpr ?_
+      · simpa [mul_assoc] using h1
+      · simpa [mul_assoc] using hh
+    · intro hh
+      exact (hg h).mp hh
+  · intro hg
+    rw [Subgroup.mem_normalizer_iff]
+    intro h
+    constructor
+    · intro hh
+      have h1 : g⁻¹ * (g * h * g⁻¹) * g ∈ H := (hg (g * h * g⁻¹)).mp ?_
+      · simpa [mul_assoc] using h1
+      · simpa [mul_assoc] using hh
+    · intro hh
+      exact (hg h).mp hh
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:48-15:73
+Type mismatch
+  (hg (g⁻¹ * h * g)).mpr ?m.85
+has type
+  g⁻¹ * h * g ∈ H
+but is expected to have type
+  g * (g⁻¹ * h * g) * g⁻¹ ∈ H
+Source line 15:
+      have h1 : g * (g⁻¹ * h * g) * g⁻¹ ∈ H := (hg (g⁻¹ * h * g)).mpr ?_
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (hg (g⁻¹ * h * g)).mpr ?_
+
+ERROR .LspCheck.lean:16:9-16:35
+Type mismatch: After simplification, term
+  h1
+ has type
+  h ∈ H
+but is expected to have type
+  g⁻¹ * (h * g) ∈ H
+Source line 16:
+      · simpa [mul_assoc] using h1
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [mul_assoc] using h1
+
+ERROR .LspCheck.lean:17:7-17:35
+No goals to be solved
+Source line 17:
+      · simpa [mul_assoc] using hh
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simpa [mul_assoc] using hh
+
+ERROR .LspCheck.lean:19:23-19:25
+Application type mismatch: The argument
+  hh
+has type
+  g⁻¹ * h * g ∈ H
+but is expected to have type
+  h ∈ H
+in the application
+  (hg h).mp hh
+Source line 19:
+      exact (hg h).mp hh
+                      ^^
+Highlighted span: hh
+
+ERROR .LspCheck.lean:26:9-26:35
+Type mismatch: After simplification, term
+  h1
+ has type
+  h ∈ H
+but is expected to have type
+  g * (h * g⁻¹) ∈ H
+Source line 26:
+      · simpa [mul_assoc] using h1
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [mul_assoc] using h1
+
+ERROR .LspCheck.lean:27:9-27:35
+Type mismatch: After simplification, term
+  hh
+ has type
+  h ∈ H
+but is expected to have type
+  g * (h * g⁻¹) ∈ H
+Source line 27:
+      · simpa [mul_assoc] using hh
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [mul_assoc] using hh
+
+ERROR .LspCheck.lean:29:23-29:25
+Application type mismatch: The argument
+  hh
+has type
+  g * h * g⁻¹ ∈ H
+but is expected to have type
+  h ∈ H
+in the application
+  (hg h).mp hh
+Source line 29:
+      exact (hg h).mp hh
+                      ^^
+Highlighted span: hh
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:48-15:73
+Type mismatch
+  (hg (g⁻¹ * h * g)).mpr ?m.85
+has type
+  g⁻¹ * h * g ∈ H
+but is expected to have type
+  g * (g⁻¹ * h * g) * g⁻¹ ∈ H
+Source line 15:
+      have h1 : g * (g⁻¹ * h * g) * g⁻¹ ∈ H := (hg (g⁻¹ * h * g)).mpr ?_
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (hg (g⁻¹ * h * g)).mpr ?_
+
+ERROR .LspCheck.lean:16:9-16:35
+Type mismatch: After simplification, term
+  h1
+ has type
+  h ∈ H
+but is expected to have type
+  g⁻¹ * (h * g) ∈ H
+Source line 16:
+      · simpa [mul_assoc] using h1
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [mul_assoc] using h1
+
+ERROR .LspCheck.lean:17:7-17:35
+No goals to be solved
+Source line 17:
+      · simpa [mul_assoc] using hh
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simpa [mul_assoc] using hh
+
+ERROR .LspCheck.lean:19:23-19:25
+Application type mismatch: The argument
+  hh
+has type
+  g⁻¹ * h * g ∈ H
+but is expected to have type
+  h ∈ H
+in the application
+  (hg h).mp hh
+Source line 19:
+      exact (hg h).mp hh
+                      ^^
+Highlighted span: hh
+
+ERROR .LspCheck.lean:26:9-26:35
+Type mismatch: After simplification, term
+  h1
+ has type
+  h ∈ H
+but is expected to have type
+  g * (h * g⁻¹) ∈ H
+Source line 26:
+      · simpa [mul_assoc] using h1
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [mul_assoc] using h1
+
+ERROR .LspCheck.lean:27:9-27:35
+Type mismatch: After simplification, term
+  hh
+ has type
+  h ∈ H
+but is expected to have type
+  g * (h * g⁻¹) ∈ H
+Source line 27:
+      · simpa [mul_assoc] using hh
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [mul_assoc] using hh
+
+ERROR .LspCheck.lean:29:23-29:25
+Application type mismatch: The argument
+  hh
+has type
+  g * h * g⁻¹ ∈ H
+but is expected to have type
+  h ∈ H
+in the application
+  (hg h).mp hh
+Source line 29:
+      exact (hg h).mp hh
+                      ^^
+Highlighted span: hh
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G] {A : Type*} [AddGroup A]
+
+variable (H : Subgroup G)
+
+theorem mem_normalizer_iff'' {g : G} : g ∈ Subgroup.normalizer H ↔ ∀ h : G, h ∈ H ↔ g⁻¹ * h * g ∈ H := by
+  constructor
+  · intro hg
+    rw [Subgroup.mem_normalizer_iff] at hg
+    intro h
+    constructor
+    · intro hh
+      have hconj : g * (g⁻¹ * h * g) * g⁻¹ ∈ H := (hg (g⁻¹ * h * g)).2 hh
+      simpa [mul_assoc] using hconj
+    · intro hh
+      have hconj : g * h * g⁻¹ ∈ H := by
+        simpa [mul_assoc] using hh
+      exact (hg h).1 hconj
+  · intro hg
+    rw [Subgroup.mem_normalizer_iff]
+    intro h
+    constructor
+    · intro hh
+      have hh' : g⁻¹ * (g * h * g⁻¹) * g ∈ H := (hg (g * h * g⁻¹)).1 (by simpa [mul_assoc] using hh)
+      simpa [mul_assoc] using hh'
+    · intro hh
+      have hh' : g⁻¹ * h * g ∈ H := by
+        simpa [mul_assoc] using hh
+      exact (hg h).2 hh'
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:72-16:74
+Application type mismatch: The argument
+  hh
+has type
+  h ∈ H
+but is expected to have type
+  g * (g⁻¹ * h * g) * g⁻¹ ∈ H
+in the application
+  (hg (g⁻¹ * h * g)).mpr hh
+Source line 16:
+      have hconj : g * (g⁻¹ * h * g) * g⁻¹ ∈ H := (hg (g⁻¹ * h * g)).2 hh
+                                                                       ^^
+Highlighted span: hh
+
+ERROR .LspCheck.lean:17:7-17:36
+Type mismatch: After simplification, term
+  hconj
+ has type
+  h ∈ H
+but is expected to have type
+  g⁻¹ * (h * g) ∈ H
+Source line 17:
+      simpa [mul_assoc] using hconj
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [mul_assoc] using hconj
+
+ERROR .LspCheck.lean:20:9-20:35
+Type mismatch: After simplification, term
+  hh
+ has type
+  g⁻¹ * (h * g) ∈ H
+but is expected to have type
+  g * (h * g⁻¹) ∈ H
+Source line 20:
+        simpa [mul_assoc] using hh
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [mul_assoc] using hh
+
+ERROR .LspCheck.lean:21:22-21:27
+Application type mismatch: The argument
+  hconj
+has type
+  g * h * g⁻¹ ∈ H
+but is expected to have type
+  h ∈ H
+in the application
+  (hg h).mp hconj
+Source line 21:
+      exact (hg h).1 hconj
+                     ^^^^^
+Highlighted span: hconj
+
+ERROR .LspCheck.lean:27:74-27:100
+Type mismatch: After simplification, term
+  hh
+ has type
+  h ∈ H
+but is expected to have type
+  g * (h * g⁻¹) ∈ H
+Source line 27:
+      have hh' : g⁻¹ * (g * h * g⁻¹) * g ∈ H := (hg (g * h * g⁻¹)).1 (by simpa [mul_assoc] using hh)
+                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [mul_assoc] using hh
+
+ERROR .LspCheck.lean:28:7-28:34
+Type mismatch: After simplification, term
+  hh'
+ has type
+  h ∈ H
+but is expected to have type
+  g * (h * g⁻¹) ∈ H
+Source line 28:
+      simpa [mul_assoc] using hh'
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [mul_assoc] using hh'
+
+ERROR .LspCheck.lean:31:9-31:35
+Type mismatch: After simplification, term
+  hh
+ has type
+  g * (h * g⁻¹) ∈ H
+but is expected to have type
+  g⁻¹ * (h * g) ∈ H
+Source line 31:
+        simpa [mul_assoc] using hh
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [mul_assoc] using hh
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:72-16:74
+Application type mismatch: The argument
+  hh
+has type
+  h ∈ H
+but is expected to have type
+  g * (g⁻¹ * h * g) * g⁻¹ ∈ H
+in the application
+  (hg (g⁻¹ * h * g)).mpr hh
+Source line 16:
+      have hconj : g * (g⁻¹ * h * g) * g⁻¹ ∈ H := (hg (g⁻¹ * h * g)).2 hh
+                                                                       ^^
+Highlighted span: hh
+
+ERROR .LspCheck.lean:17:7-17:36
+Type mismatch: After simplification, term
+  hconj
+ has type
+  h ∈ H
+but is expected to have type
+  g⁻¹ * (h * g) ∈ H
+Source line 17:
+      simpa [mul_assoc] using hconj
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [mul_assoc] using hconj
+
+ERROR .LspCheck.lean:20:9-20:35
+Type mismatch: After simplification, term
+  hh
+ has type
+  g⁻¹ * (h * g) ∈ H
+but is expected to have type
+  g * (h * g⁻¹) ∈ H
+Source line 20:
+        simpa [mul_assoc] using hh
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [mul_assoc] using hh
+
+ERROR .LspCheck.lean:21:22-21:27
+Application type mismatch: The argument
+  hconj
+has type
+  g * h * g⁻¹ ∈ H
+but is expected to have type
+  h ∈ H
+in the application
+  (hg h).mp hconj
+Source line 21:
+      exact (hg h).1 hconj
+                     ^^^^^
+Highlighted span: hconj
+
+ERROR .LspCheck.lean:27:74-27:100
+Type mismatch: After simplification, term
+  hh
+ has type
+  h ∈ H
+but is expected to have type
+  g * (h * g⁻¹) ∈ H
+Source line 27:
+      have hh' : g⁻¹ * (g * h * g⁻¹) * g ∈ H := (hg (g * h * g⁻¹)).1 (by simpa [mul_assoc] using hh)
+                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [mul_assoc] using hh
+
+ERROR .LspCheck.lean:28:7-28:34
+Type mismatch: After simplification, term
+  hh'
+ has type
+  h ∈ H
+but is expected to have type
+  g * (h * g⁻¹) ∈ H
+Source line 28:
+      simpa [mul_assoc] using hh'
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [mul_assoc] using hh'
+
+ERROR .LspCheck.lean:31:9-31:35
+Type mismatch: After simplification, term
+  hh
+ has type
+  g * (h * g⁻¹) ∈ H
+but is expected to have type
+  g⁻¹ * (h * g) ∈ H
+Source line 31:
+        simpa [mul_assoc] using hh
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [mul_assoc] using hh

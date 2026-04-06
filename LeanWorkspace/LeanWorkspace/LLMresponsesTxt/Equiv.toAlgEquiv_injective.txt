@@ -1,0 +1,176 @@
+FILE: Equiv.toAlgEquiv_injective.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Equiv.toAlgEquiv_injective.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {M G : Type*} (R A : Type*) [CommSemiring R] [Semiring A] [Algebra R A]
+
+variable [Group G] [MulSemiringAction G A] [SMulCommClass G R A]
+
+theorem toAlgEquiv_injective [FaithfulSMul G A] :
+    Function.Injective (MulSemiringAction.toAlgEquiv R A : G → A ≃ₐ[R] A) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M G : Type*} (R A : Type*) [CommSemiring R] [Semiring A] [Algebra R A]
+
+variable [Group G] [MulSemiringAction G A] [SMulCommClass G R A]
+
+theorem toAlgEquiv_injective [FaithfulSMul G A] :
+    Function.Injective (MulSemiringAction.toAlgEquiv R A : G → A ≃ₐ[R] A) := by
+  intro g h hgh
+  apply FaithfulSMul.eq_of_smul_eq_smul
+  intro a
+  have := DFunLike.congr_fun hgh a
+  simpa [MulSemiringAction.toAlgEquiv_apply] using this
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:3-10:40
+failed to synthesize
+  FaithfulSMul G ?α
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+Source line 10:
+  apply FaithfulSMul.eq_of_smul_eq_smul
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: apply FaithfulSMul.eq_of_smul_eq_smul
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:3-10:40
+failed to synthesize
+  FaithfulSMul G ?α
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+Source line 10:
+  apply FaithfulSMul.eq_of_smul_eq_smul
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: apply FaithfulSMul.eq_of_smul_eq_smul
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M G : Type*} (R A : Type*) [CommSemiring R] [Semiring A] [Algebra R A]
+
+variable [Group G] [MulSemiringAction G A] [SMulCommClass G R A]
+
+theorem toAlgEquiv_injective [FaithfulSMul G A] :
+    Function.Injective (MulSemiringAction.toAlgEquiv R A : G → A ≃ₐ[R] A) := by
+  intro g h hgh
+  let f : A → A := fun a => g • a
+  let k : A → A := fun a => h • a
+  have hf : f = k := by
+    funext a
+    exact DFunLike.congr_fun hgh a
+  exact FaithfulSMul.of_injective_smul (M := G) (α := A) f k hf
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:9-15:39
+Unknown constant `FaithfulSMul.of_injective_smul`
+Source line 15:
+  exact FaithfulSMul.of_injective_smul (M := G) (α := A) f k hf
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: FaithfulSMul.of_injective_smul
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:9-15:39
+Unknown constant `FaithfulSMul.of_injective_smul`
+Source line 15:
+  exact FaithfulSMul.of_injective_smul (M := G) (α := A) f k hf
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: FaithfulSMul.of_injective_smul
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M G : Type*} (R A : Type*) [CommSemiring R] [Semiring A] [Algebra R A]
+
+variable [Group G] [MulSemiringAction G A] [SMulCommClass G R A]
+
+theorem toAlgEquiv_injective [FaithfulSMul G A] :
+    Function.Injective (MulSemiringAction.toAlgEquiv R A : G → A ≃ₐ[R] A) := by
+  intro g h hgh
+  have hsmul : ∀ a : A, g • a = h • a := fun a => DFunLike.congr_fun hgh a
+  exact smul_left_injective G <| funext hsmul
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:34-11:46
+Application type mismatch: The argument
+  funext hsmul
+has type
+  HSMul.hSMul g = HSMul.hSMul h
+but is expected to have type
+  ?m.51 ≠ 0
+in the application
+  smul_left_injective G (funext hsmul)
+Source line 11:
+  exact smul_left_injective G <| funext hsmul
+                                 ^^^^^^^^^^^^
+Highlighted span: funext hsmul
+
+ERROR .LspCheck.lean:11:9-11:46
+failed to synthesize instance of type class
+  Ring G
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 11:
+  exact smul_left_injective G <| funext hsmul
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: smul_left_injective G <| funext hsmul
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:34-11:46
+Application type mismatch: The argument
+  funext hsmul
+has type
+  HSMul.hSMul g = HSMul.hSMul h
+but is expected to have type
+  ?m.51 ≠ 0
+in the application
+  smul_left_injective G (funext hsmul)
+Source line 11:
+  exact smul_left_injective G <| funext hsmul
+                                 ^^^^^^^^^^^^
+Highlighted span: funext hsmul
+
+ERROR .LspCheck.lean:11:9-11:46
+failed to synthesize instance of type class
+  Ring G
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 11:
+  exact smul_left_injective G <| funext hsmul
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: smul_left_injective G <| funext hsmul

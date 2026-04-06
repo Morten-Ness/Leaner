@@ -1,0 +1,375 @@
+FILE: Combination.weightedVSub_sdiff.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Combination.weightedVSub_sdiff.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+theorem weightedVSub_sdiff [DecidableEq ι] {s₂ : Finset ι} (h : s₂ ⊆ s) (w : ι → k) (p : ι → P) :
+    (s \ s₂).weightedVSub p w + s₂.weightedVSub p w = s.weightedVSub p w := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+theorem weightedVSub_sdiff [DecidableEq ι] {s₂ : Finset ι} (h : s₂ ⊆ s) (w : ι → k) (p : ι → P) :
+    (s \ s₂).weightedVSub p w + s₂.weightedVSub p w = s.weightedVSub p w := by
+  simpa [Finset.sdiff_union_of_subset h, Finset.weightedVSub_union, Finset.disjoint_sdiff] using
+    (Finset.weightedVSub_union (s := s \ s₂) (t := s₂) (f := p) (w := w) (Finset.disjoint_sdiff))
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:42-13:67
+Unknown constant `Finset.weightedVSub_union`
+Source line 13:
+  simpa [Finset.sdiff_union_of_subset h, Finset.weightedVSub_union, Finset.disjoint_sdiff] using
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.weightedVSub_union
+
+ERROR .LspCheck.lean:14:6-14:31
+Unknown constant `Finset.weightedVSub_union`
+Source line 14:
+    (Finset.weightedVSub_union (s := s \ s₂) (t := s₂) (f := p) (w := w) (Finset.disjoint_sdiff))
+     ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.weightedVSub_union
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:42-13:67
+Unknown constant `Finset.weightedVSub_union`
+Source line 13:
+  simpa [Finset.sdiff_union_of_subset h, Finset.weightedVSub_union, Finset.disjoint_sdiff] using
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.weightedVSub_union
+
+ERROR .LspCheck.lean:14:6-14:31
+Unknown constant `Finset.weightedVSub_union`
+Source line 14:
+    (Finset.weightedVSub_union (s := s \ s₂) (t := s₂) (f := p) (w := w) (Finset.disjoint_sdiff))
+     ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.weightedVSub_union
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+theorem weightedVSub_sdiff [DecidableEq ι] {s₂ : Finset ι} (h : s₂ ⊆ s) (w : ι → k) (p : ι → P) :
+    (s \ s₂).weightedVSub p w + s₂.weightedVSub p w = s.weightedVSub p w := by
+  classical
+  rw [Finset.weightedVSub_eq_finset_sum,
+    Finset.weightedVSub_eq_finset_sum,
+    Finset.weightedVSub_eq_finset_sum]
+  rw [← Finset.sum_add_distrib]
+  refine Finset.sum_bij_ne_zero (fun i hi => i) ?_ ?_ ?_ ?_
+  · intro i hi
+    simp only [Finset.mem_add, Finset.mem_sdiff, Finset.mem_coe]
+    by_cases his₂ : i ∈ s₂
+    · right
+      exact ⟨h his₂, his₂⟩
+    · left
+      exact ⟨hi, his₂⟩
+  · intro i hi
+    simp only [Finset.mem_add, Finset.mem_sdiff, Finset.mem_coe] at hi ⊢
+    rcases hi with hi | ⟨his, his₂⟩
+    · exact his
+    · exact his
+  · intro i hi
+    simp
+  · intro i hi
+    simp only [Finset.mem_add, Finset.mem_sdiff, Finset.mem_coe] at hi
+    rcases hi with hi | ⟨his, his₂⟩
+    · exact Or.inl ⟨hi, by simpa using hi⟩
+    · exact Or.inr ⟨his, his₂⟩
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:7-14:40
+Unknown constant `Finset.weightedVSub_eq_finset_sum`
+Source line 14:
+  rw [Finset.weightedVSub_eq_finset_sum,
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.weightedVSub_eq_finset_sum
+
+ERROR .LspCheck.lean:12:77-13:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s : Finset ι
+inst✝ : DecidableEq ι
+s₂ : Finset ι
+h : s₂ ⊆ s
+w : ι → k
+p : ι → P
+⊢ ((s \ s₂).weightedVSub p) w + (s₂.weightedVSub p) w = (s.weightedVSub p) w
+Source line 12:
+    (s \ s₂).weightedVSub p w + s₂.weightedVSub p w = s.weightedVSub p w := by
+                                                                            ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:7-14:40
+Unknown constant `Finset.weightedVSub_eq_finset_sum`
+Source line 14:
+  rw [Finset.weightedVSub_eq_finset_sum,
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.weightedVSub_eq_finset_sum
+
+ERROR .LspCheck.lean:12:77-13:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s : Finset ι
+inst✝ : DecidableEq ι
+s₂ : Finset ι
+h : s₂ ⊆ s
+w : ι → k
+p : ι → P
+⊢ ((s \ s₂).weightedVSub p) w + (s₂.weightedVSub p) w = (s.weightedVSub p) w
+Source line 12:
+    (s \ s₂).weightedVSub p w + s₂.weightedVSub p w = s.weightedVSub p w := by
+                                                                            ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+theorem weightedVSub_sdiff [DecidableEq ι] {s₂ : Finset ι} (h : s₂ ⊆ s) (w : ι → k) (p : ι → P) :
+    (s \ s₂).weightedVSub p w + s₂.weightedVSub p w = s.weightedVSub p w := by
+  classical
+  induction s using Finset.induction_on with
+  | empty =>
+      have hs₂ : s₂ = ∅ := Finset.eq_empty_of_subset_empty h
+      subst hs₂
+      simp
+  | @insert a s ha ih =>
+      by_cases has₂ : a ∈ s₂
+      · have hs₂ : s₂ = insert a (s₂.erase a) := by
+          exact (Finset.insert_erase has₂).symm
+        have hsubset : s₂.erase a ⊆ s := by
+          intro x hx
+          exact h (Finset.mem_of_mem_erase hx)
+        rw [hs₂, Finset.sdiff_insert_insert_eq_sdiff]
+        · simp [ha, has₂, ih hsubset, add_assoc]
+        · exact h has₂
+      · have hsubset : s₂ ⊆ s := by
+          intro x hx
+          have hx' := h hx
+          simp [Finset.mem_insert, hx, has₂] at hx'
+          exact hx'
+        rw [Finset.sdiff_insert_eq_erase, Finset.erase_eq_of_not_mem has₂]
+        · simp [ha, has₂, ih hsubset, add_assoc]
+        · intro hs₂sub
+          exact has₂ (h hs₂sub)
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:28-16:59
+Unknown constant `Finset.eq_empty_of_subset_empty`
+Source line 16:
+      have hs₂ : s₂ = ∅ := Finset.eq_empty_of_subset_empty h
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.eq_empty_of_subset_empty
+
+ERROR .LspCheck.lean:25:11-25:47
+Type mismatch
+  h (Finset.mem_of_mem_erase hx)
+has type
+  x ∈ insert a s
+but is expected to have type
+  x ∈ s
+Source line 25:
+          exact h (Finset.mem_of_mem_erase hx)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: exact h (Finset.mem_of_mem_erase hx)
+
+ERROR .LspCheck.lean:26:18-26:53
+Unknown constant `Finset.sdiff_insert_insert_eq_sdiff`
+Source line 26:
+        rw [hs₂, Finset.sdiff_insert_insert_eq_sdiff]
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.sdiff_insert_insert_eq_sdiff
+
+ERROR .LspCheck.lean:33:11-33:20
+Type mismatch
+  hx'
+has type
+  x = a ∨ x ∈ s
+but is expected to have type
+  x ∈ s
+Source line 33:
+          exact hx'
+          ^^^^^^^^^
+Highlighted span: exact hx'
+
+ERROR .LspCheck.lean:34:13-34:41
+Unknown constant `Finset.sdiff_insert_eq_erase`
+Source line 34:
+        rw [Finset.sdiff_insert_eq_erase, Finset.erase_eq_of_not_mem has₂]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.sdiff_insert_eq_erase
+
+WARNING .LspCheck.lean:32:36-32:38
+This simp argument is unused:
+  hx
+
+Hint: Omit it from the simp argument list.
+  simp [Finset.mem_insert, hx̵,̵ ̵h̵as₂] at hx'
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 32:
+          simp [Finset.mem_insert, hx, has₂] at hx'
+                                   ^^
+Highlighted span: hx
+
+WARNING .LspCheck.lean:32:40-32:44
+This simp argument is unused:
+  has₂
+
+Hint: Omit it from the simp argument list.
+  simp [Finset.mem_insert, hx,̵ ̵h̵a̵s̵₂̵] at hx'
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 32:
+          simp [Finset.mem_insert, hx, has₂] at hx'
+                                       ^^^^
+Highlighted span: has₂
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:28-16:59
+Unknown constant `Finset.eq_empty_of_subset_empty`
+Source line 16:
+      have hs₂ : s₂ = ∅ := Finset.eq_empty_of_subset_empty h
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.eq_empty_of_subset_empty
+
+ERROR .LspCheck.lean:25:11-25:47
+Type mismatch
+  h (Finset.mem_of_mem_erase hx)
+has type
+  x ∈ insert a s
+but is expected to have type
+  x ∈ s
+Source line 25:
+          exact h (Finset.mem_of_mem_erase hx)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: exact h (Finset.mem_of_mem_erase hx)
+
+ERROR .LspCheck.lean:26:18-26:53
+Unknown constant `Finset.sdiff_insert_insert_eq_sdiff`
+Source line 26:
+        rw [hs₂, Finset.sdiff_insert_insert_eq_sdiff]
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.sdiff_insert_insert_eq_sdiff
+
+ERROR .LspCheck.lean:33:11-33:20
+Type mismatch
+  hx'
+has type
+  x = a ∨ x ∈ s
+but is expected to have type
+  x ∈ s
+Source line 33:
+          exact hx'
+          ^^^^^^^^^
+Highlighted span: exact hx'
+
+ERROR .LspCheck.lean:34:13-34:41
+Unknown constant `Finset.sdiff_insert_eq_erase`
+Source line 34:
+        rw [Finset.sdiff_insert_eq_erase, Finset.erase_eq_of_not_mem has₂]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.sdiff_insert_eq_erase
+
+WARNING .LspCheck.lean:32:36-32:38
+This simp argument is unused:
+  hx
+
+Hint: Omit it from the simp argument list.
+  simp [Finset.mem_insert, hx̵,̵ ̵h̵as₂] at hx'
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 32:
+          simp [Finset.mem_insert, hx, has₂] at hx'
+                                   ^^
+Highlighted span: hx
+
+WARNING .LspCheck.lean:32:40-32:44
+This simp argument is unused:
+  has₂
+
+Hint: Omit it from the simp argument list.
+  simp [Finset.mem_insert, hx,̵ ̵h̵a̵s̵₂̵] at hx'
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 32:
+          simp [Finset.mem_insert, hx, has₂] at hx'
+                                       ^^^^
+Highlighted span: has₂

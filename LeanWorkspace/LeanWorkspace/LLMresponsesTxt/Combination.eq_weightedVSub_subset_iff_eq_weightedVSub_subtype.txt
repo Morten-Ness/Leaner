@@ -1,0 +1,619 @@
+FILE: Combination.eq_weightedVSub_subset_iff_eq_weightedVSub_subtype.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Combination.eq_weightedVSub_subset_iff_eq_weightedVSub_subtype.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+variable (k)
+
+variable {k}
+
+theorem eq_weightedVSub_subset_iff_eq_weightedVSub_subtype {v : V} {s : Set ι} {p : ι → P} :
+    (∃ fs : Finset ι, ↑fs ⊆ s ∧ ∃ w : ι → k, ∑ i ∈ fs, w i = 0 ∧
+        v = fs.weightedVSub p w) ↔
+      ∃ (fs : Finset s) (w : s → k), ∑ i ∈ fs, w i = 0 ∧
+        v = fs.weightedVSub (fun i : s => p i) w := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+variable (k)
+
+variable {k}
+
+theorem eq_weightedVSub_subset_iff_eq_weightedVSub_subtype {v : V} {s : Set ι} {p : ι → P} :
+    (∃ fs : Finset ι, ↑fs ⊆ s ∧ ∃ w : ι → k, ∑ i ∈ fs, w i = 0 ∧
+        v = fs.weightedVSub p w) ↔
+      ∃ (fs : Finset s) (w : s → k), ∑ i ∈ fs, w i = 0 ∧
+        v = fs.weightedVSub (fun i : s => p i) w := by
+  constructor
+  · rintro ⟨fs, hfs, w, hw, hv⟩
+    refine ⟨fs.attach.map ⟨fun i => ⟨i.1, hfs i.2⟩, ?_⟩, fun i => w i, ?_, ?_⟩
+    · intro a b h
+      exact Subtype.ext h
+    · simpa using hw
+    · classical
+      simp only [Finset.weightedVSub, Finset.sum_map]
+      refine congrArg (fun x => x -ᵥ p (Classical.choose (Set.Nonempty.of_subtype s))) ?_
+      simp only
+      rw [show (∑ x ∈ fs.attach, w ↑x • (p ↑x -ᵥ p (Classical.choose (Set.Nonempty.of_subtype s))) ) =
+            ∑ x ∈ fs, w x • (p x -ᵥ p (Classical.choose (Set.Nonempty.of_subtype s))) ) by
+            simpa]
+      exact hv
+  · rintro ⟨fs, w, hw, hv⟩
+    refine ⟨fs.image Subtype.val, ?_, fun i => if h : i ∈ s then w ⟨i, h⟩ else 0, ?_, ?_⟩
+    · intro i hi
+      rcases Finset.mem_image.mp hi with ⟨j, hj, rfl⟩
+      exact j.2
+    · classical
+      rw [← Finset.sum_attach (s := fs)]
+      simpa [Finset.sum_image, Function.LeftInverse.injective Subtype.val_injective, hw]
+    · classical
+      subst hv
+      simp only [Finset.weightedVSub]
+      congr 1
+      · rw [show (∑ x ∈ fs.image Subtype.val,
+            (if h : x ∈ s then w ⟨x, h⟩ else 0) •
+              (p x -ᵥ p (Classical.choose (Set.Nonempty.of_subtype s)))) =
+            ∑ x ∈ fs, w x • (p x -ᵥ p (Classical.choose (Set.Nonempty.of_subtype s)))) by
+            refine Finset.sum_image ?_ ?_]
+        · intro a _ b _ hab
+          exact Subtype.ext hab
+        · intro x hx
+          simp [x.2]
+      · rfl
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:31:86-31:88
+unexpected token ')'; expected 'by' or 'from'
+Source line 31:
+            ∑ x ∈ fs, w x • (p x -ᵥ p (Classical.choose (Set.Nonempty.of_subtype s))) ) by
+                                                                                     ^^
+Highlighted span:  )
+
+ERROR .LspCheck.lean:24:25-24:26
+Application type mismatch: The argument
+  h
+has type
+  (fun i ↦ ⟨↑i, ⋯⟩) a = (fun i ↦ ⟨↑i, ⋯⟩) b
+but is expected to have type
+  ↑a = ↑b
+in the application
+  Subtype.ext h
+Source line 24:
+      exact Subtype.ext h
+                        ^
+Highlighted span: h
+
+ERROR .LspCheck.lean:25:7-25:21
+Type mismatch: After simplification, term
+  hw
+ has type
+  ∑ i ∈ fs, w i = 0
+but is expected to have type
+  ∑ x ∈ fs.attach, w ↑x = 0
+Source line 25:
+    · simpa using hw
+      ^^^^^^^^^^^^^^
+Highlighted span: simpa using hw
+
+ERROR .LspCheck.lean:28:59-28:84
+Function expected at
+  Set.Nonempty.of_subtype
+but this term has type
+  Set.Nonempty ?m.144
+
+Note: Expected a function because this term is being applied to the argument
+  s
+Source line 28:
+      refine congrArg (fun x => x -ᵥ p (Classical.choose (Set.Nonempty.of_subtype s))) ?_
+                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Set.Nonempty.of_subtype s
+
+ERROR .LspCheck.lean:19:53-20:1
+unsolved goals
+case mpr
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+v : V
+s : Set ι
+p : ι → P
+⊢ (∃ fs w, ∑ i ∈ fs, w i = 0 ∧ v = (fs.weightedVSub fun i ↦ p ↑i) w) →
+    ∃ fs, ↑fs ⊆ s ∧ ∃ w, ∑ i ∈ fs, w i = 0 ∧ v = (fs.weightedVSub p) w
+Source line 19:
+        v = fs.weightedVSub (fun i : s => p i) w := by
+                                                    ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:31:86-31:88
+unexpected token ')'; expected 'by' or 'from'
+Source line 31:
+            ∑ x ∈ fs, w x • (p x -ᵥ p (Classical.choose (Set.Nonempty.of_subtype s))) ) by
+                                                                                     ^^
+Highlighted span:  )
+
+ERROR .LspCheck.lean:24:25-24:26
+Application type mismatch: The argument
+  h
+has type
+  (fun i ↦ ⟨↑i, ⋯⟩) a = (fun i ↦ ⟨↑i, ⋯⟩) b
+but is expected to have type
+  ↑a = ↑b
+in the application
+  Subtype.ext h
+Source line 24:
+      exact Subtype.ext h
+                        ^
+Highlighted span: h
+
+ERROR .LspCheck.lean:25:7-25:21
+Type mismatch: After simplification, term
+  hw
+ has type
+  ∑ i ∈ fs, w i = 0
+but is expected to have type
+  ∑ x ∈ fs.attach, w ↑x = 0
+Source line 25:
+    · simpa using hw
+      ^^^^^^^^^^^^^^
+Highlighted span: simpa using hw
+
+ERROR .LspCheck.lean:28:59-28:84
+Function expected at
+  Set.Nonempty.of_subtype
+but this term has type
+  Set.Nonempty ?m.144
+
+Note: Expected a function because this term is being applied to the argument
+  s
+Source line 28:
+      refine congrArg (fun x => x -ᵥ p (Classical.choose (Set.Nonempty.of_subtype s))) ?_
+                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Set.Nonempty.of_subtype s
+
+ERROR .LspCheck.lean:19:53-20:1
+unsolved goals
+case mpr
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+v : V
+s : Set ι
+p : ι → P
+⊢ (∃ fs w, ∑ i ∈ fs, w i = 0 ∧ v = (fs.weightedVSub fun i ↦ p ↑i) w) →
+    ∃ fs, ↑fs ⊆ s ∧ ∃ w, ∑ i ∈ fs, w i = 0 ∧ v = (fs.weightedVSub p) w
+Source line 19:
+        v = fs.weightedVSub (fun i : s => p i) w := by
+                                                    ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+variable (k)
+
+variable {k}
+
+theorem eq_weightedVSub_subset_iff_eq_weightedVSub_subtype {v : V} {s : Set ι} {p : ι → P} :
+    (∃ fs : Finset ι, ↑fs ⊆ s ∧ ∃ w : ι → k, ∑ i ∈ fs, w i = 0 ∧
+        v = fs.weightedVSub p w) ↔
+      ∃ (fs : Finset s) (w : s → k), ∑ i ∈ fs, w i = 0 ∧
+        v = fs.weightedVSub (fun i : s => p i) w := by
+  classical
+  constructor
+  · rintro ⟨fs, hsub, w, hsum, hv⟩
+    refine ⟨fs.subtype hsub, fun i => w i, ?_, ?_⟩
+    · simpa [Finset.sum_subtype] using hsum
+    · simpa [Finset.weightedVSub_subtype, Finset.subtype_map] using hv
+  · rintro ⟨fs, w, hsum, hv⟩
+    refine ⟨fs.attach.image (fun i => (i : ι)), ?_, ?_, ?_⟩
+    · intro i hi
+      rcases Finset.mem_image.mp hi with ⟨j, hj, rfl⟩
+      exact j.2
+    · refine ⟨fun i => if h : i ∈ s then w ⟨i, h⟩ else 0, ?_, ?_⟩
+      · simpa [Finset.sum_attach, Finset.sum_image, Subtype.coe_injective, hsum]
+      · simpa [Finset.weightedVSub_attach, Finset.weightedVSub_image, Subtype.coe_injective] using hv
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:23:13-23:28
+Application type mismatch: The argument
+  Finset.subtype ?m.91 fs
+has type
+  Finset (Subtype ?m.91)
+but is expected to have type
+  Finset ↑s
+in the application
+  Exists.intro (Finset.subtype ?m.91 fs)
+Source line 23:
+    refine ⟨fs.subtype hsub, fun i => w i, ?_, ?_⟩
+            ^^^^^^^^^^^^^^^
+Highlighted span: fs.subtype hsub
+
+ERROR .LspCheck.lean:30:13-30:16
+Invalid projection: Projection operates on types of the form `C ...` where C is a constant. The expression
+  j
+has type `ι` which does not have the necessary form.
+Source line 30:
+      exact j.2
+            ^^^
+Highlighted span: j.2
+
+ERROR .LspCheck.lean:31:14-31:66
+Invalid `⟨...⟩` notation: The expected type `ι → k` is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+Source line 31:
+    · refine ⟨fun i => if h : i ∈ s then w ⟨i, h⟩ else 0, ?_, ?_⟩
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ⟨fun i => if h : i ∈ s then w ⟨i, h⟩ else 0, ?_, ?_⟩
+
+ERROR .LspCheck.lean:32:7-32:81
+No goals to be solved
+Source line 32:
+      · simpa [Finset.sum_attach, Finset.sum_image, Subtype.coe_injective, hsum]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simpa [Finset.sum_attach, Finset.sum_image, Subtype.coe_injective, hsum]
+
+ERROR .LspCheck.lean:26:3-27:1
+unsolved goals
+case mpr.refine_3
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+v : V
+s : Set ι
+p : ι → P
+fs : Finset ↑s
+w : ↑s → k
+hsum : ∑ i ∈ fs, w i = 0
+hv : v = (fs.weightedVSub fun i ↦ p ↑i) w
+⊢ ∑
+        i ∈
+          Finset.image (fun i ↦ i) do
+            let a ← fs.attach
+            pure ↑↑a,
+        sorry i =
+      0 ∧
+    v =
+      ((Finset.image (fun i ↦ i) do
+              let a ← fs.attach
+              pure ↑↑a).weightedVSub
+          p)
+        sorry
+Source line 26:
+  · rintro ⟨fs, w, hsum, hv⟩
+  ^
+Highlighted span: ·
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:23:13-23:28
+Application type mismatch: The argument
+  Finset.subtype ?m.91 fs
+has type
+  Finset (Subtype ?m.91)
+but is expected to have type
+  Finset ↑s
+in the application
+  Exists.intro (Finset.subtype ?m.91 fs)
+Source line 23:
+    refine ⟨fs.subtype hsub, fun i => w i, ?_, ?_⟩
+            ^^^^^^^^^^^^^^^
+Highlighted span: fs.subtype hsub
+
+ERROR .LspCheck.lean:30:13-30:16
+Invalid projection: Projection operates on types of the form `C ...` where C is a constant. The expression
+  j
+has type `ι` which does not have the necessary form.
+Source line 30:
+      exact j.2
+            ^^^
+Highlighted span: j.2
+
+ERROR .LspCheck.lean:31:14-31:66
+Invalid `⟨...⟩` notation: The expected type `ι → k` is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+Source line 31:
+    · refine ⟨fun i => if h : i ∈ s then w ⟨i, h⟩ else 0, ?_, ?_⟩
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ⟨fun i => if h : i ∈ s then w ⟨i, h⟩ else 0, ?_, ?_⟩
+
+ERROR .LspCheck.lean:32:7-32:81
+No goals to be solved
+Source line 32:
+      · simpa [Finset.sum_attach, Finset.sum_image, Subtype.coe_injective, hsum]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simpa [Finset.sum_attach, Finset.sum_image, Subtype.coe_injective, hsum]
+
+ERROR .LspCheck.lean:26:3-27:1
+unsolved goals
+case mpr.refine_3
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+v : V
+s : Set ι
+p : ι → P
+fs : Finset ↑s
+w : ↑s → k
+hsum : ∑ i ∈ fs, w i = 0
+hv : v = (fs.weightedVSub fun i ↦ p ↑i) w
+⊢ ∑
+        i ∈
+          Finset.image (fun i ↦ i) do
+            let a ← fs.attach
+            pure ↑↑a,
+        sorry i =
+      0 ∧
+    v =
+      ((Finset.image (fun i ↦ i) do
+              let a ← fs.attach
+              pure ↑↑a).weightedVSub
+          p)
+        sorry
+Source line 26:
+  · rintro ⟨fs, w, hsum, hv⟩
+  ^
+Highlighted span: ·
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+variable (k)
+
+variable {k}
+
+theorem eq_weightedVSub_subset_iff_eq_weightedVSub_subtype {v : V} {s : Set ι} {p : ι → P} :
+    (∃ fs : Finset ι, ↑fs ⊆ s ∧ ∃ w : ι → k, ∑ i ∈ fs, w i = 0 ∧
+        v = fs.weightedVSub p w) ↔
+      ∃ (fs : Finset s) (w : s → k), ∑ i ∈ fs, w i = 0 ∧
+        v = fs.weightedVSub (fun i : s => p i) w := by
+  classical
+  constructor
+  · rintro ⟨fs, hfs, w, hw, hv⟩
+    let fs' : Finset s := fs.attach.map
+      { toFun := fun i => ⟨i.1, hfs i.2⟩
+        inj' := by
+          intro a b h
+          exact Subtype.ext h }
+    refine ⟨fs', fun i => w i.1, ?_, ?_⟩
+    · unfold fs'
+      simpa using hw
+    · unfold fs'
+      simpa using hv
+  · rintro ⟨fs, w, hw, hv⟩
+    refine ⟨fs.image (fun i : s => (i : ι)), ?_, ?_, ?_⟩
+    · intro i hi
+      rcases Finset.mem_image.mp hi with ⟨j, hj, rfl⟩
+      exact j.2
+    · let w' : ι → k := fun i => if h : i ∈ s then w ⟨i, h⟩ else 0
+      refine ⟨w', ?_, ?_⟩
+      · unfold w'
+        rw [Finset.sum_image]
+        · simpa using hw
+        · intro a _ b _ hab
+          exact Subtype.ext hab
+      · unfold w'
+        rw [Finset.weightedVSub_image]
+        · simpa using hv
+        · intro a _ b _ hab
+          exact Subtype.ext hab
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:27:29-27:30
+Application type mismatch: The argument
+  h
+has type
+  (fun i ↦ ⟨↑i, ⋯⟩) a = (fun i ↦ ⟨↑i, ⋯⟩) b
+but is expected to have type
+  ↑a = ↑b
+in the application
+  Subtype.ext h
+Source line 27:
+          exact Subtype.ext h }
+                            ^
+Highlighted span: h
+
+ERROR .LspCheck.lean:30:7-30:21
+Type mismatch: After simplification, term
+  hw
+ has type
+  ∑ i ∈ fs, w i = 0
+but is expected to have type
+  ∑ x ∈ fs.attach, w ↑x = 0
+Source line 30:
+      simpa using hw
+      ^^^^^^^^^^^^^^
+Highlighted span: simpa using hw
+
+ERROR .LspCheck.lean:39:14-39:26
+Invalid `⟨...⟩` notation: The expected type `ι → k` is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+Source line 39:
+      refine ⟨w', ?_, ?_⟩
+             ^^^^^^^^^^^^
+Highlighted span: ⟨w', ?_, ?_⟩
+
+ERROR .LspCheck.lean:40:7-41:1
+No goals to be solved
+Source line 40:
+      · unfold w'
+      ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:33:3-34:1
+unsolved goals
+case mpr.refine_3
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+v : V
+s : Set ι
+p : ι → P
+fs : Finset ↑s
+w : ↑s → k
+hw : ∑ i ∈ fs, w i = 0
+hv : v = (fs.weightedVSub fun i ↦ p ↑i) w
+⊢ ∑ i ∈ Finset.image (fun i ↦ ↑i) fs, sorry i = 0 ∧ v = ((Finset.image (fun i ↦ ↑i) fs).weightedVSub p) sorry
+Source line 33:
+  · rintro ⟨fs, w, hw, hv⟩
+  ^
+Highlighted span: ·
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:27:29-27:30
+Application type mismatch: The argument
+  h
+has type
+  (fun i ↦ ⟨↑i, ⋯⟩) a = (fun i ↦ ⟨↑i, ⋯⟩) b
+but is expected to have type
+  ↑a = ↑b
+in the application
+  Subtype.ext h
+Source line 27:
+          exact Subtype.ext h }
+                            ^
+Highlighted span: h
+
+ERROR .LspCheck.lean:30:7-30:21
+Type mismatch: After simplification, term
+  hw
+ has type
+  ∑ i ∈ fs, w i = 0
+but is expected to have type
+  ∑ x ∈ fs.attach, w ↑x = 0
+Source line 30:
+      simpa using hw
+      ^^^^^^^^^^^^^^
+Highlighted span: simpa using hw
+
+ERROR .LspCheck.lean:39:14-39:26
+Invalid `⟨...⟩` notation: The expected type `ι → k` is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+Source line 39:
+      refine ⟨w', ?_, ?_⟩
+             ^^^^^^^^^^^^
+Highlighted span: ⟨w', ?_, ?_⟩
+
+ERROR .LspCheck.lean:40:7-41:1
+No goals to be solved
+Source line 40:
+      · unfold w'
+      ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:33:3-34:1
+unsolved goals
+case mpr.refine_3
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+v : V
+s : Set ι
+p : ι → P
+fs : Finset ↑s
+w : ↑s → k
+hw : ∑ i ∈ fs, w i = 0
+hv : v = (fs.weightedVSub fun i ↦ p ↑i) w
+⊢ ∑ i ∈ Finset.image (fun i ↦ ↑i) fs, sorry i = 0 ∧ v = ((Finset.image (fun i ↦ ↑i) fs).weightedVSub p) sorry
+Source line 33:
+  · rintro ⟨fs, w, hw, hv⟩
+  ^
+Highlighted span: ·

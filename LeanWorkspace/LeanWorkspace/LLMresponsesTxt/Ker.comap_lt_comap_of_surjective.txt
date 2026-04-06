@@ -1,0 +1,284 @@
+FILE: Ker.comap_lt_comap_of_surjective.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Ker.comap_lt_comap_of_surjective.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N] (H : Subgroup G)
+
+variable (f : G →* N)
+
+theorem comap_lt_comap_of_surjective {f : G →* N} {K L : Subgroup N} (hf : Function.Surjective f) :
+    K.comap f < L.comap f ↔ K < L := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N] (H : Subgroup G)
+
+variable (f : G →* N)
+
+theorem comap_lt_comap_of_surjective {f : G →* N} {K L : Subgroup N} (hf : Function.Surjective f) :
+    K.comap f < L.comap f ↔ K < L := by
+  constructor
+  · intro h
+    rcases h with ⟨hKL, hne⟩
+    refine ⟨?_, ?_⟩
+    · intro x hxK
+      rcases hf x with ⟨y, rfl⟩
+      exact hKL hxK
+    · intro hEq
+      apply hne
+      ext x
+      exact hEq
+  · intro h
+    rcases h with ⟨hKL, hne⟩
+    refine ⟨?_, ?_⟩
+    · exact Subgroup.comap_mono hKL
+    · intro hEq
+      apply hne
+      ext x
+      constructor
+      · intro hxK
+        rcases hf x with ⟨y, rfl⟩
+        exact hEq.mp hxK
+      · intro hxL
+        rcases hf x with ⟨y, rfl⟩
+        exact hEq.mpr hxL
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:24:7-24:12
+This extensionality tactic only applies to equalities, not
+  ∀ ⦃a : G⦄, a ∈ ↑(Subgroup.comap f L) → a ∈ ↑(Subgroup.comap f K)
+Source line 24:
+      ext x
+      ^^^^^
+Highlighted span: ext x
+
+ERROR .LspCheck.lean:32:7-32:12
+This extensionality tactic only applies to equalities, not
+  ∀ ⦃a : N⦄, a ∈ ↑L → a ∈ ↑K
+Source line 32:
+      ext x
+      ^^^^^
+Highlighted span: ext x
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:24:7-24:12
+This extensionality tactic only applies to equalities, not
+  ∀ ⦃a : G⦄, a ∈ ↑(Subgroup.comap f L) → a ∈ ↑(Subgroup.comap f K)
+Source line 24:
+      ext x
+      ^^^^^
+Highlighted span: ext x
+
+ERROR .LspCheck.lean:32:7-32:12
+This extensionality tactic only applies to equalities, not
+  ∀ ⦃a : N⦄, a ∈ ↑L → a ∈ ↑K
+Source line 32:
+      ext x
+      ^^^^^
+Highlighted span: ext x
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N] (H : Subgroup G)
+
+variable (f : G →* N)
+
+theorem comap_lt_comap_of_surjective {f : G →* N} {K L : Subgroup N} (hf : Function.Surjective f) :
+    K.comap f < L.comap f ↔ K < L := by
+  constructor
+  · intro h
+    rcases h with ⟨hKL, hne⟩
+    refine ⟨?_, ?_⟩
+    · intro x hxK
+      rcases hf x with ⟨y, rfl⟩
+      exact hKL hxK
+    · intro hEq
+      apply hne
+      subst hEq
+      rfl
+  · intro h
+    rcases h with ⟨hKL, hne⟩
+    refine ⟨Subgroup.comap_mono hKL, ?_⟩
+    intro hEq
+    apply hne
+    apply le_antisymm
+    · intro x hxL
+      rcases hf x with ⟨y, rfl⟩
+      exact hEq.le hxL
+    · exact hKL
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:24:7-24:16
+Tactic `subst` failed: did not find equation for eliminating 'hEq'
+
+case mp.refine_2
+G : Type u_1
+inst✝¹ : Group G
+N : Type u_5
+inst✝ : Group N
+f : G →* N
+K L : Subgroup N
+hf : Function.Surjective ⇑f
+hKL : ↑(Subgroup.comap f K) ⊆ ↑(Subgroup.comap f L)
+hne : ¬↑(Subgroup.comap f L) ⊆ ↑(Subgroup.comap f K)
+hEq : ↑L ⊆ ↑K
+⊢ ↑(Subgroup.comap f L) ⊆ ↑(Subgroup.comap f K)
+Source line 24:
+      subst hEq
+      ^^^^^^^^^
+Highlighted span: subst hEq
+
+ERROR .LspCheck.lean:31:5-31:22
+Tactic `apply` failed: could not unify the conclusion of `@le_antisymm`
+  ?a ≤ ?b → ?b ≤ ?a → ?a = ?b
+with the goal
+  ↑L ⊆ ↑K
+
+Note: The full type of `@le_antisymm` is
+  ∀ {α : Type ?u.3868.502} [inst : PartialOrder α] {a b : α}, a ≤ b → b ≤ a → a = b
+
+case mpr
+G : Type u_1
+inst✝¹ : Group G
+N : Type u_5
+inst✝ : Group N
+f : G →* N
+K L : Subgroup N
+hf : Function.Surjective ⇑f
+hKL : ↑K ⊆ ↑L
+hne : ¬↑L ⊆ ↑K
+hEq : ↑(Subgroup.comap f L) ⊆ ↑(Subgroup.comap f K)
+⊢ ↑L ⊆ ↑K
+Source line 31:
+    apply le_antisymm
+    ^^^^^^^^^^^^^^^^^
+Highlighted span: apply le_antisymm
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:24:7-24:16
+Tactic `subst` failed: did not find equation for eliminating 'hEq'
+
+case mp.refine_2
+G : Type u_1
+inst✝¹ : Group G
+N : Type u_5
+inst✝ : Group N
+f : G →* N
+K L : Subgroup N
+hf : Function.Surjective ⇑f
+hKL : ↑(Subgroup.comap f K) ⊆ ↑(Subgroup.comap f L)
+hne : ¬↑(Subgroup.comap f L) ⊆ ↑(Subgroup.comap f K)
+hEq : ↑L ⊆ ↑K
+⊢ ↑(Subgroup.comap f L) ⊆ ↑(Subgroup.comap f K)
+Source line 24:
+      subst hEq
+      ^^^^^^^^^
+Highlighted span: subst hEq
+
+ERROR .LspCheck.lean:31:5-31:22
+Tactic `apply` failed: could not unify the conclusion of `@le_antisymm`
+  ?a ≤ ?b → ?b ≤ ?a → ?a = ?b
+with the goal
+  ↑L ⊆ ↑K
+
+Note: The full type of `@le_antisymm` is
+  ∀ {α : Type ?u.3868.502} [inst : PartialOrder α] {a b : α}, a ≤ b → b ≤ a → a = b
+
+case mpr
+G : Type u_1
+inst✝¹ : Group G
+N : Type u_5
+inst✝ : Group N
+f : G →* N
+K L : Subgroup N
+hf : Function.Surjective ⇑f
+hKL : ↑K ⊆ ↑L
+hne : ¬↑L ⊆ ↑K
+hEq : ↑(Subgroup.comap f L) ⊆ ↑(Subgroup.comap f K)
+⊢ ↑L ⊆ ↑K
+Source line 31:
+    apply le_antisymm
+    ^^^^^^^^^^^^^^^^^
+Highlighted span: apply le_antisymm
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N] (H : Subgroup G)
+
+variable (f : G →* N)
+
+theorem comap_lt_comap_of_surjective {f : G →* N} {K L : Subgroup N} (hf : Function.Surjective f) :
+    K.comap f < L.comap f ↔ K < L := by
+  constructor
+  · rintro ⟨hKL, hne⟩
+    refine ⟨?_, ?_⟩
+    · intro x hxK
+      rcases hf x with ⟨y, rfl⟩
+      exact hKL hxK
+    · intro hLK
+      apply hne
+      intro x hxL
+      exact hLK hxL
+  · rintro ⟨hKL, hne⟩
+    refine ⟨Subgroup.comap_mono hKL, ?_⟩
+    intro hEq
+    apply hne
+    intro x hxL
+    rcases hf x with ⟨y, rfl⟩
+    exact hEq hxL
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

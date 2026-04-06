@@ -1,0 +1,312 @@
+FILE: Basic.iff_existsUnique.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.iff_existsUnique.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {G H : Type*} [Mul G] [Mul H] {A B : Finset G} {a0 b0 : G}
+
+theorem iff_existsUnique (aA : a0 ∈ A) (bB : b0 ∈ B) :
+    UniqueMul A B a0 b0 ↔ ∃! ab, ab ∈ A ×ˢ B ∧ ab.1 * ab.2 = a0 * b0 := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G H : Type*} [Mul G] [Mul H] {A B : Finset G} {a0 b0 : G}
+
+theorem iff_existsUnique (aA : a0 ∈ A) (bB : b0 ∈ B) :
+    UniqueMul A B a0 b0 ↔ ∃! ab, ab ∈ A ×ˢ B ∧ ab.1 * ab.2 = a0 * b0 := by
+  constructor
+  · intro h
+    refine ⟨(a0, b0), ?_, ?_⟩
+    · exact ⟨by simpa using Finset.mem_product.mpr ⟨aA, bB⟩, rfl⟩
+    · intro ab hab
+      rcases hab with ⟨habAB, habmul⟩
+      apply Prod.ext
+      · exact h.2.1 ab.1 ab.2 (Finset.mem_product.mp (by simpa using habAB)).1
+          (Finset.mem_product.mp (by simpa using habAB)).2 habmul
+      · exact h.2.2 ab.1 ab.2 (Finset.mem_product.mp (by simpa using habAB)).1
+          (Finset.mem_product.mp (by simpa using habAB)).2 habmul
+  · rintro ⟨ab0, ⟨hab0AB, hab0mul⟩, habuniq⟩
+    rcases ab0 with ⟨a, b⟩
+    have ha : a ∈ A := (Finset.mem_product.mp (by simpa using hab0AB)).1
+    have hb : b ∈ B := (Finset.mem_product.mp (by simpa using hab0AB)).2
+    have hpair : (a, b) = (a0, b0) := by
+      apply habuniq
+      exact ⟨by simpa using Finset.mem_product.mpr ⟨aA, bB⟩, by simpa [hab0mul]⟩
+    rcases Prod.mk.inj hpair with ⟨rfl, rfl⟩
+    refine ⟨?_, ?_, ?_⟩
+    · simpa using aA
+    · simpa using bB
+    · constructor
+      · intro a b ha hb hmul
+        have : (a, b) = (a0, b0) := by
+          apply habuniq
+          exact ⟨by simpa using Finset.mem_product.mpr ⟨ha, hb⟩, hmul⟩
+        exact Prod.mk.inj_iff.mp this |>.1
+      · intro a b ha hb hmul
+        have : (a, b) = (a0, b0) := by
+          apply habuniq
+          exact ⟨by simpa using Finset.mem_product.mpr ⟨ha, hb⟩, hmul⟩
+        exact Prod.mk.inj_iff.mp this |>.2
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:57-10:59
+Application type mismatch: The argument
+  bB
+has type
+  b0 ∈ B
+but is expected to have type
+  ?m.56.2 ∈ ?m.55
+in the application
+  ⟨?m.61, bB⟩
+Source line 10:
+    · exact ⟨by simpa using Finset.mem_product.mpr ⟨aA, bB⟩, rfl⟩
+                                                        ^^
+Highlighted span: bB
+
+ERROR .LspCheck.lean:14:15-15:1
+Invalid projection: Projections cannot be used on functions, and
+  h
+has function type
+  ?m.90 ∈ A → ?m.91 ∈ B → ?m.90 * ?m.91 = a0 * b0 → ?m.90 = a0 ∧ ?m.91 = b0
+Source line 14:
+      · exact h.2.1 ab.1 ab.2 (Finset.mem_product.mp (by simpa using habAB)).1
+              ^
+Highlighted span: h
+
+ERROR .LspCheck.lean:16:15-17:1
+Invalid projection: Projections cannot be used on functions, and
+  h
+has function type
+  ?m.92 ∈ A → ?m.93 ∈ B → ?m.92 * ?m.93 = a0 * b0 → ?m.92 = a0 ∧ ?m.93 = b0
+Source line 16:
+      · exact h.2.2 ab.1 ab.2 (Finset.mem_product.mp (by simpa using habAB)).1
+              ^
+Highlighted span: h
+
+ERROR .LspCheck.lean:20:51-20:69
+Type mismatch: After simplification, term
+  hab0AB
+ has type
+  a ∈ A ∧ b ∈ B
+but is expected to have type
+  ?m.134.1 ∈ ?m.132 ∧ ?m.134.2 ∈ ?m.133
+Source line 20:
+    have ha : a ∈ A := (Finset.mem_product.mp (by simpa using hab0AB)).1
+                                                  ^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa using hab0AB
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:57-10:59
+Application type mismatch: The argument
+  bB
+has type
+  b0 ∈ B
+but is expected to have type
+  ?m.56.2 ∈ ?m.55
+in the application
+  ⟨?m.61, bB⟩
+Source line 10:
+    · exact ⟨by simpa using Finset.mem_product.mpr ⟨aA, bB⟩, rfl⟩
+                                                        ^^
+Highlighted span: bB
+
+ERROR .LspCheck.lean:14:15-15:1
+Invalid projection: Projections cannot be used on functions, and
+  h
+has function type
+  ?m.90 ∈ A → ?m.91 ∈ B → ?m.90 * ?m.91 = a0 * b0 → ?m.90 = a0 ∧ ?m.91 = b0
+Source line 14:
+      · exact h.2.1 ab.1 ab.2 (Finset.mem_product.mp (by simpa using habAB)).1
+              ^
+Highlighted span: h
+
+ERROR .LspCheck.lean:16:15-17:1
+Invalid projection: Projections cannot be used on functions, and
+  h
+has function type
+  ?m.92 ∈ A → ?m.93 ∈ B → ?m.92 * ?m.93 = a0 * b0 → ?m.92 = a0 ∧ ?m.93 = b0
+Source line 16:
+      · exact h.2.2 ab.1 ab.2 (Finset.mem_product.mp (by simpa using habAB)).1
+              ^
+Highlighted span: h
+
+ERROR .LspCheck.lean:20:51-20:69
+Type mismatch: After simplification, term
+  hab0AB
+ has type
+  a ∈ A ∧ b ∈ B
+but is expected to have type
+  ?m.134.1 ∈ ?m.132 ∧ ?m.134.2 ∈ ?m.133
+Source line 20:
+    have ha : a ∈ A := (Finset.mem_product.mp (by simpa using hab0AB)).1
+                                                  ^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa using hab0AB
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G H : Type*} [Mul G] [Mul H] {A B : Finset G} {a0 b0 : G}
+
+theorem iff_existsUnique (aA : a0 ∈ A) (bB : b0 ∈ B) :
+    UniqueMul A B a0 b0 ↔ ∃! ab, ab ∈ A ×ˢ B ∧ ab.1 * ab.2 = a0 * b0 := by
+  constructor
+  · intro h
+    refine ⟨(a0, b0), ?_, ?_⟩
+    · exact ⟨Finset.mem_product.mpr ⟨aA, bB⟩, rfl⟩
+    · intro ab hab
+      rcases hab with ⟨habAB, habmul⟩
+      rcases Finset.mem_product.mp habAB with ⟨ha, hb⟩
+      rcases h ha hb habmul with ⟨rfl, rfl⟩
+      rfl
+  · rintro ⟨ab, hab, habuniq⟩
+    rcases ab with ⟨a, b⟩
+    rcases hab with ⟨habAB, habmul⟩
+    rcases Finset.mem_product.mp habAB with ⟨ha, hb⟩
+    have hab0 : (a, b) = (a0, b0) := by
+      apply habuniq
+      exact ⟨Finset.mem_product.mpr ⟨aA, bB⟩, by simpa [habmul]⟩
+    rcases Prod.mk.inj hab0 with ⟨rfl, rfl⟩
+    intro a b ha hb hmul
+    have hpair : (a, b) = (a0, b0) := by
+      apply habuniq
+      exact ⟨Finset.mem_product.mpr ⟨ha, hb⟩, hmul⟩
+    exact Prod.mk.inj hpair
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:21:7-21:20
+Tactic `apply` failed: could not unify the conclusion of `habuniq`
+  ?y = (a, b)
+with the goal
+  (a, b) = (a0, b0)
+
+Note: The full type of `habuniq` is
+  ∀ (y : G × G), (fun ab ↦ ab ∈ A ×ˢ B ∧ ab.1 * ab.2 = a0 * b0) y → y = (a, b)
+
+G : Type u_1
+inst✝ : Mul G
+A B : Finset G
+a0 b0 : G
+aA : a0 ∈ A
+bB : b0 ∈ B
+a b : G
+habuniq : ∀ (y : G × G), (fun ab ↦ ab ∈ A ×ˢ B ∧ ab.1 * ab.2 = a0 * b0) y → y = (a, b)
+habAB : (a, b) ∈ A ×ˢ B
+habmul : (a, b).1 * (a, b).2 = a0 * b0
+ha : (a, b).1 ∈ A
+hb : (a, b).2 ∈ B
+⊢ (a, b) = (a0, b0)
+Source line 21:
+      apply habuniq
+      ^^^^^^^^^^^^^
+Highlighted span: apply habuniq
+
+ERROR .LspCheck.lean:25:28-25:30
+Unknown identifier `a0`
+Source line 25:
+    have hpair : (a, b) = (a0, b0) := by
+                           ^^
+Highlighted span: a0
+
+ERROR .LspCheck.lean:25:32-25:34
+Unknown identifier `b0`
+Source line 25:
+    have hpair : (a, b) = (a0, b0) := by
+                               ^^
+Highlighted span: b0
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:21:7-21:20
+Tactic `apply` failed: could not unify the conclusion of `habuniq`
+  ?y = (a, b)
+with the goal
+  (a, b) = (a0, b0)
+
+Note: The full type of `habuniq` is
+  ∀ (y : G × G), (fun ab ↦ ab ∈ A ×ˢ B ∧ ab.1 * ab.2 = a0 * b0) y → y = (a, b)
+
+G : Type u_1
+inst✝ : Mul G
+A B : Finset G
+a0 b0 : G
+aA : a0 ∈ A
+bB : b0 ∈ B
+a b : G
+habuniq : ∀ (y : G × G), (fun ab ↦ ab ∈ A ×ˢ B ∧ ab.1 * ab.2 = a0 * b0) y → y = (a, b)
+habAB : (a, b) ∈ A ×ˢ B
+habmul : (a, b).1 * (a, b).2 = a0 * b0
+ha : (a, b).1 ∈ A
+hb : (a, b).2 ∈ B
+⊢ (a, b) = (a0, b0)
+Source line 21:
+      apply habuniq
+      ^^^^^^^^^^^^^
+Highlighted span: apply habuniq
+
+ERROR .LspCheck.lean:25:28-25:30
+Unknown identifier `a0`
+Source line 25:
+    have hpair : (a, b) = (a0, b0) := by
+                           ^^
+Highlighted span: a0
+
+ERROR .LspCheck.lean:25:32-25:34
+Unknown identifier `b0`
+Source line 25:
+    have hpair : (a, b) = (a0, b0) := by
+                               ^^
+Highlighted span: b0
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G H : Type*} [Mul G] [Mul H] {A B : Finset G} {a0 b0 : G}
+
+theorem iff_existsUnique (aA : a0 ∈ A) (bB : b0 ∈ B) :
+    UniqueMul A B a0 b0 ↔ ∃! ab, ab ∈ A ×ˢ B ∧ ab.1 * ab.2 = a0 * b0 := by
+  constructor
+  · intro h
+    refine ⟨(a0, b0), ?_, ?_⟩
+    · exact ⟨Finset.mem_product.mpr ⟨aA, bB⟩, rfl⟩
+    · intro ab hab
+      rcases hab with ⟨habAB, habmul⟩
+      rcases Finset.mem_product.mp habAB with ⟨ha, hb⟩
+      rcases h ha hb habmul with ⟨rfl, rfl⟩
+      rfl
+  · rintro ⟨ab, hab, habuniq⟩
+    rcases ab with ⟨a, b⟩
+    rcases hab with ⟨habAB, habmul⟩
+    rcases Finset.mem_product.mp habAB with ⟨ha, hb⟩
+    have hEq : (a0, b0) = (a, b) := habuniq (a0, b0) ⟨Finset.mem_product.mpr ⟨aA, bB⟩, by simpa [Prod.fst, Prod.snd] using habmul.symm⟩
+    rcases Prod.mk.inj hEq.symm with ⟨rfl, rfl⟩
+    intro x y hx hy hxy
+    have hpair : (x, y) = (a, b) := habuniq (x, y) ⟨Finset.mem_product.mpr ⟨hx, hy⟩, hxy⟩
+    exact Prod.mk.inj hpair
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

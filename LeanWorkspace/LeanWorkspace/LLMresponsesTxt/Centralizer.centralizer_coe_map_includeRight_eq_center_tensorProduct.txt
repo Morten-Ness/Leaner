@@ -1,0 +1,259 @@
+FILE: Centralizer.centralizer_coe_map_includeRight_eq_center_tensorProduct.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Centralizer.centralizer_coe_map_includeRight_eq_center_tensorProduct.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable (R : Type*) [CommSemiring R]
+
+variable (A : Type*) [Semiring A] [Algebra R A]
+
+variable (B : Type*) [Semiring B] [Algebra R B]
+
+theorem centralizer_coe_map_includeRight_eq_center_tensorProduct
+    (S : Subalgebra R B) [Module.Free R A] :
+    Subalgebra.centralizer R
+      (S.map (Algebra.TensorProduct.includeRight (R := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (R : Type*) [CommSemiring R]
+
+variable (A : Type*) [Semiring A] [Algebra R A]
+
+variable (B : Type*) [Semiring B] [Algebra R B]
+
+theorem centralizer_coe_map_includeRight_eq_center_tensorProduct
+    (S : Subalgebra R B) [Module.Free R A] :
+    Subalgebra.centralizer R
+      (S.map (Algebra.TensorProduct.includeRight (R := R) (A := A))) =
+        ⊤ := by
+  ext x
+  constructor
+  · intro hx
+    trivial
+  · intro hx
+    rw [Subalgebra.mem_centralizer_iff] at *
+    intro y hy
+    rw [Subalgebra.mem_map] at hy
+    rcases hy with ⟨b, hb, rfl⟩
+    ext <;> simp [Algebra.TensorProduct.includeRight, TensorProduct.ext_iff]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:7-12:69
+Application type mismatch: The argument
+  Subalgebra.map Algebra.TensorProduct.includeRight S
+has type
+  Subalgebra R (TensorProduct R A B)
+but is expected to have type
+  Set ?m.11
+in the application
+  Subalgebra.centralizer R (Subalgebra.map Algebra.TensorProduct.includeRight S)
+Source line 12:
+      (S.map (Algebra.TensorProduct.includeRight (R := R) (A := A))) =
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (S.map (Algebra.TensorProduct.includeRight (R := R) (A := A)))
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:7-12:69
+Application type mismatch: The argument
+  Subalgebra.map Algebra.TensorProduct.includeRight S
+has type
+  Subalgebra R (TensorProduct R A B)
+but is expected to have type
+  Set ?m.11
+in the application
+  Subalgebra.centralizer R (Subalgebra.map Algebra.TensorProduct.includeRight S)
+Source line 12:
+      (S.map (Algebra.TensorProduct.includeRight (R := R) (A := A))) =
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (S.map (Algebra.TensorProduct.includeRight (R := R) (A := A)))
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (R : Type*) [CommSemiring R]
+
+variable (A : Type*) [Semiring A] [Algebra R A]
+
+variable (B : Type*) [Semiring B] [Algebra R B]
+
+theorem centralizer_coe_map_includeRight_eq_center_tensorProduct
+    (S : Subalgebra R B) [Module.Free R A] :
+    Set.centralizer
+      (↑(S.map (Algebra.TensorProduct.includeRight (R := R) (A := A))) : Set (A ⊗[R] B)) =
+        Set.center (A ⊗[R] B) := by
+  ext x
+  simp [Set.mem_centralizer_iff, Set.mem_center_iff]
+  constructor
+  · intro hx y
+    induction y using TensorProduct.induction_on with
+    | zero =>
+        simp
+    | tmul a b =>
+        have hb :
+            Algebra.TensorProduct.includeRight (R := R) (A := A) (b : B) ∈
+              (↑(S.map (Algebra.TensorProduct.includeRight (R := R) (A := A))) :
+                Set (A ⊗[R] B)) := by
+          exact ⟨b, hb, rfl⟩
+        simpa [Algebra.TensorProduct.includeRight] using hx
+          (Algebra.TensorProduct.includeRight (R := R) (A := A) (b : B)) hb
+    | add y z hy hz =>
+        simpa [mul_add, add_mul, hy, hz]
+  · intro hx y hy
+    exact hx y
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:81-12:81
+expected token
+Source line 12:
+      (↑(S.map (Algebra.TensorProduct.includeRight (R := R) (A := A))) : Set (A ⊗[R] B)) =
+                                                                                ^
+Highlighted span: ⊗
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:81-12:81
+expected token
+Source line 12:
+      (↑(S.map (Algebra.TensorProduct.includeRight (R := R) (A := A))) : Set (A ⊗[R] B)) =
+                                                                                ^
+Highlighted span: ⊗
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (R : Type*) [CommSemiring R]
+
+variable (A : Type*) [Semiring A] [Algebra R A]
+
+variable (B : Type*) [Semiring B] [Algebra R B]
+
+theorem centralizer_coe_map_includeRight_eq_center_tensorProduct
+    (S : Subalgebra R B) [Module.Free R A] :
+    Set.centralizer
+      (↑(S.map (Algebra.TensorProduct.includeRight (R := R) (A := A))) :
+        Set (TensorProduct R A B)) =
+      Set.center (TensorProduct R A B) := by
+  ext x
+  simp only [Set.mem_centralizer_iff, Set.mem_center_iff]
+  constructor
+  · intro hx y
+    induction y using TensorProduct.induction_on with
+    | zero =>
+        simp
+    | tmul a b =>
+        have hy :
+            Algebra.TensorProduct.includeRight (R := R) (A := A) b ∈
+              (↑(S.map (Algebra.TensorProduct.includeRight (R := R) (A := A))) :
+                Set (TensorProduct R A B)) := by
+          exact ⟨b, by simpa using ‹b ∈ S›, rfl⟩
+        simpa [Algebra.TensorProduct.includeRight] using
+          hx (Algebra.TensorProduct.includeRight (R := R) (A := A) b) hy
+    | add y z hy hz =>
+        simpa [mul_add, add_mul, hy, hz]
+  · intro hx y hy
+    exact hx y
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:18:14-18:15
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case h.mp
+R : Type u_1
+inst✝⁵ : CommSemiring R
+A : Type u_2
+inst✝⁴ : Semiring A
+inst✝³ : Algebra R A
+B : Type u_3
+inst✝² : Semiring B
+inst✝¹ : Algebra R B
+S : Subalgebra R B
+inst✝ : Module.Free R A
+x : TensorProduct R A B
+hx : ∀ m ∈ ↑(Subalgebra.map Algebra.TensorProduct.includeRight S), m * x = x * m
+⊢ IsMulCentral x
+Source line 18:
+  · intro hx y
+             ^
+Highlighted span: y
+
+ERROR .LspCheck.lean:33:11-33:15
+Function expected at
+  hx
+but this term has type
+  IsMulCentral x
+
+Note: Expected a function because this term is being applied to the argument
+  y
+Source line 33:
+    exact hx y
+          ^^^^
+Highlighted span: hx y
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:18:14-18:15
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case h.mp
+R : Type u_1
+inst✝⁵ : CommSemiring R
+A : Type u_2
+inst✝⁴ : Semiring A
+inst✝³ : Algebra R A
+B : Type u_3
+inst✝² : Semiring B
+inst✝¹ : Algebra R B
+S : Subalgebra R B
+inst✝ : Module.Free R A
+x : TensorProduct R A B
+hx : ∀ m ∈ ↑(Subalgebra.map Algebra.TensorProduct.includeRight S), m * x = x * m
+⊢ IsMulCentral x
+Source line 18:
+  · intro hx y
+             ^
+Highlighted span: y
+
+ERROR .LspCheck.lean:33:11-33:15
+Function expected at
+  hx
+but this term has type
+  IsMulCentral x
+
+Note: Expected a function because this term is being applied to the argument
+  y
+Source line 33:
+    exact hx y
+          ^^^^
+Highlighted span: hx y

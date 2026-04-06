@@ -1,0 +1,409 @@
+FILE: Basic.sum_sub_index.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.sum_sub_index.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {α ι γ A B C : Type*} [AddCommMonoid A] [AddCommMonoid B] [AddCommMonoid C]
+
+variable {t : ι → A → C}
+
+variable {s : Finset α} {f : α → ι →₀ A} (i : ι)
+
+variable (g : ι →₀ A) (k : ι → A → γ → B) (x : γ)
+
+variable {β M M' N P G H R S : Type*}
+
+theorem sum_sub_index [AddGroup β] [AddCommGroup γ] {f g : α →₀ β} {h : α → β → γ}
+    (h_sub : ∀ a b₁ b₂, h a (b₁ - b₂) = h a b₁ - h a b₂) : (f - g).sum h = f.sum h - g.sum h := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α ι γ A B C : Type*} [AddCommMonoid A] [AddCommMonoid B] [AddCommMonoid C]
+
+variable {t : ι → A → C}
+
+variable {s : Finset α} {f : α → ι →₀ A} (i : ι)
+
+variable (g : ι →₀ A) (k : ι → A → γ → B) (x : γ)
+
+variable {β M M' N P G H R S : Type*}
+
+theorem sum_sub_index [AddGroup β] [AddCommGroup γ] {f g : α →₀ β} {h : α → β → γ}
+    (h_sub : ∀ a b₁ b₂, h a (b₁ - b₂) = h a b₁ - h a b₂) : (f - g).sum h = f.sum h - g.sum h := by
+  classical
+  rw [sub_eq_add_neg, Finsupp.sum_add_index]
+  · refine congrArg (fun z => f.sum h + z) ?_
+    rw [← Finsupp.sum_neg_index]
+    · apply Finsupp.sum_congr rfl
+      intro a ha
+      simpa [sub_eq_add_neg] using h_sub a 0 (-g a)
+    · simp
+  · simp
+  · intro a b₁ b₂
+    simpa [sub_eq_add_neg] using h_sub a b₁ (-b₂)
+  · intro a
+    simpa using h_sub a 0 0
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:17:5-17:46
+Type mismatch
+  congrArg (fun z ↦ f.sum h + z) ?m.74
+has type
+  f.sum h + ?m.62 = f.sum h + ?m.63
+but is expected to have type
+  f.sum h + (-g).sum h = f.sum h - g.sum h
+Source line 17:
+  · refine congrArg (fun z => f.sum h + z) ?_
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: refine congrArg (fun z => f.sum h + z) ?_
+
+ERROR .LspCheck.lean:23:3-23:9
+unsolved goals
+case h_zero
+α : Type u_1
+γ : Type u_3
+β : Type u_7
+inst✝¹ : AddGroup β
+inst✝ : AddCommGroup γ
+f g : α →₀ β
+h : α → β → γ
+h_sub : ∀ (a : α) (b₁ b₂ : β), h a (b₁ - b₂) = h a b₁ - h a b₂
+⊢ ∀ (a : α), ¬f a = 0 ∨ ¬g a = 0 → h a 0 = 0
+Source line 23:
+  · simp
+  ^^^^^^
+Highlighted span: · simp
+
+ERROR .LspCheck.lean:25:42-25:44
+Application type mismatch: The argument
+  b₁
+has type
+  a ∈ f.support ∪ (-g).support
+of sort `Prop` but is expected to have type
+  β
+of sort `Type u_7` in the application
+  h_sub a b₁
+Source line 25:
+    simpa [sub_eq_add_neg] using h_sub a b₁ (-b₂)
+                                         ^^
+Highlighted span: b₁
+
+ERROR .LspCheck.lean:26:3-27:1
+No goals to be solved
+Source line 26:
+  · intro a
+  ^
+Highlighted span: ·
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:17:5-17:46
+Type mismatch
+  congrArg (fun z ↦ f.sum h + z) ?m.74
+has type
+  f.sum h + ?m.62 = f.sum h + ?m.63
+but is expected to have type
+  f.sum h + (-g).sum h = f.sum h - g.sum h
+Source line 17:
+  · refine congrArg (fun z => f.sum h + z) ?_
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: refine congrArg (fun z => f.sum h + z) ?_
+
+ERROR .LspCheck.lean:23:3-23:9
+unsolved goals
+case h_zero
+α : Type u_1
+γ : Type u_3
+β : Type u_7
+inst✝¹ : AddGroup β
+inst✝ : AddCommGroup γ
+f g : α →₀ β
+h : α → β → γ
+h_sub : ∀ (a : α) (b₁ b₂ : β), h a (b₁ - b₂) = h a b₁ - h a b₂
+⊢ ∀ (a : α), ¬f a = 0 ∨ ¬g a = 0 → h a 0 = 0
+Source line 23:
+  · simp
+  ^^^^^^
+Highlighted span: · simp
+
+ERROR .LspCheck.lean:25:42-25:44
+Application type mismatch: The argument
+  b₁
+has type
+  a ∈ f.support ∪ (-g).support
+of sort `Prop` but is expected to have type
+  β
+of sort `Type u_7` in the application
+  h_sub a b₁
+Source line 25:
+    simpa [sub_eq_add_neg] using h_sub a b₁ (-b₂)
+                                         ^^
+Highlighted span: b₁
+
+ERROR .LspCheck.lean:26:3-27:1
+No goals to be solved
+Source line 26:
+  · intro a
+  ^
+Highlighted span: ·
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α ι γ A B C : Type*} [AddCommMonoid A] [AddCommMonoid B] [AddCommMonoid C]
+
+variable {t : ι → A → C}
+
+variable {s : Finset α} {f : α → ι →₀ A} (i : ι)
+
+variable (g : ι →₀ A) (k : ι → A → γ → B) (x : γ)
+
+variable {β M M' N P G H R S : Type*}
+
+theorem sum_sub_index [AddGroup β] [AddCommGroup γ] {f g : α →₀ β} {h : α → β → γ}
+    (h_sub : ∀ a b₁ b₂, h a (b₁ - b₂) = h a b₁ - h a b₂) : (f - g).sum h = f.sum h - g.sum h := by
+  classical
+  have h_zero : ∀ a, h a 0 = 0 := by
+    intro a
+    have := h_sub a 0 0
+    simpa using this
+  have h_add : ∀ a b₁ b₂, h a (b₁ + b₂) = h a b₁ + h a b₂ := by
+    intro a b₁ b₂
+    have := h_sub a b₁ (-b₂)
+    simpa [sub_eq_add_neg] using this
+  rw [sub_eq_add_neg, Finsupp.sum_add_index]
+  · rw [show (-g).sum h = -g.sum h by
+      rw [← Finsupp.sum_neg_index]
+      · rfl
+      · intro a
+        simpa using h_zero a]
+    abel
+  · intro a
+    exact h_zero a
+  · intro a b₁ b₂
+    exact h_add a b₁ b₂
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:23:5-23:38
+Type mismatch: After simplification, term
+  this
+ has type
+  h a (b₁ + b₂) = h a b₁ + -h a (-b₂)
+but is expected to have type
+  h a (b₁ + b₂) = h a b₁ + h a b₂
+Source line 23:
+    simpa [sub_eq_add_neg] using this
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [sub_eq_add_neg] using this
+
+ERROR .LspCheck.lean:26:11-26:34
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Finsupp.sum ?m.144 fun a b ↦ ?m.145 a (-b)
+in the target expression
+  (-g).sum h = -g.sum h
+
+α : Type u_1
+γ : Type u_3
+β : Type u_7
+inst✝¹ : AddGroup β
+inst✝ : AddCommGroup γ
+f g : α →₀ β
+h : α → β → γ
+h_sub : ∀ (a : α) (b₁ b₂ : β), h a (b₁ - b₂) = h a b₁ - h a b₂
+h_zero : ∀ (a : α), h a 0 = 0
+h_add : ∀ (a : α) (b₁ b₂ : β), h a (b₁ + b₂) = h a b₁ + h a b₂
+⊢ (-g).sum h = -g.sum h
+Source line 26:
+      rw [← Finsupp.sum_neg_index]
+          ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ← Finsupp.sum_neg_index
+
+ERROR .LspCheck.lean:32:5-32:19
+Type mismatch
+  h_zero a
+has type
+  h a 0 = 0
+but is expected to have type
+  a ∈ f.support ∪ (-g).support → h a 0 = 0
+Source line 32:
+    exact h_zero a
+    ^^^^^^^^^^^^^^
+Highlighted span: exact h_zero a
+
+ERROR .LspCheck.lean:34:19-34:21
+Application type mismatch: The argument
+  b₁
+has type
+  a ∈ f.support ∪ (-g).support
+of sort `Prop` but is expected to have type
+  β
+of sort `Type u_7` in the application
+  h_add a b₁
+Source line 34:
+    exact h_add a b₁ b₂
+                  ^^
+Highlighted span: b₁
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:23:5-23:38
+Type mismatch: After simplification, term
+  this
+ has type
+  h a (b₁ + b₂) = h a b₁ + -h a (-b₂)
+but is expected to have type
+  h a (b₁ + b₂) = h a b₁ + h a b₂
+Source line 23:
+    simpa [sub_eq_add_neg] using this
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [sub_eq_add_neg] using this
+
+ERROR .LspCheck.lean:26:11-26:34
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Finsupp.sum ?m.144 fun a b ↦ ?m.145 a (-b)
+in the target expression
+  (-g).sum h = -g.sum h
+
+α : Type u_1
+γ : Type u_3
+β : Type u_7
+inst✝¹ : AddGroup β
+inst✝ : AddCommGroup γ
+f g : α →₀ β
+h : α → β → γ
+h_sub : ∀ (a : α) (b₁ b₂ : β), h a (b₁ - b₂) = h a b₁ - h a b₂
+h_zero : ∀ (a : α), h a 0 = 0
+h_add : ∀ (a : α) (b₁ b₂ : β), h a (b₁ + b₂) = h a b₁ + h a b₂
+⊢ (-g).sum h = -g.sum h
+Source line 26:
+      rw [← Finsupp.sum_neg_index]
+          ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ← Finsupp.sum_neg_index
+
+ERROR .LspCheck.lean:32:5-32:19
+Type mismatch
+  h_zero a
+has type
+  h a 0 = 0
+but is expected to have type
+  a ∈ f.support ∪ (-g).support → h a 0 = 0
+Source line 32:
+    exact h_zero a
+    ^^^^^^^^^^^^^^
+Highlighted span: exact h_zero a
+
+ERROR .LspCheck.lean:34:19-34:21
+Application type mismatch: The argument
+  b₁
+has type
+  a ∈ f.support ∪ (-g).support
+of sort `Prop` but is expected to have type
+  β
+of sort `Type u_7` in the application
+  h_add a b₁
+Source line 34:
+    exact h_add a b₁ b₂
+                  ^^
+Highlighted span: b₁
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α ι γ A B C : Type*} [AddCommMonoid A] [AddCommMonoid B] [AddCommMonoid C]
+
+variable {t : ι → A → C}
+
+variable {s : Finset α} {f : α → ι →₀ A} (i : ι)
+
+variable (g : ι →₀ A) (k : ι → A → γ → B) (x : γ)
+
+variable {β M M' N P G H R S : Type*}
+
+theorem sum_sub_index [AddGroup β] [AddCommGroup γ] {f g : α →₀ β} {h : α → β → γ}
+    (h_sub : ∀ a b₁ b₂, h a (b₁ - b₂) = h a b₁ - h a b₂) : (f - g).sum h = f.sum h - g.sum h := by
+  classical
+  have h_zero : ∀ a, h a 0 = 0 := by
+    intro a
+    have := h_sub a 0 0
+    simpa using this
+  have h_neg : ∀ a b, h a (-b) = -h a b := by
+    intro a b
+    have := h_sub a 0 b
+    simpa [h_zero a] using this
+  have h_add : ∀ a b₁ b₂, h a (b₁ + b₂) = h a b₁ + h a b₂ := by
+    intro a b₁ b₂
+    calc
+      h a (b₁ + b₂) = h a (b₁ - (-b₂)) := by simp
+      _ = h a b₁ - h a (-b₂) := h_sub a b₁ (-b₂)
+      _ = h a b₁ + h a b₂ := by rw [h_neg]; abel
+  rw [sub_eq_add_neg, Finsupp.sum_add_index]
+  · calc
+      f.sum h + (-g).sum h = f.sum h + -(g.sum h) := by
+        congr
+        exact Finsupp.sum_neg_index h_neg
+      _ = f.sum h - g.sum h := by simp [sub_eq_add_neg]
+  · intro a ha
+    exact h_zero a
+  · intro a ha b₁ b₂
+    exact h_add a b₁ b₂
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:34:37-34:42
+Application type mismatch: The argument
+  h_neg
+has type
+  ∀ (a : α) (b : β), h a (-b) = -h a b
+but is expected to have type
+  ∀ (a : ?m.240), ?m.246 a 0 = 0
+in the application
+  Finsupp.sum_neg_index h_neg
+Source line 34:
+        exact Finsupp.sum_neg_index h_neg
+                                    ^^^^^
+Highlighted span: h_neg
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:34:37-34:42
+Application type mismatch: The argument
+  h_neg
+has type
+  ∀ (a : α) (b : β), h a (-b) = -h a b
+but is expected to have type
+  ∀ (a : ?m.240), ?m.246 a 0 = 0
+in the application
+  Finsupp.sum_neg_index h_neg
+Source line 34:
+        exact Finsupp.sum_neg_index h_neg
+                                    ^^^^^
+Highlighted span: h_neg

@@ -1,0 +1,111 @@
+FILE: Basic.prod_range_induction.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.prod_range_induction.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {ι κ G M : Type*} {s s₁ s₂ : Finset ι} {a : ι}
+
+variable [CommMonoid M] {f g : ι → M}
+
+theorem prod_range_induction (f s : ℕ → M) (base : s 0 = 1)
+    (n : ℕ) (step : ∀ k < n, s (k + 1) = s k * f k) :
+    ∏ k ∈ Finset.range n, f k = s n := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι κ G M : Type*} {s s₁ s₂ : Finset ι} {a : ι}
+
+variable [CommMonoid M] {f g : ι → M}
+
+theorem prod_range_induction (f s : ℕ → M) (base : s 0 = 1)
+    (n : ℕ) (step : ∀ k < n, s (k + 1) = s k * f k) :
+    ∏ k ∈ Finset.range n, f k = s n := by
+  induction' n with n ih
+  · simp [base]
+  · have hstep : s (n + 1) = s n * f n := step n (Nat.lt_succ_self n)
+    calc
+      ∏ k ∈ Finset.range (n + 1), f k
+          = (∏ k ∈ Finset.range n, f k) * f n := by
+              rw [Finset.prod_range_succ]
+      _ = s n * f n := by rw [ih]
+      _ = s (n + 1) := hstep.symm
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:17:24-17:34
+unsolved goals
+M : Type u_4
+inst✝ : CommMonoid M
+f s : ℕ → M
+base : s 0 = 1
+n : ℕ
+ih : (∀ k < n, s (k + 1) = s k * f k) → ∏ k ∈ Finset.range n, f k = s n
+step : ∀ k < n + 1, s (k + 1) = s k * f k
+hstep : s (n + 1) = s n * f n
+⊢ ∀ k < n, s (k + 1) = s k * f k
+Source line 17:
+      _ = s n * f n := by rw [ih]
+                       ^^^^^^^^^^
+Highlighted span: by rw [ih]
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:17:24-17:34
+unsolved goals
+M : Type u_4
+inst✝ : CommMonoid M
+f s : ℕ → M
+base : s 0 = 1
+n : ℕ
+ih : (∀ k < n, s (k + 1) = s k * f k) → ∏ k ∈ Finset.range n, f k = s n
+step : ∀ k < n + 1, s (k + 1) = s k * f k
+hstep : s (n + 1) = s n * f n
+⊢ ∀ k < n, s (k + 1) = s k * f k
+Source line 17:
+      _ = s n * f n := by rw [ih]
+                       ^^^^^^^^^^
+Highlighted span: by rw [ih]
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι κ G M : Type*} {s s₁ s₂ : Finset ι} {a : ι}
+
+variable [CommMonoid M] {f g : ι → M}
+
+theorem prod_range_induction (f s : ℕ → M) (base : s 0 = 1)
+    (n : ℕ) (step : ∀ k < n, s (k + 1) = s k * f k) :
+    ∏ k ∈ Finset.range n, f k = s n := by
+  induction' n with n ih
+  · simp [base]
+  · have hstep : s (n + 1) = s n * f n := step n (Nat.lt_succ_self n)
+    have ih' : ∏ k ∈ Finset.range n, f k = s n := by
+      apply ih
+      intro k hk
+      exact step k (Nat.lt_trans hk (Nat.lt_succ_self n))
+    calc
+      ∏ k ∈ Finset.range (n + 1), f k
+          = (∏ k ∈ Finset.range n, f k) * f n := by
+              rw [Finset.prod_range_succ]
+      _ = s n * f n := by rw [ih']
+      _ = s (n + 1) := hstep.symm
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

@@ -1,0 +1,170 @@
+FILE: GradedMonoid.list_prod_ofFn_mem_graded.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: GradedMonoid.list_prod_ofFn_mem_graded.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {ι : Type*}
+
+variable {R : Type*}
+
+variable {S : Type*} [SetLike S R] [Monoid R] [AddMonoid ι]
+
+variable {A : ι → S} [SetLike.GradedMonoid A]
+
+theorem list_prod_ofFn_mem_graded {n} (i : Fin n → ι) (r : Fin n → R) (h : ∀ j, r j ∈ A (i j)) :
+    (List.ofFn r).prod ∈ A (List.ofFn i).sum := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι : Type*}
+
+variable {R : Type*}
+
+variable {S : Type*} [SetLike S R] [Monoid R] [AddMonoid ι]
+
+variable {A : ι → S} [SetLike.GradedMonoid A]
+
+theorem list_prod_ofFn_mem_graded {n} (i : Fin n → ι) (r : Fin n → R) (h : ∀ j, r j ∈ A (i j)) :
+    (List.ofFn r).prod ∈ A (List.ofFn i).sum := by
+  simpa using SetLike.GradedMonoid.list_prod_mem_graded (A := A) (l := List.ofFn (fun j => (i j, r j))) h
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:15-13:56
+Unknown constant `SetLike.GradedMonoid.list_prod_mem_graded`
+Source line 13:
+  simpa using SetLike.GradedMonoid.list_prod_mem_graded (A := A) (l := List.ofFn (fun j => (i j, r j))) h
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: SetLike.GradedMonoid.list_prod_mem_graded
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:15-13:56
+Unknown constant `SetLike.GradedMonoid.list_prod_mem_graded`
+Source line 13:
+  simpa using SetLike.GradedMonoid.list_prod_mem_graded (A := A) (l := List.ofFn (fun j => (i j, r j))) h
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: SetLike.GradedMonoid.list_prod_mem_graded
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι : Type*}
+
+variable {R : Type*}
+
+variable {S : Type*} [SetLike S R] [Monoid R] [AddMonoid ι]
+
+variable {A : ι → S} [SetLike.GradedMonoid A]
+
+theorem list_prod_ofFn_mem_graded {n} (i : Fin n → ι) (r : Fin n → R) (h : ∀ j, r j ∈ A (i j)) :
+    (List.ofFn r).prod ∈ A (List.ofFn i).sum := by
+  classical
+  induction n with
+  | zero =>
+      simp
+  | succ n ih =>
+      let i' : Fin n → ι := fun j => i j.succ
+      let r' : Fin n → R := fun j => r j.succ
+      have h' : ∀ j, r' j ∈ A (i' j) := by
+        intro j
+        exact h j.succ
+      have hhead : r 0 ∈ A (i 0) := h 0
+      have htail : (List.ofFn r').prod ∈ A (List.ofFn i').sum := ih i' r' h'
+      simpa [List.ofFn_succ, i', r', add_comm, add_left_comm, add_assoc] using SetLike.mul_mem_graded hhead htail
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:10-16:1
+unsolved goals
+case zero
+ι : Type u_1
+R : Type u_2
+S : Type u_3
+inst✝³ : SetLike S R
+inst✝² : Monoid R
+inst✝¹ : AddMonoid ι
+A : ι → S
+inst✝ : SetLike.GradedMonoid A
+i : Fin 0 → ι
+r : Fin 0 → R
+h : ∀ (j : Fin 0), r j ∈ A (i j)
+⊢ 1 ∈ A 0
+Source line 15:
+  | zero =>
+         ^
+Highlighted span: =
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:10-16:1
+unsolved goals
+case zero
+ι : Type u_1
+R : Type u_2
+S : Type u_3
+inst✝³ : SetLike S R
+inst✝² : Monoid R
+inst✝¹ : AddMonoid ι
+A : ι → S
+inst✝ : SetLike.GradedMonoid A
+i : Fin 0 → ι
+r : Fin 0 → R
+h : ∀ (j : Fin 0), r j ∈ A (i j)
+⊢ 1 ∈ A 0
+Source line 15:
+  | zero =>
+         ^
+Highlighted span: =
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι : Type*}
+
+variable {R : Type*}
+
+variable {S : Type*} [SetLike S R] [Monoid R] [AddMonoid ι]
+
+variable {A : ι → S} [SetLike.GradedMonoid A]
+
+theorem list_prod_ofFn_mem_graded {n} (i : Fin n → ι) (r : Fin n → R) (h : ∀ j, r j ∈ A (i j)) :
+    (List.ofFn r).prod ∈ A (List.ofFn i).sum := by
+  classical
+  induction n with
+  | zero =>
+      simpa using (SetLike.one_mem_graded (A := A) : (1 : R) ∈ A (0 : ι))
+  | succ n ih =>
+      let i' : Fin n → ι := fun j => i j.succ
+      let r' : Fin n → R := fun j => r j.succ
+      have h' : ∀ j, r' j ∈ A (i' j) := by
+        intro j
+        exact h j.succ
+      have hhead : r 0 ∈ A (i 0) := h 0
+      have htail : (List.ofFn r').prod ∈ A (List.ofFn i').sum := ih i' r' h'
+      simpa [List.ofFn_succ, i', r', add_assoc] using SetLike.mul_mem_graded hhead htail
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

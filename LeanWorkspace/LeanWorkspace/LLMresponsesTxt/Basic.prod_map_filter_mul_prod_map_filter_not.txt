@@ -1,0 +1,652 @@
+FILE: Basic.prod_map_filter_mul_prod_map_filter_not.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.prod_map_filter_mul_prod_map_filter_not.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {ι α β M N P G : Type*}
+
+variable [CommMonoid M] {a : M} {l l₁ l₂ : List M}
+
+theorem prod_map_filter_mul_prod_map_filter_not (p : α → Prop) [DecidablePred p] (f : α → M)
+    (l : List α) :
+    ((l.filter p).map f).prod * ((l.filter fun x => ¬p x).map f).prod = (l.map f).prod := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι α β M N P G : Type*}
+
+variable [CommMonoid M] {a : M} {l l₁ l₂ : List M}
+
+theorem prod_map_filter_mul_prod_map_filter_not (p : α → Prop) [DecidablePred p] (f : α → M)
+    (l : List α) :
+    ((l.filter p).map f).prod * ((l.filter fun x => ¬p x).map f).prod = (l.map f).prod := by
+  induction l with
+  | nil =>
+      simp
+  | cons x xs ih =>
+      by_cases hx : p x
+      · simp [hx, ih, mul_left_comm, mul_assoc]
+      · simp [hx, ih, mul_left_comm, mul_assoc]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:7-15:48
+unsolved goals
+case pos
+α : Type u_2
+M : Type u_4
+inst✝¹ : CommMonoid M
+p : α → Prop
+inst✝ : DecidablePred p
+f : α → M
+x : α
+xs : List α
+ih :
+  (List.map f (List.filter (fun b ↦ decide (p b)) xs)).prod * (List.map f (List.filter (fun x ↦ decide ¬p x) xs)).prod =
+    (List.map f xs).prod
+hx : p x
+⊢ f x *
+      ((List.map f (List.filter (fun b ↦ decide (p b)) xs)).prod *
+        (List.map f (List.filter (fun x ↦ !decide (p x)) xs)).prod) =
+    f x * (List.map f xs).prod
+Source line 15:
+      · simp [hx, ih, mul_left_comm, mul_assoc]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simp [hx, ih, mul_left_comm, mul_assoc]
+
+ERROR .LspCheck.lean:16:7-16:48
+unsolved goals
+case neg
+α : Type u_2
+M : Type u_4
+inst✝¹ : CommMonoid M
+p : α → Prop
+inst✝ : DecidablePred p
+f : α → M
+x : α
+xs : List α
+ih :
+  (List.map f (List.filter (fun b ↦ decide (p b)) xs)).prod * (List.map f (List.filter (fun x ↦ decide ¬p x) xs)).prod =
+    (List.map f xs).prod
+hx : ¬p x
+⊢ f x *
+      ((List.map f (List.filter (fun b ↦ decide (p b)) xs)).prod *
+        (List.map f (List.filter (fun x ↦ !decide (p x)) xs)).prod) =
+    f x * (List.map f xs).prod
+Source line 16:
+      · simp [hx, ih, mul_left_comm, mul_assoc]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simp [hx, ih, mul_left_comm, mul_assoc]
+
+WARNING .LspCheck.lean:15:19-15:21
+This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp [hx, i̵h̵,̵ ̵mul_left_comm, mul_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 15:
+      · simp [hx, ih, mul_left_comm, mul_assoc]
+                  ^^
+Highlighted span: ih
+
+WARNING .LspCheck.lean:15:23-15:36
+This simp argument is unused:
+  mul_left_comm
+
+Hint: Omit it from the simp argument list.
+  simp [hx, ih, mul_l̵e̵f̵t̵_̵c̵o̵m̵m̵,̵ ̵m̵u̵l̵_̵assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 15:
+      · simp [hx, ih, mul_left_comm, mul_assoc]
+                      ^^^^^^^^^^^^^
+Highlighted span: mul_left_comm
+
+WARNING .LspCheck.lean:16:19-16:21
+This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp [hx, i̵h̵,̵ ̵mul_left_comm, mul_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 16:
+      · simp [hx, ih, mul_left_comm, mul_assoc]
+                  ^^
+Highlighted span: ih
+
+WARNING .LspCheck.lean:16:38-16:47
+This simp argument is unused:
+  mul_assoc
+
+Hint: Omit it from the simp argument list.
+  simp [hx, ih, mul_left_comm,̵ ̵m̵u̵l̵_̵a̵s̵s̵o̵c̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 16:
+      · simp [hx, ih, mul_left_comm, mul_assoc]
+                                     ^^^^^^^^^
+Highlighted span: mul_assoc
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:7-15:48
+unsolved goals
+case pos
+α : Type u_2
+M : Type u_4
+inst✝¹ : CommMonoid M
+p : α → Prop
+inst✝ : DecidablePred p
+f : α → M
+x : α
+xs : List α
+ih :
+  (List.map f (List.filter (fun b ↦ decide (p b)) xs)).prod * (List.map f (List.filter (fun x ↦ decide ¬p x) xs)).prod =
+    (List.map f xs).prod
+hx : p x
+⊢ f x *
+      ((List.map f (List.filter (fun b ↦ decide (p b)) xs)).prod *
+        (List.map f (List.filter (fun x ↦ !decide (p x)) xs)).prod) =
+    f x * (List.map f xs).prod
+Source line 15:
+      · simp [hx, ih, mul_left_comm, mul_assoc]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simp [hx, ih, mul_left_comm, mul_assoc]
+
+ERROR .LspCheck.lean:16:7-16:48
+unsolved goals
+case neg
+α : Type u_2
+M : Type u_4
+inst✝¹ : CommMonoid M
+p : α → Prop
+inst✝ : DecidablePred p
+f : α → M
+x : α
+xs : List α
+ih :
+  (List.map f (List.filter (fun b ↦ decide (p b)) xs)).prod * (List.map f (List.filter (fun x ↦ decide ¬p x) xs)).prod =
+    (List.map f xs).prod
+hx : ¬p x
+⊢ f x *
+      ((List.map f (List.filter (fun b ↦ decide (p b)) xs)).prod *
+        (List.map f (List.filter (fun x ↦ !decide (p x)) xs)).prod) =
+    f x * (List.map f xs).prod
+Source line 16:
+      · simp [hx, ih, mul_left_comm, mul_assoc]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simp [hx, ih, mul_left_comm, mul_assoc]
+
+WARNING .LspCheck.lean:15:19-15:21
+This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp [hx, i̵h̵,̵ ̵mul_left_comm, mul_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 15:
+      · simp [hx, ih, mul_left_comm, mul_assoc]
+                  ^^
+Highlighted span: ih
+
+WARNING .LspCheck.lean:15:23-15:36
+This simp argument is unused:
+  mul_left_comm
+
+Hint: Omit it from the simp argument list.
+  simp [hx, ih, mul_l̵e̵f̵t̵_̵c̵o̵m̵m̵,̵ ̵m̵u̵l̵_̵assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 15:
+      · simp [hx, ih, mul_left_comm, mul_assoc]
+                      ^^^^^^^^^^^^^
+Highlighted span: mul_left_comm
+
+WARNING .LspCheck.lean:16:19-16:21
+This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp [hx, i̵h̵,̵ ̵mul_left_comm, mul_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 16:
+      · simp [hx, ih, mul_left_comm, mul_assoc]
+                  ^^
+Highlighted span: ih
+
+WARNING .LspCheck.lean:16:38-16:47
+This simp argument is unused:
+  mul_assoc
+
+Hint: Omit it from the simp argument list.
+  simp [hx, ih, mul_left_comm,̵ ̵m̵u̵l̵_̵a̵s̵s̵o̵c̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 16:
+      · simp [hx, ih, mul_left_comm, mul_assoc]
+                                     ^^^^^^^^^
+Highlighted span: mul_assoc
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι α β M N P G : Type*}
+
+variable [CommMonoid M] {a : M} {l l₁ l₂ : List M}
+
+theorem prod_map_filter_mul_prod_map_filter_not (p : α → Prop) [DecidablePred p] (f : α → M)
+    (l : List α) :
+    ((l.filter p).map f).prod * ((l.filter fun x => ¬p x).map f).prod = (l.map f).prod := by
+  induction l with
+  | nil =>
+      simp
+  | cons x xs ih =>
+      by_cases hx : p x
+      · simp [hx, mul_assoc]
+        rw [ih]
+      · simp [hx, mul_assoc]
+        rw [mul_comm _ (f x), ih, mul_assoc]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:13-16:15
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (List.map f (List.filter (fun b ↦ decide (p b)) xs)).prod * (List.map f (List.filter (fun x ↦ decide ¬p x) xs)).prod
+in the target expression
+  f x *
+      ((List.map f (List.filter (fun b ↦ decide (p b)) xs)).prod *
+        (List.map f (List.filter (fun x ↦ !decide (p x)) xs)).prod) =
+    f x * (List.map f xs).prod
+
+case pos
+α : Type u_2
+M : Type u_4
+inst✝¹ : CommMonoid M
+p : α → Prop
+inst✝ : DecidablePred p
+f : α → M
+x : α
+xs : List α
+ih :
+  (List.map f (List.filter (fun b ↦ decide (p b)) xs)).prod * (List.map f (List.filter (fun x ↦ decide ¬p x) xs)).prod =
+    (List.map f xs).prod
+hx : p x
+⊢ f x *
+      ((List.map f (List.filter (fun b ↦ decide (p b)) xs)).prod *
+        (List.map f (List.filter (fun x ↦ !decide (p x)) xs)).prod) =
+    f x * (List.map f xs).prod
+Source line 16:
+        rw [ih]
+            ^^
+Highlighted span: ih
+
+ERROR .LspCheck.lean:18:13-18:29
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.54 * f x
+in the target expression
+  (List.map f (List.filter (fun b ↦ decide (p b)) xs)).prod *
+      (f x * (List.map f (List.filter (fun x ↦ !decide (p x)) xs)).prod) =
+    f x * (List.map f xs).prod
+
+case neg
+α : Type u_2
+M : Type u_4
+inst✝¹ : CommMonoid M
+p : α → Prop
+inst✝ : DecidablePred p
+f : α → M
+x : α
+xs : List α
+ih :
+  (List.map f (List.filter (fun b ↦ decide (p b)) xs)).prod * (List.map f (List.filter (fun x ↦ decide ¬p x) xs)).prod =
+    (List.map f xs).prod
+hx : ¬p x
+⊢ (List.map f (List.filter (fun b ↦ decide (p b)) xs)).prod *
+      (f x * (List.map f (List.filter (fun x ↦ !decide (p x)) xs)).prod) =
+    f x * (List.map f xs).prod
+Source line 18:
+        rw [mul_comm _ (f x), ih, mul_assoc]
+            ^^^^^^^^^^^^^^^^
+Highlighted span: mul_comm _ (f x)
+
+WARNING .LspCheck.lean:17:19-17:28
+This simp argument is unused:
+  mul_assoc
+
+Hint: Omit it from the simp argument list.
+  simp [hx,̵ ̵m̵u̵l̵_̵a̵s̵s̵o̵c̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 17:
+      · simp [hx, mul_assoc]
+                  ^^^^^^^^^
+Highlighted span: mul_assoc
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:13-16:15
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (List.map f (List.filter (fun b ↦ decide (p b)) xs)).prod * (List.map f (List.filter (fun x ↦ decide ¬p x) xs)).prod
+in the target expression
+  f x *
+      ((List.map f (List.filter (fun b ↦ decide (p b)) xs)).prod *
+        (List.map f (List.filter (fun x ↦ !decide (p x)) xs)).prod) =
+    f x * (List.map f xs).prod
+
+case pos
+α : Type u_2
+M : Type u_4
+inst✝¹ : CommMonoid M
+p : α → Prop
+inst✝ : DecidablePred p
+f : α → M
+x : α
+xs : List α
+ih :
+  (List.map f (List.filter (fun b ↦ decide (p b)) xs)).prod * (List.map f (List.filter (fun x ↦ decide ¬p x) xs)).prod =
+    (List.map f xs).prod
+hx : p x
+⊢ f x *
+      ((List.map f (List.filter (fun b ↦ decide (p b)) xs)).prod *
+        (List.map f (List.filter (fun x ↦ !decide (p x)) xs)).prod) =
+    f x * (List.map f xs).prod
+Source line 16:
+        rw [ih]
+            ^^
+Highlighted span: ih
+
+ERROR .LspCheck.lean:18:13-18:29
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.54 * f x
+in the target expression
+  (List.map f (List.filter (fun b ↦ decide (p b)) xs)).prod *
+      (f x * (List.map f (List.filter (fun x ↦ !decide (p x)) xs)).prod) =
+    f x * (List.map f xs).prod
+
+case neg
+α : Type u_2
+M : Type u_4
+inst✝¹ : CommMonoid M
+p : α → Prop
+inst✝ : DecidablePred p
+f : α → M
+x : α
+xs : List α
+ih :
+  (List.map f (List.filter (fun b ↦ decide (p b)) xs)).prod * (List.map f (List.filter (fun x ↦ decide ¬p x) xs)).prod =
+    (List.map f xs).prod
+hx : ¬p x
+⊢ (List.map f (List.filter (fun b ↦ decide (p b)) xs)).prod *
+      (f x * (List.map f (List.filter (fun x ↦ !decide (p x)) xs)).prod) =
+    f x * (List.map f xs).prod
+Source line 18:
+        rw [mul_comm _ (f x), ih, mul_assoc]
+            ^^^^^^^^^^^^^^^^
+Highlighted span: mul_comm _ (f x)
+
+WARNING .LspCheck.lean:17:19-17:28
+This simp argument is unused:
+  mul_assoc
+
+Hint: Omit it from the simp argument list.
+  simp [hx,̵ ̵m̵u̵l̵_̵a̵s̵s̵o̵c̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 17:
+      · simp [hx, mul_assoc]
+                  ^^^^^^^^^
+Highlighted span: mul_assoc
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι α β M N P G : Type*}
+
+variable [CommMonoid M] {a : M} {l l₁ l₂ : List M}
+
+theorem prod_map_filter_mul_prod_map_filter_not (p : α → Prop) [DecidablePred p] (f : α → M)
+    (l : List α) :
+    ((l.filter p).map f).prod * ((l.filter fun x => ¬p x).map f).prod = (l.map f).prod := by
+  induction l with
+  | nil =>
+      simp
+  | cons x xs ih =>
+      by_cases hx : p x
+      · simp [hx, List.prod_cons, ih, mul_assoc]
+      · simp [hx, List.prod_cons, ih, mul_assoc, mul_left_comm, mul_comm]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:7-15:49
+unsolved goals
+case pos
+α : Type u_2
+M : Type u_4
+inst✝¹ : CommMonoid M
+p : α → Prop
+inst✝ : DecidablePred p
+f : α → M
+x : α
+xs : List α
+ih :
+  (List.map f (List.filter (fun b ↦ decide (p b)) xs)).prod * (List.map f (List.filter (fun x ↦ decide ¬p x) xs)).prod =
+    (List.map f xs).prod
+hx : p x
+⊢ f x *
+      ((List.map f (List.filter (fun b ↦ decide (p b)) xs)).prod *
+        (List.map f (List.filter (fun x ↦ !decide (p x)) xs)).prod) =
+    f x * (List.map f xs).prod
+Source line 15:
+      · simp [hx, List.prod_cons, ih, mul_assoc]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simp [hx, List.prod_cons, ih, mul_assoc]
+
+ERROR .LspCheck.lean:16:7-16:74
+unsolved goals
+case neg
+α : Type u_2
+M : Type u_4
+inst✝¹ : CommMonoid M
+p : α → Prop
+inst✝ : DecidablePred p
+f : α → M
+x : α
+xs : List α
+ih :
+  (List.map f (List.filter (fun b ↦ decide (p b)) xs)).prod * (List.map f (List.filter (fun x ↦ decide ¬p x) xs)).prod =
+    (List.map f xs).prod
+hx : ¬p x
+⊢ f x *
+      ((List.map f (List.filter (fun b ↦ decide (p b)) xs)).prod *
+        (List.map f (List.filter (fun x ↦ !decide (p x)) xs)).prod) =
+    f x * (List.map f xs).prod
+Source line 16:
+      · simp [hx, List.prod_cons, ih, mul_assoc, mul_left_comm, mul_comm]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simp [hx, List.prod_cons, ih, mul_assoc, mul_left_comm, mul_comm]
+
+WARNING .LspCheck.lean:15:35-15:37
+This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp [hx, List.prod_cons, i̵h̵,̵ ̵mul_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 15:
+      · simp [hx, List.prod_cons, ih, mul_assoc]
+                                  ^^
+Highlighted span: ih
+
+WARNING .LspCheck.lean:16:35-16:37
+This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp [hx, List.prod_cons, i̵h̵,̵ ̵mul_assoc, mul_left_comm, mul_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 16:
+      · simp [hx, List.prod_cons, ih, mul_assoc, mul_left_comm, mul_comm]
+                                  ^^
+Highlighted span: ih
+
+WARNING .LspCheck.lean:16:39-16:48
+This simp argument is unused:
+  mul_assoc
+
+Hint: Omit it from the simp argument list.
+  simp [hx, List.prod_cons, ih, m̵u̵l̵_̵a̵s̵s̵o̵c̵,̵ ̵mul_left_comm, mul_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 16:
+      · simp [hx, List.prod_cons, ih, mul_assoc, mul_left_comm, mul_comm]
+                                      ^^^^^^^^^
+Highlighted span: mul_assoc
+
+WARNING .LspCheck.lean:16:65-16:73
+This simp argument is unused:
+  mul_comm
+
+Hint: Omit it from the simp argument list.
+  simp [hx, List.prod_cons, ih, mul_assoc, mul_left_comm,̵ ̵m̵u̵l̵_̵c̵o̵m̵m̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 16:
+      · simp [hx, List.prod_cons, ih, mul_assoc, mul_left_comm, mul_comm]
+                                                                ^^^^^^^^
+Highlighted span: mul_comm
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:7-15:49
+unsolved goals
+case pos
+α : Type u_2
+M : Type u_4
+inst✝¹ : CommMonoid M
+p : α → Prop
+inst✝ : DecidablePred p
+f : α → M
+x : α
+xs : List α
+ih :
+  (List.map f (List.filter (fun b ↦ decide (p b)) xs)).prod * (List.map f (List.filter (fun x ↦ decide ¬p x) xs)).prod =
+    (List.map f xs).prod
+hx : p x
+⊢ f x *
+      ((List.map f (List.filter (fun b ↦ decide (p b)) xs)).prod *
+        (List.map f (List.filter (fun x ↦ !decide (p x)) xs)).prod) =
+    f x * (List.map f xs).prod
+Source line 15:
+      · simp [hx, List.prod_cons, ih, mul_assoc]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simp [hx, List.prod_cons, ih, mul_assoc]
+
+ERROR .LspCheck.lean:16:7-16:74
+unsolved goals
+case neg
+α : Type u_2
+M : Type u_4
+inst✝¹ : CommMonoid M
+p : α → Prop
+inst✝ : DecidablePred p
+f : α → M
+x : α
+xs : List α
+ih :
+  (List.map f (List.filter (fun b ↦ decide (p b)) xs)).prod * (List.map f (List.filter (fun x ↦ decide ¬p x) xs)).prod =
+    (List.map f xs).prod
+hx : ¬p x
+⊢ f x *
+      ((List.map f (List.filter (fun b ↦ decide (p b)) xs)).prod *
+        (List.map f (List.filter (fun x ↦ !decide (p x)) xs)).prod) =
+    f x * (List.map f xs).prod
+Source line 16:
+      · simp [hx, List.prod_cons, ih, mul_assoc, mul_left_comm, mul_comm]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: · simp [hx, List.prod_cons, ih, mul_assoc, mul_left_comm, mul_comm]
+
+WARNING .LspCheck.lean:15:35-15:37
+This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp [hx, List.prod_cons, i̵h̵,̵ ̵mul_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 15:
+      · simp [hx, List.prod_cons, ih, mul_assoc]
+                                  ^^
+Highlighted span: ih
+
+WARNING .LspCheck.lean:16:35-16:37
+This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp [hx, List.prod_cons, i̵h̵,̵ ̵mul_assoc, mul_left_comm, mul_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 16:
+      · simp [hx, List.prod_cons, ih, mul_assoc, mul_left_comm, mul_comm]
+                                  ^^
+Highlighted span: ih
+
+WARNING .LspCheck.lean:16:39-16:48
+This simp argument is unused:
+  mul_assoc
+
+Hint: Omit it from the simp argument list.
+  simp [hx, List.prod_cons, ih, m̵u̵l̵_̵a̵s̵s̵o̵c̵,̵ ̵mul_left_comm, mul_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 16:
+      · simp [hx, List.prod_cons, ih, mul_assoc, mul_left_comm, mul_comm]
+                                      ^^^^^^^^^
+Highlighted span: mul_assoc
+
+WARNING .LspCheck.lean:16:65-16:73
+This simp argument is unused:
+  mul_comm
+
+Hint: Omit it from the simp argument list.
+  simp [hx, List.prod_cons, ih, mul_assoc, mul_left_comm,̵ ̵m̵u̵l̵_̵c̵o̵m̵m̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 16:
+      · simp [hx, List.prod_cons, ih, mul_assoc, mul_left_comm, mul_comm]
+                                                                ^^^^^^^^
+Highlighted span: mul_comm

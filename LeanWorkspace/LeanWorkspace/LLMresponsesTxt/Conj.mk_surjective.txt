@@ -1,0 +1,83 @@
+FILE: Conj.mk_surjective.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Conj.mk_surjective.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {α : Type u} {β : Type v}
+
+variable [Monoid α] [Monoid β]
+
+theorem mk_surjective : Function.Surjective (@ConjClasses.mk α _) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α : Type u} {β : Type v}
+
+variable [Monoid α] [Monoid β]
+
+theorem mk_surjective : Function.Surjective (@ConjClasses.mk α _) := by
+  intro x
+  induction x using Quotient.inductionOn
+  intro a
+  exact ⟨a, rfl⟩
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:9-10:10
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case h
+α : Type u
+inst✝ : Monoid α
+a✝ : α
+⊢ ∃ a, ConjClasses.mk a = ⟦a✝⟧
+Source line 10:
+  intro a
+        ^
+Highlighted span: a
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:9-10:10
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case h
+α : Type u
+inst✝ : Monoid α
+a✝ : α
+⊢ ∃ a, ConjClasses.mk a = ⟦a✝⟧
+Source line 10:
+  intro a
+        ^
+Highlighted span: a
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α : Type u} {β : Type v}
+
+variable [Monoid α] [Monoid β]
+
+theorem mk_surjective : Function.Surjective (@ConjClasses.mk α _) := by
+  rintro ⟨a⟩
+  exact ⟨a, rfl⟩
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

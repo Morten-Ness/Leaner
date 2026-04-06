@@ -1,0 +1,221 @@
+FILE: Unitization.algHom_ext.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Unitization.algHom_ext.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {S R A : Type*} [CommSemiring S] [CommSemiring R] [NonUnitalSemiring A] [Module R A]
+  [SMulCommClass R A A] [IsScalarTower R A A] {B : Type*} [Semiring B] [Algebra S B] [Algebra S R]
+  [DistribMulAction S A] [IsScalarTower S R A] {C : Type*} [Semiring C] [Algebra R C]
+
+theorem algHom_ext {F : Type*}
+    [FunLike F (Unitization R A) B] [AlgHomClass F S (Unitization R A) B] {φ ψ : F}
+    (h : ∀ a : A, φ a = ψ a)
+    (h' : ∀ r, φ (algebraMap R (Unitization R A) r) = ψ (algebraMap R (Unitization R A) r)) :
+    φ = ψ := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {S R A : Type*} [CommSemiring S] [CommSemiring R] [NonUnitalSemiring A] [Module R A]
+  [SMulCommClass R A A] [IsScalarTower R A A] {B : Type*} [Semiring B] [Algebra S B] [Algebra S R]
+  [DistribMulAction S A] [IsScalarTower S R A] {C : Type*} [Semiring C] [Algebra R C]
+
+theorem algHom_ext {F : Type*}
+    [FunLike F (Unitization R A) B] [AlgHomClass F S (Unitization R A) B] {φ ψ : F}
+    (h : ∀ a : A, φ a = ψ a)
+    (h' : ∀ r, φ (algebraMap R (Unitization R A) r) = ψ (algebraMap R (Unitization R A) r)) :
+    φ = ψ := by
+  ext x
+  rcases x with ⟨r, a⟩
+  rw [Unitization.val_add_smul_eq, map_add, map_add, h' r, h a]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:3-12:8
+No applicable extensionality theorem found for type
+  F
+
+Note: Extensionality theorems can be registered by marking them with the `[ext]` attribute
+Source line 12:
+  ext x
+  ^^^^^
+Highlighted span: ext x
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:3-12:8
+No applicable extensionality theorem found for type
+  F
+
+Note: Extensionality theorems can be registered by marking them with the `[ext]` attribute
+Source line 12:
+  ext x
+  ^^^^^
+Highlighted span: ext x
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {S R A : Type*} [CommSemiring S] [CommSemiring R] [NonUnitalSemiring A] [Module R A]
+  [SMulCommClass R A A] [IsScalarTower R A A] {B : Type*} [Semiring B] [Algebra S B] [Algebra S R]
+  [DistribMulAction S A] [IsScalarTower S R A] {C : Type*} [Semiring C] [Algebra R C]
+
+theorem algHom_ext {F : Type*}
+    [FunLike F (Unitization R A) B] [AlgHomClass F S (Unitization R A) B] {φ ψ : F}
+    (h : ∀ a : A, φ a = ψ a)
+    (h' : ∀ r, φ (algebraMap R (Unitization R A) r) = ψ (algebraMap R (Unitization R A) r)) :
+    φ = ψ := by
+  apply DFunLike.ext
+  intro x
+  rcases x with ⟨r, a⟩
+  rw [Unitization.val_add_smul_eq, map_add, map_add, h' r, h a]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:7-15:34
+Unknown constant `Unitization.val_add_smul_eq`
+Source line 15:
+  rw [Unitization.val_add_smul_eq, map_add, map_add, h' r, h a]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Unitization.val_add_smul_eq
+
+ERROR .LspCheck.lean:11:14-12:1
+unsolved goals
+case h
+S : Type u_1
+R : Type u_2
+A : Type u_3
+inst✝¹² : CommSemiring S
+inst✝¹¹ : CommSemiring R
+inst✝¹⁰ : NonUnitalSemiring A
+inst✝⁹ : Module R A
+inst✝⁸ : SMulCommClass R A A
+inst✝⁷ : IsScalarTower R A A
+B : Type u_4
+inst✝⁶ : Semiring B
+inst✝⁵ : Algebra S B
+inst✝⁴ : Algebra S R
+inst✝³ : DistribMulAction S A
+inst✝² : IsScalarTower S R A
+F : Type u_6
+inst✝¹ : FunLike F (Unitization R A) B
+inst✝ : AlgHomClass F S (Unitization R A) B
+φ ψ : F
+h : ∀ (a : A), φ ↑a = ψ ↑a
+h' : ∀ (r : R), φ ((algebraMap R (Unitization R A)) r) = ψ ((algebraMap R (Unitization R A)) r)
+r : R
+a : A
+⊢ φ (Unitization.mk (r, a)) = ψ (Unitization.mk (r, a))
+Source line 11:
+    φ = ψ := by
+             ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:7-15:34
+Unknown constant `Unitization.val_add_smul_eq`
+Source line 15:
+  rw [Unitization.val_add_smul_eq, map_add, map_add, h' r, h a]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Unitization.val_add_smul_eq
+
+ERROR .LspCheck.lean:11:14-12:1
+unsolved goals
+case h
+S : Type u_1
+R : Type u_2
+A : Type u_3
+inst✝¹² : CommSemiring S
+inst✝¹¹ : CommSemiring R
+inst✝¹⁰ : NonUnitalSemiring A
+inst✝⁹ : Module R A
+inst✝⁸ : SMulCommClass R A A
+inst✝⁷ : IsScalarTower R A A
+B : Type u_4
+inst✝⁶ : Semiring B
+inst✝⁵ : Algebra S B
+inst✝⁴ : Algebra S R
+inst✝³ : DistribMulAction S A
+inst✝² : IsScalarTower S R A
+F : Type u_6
+inst✝¹ : FunLike F (Unitization R A) B
+inst✝ : AlgHomClass F S (Unitization R A) B
+φ ψ : F
+h : ∀ (a : A), φ ↑a = ψ ↑a
+h' : ∀ (r : R), φ ((algebraMap R (Unitization R A)) r) = ψ ((algebraMap R (Unitization R A)) r)
+r : R
+a : A
+⊢ φ (Unitization.mk (r, a)) = ψ (Unitization.mk (r, a))
+Source line 11:
+    φ = ψ := by
+             ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {S R A : Type*} [CommSemiring S] [CommSemiring R] [NonUnitalSemiring A] [Module R A]
+  [SMulCommClass R A A] [IsScalarTower R A A] {B : Type*} [Semiring B] [Algebra S B] [Algebra S R]
+  [DistribMulAction S A] [IsScalarTower S R A] {C : Type*} [Semiring C] [Algebra R C]
+
+theorem algHom_ext {F : Type*}
+    [FunLike F (Unitization R A) B] [AlgHomClass F S (Unitization R A) B] {φ ψ : F}
+    (h : ∀ a : A, φ a = ψ a)
+    (h' : ∀ r, φ (algebraMap R (Unitization R A) r) = ψ (algebraMap R (Unitization R A) r)) :
+    φ = ψ := by
+  apply DFunLike.ext
+  intro x
+  rcases x with ⟨r, a⟩
+  change φ ((algebraMap R (Unitization R A)) r + ↑a) = ψ ((algebraMap R (Unitization R A)) r + ↑a)
+  rw [map_add, map_add, h' r, h a]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:3-15:99
+'change' tactic failed, pattern
+  φ ((algebraMap R (Unitization R A)) r + ↑a) = ψ ((algebraMap R (Unitization R A)) r + ↑a)
+is not definitionally equal to target
+  φ (Unitization.mk (r, a)) = ψ (Unitization.mk (r, a))
+Source line 15:
+  change φ ((algebraMap R (Unitization R A)) r + ↑a) = ψ ((algebraMap R (Unitization R A)) r + ↑a)
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: change φ ((algebraMap R (Unitization R A)) r + ↑a) = ψ ((algebraMap R (Unitization R A)) r + ↑a)
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:3-15:99
+'change' tactic failed, pattern
+  φ ((algebraMap R (Unitization R A)) r + ↑a) = ψ ((algebraMap R (Unitization R A)) r + ↑a)
+is not definitionally equal to target
+  φ (Unitization.mk (r, a)) = ψ (Unitization.mk (r, a))
+Source line 15:
+  change φ ((algebraMap R (Unitization R A)) r + ↑a) = ψ ((algebraMap R (Unitization R A)) r + ↑a)
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: change φ ((algebraMap R (Unitization R A)) r + ↑a) = ψ ((algebraMap R (Unitization R A)) r + ↑a)

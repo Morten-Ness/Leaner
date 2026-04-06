@@ -1,0 +1,250 @@
+FILE: Basic.span_eq_top_of_surjective.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.span_eq_top_of_surjective.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {k V₁ P₁ V₂ P₂ V₃ P₃ : Type*} [Ring k]
+
+variable [AddCommGroup V₁] [Module k V₁] [AddTorsor V₁ P₁]
+
+variable [AddCommGroup V₂] [Module k V₂] [AddTorsor V₂ P₂]
+
+variable [AddCommGroup V₃] [Module k V₃] [AddTorsor V₃ P₃]
+
+variable (f : P₁ →ᵃ[k] P₂)
+
+theorem span_eq_top_of_surjective {s : Set P₁} (hf : Function.Surjective f)
+    (h : affineSpan k s = ⊤) : affineSpan k (f '' s) = ⊤ := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k V₁ P₁ V₂ P₂ V₃ P₃ : Type*} [Ring k]
+
+variable [AddCommGroup V₁] [Module k V₁] [AddTorsor V₁ P₁]
+
+variable [AddCommGroup V₂] [Module k V₂] [AddTorsor V₂ P₂]
+
+variable [AddCommGroup V₃] [Module k V₃] [AddTorsor V₃ P₃]
+
+variable (f : P₁ →ᵃ[k] P₂)
+
+theorem span_eq_top_of_surjective {s : Set P₁} (hf : Function.Surjective f)
+    (h : affineSpan k s = ⊤) : affineSpan k (f '' s) = ⊤ := by
+  rw [← AffineMap.affineSpan_image f hf, h]
+  exact AffineSubspace.map_top _ _ _
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:9-15:35
+Unknown constant `AffineMap.affineSpan_image`
+Source line 15:
+  rw [← AffineMap.affineSpan_image f hf, h]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineMap.affineSpan_image
+
+ERROR .LspCheck.lean:14:61-15:1
+unsolved goals
+k : Type u_1
+V₁ : Type u_2
+P₁ : Type u_3
+V₂ : Type u_4
+P₂ : Type u_5
+inst✝⁶ : Ring k
+inst✝⁵ : AddCommGroup V₁
+inst✝⁴ : Module k V₁
+inst✝³ : AddTorsor V₁ P₁
+inst✝² : AddCommGroup V₂
+inst✝¹ : Module k V₂
+inst✝ : AddTorsor V₂ P₂
+f : P₁ →ᵃ[k] P₂
+s : Set P₁
+hf : Function.Surjective ⇑f
+h : affineSpan k s = ⊤
+⊢ affineSpan k (⇑f '' s) = ⊤
+Source line 14:
+    (h : affineSpan k s = ⊤) : affineSpan k (f '' s) = ⊤ := by
+                                                            ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:9-15:35
+Unknown constant `AffineMap.affineSpan_image`
+Source line 15:
+  rw [← AffineMap.affineSpan_image f hf, h]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineMap.affineSpan_image
+
+ERROR .LspCheck.lean:14:61-15:1
+unsolved goals
+k : Type u_1
+V₁ : Type u_2
+P₁ : Type u_3
+V₂ : Type u_4
+P₂ : Type u_5
+inst✝⁶ : Ring k
+inst✝⁵ : AddCommGroup V₁
+inst✝⁴ : Module k V₁
+inst✝³ : AddTorsor V₁ P₁
+inst✝² : AddCommGroup V₂
+inst✝¹ : Module k V₂
+inst✝ : AddTorsor V₂ P₂
+f : P₁ →ᵃ[k] P₂
+s : Set P₁
+hf : Function.Surjective ⇑f
+h : affineSpan k s = ⊤
+⊢ affineSpan k (⇑f '' s) = ⊤
+Source line 14:
+    (h : affineSpan k s = ⊤) : affineSpan k (f '' s) = ⊤ := by
+                                                            ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k V₁ P₁ V₂ P₂ V₃ P₃ : Type*} [Ring k]
+
+variable [AddCommGroup V₁] [Module k V₁] [AddTorsor V₁ P₁]
+
+variable [AddCommGroup V₂] [Module k V₂] [AddTorsor V₂ P₂]
+
+variable [AddCommGroup V₃] [Module k V₃] [AddTorsor V₃ P₃]
+
+variable (f : P₁ →ᵃ[k] P₂)
+
+theorem span_eq_top_of_surjective {s : Set P₁} (hf : Function.Surjective f)
+    (h : affineSpan k s = ⊤) : affineSpan k (f '' s) = ⊤ := by
+  rw [eq_top_iff]
+  intro y hy
+  obtain ⟨x, rfl⟩ := hf y
+  exact AffineMap.mem_affineSpan_image f ⟨x, hy, rfl⟩
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:18:9-18:39
+Unknown constant `AffineMap.mem_affineSpan_image`
+Source line 18:
+  exact AffineMap.mem_affineSpan_image f ⟨x, hy, rfl⟩
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineMap.mem_affineSpan_image
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:18:9-18:39
+Unknown constant `AffineMap.mem_affineSpan_image`
+Source line 18:
+  exact AffineMap.mem_affineSpan_image f ⟨x, hy, rfl⟩
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineMap.mem_affineSpan_image
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k V₁ P₁ V₂ P₂ V₃ P₃ : Type*} [Ring k]
+
+variable [AddCommGroup V₁] [Module k V₁] [AddTorsor V₁ P₁]
+
+variable [AddCommGroup V₂] [Module k V₂] [AddTorsor V₂ P₂]
+
+variable [AddCommGroup V₃] [Module k V₃] [AddTorsor V₃ P₃]
+
+variable (f : P₁ →ᵃ[k] P₂)
+
+theorem span_eq_top_of_surjective {s : Set P₁} (hf : Function.Surjective f)
+    (h : affineSpan k s = ⊤) : affineSpan k (f '' s) = ⊤ := by
+  rw [eq_top_iff]
+  intro y hy
+  obtain ⟨x, rfl⟩ := hf y
+  rw [← h] at hy
+  exact affineSpan_mono (show s ⊆ f '' s from fun z hz => ⟨z, hz, rfl⟩) hy
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:18:7-18:10
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ⊤
+in the target expression
+  f x ∈ ⊤
+
+k : Type u_1
+V₁ : Type u_2
+P₁ : Type u_3
+V₂ : Type u_4
+P₂ : Type u_5
+inst✝⁶ : Ring k
+inst✝⁵ : AddCommGroup V₁
+inst✝⁴ : Module k V₁
+inst✝³ : AddTorsor V₁ P₁
+inst✝² : AddCommGroup V₂
+inst✝¹ : Module k V₂
+inst✝ : AddTorsor V₂ P₂
+f : P₁ →ᵃ[k] P₂
+s : Set P₁
+hf : Function.Surjective ⇑f
+h : affineSpan k s = ⊤
+x : P₁
+hy : f x ∈ ⊤
+⊢ f x ∈ affineSpan k (⇑f '' s)
+Source line 18:
+  rw [← h] at hy
+      ^^^
+Highlighted span: ← h
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:18:7-18:10
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ⊤
+in the target expression
+  f x ∈ ⊤
+
+k : Type u_1
+V₁ : Type u_2
+P₁ : Type u_3
+V₂ : Type u_4
+P₂ : Type u_5
+inst✝⁶ : Ring k
+inst✝⁵ : AddCommGroup V₁
+inst✝⁴ : Module k V₁
+inst✝³ : AddTorsor V₁ P₁
+inst✝² : AddCommGroup V₂
+inst✝¹ : Module k V₂
+inst✝ : AddTorsor V₂ P₂
+f : P₁ →ᵃ[k] P₂
+s : Set P₁
+hf : Function.Surjective ⇑f
+h : affineSpan k s = ⊤
+x : P₁
+hy : f x ∈ ⊤
+⊢ f x ∈ affineSpan k (⇑f '' s)
+Source line 18:
+  rw [← h] at hy
+      ^^^
+Highlighted span: ← h

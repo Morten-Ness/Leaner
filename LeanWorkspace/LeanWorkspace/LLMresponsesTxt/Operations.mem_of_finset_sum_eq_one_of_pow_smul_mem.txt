@@ -1,0 +1,412 @@
+FILE: Operations.mem_of_finset_sum_eq_one_of_pow_smul_mem.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Operations.mem_of_finset_sum_eq_one_of_pow_smul_mem.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R S : Type*} [CommSemiring R] [CommSemiring S] [Algebra R S]
+
+variable (S' : Subalgebra R S)
+
+theorem mem_of_finset_sum_eq_one_of_pow_smul_mem
+    {ι : Type*} (ι' : Finset ι) (s : ι → S) (l : ι → S)
+    (e : ∑ i ∈ ι', l i * s i = 1) (hs : ∀ i, s i ∈ S') (hl : ∀ i, l i ∈ S') (x : S)
+    (H : ∀ i, ∃ n : ℕ, (s i ^ n : S) • x ∈ S') : x ∈ S' := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R S : Type*} [CommSemiring R] [CommSemiring S] [Algebra R S]
+
+variable (S' : Subalgebra R S)
+
+theorem mem_of_finset_sum_eq_one_of_pow_smul_mem
+    {ι : Type*} (ι' : Finset ι) (s : ι → S) (l : ι → S)
+    (e : ∑ i ∈ ι', l i * s i = 1) (hs : ∀ i, s i ∈ S') (hl : ∀ i, l i ∈ S') (x : S)
+    (H : ∀ i, ∃ n : ℕ, (s i ^ n : S) • x ∈ S') : x ∈ S' := by
+  classical
+  have hsum : (∑ i ∈ ι', (l i * s i) • x) ∈ S' := by
+    refine Submodule.sum_mem (S' := S'.toSubmodule) ?_
+    intro i
+    refine Submodule.sum_mem (S' := S'.toSubmodule) ?_
+    intro hi
+    rcases H i with ⟨n, hn⟩
+    cases n with
+    | zero =>
+        simpa using hn
+    | succ n =>
+        have hs_pow : s i ^ n.succ ∈ S' := by
+          exact S'.pow_mem (hs i) n.succ
+        have hl_mul : l i * s i ^ n.succ ∈ S' := by
+          exact S'.mul_mem (hl i) hs_pow
+        have hsmul : (l i * s i ^ n.succ : S) • x ∈ S' := by
+          simpa [smul_eq_mul, mul_assoc] using S'.mul_mem (hl i) hn
+        have hfac : ((l i * s i) : S) • x = (l i * s i ^ n.succ : S) • x := by
+          simp [smul_eq_mul, pow_succ', mul_assoc, mul_left_comm, mul_comm]
+        simpa [hfac] using hsmul
+  have hx : x = ∑ i ∈ ι', (l i * s i) • x := by
+    calc
+      x = (1 : S) • x := by simp
+      _ = (∑ i ∈ ι', l i * s i) • x := by simpa [e]
+      _ = ∑ i ∈ ι', (l i * s i) • x := by
+        rw [Finset.sum_smul]
+  rw [hx]
+  exact hsum
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:30-13:52
+Invalid argument name `S'` for function `Submodule.sum_mem`
+
+Hint: Perhaps you meant one of the following parameter names:
+  • `R`: S̵'̵R̲
+  • `M`: S̵'̵M̲
+  • `ι`: S̵'̵ι̲
+  • `module_M`: S̵'̵m̲o̲d̲u̲l̲e̲_̲M̲
+  • `p`: S̵'̵p̲
+  • `t`: S̵'̵t̲
+  • `f`: S̵'̵f̲
+Source line 13:
+    refine Submodule.sum_mem (S' := S'.toSubmodule) ?_
+                             ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (S' := S'.toSubmodule)
+
+ERROR .LspCheck.lean:14:11-14:12
+No goals to be solved
+Source line 14:
+    intro i
+          ^
+Highlighted span: i
+
+WARNING .LspCheck.lean:34:43-34:52
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 34:
+      _ = (∑ i ∈ ι', l i * s i) • x := by simpa [e]
+                                          ^^^^^^^^^
+Highlighted span: simpa [e]
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:30-13:52
+Invalid argument name `S'` for function `Submodule.sum_mem`
+
+Hint: Perhaps you meant one of the following parameter names:
+  • `R`: S̵'̵R̲
+  • `M`: S̵'̵M̲
+  • `ι`: S̵'̵ι̲
+  • `module_M`: S̵'̵m̲o̲d̲u̲l̲e̲_̲M̲
+  • `p`: S̵'̵p̲
+  • `t`: S̵'̵t̲
+  • `f`: S̵'̵f̲
+Source line 13:
+    refine Submodule.sum_mem (S' := S'.toSubmodule) ?_
+                             ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (S' := S'.toSubmodule)
+
+ERROR .LspCheck.lean:14:11-14:12
+No goals to be solved
+Source line 14:
+    intro i
+          ^
+Highlighted span: i
+
+WARNING .LspCheck.lean:34:43-34:52
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 34:
+      _ = (∑ i ∈ ι', l i * s i) • x := by simpa [e]
+                                          ^^^^^^^^^
+Highlighted span: simpa [e]
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R S : Type*} [CommSemiring R] [CommSemiring S] [Algebra R S]
+
+variable (S' : Subalgebra R S)
+
+theorem mem_of_finset_sum_eq_one_of_pow_smul_mem
+    {ι : Type*} (ι' : Finset ι) (s : ι → S) (l : ι → S)
+    (e : ∑ i ∈ ι', l i * s i = 1) (hs : ∀ i, s i ∈ S') (hl : ∀ i, l i ∈ S') (x : S)
+    (H : ∀ i, ∃ n : ℕ, (s i ^ n : S) • x ∈ S') : x ∈ S' := by
+  classical
+  have hsum : (∑ i ∈ ι', (l i * s i) • x) ∈ S' := by
+    rw [show (∑ i ∈ ι', (l i * s i) • x) = ∑ i in ι', (l i * s i) • x by simp]
+    refine Finset.sum_mem ?_
+    intro i hi
+    rcases H i with ⟨n, hn⟩
+    cases n with
+    | zero =>
+        simpa using S'.mul_mem (hl i) hn
+    | succ n =>
+        have hs_pow : s i ^ n ∈ S' := S'.pow_mem (hs i) n
+        have hli : l i * s i ^ n ∈ S' := S'.mul_mem (hl i) hs_pow
+        have hmul : (l i * s i ^ n) * (s i • x) ∈ S' := by
+          simpa [smul_eq_mul, mul_assoc] using S'.mul_mem hli hn
+        simpa [smul_eq_mul, pow_succ, mul_assoc, mul_left_comm, mul_comm] using hmul
+  have hx : x = ∑ i ∈ ι', (l i * s i) • x := by
+    calc
+      x = (1 : S) • x := by simp
+      _ = (∑ i ∈ ι', l i * s i) • x := by rw [e]
+      _ = ∑ i ∈ ι', (l i * s i) • x := by rw [Finset.sum_smul]
+  rw [hx]
+  exact hsum
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:47-13:50
+unexpected token 'in'; expected ','
+Source line 13:
+    rw [show (∑ i ∈ ι', (l i * s i) • x) = ∑ i in ι', (l i * s i) • x by simp]
+                                              ^^^
+Highlighted span:  in
+
+ERROR .LspCheck.lean:13:9-13:47
+unexpected syntax
+  failed to pretty print term (use 'set_option pp.rawOnError true' for raw representation)
+Source line 13:
+    rw [show (∑ i ∈ ι', (l i * s i) • x) = ∑ i in ι', (l i * s i) • x by simp]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: show (∑ i ∈ ι', (l i * s i) • x) = ∑ i
+
+ERROR .LspCheck.lean:10:60-11:1
+unsolved goals
+R : Type u_1
+S : Type u_2
+inst✝² : CommSemiring R
+inst✝¹ : CommSemiring S
+inst✝ : Algebra R S
+S' : Subalgebra R S
+ι : Type u_3
+ι' : Finset ι
+s l : ι → S
+e : ∑ i ∈ ι', l i * s i = 1
+hs : ∀ (i : ι), s i ∈ S'
+hl : ∀ (i : ι), l i ∈ S'
+x : S
+H : ∀ (i : ι), ∃ n, s i ^ n • x ∈ S'
+hsum : ∑ i ∈ ι', (l i * s i) • x ∈ S'
+⊢ x ∈ S'
+Source line 10:
+    (H : ∀ i, ∃ n : ℕ, (s i ^ n : S) • x ∈ S') : x ∈ S' := by
+                                                           ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:47-13:50
+unexpected token 'in'; expected ','
+Source line 13:
+    rw [show (∑ i ∈ ι', (l i * s i) • x) = ∑ i in ι', (l i * s i) • x by simp]
+                                              ^^^
+Highlighted span:  in
+
+ERROR .LspCheck.lean:13:9-13:47
+unexpected syntax
+  failed to pretty print term (use 'set_option pp.rawOnError true' for raw representation)
+Source line 13:
+    rw [show (∑ i ∈ ι', (l i * s i) • x) = ∑ i in ι', (l i * s i) • x by simp]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: show (∑ i ∈ ι', (l i * s i) • x) = ∑ i
+
+ERROR .LspCheck.lean:10:60-11:1
+unsolved goals
+R : Type u_1
+S : Type u_2
+inst✝² : CommSemiring R
+inst✝¹ : CommSemiring S
+inst✝ : Algebra R S
+S' : Subalgebra R S
+ι : Type u_3
+ι' : Finset ι
+s l : ι → S
+e : ∑ i ∈ ι', l i * s i = 1
+hs : ∀ (i : ι), s i ∈ S'
+hl : ∀ (i : ι), l i ∈ S'
+x : S
+H : ∀ (i : ι), ∃ n, s i ^ n • x ∈ S'
+hsum : ∑ i ∈ ι', (l i * s i) • x ∈ S'
+⊢ x ∈ S'
+Source line 10:
+    (H : ∀ i, ∃ n : ℕ, (s i ^ n : S) • x ∈ S') : x ∈ S' := by
+                                                           ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R S : Type*} [CommSemiring R] [CommSemiring S] [Algebra R S]
+
+variable (S' : Subalgebra R S)
+
+theorem mem_of_finset_sum_eq_one_of_pow_smul_mem
+    {ι : Type*} (ι' : Finset ι) (s : ι → S) (l : ι → S)
+    (e : ∑ i ∈ ι', l i * s i = 1) (hs : ∀ i, s i ∈ S') (hl : ∀ i, l i ∈ S') (x : S)
+    (H : ∀ i, ∃ n : ℕ, (s i ^ n : S) • x ∈ S') : x ∈ S' := by
+  classical
+  have hsum : ∑ i in ι', (l i * s i) • x ∈ S' := by
+    refine Finset.sum_mem ?_
+    intro i hi
+    rcases H i with ⟨n, hn⟩
+    cases n with
+    | zero =>
+        simpa [smul_eq_mul, mul_assoc] using S'.mul_mem (hl i) hn
+    | succ n =>
+        have hs_pow : s i ^ n ∈ S' := S'.pow_mem (hs i) n
+        have hli : l i * s i ^ n ∈ S' := S'.mul_mem (hl i) hs_pow
+        have hmul : (l i * s i ^ n) * (s i ^ Nat.succ n • x) ∈ S' := by
+          exact S'.mul_mem hli hn
+        simpa [smul_eq_mul, pow_succ, mul_assoc, mul_left_comm, mul_comm] using hmul
+  have hx : x = ∑ i in ι', (l i * s i) • x := by
+    calc
+      x = (1 : S) • x := by simp
+      _ = (∑ i in ι', l i * s i) • x := by rw [e]
+      _ = ∑ i in ι', (l i * s i) • x := by rw [Finset.sum_smul]
+  rw [hx]
+  exact hsum
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:18-12:21
+unexpected token 'in'; expected ','
+Source line 12:
+  have hsum : ∑ i in ι', (l i * s i) • x ∈ S' := by
+                 ^^^
+Highlighted span:  in
+
+ERROR .LspCheck.lean:12:15-12:18
+failed to synthesize instance of type class
+  AddCommMonoid (Sort ?u.2674.27)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 12:
+  have hsum : ∑ i in ι', (l i * s i) • x ∈ S' := by
+              ^^^
+Highlighted span: ∑ i
+
+ERROR .LspCheck.lean:10:60-11:1
+unsolved goals
+case hsum
+R : Type u_1
+S : Type u_2
+inst✝² : CommSemiring R
+inst✝¹ : CommSemiring S
+inst✝ : Algebra R S
+S' : Subalgebra R S
+ι : Type u_3
+ι' : Finset ι
+s l : ι → S
+e : ∑ i ∈ ι', l i * s i = 1
+hs : ∀ (i : ι), s i ∈ S'
+hl : ∀ (i : ι), l i ∈ S'
+x : S
+H : ∀ (i : ι), ∃ n, s i ^ n • x ∈ S'
+⊢ sorry
+
+R : Type u_1
+S : Type u_2
+inst✝² : CommSemiring R
+inst✝¹ : CommSemiring S
+inst✝ : Algebra R S
+S' : Subalgebra R S
+ι : Type u_3
+ι' : Finset ι
+s l : ι → S
+e : ∑ i ∈ ι', l i * s i = 1
+hs : ∀ (i : ι), s i ∈ S'
+hl : ∀ (i : ι), l i ∈ S'
+x : S
+H : ∀ (i : ι), ∃ n, s i ^ n • x ∈ S'
+hsum : sorry
+⊢ x ∈ S'
+Source line 10:
+    (H : ∀ i, ∃ n : ℕ, (s i ^ n : S) • x ∈ S') : x ∈ S' := by
+                                                           ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:18-12:21
+unexpected token 'in'; expected ','
+Source line 12:
+  have hsum : ∑ i in ι', (l i * s i) • x ∈ S' := by
+                 ^^^
+Highlighted span:  in
+
+ERROR .LspCheck.lean:12:15-12:18
+failed to synthesize instance of type class
+  AddCommMonoid (Sort ?u.2674.27)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 12:
+  have hsum : ∑ i in ι', (l i * s i) • x ∈ S' := by
+              ^^^
+Highlighted span: ∑ i
+
+ERROR .LspCheck.lean:10:60-11:1
+unsolved goals
+case hsum
+R : Type u_1
+S : Type u_2
+inst✝² : CommSemiring R
+inst✝¹ : CommSemiring S
+inst✝ : Algebra R S
+S' : Subalgebra R S
+ι : Type u_3
+ι' : Finset ι
+s l : ι → S
+e : ∑ i ∈ ι', l i * s i = 1
+hs : ∀ (i : ι), s i ∈ S'
+hl : ∀ (i : ι), l i ∈ S'
+x : S
+H : ∀ (i : ι), ∃ n, s i ^ n • x ∈ S'
+⊢ sorry
+
+R : Type u_1
+S : Type u_2
+inst✝² : CommSemiring R
+inst✝¹ : CommSemiring S
+inst✝ : Algebra R S
+S' : Subalgebra R S
+ι : Type u_3
+ι' : Finset ι
+s l : ι → S
+e : ∑ i ∈ ι', l i * s i = 1
+hs : ∀ (i : ι), s i ∈ S'
+hl : ∀ (i : ι), l i ∈ S'
+x : S
+H : ∀ (i : ι), ∃ n, s i ^ n • x ∈ S'
+hsum : sorry
+⊢ x ∈ S'
+Source line 10:
+    (H : ∀ i, ∃ n : ℕ, (s i ^ n : S) • x ∈ S') : x ∈ S' := by
+                                                           ^
+Highlighted span: b

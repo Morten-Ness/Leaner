@@ -1,0 +1,75 @@
+FILE: Finset.sum_mul.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Finset.sum_mul.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {ι κ M R : Type*} {s s₁ s₂ : Finset ι} {i : ι}
+
+variable [NonUnitalNonAssocSemiring R]
+
+theorem sum_mul (s : Finset ι) (f : ι → R) (a : R) :
+    (∑ i ∈ s, f i) * a = ∑ i ∈ s, f i * a := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι κ M R : Type*} {s s₁ s₂ : Finset ι} {i : ι}
+
+variable [NonUnitalNonAssocSemiring R]
+
+theorem sum_mul (s : Finset ι) (f : ι → R) (a : R) :
+    (∑ i ∈ s, f i) * a = ∑ i ∈ s, f i * a := by
+  simpa using Finset.mul_sum.symm (s := s) (f := f) (a := a)
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:9:15-9:34
+Unknown constant `Finset.mul_sum.symm`
+Source line 9:
+  simpa using Finset.mul_sum.symm (s := s) (f := f) (a := a)
+              ^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.mul_sum.symm
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:9:15-9:34
+Unknown constant `Finset.mul_sum.symm`
+Source line 9:
+  simpa using Finset.mul_sum.symm (s := s) (f := f) (a := a)
+              ^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.mul_sum.symm
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι κ M R : Type*} {s s₁ s₂ : Finset ι} {i : ι}
+
+variable [NonUnitalNonAssocSemiring R]
+
+theorem sum_mul (s : Finset ι) (f : ι → R) (a : R) :
+    (∑ i ∈ s, f i) * a = ∑ i ∈ s, f i * a := by
+  classical
+  induction s using Finset.induction_on with
+  | empty =>
+      simp
+  | @insert x s hx ih =>
+      simp [hx, add_mul, ih]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

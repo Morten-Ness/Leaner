@@ -1,0 +1,51 @@
+FILE: Basic.smul_inter_nonempty_iff'.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.smul_inter_nonempty_iff'.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Pointwise
+
+variable {F α β γ : Type*}
+
+variable [Group α] [MulAction α β] {s t A B : Set β} {a b : α} {x : β}
+
+theorem smul_inter_nonempty_iff' {s t : Set α} {x : α} :
+    (x • s ∩ t).Nonempty ↔ ∃ a b, (a ∈ t ∧ b ∈ s) ∧ a / b = x := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise
+
+variable {F α β γ : Type*}
+
+variable [Group α] [MulAction α β] {s t A B : Set β} {a b : α} {x : β}
+
+theorem smul_inter_nonempty_iff' {s t : Set α} {x : α} :
+    (x • s ∩ t).Nonempty ↔ ∃ a b, (a ∈ t ∧ b ∈ s) ∧ a / b = x := by
+  constructor
+  · rintro ⟨y, ⟨hyxs, hyt⟩⟩
+    rcases hyxs with ⟨b, hbs, rfl⟩
+    refine ⟨x * b, b, ?_, ?_⟩
+    · exact ⟨hyt, hbs⟩
+    · simp [div_eq_mul_inv, mul_assoc]
+  · rintro ⟨a, b, ⟨hat, hbs⟩, habx⟩
+    refine ⟨a, ?_⟩
+    refine ⟨?_, hat⟩
+    refine ⟨b, hbs, ?_⟩
+    rw [← habx]
+    simp [div_eq_mul_inv, mul_assoc]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+PASS

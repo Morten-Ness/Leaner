@@ -1,0 +1,290 @@
+FILE: Centroid.faceOppositeCentroid_eq_smul_vsub_vadd_point.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Centroid.faceOppositeCentroid_eq_smul_vsub_vadd_point.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [DivisionRing k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {n : ℕ}
+
+variable [NeZero n]
+
+theorem faceOppositeCentroid_eq_smul_vsub_vadd_point [CharZero k] (s : Affine.Simplex k P n)
+    (i : Fin (n + 1)) :
+    s.faceOppositeCentroid i = (n : k)⁻¹ • (s.centroid -ᵥ s.points i) +ᵥ s.centroid := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [DivisionRing k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {n : ℕ}
+
+variable [NeZero n]
+
+theorem faceOppositeCentroid_eq_smul_vsub_vadd_point [CharZero k] (s : Affine.Simplex k P n)
+    (i : Fin (n + 1)) :
+    s.faceOppositeCentroid i = (n : k)⁻¹ • (s.centroid -ᵥ s.points i) +ᵥ s.centroid := by
+  simpa [Affine.Simplex.faceOppositeCentroid, smul_vsub_assoc, inv_smul_eq_iff₀, Nat.cast_ne_zero]
+    using (s.centroid_eq_affineCombination_of_eq_one
+      (fun j => if j = i then (0 : k) else (n : k)⁻¹)
+      (by
+        rw [Finset.sum_ite_eq, Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
+        field_simp [Nat.cast_ne_zero]))
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:47-13:62
+Unknown identifier `smul_vsub_assoc`
+Source line 13:
+  simpa [Affine.Simplex.faceOppositeCentroid, smul_vsub_assoc, inv_smul_eq_iff₀, Nat.cast_ne_zero]
+                                              ^^^^^^^^^^^^^^^
+Highlighted span: smul_vsub_assoc
+
+ERROR .LspCheck.lean:14:14-14:53
+Invalid field `centroid_eq_affineCombination_of_eq_one`: The environment does not contain `Affine.Simplex.centroid_eq_affineCombination_of_eq_one`, so it is not possible to project the field `centroid_eq_affineCombination_of_eq_one` from an expression
+  s
+of type `Affine.Simplex k P n`
+Source line 14:
+    using (s.centroid_eq_affineCombination_of_eq_one
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: centroid_eq_affineCombination_of_eq_one
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:47-13:62
+Unknown identifier `smul_vsub_assoc`
+Source line 13:
+  simpa [Affine.Simplex.faceOppositeCentroid, smul_vsub_assoc, inv_smul_eq_iff₀, Nat.cast_ne_zero]
+                                              ^^^^^^^^^^^^^^^
+Highlighted span: smul_vsub_assoc
+
+ERROR .LspCheck.lean:14:14-14:53
+Invalid field `centroid_eq_affineCombination_of_eq_one`: The environment does not contain `Affine.Simplex.centroid_eq_affineCombination_of_eq_one`, so it is not possible to project the field `centroid_eq_affineCombination_of_eq_one` from an expression
+  s
+of type `Affine.Simplex k P n`
+Source line 14:
+    using (s.centroid_eq_affineCombination_of_eq_one
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: centroid_eq_affineCombination_of_eq_one
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [DivisionRing k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {n : ℕ}
+
+variable [NeZero n]
+
+theorem faceOppositeCentroid_eq_smul_vsub_vadd_point [CharZero k] (s : Affine.Simplex k P n)
+    (i : Fin (n + 1)) :
+    s.faceOppositeCentroid i = (n : k)⁻¹ • (s.centroid -ᵥ s.points i) +ᵥ s.centroid := by
+  simpa using s.faceOppositeCentroid_eq_smul_vsub_vadd_centroid i
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:17-13:64
+Invalid field `faceOppositeCentroid_eq_smul_vsub_vadd_centroid`: The environment does not contain `Affine.Simplex.faceOppositeCentroid_eq_smul_vsub_vadd_centroid`, so it is not possible to project the field `faceOppositeCentroid_eq_smul_vsub_vadd_centroid` from an expression
+  s
+of type `Affine.Simplex k P n`
+Source line 13:
+  simpa using s.faceOppositeCentroid_eq_smul_vsub_vadd_centroid i
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: faceOppositeCentroid_eq_smul_vsub_vadd_centroid
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:17-13:64
+Invalid field `faceOppositeCentroid_eq_smul_vsub_vadd_centroid`: The environment does not contain `Affine.Simplex.faceOppositeCentroid_eq_smul_vsub_vadd_centroid`, so it is not possible to project the field `faceOppositeCentroid_eq_smul_vsub_vadd_centroid` from an expression
+  s
+of type `Affine.Simplex k P n`
+Source line 13:
+  simpa using s.faceOppositeCentroid_eq_smul_vsub_vadd_centroid i
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: faceOppositeCentroid_eq_smul_vsub_vadd_centroid
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [DivisionRing k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {n : ℕ}
+
+variable [NeZero n]
+
+theorem faceOppositeCentroid_eq_smul_vsub_vadd_point [CharZero k] (s : Affine.Simplex k P n)
+    (i : Fin (n + 1)) :
+    s.faceOppositeCentroid i = (n : k)⁻¹ • (s.centroid -ᵥ s.points i) +ᵥ s.centroid := by
+  rw [Affine.Simplex.faceOppositeCentroid]
+  let w : Fin (n + 1) → k := fun j => if j = i then 0 else (n : k)⁻¹
+  have hw_sum : ∑ j, w j = (1 : k) := by
+    classical
+    rw [show (∑ j : Fin (n + 1), w j) = ∑ j in ({i}ᶜ : Finset (Fin (n + 1))), (n : k)⁻¹ by
+      symm
+      refine Finset.sum_subset ?_ ?_
+      · intro j hj
+        simp only [Finset.mem_compl, Finset.mem_singleton] at hj
+        simp [w, hj]
+      · intro j hj1 hj2
+        simp only [Finset.mem_univ, Finset.mem_compl, Finset.mem_singleton, true_and] at hj2
+        simp [w, hj2]]
+    have hcard : ({i}ᶜ : Finset (Fin (n + 1))).card = n := by
+      simpa using Finset.card_compl_singleton i
+    rw [Finset.sum_const, hcard, nsmul_eq_mul, Nat.cast_ofNat]
+    field_simp [Nat.cast_ne_zero]
+  have hcent :
+      s.centroid =
+        AffineMap.lineMap (s.points i) (s.faceOppositeCentroid i) ((n : k) / (n + 1 : ℕ) : k) := by
+    rw [Affine.Simplex.centroid_eq_affineCombination]
+    congr with j
+    by_cases hji : j = i
+    · subst hji
+      simp [w]
+    · simp [w, hji]
+    · simpa [w] using hw_sum
+  have hn0 : (n : k) ≠ 0 := Nat.cast_ne_zero n
+  have hnp10 : ((n + 1 : ℕ) : k) ≠ 0 := Nat.cast_ne_zero (n + 1)
+  have hfrac : ((n : k) / (n + 1 : ℕ) : k) ≠ 1 := by
+    intro h
+    have : ((n : k) : k) = (n + 1 : ℕ) := by
+      exact (div_eq_iff hnp10).mp h
+    norm_num at this
+  have hline :=
+    AffineMap.lineMap_apply_module (s.points i) (s.faceOppositeCentroid i) ((n : k) / (n + 1 : ℕ) : k)
+  rw [hline] at hcent
+  have hvsub :
+      s.centroid -ᵥ s.points i =
+        (((n : k) / (n + 1 : ℕ) : k)) • (s.faceOppositeCentroid i -ᵥ s.points i) := by
+    simpa [vsub_vadd, sub_eq_add_neg, add_comm, add_left_comm, add_assoc] using hcent
+  have hinv : (((n : k) / (n + 1 : ℕ) : k))⁻¹ = ((n + 1 : ℕ) : k) / (n : k) := by
+    field_simp [hn0, hnp10]
+  have hvsub' :
+      s.faceOppositeCentroid i -ᵥ s.points i =
+        (((n + 1 : ℕ) : k) / (n : k)) • (s.centroid -ᵥ s.points i) := by
+    rw [hvsub]
+    field_simp [hn0, hnp10]
+  have hdecomp :
+      s.faceOppositeCentroid i -ᵥ s.points i =
+        (s.centroid -ᵥ s.points i) + (s.faceOppositeCentroid i -ᵥ s.centroid) := by
+    simpa using vsub_assoc (s.faceOppositeCentroid i) s.centroid (s.points i)
+  have hfinal :
+      s.faceOppositeCentroid i -ᵥ s.centroid =
+        (n : k)⁻¹ • (s.centroid -ᵥ s.points i) := by
+    rw [← add_right_inj (-(s.centroid -ᵥ s.points i))]
+    rw [add_assoc, add_left_neg, zero_add]
+    rw [hvsub', hdecomp]
+    have hcalc : (((n + 1 : ℕ) : k) / (n : k)) = (1 : k) + (n : k)⁻¹ := by
+      field_simp [hn0]
+      ring
+    rw [hcalc]
+    simp [add_smul]
+  exact eq_of_vsub_eq_vsub_right <| by simpa using hfinal.symm
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:17:44-17:47
+unexpected token 'in'; expected ','
+Source line 17:
+    rw [show (∑ j : Fin (n + 1), w j) = ∑ j in ({i}ᶜ : Finset (Fin (n + 1))), (n : k)⁻¹ by
+                                           ^^^
+Highlighted span:  in
+
+ERROR .LspCheck.lean:17:9-17:44
+unexpected syntax
+  failed to pretty print term (use 'set_option pp.rawOnError true' for raw representation)
+Source line 17:
+    rw [show (∑ j : Fin (n + 1), w j) = ∑ j in ({i}ᶜ : Finset (Fin (n + 1))), (n : k)⁻¹ by
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: show (∑ j : Fin (n + 1), w j) = ∑ j
+
+ERROR .LspCheck.lean:12:88-13:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝⁵ : DivisionRing k
+inst✝⁴ : AddCommGroup V
+inst✝³ : Module k V
+inst✝² : AddTorsor V P
+n : ℕ
+inst✝¹ : NeZero n
+inst✝ : CharZero k
+s : Affine.Simplex k P n
+i : Fin (n + 1)
+w : Fin (n + 1) → k := fun j ↦ if j = i then 0 else (↑n)⁻¹
+hw_sum : ∑ j, w j = 1
+⊢ (s.faceOpposite i).centroid = (↑n)⁻¹ • (s.centroid -ᵥ s.points i) +ᵥ s.centroid
+Source line 12:
+    s.faceOppositeCentroid i = (n : k)⁻¹ • (s.centroid -ᵥ s.points i) +ᵥ s.centroid := by
+                                                                                       ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:17:44-17:47
+unexpected token 'in'; expected ','
+Source line 17:
+    rw [show (∑ j : Fin (n + 1), w j) = ∑ j in ({i}ᶜ : Finset (Fin (n + 1))), (n : k)⁻¹ by
+                                           ^^^
+Highlighted span:  in
+
+ERROR .LspCheck.lean:17:9-17:44
+unexpected syntax
+  failed to pretty print term (use 'set_option pp.rawOnError true' for raw representation)
+Source line 17:
+    rw [show (∑ j : Fin (n + 1), w j) = ∑ j in ({i}ᶜ : Finset (Fin (n + 1))), (n : k)⁻¹ by
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: show (∑ j : Fin (n + 1), w j) = ∑ j
+
+ERROR .LspCheck.lean:12:88-13:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝⁵ : DivisionRing k
+inst✝⁴ : AddCommGroup V
+inst✝³ : Module k V
+inst✝² : AddTorsor V P
+n : ℕ
+inst✝¹ : NeZero n
+inst✝ : CharZero k
+s : Affine.Simplex k P n
+i : Fin (n + 1)
+w : Fin (n + 1) → k := fun j ↦ if j = i then 0 else (↑n)⁻¹
+hw_sum : ∑ j, w j = 1
+⊢ (s.faceOpposite i).centroid = (↑n)⁻¹ • (s.centroid -ᵥ s.points i) +ᵥ s.centroid
+Source line 12:
+    s.faceOppositeCentroid i = (n : k)⁻¹ • (s.centroid -ᵥ s.points i) +ᵥ s.centroid := by
+                                                                                       ^
+Highlighted span: b

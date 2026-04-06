@@ -1,0 +1,165 @@
+FILE: Basic.mulHom_preimage.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.mulHom_preimage.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {G H : Type*} [Mul G] [Mul H] {A B : Finset G} {a0 b0 : G}
+
+theorem mulHom_preimage (f : G →ₙ* H) (hf : Function.Injective f) (a0 b0 : G) {A B : Finset H}
+    (u : UniqueMul A B (f a0) (f b0)) :
+    UniqueMul (A.preimage f hf.injOn) (B.preimage f hf.injOn) a0 b0 := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G H : Type*} [Mul G] [Mul H] {A B : Finset G} {a0 b0 : G}
+
+theorem mulHom_preimage (f : G →ₙ* H) (hf : Function.Injective f) (a0 b0 : G) {A B : Finset H}
+    (u : UniqueMul A B (f a0) (f b0)) :
+    UniqueMul (A.preimage f hf.injOn) (B.preimage f hf.injOn) a0 b0 := by
+  rcases u with ⟨ha0, hb0, hu⟩
+  refine ⟨?_, ?_, ?_⟩
+  · simpa [Finset.mem_preimage] using ha0
+  · simpa [Finset.mem_preimage] using hb0
+  · intro a b ha hb hab
+    apply hf
+    apply hu
+    · simpa [Finset.mem_preimage] using ha
+    · simpa [Finset.mem_preimage] using hb
+    · simpa using congrArg f hab
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:8:17-8:31
+Tactic `rcases` failed: `u : ∀ ⦃a b : H⦄,
+  a ∈ A → b ∈ B → a * b = f a0 * f b0 → a = f a0 ∧ b = f b0` is not an inductive datatype
+Source line 8:
+  rcases u with ⟨ha0, hb0, hu⟩
+                ^^^^^^^^^^^^^^
+Highlighted span: ⟨ha0, hb0, hu⟩
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:8:17-8:31
+Tactic `rcases` failed: `u : ∀ ⦃a b : H⦄,
+  a ∈ A → b ∈ B → a * b = f a0 * f b0 → a = f a0 ∧ b = f b0` is not an inductive datatype
+Source line 8:
+  rcases u with ⟨ha0, hb0, hu⟩
+                ^^^^^^^^^^^^^^
+Highlighted span: ⟨ha0, hb0, hu⟩
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G H : Type*} [Mul G] [Mul H] {A B : Finset G} {a0 b0 : G}
+
+theorem mulHom_preimage (f : G →ₙ* H) (hf : Function.Injective f) (a0 b0 : G) {A B : Finset H}
+    (u : UniqueMul A B (f a0) (f b0)) :
+    UniqueMul (A.preimage f hf.injOn) (B.preimage f hf.injOn) a0 b0 := by
+  intro a b ha hb hab
+  apply hf
+  apply (u (show f a ∈ A by simpa [Finset.mem_preimage] using ha)
+      (show f b ∈ B by simpa [Finset.mem_preimage] using hb))
+  simpa [map_mul] using congrArg f hab
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:9:3-9:11
+Tactic `apply` failed: could not unify the conclusion of `hf`
+  ?a₁ = ?a₂
+with the goal
+  a = a0 ∧ b = b0
+
+Note: The full type of `hf` is
+  Function.Injective ⇑f
+
+G : Type u_1
+H : Type u_2
+inst✝¹ : Mul G
+inst✝ : Mul H
+f : G →ₙ* H
+hf : Function.Injective ⇑f
+a0 b0 : G
+A B : Finset H
+u : UniqueMul A B (f a0) (f b0)
+a b : G
+ha : a ∈ A.preimage ⇑f ⋯
+hb : b ∈ B.preimage ⇑f ⋯
+hab : a * b = a0 * b0
+⊢ a = a0 ∧ b = b0
+Source line 9:
+  apply hf
+  ^^^^^^^^
+Highlighted span: apply hf
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:9:3-9:11
+Tactic `apply` failed: could not unify the conclusion of `hf`
+  ?a₁ = ?a₂
+with the goal
+  a = a0 ∧ b = b0
+
+Note: The full type of `hf` is
+  Function.Injective ⇑f
+
+G : Type u_1
+H : Type u_2
+inst✝¹ : Mul G
+inst✝ : Mul H
+f : G →ₙ* H
+hf : Function.Injective ⇑f
+a0 b0 : G
+A B : Finset H
+u : UniqueMul A B (f a0) (f b0)
+a b : G
+ha : a ∈ A.preimage ⇑f ⋯
+hb : b ∈ B.preimage ⇑f ⋯
+hab : a * b = a0 * b0
+⊢ a = a0 ∧ b = b0
+Source line 9:
+  apply hf
+  ^^^^^^^^
+Highlighted span: apply hf
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G H : Type*} [Mul G] [Mul H] {A B : Finset G} {a0 b0 : G}
+
+theorem mulHom_preimage (f : G →ₙ* H) (hf : Function.Injective f) (a0 b0 : G) {A B : Finset H}
+    (u : UniqueMul A B (f a0) (f b0)) :
+    UniqueMul (A.preimage f hf.injOn) (B.preimage f hf.injOn) a0 b0 := by
+  intro a b ha hb hab
+  have ha' : f a ∈ A := by
+    simpa [Finset.mem_preimage] using ha
+  have hb' : f b ∈ B := by
+    simpa [Finset.mem_preimage] using hb
+  have hmul : f a * f b = f a0 * f b0 := by
+    simpa [map_mul] using congrArg f hab
+  rcases u ha' hb' hmul with ⟨hfa, hfb⟩
+  exact ⟨hf hfa, hf hfb⟩
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

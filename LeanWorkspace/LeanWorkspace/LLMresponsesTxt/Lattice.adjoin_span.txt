@@ -1,0 +1,752 @@
+FILE: Lattice.adjoin_span.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Lattice.adjoin_span.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+
+variable [CommSemiring R] [CommSemiring S] [Semiring A] [Semiring B]
+
+variable [Algebra R S] [Algebra R A] [Algebra S A] [Algebra R B] [IsScalarTower R S A]
+
+variable {s t : Set A}
+
+theorem adjoin_span {s : Set A} : Algebra.adjoin R (Submodule.span R s : Set A) = Algebra.adjoin R s := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+
+variable [CommSemiring R] [CommSemiring S] [Semiring A] [Semiring B]
+
+variable [Algebra R S] [Algebra R A] [Algebra S A] [Algebra R B] [IsScalarTower R S A]
+
+variable {s t : Set A}
+
+theorem adjoin_span {s : Set A} : Algebra.adjoin R (Submodule.span R s : Set A) = Algebra.adjoin R s := by
+  rw [Algebra.adjoin_eq_span]
+  congr
+  ext x
+  constructor
+  · intro hx
+    refine Submodule.span_induction hx ?hbase ?hzero ?hadd ?hsmul
+    · intro y hy
+      exact Subset.trans (Algebra.subset_adjoin hy) (Submodule.subset_span : s ⊆ Submodule.span R (Algebra.adjoin R s : Set A))
+    · exact Submodule.zero_mem _
+    · intro x y hx hy
+      exact Submodule.add_mem _ hx hy
+    · intro a x hx
+      exact Submodule.smul_mem _ a hx
+  · intro hx
+    exact Submodule.span_mono (Algebra.subset_adjoin) hx
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:3:20-3:22
+unknown universe level `uR`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                   ^^
+Highlighted span: uR
+
+ERROR .LspCheck.lean:3:34-3:36
+unknown universe level `uS`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                                 ^^
+Highlighted span: uS
+
+ERROR .LspCheck.lean:3:48-3:50
+unknown universe level `uA`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                                               ^^
+Highlighted span: uA
+
+ERROR .LspCheck.lean:3:62-3:64
+unknown universe level `uB`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                                                             ^^
+Highlighted span: uB
+
+WARNING .LspCheck.lean:11:9-11:20
+declaration uses `sorry`
+Source line 11:
+theorem adjoin_span {s : Set A} : Algebra.adjoin R (Submodule.span R s : Set A) = Algebra.adjoin R s := by
+        ^^^^^^^^^^^
+Highlighted span: adjoin_span
+
+WARNING .LspCheck.lean:13:3-13:8
+this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Source line 13:
+  congr
+  ^^^^^
+Highlighted span: congr
+
+WARNING .LspCheck.lean:14:3-14:8
+this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Source line 14:
+  ext x
+  ^^^^^
+Highlighted span: ext x
+
+WARNING .LspCheck.lean:15:3-15:14
+this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Source line 15:
+  constructor
+  ^^^^^^^^^^^
+Highlighted span: constructor
+
+WARNING .LspCheck.lean:16:3-17:1
+this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Source line 16:
+  · intro hx
+  ^
+Highlighted span: ·
+
+WARNING .LspCheck.lean:25:3-26:1
+this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Source line 25:
+  · intro hx
+  ^
+Highlighted span: ·
+
+WARNING .LspCheck.lean:12:3-12:30
+'rw [Algebra.adjoin_eq_span]' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Source line 12:
+  rw [Algebra.adjoin_eq_span]
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: rw [Algebra.adjoin_eq_span]
+
+WARNING .LspCheck.lean:13:3-13:8
+'congr' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Source line 13:
+  congr
+  ^^^^^
+Highlighted span: congr
+
+WARNING .LspCheck.lean:14:3-14:8
+'ext x' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Source line 14:
+  ext x
+  ^^^^^
+Highlighted span: ext x
+
+WARNING .LspCheck.lean:15:3-15:14
+'constructor' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Source line 15:
+  constructor
+  ^^^^^^^^^^^
+Highlighted span: constructor
+
+WARNING .LspCheck.lean:16:3-17:1
+'·
+  intro hx
+  refine Submodule.span_induction hx ?hbase ?hzero ?hadd ?hsmul
+  · intro y hy
+    exact
+      Subset.trans (Algebra.subset_adjoin hy)
+        (Submodule.subset_span : s ⊆ Submodule.span R (Algebra.adjoin R s : Set A))
+  · exact Submodule.zero_mem _
+  · intro x y hx hy
+    exact Submodule.add_mem _ hx hy
+  · intro a x hx
+    exact Submodule.smul_mem _ a hx' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Source line 16:
+  · intro hx
+  ^
+Highlighted span: ·
+
+WARNING .LspCheck.lean:25:3-26:1
+'·
+  intro hx
+  exact Submodule.span_mono (Algebra.subset_adjoin) hx' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Source line 25:
+  · intro hx
+  ^
+Highlighted span: ·
+
+WARNING .LspCheck.lean:11:101-11:107
+This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+Source line 11:
+theorem adjoin_span {s : Set A} : Algebra.adjoin R (Submodule.span R s : Set A) = Algebra.adjoin R s := by
+                                                                                                    ^^^^^^
+Highlighted span:  := by
+
+WARNING .LspCheck.lean:19:101-19:128
+This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+Source line 19:
+      exact Subset.trans (Algebra.subset_adjoin hy) (Submodule.subset_span : s ⊆ Submodule.span R (Algebra.adjoin R s : Set A))
+                                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: lgebra.adjoin R s : Set A))
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:3:20-3:22
+unknown universe level `uR`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                   ^^
+Highlighted span: uR
+
+ERROR .LspCheck.lean:3:34-3:36
+unknown universe level `uS`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                                 ^^
+Highlighted span: uS
+
+ERROR .LspCheck.lean:3:48-3:50
+unknown universe level `uA`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                                               ^^
+Highlighted span: uA
+
+ERROR .LspCheck.lean:3:62-3:64
+unknown universe level `uB`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                                                             ^^
+Highlighted span: uB
+
+WARNING .LspCheck.lean:11:9-11:20
+declaration uses `sorry`
+Source line 11:
+theorem adjoin_span {s : Set A} : Algebra.adjoin R (Submodule.span R s : Set A) = Algebra.adjoin R s := by
+        ^^^^^^^^^^^
+Highlighted span: adjoin_span
+
+WARNING .LspCheck.lean:13:3-13:8
+this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Source line 13:
+  congr
+  ^^^^^
+Highlighted span: congr
+
+WARNING .LspCheck.lean:14:3-14:8
+this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Source line 14:
+  ext x
+  ^^^^^
+Highlighted span: ext x
+
+WARNING .LspCheck.lean:15:3-15:14
+this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Source line 15:
+  constructor
+  ^^^^^^^^^^^
+Highlighted span: constructor
+
+WARNING .LspCheck.lean:16:3-17:1
+this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Source line 16:
+  · intro hx
+  ^
+Highlighted span: ·
+
+WARNING .LspCheck.lean:25:3-26:1
+this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Source line 25:
+  · intro hx
+  ^
+Highlighted span: ·
+
+WARNING .LspCheck.lean:12:3-12:30
+'rw [Algebra.adjoin_eq_span]' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Source line 12:
+  rw [Algebra.adjoin_eq_span]
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: rw [Algebra.adjoin_eq_span]
+
+WARNING .LspCheck.lean:13:3-13:8
+'congr' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Source line 13:
+  congr
+  ^^^^^
+Highlighted span: congr
+
+WARNING .LspCheck.lean:14:3-14:8
+'ext x' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Source line 14:
+  ext x
+  ^^^^^
+Highlighted span: ext x
+
+WARNING .LspCheck.lean:15:3-15:14
+'constructor' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Source line 15:
+  constructor
+  ^^^^^^^^^^^
+Highlighted span: constructor
+
+WARNING .LspCheck.lean:16:3-17:1
+'·
+  intro hx
+  refine Submodule.span_induction hx ?hbase ?hzero ?hadd ?hsmul
+  · intro y hy
+    exact
+      Subset.trans (Algebra.subset_adjoin hy)
+        (Submodule.subset_span : s ⊆ Submodule.span R (Algebra.adjoin R s : Set A))
+  · exact Submodule.zero_mem _
+  · intro x y hx hy
+    exact Submodule.add_mem _ hx hy
+  · intro a x hx
+    exact Submodule.smul_mem _ a hx' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Source line 16:
+  · intro hx
+  ^
+Highlighted span: ·
+
+WARNING .LspCheck.lean:25:3-26:1
+'·
+  intro hx
+  exact Submodule.span_mono (Algebra.subset_adjoin) hx' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Source line 25:
+  · intro hx
+  ^
+Highlighted span: ·
+
+WARNING .LspCheck.lean:11:101-11:107
+This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+Source line 11:
+theorem adjoin_span {s : Set A} : Algebra.adjoin R (Submodule.span R s : Set A) = Algebra.adjoin R s := by
+                                                                                                    ^^^^^^
+Highlighted span:  := by
+
+WARNING .LspCheck.lean:19:101-19:128
+This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+Source line 19:
+      exact Subset.trans (Algebra.subset_adjoin hy) (Submodule.subset_span : s ⊆ Submodule.span R (Algebra.adjoin R s : Set A))
+                                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: lgebra.adjoin R s : Set A))
+
+===== ASSISTANT =====
+import Mathlib
+
+universe uR uS uA uB
+
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+
+variable [CommSemiring R] [CommSemiring S] [Semiring A] [Semiring B]
+
+variable [Algebra R S] [Algebra R A] [Algebra S A] [Algebra R B]
+variable [IsScalarTower R S A]
+
+variable {s t : Set A}
+
+theorem adjoin_span {s : Set A} :
+    Algebra.adjoin R (Submodule.span R s : Set A) = Algebra.adjoin R s := by
+  exact le_antisymm
+    (Algebra.adjoin_le fun x hx =>
+      Submodule.span_induction hx
+        (fun y hy => Algebra.subset_adjoin <| Submodule.subset_span hy)
+        (show (0 : A) ∈ Algebra.adjoin R s by
+          exact Subsemiring.zero_mem _)
+        (fun x y hx hy => show x + y ∈ Algebra.adjoin R s by
+          exact Subsemiring.add_mem _ hx hy)
+        (fun a x hx => show a • x ∈ Algebra.adjoin R s by
+          simpa [Algebra.smul_def] using
+            Subsemiring.mul_mem (Algebra.adjoin R s) (algebraMap R A a) x
+              (show algebraMap R A a ∈ Algebra.adjoin R s by
+                exact Algebra.algebraMap_mem _ _)
+              hx))
+    (Algebra.adjoin_le fun x hx =>
+      Algebra.subset_adjoin <| Submodule.subset_span hx)
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:24:9-25:1
+Application type mismatch: The argument
+  fun a x hx ↦
+    have this := ?m.67;
+    this
+has type
+  ∀ (a : Set ?m.40) (x : a ∈ Set.range fun s ↦ ⋂ (_ : s ∈ {p | ?m.44 ⊆ ↑p}), ↑s) (hx : ?m.68 a x),
+    a • ?m.65 ∈ Algebra.adjoin R s
+but is expected to have type
+  ?m.50 ∈ Submodule.span ?m.39 ?m.44
+in the application
+  Submodule.span_induction ?m.46 ?m.47 ?m.48 ?m.49 fun a x hx ↦
+    have this := ?m.67;
+    this
+Source line 24:
+        (fun a x hx => show a • x ∈ Algebra.adjoin R s by
+        ^
+Highlighted span: (
+
+ERROR .LspCheck.lean:18:32-18:34
+Type mismatch
+  hx
+has type
+  x ∈ ↑(Submodule.span R s)
+but is expected to have type
+  ∀ x_1 ∈ ?m.79 x hx, x ∈ ↑(Algebra.adjoin R s)
+Source line 18:
+      Submodule.span_induction hx
+                               ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:19:47-19:71
+failed to synthesize instance of type class
+  AddCommMonoid (Set A)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 19:
+        (fun y hy => Algebra.subset_adjoin <| Submodule.subset_span hy)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submodule.subset_span hy
+
+ERROR .LspCheck.lean:19:22-19:71
+failed to synthesize instance of type class
+  Semiring (Set A)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 19:
+        (fun y hy => Algebra.subset_adjoin <| Submodule.subset_span hy)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Algebra.subset_adjoin <| Submodule.subset_span hy
+
+ERROR .LspCheck.lean:20:10-21:1
+Type mismatch
+  this
+has type
+  0 ∈ Algebra.adjoin R s
+but is expected to have type
+  ∀ (x_1 y : ?m.75 x hx),
+    x_1 ∈ Submodule.span (?m.74 x hx) (?m.79 x hx) →
+      y ∈ Submodule.span (?m.74 x hx) (?m.79 x hx) →
+        x ∈ ↑(Algebra.adjoin R s) → x ∈ ↑(Algebra.adjoin R s) → x ∈ ↑(Algebra.adjoin R s)
+Source line 20:
+        (show (0 : A) ∈ Algebra.adjoin R s by
+         ^
+Highlighted span: s
+
+ERROR .LspCheck.lean:22:27-23:1
+Type mismatch
+  this
+has type
+  x + y ∈ Algebra.adjoin R s
+but is expected to have type
+  x✝ ∈ ↑(Algebra.adjoin R s)
+Source line 22:
+        (fun x y hx hy => show x + y ∈ Algebra.adjoin R s by
+                          ^
+Highlighted span: s
+
+ERROR .LspCheck.lean:26:70-26:71
+Application type mismatch: The argument
+  a
+has type
+  Set A
+of sort `Type uA` but is expected to have type
+  R
+of sort `Type uR` in the application
+  (algebraMap R A) a
+Source line 26:
+            Subsemiring.mul_mem (Algebra.adjoin R s) (algebraMap R A a) x
+                                                                     ^
+Highlighted span: a
+
+ERROR .LspCheck.lean:23:39-23:41
+Application type mismatch: The argument
+  hx
+has type
+  y ∈ Submodule.span A (?m.79 x✝ hx✝)
+but is expected to have type
+  x ∈ (Algebra.adjoin R s).toSubsemiring
+in the application
+  Subsemiring.add_mem (Algebra.adjoin R s).toSubsemiring hx
+Source line 23:
+          exact Subsemiring.add_mem _ hx hy)
+                                      ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:24:29-24:34
+Application type mismatch: The argument
+  x
+has type
+  a ∈ Set.range fun s ↦ ⋂ (_ : s ∈ {p | ?m.79 x✝ hx✝ ⊆ ↑p}), ↑s
+of sort `Prop` but is expected to have type
+  ?m.69 a x hx
+of sort `Type ?u.2532.1811` in the application
+  a • x
+Source line 24:
+        (fun a x hx => show a • x ∈ Algebra.adjoin R s by
+                            ^^^^^
+Highlighted span: a • x
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:24:9-25:1
+Application type mismatch: The argument
+  fun a x hx ↦
+    have this := ?m.67;
+    this
+has type
+  ∀ (a : Set ?m.40) (x : a ∈ Set.range fun s ↦ ⋂ (_ : s ∈ {p | ?m.44 ⊆ ↑p}), ↑s) (hx : ?m.68 a x),
+    a • ?m.65 ∈ Algebra.adjoin R s
+but is expected to have type
+  ?m.50 ∈ Submodule.span ?m.39 ?m.44
+in the application
+  Submodule.span_induction ?m.46 ?m.47 ?m.48 ?m.49 fun a x hx ↦
+    have this := ?m.67;
+    this
+Source line 24:
+        (fun a x hx => show a • x ∈ Algebra.adjoin R s by
+        ^
+Highlighted span: (
+
+ERROR .LspCheck.lean:18:32-18:34
+Type mismatch
+  hx
+has type
+  x ∈ ↑(Submodule.span R s)
+but is expected to have type
+  ∀ x_1 ∈ ?m.79 x hx, x ∈ ↑(Algebra.adjoin R s)
+Source line 18:
+      Submodule.span_induction hx
+                               ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:19:47-19:71
+failed to synthesize instance of type class
+  AddCommMonoid (Set A)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 19:
+        (fun y hy => Algebra.subset_adjoin <| Submodule.subset_span hy)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submodule.subset_span hy
+
+ERROR .LspCheck.lean:19:22-19:71
+failed to synthesize instance of type class
+  Semiring (Set A)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 19:
+        (fun y hy => Algebra.subset_adjoin <| Submodule.subset_span hy)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Algebra.subset_adjoin <| Submodule.subset_span hy
+
+ERROR .LspCheck.lean:20:10-21:1
+Type mismatch
+  this
+has type
+  0 ∈ Algebra.adjoin R s
+but is expected to have type
+  ∀ (x_1 y : ?m.75 x hx),
+    x_1 ∈ Submodule.span (?m.74 x hx) (?m.79 x hx) →
+      y ∈ Submodule.span (?m.74 x hx) (?m.79 x hx) →
+        x ∈ ↑(Algebra.adjoin R s) → x ∈ ↑(Algebra.adjoin R s) → x ∈ ↑(Algebra.adjoin R s)
+Source line 20:
+        (show (0 : A) ∈ Algebra.adjoin R s by
+         ^
+Highlighted span: s
+
+ERROR .LspCheck.lean:22:27-23:1
+Type mismatch
+  this
+has type
+  x + y ∈ Algebra.adjoin R s
+but is expected to have type
+  x✝ ∈ ↑(Algebra.adjoin R s)
+Source line 22:
+        (fun x y hx hy => show x + y ∈ Algebra.adjoin R s by
+                          ^
+Highlighted span: s
+
+ERROR .LspCheck.lean:26:70-26:71
+Application type mismatch: The argument
+  a
+has type
+  Set A
+of sort `Type uA` but is expected to have type
+  R
+of sort `Type uR` in the application
+  (algebraMap R A) a
+Source line 26:
+            Subsemiring.mul_mem (Algebra.adjoin R s) (algebraMap R A a) x
+                                                                     ^
+Highlighted span: a
+
+ERROR .LspCheck.lean:23:39-23:41
+Application type mismatch: The argument
+  hx
+has type
+  y ∈ Submodule.span A (?m.79 x✝ hx✝)
+but is expected to have type
+  x ∈ (Algebra.adjoin R s).toSubsemiring
+in the application
+  Subsemiring.add_mem (Algebra.adjoin R s).toSubsemiring hx
+Source line 23:
+          exact Subsemiring.add_mem _ hx hy)
+                                      ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:24:29-24:34
+Application type mismatch: The argument
+  x
+has type
+  a ∈ Set.range fun s ↦ ⋂ (_ : s ∈ {p | ?m.79 x✝ hx✝ ⊆ ↑p}), ↑s
+of sort `Prop` but is expected to have type
+  ?m.69 a x hx
+of sort `Type ?u.2532.1811` in the application
+  a • x
+Source line 24:
+        (fun a x hx => show a • x ∈ Algebra.adjoin R s by
+                            ^^^^^
+Highlighted span: a • x
+
+===== ASSISTANT =====
+import Mathlib
+
+universe uR uS uA uB
+
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+
+variable [CommSemiring R] [CommSemiring S] [Semiring A] [Semiring B]
+
+variable [Algebra R S] [Algebra R A] [Algebra S A] [Algebra R B]
+variable [IsScalarTower R S A]
+
+variable {s t : Set A}
+
+theorem adjoin_span {s : Set A} :
+    Algebra.adjoin R (Submodule.span R s : Set A) = Algebra.adjoin R s := by
+  rw [Algebra.adjoin_eq_span, Algebra.adjoin_eq_span]
+  congr
+  ext x
+  constructor
+  · intro hx
+    exact Submodule.span_mono
+      (by
+        intro y hy
+        exact Submodule.subset_span (Algebra.subset_adjoin (Submodule.subset_span hy)))
+      hx
+  · intro hx
+    exact Submodule.span_mono
+      (by
+        intro y hy
+        exact Submodule.subset_span (Algebra.subset_adjoin hy))
+      hx
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:7-16:29
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Subalgebra.toSubmodule (Algebra.adjoin ?R ?s)
+in the target expression
+  Algebra.adjoin R ↑(Submodule.span R s) = Algebra.adjoin R s
+
+R : Type uR
+A : Type uA
+inst✝² : CommSemiring R
+inst✝¹ : Semiring A
+inst✝ : Algebra R A
+s : Set A
+⊢ Algebra.adjoin R ↑(Submodule.span R s) = Algebra.adjoin R s
+Source line 16:
+  rw [Algebra.adjoin_eq_span, Algebra.adjoin_eq_span]
+      ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Algebra.adjoin_eq_span
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:7-16:29
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Subalgebra.toSubmodule (Algebra.adjoin ?R ?s)
+in the target expression
+  Algebra.adjoin R ↑(Submodule.span R s) = Algebra.adjoin R s
+
+R : Type uR
+A : Type uA
+inst✝² : CommSemiring R
+inst✝¹ : Semiring A
+inst✝ : Algebra R A
+s : Set A
+⊢ Algebra.adjoin R ↑(Submodule.span R s) = Algebra.adjoin R s
+Source line 16:
+  rw [Algebra.adjoin_eq_span, Algebra.adjoin_eq_span]
+      ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Algebra.adjoin_eq_span

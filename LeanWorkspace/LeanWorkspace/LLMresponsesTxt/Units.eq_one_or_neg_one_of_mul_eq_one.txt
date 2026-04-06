@@ -1,0 +1,82 @@
+FILE: Units.eq_one_or_neg_one_of_mul_eq_one.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Units.eq_one_or_neg_one_of_mul_eq_one.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {u v : ℤ}
+
+theorem eq_one_or_neg_one_of_mul_eq_one (h : u * v = 1) : u = 1 ∨ u = -1 := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {u v : ℤ}
+
+theorem eq_one_or_neg_one_of_mul_eq_one (h : u * v = 1) : u = 1 ∨ u = -1 := by
+  have hu : IsUnit u := by
+    refine ⟨⟨u, v, ?_, ?_⟩, rfl⟩
+    · simpa [Int.units_mul_eq_mul]
+    · simpa [Int.units_mul_eq_mul, mul_comm] using h
+  simpa [Int.isUnit_iff] using hu
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:8:14-8:34
+Unknown constant `Int.units_mul_eq_mul`
+Source line 8:
+    · simpa [Int.units_mul_eq_mul]
+             ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Int.units_mul_eq_mul
+
+ERROR .LspCheck.lean:9:14-9:34
+Unknown constant `Int.units_mul_eq_mul`
+Source line 9:
+    · simpa [Int.units_mul_eq_mul, mul_comm] using h
+             ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Int.units_mul_eq_mul
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:8:14-8:34
+Unknown constant `Int.units_mul_eq_mul`
+Source line 8:
+    · simpa [Int.units_mul_eq_mul]
+             ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Int.units_mul_eq_mul
+
+ERROR .LspCheck.lean:9:14-9:34
+Unknown constant `Int.units_mul_eq_mul`
+Source line 9:
+    · simpa [Int.units_mul_eq_mul, mul_comm] using h
+             ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Int.units_mul_eq_mul
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {u v : ℤ}
+
+theorem eq_one_or_neg_one_of_mul_eq_one (h : u * v = 1) : u = 1 ∨ u = -1 := by
+  have hu : IsUnit u := by
+    refine ⟨⟨u, v, h, ?_⟩, rfl⟩
+    simpa [mul_comm] using h
+  simpa [Int.isUnit_iff] using hu
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

@@ -1,0 +1,212 @@
+FILE: Basic.image_inv_of_apply_inv_eq.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.image_inv_of_apply_inv_eq.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {F α β γ : Type*}
+
+variable [InvolutiveInv α] {s t : Set α} {a : α}
+
+theorem image_inv_of_apply_inv_eq {f g : α → β} (H : ∀ x ∈ s, f x⁻¹ = g x) :
+    f '' (s⁻¹) = g '' s := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F α β γ : Type*}
+
+variable [InvolutiveInv α] {s t : Set α} {a : α}
+
+theorem image_inv_of_apply_inv_eq {f g : α → β} (H : ∀ x ∈ s, f x⁻¹ = g x) :
+    f '' (s⁻¹) = g '' s := by
+  ext y
+  constructor
+  · rintro ⟨x, hx, rfl⟩
+    rcases hx with ⟨z, hz, rfl⟩
+    exact ⟨z, hz, H z hz⟩
+  · rintro ⟨x, hx, rfl⟩
+    refine ⟨x⁻¹, ?_, ?_⟩
+    · exact ⟨x, hx, inv_inv x⟩
+    · simpa using (H x hx).symm
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:20-12:32
+Tactic `rcases` failed: `hx : s x⁻¹` is not an inductive datatype
+Source line 12:
+    rcases hx with ⟨z, hz, rfl⟩
+                   ^^^^^^^^^^^^
+Highlighted span: ⟨z, hz, rfl⟩
+
+ERROR .LspCheck.lean:16:13-16:31
+Invalid `⟨...⟩` notation: The expected type `s x⁻¹⁻¹` is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+Source line 16:
+    · exact ⟨x, hx, inv_inv x⟩
+            ^^^^^^^^^^^^^^^^^^
+Highlighted span: ⟨x, hx, inv_inv x⟩
+
+ERROR .LspCheck.lean:17:7-17:32
+Type mismatch: After simplification, term
+  Eq.symm (H x hx)
+ has type
+  g x = f x⁻¹
+but is expected to have type
+  f x⁻¹ = g x
+Source line 17:
+    · simpa using (H x hx).symm
+      ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa using (H x hx).symm
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:20-12:32
+Tactic `rcases` failed: `hx : s x⁻¹` is not an inductive datatype
+Source line 12:
+    rcases hx with ⟨z, hz, rfl⟩
+                   ^^^^^^^^^^^^
+Highlighted span: ⟨z, hz, rfl⟩
+
+ERROR .LspCheck.lean:16:13-16:31
+Invalid `⟨...⟩` notation: The expected type `s x⁻¹⁻¹` is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+Source line 16:
+    · exact ⟨x, hx, inv_inv x⟩
+            ^^^^^^^^^^^^^^^^^^
+Highlighted span: ⟨x, hx, inv_inv x⟩
+
+ERROR .LspCheck.lean:17:7-17:32
+Type mismatch: After simplification, term
+  Eq.symm (H x hx)
+ has type
+  g x = f x⁻¹
+but is expected to have type
+  f x⁻¹ = g x
+Source line 17:
+    · simpa using (H x hx).symm
+      ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa using (H x hx).symm
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F α β γ : Type*}
+
+variable [InvolutiveInv α] {s t : Set α} {a : α}
+
+theorem image_inv_of_apply_inv_eq {f g : α → β} (H : ∀ x ∈ s, f x⁻¹ = g x) :
+    f '' (s⁻¹) = g '' s := by
+  ext y
+  constructor
+  · rintro ⟨x, hx, rfl⟩
+    refine ⟨x⁻¹, ?_, ?_⟩
+    · simpa [Set.mem_inv] using hx
+    · simpa using H (x⁻¹) (by simpa [Set.mem_inv] using hx)
+  · rintro ⟨x, hx, rfl⟩
+    refine ⟨x⁻¹, ?_, ?_⟩
+    · simpa [Set.mem_inv] using hx
+    · simpa using H x hx
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:7-14:60
+Type mismatch: After simplification, term
+  H x⁻¹ (Eq.mp Set.mem_inv._simp_2 hx)
+ has type
+  f x = g x⁻¹
+but is expected to have type
+  g x⁻¹ = f x
+Source line 14:
+    · simpa using H (x⁻¹) (by simpa [Set.mem_inv] using hx)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa using H (x⁻¹) (by simpa [Set.mem_inv] using hx)
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:7-14:60
+Type mismatch: After simplification, term
+  H x⁻¹ (Eq.mp Set.mem_inv._simp_2 hx)
+ has type
+  f x = g x⁻¹
+but is expected to have type
+  g x⁻¹ = f x
+Source line 14:
+    · simpa using H (x⁻¹) (by simpa [Set.mem_inv] using hx)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa using H (x⁻¹) (by simpa [Set.mem_inv] using hx)
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F α β γ : Type*}
+
+variable [InvolutiveInv α] {s t : Set α} {a : α}
+
+theorem image_inv_of_apply_inv_eq {f g : α → β} (H : ∀ x ∈ s, f x⁻¹ = g x) :
+    f '' (s⁻¹) = g '' s := by
+  ext y
+  constructor
+  · rintro ⟨x, hx, rfl⟩
+    refine ⟨x⁻¹, ?_, ?_⟩
+    · simpa [Set.mem_inv] using hx
+    · exact (H (x⁻¹) (by simpa [Set.mem_inv] using hx)).symm
+  · rintro ⟨x, hx, rfl⟩
+    refine ⟨x⁻¹, ?_, ?_⟩
+    · simpa [Set.mem_inv] using hx
+    · exact H x hx
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:7-14:61
+Type mismatch
+  Eq.symm (H x⁻¹ (Eq.mp Set.mem_inv._simp_2 hx))
+has type
+  g x⁻¹ = f x⁻¹⁻¹
+but is expected to have type
+  g x⁻¹ = f x
+Source line 14:
+    · exact (H (x⁻¹) (by simpa [Set.mem_inv] using hx)).symm
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: exact (H (x⁻¹) (by simpa [Set.mem_inv] using hx)).symm
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:7-14:61
+Type mismatch
+  Eq.symm (H x⁻¹ (Eq.mp Set.mem_inv._simp_2 hx))
+has type
+  g x⁻¹ = f x⁻¹⁻¹
+but is expected to have type
+  g x⁻¹ = f x
+Source line 14:
+    · exact (H (x⁻¹) (by simpa [Set.mem_inv] using hx)).symm
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: exact (H (x⁻¹) (by simpa [Set.mem_inv] using hx)).symm

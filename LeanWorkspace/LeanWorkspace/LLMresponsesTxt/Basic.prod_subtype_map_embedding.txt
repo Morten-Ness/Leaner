@@ -1,0 +1,40 @@
+FILE: Basic.prod_subtype_map_embedding.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.prod_subtype_map_embedding.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {ι κ G M : Type*} {s s₁ s₂ : Finset ι} {a : ι}
+
+variable [CommMonoid M] {f g : ι → M}
+
+theorem prod_subtype_map_embedding {p : ι → Prop} {s : Finset { x // p x }} {f : { x // p x } → M}
+    {g : ι → M} (h : ∀ x : { x // p x }, x ∈ s → g x = f x) :
+    (∏ x ∈ s.map (Function.Embedding.subtype _), g x) = ∏ x ∈ s, f x := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι κ G M : Type*} {s s₁ s₂ : Finset ι} {a : ι}
+
+variable [CommMonoid M] {f g : ι → M}
+
+theorem prod_subtype_map_embedding {p : ι → Prop} {s : Finset { x // p x }} {f : { x // p x } → M}
+    {g : ι → M} (h : ∀ x : { x // p x }, x ∈ s → g x = f x) :
+    (∏ x ∈ s.map (Function.Embedding.subtype _), g x) = ∏ x ∈ s, f x := by
+  classical
+  rw [Finset.prod_map]
+  exact Finset.prod_congr rfl h
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+PASS

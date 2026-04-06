@@ -1,0 +1,193 @@
+FILE: Membership.coe_sSup_of_directed_on.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Membership.coe_sSup_of_directed_on.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {ι : Sort*} {M : Type*}
+
+variable [Mul M]
+
+theorem coe_sSup_of_directed_on {S : Set (Subsemigroup M)} (hS : DirectedOn (· ≤ ·) S) :
+    (↑(sSup S) : Set M) = ⋃ s ∈ S, ↑s := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι : Sort*} {M : Type*}
+
+variable [Mul M]
+
+theorem coe_sSup_of_directed_on {S : Set (Subsemigroup M)} (hS : DirectedOn (· ≤ ·) S) :
+    (↑(sSup S) : Set M) = ⋃ s ∈ S, ↑s := by
+  ext x
+  simp only [Set.mem_iUnion, SetLike.mem_coe]
+  constructor
+  · intro hx
+    rcases Subsemigroup.mem_sSup_of_directedOn hS hx with ⟨s, hsS, hxs⟩
+    exact ⟨s, hsS, hxs⟩
+  · rintro ⟨s, hsS, hxs⟩
+    exact Subsemigroup.mem_sSup_of_mem hsS hxs
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:12-13:47
+Unknown constant `Subsemigroup.mem_sSup_of_directedOn`
+Source line 13:
+    rcases Subsemigroup.mem_sSup_of_directedOn hS hx with ⟨s, hsS, hxs⟩
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subsemigroup.mem_sSup_of_directedOn
+
+ERROR .LspCheck.lean:13:59-13:72
+Tactic `rcases` failed: `x✝ : ?m.39` is not an inductive datatype
+Source line 13:
+    rcases Subsemigroup.mem_sSup_of_directedOn hS hx with ⟨s, hsS, hxs⟩
+                                                          ^^^^^^^^^^^^^
+Highlighted span: ⟨s, hsS, hxs⟩
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:12-13:47
+Unknown constant `Subsemigroup.mem_sSup_of_directedOn`
+Source line 13:
+    rcases Subsemigroup.mem_sSup_of_directedOn hS hx with ⟨s, hsS, hxs⟩
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subsemigroup.mem_sSup_of_directedOn
+
+ERROR .LspCheck.lean:13:59-13:72
+Tactic `rcases` failed: `x✝ : ?m.39` is not an inductive datatype
+Source line 13:
+    rcases Subsemigroup.mem_sSup_of_directedOn hS hx with ⟨s, hsS, hxs⟩
+                                                          ^^^^^^^^^^^^^
+Highlighted span: ⟨s, hsS, hxs⟩
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι : Sort*} {M : Type*}
+
+variable [Mul M]
+
+theorem coe_sSup_of_directed_on {S : Set (Subsemigroup M)} (hS : DirectedOn (· ≤ ·) S) :
+    (↑(sSup S) : Set M) = ⋃ s ∈ S, ↑s := by
+  classical
+  ext x
+  constructor
+  · intro hx
+    rw [Subsemigroup.mem_sSup_of_directedOn hS] at hx
+    simpa [Set.mem_iUnion] using hx
+  · intro hx
+    rw [Subsemigroup.mem_sSup_of_directedOn hS]
+    simpa [Set.mem_iUnion] using hx
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:9-13:44
+Unknown constant `Subsemigroup.mem_sSup_of_directedOn`
+Source line 13:
+    rw [Subsemigroup.mem_sSup_of_directedOn hS] at hx
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subsemigroup.mem_sSup_of_directedOn
+
+ERROR .LspCheck.lean:16:9-16:44
+Unknown constant `Subsemigroup.mem_sSup_of_directedOn`
+Source line 16:
+    rw [Subsemigroup.mem_sSup_of_directedOn hS]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subsemigroup.mem_sSup_of_directedOn
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:9-13:44
+Unknown constant `Subsemigroup.mem_sSup_of_directedOn`
+Source line 13:
+    rw [Subsemigroup.mem_sSup_of_directedOn hS] at hx
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subsemigroup.mem_sSup_of_directedOn
+
+ERROR .LspCheck.lean:16:9-16:44
+Unknown constant `Subsemigroup.mem_sSup_of_directedOn`
+Source line 16:
+    rw [Subsemigroup.mem_sSup_of_directedOn hS]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subsemigroup.mem_sSup_of_directedOn
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι : Sort*} {M : Type*}
+
+variable [Mul M]
+
+theorem coe_sSup_of_directed_on {S : Set (Subsemigroup M)} (hS : DirectedOn (· ≤ ·) S) :
+    (↑(sSup S) : Set M) = ⋃ s ∈ S, ↑s := by
+  classical
+  ext x
+  simp only [Set.mem_iUnion, SetLike.mem_coe]
+  constructor
+  · intro hx
+    change x ∈ sSup S at hx
+    rw [Subsemigroup.sSup_eq_iSup] at hx
+    simpa [iSup_subtype] using hx
+  · rintro ⟨s, hsS, hxs⟩
+    change x ∈ sSup S
+    rw [Subsemigroup.sSup_eq_iSup]
+    rw [iSup_subtype]
+    exact ⟨s, hsS, hxs⟩
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:9-15:34
+Unknown constant `Subsemigroup.sSup_eq_iSup`
+Source line 15:
+    rw [Subsemigroup.sSup_eq_iSup] at hx
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subsemigroup.sSup_eq_iSup
+
+ERROR .LspCheck.lean:19:9-19:34
+Unknown constant `Subsemigroup.sSup_eq_iSup`
+Source line 19:
+    rw [Subsemigroup.sSup_eq_iSup]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subsemigroup.sSup_eq_iSup
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:9-15:34
+Unknown constant `Subsemigroup.sSup_eq_iSup`
+Source line 15:
+    rw [Subsemigroup.sSup_eq_iSup] at hx
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subsemigroup.sSup_eq_iSup
+
+ERROR .LspCheck.lean:19:9-19:34
+Unknown constant `Subsemigroup.sSup_eq_iSup`
+Source line 19:
+    rw [Subsemigroup.sSup_eq_iSup]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subsemigroup.sSup_eq_iSup

@@ -1,0 +1,215 @@
+FILE: Defs.nonempty_of_affineSpan_eq_top.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Defs.nonempty_of_affineSpan_eq_top.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+  [S : AddTorsor V P] {ι : Sort*}
+
+variable (k V)
+
+variable (P)
+
+variable {k V P}
+
+variable (k V) {p₁ p₂ : P}
+
+variable (P) in
+
+theorem nonempty_of_affineSpan_eq_top {s : Set P} (h : affineSpan k s = ⊤) : s.Nonempty := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+  [S : AddTorsor V P] {ι : Sort*}
+
+variable (k V)
+
+variable (P)
+
+variable {k V P}
+
+variable (k V) {p₁ p₂ : P}
+
+variable (P) in
+
+theorem nonempty_of_affineSpan_eq_top {s : Set P} (h : affineSpan k s = ⊤) : s.Nonempty := by
+  by_contra hs
+  rw [Set.not_nonempty_iff_eq_empty] at hs
+  rw [hs, affineSpan_empty] at h
+  exact AffineSubspace.not_nonempty_eq_top h.symm
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:19:11-19:27
+Unknown identifier `affineSpan_empty`
+Source line 19:
+  rw [hs, affineSpan_empty] at h
+          ^^^^^^^^^^^^^^^^
+Highlighted span: affineSpan_empty
+
+ERROR .LspCheck.lean:16:92-17:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+S : AddTorsor V P
+s : Set P
+h : affineSpan k ∅ = ⊤
+hs : s = ∅
+⊢ False
+Source line 16:
+theorem nonempty_of_affineSpan_eq_top {s : Set P} (h : affineSpan k s = ⊤) : s.Nonempty := by
+                                                                                           ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:19:11-19:27
+Unknown identifier `affineSpan_empty`
+Source line 19:
+  rw [hs, affineSpan_empty] at h
+          ^^^^^^^^^^^^^^^^
+Highlighted span: affineSpan_empty
+
+ERROR .LspCheck.lean:16:92-17:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+S : AddTorsor V P
+s : Set P
+h : affineSpan k ∅ = ⊤
+hs : s = ∅
+⊢ False
+Source line 16:
+theorem nonempty_of_affineSpan_eq_top {s : Set P} (h : affineSpan k s = ⊤) : s.Nonempty := by
+                                                                                           ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+  [S : AddTorsor V P] {ι : Sort*}
+
+variable (k V)
+
+variable (P)
+
+variable {k V P}
+
+variable (k V) {p₁ p₂ : P}
+
+variable (P) in
+
+theorem nonempty_of_affineSpan_eq_top {s : Set P} (h : affineSpan k s = ⊤) : s.Nonempty := by
+  by_contra hs
+  rw [Set.not_nonempty_iff_eq_empty] at hs
+  subst hs
+  have h' : (affineSpan k (∅ : Set P)).direction = (⊤ : AffineSubspace k P).direction := by
+    rw [h]
+  simpa using h'
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:22:3-22:17
+Type mismatch: After simplification, term
+  h'
+ has type
+  ⊥ = ⊤
+but is expected to have type
+  False
+Source line 22:
+  simpa using h'
+  ^^^^^^^^^^^^^^
+Highlighted span: simpa using h'
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:22:3-22:17
+Type mismatch: After simplification, term
+  h'
+ has type
+  ⊥ = ⊤
+but is expected to have type
+  False
+Source line 22:
+  simpa using h'
+  ^^^^^^^^^^^^^^
+Highlighted span: simpa using h'
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+  [S : AddTorsor V P] {ι : Sort*}
+
+variable (k V)
+
+variable (P)
+
+variable {k V P}
+
+variable (k V) {p₁ p₂ : P}
+
+variable (P) in
+
+theorem nonempty_of_affineSpan_eq_top {s : Set P} (h : affineSpan k s = ⊤) : s.Nonempty := by
+  by_contra hs
+  rw [Set.not_nonempty_iff_eq_empty] at hs
+  subst hs
+  have h' : (⊥ : Submodule k V) = ⊤ := by
+    simpa using congrArg AffineSubspace.direction h
+  exact Submodule.bot_ne_top h'
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:22:9-22:29
+Unknown constant `Submodule.bot_ne_top`
+Source line 22:
+  exact Submodule.bot_ne_top h'
+        ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submodule.bot_ne_top
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:22:9-22:29
+Unknown constant `Submodule.bot_ne_top`
+Source line 22:
+  exact Submodule.bot_ne_top h'
+        ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submodule.bot_ne_top

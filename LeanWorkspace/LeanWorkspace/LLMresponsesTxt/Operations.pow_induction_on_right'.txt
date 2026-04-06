@@ -1,0 +1,554 @@
+FILE: Operations.pow_induction_on_right'.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Operations.pow_induction_on_right'.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {ι : Sort uι}
+
+variable {R : Type u} [CommSemiring R]
+
+variable {A : Type v} [Semiring A] [Algebra R A]
+
+variable (S T : Set A) {M N P Q : Submodule R A} {m n : A}
+
+theorem pow_induction_on_right' {C : ∀ (n : ℕ) (x), x ∈ M ^ n → Prop}
+    (algebraMap : ∀ r : R, C 0 (algebraMap _ _ r) (Submodule.algebraMap_mem r))
+    (add : ∀ x y i hx hy, C i x hx → C i y hy → C i (x + y) (add_mem ‹_› ‹_›))
+    (mul_mem :
+      ∀ i x hx, C i x hx →
+        ∀ m (hm : m ∈ M), C i.succ (x * m) (Submodule.mul_mem_mul hx hm))
+    {n : ℕ} {x : A} (hx : x ∈ M ^ n) : C n x hx := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι : Sort uι}
+
+variable {R : Type u} [CommSemiring R]
+
+variable {A : Type v} [Semiring A] [Algebra R A]
+
+variable (S T : Set A) {M N P Q : Submodule R A} {m n : A}
+
+theorem pow_induction_on_right' {C : ∀ (n : ℕ) (x), x ∈ M ^ n → Prop}
+    (algebraMap : ∀ r : R, C 0 (algebraMap _ _ r) (Submodule.algebraMap_mem r))
+    (add : ∀ x y i hx hy, C i x hx → C i y hy → C i (x + y) (add_mem ‹_› ‹_›))
+    (mul_mem :
+      ∀ i x hx, C i x hx →
+        ∀ m (hm : m ∈ M), C i.succ (x * m) (Submodule.mul_mem_mul hx hm))
+    {n : ℕ} {x : A} (hx : x ∈ M ^ n) : C n x hx := by
+  induction n generalizing x with
+  | zero =>
+      simpa using algebraMap x
+  | succ n ih =>
+      rw [Submodule.pow_succ] at hx
+      exact Submodule.mul_induction_on hx
+        (fun x y hx hy hxC hyC => add x y (n + 1) hx hy hxC hyC)
+        (fun x hx y hy => mul_mem n x hx (ih hx) y hy)
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:3:20-3:22
+unknown universe level `uι`
+Source line 3:
+variable {ι : Sort uι}
+                   ^^
+Highlighted span: uι
+
+ERROR .LspCheck.lean:20:30-20:31
+Application type mismatch: The argument
+  x
+has type
+  A
+of sort `Type v` but is expected to have type
+  R
+of sort `Type u` in the application
+  algebraMap x
+Source line 20:
+      simpa using algebraMap x
+                             ^
+Highlighted span: x
+
+ERROR .LspCheck.lean:23:13-24:1
+failed to elaborate eliminator, motive is not type correct:
+  fun x ↦ C (n + 1) x hx✝
+Source line 23:
+      exact Submodule.mul_induction_on hx
+            ^
+Highlighted span: S
+
+ERROR .LspCheck.lean:24:41-24:42
+Application type mismatch: The argument
+  y
+has type
+  x ∈ M ^ n
+of sort `Prop` but is expected to have type
+  A
+of sort `Type v` in the application
+  add x y
+Source line 24:
+        (fun x y hx hy hxC hyC => add x y (n + 1) hx hy hxC hyC)
+                                        ^
+Highlighted span: y
+
+ERROR .LspCheck.lean:25:39-25:41
+Application type mismatch: The argument
+  hx
+has type
+  A
+of sort `Type v` but is expected to have type
+  x ∈ M ^ n
+of sort `Prop` in the application
+  mul_mem n x hx
+Source line 25:
+        (fun x hx y hy => mul_mem n x hx (ih hx) y hy)
+                                      ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:25:46-25:48
+Application type mismatch: The argument
+  hx
+has type
+  A
+of sort `Type v` but is expected to have type
+  ?m.178 ∈ M ^ n
+of sort `Prop` in the application
+  ih hx
+Source line 25:
+        (fun x hx y hy => mul_mem n x hx (ih hx) y hy)
+                                             ^^
+Highlighted span: hx
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:3:20-3:22
+unknown universe level `uι`
+Source line 3:
+variable {ι : Sort uι}
+                   ^^
+Highlighted span: uι
+
+ERROR .LspCheck.lean:20:30-20:31
+Application type mismatch: The argument
+  x
+has type
+  A
+of sort `Type v` but is expected to have type
+  R
+of sort `Type u` in the application
+  algebraMap x
+Source line 20:
+      simpa using algebraMap x
+                             ^
+Highlighted span: x
+
+ERROR .LspCheck.lean:23:13-24:1
+failed to elaborate eliminator, motive is not type correct:
+  fun x ↦ C (n + 1) x hx✝
+Source line 23:
+      exact Submodule.mul_induction_on hx
+            ^
+Highlighted span: S
+
+ERROR .LspCheck.lean:24:41-24:42
+Application type mismatch: The argument
+  y
+has type
+  x ∈ M ^ n
+of sort `Prop` but is expected to have type
+  A
+of sort `Type v` in the application
+  add x y
+Source line 24:
+        (fun x y hx hy hxC hyC => add x y (n + 1) hx hy hxC hyC)
+                                        ^
+Highlighted span: y
+
+ERROR .LspCheck.lean:25:39-25:41
+Application type mismatch: The argument
+  hx
+has type
+  A
+of sort `Type v` but is expected to have type
+  x ∈ M ^ n
+of sort `Prop` in the application
+  mul_mem n x hx
+Source line 25:
+        (fun x hx y hy => mul_mem n x hx (ih hx) y hy)
+                                      ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:25:46-25:48
+Application type mismatch: The argument
+  hx
+has type
+  A
+of sort `Type v` but is expected to have type
+  ?m.178 ∈ M ^ n
+of sort `Prop` in the application
+  ih hx
+Source line 25:
+        (fun x hx y hy => mul_mem n x hx (ih hx) y hy)
+                                             ^^
+Highlighted span: hx
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type u} [CommSemiring R]
+
+variable {A : Type v} [Semiring A] [Algebra R A]
+
+variable (S T : Set A) {M N P Q : Submodule R A} {m n : A}
+
+theorem pow_induction_on_right' {C : ∀ (n : ℕ) (x), x ∈ M ^ n → Prop}
+    (algebraMap : ∀ r : R, C 0 (algebraMap _ _ r) (Submodule.algebraMap_mem r))
+    (add : ∀ x y i hx hy, C i x hx → C i y hy → C i (x + y) (add_mem ‹_› ‹_›))
+    (mul_mem :
+      ∀ i x hx, C i x hx →
+        ∀ m (hm : m ∈ M), C i.succ (x * m) (Submodule.mul_mem_mul hx hm))
+    {n : ℕ} {x : A} (hx : x ∈ M ^ n) : C n x hx := by
+  induction' n with n ih generalizing x
+  · simpa [pow_zero] using algebraMap (R := R) (A := A) x
+  · rw [Submodule.pow_succ] at hx
+    exact Submodule.mul_induction_on
+      (p := fun x hx => C (n + 1) x hx)
+      hx
+      (fun x y hx hy hxC hyC => add x y (n + 1) hx hy hxC hyC)
+      (fun x hx y hy => mul_mem n x hx (ih hx) y hy)
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:17:57-17:58
+Application type mismatch: The argument
+  x
+has type
+  A
+of sort `Type v` but is expected to have type
+  R
+of sort `Type u` in the application
+  algebraMap x
+Source line 17:
+  · simpa [pow_zero] using algebraMap (R := R) (A := A) x
+                                                        ^
+Highlighted span: x
+
+ERROR .LspCheck.lean:17:39-17:47
+Invalid argument name `R` for function
+
+Hint: Perhaps you meant one of the following parameter names:
+  • `r`: R̵r̲
+Source line 17:
+  · simpa [pow_zero] using algebraMap (R := R) (A := A) x
+                                      ^^^^^^^^
+Highlighted span: (R := R)
+
+ERROR .LspCheck.lean:19:11-20:1
+failed to elaborate eliminator, unused named arguments: [p]
+Source line 19:
+    exact Submodule.mul_induction_on
+          ^
+Highlighted span: S
+
+ERROR .LspCheck.lean:22:39-22:40
+Application type mismatch: The argument
+  y
+has type
+  x ∈ M ^ n
+of sort `Prop` but is expected to have type
+  A
+of sort `Type v` in the application
+  add x y
+Source line 22:
+      (fun x y hx hy hxC hyC => add x y (n + 1) hx hy hxC hyC)
+                                      ^
+Highlighted span: y
+
+ERROR .LspCheck.lean:23:37-23:39
+Application type mismatch: The argument
+  hx
+has type
+  A
+of sort `Type v` but is expected to have type
+  x ∈ M ^ n
+of sort `Prop` in the application
+  mul_mem n x hx
+Source line 23:
+      (fun x hx y hy => mul_mem n x hx (ih hx) y hy)
+                                    ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:23:44-23:46
+Application type mismatch: The argument
+  hx
+has type
+  A
+of sort `Type v` but is expected to have type
+  ?m.166 ∈ M ^ n
+of sort `Prop` in the application
+  ih hx
+Source line 23:
+      (fun x hx y hy => mul_mem n x hx (ih hx) y hy)
+                                           ^^
+Highlighted span: hx
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:17:57-17:58
+Application type mismatch: The argument
+  x
+has type
+  A
+of sort `Type v` but is expected to have type
+  R
+of sort `Type u` in the application
+  algebraMap x
+Source line 17:
+  · simpa [pow_zero] using algebraMap (R := R) (A := A) x
+                                                        ^
+Highlighted span: x
+
+ERROR .LspCheck.lean:17:39-17:47
+Invalid argument name `R` for function
+
+Hint: Perhaps you meant one of the following parameter names:
+  • `r`: R̵r̲
+Source line 17:
+  · simpa [pow_zero] using algebraMap (R := R) (A := A) x
+                                      ^^^^^^^^
+Highlighted span: (R := R)
+
+ERROR .LspCheck.lean:19:11-20:1
+failed to elaborate eliminator, unused named arguments: [p]
+Source line 19:
+    exact Submodule.mul_induction_on
+          ^
+Highlighted span: S
+
+ERROR .LspCheck.lean:22:39-22:40
+Application type mismatch: The argument
+  y
+has type
+  x ∈ M ^ n
+of sort `Prop` but is expected to have type
+  A
+of sort `Type v` in the application
+  add x y
+Source line 22:
+      (fun x y hx hy hxC hyC => add x y (n + 1) hx hy hxC hyC)
+                                      ^
+Highlighted span: y
+
+ERROR .LspCheck.lean:23:37-23:39
+Application type mismatch: The argument
+  hx
+has type
+  A
+of sort `Type v` but is expected to have type
+  x ∈ M ^ n
+of sort `Prop` in the application
+  mul_mem n x hx
+Source line 23:
+      (fun x hx y hy => mul_mem n x hx (ih hx) y hy)
+                                    ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:23:44-23:46
+Application type mismatch: The argument
+  hx
+has type
+  A
+of sort `Type v` but is expected to have type
+  ?m.166 ∈ M ^ n
+of sort `Prop` in the application
+  ih hx
+Source line 23:
+      (fun x hx y hy => mul_mem n x hx (ih hx) y hy)
+                                           ^^
+Highlighted span: hx
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type u} [CommSemiring R]
+
+variable {A : Type v} [Semiring A] [Algebra R A]
+
+variable (S T : Set A) {M N P Q : Submodule R A} {m n : A}
+
+theorem pow_induction_on_right' {C : ∀ (n : ℕ) (x), x ∈ M ^ n → Prop}
+    (algebraMap : ∀ r : R, C 0 (algebraMap _ _ r) (Submodule.algebraMap_mem r))
+    (add : ∀ x y i hx hy, C i x hx → C i y hy → C i (x + y) (add_mem ‹_› ‹_›))
+    (mul_mem :
+      ∀ i x hx, C i x hx →
+        ∀ m (hm : m ∈ M), C i.succ (x * m) (Submodule.mul_mem_mul hx hm))
+    {n : ℕ} {x : A} (hx : x ∈ M ^ n) : C n x hx := by
+  revert x
+  induction n with
+  | zero =>
+      intro x hx
+      rw [pow_zero] at hx
+      rcases hx with ⟨r, rfl⟩
+      simpa using algebraMap r
+  | succ n ih =>
+      intro x hx
+      rw [Submodule.pow_succ] at hx
+      exact Submodule.mul_induction_on hx
+        (fun y z hy hz =>
+          add y z (n + 1) hy hz)
+        (fun y hy m hm =>
+          mul_mem n y hy (ih hy) m hm)
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:22:7-22:31
+Type mismatch: After simplification, term
+  algebraMap r
+ has type
+  C 0 ((_root_.algebraMap R A) r) ⋯
+but is expected to have type
+  C 0 (r • 1) ⋯
+Source line 22:
+      simpa using algebraMap r
+      ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa using algebraMap r
+
+ERROR .LspCheck.lean:26:13-27:1
+failed to elaborate eliminator, motive is not type correct:
+  fun x ↦ C (n + 1) x hx✝
+Source line 26:
+      exact Submodule.mul_induction_on hx
+            ^
+Highlighted span: S
+
+ERROR .LspCheck.lean:28:17-28:18
+Application type mismatch: The argument
+  z
+has type
+  y ∈ M ^ n
+of sort `Prop` but is expected to have type
+  A
+of sort `Type v` in the application
+  add y z
+Source line 28:
+          add y z (n + 1) hy hz)
+                ^
+Highlighted span: z
+
+ERROR .LspCheck.lean:30:23-30:25
+Application type mismatch: The argument
+  hy
+has type
+  A
+of sort `Type v` but is expected to have type
+  y ∈ M ^ n
+of sort `Prop` in the application
+  mul_mem n y hy
+Source line 30:
+          mul_mem n y hy (ih hy) m hm)
+                      ^^
+Highlighted span: hy
+
+ERROR .LspCheck.lean:30:30-30:32
+Application type mismatch: The argument
+  hy
+has type
+  A
+of sort `Type v` but is expected to have type
+  ?m.202 ∈ M ^ n
+of sort `Prop` in the application
+  ih hy
+Source line 30:
+          mul_mem n y hy (ih hy) m hm)
+                             ^^
+Highlighted span: hy
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:22:7-22:31
+Type mismatch: After simplification, term
+  algebraMap r
+ has type
+  C 0 ((_root_.algebraMap R A) r) ⋯
+but is expected to have type
+  C 0 (r • 1) ⋯
+Source line 22:
+      simpa using algebraMap r
+      ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa using algebraMap r
+
+ERROR .LspCheck.lean:26:13-27:1
+failed to elaborate eliminator, motive is not type correct:
+  fun x ↦ C (n + 1) x hx✝
+Source line 26:
+      exact Submodule.mul_induction_on hx
+            ^
+Highlighted span: S
+
+ERROR .LspCheck.lean:28:17-28:18
+Application type mismatch: The argument
+  z
+has type
+  y ∈ M ^ n
+of sort `Prop` but is expected to have type
+  A
+of sort `Type v` in the application
+  add y z
+Source line 28:
+          add y z (n + 1) hy hz)
+                ^
+Highlighted span: z
+
+ERROR .LspCheck.lean:30:23-30:25
+Application type mismatch: The argument
+  hy
+has type
+  A
+of sort `Type v` but is expected to have type
+  y ∈ M ^ n
+of sort `Prop` in the application
+  mul_mem n y hy
+Source line 30:
+          mul_mem n y hy (ih hy) m hm)
+                      ^^
+Highlighted span: hy
+
+ERROR .LspCheck.lean:30:30-30:32
+Application type mismatch: The argument
+  hy
+has type
+  A
+of sort `Type v` but is expected to have type
+  ?m.202 ∈ M ^ n
+of sort `Prop` in the application
+  ih hy
+Source line 30:
+          mul_mem n y hy (ih hy) m hm)
+                             ^^
+Highlighted span: hy

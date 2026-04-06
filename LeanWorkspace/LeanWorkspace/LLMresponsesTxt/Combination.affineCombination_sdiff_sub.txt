@@ -1,0 +1,338 @@
+FILE: Combination.affineCombination_sdiff_sub.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Combination.affineCombination_sdiff_sub.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+variable (k)
+
+variable {k}
+
+theorem affineCombination_sdiff_sub [DecidableEq ι] {s₂ : Finset ι} (h : s₂ ⊆ s) (w : ι → k)
+    (p : ι → P) :
+    (s \ s₂).affineCombination k p w -ᵥ s₂.affineCombination k p (-w) = s.weightedVSub p w := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+variable (k)
+
+variable {k}
+
+theorem affineCombination_sdiff_sub [DecidableEq ι] {s₂ : Finset ι} (h : s₂ ⊆ s) (w : ι → k)
+    (p : ι → P) :
+    (s \ s₂).affineCombination k p w -ᵥ s₂.affineCombination k p (-w) = s.weightedVSub p w := by
+  classical
+  rw [← Finset.affineCombination_eq_weightedVSub_of_point_vadd_of_sum_eq_one
+      (s := s \ s₂) (k := k) (p := p) (w := w) (b := s₂.affineCombination k p (-w))]
+  · simp [Finset.weightedVSub_eq_weightedVSub_union, h, Finset.sum_sdiff, Finset.sum_neg_distrib]
+  · rw [Finset.affineCombination_eq_weightedVSub_of_point_vadd_of_sum_eq_one (s := s₂) (k := k)
+      (p := p) (w := fun i => -w i) (b := p (Classical.choose <| Finset.nonempty_of_ne_empty <| by
+        intro hs
+        simpa [hs] using h))]
+    · simp
+    · simp
+  · simp [Finset.sum_sdiff, h]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:19:9-19:77
+Unknown constant `Finset.affineCombination_eq_weightedVSub_of_point_vadd_of_sum_eq_one`
+Source line 19:
+  rw [← Finset.affineCombination_eq_weightedVSub_of_point_vadd_of_sum_eq_one
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.affineCombination_eq_weightedVSub_of_point_vadd_of_sum_eq_one
+
+ERROR .LspCheck.lean:17:95-18:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s : Finset ι
+inst✝ : DecidableEq ι
+s₂ : Finset ι
+h : s₂ ⊆ s
+w : ι → k
+p : ι → P
+⊢ (Finset.affineCombination k (s \ s₂) p) w -ᵥ (Finset.affineCombination k s₂ p) (-w) = (s.weightedVSub p) w
+Source line 17:
+    (s \ s₂).affineCombination k p w -ᵥ s₂.affineCombination k p (-w) = s.weightedVSub p w := by
+                                                                                              ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:19:9-19:77
+Unknown constant `Finset.affineCombination_eq_weightedVSub_of_point_vadd_of_sum_eq_one`
+Source line 19:
+  rw [← Finset.affineCombination_eq_weightedVSub_of_point_vadd_of_sum_eq_one
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.affineCombination_eq_weightedVSub_of_point_vadd_of_sum_eq_one
+
+ERROR .LspCheck.lean:17:95-18:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s : Finset ι
+inst✝ : DecidableEq ι
+s₂ : Finset ι
+h : s₂ ⊆ s
+w : ι → k
+p : ι → P
+⊢ (Finset.affineCombination k (s \ s₂) p) w -ᵥ (Finset.affineCombination k s₂ p) (-w) = (s.weightedVSub p) w
+Source line 17:
+    (s \ s₂).affineCombination k p w -ᵥ s₂.affineCombination k p (-w) = s.weightedVSub p w := by
+                                                                                              ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+variable (k)
+
+variable {k}
+
+theorem affineCombination_sdiff_sub [DecidableEq ι] {s₂ : Finset ι} (h : s₂ ⊆ s) (w : ι → k)
+    (p : ι → P) :
+    (s \ s₂).affineCombination k p w -ᵥ s₂.affineCombination k p (-w) = s.weightedVSub p w := by
+  classical
+  by_cases hs₂ : s₂.Nonempty
+  · rcases hs₂ with ⟨i, hi⟩
+    rw [Finset.affineCombination_eq_centerMass_eq_weightedVSub _ hi]
+    rw [Finset.affineCombination_eq_centerMass_eq_weightedVSub _ hi]
+    simp only [Pi.neg_apply, neg_smul, sub_eq_add_neg, vsub_eq_sub]
+    rw [← Finset.sum_sdiff h]
+    simp [Finset.weightedVSub, h, hi, add_comm, add_left_comm, add_assoc, Finset.sum_sdiff]
+  · have hs₂' : s₂ = ∅ := Finset.not_nonempty_iff_eq_empty.mp hs₂
+    subst hs₂'
+    simp [Finset.weightedVSub]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:21:9-21:63
+Unknown constant `Finset.affineCombination_eq_centerMass_eq_weightedVSub`
+Source line 21:
+    rw [Finset.affineCombination_eq_centerMass_eq_weightedVSub _ hi]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.affineCombination_eq_centerMass_eq_weightedVSub
+
+ERROR .LspCheck.lean:26:3-27:1
+unsolved goals
+case neg
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s : Finset ι
+inst✝ : DecidableEq ι
+w : ι → k
+p : ι → P
+h : ∅ ⊆ s
+hs₂ : ¬∅.Nonempty
+⊢ (Finset.affineCombination k s p) w -ᵥ (Finset.affineCombination k ∅ p) (-w) =
+    ∑ i ∈ s, w i • (p i -ᵥ Classical.choice ⋯)
+Source line 26:
+  · have hs₂' : s₂ = ∅ := Finset.not_nonempty_iff_eq_empty.mp hs₂
+  ^
+Highlighted span: ·
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:21:9-21:63
+Unknown constant `Finset.affineCombination_eq_centerMass_eq_weightedVSub`
+Source line 21:
+    rw [Finset.affineCombination_eq_centerMass_eq_weightedVSub _ hi]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.affineCombination_eq_centerMass_eq_weightedVSub
+
+ERROR .LspCheck.lean:26:3-27:1
+unsolved goals
+case neg
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s : Finset ι
+inst✝ : DecidableEq ι
+w : ι → k
+p : ι → P
+h : ∅ ⊆ s
+hs₂ : ¬∅.Nonempty
+⊢ (Finset.affineCombination k s p) w -ᵥ (Finset.affineCombination k ∅ p) (-w) =
+    ∑ i ∈ s, w i • (p i -ᵥ Classical.choice ⋯)
+Source line 26:
+  · have hs₂' : s₂ = ∅ := Finset.not_nonempty_iff_eq_empty.mp hs₂
+  ^
+Highlighted span: ·
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+variable (k)
+
+variable {k}
+
+theorem affineCombination_sdiff_sub [DecidableEq ι] {s₂ : Finset ι} (h : s₂ ⊆ s) (w : ι → k)
+    (p : ι → P) :
+    (s \ s₂).affineCombination k p w -ᵥ s₂.affineCombination k p (-w) = s.weightedVSub p w := by
+  classical
+  simp_rw [Finset.affineCombination, Finset.weightedVSub]
+  rw [Finset.sum_sdiff h]
+  simp_rw [Pi.neg_apply, neg_smul]
+  abel
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:20:7-20:25
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ x ∈ s \ s₂, ?m.48 x + ∑ x ∈ s₂, ?m.48 x
+in the target expression
+  { toFun := fun w ↦ ((s \ s₂).weightedVSubOfPoint p (Classical.choice ⋯)) w +ᵥ Classical.choice ⋯,
+          linear := (s \ s₂).weightedVSubOfPoint p (Classical.choice ⋯), map_vadd' := ⋯ }
+        w -ᵥ
+      { toFun := fun w ↦ (s₂.weightedVSubOfPoint p (Classical.choice ⋯)) w +ᵥ Classical.choice ⋯,
+          linear := s₂.weightedVSubOfPoint p (Classical.choice ⋯), map_vadd' := ⋯ }
+        (-w) =
+    (s.weightedVSubOfPoint p (Classical.choice ⋯)) w
+
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s : Finset ι
+inst✝ : DecidableEq ι
+s₂ : Finset ι
+h : s₂ ⊆ s
+w : ι → k
+p : ι → P
+⊢ { toFun := fun w ↦ ((s \ s₂).weightedVSubOfPoint p (Classical.choice ⋯)) w +ᵥ Classical.choice ⋯,
+          linear := (s \ s₂).weightedVSubOfPoint p (Classical.choice ⋯), map_vadd' := ⋯ }
+        w -ᵥ
+      { toFun := fun w ↦ (s₂.weightedVSubOfPoint p (Classical.choice ⋯)) w +ᵥ Classical.choice ⋯,
+          linear := s₂.weightedVSubOfPoint p (Classical.choice ⋯), map_vadd' := ⋯ }
+        (-w) =
+    (s.weightedVSubOfPoint p (Classical.choice ⋯)) w
+Source line 20:
+  rw [Finset.sum_sdiff h]
+      ^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.sum_sdiff h
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:20:7-20:25
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ x ∈ s \ s₂, ?m.48 x + ∑ x ∈ s₂, ?m.48 x
+in the target expression
+  { toFun := fun w ↦ ((s \ s₂).weightedVSubOfPoint p (Classical.choice ⋯)) w +ᵥ Classical.choice ⋯,
+          linear := (s \ s₂).weightedVSubOfPoint p (Classical.choice ⋯), map_vadd' := ⋯ }
+        w -ᵥ
+      { toFun := fun w ↦ (s₂.weightedVSubOfPoint p (Classical.choice ⋯)) w +ᵥ Classical.choice ⋯,
+          linear := s₂.weightedVSubOfPoint p (Classical.choice ⋯), map_vadd' := ⋯ }
+        (-w) =
+    (s.weightedVSubOfPoint p (Classical.choice ⋯)) w
+
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s : Finset ι
+inst✝ : DecidableEq ι
+s₂ : Finset ι
+h : s₂ ⊆ s
+w : ι → k
+p : ι → P
+⊢ { toFun := fun w ↦ ((s \ s₂).weightedVSubOfPoint p (Classical.choice ⋯)) w +ᵥ Classical.choice ⋯,
+          linear := (s \ s₂).weightedVSubOfPoint p (Classical.choice ⋯), map_vadd' := ⋯ }
+        w -ᵥ
+      { toFun := fun w ↦ (s₂.weightedVSubOfPoint p (Classical.choice ⋯)) w +ᵥ Classical.choice ⋯,
+          linear := s₂.weightedVSubOfPoint p (Classical.choice ⋯), map_vadd' := ⋯ }
+        (-w) =
+    (s.weightedVSubOfPoint p (Classical.choice ⋯)) w
+Source line 20:
+  rw [Finset.sum_sdiff h]
+      ^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.sum_sdiff h

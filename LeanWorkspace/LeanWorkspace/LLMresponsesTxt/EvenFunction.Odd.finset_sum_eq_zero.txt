@@ -1,0 +1,328 @@
+FILE: EvenFunction.Odd.finset_sum_eq_zero.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: EvenFunction.Odd.finset_sum_eq_zero.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {α β : Type*} [Neg α]
+
+variable {α β : Type*} [AddCommGroup β] [IsAddTorsionFree β] {f : α → β}
+
+theorem Odd.finset_sum_eq_zero [InvolutiveNeg α] {f : α → β} (hf : f.Odd) {s : Finset α}
+    (hs : Finset.map (Equiv.neg α).toEmbedding s = s) :
+    s.sum f = 0 := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α β : Type*} [Neg α]
+
+variable {α β : Type*} [AddCommGroup β] [IsAddTorsionFree β] {f : α → β}
+
+theorem Odd.finset_sum_eq_zero [InvolutiveNeg α] {f : α → β} (hf : f.Odd) {s : Finset α}
+    (hs : Finset.map (Equiv.neg α).toEmbedding s = s) :
+    s.sum f = 0 := by
+  have hmap := Finset.sum_map (f := f) (e := (Equiv.neg α).toEmbedding) s
+  rw [hs] at hmap
+  have htwo : s.sum f + s.sum f = 0 := by
+    calc
+      s.sum f + s.sum f = s.sum f + (Finset.map (Equiv.neg α).toEmbedding s).sum f := by rw [hs]
+      _ = s.sum f + s.sum (fun x => f (-x)) := by rw [Finset.sum_map]
+      _ = s.sum fun x => (f x + f (-x)) := by rw [Finset.sum_add_distrib]
+      _ = s.sum fun x => 0 := by
+        refine Finset.sum_congr rfl ?_
+        intro x hx
+        rw [hf x]
+        abel
+      _ = 0 := by simp
+  exact eq_zero_of_two_nsmul_eq_zero <| by simpa [two_nsmul] using htwo
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:48-15:70
+unsolved goals
+α : Type u_3
+β : Type u_4
+inst✝² : AddCommGroup β
+inst✝¹ : IsAddTorsionFree β
+inst✝ : InvolutiveNeg α
+f : α → β
+hf : Function.Odd f
+s : Finset α
+hs : Finset.map (Equiv.toEmbedding (Equiv.neg α)) s = s
+hmap : ∑ x ∈ s, f x = ∑ x ∈ s, f ((Equiv.toEmbedding (Equiv.neg α)) x)
+⊢ s.sum f + ∑ x ∈ s, f ((Equiv.toEmbedding (Equiv.neg α)) x) = s.sum f + ∑ x ∈ s, f (-x)
+Source line 15:
+      _ = s.sum f + s.sum (fun x => f (-x)) := by rw [Finset.sum_map]
+                                               ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: by rw [Finset.sum_map]
+
+ERROR .LspCheck.lean:23:9-23:37
+Unknown identifier `eq_zero_of_two_nsmul_eq_zero`
+Source line 23:
+  exact eq_zero_of_two_nsmul_eq_zero <| by simpa [two_nsmul] using htwo
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: eq_zero_of_two_nsmul_eq_zero
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:48-15:70
+unsolved goals
+α : Type u_3
+β : Type u_4
+inst✝² : AddCommGroup β
+inst✝¹ : IsAddTorsionFree β
+inst✝ : InvolutiveNeg α
+f : α → β
+hf : Function.Odd f
+s : Finset α
+hs : Finset.map (Equiv.toEmbedding (Equiv.neg α)) s = s
+hmap : ∑ x ∈ s, f x = ∑ x ∈ s, f ((Equiv.toEmbedding (Equiv.neg α)) x)
+⊢ s.sum f + ∑ x ∈ s, f ((Equiv.toEmbedding (Equiv.neg α)) x) = s.sum f + ∑ x ∈ s, f (-x)
+Source line 15:
+      _ = s.sum f + s.sum (fun x => f (-x)) := by rw [Finset.sum_map]
+                                               ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: by rw [Finset.sum_map]
+
+ERROR .LspCheck.lean:23:9-23:37
+Unknown identifier `eq_zero_of_two_nsmul_eq_zero`
+Source line 23:
+  exact eq_zero_of_two_nsmul_eq_zero <| by simpa [two_nsmul] using htwo
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: eq_zero_of_two_nsmul_eq_zero
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α β : Type*} [Neg α]
+
+variable {α β : Type*} [AddCommGroup β] [IsAddTorsionFree β] {f : α → β}
+
+theorem Odd.finset_sum_eq_zero [InvolutiveNeg α] {f : α → β} (hf : f.Odd) {s : Finset α}
+    (hs : Finset.map (Equiv.neg α).toEmbedding s = s) :
+    s.sum f = 0 := by
+  have hsum_neg : (Finset.map (Equiv.neg α).toEmbedding s).sum f = s.sum fun x => f (-x) := by
+    simp [Finset.sum_map]
+  have h1 : s.sum f = s.sum fun x => f (-x) := by
+    calc
+      s.sum f = (Finset.map (Equiv.neg α).toEmbedding s).sum f := by rw [hs]
+      _ = s.sum fun x => f (-x) := hsum_neg
+  have h2 : s.sum f = - s.sum f := by
+    calc
+      s.sum f = s.sum fun x => f (-x) := h1
+      _ = s.sum fun x => -f x := by
+        refine Finset.sum_congr rfl ?_
+        intro x hx
+        simpa [hf x]
+      _ = - s.sum f := by simp
+  have h3 : s.sum f + s.sum f = 0 := by
+    linarith
+  have h4 : (2 : ℕ) • s.sum f = 0 := by simpa [two_nsmul] using h3
+  exact (nsmul_right_injective two_ne_zero).eq_iff.mp h4
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+WARNING .LspCheck.lean:22:9-22:21
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 22:
+        simpa [hf x]
+        ^^^^^^^^^^^^
+Highlighted span: simpa [hf x]
+
+ERROR .LspCheck.lean:25:5-25:13
+linarith failed to find a contradiction
+α : Type u_3
+β : Type u_4
+inst✝² : AddCommGroup β
+inst✝¹ : IsAddTorsionFree β
+inst✝ : InvolutiveNeg α
+f : α → β
+hf : Function.Odd f
+s : Finset α
+hs : Finset.map (Equiv.toEmbedding (Equiv.neg α)) s = s
+hsum_neg : (Finset.map (Equiv.toEmbedding (Equiv.neg α)) s).sum f = ∑ x ∈ s, f (-x)
+h1 : s.sum f = ∑ x ∈ s, f (-x)
+h2 : s.sum f = -s.sum f
+⊢ False
+failed
+Source line 25:
+    linarith
+    ^^^^^^^^
+Highlighted span: linarith
+
+ERROR .LspCheck.lean:27:55-27:57
+Application type mismatch: The argument
+  h4
+has type
+  2 • s.sum f = 0
+but is expected to have type
+  2 • s.sum f = 2 • 0
+in the application
+  (Function.Injective.eq_iff (nsmul_right_injective two_ne_zero)).mp h4
+Source line 27:
+  exact (nsmul_right_injective two_ne_zero).eq_iff.mp h4
+                                                      ^^
+Highlighted span: h4
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+WARNING .LspCheck.lean:22:9-22:21
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 22:
+        simpa [hf x]
+        ^^^^^^^^^^^^
+Highlighted span: simpa [hf x]
+
+ERROR .LspCheck.lean:25:5-25:13
+linarith failed to find a contradiction
+α : Type u_3
+β : Type u_4
+inst✝² : AddCommGroup β
+inst✝¹ : IsAddTorsionFree β
+inst✝ : InvolutiveNeg α
+f : α → β
+hf : Function.Odd f
+s : Finset α
+hs : Finset.map (Equiv.toEmbedding (Equiv.neg α)) s = s
+hsum_neg : (Finset.map (Equiv.toEmbedding (Equiv.neg α)) s).sum f = ∑ x ∈ s, f (-x)
+h1 : s.sum f = ∑ x ∈ s, f (-x)
+h2 : s.sum f = -s.sum f
+⊢ False
+failed
+Source line 25:
+    linarith
+    ^^^^^^^^
+Highlighted span: linarith
+
+ERROR .LspCheck.lean:27:55-27:57
+Application type mismatch: The argument
+  h4
+has type
+  2 • s.sum f = 0
+but is expected to have type
+  2 • s.sum f = 2 • 0
+in the application
+  (Function.Injective.eq_iff (nsmul_right_injective two_ne_zero)).mp h4
+Source line 27:
+  exact (nsmul_right_injective two_ne_zero).eq_iff.mp h4
+                                                      ^^
+Highlighted span: h4
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α β : Type*} [Neg α]
+
+variable {α β : Type*} [AddCommGroup β] [IsAddTorsionFree β] {f : α → β}
+
+theorem Odd.finset_sum_eq_zero [InvolutiveNeg α] {f : α → β} (hf : f.Odd) {s : Finset α}
+    (hs : Finset.map (Equiv.neg α).toEmbedding s = s) :
+    s.sum f = 0 := by
+  have hsum_neg : (Finset.map (Equiv.neg α).toEmbedding s).sum f = s.sum (fun x => f (-x)) := by
+    simp [Finset.sum_map]
+  have h1 : s.sum f = s.sum (fun x => f (-x)) := by
+    calc
+      s.sum f = (Finset.map (Equiv.neg α).toEmbedding s).sum f := by rw [hs]
+      _ = s.sum (fun x => f (-x)) := hsum_neg
+  have h2 : s.sum f = -s.sum f := by
+    calc
+      s.sum f = s.sum (fun x => f (-x)) := h1
+      _ = s.sum (fun x => -f x) := by
+        refine Finset.sum_congr rfl ?_
+        intro x hx
+        rw [hf x]
+      _ = -s.sum f := by simp
+  have h3 : s.sum f + s.sum f = 0 := by
+    calc
+      s.sum f + s.sum f = s.sum f + (-s.sum f) := by rw [h2]
+      _ = 0 := add_right_neg _
+  have h4 : (2 : ℕ) • s.sum f = 0 := by
+    simpa [two_nsmul] using h3
+  exact (nsmul_right_injective two_ne_zero) <| by simpa using h4
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:27:16-27:29
+Unknown identifier `add_right_neg`
+Source line 27:
+      _ = 0 := add_right_neg _
+               ^^^^^^^^^^^^^
+Highlighted span: add_right_neg
+
+ERROR .LspCheck.lean:26:51-26:61
+unsolved goals
+α : Type u_3
+β : Type u_4
+inst✝² : AddCommGroup β
+inst✝¹ : IsAddTorsionFree β
+inst✝ : InvolutiveNeg α
+f : α → β
+hf : Function.Odd f
+s : Finset α
+hs : Finset.map (Equiv.toEmbedding (Equiv.neg α)) s = s
+hsum_neg : (Finset.map (Equiv.toEmbedding (Equiv.neg α)) s).sum f = ∑ x ∈ s, f (-x)
+h1 : s.sum f = ∑ x ∈ s, f (-x)
+h2 : s.sum f = -s.sum f
+⊢ -s.sum f + -s.sum f = -s.sum f + - -s.sum f
+Source line 26:
+      s.sum f + s.sum f = s.sum f + (-s.sum f) := by rw [h2]
+                                                  ^^^^^^^^^^
+Highlighted span: by rw [h2]
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:27:16-27:29
+Unknown identifier `add_right_neg`
+Source line 27:
+      _ = 0 := add_right_neg _
+               ^^^^^^^^^^^^^
+Highlighted span: add_right_neg
+
+ERROR .LspCheck.lean:26:51-26:61
+unsolved goals
+α : Type u_3
+β : Type u_4
+inst✝² : AddCommGroup β
+inst✝¹ : IsAddTorsionFree β
+inst✝ : InvolutiveNeg α
+f : α → β
+hf : Function.Odd f
+s : Finset α
+hs : Finset.map (Equiv.toEmbedding (Equiv.neg α)) s = s
+hsum_neg : (Finset.map (Equiv.toEmbedding (Equiv.neg α)) s).sum f = ∑ x ∈ s, f (-x)
+h1 : s.sum f = ∑ x ∈ s, f (-x)
+h2 : s.sum f = -s.sum f
+⊢ -s.sum f + -s.sum f = -s.sum f + - -s.sum f
+Source line 26:
+      s.sum f + s.sum f = s.sum f + (-s.sum f) := by rw [h2]
+                                                  ^^^^^^^^^^
+Highlighted span: by rw [h2]

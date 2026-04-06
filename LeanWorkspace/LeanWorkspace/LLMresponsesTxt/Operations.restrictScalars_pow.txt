@@ -1,0 +1,328 @@
+FILE: Operations.restrictScalars_pow.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Operations.restrictScalars_pow.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R : Type u} [Semiring R] {A : Type v} [Semiring A] [Module R A]
+
+variable {M : Type*} [AddCommMonoid M] [Module R M] [Module A M] [IsScalarTower R A M]
+
+variable [IsScalarTower R A A]
+
+variable (S T : Set A) {M N P Q : Submodule R A} {m n : A}
+
+variable {ι : Sort uι}
+
+theorem restrictScalars_pow {A B C : Type*} [Semiring A] [Semiring B]
+    [Semiring C] [SMul A B] [Module A C] [Module B C]
+    [IsScalarTower A C C] [IsScalarTower B C C] [IsScalarTower A B C]
+    {I : Submodule B C} :
+    ∀ {n : ℕ}, (hn : n ≠ 0) → (I ^ n).restrictScalars A = I.restrictScalars A ^ n
+  | 1, _ => by simp [Submodule.pow_one]
+  | n + 2, _ => by
+    simp [Submodule.pow_succ (n := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type u} [Semiring R] {A : Type v} [Semiring A] [Module R A]
+
+variable {M : Type*} [AddCommMonoid M] [Module R M] [Module A M] [IsScalarTower R A M]
+
+variable [IsScalarTower R A A]
+
+variable (S T : Set A) {M N P Q : Submodule R A} {m n : A}
+
+variable {ι : Sort uι}
+
+theorem restrictScalars_pow {A B C : Type*} [Semiring A] [Semiring B]
+    [Semiring C] [SMul A B] [Module A C] [Module B C]
+    [IsScalarTower A C C] [IsScalarTower B C C] [IsScalarTower A B C]
+    {I : Submodule B C} :
+    ∀ {n : ℕ}, (hn : n ≠ 0) → (I ^ n).restrictScalars A = I.restrictScalars A ^ n
+  | 1, _ => by simp [Submodule.pow_one]
+  | n + 2, _ => by
+    simp [Submodule.pow_succ (n := n + 1), restrictScalars_pow (n := n + 1) (by omega)]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:20-11:22
+unknown universe level `uι`
+Source line 11:
+variable {ι : Sort uι}
+                   ^^
+Highlighted span: uι
+
+ERROR .LspCheck.lean:19:17-20:1
+unsolved goals
+A : Type u_2
+B : Type u_3
+C : Type u_4
+inst✝⁸ : Semiring A
+inst✝⁷ : Semiring B
+inst✝⁶ : Semiring C
+inst✝⁵ : SMul A B
+inst✝⁴ : Module A C
+inst✝³ : Module B C
+inst✝² : IsScalarTower A C C
+inst✝¹ : IsScalarTower B C C
+inst✝ : IsScalarTower A B C
+I : Submodule B C
+n : ℕ
+x✝ : n + 2 ≠ 0
+⊢ Submodule.restrictScalars A (I ^ (n + 1) * I) =
+    Submodule.restrictScalars A I ^ (n + 1) * Submodule.restrictScalars A I
+Source line 19:
+  | n + 2, _ => by
+                ^
+Highlighted span: b
+
+WARNING .LspCheck.lean:20:44-20:87
+This simp argument is unused:
+  restrictScalars_pow (n := n + 1) (by omega)
+
+Hint: Omit it from the simp argument list.
+  simp [Submodule.pow_succ (n := n + 1),̵ ̵r̵e̵s̵t̵r̵i̵c̵t̵S̵c̵a̵l̵a̵r̵s̵_̵p̵o̵w̵ ̵(̵n̵ ̵:̵=̵ ̵n̵ ̵+̵ ̵1̵)̵ ̵(̵b̵y̵ ̵o̵m̵e̵g̵a̵)̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 20:
+    simp [Submodule.pow_succ (n := n + 1), restrictScalars_pow (n := n + 1) (by omega)]
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: restrictScalars_pow (n := n + 1) (by omega)
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:20-11:22
+unknown universe level `uι`
+Source line 11:
+variable {ι : Sort uι}
+                   ^^
+Highlighted span: uι
+
+ERROR .LspCheck.lean:19:17-20:1
+unsolved goals
+A : Type u_2
+B : Type u_3
+C : Type u_4
+inst✝⁸ : Semiring A
+inst✝⁷ : Semiring B
+inst✝⁶ : Semiring C
+inst✝⁵ : SMul A B
+inst✝⁴ : Module A C
+inst✝³ : Module B C
+inst✝² : IsScalarTower A C C
+inst✝¹ : IsScalarTower B C C
+inst✝ : IsScalarTower A B C
+I : Submodule B C
+n : ℕ
+x✝ : n + 2 ≠ 0
+⊢ Submodule.restrictScalars A (I ^ (n + 1) * I) =
+    Submodule.restrictScalars A I ^ (n + 1) * Submodule.restrictScalars A I
+Source line 19:
+  | n + 2, _ => by
+                ^
+Highlighted span: b
+
+WARNING .LspCheck.lean:20:44-20:87
+This simp argument is unused:
+  restrictScalars_pow (n := n + 1) (by omega)
+
+Hint: Omit it from the simp argument list.
+  simp [Submodule.pow_succ (n := n + 1),̵ ̵r̵e̵s̵t̵r̵i̵c̵t̵S̵c̵a̵l̵a̵r̵s̵_̵p̵o̵w̵ ̵(̵n̵ ̵:̵=̵ ̵n̵ ̵+̵ ̵1̵)̵ ̵(̵b̵y̵ ̵o̵m̵e̵g̵a̵)̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 20:
+    simp [Submodule.pow_succ (n := n + 1), restrictScalars_pow (n := n + 1) (by omega)]
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: restrictScalars_pow (n := n + 1) (by omega)
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type u} [Semiring R] {A : Type v} [Semiring A] [Module R A]
+
+variable {M : Type*} [AddCommMonoid M] [Module R M] [Module A M] [IsScalarTower R A M]
+
+variable [IsScalarTower R A A]
+
+variable (S T : Set A) {M N P Q : Submodule R A} {m n : A}
+
+variable {ι : Sort _}
+
+theorem restrictScalars_pow {A B C : Type*} [Semiring A] [Semiring B]
+    [Semiring C] [SMul A B] [Module A C] [Module B C]
+    [IsScalarTower A C C] [IsScalarTower B C C] [IsScalarTower A B C]
+    {I : Submodule B C} :
+    ∀ {n : ℕ}, (hn : n ≠ 0) → (I ^ n).restrictScalars A = I.restrictScalars A ^ n
+  | 1, _ => by simp [Submodule.pow_one]
+  | n + 2, _ => by
+    rw [Submodule.pow_succ]
+    rw [restrictScalars_pow (n := n + 1) (by omega)]
+    rfl
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:21:9-21:52
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Submodule.restrictScalars ?m.127 (?m.139 ^ (n + 1))
+in the target expression
+  Submodule.restrictScalars A (I ^ (n + 1) * I) = Submodule.restrictScalars A I ^ (n + 2)
+
+A : Type u_2
+B : Type u_3
+C : Type u_4
+inst✝⁸ : Semiring A
+inst✝⁷ : Semiring B
+inst✝⁶ : Semiring C
+inst✝⁵ : SMul A B
+inst✝⁴ : Module A C
+inst✝³ : Module B C
+inst✝² : IsScalarTower A C C
+inst✝¹ : IsScalarTower B C C
+inst✝ : IsScalarTower A B C
+I : Submodule B C
+n : ℕ
+x✝ : n + 2 ≠ 0
+⊢ Submodule.restrictScalars A (I ^ (n + 1) * I) = Submodule.restrictScalars A I ^ (n + 2)
+Source line 21:
+    rw [restrictScalars_pow (n := n + 1) (by omega)]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: restrictScalars_pow (n := n + 1) (by omega)
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:21:9-21:52
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Submodule.restrictScalars ?m.127 (?m.139 ^ (n + 1))
+in the target expression
+  Submodule.restrictScalars A (I ^ (n + 1) * I) = Submodule.restrictScalars A I ^ (n + 2)
+
+A : Type u_2
+B : Type u_3
+C : Type u_4
+inst✝⁸ : Semiring A
+inst✝⁷ : Semiring B
+inst✝⁶ : Semiring C
+inst✝⁵ : SMul A B
+inst✝⁴ : Module A C
+inst✝³ : Module B C
+inst✝² : IsScalarTower A C C
+inst✝¹ : IsScalarTower B C C
+inst✝ : IsScalarTower A B C
+I : Submodule B C
+n : ℕ
+x✝ : n + 2 ≠ 0
+⊢ Submodule.restrictScalars A (I ^ (n + 1) * I) = Submodule.restrictScalars A I ^ (n + 2)
+Source line 21:
+    rw [restrictScalars_pow (n := n + 1) (by omega)]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: restrictScalars_pow (n := n + 1) (by omega)
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type u} [Semiring R] {A : Type v} [Semiring A] [Module R A]
+
+variable {M : Type*} [AddCommMonoid M] [Module R M] [Module A M] [IsScalarTower R A M]
+
+variable [IsScalarTower R A A]
+
+variable (S T : Set A) {M N P Q : Submodule R A} {m n : A}
+
+variable {ι : Sort _}
+
+theorem restrictScalars_pow {A B C : Type*} [Semiring A] [Semiring B]
+    [Semiring C] [SMul A B] [Module A C] [Module B C]
+    [IsScalarTower A C C] [IsScalarTower B C C] [IsScalarTower A B C]
+    {I : Submodule B C} :
+    ∀ {n : ℕ}, (hn : n ≠ 0) → (I ^ n).restrictScalars A = I.restrictScalars A ^ n
+  | 1, _ => by simp [Submodule.pow_one]
+  | n + 2, _ => by
+    rw [Submodule.pow_succ, Submodule.pow_succ]
+    rw [show (I ^ (n + 1)).restrictScalars A = I.restrictScalars A ^ (n + 1) by
+      exact restrictScalars_pow (n := n + 1) (by omega)]
+    rfl
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:21:9-22:1
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Submodule.restrictScalars A (I ^ (n + 1))
+in the target expression
+  Submodule.restrictScalars A (I ^ n * I * I) = Submodule.restrictScalars A I ^ (n + 2)
+
+A : Type u_2
+B : Type u_3
+C : Type u_4
+inst✝⁸ : Semiring A
+inst✝⁷ : Semiring B
+inst✝⁶ : Semiring C
+inst✝⁵ : SMul A B
+inst✝⁴ : Module A C
+inst✝³ : Module B C
+inst✝² : IsScalarTower A C C
+inst✝¹ : IsScalarTower B C C
+inst✝ : IsScalarTower A B C
+I : Submodule B C
+n : ℕ
+x✝ : n + 2 ≠ 0
+⊢ Submodule.restrictScalars A (I ^ n * I * I) = Submodule.restrictScalars A I ^ (n + 2)
+Source line 21:
+    rw [show (I ^ (n + 1)).restrictScalars A = I.restrictScalars A ^ (n + 1) by
+        ^
+Highlighted span: s
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:21:9-22:1
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Submodule.restrictScalars A (I ^ (n + 1))
+in the target expression
+  Submodule.restrictScalars A (I ^ n * I * I) = Submodule.restrictScalars A I ^ (n + 2)
+
+A : Type u_2
+B : Type u_3
+C : Type u_4
+inst✝⁸ : Semiring A
+inst✝⁷ : Semiring B
+inst✝⁶ : Semiring C
+inst✝⁵ : SMul A B
+inst✝⁴ : Module A C
+inst✝³ : Module B C
+inst✝² : IsScalarTower A C C
+inst✝¹ : IsScalarTower B C C
+inst✝ : IsScalarTower A B C
+I : Submodule B C
+n : ℕ
+x✝ : n + 2 ≠ 0
+⊢ Submodule.restrictScalars A (I ^ n * I * I) = Submodule.restrictScalars A I ^ (n + 2)
+Source line 21:
+    rw [show (I ^ (n + 1)).restrictScalars A = I.restrictScalars A ^ (n + 1) by
+        ^
+Highlighted span: s

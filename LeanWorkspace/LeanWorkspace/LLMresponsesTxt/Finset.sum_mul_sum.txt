@@ -1,0 +1,295 @@
+FILE: Finset.sum_mul_sum.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Finset.sum_mul_sum.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {ι κ M R : Type*} {s s₁ s₂ : Finset ι} {i : ι}
+
+variable [NonUnitalNonAssocSemiring R]
+
+theorem sum_mul_sum (s : Finset ι) (t : Finset κ) (f : ι → R) (g : κ → R) :
+    (∑ i ∈ s, f i) * ∑ j ∈ t, g j = ∑ i ∈ s, ∑ j ∈ t, f i * g j := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι κ M R : Type*} {s s₁ s₂ : Finset ι} {i : ι}
+
+variable [NonUnitalNonAssocSemiring R]
+
+theorem sum_mul_sum (s : Finset ι) (t : Finset κ) (f : ι → R) (g : κ → R) :
+    (∑ i ∈ s, f i) * ∑ j ∈ t, g j = ∑ i ∈ s, ∑ j ∈ t, f i * g j := by
+  classical
+  induction s using Finset.induction_on with
+  | empty =>
+      simp
+  | @insert a s ha ih =>
+      simp [ha, add_mul, ih, Finset.sum_add_distrib]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:23-14:1
+unsolved goals
+case insert
+ι : Type u_1
+κ : Type u_2
+R : Type u_4
+inst✝ : NonUnitalNonAssocSemiring R
+t : Finset κ
+f : ι → R
+g : κ → R
+a : ι
+s : Finset ι
+ha : a ∉ s
+ih : (∑ i ∈ s, f i) * ∑ j ∈ t, g j = ∑ i ∈ s, ∑ j ∈ t, f i * g j
+⊢ f a * ∑ j ∈ t, g j + ∑ i ∈ s, ∑ j ∈ t, f i * g j = ∑ j ∈ t, f a * g j + ∑ i ∈ s, ∑ j ∈ t, f i * g j
+Source line 13:
+  | @insert a s ha ih =>
+                      ^
+Highlighted span: =
+
+WARNING .LspCheck.lean:14:30-14:52
+This simp argument is unused:
+  Finset.sum_add_distrib
+
+Hint: Omit it from the simp argument list.
+  simp [ha, add_mul, ih,̵ ̵F̵i̵n̵s̵e̵t̵.̵s̵u̵m̵_̵a̵d̵d̵_̵d̵i̵s̵t̵r̵i̵b̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 14:
+      simp [ha, add_mul, ih, Finset.sum_add_distrib]
+                             ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.sum_add_distrib
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:23-14:1
+unsolved goals
+case insert
+ι : Type u_1
+κ : Type u_2
+R : Type u_4
+inst✝ : NonUnitalNonAssocSemiring R
+t : Finset κ
+f : ι → R
+g : κ → R
+a : ι
+s : Finset ι
+ha : a ∉ s
+ih : (∑ i ∈ s, f i) * ∑ j ∈ t, g j = ∑ i ∈ s, ∑ j ∈ t, f i * g j
+⊢ f a * ∑ j ∈ t, g j + ∑ i ∈ s, ∑ j ∈ t, f i * g j = ∑ j ∈ t, f a * g j + ∑ i ∈ s, ∑ j ∈ t, f i * g j
+Source line 13:
+  | @insert a s ha ih =>
+                      ^
+Highlighted span: =
+
+WARNING .LspCheck.lean:14:30-14:52
+This simp argument is unused:
+  Finset.sum_add_distrib
+
+Hint: Omit it from the simp argument list.
+  simp [ha, add_mul, ih,̵ ̵F̵i̵n̵s̵e̵t̵.̵s̵u̵m̵_̵a̵d̵d̵_̵d̵i̵s̵t̵r̵i̵b̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 14:
+      simp [ha, add_mul, ih, Finset.sum_add_distrib]
+                             ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.sum_add_distrib
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι κ M R : Type*} {s s₁ s₂ : Finset ι} {i : ι}
+
+variable [NonUnitalNonAssocSemiring R]
+
+theorem sum_mul_sum (s : Finset ι) (t : Finset κ) (f : ι → R) (g : κ → R) :
+    (∑ i ∈ s, f i) * ∑ j ∈ t, g j = ∑ i ∈ s, ∑ j ∈ t, f i * g j := by
+  classical
+  induction s using Finset.induction_on with
+  | empty =>
+      simp
+  | @insert a s ha ih =>
+      simp [ha, add_mul, ih, Finset.mul_sum]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:23-14:1
+unsolved goals
+case insert
+ι : Type u_1
+κ : Type u_2
+R : Type u_4
+inst✝ : NonUnitalNonAssocSemiring R
+t : Finset κ
+f : ι → R
+g : κ → R
+a : ι
+s : Finset ι
+ha : a ∉ s
+ih : (∑ i ∈ s, f i) * ∑ j ∈ t, g j = ∑ i ∈ s, ∑ j ∈ t, f i * g j
+⊢ ∑ x ∈ t, (f a * g x + (∑ i ∈ s, f i) * g x) = ∑ j ∈ t, f a * g j + ∑ i ∈ s, ∑ j ∈ t, f i * g j
+Source line 13:
+  | @insert a s ha ih =>
+                      ^
+Highlighted span: =
+
+WARNING .LspCheck.lean:14:26-14:28
+This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp [ha, add_mul, i̵h̵,̵ ̵Finset.mul_sum]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 14:
+      simp [ha, add_mul, ih, Finset.mul_sum]
+                         ^^
+Highlighted span: ih
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:23-14:1
+unsolved goals
+case insert
+ι : Type u_1
+κ : Type u_2
+R : Type u_4
+inst✝ : NonUnitalNonAssocSemiring R
+t : Finset κ
+f : ι → R
+g : κ → R
+a : ι
+s : Finset ι
+ha : a ∉ s
+ih : (∑ i ∈ s, f i) * ∑ j ∈ t, g j = ∑ i ∈ s, ∑ j ∈ t, f i * g j
+⊢ ∑ x ∈ t, (f a * g x + (∑ i ∈ s, f i) * g x) = ∑ j ∈ t, f a * g j + ∑ i ∈ s, ∑ j ∈ t, f i * g j
+Source line 13:
+  | @insert a s ha ih =>
+                      ^
+Highlighted span: =
+
+WARNING .LspCheck.lean:14:26-14:28
+This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp [ha, add_mul, i̵h̵,̵ ̵Finset.mul_sum]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 14:
+      simp [ha, add_mul, ih, Finset.mul_sum]
+                         ^^
+Highlighted span: ih
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι κ M R : Type*} {s s₁ s₂ : Finset ι} {i : ι}
+
+variable [NonUnitalNonAssocSemiring R]
+
+theorem sum_mul_sum (s : Finset ι) (t : Finset κ) (f : ι → R) (g : κ → R) :
+    (∑ i ∈ s, f i) * ∑ j ∈ t, g j = ∑ i ∈ s, ∑ j ∈ t, f i * g j := by
+  classical
+  induction s using Finset.induction_on with
+  | empty =>
+      simp
+  | @insert a s ha ih =>
+      simp [ha, add_mul, Finset.mul_sum, ih, Finset.sum_add_distrib]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:23-14:1
+unsolved goals
+case insert
+ι : Type u_1
+κ : Type u_2
+R : Type u_4
+inst✝ : NonUnitalNonAssocSemiring R
+t : Finset κ
+f : ι → R
+g : κ → R
+a : ι
+s : Finset ι
+ha : a ∉ s
+ih : (∑ i ∈ s, f i) * ∑ j ∈ t, g j = ∑ i ∈ s, ∑ j ∈ t, f i * g j
+⊢ ∑ x ∈ t, f a * g x + ∑ x ∈ t, (∑ i ∈ s, f i) * g x = ∑ x ∈ t, f a * g x + ∑ i ∈ s, ∑ j ∈ t, f i * g j
+Source line 13:
+  | @insert a s ha ih =>
+                      ^
+Highlighted span: =
+
+WARNING .LspCheck.lean:14:42-14:44
+This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp [ha, add_mul, Finset.mul_sum, i̵h̵,̵ ̵Finset.sum_add_distrib]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 14:
+      simp [ha, add_mul, Finset.mul_sum, ih, Finset.sum_add_distrib]
+                                         ^^
+Highlighted span: ih
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:23-14:1
+unsolved goals
+case insert
+ι : Type u_1
+κ : Type u_2
+R : Type u_4
+inst✝ : NonUnitalNonAssocSemiring R
+t : Finset κ
+f : ι → R
+g : κ → R
+a : ι
+s : Finset ι
+ha : a ∉ s
+ih : (∑ i ∈ s, f i) * ∑ j ∈ t, g j = ∑ i ∈ s, ∑ j ∈ t, f i * g j
+⊢ ∑ x ∈ t, f a * g x + ∑ x ∈ t, (∑ i ∈ s, f i) * g x = ∑ x ∈ t, f a * g x + ∑ i ∈ s, ∑ j ∈ t, f i * g j
+Source line 13:
+  | @insert a s ha ih =>
+                      ^
+Highlighted span: =
+
+WARNING .LspCheck.lean:14:42-14:44
+This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp [ha, add_mul, Finset.mul_sum, i̵h̵,̵ ̵Finset.sum_add_distrib]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 14:
+      simp [ha, add_mul, Finset.mul_sum, ih, Finset.sum_add_distrib]
+                                         ^^
+Highlighted span: ih

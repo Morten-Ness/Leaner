@@ -1,0 +1,193 @@
+FILE: ModEq.sub_modEq_iff_modEq_add.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: ModEq.sub_modEq_iff_modEq_add.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {G : Type*} [AddCommGroup G] {p a a₁ a₂ b b₁ b₂ c : G} {n : ℕ} {z : ℤ}
+
+theorem sub_modEq_iff_modEq_add : a - b ≡ c [PMOD p] ↔ a ≡ c + b [PMOD p] := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G : Type*} [AddCommGroup G] {p a a₁ a₂ b b₁ b₂ c : G} {n : ℕ} {z : ℤ}
+
+theorem sub_modEq_iff_modEq_add : a - b ≡ c [PMOD p] ↔ a ≡ c + b [PMOD p] := by
+  simpa [sub_eq_add_neg, add_assoc, add_comm, add_left_comm] using
+    (add_right_cancel_iff_modEq (p := p) (a := a - b) (b := c) (c := b))
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:7:6-7:32
+Unknown identifier `add_right_cancel_iff_modEq`
+Source line 7:
+    (add_right_cancel_iff_modEq (p := p) (a := a - b) (b := c) (c := b))
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: add_right_cancel_iff_modEq
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:7:6-7:32
+Unknown identifier `add_right_cancel_iff_modEq`
+Source line 7:
+    (add_right_cancel_iff_modEq (p := p) (a := a - b) (b := c) (c := b))
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: add_right_cancel_iff_modEq
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G : Type*} [AddCommGroup G] {p a a₁ a₂ b b₁ b₂ c : G} {n : ℕ} {z : ℤ}
+
+theorem sub_modEq_iff_modEq_add : a - b ≡ c [PMOD p] ↔ a ≡ c + b [PMOD p] := by
+  constructor
+  · intro h
+    rcases h with ⟨z, hz⟩
+    refine ⟨z, ?_⟩
+    calc
+      a = (a - b) + b := by abel
+      _ = c + z • p + b := by simpa [sub_eq_add_neg] using congrArg (fun x => x + b) hz
+      _ = c + b + z • p := by abel
+  · intro h
+    rcases h with ⟨z, hz⟩
+    refine ⟨z, ?_⟩
+    calc
+      a - b = a + (-b) := by simp [sub_eq_add_neg]
+      _ = (c + b + z • p) + (-b) := by simpa using congrArg (fun x => x + (-b)) hz
+      _ = c + z • p := by abel
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:5-10:9
+'calc' expression has type
+  a = c + b + z • p
+but is expected to have type
+  ∃ n, z • p + a = n • p + (c + b)
+Source line 10:
+    calc
+    ^^^^
+Highlighted span: calc
+
+ERROR .LspCheck.lean:12:86-12:88
+Application type mismatch: The argument
+  hz
+has type
+  ∃ n, z • p + (a - b) = n • p + c
+but is expected to have type
+  ?m.91 = ?m.92
+in the application
+  congrArg (fun x ↦ x + b) hz
+Source line 12:
+      _ = c + z • p + b := by simpa [sub_eq_add_neg] using congrArg (fun x => x + b) hz
+                                                                                     ^^
+Highlighted span: hz
+
+ERROR .LspCheck.lean:17:5-17:9
+'calc' expression has type
+  a - b = c + z • p
+but is expected to have type
+  ∃ n, z • p + (a - b) = n • p + c
+Source line 17:
+    calc
+    ^^^^
+Highlighted span: calc
+
+ERROR .LspCheck.lean:19:81-19:83
+Application type mismatch: The argument
+  hz
+has type
+  ∃ n, z • p + a = n • p + (c + b)
+but is expected to have type
+  ?m.158 = ?m.159
+in the application
+  congrArg (fun x ↦ x + -b) hz
+Source line 19:
+      _ = (c + b + z • p) + (-b) := by simpa using congrArg (fun x => x + (-b)) hz
+                                                                                ^^
+Highlighted span: hz
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:5-10:9
+'calc' expression has type
+  a = c + b + z • p
+but is expected to have type
+  ∃ n, z • p + a = n • p + (c + b)
+Source line 10:
+    calc
+    ^^^^
+Highlighted span: calc
+
+ERROR .LspCheck.lean:12:86-12:88
+Application type mismatch: The argument
+  hz
+has type
+  ∃ n, z • p + (a - b) = n • p + c
+but is expected to have type
+  ?m.91 = ?m.92
+in the application
+  congrArg (fun x ↦ x + b) hz
+Source line 12:
+      _ = c + z • p + b := by simpa [sub_eq_add_neg] using congrArg (fun x => x + b) hz
+                                                                                     ^^
+Highlighted span: hz
+
+ERROR .LspCheck.lean:17:5-17:9
+'calc' expression has type
+  a - b = c + z • p
+but is expected to have type
+  ∃ n, z • p + (a - b) = n • p + c
+Source line 17:
+    calc
+    ^^^^
+Highlighted span: calc
+
+ERROR .LspCheck.lean:19:81-19:83
+Application type mismatch: The argument
+  hz
+has type
+  ∃ n, z • p + a = n • p + (c + b)
+but is expected to have type
+  ?m.158 = ?m.159
+in the application
+  congrArg (fun x ↦ x + -b) hz
+Source line 19:
+      _ = (c + b + z • p) + (-b) := by simpa using congrArg (fun x => x + (-b)) hz
+                                                                                ^^
+Highlighted span: hz
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G : Type*} [AddCommGroup G] {p a a₁ a₂ b b₁ b₂ c : G} {n : ℕ} {z : ℤ}
+
+theorem sub_modEq_iff_modEq_add : a - b ≡ c [PMOD p] ↔ a ≡ c + b [PMOD p] := by
+  constructor
+  · intro h
+    simpa [sub_eq_add_neg, add_assoc, add_comm, add_left_comm] using h.add_right b
+  · intro h
+    simpa [sub_eq_add_neg, add_assoc, add_comm, add_left_comm] using h.sub_right b
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

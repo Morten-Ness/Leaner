@@ -1,0 +1,275 @@
+FILE: Defs.vadd_mem_iff_mem_of_mem_direction.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Defs.vadd_mem_iff_mem_of_mem_direction.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable (k : Type*) {V : Type*} (P : Type*) [Ring k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {k P}
+
+theorem vadd_mem_iff_mem_of_mem_direction {s : AffineSubspace k P} {v : V} (hv : v ∈ s.direction)
+    {p : P} : v +ᵥ p ∈ s ↔ p ∈ s := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (k : Type*) {V : Type*} (P : Type*) [Ring k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {k P}
+
+theorem vadd_mem_iff_mem_of_mem_direction {s : AffineSubspace k P} {v : V} (hv : v ∈ s.direction)
+    {p : P} : v +ᵥ p ∈ s ↔ p ∈ s := by
+  constructor
+  · intro hp
+    rw [← s.vsub_right_mem_direction_iff_mem hp]
+    simpa using hv
+  · intro hp
+    rw [s.vadd_mem_iff_mem_direction hp]
+    exact hv
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:5-13:19
+Type mismatch: After simplification, term
+  hv
+ has type
+  v ∈ s.direction
+but is expected to have type
+  p -ᵥ (v +ᵥ p) ∈ s.direction
+Source line 13:
+    simpa using hv
+    ^^^^^^^^^^^^^^
+Highlighted span: simpa using hv
+
+ERROR .LspCheck.lean:15:38-15:40
+Application type mismatch: The argument
+  hp
+has type
+  p ∈ s
+of sort `Prop` but is expected to have type
+  V
+of sort `Type u_2` in the application
+  @AffineSubspace.vadd_mem_iff_mem_direction k V P inst✝³ inst✝² inst✝¹ inst✝ s hp
+Source line 15:
+    rw [s.vadd_mem_iff_mem_direction hp]
+                                     ^^
+Highlighted span: hp
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:5-13:19
+Type mismatch: After simplification, term
+  hv
+ has type
+  v ∈ s.direction
+but is expected to have type
+  p -ᵥ (v +ᵥ p) ∈ s.direction
+Source line 13:
+    simpa using hv
+    ^^^^^^^^^^^^^^
+Highlighted span: simpa using hv
+
+ERROR .LspCheck.lean:15:38-15:40
+Application type mismatch: The argument
+  hp
+has type
+  p ∈ s
+of sort `Prop` but is expected to have type
+  V
+of sort `Type u_2` in the application
+  @AffineSubspace.vadd_mem_iff_mem_direction k V P inst✝³ inst✝² inst✝¹ inst✝ s hp
+Source line 15:
+    rw [s.vadd_mem_iff_mem_direction hp]
+                                     ^^
+Highlighted span: hp
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (k : Type*) {V : Type*} (P : Type*) [Ring k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {k P}
+
+theorem vadd_mem_iff_mem_of_mem_direction {s : AffineSubspace k P} {v : V} (hv : v ∈ s.direction)
+    {p : P} : v +ᵥ p ∈ s ↔ p ∈ s := by
+  constructor
+  · intro hp
+    rw [← s.vsub_right_mem_direction_iff_mem hp]
+    simpa using neg_mem_iff.mp (by simpa using hv)
+  · intro hp
+    rw [s.vsub_right_mem_direction_iff_mem hp]
+    simpa using hv
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:9-15:46
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Membership.mem.{u_2, u_2} s.direction (?p₂ -ᵥ p)
+in the target expression
+  Membership.mem.{u_3, u_3} s (v +ᵥ p)
+
+case mpr
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+inst✝ : AddTorsor V P
+s : AffineSubspace k P
+v : V
+hv : v ∈ s.direction
+p : P
+hp : p ∈ s
+⊢ v +ᵥ p ∈ s
+Source line 15:
+    rw [s.vsub_right_mem_direction_iff_mem hp]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: s.vsub_right_mem_direction_iff_mem hp
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:9-15:46
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Membership.mem.{u_2, u_2} s.direction (?p₂ -ᵥ p)
+in the target expression
+  Membership.mem.{u_3, u_3} s (v +ᵥ p)
+
+case mpr
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+inst✝ : AddTorsor V P
+s : AffineSubspace k P
+v : V
+hv : v ∈ s.direction
+p : P
+hp : p ∈ s
+⊢ v +ᵥ p ∈ s
+Source line 15:
+    rw [s.vsub_right_mem_direction_iff_mem hp]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: s.vsub_right_mem_direction_iff_mem hp
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (k : Type*) {V : Type*} (P : Type*) [Ring k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {k P}
+
+theorem vadd_mem_iff_mem_of_mem_direction {s : AffineSubspace k P} {v : V} (hv : v ∈ s.direction)
+    {p : P} : v +ᵥ p ∈ s ↔ p ∈ s := by
+  constructor
+  · intro hp
+    have hmem : p -ᵥ (v +ᵥ p) ∈ s.direction := by
+      rw [s.vsub_right_mem_direction_iff_mem hp]
+      exact hp
+    simpa using hmem
+  · intro hp
+    have hmem : (v +ᵥ p) -ᵥ p ∈ s.direction := by
+      simpa using hv
+    exact s.vadd_vsub_mem_of_mem_direction hmem hp
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:7-14:15
+Type mismatch
+  hp
+has type
+  v +ᵥ p ∈ s
+but is expected to have type
+  p ∈ s
+Source line 14:
+      exact hp
+      ^^^^^^^^
+Highlighted span: exact hp
+
+ERROR .LspCheck.lean:15:5-15:21
+Type mismatch: After simplification, term
+  hmem
+ has type
+  Membership.mem.{u_2, u_2} s.direction (p -ᵥ (v +ᵥ p))
+but is expected to have type
+  Membership.mem.{u_3, u_3} s p
+Source line 15:
+    simpa using hmem
+    ^^^^^^^^^^^^^^^^
+Highlighted span: simpa using hmem
+
+ERROR .LspCheck.lean:19:13-19:43
+Invalid field `vadd_vsub_mem_of_mem_direction`: The environment does not contain `AffineSubspace.vadd_vsub_mem_of_mem_direction`, so it is not possible to project the field `vadd_vsub_mem_of_mem_direction` from an expression
+  s
+of type `AffineSubspace k P`
+Source line 19:
+    exact s.vadd_vsub_mem_of_mem_direction hmem hp
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: vadd_vsub_mem_of_mem_direction
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:7-14:15
+Type mismatch
+  hp
+has type
+  v +ᵥ p ∈ s
+but is expected to have type
+  p ∈ s
+Source line 14:
+      exact hp
+      ^^^^^^^^
+Highlighted span: exact hp
+
+ERROR .LspCheck.lean:15:5-15:21
+Type mismatch: After simplification, term
+  hmem
+ has type
+  Membership.mem.{u_2, u_2} s.direction (p -ᵥ (v +ᵥ p))
+but is expected to have type
+  Membership.mem.{u_3, u_3} s p
+Source line 15:
+    simpa using hmem
+    ^^^^^^^^^^^^^^^^
+Highlighted span: simpa using hmem
+
+ERROR .LspCheck.lean:19:13-19:43
+Invalid field `vadd_vsub_mem_of_mem_direction`: The environment does not contain `AffineSubspace.vadd_vsub_mem_of_mem_direction`, so it is not possible to project the field `vadd_vsub_mem_of_mem_direction` from an expression
+  s
+of type `AffineSubspace k P`
+Source line 19:
+    exact s.vadd_vsub_mem_of_mem_direction hmem hp
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: vadd_vsub_mem_of_mem_direction

@@ -1,0 +1,359 @@
+FILE: Basic.map_surjective.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.map_surjective.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable (ι : Type v) (β : ι → Type w)
+
+variable [∀ i, AddCommMonoid (β i)]
+
+variable {M S : Type*} [AddCommMonoid M] [SetLike S M] [AddSubmonoidClass S M]
+
+variable {ι : Type*} {α : ι → Type*} {β : ι → Type*} [∀ i, AddCommMonoid (α i)]
+
+variable [∀ i, AddCommMonoid (β i)] (f : ∀ (i : ι), α i →+ β i)
+
+theorem map_surjective : Function.Surjective (DirectSum.map f) ↔ (∀ i, Function.Surjective (f i)) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (ι : Type v) (β : ι → Type w)
+
+variable [∀ i, AddCommMonoid (β i)]
+
+variable {M S : Type*} [AddCommMonoid M] [SetLike S M] [AddSubmonoidClass S M]
+
+variable {ι : Type*} {α : ι → Type*} {β : ι → Type*} [∀ i, AddCommMonoid (α i)]
+
+variable [∀ i, AddCommMonoid (β i)] (f : ∀ (i : ι), α i →+ β i)
+
+theorem map_surjective : Function.Surjective (DirectSum.map f) ↔ (∀ i, Function.Surjective (f i)) := by
+  constructor
+  · intro h i y
+    obtain ⟨x, hx⟩ := h (DirectSum.lof β i y)
+    refine ⟨DirectSum.of (fun i => α i) i x, ?_⟩
+    have := congrArg (DirectSum.component i) hx
+    simpa using this
+  · intro h x
+    classical
+    refine DirectSum.induction_on x ?hz ?ha ?hs
+    · refine ⟨0, by simp⟩
+    · intro i y
+      obtain ⟨x, rfl⟩ := h i y
+      refine ⟨DirectSum.of (fun i => α i) i x, by simp [DirectSum.map_of]⟩
+    · intro x y hx hy
+      rcases hx with ⟨x', rfl⟩
+      rcases hy with ⟨y', rfl⟩
+      refine ⟨x' + y', by simp⟩
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:40-16:41
+Application type mismatch: The argument
+  β
+has type
+  ι → Type u_5
+but is expected to have type
+  Type ?u.11823.23
+in the application
+  @DirectSum.lof β
+Source line 16:
+    obtain ⟨x, hx⟩ := h (DirectSum.lof β i y)
+                                       ^
+Highlighted span: β
+
+ERROR .LspCheck.lean:17:43-17:44
+Application type mismatch: The argument
+  x
+has type
+  DirectSum ι fun i ↦ α i
+of sort `Type (max u_4 u_3)` but is expected to have type
+  α i
+of sort `Type u_4` in the application
+  (DirectSum.of (fun i ↦ α i) i) x
+Source line 17:
+    refine ⟨DirectSum.of (fun i => α i) i x, ?_⟩
+                                          ^
+Highlighted span: x
+
+ERROR .LspCheck.lean:17:13-17:44
+failed to synthesize instance of type class
+  DecidableEq ι
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 17:
+    refine ⟨DirectSum.of (fun i => α i) i x, ?_⟩
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: DirectSum.of (fun i => α i) i x
+
+ERROR .LspCheck.lean:18:43-18:44
+Application type mismatch: The argument
+  i
+has type
+  ι
+of sort `Type u_3` but is expected to have type
+  Type ?u.11823.18207
+of sort `Type (?u.11823.18207 + 1)` in the application
+  @DirectSum.component i
+Source line 18:
+    have := congrArg (DirectSum.component i) hx
+                                          ^
+Highlighted span: i
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:40-16:41
+Application type mismatch: The argument
+  β
+has type
+  ι → Type u_5
+but is expected to have type
+  Type ?u.11823.23
+in the application
+  @DirectSum.lof β
+Source line 16:
+    obtain ⟨x, hx⟩ := h (DirectSum.lof β i y)
+                                       ^
+Highlighted span: β
+
+ERROR .LspCheck.lean:17:43-17:44
+Application type mismatch: The argument
+  x
+has type
+  DirectSum ι fun i ↦ α i
+of sort `Type (max u_4 u_3)` but is expected to have type
+  α i
+of sort `Type u_4` in the application
+  (DirectSum.of (fun i ↦ α i) i) x
+Source line 17:
+    refine ⟨DirectSum.of (fun i => α i) i x, ?_⟩
+                                          ^
+Highlighted span: x
+
+ERROR .LspCheck.lean:17:13-17:44
+failed to synthesize instance of type class
+  DecidableEq ι
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 17:
+    refine ⟨DirectSum.of (fun i => α i) i x, ?_⟩
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: DirectSum.of (fun i => α i) i x
+
+ERROR .LspCheck.lean:18:43-18:44
+Application type mismatch: The argument
+  i
+has type
+  ι
+of sort `Type u_3` but is expected to have type
+  Type ?u.11823.18207
+of sort `Type (?u.11823.18207 + 1)` in the application
+  @DirectSum.component i
+Source line 18:
+    have := congrArg (DirectSum.component i) hx
+                                          ^
+Highlighted span: i
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (ι : Type v) (β : ι → Type w)
+
+variable [∀ i, AddCommMonoid (β i)]
+
+variable {M S : Type*} [AddCommMonoid M] [SetLike S M] [AddSubmonoidClass S M]
+
+variable {ι : Type*} {α : ι → Type*} {β : ι → Type*} [∀ i, AddCommMonoid (α i)]
+
+variable [∀ i, AddCommMonoid (β i)] (f : ∀ (i : ι), α i →+ β i)
+
+theorem map_surjective : Function.Surjective (DirectSum.map f) ↔ (∀ i, Function.Surjective (f i)) := by
+  constructor
+  · intro h i y
+    obtain ⟨x, hx⟩ := h (DirectSum.of β i y)
+    refine ⟨DirectSum.toAddMonoid (α := α) x i, ?_⟩
+    have hcomp := congrArg (DirectSum.toAddMonoid (α := β) · i) hx
+    simpa using hcomp
+  · intro h
+    classical
+    intro x
+    refine DirectSum.induction_on x ?_ ?_ ?_
+    · exact ⟨0, by simp⟩
+    · intro i y
+      obtain ⟨x, rfl⟩ := h i y
+      exact ⟨DirectSum.of α i x, by simp [DirectSum.map_of]⟩
+    · intro x y hx hy
+      rcases hx with ⟨x', rfl⟩
+      rcases hy with ⟨y', rfl⟩
+      exact ⟨x' + y', by simp⟩
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:26-16:44
+failed to synthesize instance of type class
+  DecidableEq ι
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 16:
+    obtain ⟨x, hx⟩ := h (DirectSum.of β i y)
+                         ^^^^^^^^^^^^^^^^^^
+Highlighted span: DirectSum.of β i y
+
+ERROR .LspCheck.lean:17:35-17:43
+Invalid argument name `α` for function `DFunLike.coe`
+
+Hint: Perhaps you meant one of the following parameter names:
+  • `ι`: α̵ι̲
+  • `β`: α̵β̲
+  • `γ`: α̵γ̲
+  • `φ`: α̵φ̲
+  • `a`: α̵a̲
+Source line 17:
+    refine ⟨DirectSum.toAddMonoid (α := α) x i, ?_⟩
+                                  ^^^^^^^^
+Highlighted span: (α := α)
+
+ERROR .LspCheck.lean:17:46-17:47
+Application type mismatch: The argument
+  i
+has type
+  ι
+but is expected to have type
+  DirectSum ?m.47 fun i ↦ ?m.48 i
+in the application
+  (DirectSum.toAddMonoid ?m.54) i
+Source line 17:
+    refine ⟨DirectSum.toAddMonoid (α := α) x i, ?_⟩
+                                             ^
+Highlighted span: i
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:26-16:44
+failed to synthesize instance of type class
+  DecidableEq ι
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 16:
+    obtain ⟨x, hx⟩ := h (DirectSum.of β i y)
+                         ^^^^^^^^^^^^^^^^^^
+Highlighted span: DirectSum.of β i y
+
+ERROR .LspCheck.lean:17:35-17:43
+Invalid argument name `α` for function `DFunLike.coe`
+
+Hint: Perhaps you meant one of the following parameter names:
+  • `ι`: α̵ι̲
+  • `β`: α̵β̲
+  • `γ`: α̵γ̲
+  • `φ`: α̵φ̲
+  • `a`: α̵a̲
+Source line 17:
+    refine ⟨DirectSum.toAddMonoid (α := α) x i, ?_⟩
+                                  ^^^^^^^^
+Highlighted span: (α := α)
+
+ERROR .LspCheck.lean:17:46-17:47
+Application type mismatch: The argument
+  i
+has type
+  ι
+but is expected to have type
+  DirectSum ?m.47 fun i ↦ ?m.48 i
+in the application
+  (DirectSum.toAddMonoid ?m.54) i
+Source line 17:
+    refine ⟨DirectSum.toAddMonoid (α := α) x i, ?_⟩
+                                             ^
+Highlighted span: i
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (ι : Type v) (β : ι → Type w)
+
+variable [∀ i, AddCommMonoid (β i)]
+
+variable {M S : Type*} [AddCommMonoid M] [SetLike S M] [AddSubmonoidClass S M]
+
+variable {ι : Type*} {α : ι → Type*} {β : ι → Type*} [∀ i, AddCommMonoid (α i)]
+
+variable [∀ i, AddCommMonoid (β i)] (f : ∀ (i : ι), α i →+ β i)
+
+theorem map_surjective : Function.Surjective (DirectSum.map f) ↔ (∀ i, Function.Surjective (f i)) := by
+  classical
+  constructor
+  · intro h i
+    simpa [Function.Surjective] using
+      (DirectSum.addHom_ext fun x =>
+        h.comp (DirectSum.of α i)).surjective
+  · intro h
+    intro x
+    refine DirectSum.induction_on x ?_ ?_ ?_
+    · exact ⟨0, by simp⟩
+    · intro i y
+      rcases h i y with ⟨x, rfl⟩
+      exact ⟨DirectSum.of α i x, by simp [DirectSum.map_of]⟩
+    · intro x y hx hy
+      rcases hx with ⟨x', rfl⟩
+      rcases hy with ⟨y', rfl⟩
+      exact ⟨x' + y', by simp⟩
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:19:16-19:34
+Application type mismatch: The argument
+  DirectSum.of α i
+has type
+  α i →+ DirectSum ι fun i ↦ α i
+of sort `Type (max u_4 u_4 u_3)` but is expected to have type
+  Function.Surjective ?m.44
+of sort `Prop` in the application
+  Function.Surjective.comp h (DirectSum.of α i)
+Source line 19:
+        h.comp (DirectSum.of α i)).surjective
+               ^^^^^^^^^^^^^^^^^^
+Highlighted span: (DirectSum.of α i)
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:19:16-19:34
+Application type mismatch: The argument
+  DirectSum.of α i
+has type
+  α i →+ DirectSum ι fun i ↦ α i
+of sort `Type (max u_4 u_4 u_3)` but is expected to have type
+  Function.Surjective ?m.44
+of sort `Prop` in the application
+  Function.Surjective.comp h (DirectSum.of α i)
+Source line 19:
+        h.comp (DirectSum.of α i)).surjective
+               ^^^^^^^^^^^^^^^^^^
+Highlighted span: (DirectSum.of α i)

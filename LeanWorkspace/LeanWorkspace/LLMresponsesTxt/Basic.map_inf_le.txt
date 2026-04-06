@@ -1,0 +1,124 @@
+FILE: Basic.map_inf_le.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.map_inf_le.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {k V₁ P₁ V₂ P₂ V₃ P₃ : Type*} [Ring k]
+
+variable [AddCommGroup V₁] [Module k V₁] [AddTorsor V₁ P₁]
+
+variable [AddCommGroup V₂] [Module k V₂] [AddTorsor V₂ P₂]
+
+variable [AddCommGroup V₃] [Module k V₃] [AddTorsor V₃ P₃]
+
+variable (f : P₁ →ᵃ[k] P₂)
+
+theorem map_inf_le (s₁ s₂ : AffineSubspace k P₁) : (s₁ ⊓ s₂).map f ≤ s₁.map f ⊓ s₂.map f := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k V₁ P₁ V₂ P₂ V₃ P₃ : Type*} [Ring k]
+
+variable [AddCommGroup V₁] [Module k V₁] [AddTorsor V₁ P₁]
+
+variable [AddCommGroup V₂] [Module k V₂] [AddTorsor V₂ P₂]
+
+variable [AddCommGroup V₃] [Module k V₃] [AddTorsor V₃ P₃]
+
+variable (f : P₁ →ᵃ[k] P₂)
+
+theorem map_inf_le (s₁ s₂ : AffineSubspace k P₁) : (s₁ ⊓ s₂).map f ≤ s₁.map f ⊓ s₂.map f := by
+  intro p hp
+  constructor <;> exact hp
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:19-15:27
+Type mismatch
+  hp
+has type
+  p ∈ AffineSubspace.map f (s₁ ⊓ s₂)
+but is expected to have type
+  p ∈ ↑(AffineSubspace.map f s₁)
+Source line 15:
+  constructor <;> exact hp
+                  ^^^^^^^^
+Highlighted span: exact hp
+
+ERROR .LspCheck.lean:15:19-15:27
+Type mismatch
+  hp
+has type
+  p ∈ AffineSubspace.map f (s₁ ⊓ s₂)
+but is expected to have type
+  p ∈ ↑(AffineSubspace.map f s₂)
+Source line 15:
+  constructor <;> exact hp
+                  ^^^^^^^^
+Highlighted span: exact hp
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:19-15:27
+Type mismatch
+  hp
+has type
+  p ∈ AffineSubspace.map f (s₁ ⊓ s₂)
+but is expected to have type
+  p ∈ ↑(AffineSubspace.map f s₁)
+Source line 15:
+  constructor <;> exact hp
+                  ^^^^^^^^
+Highlighted span: exact hp
+
+ERROR .LspCheck.lean:15:19-15:27
+Type mismatch
+  hp
+has type
+  p ∈ AffineSubspace.map f (s₁ ⊓ s₂)
+but is expected to have type
+  p ∈ ↑(AffineSubspace.map f s₂)
+Source line 15:
+  constructor <;> exact hp
+                  ^^^^^^^^
+Highlighted span: exact hp
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k V₁ P₁ V₂ P₂ V₃ P₃ : Type*} [Ring k]
+
+variable [AddCommGroup V₁] [Module k V₁] [AddTorsor V₁ P₁]
+
+variable [AddCommGroup V₂] [Module k V₂] [AddTorsor V₂ P₂]
+
+variable [AddCommGroup V₃] [Module k V₃] [AddTorsor V₃ P₃]
+
+variable (f : P₁ →ᵃ[k] P₂)
+
+theorem map_inf_le (s₁ s₂ : AffineSubspace k P₁) : (s₁ ⊓ s₂).map f ≤ s₁.map f ⊓ s₂.map f := by
+  intro p hp
+  rcases hp with ⟨q, hq, rfl⟩
+  constructor
+  · exact ⟨q, hq.1, rfl⟩
+  · exact ⟨q, hq.2, rfl⟩
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

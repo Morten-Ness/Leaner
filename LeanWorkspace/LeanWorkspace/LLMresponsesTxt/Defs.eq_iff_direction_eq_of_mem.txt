@@ -1,0 +1,315 @@
+FILE: Defs.eq_iff_direction_eq_of_mem.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Defs.eq_iff_direction_eq_of_mem.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable (k : Type*) {V : Type*} (P : Type*) [Ring k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {k P}
+
+theorem eq_iff_direction_eq_of_mem {s₁ s₂ : AffineSubspace k P} {p : P} (h₁ : p ∈ s₁)
+    (h₂ : p ∈ s₂) : s₁ = s₂ ↔ s₁.direction = s₂.direction := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (k : Type*) {V : Type*} (P : Type*) [Ring k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {k P}
+
+theorem eq_iff_direction_eq_of_mem {s₁ s₂ : AffineSubspace k P} {p : P} (h₁ : p ∈ s₁)
+    (h₂ : p ∈ s₂) : s₁ = s₂ ↔ s₁.direction = s₂.direction := by
+  constructor
+  · intro h
+    simpa [h]
+  · intro hdir
+    exact AffineSubspace.ext_of_direction_eq h₁ h₂ hdir
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+WARNING .LspCheck.lean:12:5-12:14
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 12:
+    simpa [h]
+    ^^^^^^^^^
+Highlighted span: simpa [h]
+
+ERROR .LspCheck.lean:14:46-14:48
+Application type mismatch: The argument
+  h₁
+has type
+  p ∈ s₁
+but is expected to have type
+  AffineSubspace.direction ?m.52 = AffineSubspace.direction ?m.53
+in the application
+  AffineSubspace.ext_of_direction_eq h₁
+Source line 14:
+    exact AffineSubspace.ext_of_direction_eq h₁ h₂ hdir
+                                             ^^
+Highlighted span: h₁
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+WARNING .LspCheck.lean:12:5-12:14
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 12:
+    simpa [h]
+    ^^^^^^^^^
+Highlighted span: simpa [h]
+
+ERROR .LspCheck.lean:14:46-14:48
+Application type mismatch: The argument
+  h₁
+has type
+  p ∈ s₁
+but is expected to have type
+  AffineSubspace.direction ?m.52 = AffineSubspace.direction ?m.53
+in the application
+  AffineSubspace.ext_of_direction_eq h₁
+Source line 14:
+    exact AffineSubspace.ext_of_direction_eq h₁ h₂ hdir
+                                             ^^
+Highlighted span: h₁
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (k : Type*) {V : Type*} (P : Type*) [Ring k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {k P}
+
+theorem eq_iff_direction_eq_of_mem {s₁ s₂ : AffineSubspace k P} {p : P} (h₁ : p ∈ s₁)
+    (h₂ : p ∈ s₂) : s₁ = s₂ ↔ s₁.direction = s₂.direction := by
+  constructor
+  · intro h
+    simp [h]
+  · intro hdir
+    ext q
+    constructor
+    · intro hq
+      rw [← AffineSubspace.vsub_right_mem_direction_iff_mem h₂]
+      have : q -ᵥ p ∈ s₁.direction := by
+        rw [← AffineSubspace.vsub_right_mem_direction_iff_mem h₁]
+        exact hq
+      rwa [hdir] at this
+    · intro hq
+      rw [← AffineSubspace.vsub_right_mem_direction_iff_mem h₁]
+      have : q -ᵥ p ∈ s₂.direction := by
+        rw [← AffineSubspace.vsub_right_mem_direction_iff_mem h₂]
+        exact hq
+      rwa [← hdir] at this
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:19:13-19:65
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Membership.mem.{u_3, u_3} s₁ ?p₂
+in the target expression
+  Membership.mem.{u_2, u_2} s₁.direction (q -ᵥ p)
+
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+inst✝ : AddTorsor V P
+s₁ s₂ : AffineSubspace k P
+p : P
+h₁ : p ∈ s₁
+h₂ : p ∈ s₂
+hdir : s₁.direction = s₂.direction
+q : P
+hq : q ∈ s₁
+⊢ q -ᵥ p ∈ s₁.direction
+Source line 19:
+        rw [← AffineSubspace.vsub_right_mem_direction_iff_mem h₁]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ← AffineSubspace.vsub_right_mem_direction_iff_mem h₁
+
+ERROR .LspCheck.lean:25:13-25:65
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Membership.mem.{u_3, u_3} s₂ ?p₂
+in the target expression
+  Membership.mem.{u_2, u_2} s₂.direction (q -ᵥ p)
+
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+inst✝ : AddTorsor V P
+s₁ s₂ : AffineSubspace k P
+p : P
+h₁ : p ∈ s₁
+h₂ : p ∈ s₂
+hdir : s₁.direction = s₂.direction
+q : P
+hq : q ∈ s₂
+⊢ q -ᵥ p ∈ s₂.direction
+Source line 25:
+        rw [← AffineSubspace.vsub_right_mem_direction_iff_mem h₂]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ← AffineSubspace.vsub_right_mem_direction_iff_mem h₂
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:19:13-19:65
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Membership.mem.{u_3, u_3} s₁ ?p₂
+in the target expression
+  Membership.mem.{u_2, u_2} s₁.direction (q -ᵥ p)
+
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+inst✝ : AddTorsor V P
+s₁ s₂ : AffineSubspace k P
+p : P
+h₁ : p ∈ s₁
+h₂ : p ∈ s₂
+hdir : s₁.direction = s₂.direction
+q : P
+hq : q ∈ s₁
+⊢ q -ᵥ p ∈ s₁.direction
+Source line 19:
+        rw [← AffineSubspace.vsub_right_mem_direction_iff_mem h₁]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ← AffineSubspace.vsub_right_mem_direction_iff_mem h₁
+
+ERROR .LspCheck.lean:25:13-25:65
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Membership.mem.{u_3, u_3} s₂ ?p₂
+in the target expression
+  Membership.mem.{u_2, u_2} s₂.direction (q -ᵥ p)
+
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+inst✝ : AddTorsor V P
+s₁ s₂ : AffineSubspace k P
+p : P
+h₁ : p ∈ s₁
+h₂ : p ∈ s₂
+hdir : s₁.direction = s₂.direction
+q : P
+hq : q ∈ s₂
+⊢ q -ᵥ p ∈ s₂.direction
+Source line 25:
+        rw [← AffineSubspace.vsub_right_mem_direction_iff_mem h₂]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ← AffineSubspace.vsub_right_mem_direction_iff_mem h₂
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (k : Type*) {V : Type*} (P : Type*) [Ring k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {k P}
+
+theorem eq_iff_direction_eq_of_mem {s₁ s₂ : AffineSubspace k P} {p : P} (h₁ : p ∈ s₁)
+    (h₂ : p ∈ s₂) : s₁ = s₂ ↔ s₁.direction = s₂.direction := by
+  constructor
+  · intro h
+    simp [h]
+  · intro hdir
+    ext q
+    rw [AffineSubspace.vsub_right_mem_direction_iff_mem h₂, AffineSubspace.vsub_right_mem_direction_iff_mem h₁]
+    simpa [hdir] using Iff.rfl
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:9-15:59
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?p₂ -ᵥ p ∈ s₂.direction
+in the target expression
+  q ∈ s₁ ↔ q ∈ s₂
+
+case mpr.h
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+inst✝ : AddTorsor V P
+s₁ s₂ : AffineSubspace k P
+p : P
+h₁ : p ∈ s₁
+h₂ : p ∈ s₂
+hdir : s₁.direction = s₂.direction
+q : P
+⊢ q ∈ s₁ ↔ q ∈ s₂
+Source line 15:
+    rw [AffineSubspace.vsub_right_mem_direction_iff_mem h₂, AffineSubspace.vsub_right_mem_direction_iff_mem h₁]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.vsub_right_mem_direction_iff_mem h₂
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:9-15:59
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?p₂ -ᵥ p ∈ s₂.direction
+in the target expression
+  q ∈ s₁ ↔ q ∈ s₂
+
+case mpr.h
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+inst✝ : AddTorsor V P
+s₁ s₂ : AffineSubspace k P
+p : P
+h₁ : p ∈ s₁
+h₂ : p ∈ s₂
+hdir : s₁.direction = s₂.direction
+q : P
+⊢ q ∈ s₁ ↔ q ∈ s₂
+Source line 15:
+    rw [AffineSubspace.vsub_right_mem_direction_iff_mem h₂, AffineSubspace.vsub_right_mem_direction_iff_mem h₁]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.vsub_right_mem_direction_iff_mem h₂

@@ -1,0 +1,179 @@
+FILE: Ker.ker_codRestrict.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Ker.ker_codRestrict.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} {P : Type*} [Group N] [Group P] (K : Subgroup G)
+
+variable {M : Type*} [MulOneClass M]
+
+theorem ker_codRestrict {S} [SetLike S N] [SubmonoidClass S N] (f : G →* N) (s : S)
+    (h : ∀ x, f x ∈ s) : (f.codRestrict s h).ker = f.ker := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} {P : Type*} [Group N] [Group P] (K : Subgroup G)
+
+variable {M : Type*} [MulOneClass M]
+
+theorem ker_codRestrict {S} [SetLike S N] [SubmonoidClass S N] (f : G →* N) (s : S)
+    (h : ∀ x, f x ∈ s) : (f.codRestrict s h).ker = f.ker := by
+  ext x
+  rfl
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:3-16:6
+Tactic `rfl` failed: The left-hand side
+  x ∈ (f.codRestrict s h).ker
+is not definitionally equal to the right-hand side
+  x ∈ f.ker
+
+case h
+G : Type u_1
+inst✝³ : Group G
+N : Type u_5
+inst✝² : Group N
+S : Type u_8
+inst✝¹ : SetLike S N
+inst✝ : SubmonoidClass S N
+f : G →* N
+s : S
+h : ∀ (x : G), f x ∈ s
+x : G
+⊢ x ∈ (f.codRestrict s h).ker ↔ x ∈ f.ker
+Source line 16:
+  rfl
+  ^^^
+Highlighted span: rfl
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:3-16:6
+Tactic `rfl` failed: The left-hand side
+  x ∈ (f.codRestrict s h).ker
+is not definitionally equal to the right-hand side
+  x ∈ f.ker
+
+case h
+G : Type u_1
+inst✝³ : Group G
+N : Type u_5
+inst✝² : Group N
+S : Type u_8
+inst✝¹ : SetLike S N
+inst✝ : SubmonoidClass S N
+f : G →* N
+s : S
+h : ∀ (x : G), f x ∈ s
+x : G
+⊢ x ∈ (f.codRestrict s h).ker ↔ x ∈ f.ker
+Source line 16:
+  rfl
+  ^^^
+Highlighted span: rfl
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} {P : Type*} [Group N] [Group P] (K : Subgroup G)
+
+variable {M : Type*} [MulOneClass M]
+
+theorem ker_codRestrict {S} [SetLike S N] [SubmonoidClass S N] (f : G →* N) (s : S)
+    (h : ∀ x, f x ∈ s) : (f.codRestrict s h).ker = f.ker := by
+  ext x
+  change f x = 1 ↔ f x = 1
+  constructor <;> intro hx
+  · exact Subtype.ext_iff.mp hx
+  · exact Subtype.ext hx
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:3-16:27
+'change' tactic failed, pattern
+  f x = 1 ↔ f x = 1
+is not definitionally equal to target
+  x ∈ (f.codRestrict s h).ker ↔ x ∈ f.ker
+Source line 16:
+  change f x = 1 ↔ f x = 1
+  ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: change f x = 1 ↔ f x = 1
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:3-16:27
+'change' tactic failed, pattern
+  f x = 1 ↔ f x = 1
+is not definitionally equal to target
+  x ∈ (f.codRestrict s h).ker ↔ x ∈ f.ker
+Source line 16:
+  change f x = 1 ↔ f x = 1
+  ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: change f x = 1 ↔ f x = 1
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} {P : Type*} [Group N] [Group P] (K : Subgroup G)
+
+variable {M : Type*} [MulOneClass M]
+
+theorem ker_codRestrict {S} [SetLike S N] [SubmonoidClass S N] (f : G →* N) (s : S)
+    (h : ∀ x, f x ∈ s) : (f.codRestrict s h).ker = f.ker := by
+  ext x
+  constructor
+  · intro hx
+    exact congrArg Subtype.val hx
+  · intro hx
+    apply Subtype.ext
+    simpa using hx
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

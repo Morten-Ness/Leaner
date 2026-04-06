@@ -1,0 +1,191 @@
+FILE: Basic.map_sub_ofNat'.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.map_sub_ofNat'.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_sub_ofNat' [AddGroupWithOne G] [AddGroup H] [AddConstMapClass F G H 1 b]
+    (f : F) (x : G) (n : ℕ) [n.AtLeastTwo] :
+    f (x - ofNat(n)) = f x - ofNat(n) • b := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_sub_ofNat' [AddGroupWithOne G] [AddGroup H] [AddConstMapClass F G H 1 b]
+    (f : F) (x : G) (n : ℕ) [n.AtLeastTwo] :
+    f (x - ofNat(n)) = f x - ofNat(n) • b := by
+  simpa [sub_eq_add_neg, ofNat_eq_nsmul_one] using
+    (map_add_nsmul (f := f) (a := x) (n := -ofNat(n)) (b := b))
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:8:26-8:44
+Unknown identifier `ofNat_eq_nsmul_one`
+Source line 8:
+  simpa [sub_eq_add_neg, ofNat_eq_nsmul_one] using
+                         ^^^^^^^^^^^^^^^^^^
+Highlighted span: ofNat_eq_nsmul_one
+
+ERROR .LspCheck.lean:9:6-9:19
+Unknown identifier `map_add_nsmul`
+Source line 9:
+    (map_add_nsmul (f := f) (a := x) (n := -ofNat(n)) (b := b))
+     ^^^^^^^^^^^^^
+Highlighted span: map_add_nsmul
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:8:26-8:44
+Unknown identifier `ofNat_eq_nsmul_one`
+Source line 8:
+  simpa [sub_eq_add_neg, ofNat_eq_nsmul_one] using
+                         ^^^^^^^^^^^^^^^^^^
+Highlighted span: ofNat_eq_nsmul_one
+
+ERROR .LspCheck.lean:9:6-9:19
+Unknown identifier `map_add_nsmul`
+Source line 9:
+    (map_add_nsmul (f := f) (a := x) (n := -ofNat(n)) (b := b))
+     ^^^^^^^^^^^^^
+Highlighted span: map_add_nsmul
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_sub_ofNat' [AddGroupWithOne G] [AddGroup H] [AddConstMapClass F G H 1 b]
+    (f : F) (x : G) (n : ℕ) [n.AtLeastTwo] :
+    f (x - ofNat(n)) = f x - ofNat(n) • b := by
+  induction n using Nat.caseStrongInductionOn with
+  | h n ih =>
+      rcases n with _ | _ | n
+      · cases (Nat.not_lt_zero 0 (by simpa using inferInstance : 2 ≤ 0))
+      · cases (show ¬ Nat.AtLeastTwo 1 from by infer_instance)
+      ·
+        rcases n with _ | n
+        · simp [AddConstMapClass.map_zero, map_add]
+        ·
+          have hmap : f (x + 1) = f x + b := by
+            simpa using (AddConstMapClass.map_add (F := F) (f := f) (a := x) (n := 1) (b := b))
+          have hpred : Nat.AtLeastTwo (n + 2) := inferInstance
+          have ih' := ih (n + 2) (Nat.lt_succ_self _) hpred
+          simpa [Nat.succ_eq_add_one, sub_eq_add_neg, add_assoc, add_left_comm, add_comm, two_nsmul,
+            ← add_nsmul, ← one_nsmul, ← Nat.cast_add, ofNat_eq_coe, zsmul_eq_mul, sub_eq_add_neg] using ih'
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:8:21-8:46
+Unknown constant `Nat.caseStrongInductionOn`
+Source line 8:
+  induction n using Nat.caseStrongInductionOn with
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Nat.caseStrongInductionOn
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:8:21-8:46
+Unknown constant `Nat.caseStrongInductionOn`
+Source line 8:
+  induction n using Nat.caseStrongInductionOn with
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Nat.caseStrongInductionOn
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_sub_ofNat' [AddGroupWithOne G] [AddGroup H] [AddConstMapClass F G H 1 b]
+    (f : F) (x : G) (n : ℕ) [n.AtLeastTwo] :
+    f (x - ofNat(n)) = f x - ofNat(n) • b := by
+  rw [show ofNat n = (n : G) by rfl, show ofNat n • b = (n : ℤ) • b by rfl]
+  simpa [sub_eq_add_neg, add_comm, add_left_comm, add_assoc] using
+    map_zsmul₀ (f := f) (a := x) (n := (-((n : ℤ)))) (b := b)
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:8:12-8:17
+Unknown identifier `ofNat`
+Source line 8:
+  rw [show ofNat n = (n : G) by rfl, show ofNat n • b = (n : ℤ) • b by rfl]
+           ^^^^^
+Highlighted span: ofNat
+
+ERROR .LspCheck.lean:7:46-8:1
+unsolved goals
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝⁴ : FunLike F G H
+b : H
+inst✝³ : AddGroupWithOne G
+inst✝² : AddGroup H
+inst✝¹ : AddConstMapClass F G H 1 b
+f : F
+x : G
+n : ℕ
+inst✝ : n.AtLeastTwo
+⊢ f (x - OfNat.ofNat n) = f x - OfNat.ofNat n • b
+Source line 7:
+    f (x - ofNat(n)) = f x - ofNat(n) • b := by
+                                             ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:8:12-8:17
+Unknown identifier `ofNat`
+Source line 8:
+  rw [show ofNat n = (n : G) by rfl, show ofNat n • b = (n : ℤ) • b by rfl]
+           ^^^^^
+Highlighted span: ofNat
+
+ERROR .LspCheck.lean:7:46-8:1
+unsolved goals
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝⁴ : FunLike F G H
+b : H
+inst✝³ : AddGroupWithOne G
+inst✝² : AddGroup H
+inst✝¹ : AddConstMapClass F G H 1 b
+f : F
+x : G
+n : ℕ
+inst✝ : n.AtLeastTwo
+⊢ f (x - OfNat.ofNat n) = f x - OfNat.ofNat n • b
+Source line 7:
+    f (x - ofNat(n)) = f x - ofNat(n) • b := by
+                                             ^
+Highlighted span: b

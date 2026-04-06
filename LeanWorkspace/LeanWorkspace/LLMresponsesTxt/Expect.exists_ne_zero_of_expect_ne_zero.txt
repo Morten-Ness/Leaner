@@ -1,0 +1,239 @@
+FILE: Expect.exists_ne_zero_of_expect_ne_zero.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Expect.exists_ne_zero_of_expect_ne_zero.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Pointwise BigOperators
+
+variable {ι κ M N : Type*}
+
+variable [AddCommMonoid M] [Module ℚ≥0 M] [AddCommMonoid N] [Module ℚ≥0 N] {s t : Finset ι}
+  {f g : ι → M} {p q : ι → Prop} [DecidablePred p] [DecidablePred q]
+
+theorem exists_ne_zero_of_expect_ne_zero (h : 𝔼 i ∈ s, f i ≠ 0) : ∃ i ∈ s, f i ≠ 0 := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise BigOperators
+
+variable {ι κ M N : Type*}
+
+variable [AddCommMonoid M] [Module ℚ≥0 M] [AddCommMonoid N] [Module ℚ≥0 N] {s t : Finset ι}
+  {f g : ι → M} {p q : ι → Prop} [DecidablePred p] [DecidablePred q]
+
+theorem exists_ne_zero_of_expect_ne_zero (h : 𝔼 i ∈ s, f i ≠ 0) : ∃ i ∈ s, f i ≠ 0 := by
+  by_contra h'
+  push_neg at h'
+  rw [Finset.expect_eq_zero_iff] at h
+  exact h h'
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+WARNING .LspCheck.lean:12:3-12:17
+`push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+Source line 12:
+  push_neg at h'
+  ^^^^^^^^^^^^^^
+Highlighted span: push_neg at h'
+
+ERROR .LspCheck.lean:13:7-13:32
+Unknown constant `Finset.expect_eq_zero_iff`
+Source line 13:
+  rw [Finset.expect_eq_zero_iff] at h
+      ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.expect_eq_zero_iff
+
+ERROR .LspCheck.lean:10:88-11:1
+unsolved goals
+ι : Type u_1
+M : Type u_3
+inst✝¹ : AddCommMonoid M
+inst✝ : Module ℚ≥0 M
+s : Finset ι
+f : ι → M
+h : 𝔼 i ∈ s, f i ≠ 0
+h' : ∀ i ∈ s, f i = 0
+⊢ False
+Source line 10:
+theorem exists_ne_zero_of_expect_ne_zero (h : 𝔼 i ∈ s, f i ≠ 0) : ∃ i ∈ s, f i ≠ 0 := by
+                                                                                       ^
+Highlighted span: y
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+WARNING .LspCheck.lean:12:3-12:17
+`push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+Source line 12:
+  push_neg at h'
+  ^^^^^^^^^^^^^^
+Highlighted span: push_neg at h'
+
+ERROR .LspCheck.lean:13:7-13:32
+Unknown constant `Finset.expect_eq_zero_iff`
+Source line 13:
+  rw [Finset.expect_eq_zero_iff] at h
+      ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.expect_eq_zero_iff
+
+ERROR .LspCheck.lean:10:88-11:1
+unsolved goals
+ι : Type u_1
+M : Type u_3
+inst✝¹ : AddCommMonoid M
+inst✝ : Module ℚ≥0 M
+s : Finset ι
+f : ι → M
+h : 𝔼 i ∈ s, f i ≠ 0
+h' : ∀ i ∈ s, f i = 0
+⊢ False
+Source line 10:
+theorem exists_ne_zero_of_expect_ne_zero (h : 𝔼 i ∈ s, f i ≠ 0) : ∃ i ∈ s, f i ≠ 0 := by
+                                                                                       ^
+Highlighted span: y
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise BigOperators
+
+variable {ι κ M N : Type*}
+
+variable [AddCommMonoid M] [Module ℚ≥0 M] [AddCommMonoid N] [Module ℚ≥0 N] {s t : Finset ι}
+  {f g : ι → M} {p q : ι → Prop} [DecidablePred p] [DecidablePred q]
+
+theorem exists_ne_zero_of_expect_ne_zero (h : 𝔼 i ∈ s, f i ≠ 0) : ∃ i ∈ s, f i ≠ 0 := by
+  classical
+  by_cases hs : s.Nonempty
+  · exact Finset.exists_ne_zero_of_sum_ne_zero hs h
+  · exact False.elim <| h <| by simpa [Finset.not_nonempty_iff_eq_empty.mp hs] using rfl
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:48-13:50
+Application type mismatch: The argument
+  hs
+has type
+  s.Nonempty
+but is expected to have type
+  ∑ x ∈ ?m.38, ?m.40 x ≠ 0
+in the application
+  Finset.exists_ne_zero_of_sum_ne_zero hs
+Source line 13:
+  · exact Finset.exists_ne_zero_of_sum_ne_zero hs h
+                                               ^^
+Highlighted span: hs
+
+WARNING .LspCheck.lean:14:33-14:89
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 14:
+  · exact False.elim <| h <| by simpa [Finset.not_nonempty_iff_eq_empty.mp hs] using rfl
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [Finset.not_nonempty_iff_eq_empty.mp hs] using rfl
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:48-13:50
+Application type mismatch: The argument
+  hs
+has type
+  s.Nonempty
+but is expected to have type
+  ∑ x ∈ ?m.38, ?m.40 x ≠ 0
+in the application
+  Finset.exists_ne_zero_of_sum_ne_zero hs
+Source line 13:
+  · exact Finset.exists_ne_zero_of_sum_ne_zero hs h
+                                               ^^
+Highlighted span: hs
+
+WARNING .LspCheck.lean:14:33-14:89
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 14:
+  · exact False.elim <| h <| by simpa [Finset.not_nonempty_iff_eq_empty.mp hs] using rfl
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [Finset.not_nonempty_iff_eq_empty.mp hs] using rfl
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise BigOperators
+
+variable {ι κ M N : Type*}
+
+variable [AddCommMonoid M] [Module ℚ≥0 M] [AddCommMonoid N] [Module ℚ≥0 N] {s t : Finset ι}
+  {f g : ι → M} {p q : ι → Prop} [DecidablePred p] [DecidablePred q]
+
+theorem exists_ne_zero_of_expect_ne_zero (h : 𝔼 i ∈ s, f i ≠ 0) : ∃ i ∈ s, f i ≠ 0 := by
+  classical
+  by_contra h'
+  simp only [not_exists, not_and, not_not] at h'
+  apply h
+  ext
+  simp [h' i]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:3-15:6
+No applicable extensionality theorem found for type
+  M
+
+Note: Extensionality theorems can be registered by marking them with the `[ext]` attribute
+Source line 15:
+  ext
+  ^^^
+Highlighted span: ext
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:3-15:6
+No applicable extensionality theorem found for type
+  M
+
+Note: Extensionality theorems can be registered by marking them with the `[ext]` attribute
+Source line 15:
+  ext
+  ^^^
+Highlighted span: ext

@@ -1,0 +1,650 @@
+FILE: Quotient.zsmul_mem_zmultiples_iff_exists_sub_div.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Quotient.zsmul_mem_zmultiples_iff_exists_sub_div.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R : Type*} [DivisionRing R] [CharZero R] {p : R}
+
+theorem zsmul_mem_zmultiples_iff_exists_sub_div {r : R} {z : ℤ} (hz : z ≠ 0) :
+    z • r ∈ AddSubgroup.zmultiples p ↔
+      ∃ k : Fin z.natAbs, r - (k : ℕ) • (p / z : R) ∈ AddSubgroup.zmultiples p := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type*} [DivisionRing R] [CharZero R] {p : R}
+
+theorem zsmul_mem_zmultiples_iff_exists_sub_div {r : R} {z : ℤ} (hz : z ≠ 0) :
+    z • r ∈ AddSubgroup.zmultiples p ↔
+      ∃ k : Fin z.natAbs, r - (k : ℕ) • (p / z : R) ∈ AddSubgroup.zmultiples p := by
+  constructor
+  · intro hr
+    refine ⟨0, ?_⟩
+    rw [Fin.coe_zero]
+    simp only [zero_smul, sub_zero]
+    rcases hr with ⟨m, hm⟩
+    refine ⟨m / z, ?_⟩
+    rw [hm]
+    calc
+      (m / z : R) • p = ((m : R) / (z : R)) * p := by simp [zsmul_eq_mul]
+      _ = ((m : R) * ((z : R)⁻¹)) * p := by rw [div_eq_mul_inv]
+      _ = ((m : R) * (((z : R)⁻¹) * p)) := by ring
+      _ = ((m : R) * (p / z : R)) := by rw [div_eq_mul_inv, mul_assoc]
+      _ = (m : ℤ) • (p / z : R) := by simp [zsmul_eq_mul]
+  · rintro ⟨k, hk⟩
+    rcases hk with ⟨m, hm⟩
+    refine ⟨m + k, ?_⟩
+    have hzR : (z : R) ≠ 0 := by exact_mod_cast hz
+    apply_fun fun x : R => (z : R) * x at hm
+    simp only [mul_sub, mul_zsmul, zsmul_eq_mul, Nat.cast_smul_eq_nsmul, Fin.isValue,
+      sub_eq_iff_eq_add, Int.cast_add, Int.cast_natCast, mul_assoc] at hm ⊢
+    rw [← hm]
+    calc
+      (z : R) * r = (z : R) * (r - (k : ℕ) • (p / z : R)) + (z : R) * ((k : ℕ) • (p / z : R)) := by ring
+      _ = (m : R) * p + (k : R) * ((z : R) * (p / z : R)) := by
+        rw [hm]
+        simp [nsmul_eq_mul, mul_assoc]
+      _ = (m : R) * p + (k : R) * p := by
+        rw [div_eq_mul_inv]
+        field_simp [hzR]
+      _ = ((m + k : ℤ) : R) * p := by
+        norm_num [Int.cast_add]
+        ring
+      _ = (m + k : ℤ) • p := by simp [zsmul_eq_mul]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:13-10:14
+failed to synthesize instance of type class
+  OfNat (Fin z.natAbs) 0
+numerals are polymorphic in Lean, but the numeral `0` cannot be used in a context where the expected type is
+  Fin z.natAbs
+due to the absence of the instance above
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 10:
+    refine ⟨0, ?_⟩
+            ^
+Highlighted span: 0
+
+ERROR .LspCheck.lean:11:9-11:21
+Unknown constant `Fin.coe_zero`
+Source line 11:
+    rw [Fin.coe_zero]
+        ^^^^^^^^^^^^
+Highlighted span: Fin.coe_zero
+
+ERROR .LspCheck.lean:29:9-29:13
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑z * r - ↑z * ↑k • (p / ↑z)
+in the target expression
+  (↑m + ↑↑k) * p = ↑z * r
+
+case mpr
+R : Type u_1
+inst✝¹ : DivisionRing R
+inst✝ : CharZero R
+p r : R
+z : ℤ
+hz : z ≠ 0
+k : Fin z.natAbs
+m : ℤ
+hzR : ↑z ≠ 0
+hm : ↑z * (↑m * p) = ↑z * r - ↑z * ↑k • (p / ↑z)
+⊢ (↑m + ↑↑k) * p = ↑z * r
+Source line 29:
+    rw [← hm]
+        ^^^^
+Highlighted span: ← hm
+
+WARNING .LspCheck.lean:27:25-27:34
+This simp argument is unused:
+  mul_zsmul
+
+Hint: Omit it from the simp argument list.
+  simp only [mul_sub, m̵u̵l̵_̵zsmul,̵ ̵z̵s̵m̵u̵l̵_eq_mul, Nat.cast_smul_eq_nsmul, Fin.isValue,
+  ̵  ̵ ̵ ̵ ̵ ̵sub_eq_iff_eq_add,
+  ̲  ̲ ̲ ̲ ̲ ̲Int.cast_add, Int.cast_natCast, mul_assoc] at hm ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 27:
+    simp only [mul_sub, mul_zsmul, zsmul_eq_mul, Nat.cast_smul_eq_nsmul, Fin.isValue,
+                        ^^^^^^^^^
+Highlighted span: mul_zsmul
+
+WARNING .LspCheck.lean:27:50-27:72
+This simp argument is unused:
+  Nat.cast_smul_eq_nsmul
+
+Hint: Omit it from the simp argument list.
+  simp only [mul_sub, mul_zsmul, zsmul_eq_mul, N̵a̵t̵.̵c̵a̵s̵t̵_̵s̵m̵u̵l̵_̵e̵q̵_̵n̵s̵m̵u̵l̵,̵ ̵Fin.isValue, sub_eq_iff_eq_add, Int.cast_add,
+  ̲  ̲ ̲ ̲ ̲ ̲Int.cast_natCast, mul_assoc] at hm ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 27:
+    simp only [mul_sub, mul_zsmul, zsmul_eq_mul, Nat.cast_smul_eq_nsmul, Fin.isValue,
+                                                 ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Nat.cast_smul_eq_nsmul
+
+WARNING .LspCheck.lean:27:74-27:85
+This simp argument is unused:
+  Fin.isValue
+
+Hint: Omit it from the simp argument list.
+  simp only [mul_sub, mul_zsmul, zsmul_eq_mul, Nat.cast_smul_eq_nsmul, F̵i̵n̵.̵i̵sV̵a̵l̵ue̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵s̵u̵b_eq_iff_eq_add,
+  ̲  ̲ ̲ ̲ ̲ ̲Int.cast_add, Int.cast_natCast, mul_assoc] at hm ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 27:
+    simp only [mul_sub, mul_zsmul, zsmul_eq_mul, Nat.cast_smul_eq_nsmul, Fin.isValue,
+                                                                         ^^^^^^^^^^^
+Highlighted span: Fin.isValue
+
+WARNING .LspCheck.lean:28:7-28:24
+This simp argument is unused:
+  sub_eq_iff_eq_add
+
+Hint: Omit it from the simp argument list.
+  simp only [mul_sub, mul_zsmul, zsmul_eq_mul, Nat.cast_smul_eq_nsmul, Fin.isValue, s̵u̵b̵_̵e̵q̵_̵i̵f̵f̵_̵e̵q̵_̵a̵d̵d̵,̵ ̵Int.cast_add,
+  ̲  ̲ ̲ ̲ ̲ ̲Int.cast_natCast, mul_assoc] at hm ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 28:
+      sub_eq_iff_eq_add, Int.cast_add, Int.cast_natCast, mul_assoc] at hm ⊢
+      ^^^^^^^^^^^^^^^^^
+Highlighted span: sub_eq_iff_eq_add
+
+WARNING .LspCheck.lean:28:58-28:67
+This simp argument is unused:
+  mul_assoc
+
+Hint: Omit it from the simp argument list.
+  simp only [mul_sub, mul_zsmul, zsmul_eq_mul, Nat.cast_smul_eq_nsmul, Fin.isValue,
+        sub_eq_iff_eq_add, Int.cast_add, Int.cast_natCast,̵ ̵m̵u̵l̵_̵a̵s̵s̵o̵c̵] at hm ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 28:
+      sub_eq_iff_eq_add, Int.cast_add, Int.cast_natCast, mul_assoc] at hm ⊢
+                                                         ^^^^^^^^^
+Highlighted span: mul_assoc
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:13-10:14
+failed to synthesize instance of type class
+  OfNat (Fin z.natAbs) 0
+numerals are polymorphic in Lean, but the numeral `0` cannot be used in a context where the expected type is
+  Fin z.natAbs
+due to the absence of the instance above
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 10:
+    refine ⟨0, ?_⟩
+            ^
+Highlighted span: 0
+
+ERROR .LspCheck.lean:11:9-11:21
+Unknown constant `Fin.coe_zero`
+Source line 11:
+    rw [Fin.coe_zero]
+        ^^^^^^^^^^^^
+Highlighted span: Fin.coe_zero
+
+ERROR .LspCheck.lean:29:9-29:13
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑z * r - ↑z * ↑k • (p / ↑z)
+in the target expression
+  (↑m + ↑↑k) * p = ↑z * r
+
+case mpr
+R : Type u_1
+inst✝¹ : DivisionRing R
+inst✝ : CharZero R
+p r : R
+z : ℤ
+hz : z ≠ 0
+k : Fin z.natAbs
+m : ℤ
+hzR : ↑z ≠ 0
+hm : ↑z * (↑m * p) = ↑z * r - ↑z * ↑k • (p / ↑z)
+⊢ (↑m + ↑↑k) * p = ↑z * r
+Source line 29:
+    rw [← hm]
+        ^^^^
+Highlighted span: ← hm
+
+WARNING .LspCheck.lean:27:25-27:34
+This simp argument is unused:
+  mul_zsmul
+
+Hint: Omit it from the simp argument list.
+  simp only [mul_sub, m̵u̵l̵_̵zsmul,̵ ̵z̵s̵m̵u̵l̵_eq_mul, Nat.cast_smul_eq_nsmul, Fin.isValue,
+  ̵  ̵ ̵ ̵ ̵ ̵sub_eq_iff_eq_add,
+  ̲  ̲ ̲ ̲ ̲ ̲Int.cast_add, Int.cast_natCast, mul_assoc] at hm ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 27:
+    simp only [mul_sub, mul_zsmul, zsmul_eq_mul, Nat.cast_smul_eq_nsmul, Fin.isValue,
+                        ^^^^^^^^^
+Highlighted span: mul_zsmul
+
+WARNING .LspCheck.lean:27:50-27:72
+This simp argument is unused:
+  Nat.cast_smul_eq_nsmul
+
+Hint: Omit it from the simp argument list.
+  simp only [mul_sub, mul_zsmul, zsmul_eq_mul, N̵a̵t̵.̵c̵a̵s̵t̵_̵s̵m̵u̵l̵_̵e̵q̵_̵n̵s̵m̵u̵l̵,̵ ̵Fin.isValue, sub_eq_iff_eq_add, Int.cast_add,
+  ̲  ̲ ̲ ̲ ̲ ̲Int.cast_natCast, mul_assoc] at hm ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 27:
+    simp only [mul_sub, mul_zsmul, zsmul_eq_mul, Nat.cast_smul_eq_nsmul, Fin.isValue,
+                                                 ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Nat.cast_smul_eq_nsmul
+
+WARNING .LspCheck.lean:27:74-27:85
+This simp argument is unused:
+  Fin.isValue
+
+Hint: Omit it from the simp argument list.
+  simp only [mul_sub, mul_zsmul, zsmul_eq_mul, Nat.cast_smul_eq_nsmul, F̵i̵n̵.̵i̵sV̵a̵l̵ue̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵s̵u̵b_eq_iff_eq_add,
+  ̲  ̲ ̲ ̲ ̲ ̲Int.cast_add, Int.cast_natCast, mul_assoc] at hm ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 27:
+    simp only [mul_sub, mul_zsmul, zsmul_eq_mul, Nat.cast_smul_eq_nsmul, Fin.isValue,
+                                                                         ^^^^^^^^^^^
+Highlighted span: Fin.isValue
+
+WARNING .LspCheck.lean:28:7-28:24
+This simp argument is unused:
+  sub_eq_iff_eq_add
+
+Hint: Omit it from the simp argument list.
+  simp only [mul_sub, mul_zsmul, zsmul_eq_mul, Nat.cast_smul_eq_nsmul, Fin.isValue, s̵u̵b̵_̵e̵q̵_̵i̵f̵f̵_̵e̵q̵_̵a̵d̵d̵,̵ ̵Int.cast_add,
+  ̲  ̲ ̲ ̲ ̲ ̲Int.cast_natCast, mul_assoc] at hm ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 28:
+      sub_eq_iff_eq_add, Int.cast_add, Int.cast_natCast, mul_assoc] at hm ⊢
+      ^^^^^^^^^^^^^^^^^
+Highlighted span: sub_eq_iff_eq_add
+
+WARNING .LspCheck.lean:28:58-28:67
+This simp argument is unused:
+  mul_assoc
+
+Hint: Omit it from the simp argument list.
+  simp only [mul_sub, mul_zsmul, zsmul_eq_mul, Nat.cast_smul_eq_nsmul, Fin.isValue,
+        sub_eq_iff_eq_add, Int.cast_add, Int.cast_natCast,̵ ̵m̵u̵l̵_̵a̵s̵s̵o̵c̵] at hm ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 28:
+      sub_eq_iff_eq_add, Int.cast_add, Int.cast_natCast, mul_assoc] at hm ⊢
+                                                         ^^^^^^^^^
+Highlighted span: mul_assoc
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type*} [DivisionRing R] [CharZero R] {p : R}
+
+theorem zsmul_mem_zmultiples_iff_exists_sub_div {r : R} {z : ℤ} (hz : z ≠ 0) :
+    z • r ∈ AddSubgroup.zmultiples p ↔
+      ∃ k : Fin z.natAbs, r - (k : ℕ) • (p / z : R) ∈ AddSubgroup.zmultiples p := by
+  constructor
+  · intro hr
+    rcases hr with ⟨m, hm⟩
+    have hzNatAbs : 0 < z.natAbs := Int.natAbs_pos.mpr hz
+    let k : Fin z.natAbs := ⟨0, hzNatAbs⟩
+    refine ⟨k, ?_⟩
+    change r ∈ AddSubgroup.zmultiples p
+    refine ⟨m / z, ?_⟩
+    rw [hm]
+    have hzR : (z : R) ≠ 0 := by exact_mod_cast hz
+    calc
+      ((m / z : ℤ) : R) * p = (((m / z : ℤ) : R) * (z : R)) * (p / z : R) := by
+        rw [← mul_assoc, div_eq_mul_inv, ← mul_assoc, Int.cast_ediv_of_dvd]
+        · field_simp [hzR]
+        · exact dvd_iff_exists_eq_mul_left.mpr ⟨m / z, by ring⟩
+      _ = ((m / z : ℤ) * z : ℤ) • (p / z : R) := by simp [zsmul_eq_mul]
+      _ = (m : ℤ) • (p / z : R) := by
+        congr 1
+        exact Int.ediv_mul_cancel ?_
+    all_goals
+      exact dvd_iff_exists_eq_mul_left.mpr ⟨m / z, by ring⟩
+  · rintro ⟨k, hk⟩
+    rcases hk with ⟨m, hm⟩
+    refine ⟨m + k.1, ?_⟩
+    have hzR : (z : R) ≠ 0 := by exact_mod_cast hz
+    have hk' : ((k : ℕ) : R) * (p / z : R) = (k : ℕ) • (p / z : R) := by
+      simp [nsmul_eq_mul]
+    rw [show z • r = (z : R) * r by simp [zsmul_eq_mul]]
+    rw [hm]
+    calc
+      (z : R) * ((m : ℤ) • p + (k : ℕ) • (p / z : R)) =
+          (z : R) * ((m : ℤ) • p) + (z : R) * ((k : ℕ) • (p / z : R)) := by ring
+      _ = ((m : ℤ) • ((z : R) * p)) + ((k : ℕ) • ((z : R) * (p / z : R))) := by
+        simp [zsmul_eq_mul, nsmul_eq_mul, mul_add, add_mul, mul_assoc]
+      _ = ((m : ℤ) • ((z : R) * p)) + ((k : ℕ) • p) := by
+        congr 1
+        field_simp [hzR]
+      _ = ((m : ℤ) • ((z : R) * p)) + ((k.1 : ℤ) • p) := by
+        simp
+      _ = ((m * z + k.1 : ℤ) : R) * p := by
+        simp [zsmul_eq_mul, add_mul, mul_assoc]
+      _ = (m + k.1 : ℤ) • p := by
+        simp [zsmul_eq_mul]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:5-14:40
+'change' tactic failed, pattern
+  r ∈ AddSubgroup.zmultiples p
+is not definitionally equal to target
+  r - ↑k • (p / ↑z) ∈ AddSubgroup.zmultiples p
+Source line 14:
+    change r ∈ AddSubgroup.zmultiples p
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: change r ∈ AddSubgroup.zmultiples p
+
+ERROR .LspCheck.lean:36:9-36:11
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (fun x ↦ x • p) m
+in the target expression
+  (fun x ↦ x • p) (m + ↑↑k) = ↑z * r
+
+case mpr
+R : Type u_1
+inst✝¹ : DivisionRing R
+inst✝ : CharZero R
+p r : R
+z : ℤ
+hz : z ≠ 0
+k : Fin z.natAbs
+m : ℤ
+hm : (fun x ↦ x • p) m = r - ↑k • (p / ↑z)
+hzR : ↑z ≠ 0
+hk' : ↑↑k * (p / ↑z) = ↑k • (p / ↑z)
+⊢ (fun x ↦ x • p) (m + ↑↑k) = ↑z * r
+Source line 36:
+    rw [hm]
+        ^^
+Highlighted span: hm
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:5-14:40
+'change' tactic failed, pattern
+  r ∈ AddSubgroup.zmultiples p
+is not definitionally equal to target
+  r - ↑k • (p / ↑z) ∈ AddSubgroup.zmultiples p
+Source line 14:
+    change r ∈ AddSubgroup.zmultiples p
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: change r ∈ AddSubgroup.zmultiples p
+
+ERROR .LspCheck.lean:36:9-36:11
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (fun x ↦ x • p) m
+in the target expression
+  (fun x ↦ x • p) (m + ↑↑k) = ↑z * r
+
+case mpr
+R : Type u_1
+inst✝¹ : DivisionRing R
+inst✝ : CharZero R
+p r : R
+z : ℤ
+hz : z ≠ 0
+k : Fin z.natAbs
+m : ℤ
+hm : (fun x ↦ x • p) m = r - ↑k • (p / ↑z)
+hzR : ↑z ≠ 0
+hk' : ↑↑k * (p / ↑z) = ↑k • (p / ↑z)
+⊢ (fun x ↦ x • p) (m + ↑↑k) = ↑z * r
+Source line 36:
+    rw [hm]
+        ^^
+Highlighted span: hm
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type*} [DivisionRing R] [CharZero R] {p : R}
+
+theorem zsmul_mem_zmultiples_iff_exists_sub_div {r : R} {z : ℤ} (hz : z ≠ 0) :
+    z • r ∈ AddSubgroup.zmultiples p ↔
+      ∃ k : Fin z.natAbs, r - (k : ℕ) • (p / z : R) ∈ AddSubgroup.zmultiples p := by
+  constructor
+  · intro hr
+    have hzpos : 0 < z.natAbs := Int.natAbs_pos.mpr hz
+    refine ⟨⟨0, hzpos⟩, ?_⟩
+    simp only [Fin.coe_mk, Nat.cast_zero, zero_smul, sub_zero]
+    exact hr
+  · rintro ⟨k, hk⟩
+    rcases hk with ⟨m, hm⟩
+    refine ⟨m * z + k, ?_⟩
+    have hzR : (z : R) ≠ 0 := by
+      exact_mod_cast hz
+    rw [show ((m * z + k : ℤ) • p : R) = (m * z : ℤ) • p + (k : ℤ) • p by
+      simp [add_zsmul]]
+    rw [hm]
+    have hklt : (k : ℤ) < Int.natAbs z := by
+      exact_mod_cast k.2
+    have hkmod : ((k : ℤ) : R) = (k : R) := rfl
+    calc
+      (m * z : ℤ) • p + (k : ℤ) • p
+          = z • (m • p) + (k : ℤ) • p := by simp [mul_zsmul]
+      _ = z • (r - (k : ℕ) • (p / z : R)) + (k : ℤ) • p := by rw [hm]
+      _ = z • r - z • ((k : ℕ) • (p / z : R)) + (k : ℤ) • p := by simp [sub_zsmul]
+      _ = z • r - ((k : ℕ) • (z • (p / z : R))) + (k : ℤ) • p := by simp [zsmul_nsmul]
+      _ = z • r - (k : ℕ) • p + (k : ℤ) • p := by
+        congr 2
+        field_simp [div_eq_mul_inv, hzR]
+      _ = z • r := by
+        norm_num [Int.ofNat_eq_coe, sub_eq_add_neg, add_assoc]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:16-12:26
+Unknown constant `Fin.coe_mk`
+Source line 12:
+    simp only [Fin.coe_mk, Nat.cast_zero, zero_smul, sub_zero]
+               ^^^^^^^^^^
+Highlighted span: Fin.coe_mk
+
+ERROR .LspCheck.lean:13:5-13:13
+Type mismatch
+  hr
+has type
+  z • r ∈ AddSubgroup.zmultiples p
+but is expected to have type
+  r ∈ AddSubgroup.zmultiples p
+Source line 13:
+    exact hr
+    ^^^^^^^^
+Highlighted span: exact hr
+
+ERROR .LspCheck.lean:19:9-20:1
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (m * z + ↑↑k) • p
+in the target expression
+  (fun x ↦ x • p) (m * z + ↑↑k) = z • r
+
+case mpr
+R : Type u_1
+inst✝¹ : DivisionRing R
+inst✝ : CharZero R
+p r : R
+z : ℤ
+hz : z ≠ 0
+k : Fin z.natAbs
+m : ℤ
+hm : (fun x ↦ x • p) m = r - ↑k • (p / ↑z)
+hzR : ↑z ≠ 0
+⊢ (fun x ↦ x • p) (m * z + ↑↑k) = z • r
+Source line 19:
+    rw [show ((m * z + k : ℤ) • p : R) = (m * z : ℤ) • p + (k : ℤ) • p by
+        ^
+Highlighted span: s
+
+ERROR .LspCheck.lean:19:9-20:1
+unsolved goals
+R : Type u_1
+inst✝¹ : DivisionRing R
+inst✝ : CharZero R
+p r : R
+z : ℤ
+hz : z ≠ 0
+k : Fin z.natAbs
+m : ℤ
+hm : (fun x ↦ x • p) m = r - ↑k • (p / ↑z)
+hzR : ↑z ≠ 0
+⊢ (↑m * ↑z + ↑↑k) * p = ↑m * ↑z * p + ↑↑k * p
+Source line 19:
+    rw [show ((m * z + k : ℤ) • p : R) = (m * z : ℤ) • p + (k : ℤ) • p by
+        ^
+Highlighted span: s
+
+WARNING .LspCheck.lean:12:28-12:41
+This simp argument is unused:
+  Nat.cast_zero
+
+Hint: Omit it from the simp argument list.
+  simp only [Fin.coe_mk, N̵a̵t̵.̵c̵a̵s̵t̵_̵z̵e̵r̵o̵,̵ ̵zero_smul, sub_zero]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 12:
+    simp only [Fin.coe_mk, Nat.cast_zero, zero_smul, sub_zero]
+                           ^^^^^^^^^^^^^
+Highlighted span: Nat.cast_zero
+
+WARNING .LspCheck.lean:20:13-20:22
+This simp argument is unused:
+  add_zsmul
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵a̵d̵d̵_̵z̵s̵m̵u̵l̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 20:
+      simp [add_zsmul]]
+            ^^^^^^^^^
+Highlighted span: add_zsmul
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:16-12:26
+Unknown constant `Fin.coe_mk`
+Source line 12:
+    simp only [Fin.coe_mk, Nat.cast_zero, zero_smul, sub_zero]
+               ^^^^^^^^^^
+Highlighted span: Fin.coe_mk
+
+ERROR .LspCheck.lean:13:5-13:13
+Type mismatch
+  hr
+has type
+  z • r ∈ AddSubgroup.zmultiples p
+but is expected to have type
+  r ∈ AddSubgroup.zmultiples p
+Source line 13:
+    exact hr
+    ^^^^^^^^
+Highlighted span: exact hr
+
+ERROR .LspCheck.lean:19:9-20:1
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (m * z + ↑↑k) • p
+in the target expression
+  (fun x ↦ x • p) (m * z + ↑↑k) = z • r
+
+case mpr
+R : Type u_1
+inst✝¹ : DivisionRing R
+inst✝ : CharZero R
+p r : R
+z : ℤ
+hz : z ≠ 0
+k : Fin z.natAbs
+m : ℤ
+hm : (fun x ↦ x • p) m = r - ↑k • (p / ↑z)
+hzR : ↑z ≠ 0
+⊢ (fun x ↦ x • p) (m * z + ↑↑k) = z • r
+Source line 19:
+    rw [show ((m * z + k : ℤ) • p : R) = (m * z : ℤ) • p + (k : ℤ) • p by
+        ^
+Highlighted span: s
+
+ERROR .LspCheck.lean:19:9-20:1
+unsolved goals
+R : Type u_1
+inst✝¹ : DivisionRing R
+inst✝ : CharZero R
+p r : R
+z : ℤ
+hz : z ≠ 0
+k : Fin z.natAbs
+m : ℤ
+hm : (fun x ↦ x • p) m = r - ↑k • (p / ↑z)
+hzR : ↑z ≠ 0
+⊢ (↑m * ↑z + ↑↑k) * p = ↑m * ↑z * p + ↑↑k * p
+Source line 19:
+    rw [show ((m * z + k : ℤ) • p : R) = (m * z : ℤ) • p + (k : ℤ) • p by
+        ^
+Highlighted span: s
+
+WARNING .LspCheck.lean:12:28-12:41
+This simp argument is unused:
+  Nat.cast_zero
+
+Hint: Omit it from the simp argument list.
+  simp only [Fin.coe_mk, N̵a̵t̵.̵c̵a̵s̵t̵_̵z̵e̵r̵o̵,̵ ̵zero_smul, sub_zero]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 12:
+    simp only [Fin.coe_mk, Nat.cast_zero, zero_smul, sub_zero]
+                           ^^^^^^^^^^^^^
+Highlighted span: Nat.cast_zero
+
+WARNING .LspCheck.lean:20:13-20:22
+This simp argument is unused:
+  add_zsmul
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵a̵d̵d̵_̵z̵s̵m̵u̵l̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 20:
+      simp [add_zsmul]]
+            ^^^^^^^^^
+Highlighted span: add_zsmul

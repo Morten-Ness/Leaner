@@ -1,0 +1,207 @@
+FILE: Combination.sum_smul_const_vsub_eq_neg_weightedVSub.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Combination.sum_smul_const_vsub_eq_neg_weightedVSub.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+theorem sum_smul_const_vsub_eq_neg_weightedVSub (w : ι → k) (p₂ : ι → P) (p₁ : P)
+    (h : ∑ i ∈ s, w i = 0) : (∑ i ∈ s, w i • (p₁ -ᵥ p₂ i)) = -s.weightedVSub p₂ w := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+theorem sum_smul_const_vsub_eq_neg_weightedVSub (w : ι → k) (p₂ : ι → P) (p₁ : P)
+    (h : ∑ i ∈ s, w i = 0) : (∑ i ∈ s, w i • (p₁ -ᵥ p₂ i)) = -s.weightedVSub p₂ w := by
+  simpa [Finset.weightedVSub, h, vsub_eq_sub] using
+    (Finset.weightedVSub_vadd_eq_weightedVSub_of_sum_eq_zero (s := s) (t := p₂) (w := w) h (-p₁))
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:6-14:61
+Unknown constant `Finset.weightedVSub_vadd_eq_weightedVSub_of_sum_eq_zero`
+Source line 14:
+    (Finset.weightedVSub_vadd_eq_weightedVSub_of_sum_eq_zero (s := s) (t := p₂) (w := w) h (-p₁))
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.weightedVSub_vadd_eq_weightedVSub_of_sum_eq_zero
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:6-14:61
+Unknown constant `Finset.weightedVSub_vadd_eq_weightedVSub_of_sum_eq_zero`
+Source line 14:
+    (Finset.weightedVSub_vadd_eq_weightedVSub_of_sum_eq_zero (s := s) (t := p₂) (w := w) h (-p₁))
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.weightedVSub_vadd_eq_weightedVSub_of_sum_eq_zero
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+theorem sum_smul_const_vsub_eq_neg_weightedVSub (w : ι → k) (p₂ : ι → P) (p₁ : P)
+    (h : ∑ i ∈ s, w i = 0) : (∑ i ∈ s, w i • (p₁ -ᵥ p₂ i)) = -s.weightedVSub p₂ w := by
+  classical
+  induction s using Finset.induction_on with
+  | empty =>
+      simp [Finset.weightedVSub]
+  | @insert a s ha ih =>
+      rw [Finset.sum_insert ha, Finset.sum_insert ha] at h ⊢
+      rw [Finset.weightedVSub_insert, neg_add]
+      have hs : ∑ x ∈ s, w x = -w a := by
+        linarith
+      calc
+        w a • (p₁ -ᵥ p₂ a) + ∑ x ∈ s, w x • (p₁ -ᵥ p₂ x)
+            = w a • (p₁ -ᵥ p₂ a) + (-s.weightedVSub p₂ w) := by rw [ih hs]
+        _ = -(w a • (p₂ a -ᵥ p₁) + s.weightedVSub p₂ w) := by
+          rw [smul_vsub_assoc, add_comm, neg_add]
+          abel
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:18:33-18:53
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ x ∈ insert a s, ?m.79 x
+in the target expression
+  w a + ∑ x ∈ s, w x = 0
+
+case insert
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s✝ : Finset ι
+w : ι → k
+p₂ : ι → P
+p₁ : P
+a : ι
+s : Finset ι
+ha : a ∉ s
+ih : ∑ i ∈ s, w i = 0 → ∑ i ∈ s, w i • (p₁ -ᵥ p₂ i) = -(s.weightedVSub p₂) w
+h : w a + ∑ x ∈ s, w x = 0
+⊢ w a • (p₁ -ᵥ p₂ a) + ∑ x ∈ s, w x • (p₁ -ᵥ p₂ x) = -((insert a s).weightedVSub p₂) w
+Source line 18:
+      rw [Finset.sum_insert ha, Finset.sum_insert ha] at h ⊢
+                                ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.sum_insert ha
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:18:33-18:53
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ x ∈ insert a s, ?m.79 x
+in the target expression
+  w a + ∑ x ∈ s, w x = 0
+
+case insert
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s✝ : Finset ι
+w : ι → k
+p₂ : ι → P
+p₁ : P
+a : ι
+s : Finset ι
+ha : a ∉ s
+ih : ∑ i ∈ s, w i = 0 → ∑ i ∈ s, w i • (p₁ -ᵥ p₂ i) = -(s.weightedVSub p₂) w
+h : w a + ∑ x ∈ s, w x = 0
+⊢ w a • (p₁ -ᵥ p₂ a) + ∑ x ∈ s, w x • (p₁ -ᵥ p₂ x) = -((insert a s).weightedVSub p₂) w
+Source line 18:
+      rw [Finset.sum_insert ha, Finset.sum_insert ha] at h ⊢
+                                ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.sum_insert ha
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+theorem sum_smul_const_vsub_eq_neg_weightedVSub (w : ι → k) (p₂ : ι → P) (p₁ : P)
+    (h : ∑ i ∈ s, w i = 0) : (∑ i ∈ s, w i • (p₁ -ᵥ p₂ i)) = -s.weightedVSub p₂ w := by
+  classical
+  simpa [Finset.weightedVSub, h, sub_eq_add_neg, add_comm, add_left_comm, add_assoc] using
+    (s.sum_vsub_eq_sub_sum p₁ fun i => w i • p₂ i)
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:8-15:27
+Invalid field `sum_vsub_eq_sub_sum`: The environment does not contain `Finset.sum_vsub_eq_sub_sum`, so it is not possible to project the field `sum_vsub_eq_sub_sum` from an expression
+  s
+of type `Finset ι`
+Source line 15:
+    (s.sum_vsub_eq_sub_sum p₁ fun i => w i • p₂ i)
+       ^^^^^^^^^^^^^^^^^^^
+Highlighted span: sum_vsub_eq_sub_sum
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:8-15:27
+Invalid field `sum_vsub_eq_sub_sum`: The environment does not contain `Finset.sum_vsub_eq_sub_sum`, so it is not possible to project the field `sum_vsub_eq_sub_sum` from an expression
+  s
+of type `Finset ι`
+Source line 15:
+    (s.sum_vsub_eq_sub_sum p₁ fun i => w i • p₂ i)
+       ^^^^^^^^^^^^^^^^^^^
+Highlighted span: sum_vsub_eq_sub_sum

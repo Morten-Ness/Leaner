@@ -1,0 +1,532 @@
+FILE: Basic.prod_add_index'.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.prod_add_index'.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {α ι γ A B C : Type*} [AddCommMonoid A] [AddCommMonoid B] [AddCommMonoid C]
+
+variable {t : ι → A → C}
+
+variable {s : Finset α} {f : α → ι →₀ A} (i : ι)
+
+variable (g : ι →₀ A) (k : ι → A → γ → B) (x : γ)
+
+variable {β M M' N P G H R S : Type*}
+
+theorem prod_add_index' [AddZeroClass M] [CommMonoid N] {f g : α →₀ M} {h : α → M → N}
+    (h_zero : ∀ a, h a 0 = 1) (h_add : ∀ a b₁ b₂, h a (b₁ + b₂) = h a b₁ * h a b₂) :
+    (f + g).prod h = f.prod h * g.prod h := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α ι γ A B C : Type*} [AddCommMonoid A] [AddCommMonoid B] [AddCommMonoid C]
+
+variable {t : ι → A → C}
+
+variable {s : Finset α} {f : α → ι →₀ A} (i : ι)
+
+variable (g : ι →₀ A) (k : ι → A → γ → B) (x : γ)
+
+variable {β M M' N P G H R S : Type*}
+
+theorem prod_add_index' [AddZeroClass M] [CommMonoid N] {f g : α →₀ M} {h : α → M → N}
+    (h_zero : ∀ a, h a 0 = 1) (h_add : ∀ a b₁ b₂, h a (b₁ + b₂) = h a b₁ * h a b₂) :
+    (f + g).prod h = f.prod h * g.prod h := by
+  classical
+  simpa [Finsupp.prod, Pi.add_apply, h_zero, h_add] using
+    Finset.prod_add_index (s := (f + g).support) (f := fun a => h a (f a)) (g := fun a => h a (g a))
+      (by simp [h_zero])
+      (by intro a b; simp [h_add, mul_assoc, mul_left_comm, mul_comm])
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:18:5-18:26
+Unknown constant `Finset.prod_add_index`
+Source line 18:
+    Finset.prod_add_index (s := (f + g).support) (f := fun a => h a (f a)) (g := fun a => h a (g a))
+    ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.prod_add_index
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:18:5-18:26
+Unknown constant `Finset.prod_add_index`
+Source line 18:
+    Finset.prod_add_index (s := (f + g).support) (f := fun a => h a (f a)) (g := fun a => h a (g a))
+    ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.prod_add_index
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α ι γ A B C : Type*} [AddCommMonoid A] [AddCommMonoid B] [AddCommMonoid C]
+
+variable {t : ι → A → C}
+
+variable {s : Finset α} {f : α → ι →₀ A} (i : ι)
+
+variable (g : ι →₀ A) (k : ι → A → γ → B) (x : γ)
+
+variable {β M M' N P G H R S : Type*}
+
+theorem prod_add_index' [AddZeroClass M] [CommMonoid N] {f g : α →₀ M} {h : α → M → N}
+    (h_zero : ∀ a, h a 0 = 1) (h_add : ∀ a b₁ b₂, h a (b₁ + b₂) = h a b₁ * h a b₂) :
+    (f + g).prod h = f.prod h * g.prod h := by
+  classical
+  rw [Finsupp.prod]
+  rw [Finsupp.prod]
+  rw [Finsupp.prod]
+  let s : Finset α := f.support ∪ g.support
+  have hsfg : (f + g).support ⊆ s := by
+    intro a ha
+    simp only [s]
+    by_cases hf : f a = 0
+    · right
+      have hg : g a ≠ 0 := by
+        intro hgz
+        apply ha
+        simp [Finsupp.mem_support_iff, hf, hgz]
+      simpa [Finsupp.mem_support_iff] using hg
+    · left
+      simpa [Finsupp.mem_support_iff] using hf
+  have hsf : f.support ⊆ s := by
+    intro a ha
+    simp [s, ha]
+  have hsg : g.support ⊆ s := by
+    intro a ha
+    simp [s, ha]
+  rw [Finset.prod_subset hsfg]
+  · rw [Finset.prod_subset hsf, Finset.prod_subset hsg]
+    · simp_rw [h_zero]
+      refine (Finset.prod_congr rfl ?_).trans ?_
+      · intro a ha
+        rw [h_add]
+      · exact Finset.prod_mul_distrib.symm
+    · intro a ha hs'
+      rw [not_mem_support_iff.mp hs', h_zero]
+    · intro a ha hs'
+      rw [not_mem_support_iff.mp hs', h_zero]
+  · intro a ha hs'
+    rw [not_mem_support_iff.mp hs', h_zero]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:25:7-25:12
+Tactic `right` failed: target is not an inductive datatype
+
+case pos
+α : Type u_1
+M : Type u_8
+N : Type u_10
+inst✝¹ : AddZeroClass M
+inst✝ : CommMonoid N
+f g : α →₀ M
+h : α → M → N
+h_zero : ∀ (a : α), h a 0 = 1
+h_add : ∀ (a : α) (b₁ b₂ : M), h a (b₁ + b₂) = h a b₁ * h a b₂
+s : Finset α := f.support ∪ g.support
+a : α
+ha : a ∈ (f + g).support
+hf : f a = 0
+⊢ a ∈ f.support ∪ g.support
+Source line 25:
+    · right
+      ^^^^^
+Highlighted span: right
+
+ERROR .LspCheck.lean:31:7-31:11
+Tactic `left` failed: target is not an inductive datatype
+
+case neg
+α : Type u_1
+M : Type u_8
+N : Type u_10
+inst✝¹ : AddZeroClass M
+inst✝ : CommMonoid N
+f g : α →₀ M
+h : α → M → N
+h_zero : ∀ (a : α), h a 0 = 1
+h_add : ∀ (a : α) (b₁ b₂ : M), h a (b₁ + b₂) = h a b₁ * h a b₂
+s : Finset α := f.support ∪ g.support
+a : α
+ha : a ∈ (f + g).support
+hf : ¬f a = 0
+⊢ a ∈ f.support ∪ g.support
+Source line 31:
+    · left
+      ^^^^
+Highlighted span: left
+
+ERROR .LspCheck.lean:41:16-41:22
+`simp` made no progress
+Source line 41:
+    · simp_rw [h_zero]
+               ^^^^^^
+Highlighted span: h_zero
+
+ERROR .LspCheck.lean:47:11-47:33
+Unknown identifier `not_mem_support_iff.mp`
+Source line 47:
+      rw [not_mem_support_iff.mp hs', h_zero]
+          ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: not_mem_support_iff.mp
+
+ERROR .LspCheck.lean:49:11-49:33
+Unknown identifier `not_mem_support_iff.mp`
+Source line 49:
+      rw [not_mem_support_iff.mp hs', h_zero]
+          ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: not_mem_support_iff.mp
+
+ERROR .LspCheck.lean:51:9-51:31
+Unknown identifier `not_mem_support_iff.mp`
+Source line 51:
+    rw [not_mem_support_iff.mp hs', h_zero]
+        ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: not_mem_support_iff.mp
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:25:7-25:12
+Tactic `right` failed: target is not an inductive datatype
+
+case pos
+α : Type u_1
+M : Type u_8
+N : Type u_10
+inst✝¹ : AddZeroClass M
+inst✝ : CommMonoid N
+f g : α →₀ M
+h : α → M → N
+h_zero : ∀ (a : α), h a 0 = 1
+h_add : ∀ (a : α) (b₁ b₂ : M), h a (b₁ + b₂) = h a b₁ * h a b₂
+s : Finset α := f.support ∪ g.support
+a : α
+ha : a ∈ (f + g).support
+hf : f a = 0
+⊢ a ∈ f.support ∪ g.support
+Source line 25:
+    · right
+      ^^^^^
+Highlighted span: right
+
+ERROR .LspCheck.lean:31:7-31:11
+Tactic `left` failed: target is not an inductive datatype
+
+case neg
+α : Type u_1
+M : Type u_8
+N : Type u_10
+inst✝¹ : AddZeroClass M
+inst✝ : CommMonoid N
+f g : α →₀ M
+h : α → M → N
+h_zero : ∀ (a : α), h a 0 = 1
+h_add : ∀ (a : α) (b₁ b₂ : M), h a (b₁ + b₂) = h a b₁ * h a b₂
+s : Finset α := f.support ∪ g.support
+a : α
+ha : a ∈ (f + g).support
+hf : ¬f a = 0
+⊢ a ∈ f.support ∪ g.support
+Source line 31:
+    · left
+      ^^^^
+Highlighted span: left
+
+ERROR .LspCheck.lean:41:16-41:22
+`simp` made no progress
+Source line 41:
+    · simp_rw [h_zero]
+               ^^^^^^
+Highlighted span: h_zero
+
+ERROR .LspCheck.lean:47:11-47:33
+Unknown identifier `not_mem_support_iff.mp`
+Source line 47:
+      rw [not_mem_support_iff.mp hs', h_zero]
+          ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: not_mem_support_iff.mp
+
+ERROR .LspCheck.lean:49:11-49:33
+Unknown identifier `not_mem_support_iff.mp`
+Source line 49:
+      rw [not_mem_support_iff.mp hs', h_zero]
+          ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: not_mem_support_iff.mp
+
+ERROR .LspCheck.lean:51:9-51:31
+Unknown identifier `not_mem_support_iff.mp`
+Source line 51:
+    rw [not_mem_support_iff.mp hs', h_zero]
+        ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: not_mem_support_iff.mp
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α ι γ A B C : Type*} [AddCommMonoid A] [AddCommMonoid B] [AddCommMonoid C]
+
+variable {t : ι → A → C}
+
+variable {s : Finset α} {f : α → ι →₀ A} (i : ι)
+
+variable (g : ι →₀ A) (k : ι → A → γ → B) (x : γ)
+
+variable {β M M' N P G H R S : Type*}
+
+theorem prod_add_index' [AddZeroClass M] [CommMonoid N] {f g : α →₀ M} {h : α → M → N}
+    (h_zero : ∀ a, h a 0 = 1) (h_add : ∀ a b₁ b₂, h a (b₁ + b₂) = h a b₁ * h a b₂) :
+    (f + g).prod h = f.prod h * g.prod h := by
+  classical
+  rw [Finsupp.prod, Finsupp.prod, Finsupp.prod]
+  let s : Finset α := f.support ∪ g.support
+  have hsfg : (f + g).support ⊆ s := by
+    intro a ha
+    rw [Finset.mem_coe, Finset.mem_union, Finsupp.mem_support_iff] at *
+    by_cases hf : f a = 0
+    · right
+      intro hg
+      apply ha
+      simp [hf, hg]
+    · left
+      exact hf
+  have hsf : f.support ⊆ s := by
+    intro a ha
+    rw [Finset.mem_coe, Finset.mem_union]
+    left
+    exact ha
+  have hsg : g.support ⊆ s := by
+    intro a ha
+    rw [Finset.mem_coe, Finset.mem_union]
+    right
+    exact ha
+  rw [Finset.prod_subset hsfg]
+  · rw [Finset.prod_subset hsf, Finset.prod_subset hsg]
+    · have h1 : ∏ x ∈ s, h x ((f + g) x) = ∏ x ∈ s, (h x (f x) * h x (g x)) := by
+        refine Finset.prod_congr rfl ?_
+        intro a ha
+        simp [h_add]
+      rw [h1, Finset.prod_mul_distrib]
+    · intro a ha has
+      rw [Finsupp.not_mem_support_iff.mp has, h_zero]
+    · intro a ha has
+      rw [Finsupp.not_mem_support_iff.mp has, h_zero]
+  · intro a ha has
+    rw [Finsupp.not_mem_support_iff.mp has, h_zero]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:21:9-21:23
+Tactic `rewrite` failed: Did not find an occurrence of the pattern in the current goal
+
+α : Type u_1
+M : Type u_8
+N : Type u_10
+inst✝¹ : AddZeroClass M
+inst✝ : CommMonoid N
+f g : α →₀ M
+h : α → M → N
+h_zero : ∀ (a : α), h a 0 = 1
+h_add : ∀ (a : α) (b₁ b₂ : M), h a (b₁ + b₂) = h a b₁ * h a b₂
+s : Finset α := f.support ∪ g.support
+a : α
+ha : a ∈ (f + g).support
+⊢ a ∈ s
+Source line 21:
+    rw [Finset.mem_coe, Finset.mem_union, Finsupp.mem_support_iff] at *
+        ^^^^^^^^^^^^^^
+Highlighted span: Finset.mem_coe
+
+ERROR .LspCheck.lean:31:9-31:23
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.112 ∈ ↑?m.113
+in the target expression
+  a ∈ s
+
+α : Type u_1
+M : Type u_8
+N : Type u_10
+inst✝¹ : AddZeroClass M
+inst✝ : CommMonoid N
+f g : α →₀ M
+h : α → M → N
+h_zero : ∀ (a : α), h a 0 = 1
+h_add : ∀ (a : α) (b₁ b₂ : M), h a (b₁ + b₂) = h a b₁ * h a b₂
+s : Finset α := f.support ∪ g.support
+hsfg : (f + g).support ⊆ s
+a : α
+ha : a ∈ f.support
+⊢ a ∈ s
+Source line 31:
+    rw [Finset.mem_coe, Finset.mem_union]
+        ^^^^^^^^^^^^^^
+Highlighted span: Finset.mem_coe
+
+ERROR .LspCheck.lean:36:9-36:23
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.127 ∈ ↑?m.128
+in the target expression
+  a ∈ s
+
+α : Type u_1
+M : Type u_8
+N : Type u_10
+inst✝¹ : AddZeroClass M
+inst✝ : CommMonoid N
+f g : α →₀ M
+h : α → M → N
+h_zero : ∀ (a : α), h a 0 = 1
+h_add : ∀ (a : α) (b₁ b₂ : M), h a (b₁ + b₂) = h a b₁ * h a b₂
+s : Finset α := f.support ∪ g.support
+hsfg : (f + g).support ⊆ s
+hsf : f.support ⊆ s
+a : α
+ha : a ∈ g.support
+⊢ a ∈ s
+Source line 36:
+    rw [Finset.mem_coe, Finset.mem_union]
+        ^^^^^^^^^^^^^^
+Highlighted span: Finset.mem_coe
+
+ERROR .LspCheck.lean:47:11-47:41
+Unknown constant `Finsupp.not_mem_support_iff.mp`
+Source line 47:
+      rw [Finsupp.not_mem_support_iff.mp has, h_zero]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finsupp.not_mem_support_iff.mp
+
+ERROR .LspCheck.lean:49:11-49:41
+Unknown constant `Finsupp.not_mem_support_iff.mp`
+Source line 49:
+      rw [Finsupp.not_mem_support_iff.mp has, h_zero]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finsupp.not_mem_support_iff.mp
+
+ERROR .LspCheck.lean:51:9-51:39
+Unknown constant `Finsupp.not_mem_support_iff.mp`
+Source line 51:
+    rw [Finsupp.not_mem_support_iff.mp has, h_zero]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finsupp.not_mem_support_iff.mp
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:21:9-21:23
+Tactic `rewrite` failed: Did not find an occurrence of the pattern in the current goal
+
+α : Type u_1
+M : Type u_8
+N : Type u_10
+inst✝¹ : AddZeroClass M
+inst✝ : CommMonoid N
+f g : α →₀ M
+h : α → M → N
+h_zero : ∀ (a : α), h a 0 = 1
+h_add : ∀ (a : α) (b₁ b₂ : M), h a (b₁ + b₂) = h a b₁ * h a b₂
+s : Finset α := f.support ∪ g.support
+a : α
+ha : a ∈ (f + g).support
+⊢ a ∈ s
+Source line 21:
+    rw [Finset.mem_coe, Finset.mem_union, Finsupp.mem_support_iff] at *
+        ^^^^^^^^^^^^^^
+Highlighted span: Finset.mem_coe
+
+ERROR .LspCheck.lean:31:9-31:23
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.112 ∈ ↑?m.113
+in the target expression
+  a ∈ s
+
+α : Type u_1
+M : Type u_8
+N : Type u_10
+inst✝¹ : AddZeroClass M
+inst✝ : CommMonoid N
+f g : α →₀ M
+h : α → M → N
+h_zero : ∀ (a : α), h a 0 = 1
+h_add : ∀ (a : α) (b₁ b₂ : M), h a (b₁ + b₂) = h a b₁ * h a b₂
+s : Finset α := f.support ∪ g.support
+hsfg : (f + g).support ⊆ s
+a : α
+ha : a ∈ f.support
+⊢ a ∈ s
+Source line 31:
+    rw [Finset.mem_coe, Finset.mem_union]
+        ^^^^^^^^^^^^^^
+Highlighted span: Finset.mem_coe
+
+ERROR .LspCheck.lean:36:9-36:23
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.127 ∈ ↑?m.128
+in the target expression
+  a ∈ s
+
+α : Type u_1
+M : Type u_8
+N : Type u_10
+inst✝¹ : AddZeroClass M
+inst✝ : CommMonoid N
+f g : α →₀ M
+h : α → M → N
+h_zero : ∀ (a : α), h a 0 = 1
+h_add : ∀ (a : α) (b₁ b₂ : M), h a (b₁ + b₂) = h a b₁ * h a b₂
+s : Finset α := f.support ∪ g.support
+hsfg : (f + g).support ⊆ s
+hsf : f.support ⊆ s
+a : α
+ha : a ∈ g.support
+⊢ a ∈ s
+Source line 36:
+    rw [Finset.mem_coe, Finset.mem_union]
+        ^^^^^^^^^^^^^^
+Highlighted span: Finset.mem_coe
+
+ERROR .LspCheck.lean:47:11-47:41
+Unknown constant `Finsupp.not_mem_support_iff.mp`
+Source line 47:
+      rw [Finsupp.not_mem_support_iff.mp has, h_zero]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finsupp.not_mem_support_iff.mp
+
+ERROR .LspCheck.lean:49:11-49:41
+Unknown constant `Finsupp.not_mem_support_iff.mp`
+Source line 49:
+      rw [Finsupp.not_mem_support_iff.mp has, h_zero]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finsupp.not_mem_support_iff.mp
+
+ERROR .LspCheck.lean:51:9-51:39
+Unknown constant `Finsupp.not_mem_support_iff.mp`
+Source line 51:
+    rw [Finsupp.not_mem_support_iff.mp has, h_zero]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finsupp.not_mem_support_iff.mp

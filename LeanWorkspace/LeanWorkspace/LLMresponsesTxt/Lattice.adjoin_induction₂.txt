@@ -1,0 +1,1533 @@
+FILE: Lattice.adjoin_induction₂.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Lattice.adjoin_induction₂.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+
+variable [CommSemiring R] [CommSemiring S] [Semiring A] [Semiring B]
+
+variable [Algebra R S] [Algebra R A] [Algebra S A] [Algebra R B] [IsScalarTower R S A]
+
+variable {s t : Set A}
+
+theorem adjoin_induction₂ {s : Set A} {p : (x y : A) → x ∈ Algebra.adjoin R s → y ∈ Algebra.adjoin R s → Prop}
+    (mem_mem : ∀ (x) (y) (hx : x ∈ s) (hy : y ∈ s), p x y (Algebra.subset_adjoin hx) (Algebra.subset_adjoin hy))
+    (algebraMap_both : ∀ r₁ r₂, p (algebraMap R A r₁) (algebraMap R A r₂) (algebraMap_mem _ r₁)
+      (algebraMap_mem _ r₂))
+    (algebraMap_left : ∀ (r) (x) (hx : x ∈ s), p (algebraMap R A r) x (algebraMap_mem _ r)
+      (Algebra.subset_adjoin hx))
+    (algebraMap_right : ∀ (r) (x) (hx : x ∈ s), p x (algebraMap R A r) (Algebra.subset_adjoin hx)
+      (algebraMap_mem _ r))
+    (add_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x + y) z (add_mem hx hy) hz)
+    (add_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y + z) hx (add_mem hy hz))
+    (mul_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x * y) z (mul_mem hx hy) hz)
+    (mul_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y * z) hx (mul_mem hy hz))
+    {x y : A} (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s) :
+    p x y hx hy := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+
+variable [CommSemiring R] [CommSemiring S] [Semiring A] [Semiring B]
+
+variable [Algebra R S] [Algebra R A] [Algebra S A] [Algebra R B] [IsScalarTower R S A]
+
+variable {s t : Set A}
+
+theorem adjoin_induction₂ {s : Set A} {p : (x y : A) → x ∈ Algebra.adjoin R s → y ∈ Algebra.adjoin R s → Prop}
+    (mem_mem : ∀ (x) (y) (hx : x ∈ s) (hy : y ∈ s), p x y (Algebra.subset_adjoin hx) (Algebra.subset_adjoin hy))
+    (algebraMap_both : ∀ r₁ r₂, p (algebraMap R A r₁) (algebraMap R A r₂) (algebraMap_mem _ r₁)
+      (algebraMap_mem _ r₂))
+    (algebraMap_left : ∀ (r) (x) (hx : x ∈ s), p (algebraMap R A r) x (algebraMap_mem _ r)
+      (Algebra.subset_adjoin hx))
+    (algebraMap_right : ∀ (r) (x) (hx : x ∈ s), p x (algebraMap R A r) (Algebra.subset_adjoin hx)
+      (algebraMap_mem _ r))
+    (add_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x + y) z (add_mem hx hy) hz)
+    (add_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y + z) hx (add_mem hy hz))
+    (mul_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x * y) z (mul_mem hx hy) hz)
+    (mul_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y * z) hx (mul_mem hy hz))
+    {x y : A} (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s) :
+    p x y hx hy := by
+  let q : ∀ x : A, x ∈ Algebra.adjoin R s → Prop :=
+    fun x hx' => ∀ y : A, ∀ hy' : y ∈ Algebra.adjoin R s, p x y hx' hy'
+  have hxq : q x hx := by
+    refine Algebra.adjoin_induction ?_ ?_ ?_ ?_ hx
+    · intro x hx'
+      refine ?_
+      refine Algebra.adjoin_induction ?_ ?_ ?_ ?_
+      · intro y hy'
+        exact mem_mem x y hx' hy'
+      · intro r
+        exact algebraMap_right r x hx'
+      · intro y z hy hz hyP hzP
+        exact add_right x y z (Algebra.subset_adjoin hx') hy hz hyP hzP
+      · intro y z hy hz hyP hzP
+        exact mul_right x y z (Algebra.subset_adjoin hx') hy hz hyP hzP
+    · intro r
+      refine ?_
+      refine Algebra.adjoin_induction ?_ ?_ ?_ ?_
+      · intro y hy'
+        exact algebraMap_left r y hy'
+      · intro r'
+        exact algebraMap_both r r'
+      · intro y z hy hz hyP hzP
+        exact add_right (algebraMap R A r) y z (algebraMap_mem _ r) hy hz hyP hzP
+      · intro y z hy hz hyP hzP
+        exact mul_right (algebraMap R A r) y z (algebraMap_mem _ r) hy hz hyP hzP
+    · intro x₁ x₂ hx₁ hx₂ hx₁P hx₂P
+      intro y hy'
+      exact add_left x₁ x₂ y hx₁ hx₂ hy' (hx₁P y hy') (hx₂P y hy')
+    · intro x₁ x₂ hx₁ hx₂ hx₁P hx₂P
+      intro y hy'
+      exact mul_left x₁ x₂ y hx₁ hx₂ hy' (hx₁P y hy') (hx₂P y hy')
+  exact hxq y hy
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:3:20-3:22
+unknown universe level `uR`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                   ^^
+Highlighted span: uR
+
+ERROR .LspCheck.lean:3:34-3:36
+unknown universe level `uS`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                                 ^^
+Highlighted span: uS
+
+ERROR .LspCheck.lean:3:48-3:50
+unknown universe level `uA`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                                               ^^
+Highlighted span: uA
+
+ERROR .LspCheck.lean:3:62-3:64
+unknown universe level `uB`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                                                             ^^
+Highlighted span: uB
+
+WARNING .LspCheck.lean:12:6-12:13
+unused variable `mem_mem`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 12:
+    (mem_mem : ∀ (x) (y) (hx : x ∈ s) (hy : y ∈ s), p x y (Algebra.subset_adjoin hx) (Algebra.subset_adjoin hy))
+     ^^^^^^^
+Highlighted span: mem_mem
+
+WARNING .LspCheck.lean:12:27-12:29
+unused variable `hx`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 12:
+    (mem_mem : ∀ (x) (y) (hx : x ∈ s) (hy : y ∈ s), p x y (Algebra.subset_adjoin hx) (Algebra.subset_adjoin hy))
+                          ^^
+Highlighted span: hx
+
+WARNING .LspCheck.lean:12:40-12:42
+unused variable `hy`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 12:
+    (mem_mem : ∀ (x) (y) (hx : x ∈ s) (hy : y ∈ s), p x y (Algebra.subset_adjoin hx) (Algebra.subset_adjoin hy))
+                                       ^^
+Highlighted span: hy
+
+WARNING .LspCheck.lean:13:6-13:21
+unused variable `algebraMap_both`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 13:
+    (algebraMap_both : ∀ r₁ r₂, p (algebraMap R A r₁) (algebraMap R A r₂) (algebraMap_mem _ r₁)
+     ^^^^^^^^^^^^^^^
+Highlighted span: algebraMap_both
+
+WARNING .LspCheck.lean:13:26-13:28
+unused variable `r₁`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 13:
+    (algebraMap_both : ∀ r₁ r₂, p (algebraMap R A r₁) (algebraMap R A r₂) (algebraMap_mem _ r₁)
+                         ^^
+Highlighted span: r₁
+
+WARNING .LspCheck.lean:13:29-13:31
+unused variable `r₂`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 13:
+    (algebraMap_both : ∀ r₁ r₂, p (algebraMap R A r₁) (algebraMap R A r₂) (algebraMap_mem _ r₁)
+                            ^^
+Highlighted span: r₂
+
+WARNING .LspCheck.lean:15:6-15:21
+unused variable `algebraMap_left`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 15:
+    (algebraMap_left : ∀ (r) (x) (hx : x ∈ s), p (algebraMap R A r) x (algebraMap_mem _ r)
+     ^^^^^^^^^^^^^^^
+Highlighted span: algebraMap_left
+
+WARNING .LspCheck.lean:15:27-15:28
+unused variable `r`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 15:
+    (algebraMap_left : ∀ (r) (x) (hx : x ∈ s), p (algebraMap R A r) x (algebraMap_mem _ r)
+                          ^
+Highlighted span: r
+
+WARNING .LspCheck.lean:15:35-15:37
+unused variable `hx`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 15:
+    (algebraMap_left : ∀ (r) (x) (hx : x ∈ s), p (algebraMap R A r) x (algebraMap_mem _ r)
+                                  ^^
+Highlighted span: hx
+
+WARNING .LspCheck.lean:17:6-17:22
+unused variable `algebraMap_right`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 17:
+    (algebraMap_right : ∀ (r) (x) (hx : x ∈ s), p x (algebraMap R A r) (Algebra.subset_adjoin hx)
+     ^^^^^^^^^^^^^^^^
+Highlighted span: algebraMap_right
+
+WARNING .LspCheck.lean:17:28-17:29
+unused variable `r`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 17:
+    (algebraMap_right : ∀ (r) (x) (hx : x ∈ s), p x (algebraMap R A r) (Algebra.subset_adjoin hx)
+                           ^
+Highlighted span: r
+
+WARNING .LspCheck.lean:17:36-17:38
+unused variable `hx`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 17:
+    (algebraMap_right : ∀ (r) (x) (hx : x ∈ s), p x (algebraMap R A r) (Algebra.subset_adjoin hx)
+                                   ^^
+Highlighted span: hx
+
+WARNING .LspCheck.lean:19:6-19:14
+unused variable `add_left`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 19:
+    (add_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x + y) z (add_mem hx hy) hz)
+     ^^^^^^^^
+Highlighted span: add_left
+
+WARNING .LspCheck.lean:19:19-19:20
+unused variable `x`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 19:
+    (add_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x + y) z (add_mem hx hy) hz)
+                  ^
+Highlighted span: x
+
+WARNING .LspCheck.lean:19:21-19:22
+unused variable `y`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 19:
+    (add_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x + y) z (add_mem hx hy) hz)
+                    ^
+Highlighted span: y
+
+WARNING .LspCheck.lean:19:23-19:24
+unused variable `z`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 19:
+    (add_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x + y) z (add_mem hx hy) hz)
+                      ^
+Highlighted span: z
+
+WARNING .LspCheck.lean:19:25-19:27
+unused variable `hx`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 19:
+    (add_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x + y) z (add_mem hx hy) hz)
+                        ^^
+Highlighted span: hx
+
+WARNING .LspCheck.lean:19:28-19:30
+unused variable `hy`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 19:
+    (add_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x + y) z (add_mem hx hy) hz)
+                           ^^
+Highlighted span: hy
+
+WARNING .LspCheck.lean:19:31-19:33
+unused variable `hz`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 19:
+    (add_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x + y) z (add_mem hx hy) hz)
+                              ^^
+Highlighted span: hz
+
+WARNING .LspCheck.lean:20:6-20:15
+unused variable `add_right`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 20:
+    (add_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y + z) hx (add_mem hy hz))
+     ^^^^^^^^^
+Highlighted span: add_right
+
+WARNING .LspCheck.lean:20:20-20:21
+unused variable `x`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 20:
+    (add_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y + z) hx (add_mem hy hz))
+                   ^
+Highlighted span: x
+
+WARNING .LspCheck.lean:20:22-20:23
+unused variable `y`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 20:
+    (add_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y + z) hx (add_mem hy hz))
+                     ^
+Highlighted span: y
+
+WARNING .LspCheck.lean:20:24-20:25
+unused variable `z`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 20:
+    (add_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y + z) hx (add_mem hy hz))
+                       ^
+Highlighted span: z
+
+WARNING .LspCheck.lean:20:26-20:28
+unused variable `hx`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 20:
+    (add_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y + z) hx (add_mem hy hz))
+                         ^^
+Highlighted span: hx
+
+WARNING .LspCheck.lean:20:29-20:31
+unused variable `hy`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 20:
+    (add_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y + z) hx (add_mem hy hz))
+                            ^^
+Highlighted span: hy
+
+WARNING .LspCheck.lean:20:32-20:34
+unused variable `hz`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 20:
+    (add_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y + z) hx (add_mem hy hz))
+                               ^^
+Highlighted span: hz
+
+WARNING .LspCheck.lean:21:6-21:14
+unused variable `mul_left`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 21:
+    (mul_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x * y) z (mul_mem hx hy) hz)
+     ^^^^^^^^
+Highlighted span: mul_left
+
+WARNING .LspCheck.lean:21:19-21:20
+unused variable `x`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 21:
+    (mul_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x * y) z (mul_mem hx hy) hz)
+                  ^
+Highlighted span: x
+
+WARNING .LspCheck.lean:21:21-21:22
+unused variable `y`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 21:
+    (mul_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x * y) z (mul_mem hx hy) hz)
+                    ^
+Highlighted span: y
+
+WARNING .LspCheck.lean:21:23-21:24
+unused variable `z`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 21:
+    (mul_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x * y) z (mul_mem hx hy) hz)
+                      ^
+Highlighted span: z
+
+WARNING .LspCheck.lean:21:25-21:27
+unused variable `hx`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 21:
+    (mul_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x * y) z (mul_mem hx hy) hz)
+                        ^^
+Highlighted span: hx
+
+WARNING .LspCheck.lean:21:28-21:30
+unused variable `hy`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 21:
+    (mul_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x * y) z (mul_mem hx hy) hz)
+                           ^^
+Highlighted span: hy
+
+WARNING .LspCheck.lean:21:31-21:33
+unused variable `hz`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 21:
+    (mul_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x * y) z (mul_mem hx hy) hz)
+                              ^^
+Highlighted span: hz
+
+WARNING .LspCheck.lean:22:6-22:15
+unused variable `mul_right`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 22:
+    (mul_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y * z) hx (mul_mem hy hz))
+     ^^^^^^^^^
+Highlighted span: mul_right
+
+WARNING .LspCheck.lean:22:20-22:21
+unused variable `x`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 22:
+    (mul_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y * z) hx (mul_mem hy hz))
+                   ^
+Highlighted span: x
+
+WARNING .LspCheck.lean:22:22-22:23
+unused variable `y`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 22:
+    (mul_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y * z) hx (mul_mem hy hz))
+                     ^
+Highlighted span: y
+
+WARNING .LspCheck.lean:22:24-22:25
+unused variable `z`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 22:
+    (mul_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y * z) hx (mul_mem hy hz))
+                       ^
+Highlighted span: z
+
+WARNING .LspCheck.lean:22:26-22:28
+unused variable `hx`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 22:
+    (mul_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y * z) hx (mul_mem hy hz))
+                         ^^
+Highlighted span: hx
+
+WARNING .LspCheck.lean:22:29-22:31
+unused variable `hy`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 22:
+    (mul_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y * z) hx (mul_mem hy hz))
+                            ^^
+Highlighted span: hy
+
+WARNING .LspCheck.lean:22:32-22:34
+unused variable `hz`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 22:
+    (mul_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y * z) hx (mul_mem hy hz))
+                               ^^
+Highlighted span: hz
+
+WARNING .LspCheck.lean:25:3-26:1
+this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Source line 25:
+  let q : ∀ x : A, x ∈ Algebra.adjoin R s → Prop :=
+  ^
+Highlighted span: l
+
+WARNING .LspCheck.lean:27:3-28:1
+this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Source line 27:
+  have hxq : q x hx := by
+  ^
+Highlighted span: h
+
+WARNING .LspCheck.lean:57:3-57:17
+this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Source line 57:
+  exact hxq y hy
+  ^^^^^^^^^^^^^^
+Highlighted span: exact hxq y hy
+
+WARNING .LspCheck.lean:25:3-26:1
+'let q : ∀ x : A, x ∈ Algebra.adjoin R s → Prop := fun x hx' =>
+  ∀ y : A, ∀ hy' : y ∈ Algebra.adjoin R s, p x y hx' hy'' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Source line 25:
+  let q : ∀ x : A, x ∈ Algebra.adjoin R s → Prop :=
+  ^
+Highlighted span: l
+
+WARNING .LspCheck.lean:27:3-28:1
+'have hxq : q x hx := by
+  refine Algebra.adjoin_induction ?_ ?_ ?_ ?_ hx
+  · intro x hx'
+    refine ?_
+    refine Algebra.adjoin_induction ?_ ?_ ?_ ?_
+    · intro y hy'
+      exact mem_mem x y hx' hy'
+    · intro r
+      exact algebraMap_right r x hx'
+    · intro y z hy hz hyP hzP
+      exact add_right x y z (Algebra.subset_adjoin hx') hy hz hyP hzP
+    · intro y z hy hz hyP hzP
+      exact mul_right x y z (Algebra.subset_adjoin hx') hy hz hyP hzP
+  · intro r
+    refine ?_
+    refine Algebra.adjoin_induction ?_ ?_ ?_ ?_
+    · intro y hy'
+      exact algebraMap_left r y hy'
+    · intro r'
+      exact algebraMap_both r r'
+    · intro y z hy hz hyP hzP
+      exact add_right (algebraMap R A r) y z (algebraMap_mem _ r) hy hz hyP hzP
+    · intro y z hy hz hyP hzP
+      exact mul_right (algebraMap R A r) y z (algebraMap_mem _ r) hy hz hyP hzP
+  · intro x₁ x₂ hx₁ hx₂ hx₁P hx₂P
+    intro y hy'
+    exact add_left x₁ x₂ y hx₁ hx₂ hy' (hx₁P y hy') (hx₂P y hy')
+  · intro x₁ x₂ hx₁ hx₂ hx₁P hx₂P
+    intro y hy'
+    exact mul_left x₁ x₂ y hx₁ hx₂ hy' (hx₁P y hy') (hx₂P y hy')' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Source line 27:
+  have hxq : q x hx := by
+  ^
+Highlighted span: h
+
+WARNING .LspCheck.lean:57:3-57:17
+'exact hxq y hy' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Source line 57:
+  exact hxq y hy
+  ^^^^^^^^^^^^^^
+Highlighted span: exact hxq y hy
+
+WARNING .LspCheck.lean:11:101-11:111
+This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+Source line 11:
+theorem adjoin_induction₂ {s : Set A} {p : (x y : A) → x ∈ Algebra.adjoin R s → y ∈ Algebra.adjoin R s → Prop}
+                                                                                                    ^^^^^^^^^^
+Highlighted span:  s → Prop}
+
+WARNING .LspCheck.lean:12:101-12:113
+This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+Source line 12:
+    (mem_mem : ∀ (x) (y) (hx : x ∈ s) (hy : y ∈ s), p x y (Algebra.subset_adjoin hx) (Algebra.subset_adjoin hy))
+                                                                                                    ^^^^^^^^^^^^
+Highlighted span: _adjoin hy))
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:3:20-3:22
+unknown universe level `uR`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                   ^^
+Highlighted span: uR
+
+ERROR .LspCheck.lean:3:34-3:36
+unknown universe level `uS`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                                 ^^
+Highlighted span: uS
+
+ERROR .LspCheck.lean:3:48-3:50
+unknown universe level `uA`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                                               ^^
+Highlighted span: uA
+
+ERROR .LspCheck.lean:3:62-3:64
+unknown universe level `uB`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                                                             ^^
+Highlighted span: uB
+
+WARNING .LspCheck.lean:12:6-12:13
+unused variable `mem_mem`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 12:
+    (mem_mem : ∀ (x) (y) (hx : x ∈ s) (hy : y ∈ s), p x y (Algebra.subset_adjoin hx) (Algebra.subset_adjoin hy))
+     ^^^^^^^
+Highlighted span: mem_mem
+
+WARNING .LspCheck.lean:12:27-12:29
+unused variable `hx`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 12:
+    (mem_mem : ∀ (x) (y) (hx : x ∈ s) (hy : y ∈ s), p x y (Algebra.subset_adjoin hx) (Algebra.subset_adjoin hy))
+                          ^^
+Highlighted span: hx
+
+WARNING .LspCheck.lean:12:40-12:42
+unused variable `hy`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 12:
+    (mem_mem : ∀ (x) (y) (hx : x ∈ s) (hy : y ∈ s), p x y (Algebra.subset_adjoin hx) (Algebra.subset_adjoin hy))
+                                       ^^
+Highlighted span: hy
+
+WARNING .LspCheck.lean:13:6-13:21
+unused variable `algebraMap_both`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 13:
+    (algebraMap_both : ∀ r₁ r₂, p (algebraMap R A r₁) (algebraMap R A r₂) (algebraMap_mem _ r₁)
+     ^^^^^^^^^^^^^^^
+Highlighted span: algebraMap_both
+
+WARNING .LspCheck.lean:13:26-13:28
+unused variable `r₁`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 13:
+    (algebraMap_both : ∀ r₁ r₂, p (algebraMap R A r₁) (algebraMap R A r₂) (algebraMap_mem _ r₁)
+                         ^^
+Highlighted span: r₁
+
+WARNING .LspCheck.lean:13:29-13:31
+unused variable `r₂`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 13:
+    (algebraMap_both : ∀ r₁ r₂, p (algebraMap R A r₁) (algebraMap R A r₂) (algebraMap_mem _ r₁)
+                            ^^
+Highlighted span: r₂
+
+WARNING .LspCheck.lean:15:6-15:21
+unused variable `algebraMap_left`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 15:
+    (algebraMap_left : ∀ (r) (x) (hx : x ∈ s), p (algebraMap R A r) x (algebraMap_mem _ r)
+     ^^^^^^^^^^^^^^^
+Highlighted span: algebraMap_left
+
+WARNING .LspCheck.lean:15:27-15:28
+unused variable `r`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 15:
+    (algebraMap_left : ∀ (r) (x) (hx : x ∈ s), p (algebraMap R A r) x (algebraMap_mem _ r)
+                          ^
+Highlighted span: r
+
+WARNING .LspCheck.lean:15:35-15:37
+unused variable `hx`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 15:
+    (algebraMap_left : ∀ (r) (x) (hx : x ∈ s), p (algebraMap R A r) x (algebraMap_mem _ r)
+                                  ^^
+Highlighted span: hx
+
+WARNING .LspCheck.lean:17:6-17:22
+unused variable `algebraMap_right`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 17:
+    (algebraMap_right : ∀ (r) (x) (hx : x ∈ s), p x (algebraMap R A r) (Algebra.subset_adjoin hx)
+     ^^^^^^^^^^^^^^^^
+Highlighted span: algebraMap_right
+
+WARNING .LspCheck.lean:17:28-17:29
+unused variable `r`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 17:
+    (algebraMap_right : ∀ (r) (x) (hx : x ∈ s), p x (algebraMap R A r) (Algebra.subset_adjoin hx)
+                           ^
+Highlighted span: r
+
+WARNING .LspCheck.lean:17:36-17:38
+unused variable `hx`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 17:
+    (algebraMap_right : ∀ (r) (x) (hx : x ∈ s), p x (algebraMap R A r) (Algebra.subset_adjoin hx)
+                                   ^^
+Highlighted span: hx
+
+WARNING .LspCheck.lean:19:6-19:14
+unused variable `add_left`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 19:
+    (add_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x + y) z (add_mem hx hy) hz)
+     ^^^^^^^^
+Highlighted span: add_left
+
+WARNING .LspCheck.lean:19:19-19:20
+unused variable `x`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 19:
+    (add_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x + y) z (add_mem hx hy) hz)
+                  ^
+Highlighted span: x
+
+WARNING .LspCheck.lean:19:21-19:22
+unused variable `y`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 19:
+    (add_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x + y) z (add_mem hx hy) hz)
+                    ^
+Highlighted span: y
+
+WARNING .LspCheck.lean:19:23-19:24
+unused variable `z`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 19:
+    (add_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x + y) z (add_mem hx hy) hz)
+                      ^
+Highlighted span: z
+
+WARNING .LspCheck.lean:19:25-19:27
+unused variable `hx`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 19:
+    (add_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x + y) z (add_mem hx hy) hz)
+                        ^^
+Highlighted span: hx
+
+WARNING .LspCheck.lean:19:28-19:30
+unused variable `hy`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 19:
+    (add_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x + y) z (add_mem hx hy) hz)
+                           ^^
+Highlighted span: hy
+
+WARNING .LspCheck.lean:19:31-19:33
+unused variable `hz`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 19:
+    (add_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x + y) z (add_mem hx hy) hz)
+                              ^^
+Highlighted span: hz
+
+WARNING .LspCheck.lean:20:6-20:15
+unused variable `add_right`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 20:
+    (add_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y + z) hx (add_mem hy hz))
+     ^^^^^^^^^
+Highlighted span: add_right
+
+WARNING .LspCheck.lean:20:20-20:21
+unused variable `x`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 20:
+    (add_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y + z) hx (add_mem hy hz))
+                   ^
+Highlighted span: x
+
+WARNING .LspCheck.lean:20:22-20:23
+unused variable `y`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 20:
+    (add_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y + z) hx (add_mem hy hz))
+                     ^
+Highlighted span: y
+
+WARNING .LspCheck.lean:20:24-20:25
+unused variable `z`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 20:
+    (add_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y + z) hx (add_mem hy hz))
+                       ^
+Highlighted span: z
+
+WARNING .LspCheck.lean:20:26-20:28
+unused variable `hx`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 20:
+    (add_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y + z) hx (add_mem hy hz))
+                         ^^
+Highlighted span: hx
+
+WARNING .LspCheck.lean:20:29-20:31
+unused variable `hy`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 20:
+    (add_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y + z) hx (add_mem hy hz))
+                            ^^
+Highlighted span: hy
+
+WARNING .LspCheck.lean:20:32-20:34
+unused variable `hz`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 20:
+    (add_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y + z) hx (add_mem hy hz))
+                               ^^
+Highlighted span: hz
+
+WARNING .LspCheck.lean:21:6-21:14
+unused variable `mul_left`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 21:
+    (mul_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x * y) z (mul_mem hx hy) hz)
+     ^^^^^^^^
+Highlighted span: mul_left
+
+WARNING .LspCheck.lean:21:19-21:20
+unused variable `x`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 21:
+    (mul_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x * y) z (mul_mem hx hy) hz)
+                  ^
+Highlighted span: x
+
+WARNING .LspCheck.lean:21:21-21:22
+unused variable `y`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 21:
+    (mul_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x * y) z (mul_mem hx hy) hz)
+                    ^
+Highlighted span: y
+
+WARNING .LspCheck.lean:21:23-21:24
+unused variable `z`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 21:
+    (mul_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x * y) z (mul_mem hx hy) hz)
+                      ^
+Highlighted span: z
+
+WARNING .LspCheck.lean:21:25-21:27
+unused variable `hx`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 21:
+    (mul_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x * y) z (mul_mem hx hy) hz)
+                        ^^
+Highlighted span: hx
+
+WARNING .LspCheck.lean:21:28-21:30
+unused variable `hy`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 21:
+    (mul_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x * y) z (mul_mem hx hy) hz)
+                           ^^
+Highlighted span: hy
+
+WARNING .LspCheck.lean:21:31-21:33
+unused variable `hz`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 21:
+    (mul_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x * y) z (mul_mem hx hy) hz)
+                              ^^
+Highlighted span: hz
+
+WARNING .LspCheck.lean:22:6-22:15
+unused variable `mul_right`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 22:
+    (mul_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y * z) hx (mul_mem hy hz))
+     ^^^^^^^^^
+Highlighted span: mul_right
+
+WARNING .LspCheck.lean:22:20-22:21
+unused variable `x`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 22:
+    (mul_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y * z) hx (mul_mem hy hz))
+                   ^
+Highlighted span: x
+
+WARNING .LspCheck.lean:22:22-22:23
+unused variable `y`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 22:
+    (mul_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y * z) hx (mul_mem hy hz))
+                     ^
+Highlighted span: y
+
+WARNING .LspCheck.lean:22:24-22:25
+unused variable `z`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 22:
+    (mul_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y * z) hx (mul_mem hy hz))
+                       ^
+Highlighted span: z
+
+WARNING .LspCheck.lean:22:26-22:28
+unused variable `hx`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 22:
+    (mul_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y * z) hx (mul_mem hy hz))
+                         ^^
+Highlighted span: hx
+
+WARNING .LspCheck.lean:22:29-22:31
+unused variable `hy`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 22:
+    (mul_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y * z) hx (mul_mem hy hz))
+                            ^^
+Highlighted span: hy
+
+WARNING .LspCheck.lean:22:32-22:34
+unused variable `hz`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Source line 22:
+    (mul_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y * z) hx (mul_mem hy hz))
+                               ^^
+Highlighted span: hz
+
+WARNING .LspCheck.lean:25:3-26:1
+this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Source line 25:
+  let q : ∀ x : A, x ∈ Algebra.adjoin R s → Prop :=
+  ^
+Highlighted span: l
+
+WARNING .LspCheck.lean:27:3-28:1
+this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Source line 27:
+  have hxq : q x hx := by
+  ^
+Highlighted span: h
+
+WARNING .LspCheck.lean:57:3-57:17
+this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Source line 57:
+  exact hxq y hy
+  ^^^^^^^^^^^^^^
+Highlighted span: exact hxq y hy
+
+WARNING .LspCheck.lean:25:3-26:1
+'let q : ∀ x : A, x ∈ Algebra.adjoin R s → Prop := fun x hx' =>
+  ∀ y : A, ∀ hy' : y ∈ Algebra.adjoin R s, p x y hx' hy'' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Source line 25:
+  let q : ∀ x : A, x ∈ Algebra.adjoin R s → Prop :=
+  ^
+Highlighted span: l
+
+WARNING .LspCheck.lean:27:3-28:1
+'have hxq : q x hx := by
+  refine Algebra.adjoin_induction ?_ ?_ ?_ ?_ hx
+  · intro x hx'
+    refine ?_
+    refine Algebra.adjoin_induction ?_ ?_ ?_ ?_
+    · intro y hy'
+      exact mem_mem x y hx' hy'
+    · intro r
+      exact algebraMap_right r x hx'
+    · intro y z hy hz hyP hzP
+      exact add_right x y z (Algebra.subset_adjoin hx') hy hz hyP hzP
+    · intro y z hy hz hyP hzP
+      exact mul_right x y z (Algebra.subset_adjoin hx') hy hz hyP hzP
+  · intro r
+    refine ?_
+    refine Algebra.adjoin_induction ?_ ?_ ?_ ?_
+    · intro y hy'
+      exact algebraMap_left r y hy'
+    · intro r'
+      exact algebraMap_both r r'
+    · intro y z hy hz hyP hzP
+      exact add_right (algebraMap R A r) y z (algebraMap_mem _ r) hy hz hyP hzP
+    · intro y z hy hz hyP hzP
+      exact mul_right (algebraMap R A r) y z (algebraMap_mem _ r) hy hz hyP hzP
+  · intro x₁ x₂ hx₁ hx₂ hx₁P hx₂P
+    intro y hy'
+    exact add_left x₁ x₂ y hx₁ hx₂ hy' (hx₁P y hy') (hx₂P y hy')
+  · intro x₁ x₂ hx₁ hx₂ hx₁P hx₂P
+    intro y hy'
+    exact mul_left x₁ x₂ y hx₁ hx₂ hy' (hx₁P y hy') (hx₂P y hy')' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Source line 27:
+  have hxq : q x hx := by
+  ^
+Highlighted span: h
+
+WARNING .LspCheck.lean:57:3-57:17
+'exact hxq y hy' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Source line 57:
+  exact hxq y hy
+  ^^^^^^^^^^^^^^
+Highlighted span: exact hxq y hy
+
+WARNING .LspCheck.lean:11:101-11:111
+This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+Source line 11:
+theorem adjoin_induction₂ {s : Set A} {p : (x y : A) → x ∈ Algebra.adjoin R s → y ∈ Algebra.adjoin R s → Prop}
+                                                                                                    ^^^^^^^^^^
+Highlighted span:  s → Prop}
+
+WARNING .LspCheck.lean:12:101-12:113
+This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+Source line 12:
+    (mem_mem : ∀ (x) (y) (hx : x ∈ s) (hy : y ∈ s), p x y (Algebra.subset_adjoin hx) (Algebra.subset_adjoin hy))
+                                                                                                    ^^^^^^^^^^^^
+Highlighted span: _adjoin hy))
+
+===== ASSISTANT =====
+import Mathlib
+
+universe uR uS uA uB
+
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+
+variable [CommSemiring R] [CommSemiring S] [Semiring A] [Semiring B]
+
+variable [Algebra R S] [Algebra R A] [Algebra S A] [Algebra R B] [IsScalarTower R S A]
+
+variable {s t : Set A}
+
+theorem adjoin_induction₂ {s : Set A} {p : (x y : A) → x ∈ Algebra.adjoin R s → y ∈ Algebra.adjoin R s → Prop}
+    (mem_mem : ∀ (x) (y) (hx : x ∈ s) (hy : y ∈ s), p x y (Algebra.subset_adjoin hx) (Algebra.subset_adjoin hy))
+    (algebraMap_both : ∀ r₁ r₂, p (algebraMap R A r₁) (algebraMap R A r₂) (algebraMap_mem _ r₁)
+      (algebraMap_mem _ r₂))
+    (algebraMap_left : ∀ (r) (x) (hx : x ∈ s), p (algebraMap R A r) x (algebraMap_mem _ r)
+      (Algebra.subset_adjoin hx))
+    (algebraMap_right : ∀ (r) (x) (hx : x ∈ s), p x (algebraMap R A r) (Algebra.subset_adjoin hx)
+      (algebraMap_mem _ r))
+    (add_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x + y) z (add_mem hx hy) hz)
+    (add_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y + z) hx (add_mem hy hz))
+    (mul_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x * y) z (mul_mem hx hy) hz)
+    (mul_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y * z) hx (mul_mem hy hz))
+    {x y : A} (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s) :
+    p x y hx hy := by
+  revert y hy
+  refine Algebra.adjoin_induction ?_ ?_ ?_ ?_ hx
+  · intro x hx y hy
+    refine Algebra.adjoin_induction ?_ ?_ ?_ ?_ hy
+    · intro y hy'
+      exact mem_mem x y hx hy'
+    · intro r
+      exact algebraMap_right r x hx
+    · intro y₁ y₂ hy₁ hy₂ ih₁ ih₂
+      exact add_right x y₁ y₂ (Algebra.subset_adjoin hx) hy₁ hy₂ ih₁ ih₂
+    · intro y₁ y₂ hy₁ hy₂ ih₁ ih₂
+      exact mul_right x y₁ y₂ (Algebra.subset_adjoin hx) hy₁ hy₂ ih₁ ih₂
+  · intro r y hy
+    refine Algebra.adjoin_induction ?_ ?_ ?_ ?_ hy
+    · intro y hy'
+      exact algebraMap_left r y hy'
+    · intro r'
+      exact algebraMap_both r r'
+    · intro y₁ y₂ hy₁ hy₂ ih₁ ih₂
+      exact add_right (algebraMap R A r) y₁ y₂ (algebraMap_mem _ r) hy₁ hy₂ ih₁ ih₂
+    · intro y₁ y₂ hy₁ hy₂ ih₁ ih₂
+      exact mul_right (algebraMap R A r) y₁ y₂ (algebraMap_mem _ r) hy₁ hy₂ ih₁ ih₂
+  · intro x₁ x₂ hx₁ hx₂ ih₁ ih₂ y hy
+    exact add_left x₁ x₂ y hx₁ hx₂ hy (ih₁ y hy) (ih₂ y hy)
+  · intro x₁ x₂ hx₁ hx₂ ih₁ ih₂ y hy
+    exact mul_left x₁ x₂ y hx₁ hx₂ hy (ih₁ y hy) (ih₂ y hy)
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:29:18-29:20
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case refine_1
+R : Type uR
+A : Type uA
+inst✝² : CommSemiring R
+inst✝¹ : Semiring A
+inst✝ : Algebra R A
+s : Set A
+p : (x y : A) → x ∈ Algebra.adjoin R s → y ∈ Algebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+algebraMap_both : ∀ (r₁ r₂ : R), p ((algebraMap R A) r₁) ((algebraMap R A) r₂) ⋯ ⋯
+algebraMap_left : ∀ (r : R) (x : A) (hx : x ∈ s), p ((algebraMap R A) r) x ⋯ ⋯
+algebraMap_right : ∀ (r : R) (x : A) (hx : x ∈ s), p x ((algebraMap R A) r) ⋯ ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s) (hz : z ∈ Algebra.adjoin R s),
+    p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s) (hz : z ∈ Algebra.adjoin R s),
+    p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s) (hz : z ∈ Algebra.adjoin R s),
+    p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s) (hz : z ∈ Algebra.adjoin R s),
+    p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+x✝ : A
+hx✝ : x✝ ∈ Algebra.adjoin R s
+y✝ x : A
+hx : x ∈ s
+y : y✝ ∈ Algebra.adjoin R s
+⊢ p x y✝ ⋯ y
+Source line 29:
+  · intro x hx y hy
+                 ^^
+Highlighted span: hy
+
+ERROR .LspCheck.lean:39:15-39:17
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case refine_2
+R : Type uR
+A : Type uA
+inst✝² : CommSemiring R
+inst✝¹ : Semiring A
+inst✝ : Algebra R A
+s : Set A
+p : (x y : A) → x ∈ Algebra.adjoin R s → y ∈ Algebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+algebraMap_both : ∀ (r₁ r₂ : R), p ((algebraMap R A) r₁) ((algebraMap R A) r₂) ⋯ ⋯
+algebraMap_left : ∀ (r : R) (x : A) (hx : x ∈ s), p ((algebraMap R A) r) x ⋯ ⋯
+algebraMap_right : ∀ (r : R) (x : A) (hx : x ∈ s), p x ((algebraMap R A) r) ⋯ ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s) (hz : z ∈ Algebra.adjoin R s),
+    p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s) (hz : z ∈ Algebra.adjoin R s),
+    p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s) (hz : z ∈ Algebra.adjoin R s),
+    p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s) (hz : z ∈ Algebra.adjoin R s),
+    p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+x : A
+hx : x ∈ Algebra.adjoin R s
+y✝ : A
+r : R
+y : y✝ ∈ Algebra.adjoin R s
+⊢ p ((algebraMap R A) r) y✝ ⋯ y
+Source line 39:
+  · intro r y hy
+              ^^
+Highlighted span: hy
+
+ERROR .LspCheck.lean:49:35-49:37
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case refine_3
+R : Type uR
+A : Type uA
+inst✝² : CommSemiring R
+inst✝¹ : Semiring A
+inst✝ : Algebra R A
+s : Set A
+p : (x y : A) → x ∈ Algebra.adjoin R s → y ∈ Algebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+algebraMap_both : ∀ (r₁ r₂ : R), p ((algebraMap R A) r₁) ((algebraMap R A) r₂) ⋯ ⋯
+algebraMap_left : ∀ (r : R) (x : A) (hx : x ∈ s), p ((algebraMap R A) r) x ⋯ ⋯
+algebraMap_right : ∀ (r : R) (x : A) (hx : x ∈ s), p x ((algebraMap R A) r) ⋯ ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s) (hz : z ∈ Algebra.adjoin R s),
+    p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s) (hz : z ∈ Algebra.adjoin R s),
+    p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s) (hz : z ∈ Algebra.adjoin R s),
+    p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s) (hz : z ∈ Algebra.adjoin R s),
+    p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+x : A
+hx : x ∈ Algebra.adjoin R s
+y✝ x₁ x₂ : A
+hx₁ : x₁ ∈ Algebra.adjoin R s
+hx₂ : x₂ ∈ Algebra.adjoin R s
+ih₁ : ∀ (hy : y✝ ∈ Algebra.adjoin R s), p x₁ y✝ hx₁ hy
+ih₂ : ∀ (hy : y✝ ∈ Algebra.adjoin R s), p x₂ y✝ hx₂ hy
+y : y✝ ∈ Algebra.adjoin R s
+⊢ p (x₁ + x₂) y✝ ⋯ y
+Source line 49:
+  · intro x₁ x₂ hx₁ hx₂ ih₁ ih₂ y hy
+                                  ^^
+Highlighted span: hy
+
+ERROR .LspCheck.lean:51:35-51:37
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case refine_4
+R : Type uR
+A : Type uA
+inst✝² : CommSemiring R
+inst✝¹ : Semiring A
+inst✝ : Algebra R A
+s : Set A
+p : (x y : A) → x ∈ Algebra.adjoin R s → y ∈ Algebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+algebraMap_both : ∀ (r₁ r₂ : R), p ((algebraMap R A) r₁) ((algebraMap R A) r₂) ⋯ ⋯
+algebraMap_left : ∀ (r : R) (x : A) (hx : x ∈ s), p ((algebraMap R A) r) x ⋯ ⋯
+algebraMap_right : ∀ (r : R) (x : A) (hx : x ∈ s), p x ((algebraMap R A) r) ⋯ ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s) (hz : z ∈ Algebra.adjoin R s),
+    p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s) (hz : z ∈ Algebra.adjoin R s),
+    p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s) (hz : z ∈ Algebra.adjoin R s),
+    p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s) (hz : z ∈ Algebra.adjoin R s),
+    p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+x : A
+hx : x ∈ Algebra.adjoin R s
+y✝ x₁ x₂ : A
+hx₁ : x₁ ∈ Algebra.adjoin R s
+hx₂ : x₂ ∈ Algebra.adjoin R s
+ih₁ : ∀ (hy : y✝ ∈ Algebra.adjoin R s), p x₁ y✝ hx₁ hy
+ih₂ : ∀ (hy : y✝ ∈ Algebra.adjoin R s), p x₂ y✝ hx₂ hy
+y : y✝ ∈ Algebra.adjoin R s
+⊢ p (x₁ * x₂) y✝ ⋯ y
+Source line 51:
+  · intro x₁ x₂ hx₁ hx₂ ih₁ ih₂ y hy
+                                  ^^
+Highlighted span: hy
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:29:18-29:20
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case refine_1
+R : Type uR
+A : Type uA
+inst✝² : CommSemiring R
+inst✝¹ : Semiring A
+inst✝ : Algebra R A
+s : Set A
+p : (x y : A) → x ∈ Algebra.adjoin R s → y ∈ Algebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+algebraMap_both : ∀ (r₁ r₂ : R), p ((algebraMap R A) r₁) ((algebraMap R A) r₂) ⋯ ⋯
+algebraMap_left : ∀ (r : R) (x : A) (hx : x ∈ s), p ((algebraMap R A) r) x ⋯ ⋯
+algebraMap_right : ∀ (r : R) (x : A) (hx : x ∈ s), p x ((algebraMap R A) r) ⋯ ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s) (hz : z ∈ Algebra.adjoin R s),
+    p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s) (hz : z ∈ Algebra.adjoin R s),
+    p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s) (hz : z ∈ Algebra.adjoin R s),
+    p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s) (hz : z ∈ Algebra.adjoin R s),
+    p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+x✝ : A
+hx✝ : x✝ ∈ Algebra.adjoin R s
+y✝ x : A
+hx : x ∈ s
+y : y✝ ∈ Algebra.adjoin R s
+⊢ p x y✝ ⋯ y
+Source line 29:
+  · intro x hx y hy
+                 ^^
+Highlighted span: hy
+
+ERROR .LspCheck.lean:39:15-39:17
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case refine_2
+R : Type uR
+A : Type uA
+inst✝² : CommSemiring R
+inst✝¹ : Semiring A
+inst✝ : Algebra R A
+s : Set A
+p : (x y : A) → x ∈ Algebra.adjoin R s → y ∈ Algebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+algebraMap_both : ∀ (r₁ r₂ : R), p ((algebraMap R A) r₁) ((algebraMap R A) r₂) ⋯ ⋯
+algebraMap_left : ∀ (r : R) (x : A) (hx : x ∈ s), p ((algebraMap R A) r) x ⋯ ⋯
+algebraMap_right : ∀ (r : R) (x : A) (hx : x ∈ s), p x ((algebraMap R A) r) ⋯ ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s) (hz : z ∈ Algebra.adjoin R s),
+    p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s) (hz : z ∈ Algebra.adjoin R s),
+    p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s) (hz : z ∈ Algebra.adjoin R s),
+    p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s) (hz : z ∈ Algebra.adjoin R s),
+    p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+x : A
+hx : x ∈ Algebra.adjoin R s
+y✝ : A
+r : R
+y : y✝ ∈ Algebra.adjoin R s
+⊢ p ((algebraMap R A) r) y✝ ⋯ y
+Source line 39:
+  · intro r y hy
+              ^^
+Highlighted span: hy
+
+ERROR .LspCheck.lean:49:35-49:37
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case refine_3
+R : Type uR
+A : Type uA
+inst✝² : CommSemiring R
+inst✝¹ : Semiring A
+inst✝ : Algebra R A
+s : Set A
+p : (x y : A) → x ∈ Algebra.adjoin R s → y ∈ Algebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+algebraMap_both : ∀ (r₁ r₂ : R), p ((algebraMap R A) r₁) ((algebraMap R A) r₂) ⋯ ⋯
+algebraMap_left : ∀ (r : R) (x : A) (hx : x ∈ s), p ((algebraMap R A) r) x ⋯ ⋯
+algebraMap_right : ∀ (r : R) (x : A) (hx : x ∈ s), p x ((algebraMap R A) r) ⋯ ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s) (hz : z ∈ Algebra.adjoin R s),
+    p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s) (hz : z ∈ Algebra.adjoin R s),
+    p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s) (hz : z ∈ Algebra.adjoin R s),
+    p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s) (hz : z ∈ Algebra.adjoin R s),
+    p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+x : A
+hx : x ∈ Algebra.adjoin R s
+y✝ x₁ x₂ : A
+hx₁ : x₁ ∈ Algebra.adjoin R s
+hx₂ : x₂ ∈ Algebra.adjoin R s
+ih₁ : ∀ (hy : y✝ ∈ Algebra.adjoin R s), p x₁ y✝ hx₁ hy
+ih₂ : ∀ (hy : y✝ ∈ Algebra.adjoin R s), p x₂ y✝ hx₂ hy
+y : y✝ ∈ Algebra.adjoin R s
+⊢ p (x₁ + x₂) y✝ ⋯ y
+Source line 49:
+  · intro x₁ x₂ hx₁ hx₂ ih₁ ih₂ y hy
+                                  ^^
+Highlighted span: hy
+
+ERROR .LspCheck.lean:51:35-51:37
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case refine_4
+R : Type uR
+A : Type uA
+inst✝² : CommSemiring R
+inst✝¹ : Semiring A
+inst✝ : Algebra R A
+s : Set A
+p : (x y : A) → x ∈ Algebra.adjoin R s → y ∈ Algebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+algebraMap_both : ∀ (r₁ r₂ : R), p ((algebraMap R A) r₁) ((algebraMap R A) r₂) ⋯ ⋯
+algebraMap_left : ∀ (r : R) (x : A) (hx : x ∈ s), p ((algebraMap R A) r) x ⋯ ⋯
+algebraMap_right : ∀ (r : R) (x : A) (hx : x ∈ s), p x ((algebraMap R A) r) ⋯ ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s) (hz : z ∈ Algebra.adjoin R s),
+    p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s) (hz : z ∈ Algebra.adjoin R s),
+    p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s) (hz : z ∈ Algebra.adjoin R s),
+    p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s) (hz : z ∈ Algebra.adjoin R s),
+    p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+x : A
+hx : x ∈ Algebra.adjoin R s
+y✝ x₁ x₂ : A
+hx₁ : x₁ ∈ Algebra.adjoin R s
+hx₂ : x₂ ∈ Algebra.adjoin R s
+ih₁ : ∀ (hy : y✝ ∈ Algebra.adjoin R s), p x₁ y✝ hx₁ hy
+ih₂ : ∀ (hy : y✝ ∈ Algebra.adjoin R s), p x₂ y✝ hx₂ hy
+y : y✝ ∈ Algebra.adjoin R s
+⊢ p (x₁ * x₂) y✝ ⋯ y
+Source line 51:
+  · intro x₁ x₂ hx₁ hx₂ ih₁ ih₂ y hy
+                                  ^^
+Highlighted span: hy
+
+===== ASSISTANT =====
+import Mathlib
+
+universe uR uS uA uB
+
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+
+variable [CommSemiring R] [CommSemiring S] [Semiring A] [Semiring B]
+
+variable [Algebra R S] [Algebra R A] [Algebra S A] [Algebra R B] [IsScalarTower R S A]
+
+variable {s t : Set A}
+
+theorem adjoin_induction₂ {s : Set A} {p : (x y : A) → x ∈ Algebra.adjoin R s → y ∈ Algebra.adjoin R s → Prop}
+    (mem_mem : ∀ (x) (y) (hx : x ∈ s) (hy : y ∈ s), p x y (Algebra.subset_adjoin hx) (Algebra.subset_adjoin hy))
+    (algebraMap_both : ∀ r₁ r₂, p (algebraMap R A r₁) (algebraMap R A r₂) (algebraMap_mem _ r₁)
+      (algebraMap_mem _ r₂))
+    (algebraMap_left : ∀ (r) (x) (hx : x ∈ s), p (algebraMap R A r) x (algebraMap_mem _ r)
+      (Algebra.subset_adjoin hx))
+    (algebraMap_right : ∀ (r) (x) (hx : x ∈ s), p x (algebraMap R A r) (Algebra.subset_adjoin hx)
+      (algebraMap_mem _ r))
+    (add_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x + y) z (add_mem hx hy) hz)
+    (add_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y + z) hx (add_mem hy hz))
+    (mul_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x * y) z (mul_mem hx hy) hz)
+    (mul_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y * z) hx (mul_mem hy hz))
+    {x y : A} (hx : x ∈ Algebra.adjoin R s) (hy : y ∈ Algebra.adjoin R s) :
+    p x y hx hy := by
+  let q : ∀ x : A, x ∈ Algebra.adjoin R s → Prop :=
+    fun x hx => ∀ ⦃y : A⦄, ∀ hy : y ∈ Algebra.adjoin R s, p x y hx hy
+  have hxq : q x hx := by
+    refine Algebra.adjoin_induction ?_ ?_ ?_ ?_ hx
+    · intro x hx
+      dsimp [q]
+      intro y hy
+      refine Algebra.adjoin_induction ?_ ?_ ?_ ?_ hy
+      · intro y hy'
+        exact mem_mem x y hx hy'
+      · intro r
+        exact algebraMap_right r x hx
+      · intro y₁ y₂ hy₁ hy₂ ih₁ ih₂
+        exact add_right x y₁ y₂ (Algebra.subset_adjoin hx) hy₁ hy₂ ih₁ ih₂
+      · intro y₁ y₂ hy₁ hy₂ ih₁ ih₂
+        exact mul_right x y₁ y₂ (Algebra.subset_adjoin hx) hy₁ hy₂ ih₁ ih₂
+    · intro r
+      dsimp [q]
+      intro y hy
+      refine Algebra.adjoin_induction ?_ ?_ ?_ ?_ hy
+      · intro y hy'
+        exact algebraMap_left r y hy'
+      · intro r'
+        exact algebraMap_both r r'
+      · intro y₁ y₂ hy₁ hy₂ ih₁ ih₂
+        exact add_right (algebraMap R A r) y₁ y₂ (algebraMap_mem _ r) hy₁ hy₂ ih₁ ih₂
+      · intro y₁ y₂ hy₁ hy₂ ih₁ ih₂
+        exact mul_right (algebraMap R A r) y₁ y₂ (algebraMap_mem _ r) hy₁ hy₂ ih₁ ih₂
+    · intro x₁ x₂ hx₁ hx₂ ih₁ ih₂
+      dsimp [q] at ih₁ ih₂ ⊢
+      intro y hy
+      exact add_left x₁ x₂ y hx₁ hx₂ hy (ih₁ hy) (ih₂ hy)
+    · intro x₁ x₂ hx₁ hx₂ ih₁ ih₂
+      dsimp [q] at ih₁ ih₂ ⊢
+      intro y hy
+      exact mul_left x₁ x₂ y hx₁ hx₂ hy (ih₁ hy) (ih₂ hy)
+  exact hxq hy
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

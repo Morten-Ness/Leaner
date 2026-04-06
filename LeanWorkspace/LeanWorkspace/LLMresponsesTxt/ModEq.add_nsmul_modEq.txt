@@ -1,0 +1,181 @@
+FILE: ModEq.add_nsmul_modEq.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: ModEq.add_nsmul_modEq.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {M : Type*} [AddCommMonoid M] {a b c d p : M}
+
+theorem add_nsmul_modEq (n : ℕ) : a + n • p ≡ a [PMOD p] := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M : Type*} [AddCommMonoid M] {a b c d p : M}
+
+theorem add_nsmul_modEq (n : ℕ) : a + n • p ≡ a [PMOD p] := by
+  simpa [modEq_iff_eq_add] using (ModEq.refl (a + n • p) p)
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:6:10-6:26
+Unknown identifier `modEq_iff_eq_add`
+Source line 6:
+  simpa [modEq_iff_eq_add] using (ModEq.refl (a + n • p) p)
+         ^^^^^^^^^^^^^^^^
+Highlighted span: modEq_iff_eq_add
+
+ERROR .LspCheck.lean:6:35-6:45
+Unknown identifier `ModEq.refl`
+Source line 6:
+  simpa [modEq_iff_eq_add] using (ModEq.refl (a + n • p) p)
+                                  ^^^^^^^^^^
+Highlighted span: ModEq.refl
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:6:10-6:26
+Unknown identifier `modEq_iff_eq_add`
+Source line 6:
+  simpa [modEq_iff_eq_add] using (ModEq.refl (a + n • p) p)
+         ^^^^^^^^^^^^^^^^
+Highlighted span: modEq_iff_eq_add
+
+ERROR .LspCheck.lean:6:35-6:45
+Unknown identifier `ModEq.refl`
+Source line 6:
+  simpa [modEq_iff_eq_add] using (ModEq.refl (a + n • p) p)
+                                  ^^^^^^^^^^
+Highlighted span: ModEq.refl
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M : Type*} [AddCommMonoid M] {a b c d p : M}
+
+theorem add_nsmul_modEq (n : ℕ) : a + n • p ≡ a [PMOD p] := by
+  exact ⟨n, by simp [add_assoc, add_comm, add_left_comm]⟩
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:6:13-6:57
+unsolved goals
+M : Type u_1
+inst✝ : AddCommMonoid M
+a p : M
+n : ℕ
+⊢ ∃ n_1, a + (n • p + n • p) = a + n_1 • p
+Source line 6:
+  exact ⟨n, by simp [add_assoc, add_comm, add_left_comm]⟩
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: by simp [add_assoc, add_comm, add_left_comm]
+
+WARNING .LspCheck.lean:6:22-6:31
+This simp argument is unused:
+  add_assoc
+
+Hint: Omit it from the simp argument list.
+  simp [̵a̵d̵d̵_̵a̵s̵s̵o̵c̵,̵ ̵a̵d̵d̵_̵c̵o̵m̵m̵,̵[̲a̲d̲d̲_̲c̲o̲m̲m̲,̲ add_left_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 6:
+  exact ⟨n, by simp [add_assoc, add_comm, add_left_comm]⟩
+                     ^^^^^^^^^
+Highlighted span: add_assoc
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:6:13-6:57
+unsolved goals
+M : Type u_1
+inst✝ : AddCommMonoid M
+a p : M
+n : ℕ
+⊢ ∃ n_1, a + (n • p + n • p) = a + n_1 • p
+Source line 6:
+  exact ⟨n, by simp [add_assoc, add_comm, add_left_comm]⟩
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: by simp [add_assoc, add_comm, add_left_comm]
+
+WARNING .LspCheck.lean:6:22-6:31
+This simp argument is unused:
+  add_assoc
+
+Hint: Omit it from the simp argument list.
+  simp [̵a̵d̵d̵_̵a̵s̵s̵o̵c̵,̵ ̵a̵d̵d̵_̵c̵o̵m̵m̵,̵[̲a̲d̲d̲_̲c̲o̲m̲m̲,̲ add_left_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 6:
+  exact ⟨n, by simp [add_assoc, add_comm, add_left_comm]⟩
+                     ^^^^^^^^^
+Highlighted span: add_assoc
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M : Type*} [AddCommMonoid M] {a b c d p : M}
+
+theorem add_nsmul_modEq (n : ℕ) : a + n • p ≡ a [PMOD p] := by
+  refine ⟨n, ?_⟩
+  rw [add_assoc, add_comm (n • p) a]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:7:7-7:16
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?a + ?b + ?c
+in the target expression
+  ∃ n_1, n • p + (a + n • p) = n_1 • p + a
+
+M : Type u_1
+inst✝ : AddCommMonoid M
+a p : M
+n : ℕ
+⊢ ∃ n_1, n • p + (a + n • p) = n_1 • p + a
+Source line 7:
+  rw [add_assoc, add_comm (n • p) a]
+      ^^^^^^^^^
+Highlighted span: add_assoc
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:7:7-7:16
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?a + ?b + ?c
+in the target expression
+  ∃ n_1, n • p + (a + n • p) = n_1 • p + a
+
+M : Type u_1
+inst✝ : AddCommMonoid M
+a p : M
+n : ℕ
+⊢ ∃ n_1, n • p + (a + n • p) = n_1 • p + a
+Source line 7:
+  rw [add_assoc, add_comm (n • p) a]
+      ^^^^^^^^^
+Highlighted span: add_assoc

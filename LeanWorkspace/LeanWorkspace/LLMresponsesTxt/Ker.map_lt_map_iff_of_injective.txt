@@ -1,0 +1,481 @@
+FILE: Ker.map_lt_map_iff_of_injective.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Ker.map_lt_map_iff_of_injective.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N] (H : Subgroup G)
+
+variable (f : G →* N)
+
+theorem map_lt_map_iff_of_injective {f : G →* N} (hf : Function.Injective f) {H K : Subgroup G} :
+    H.map f < K.map f ↔ H < K := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N] (H : Subgroup G)
+
+variable (f : G →* N)
+
+theorem map_lt_map_iff_of_injective {f : G →* N} (hf : Function.Injective f) {H K : Subgroup G} :
+    H.map f < K.map f ↔ H < K := by
+  constructor
+  · intro h
+    rcases h with ⟨hHK, hne⟩
+    refine ⟨?_, ?_⟩
+    · intro x hx
+      have hx' : f x ∈ H.map f := ⟨x, hx, rfl⟩
+      exact (show f x ∈ K.map f from hHK hx' |> fun hxk =>
+        let ⟨y, hy, hxy⟩ := hxk
+        by
+          rw [← hxy]
+          exact hy) |> fun hk => by
+            rcases hk with ⟨y, hy, hfy⟩
+            exact hf <| by simpa using hfy
+    · intro hEq
+      apply hne
+      ext y
+      constructor
+      · intro hy
+        rcases hy with ⟨x, hx, rfl⟩
+        exact ⟨x, hEq.le hx, rfl⟩
+      · intro hy
+        rcases hy with ⟨x, hx, rfl⟩
+        exact ⟨x, hEq.ge hx, rfl⟩
+  · intro h
+    rcases h with ⟨hHK, hne⟩
+    refine ⟨Subgroup.map_mono hHK, ?_⟩
+    intro hEq
+    apply hne
+    ext x
+    constructor
+    · intro hx
+      have hx' : f x ∈ H.map f := ⟨x, hx, rfl⟩
+      rw [hEq] at hx'
+      rcases hx' with ⟨y, hy, hfy⟩
+      exact hf <| by simpa using hfy ▸ hy
+    · intro hx
+      have hx' : f x ∈ K.map f := ⟨x, hx, rfl⟩
+      rw [← hEq] at hx'
+      rcases hx' with ⟨y, hy, hfy⟩
+      exact hf <| by simpa using hfy ▸ hy
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:27:13-27:43
+Type mismatch
+  hf hfy
+has type
+  y = x
+but is expected to have type
+  x ∈ ↑K
+Source line 27:
+            exact hf <| by simpa using hfy
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: exact hf <| by simpa using hfy
+
+ERROR .LspCheck.lean:25:11-25:19
+Type mismatch
+  hy
+has type
+  Membership.mem.{u_1, u_1} (↑K) y
+but is expected to have type
+  Membership.mem.{u_5, u_5} (Subgroup.map f K) (f y)
+Source line 25:
+          exact hy) |> fun hk => by
+          ^^^^^^^^
+Highlighted span: exact hy
+
+ERROR .LspCheck.lean:30:7-30:12
+This extensionality tactic only applies to equalities, not
+  ∀ ⦃a : N⦄, a ∈ ↑(Subgroup.map f K) → a ∈ ↑(Subgroup.map f H)
+Source line 30:
+      ext y
+      ^^^^^
+Highlighted span: ext y
+
+ERROR .LspCheck.lean:43:5-43:10
+This extensionality tactic only applies to equalities, not
+  ∀ ⦃a : G⦄, a ∈ ↑K → a ∈ ↑H
+Source line 43:
+    ext x
+    ^^^^^
+Highlighted span: ext x
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:27:13-27:43
+Type mismatch
+  hf hfy
+has type
+  y = x
+but is expected to have type
+  x ∈ ↑K
+Source line 27:
+            exact hf <| by simpa using hfy
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: exact hf <| by simpa using hfy
+
+ERROR .LspCheck.lean:25:11-25:19
+Type mismatch
+  hy
+has type
+  Membership.mem.{u_1, u_1} (↑K) y
+but is expected to have type
+  Membership.mem.{u_5, u_5} (Subgroup.map f K) (f y)
+Source line 25:
+          exact hy) |> fun hk => by
+          ^^^^^^^^
+Highlighted span: exact hy
+
+ERROR .LspCheck.lean:30:7-30:12
+This extensionality tactic only applies to equalities, not
+  ∀ ⦃a : N⦄, a ∈ ↑(Subgroup.map f K) → a ∈ ↑(Subgroup.map f H)
+Source line 30:
+      ext y
+      ^^^^^
+Highlighted span: ext y
+
+ERROR .LspCheck.lean:43:5-43:10
+This extensionality tactic only applies to equalities, not
+  ∀ ⦃a : G⦄, a ∈ ↑K → a ∈ ↑H
+Source line 43:
+    ext x
+    ^^^^^
+Highlighted span: ext x
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N] (H : Subgroup G)
+
+variable (f : G →* N)
+
+theorem map_lt_map_iff_of_injective {f : G →* N} (hf : Function.Injective f) {H K : Subgroup G} :
+    H.map f < K.map f ↔ H < K := by
+  constructor
+  · rintro ⟨hmap, hne⟩
+    refine ⟨?_, ?_⟩
+    · intro x hx
+      have hxmap : f x ∈ H.map f := ⟨x, hx, rfl⟩
+      have hkmap : f x ∈ K.map f := hmap hxmap
+      rcases hkmap with ⟨y, hy, hfy⟩
+      have : y = x := hf (by simpa using hfy.symm)
+      simpa [this] using hy
+    · intro hHK
+      apply hne
+      apply le_antisymm
+      · intro z hz
+        rcases hz with ⟨x, hx, rfl⟩
+        exact ⟨x, hHK.le hx, rfl⟩
+      · intro z hz
+        rcases hz with ⟨x, hx, rfl⟩
+        exact ⟨x, hHK.ge hx, rfl⟩
+  · rintro ⟨hHK, hne⟩
+    refine ⟨Subgroup.map_mono hHK, ?_⟩
+    intro hEq
+    apply hne
+    apply le_antisymm
+    · intro x hx
+      have hxmap : f x ∈ H.map f := ⟨x, hx, rfl⟩
+      have hkmap : f x ∈ K.map f := by simpa [hEq] using hxmap
+      rcases hkmap with ⟨y, hy, hfy⟩
+      have : y = x := hf (by simpa using hfy.symm)
+      simpa [this] using hy
+    · exact hHK
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:22:30-22:50
+Type mismatch: After simplification, term
+  Eq.symm hfy
+ has type
+  f x = f y
+but is expected to have type
+  f y = f x
+Source line 22:
+      have : y = x := hf (by simpa using hfy.symm)
+                             ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa using hfy.symm
+
+ERROR .LspCheck.lean:26:7-26:24
+Tactic `apply` failed: could not unify the conclusion of `@le_antisymm`
+  ?a ≤ ?b → ?b ≤ ?a → ?a = ?b
+with the goal
+  ↑(Subgroup.map f K) ⊆ ↑(Subgroup.map f H)
+
+Note: The full type of `@le_antisymm` is
+  ∀ {α : Type ?u.3868.1507} [inst : PartialOrder α] {a b : α}, a ≤ b → b ≤ a → a = b
+
+case mp.refine_2
+G : Type u_1
+inst✝¹ : Group G
+N : Type u_5
+inst✝ : Group N
+f : G →* N
+hf : Function.Injective ⇑f
+H K : Subgroup G
+hmap : ↑(Subgroup.map f H) ⊆ ↑(Subgroup.map f K)
+hne : ¬↑(Subgroup.map f K) ⊆ ↑(Subgroup.map f H)
+hHK : ↑K ⊆ ↑H
+⊢ ↑(Subgroup.map f K) ⊆ ↑(Subgroup.map f H)
+Source line 26:
+      apply le_antisymm
+      ^^^^^^^^^^^^^^^^^
+Highlighted span: apply le_antisymm
+
+ERROR .LspCheck.lean:37:5-37:22
+Tactic `apply` failed: could not unify the conclusion of `@le_antisymm`
+  ?a ≤ ?b → ?b ≤ ?a → ?a = ?b
+with the goal
+  ↑K ⊆ ↑H
+
+Note: The full type of `@le_antisymm` is
+  ∀ {α : Type ?u.3868.2695} [inst : PartialOrder α] {a b : α}, a ≤ b → b ≤ a → a = b
+
+case mpr
+G : Type u_1
+inst✝¹ : Group G
+N : Type u_5
+inst✝ : Group N
+f : G →* N
+hf : Function.Injective ⇑f
+H K : Subgroup G
+hHK : ↑H ⊆ ↑K
+hne : ¬↑K ⊆ ↑H
+hEq : ↑(Subgroup.map f K) ⊆ ↑(Subgroup.map f H)
+⊢ ↑K ⊆ ↑H
+Source line 37:
+    apply le_antisymm
+    ^^^^^^^^^^^^^^^^^
+Highlighted span: apply le_antisymm
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:22:30-22:50
+Type mismatch: After simplification, term
+  Eq.symm hfy
+ has type
+  f x = f y
+but is expected to have type
+  f y = f x
+Source line 22:
+      have : y = x := hf (by simpa using hfy.symm)
+                             ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa using hfy.symm
+
+ERROR .LspCheck.lean:26:7-26:24
+Tactic `apply` failed: could not unify the conclusion of `@le_antisymm`
+  ?a ≤ ?b → ?b ≤ ?a → ?a = ?b
+with the goal
+  ↑(Subgroup.map f K) ⊆ ↑(Subgroup.map f H)
+
+Note: The full type of `@le_antisymm` is
+  ∀ {α : Type ?u.3868.1507} [inst : PartialOrder α] {a b : α}, a ≤ b → b ≤ a → a = b
+
+case mp.refine_2
+G : Type u_1
+inst✝¹ : Group G
+N : Type u_5
+inst✝ : Group N
+f : G →* N
+hf : Function.Injective ⇑f
+H K : Subgroup G
+hmap : ↑(Subgroup.map f H) ⊆ ↑(Subgroup.map f K)
+hne : ¬↑(Subgroup.map f K) ⊆ ↑(Subgroup.map f H)
+hHK : ↑K ⊆ ↑H
+⊢ ↑(Subgroup.map f K) ⊆ ↑(Subgroup.map f H)
+Source line 26:
+      apply le_antisymm
+      ^^^^^^^^^^^^^^^^^
+Highlighted span: apply le_antisymm
+
+ERROR .LspCheck.lean:37:5-37:22
+Tactic `apply` failed: could not unify the conclusion of `@le_antisymm`
+  ?a ≤ ?b → ?b ≤ ?a → ?a = ?b
+with the goal
+  ↑K ⊆ ↑H
+
+Note: The full type of `@le_antisymm` is
+  ∀ {α : Type ?u.3868.2695} [inst : PartialOrder α] {a b : α}, a ≤ b → b ≤ a → a = b
+
+case mpr
+G : Type u_1
+inst✝¹ : Group G
+N : Type u_5
+inst✝ : Group N
+f : G →* N
+hf : Function.Injective ⇑f
+H K : Subgroup G
+hHK : ↑H ⊆ ↑K
+hne : ¬↑K ⊆ ↑H
+hEq : ↑(Subgroup.map f K) ⊆ ↑(Subgroup.map f H)
+⊢ ↑K ⊆ ↑H
+Source line 37:
+    apply le_antisymm
+    ^^^^^^^^^^^^^^^^^
+Highlighted span: apply le_antisymm
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N] (H : Subgroup G)
+
+variable (f : G →* N)
+
+theorem map_lt_map_iff_of_injective {f : G →* N} (hf : Function.Injective f) {H K : Subgroup G} :
+    H.map f < K.map f ↔ H < K := by
+  constructor
+  · rintro ⟨hmap, hne⟩
+    refine ⟨?_, ?_⟩
+    · intro x hx
+      have hxmap : f x ∈ H.map f := ⟨x, hx, rfl⟩
+      have hkmap : f x ∈ K.map f := hmap hxmap
+      rcases hkmap with ⟨y, hy, hfy⟩
+      have : y = x := hf (by simpa using hfy)
+      simpa [this] using hy
+    · intro hKH
+      apply hne
+      intro z hz
+      rcases hz with ⟨x, hx, rfl⟩
+      exact ⟨x, hKH hx, rfl⟩
+  · rintro ⟨hHK, hne⟩
+    refine ⟨Subgroup.map_mono hHK, ?_⟩
+    intro hEq
+    apply hne
+    intro x hx
+    have hxmap : f x ∈ H.map f := ⟨x, hx, rfl⟩
+    have hkmap : f x ∈ K.map f := by simpa [hEq] using hxmap
+    rcases hkmap with ⟨y, hy, hfy⟩
+    have : y = x := hf (by simpa using hfy)
+    simpa [this] using hy
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:34:39-34:41
+Application type mismatch: The argument
+  hx
+has type
+  x ∈ ↑K
+but is expected to have type
+  x ∈ ↑H
+in the application
+  And.intro hx
+Source line 34:
+    have hxmap : f x ∈ H.map f := ⟨x, hx, rfl⟩
+                                      ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:35:38-35:61
+Type mismatch: After simplification, term
+  hxmap
+ has type
+  ∃ x_1 ∈ H, f x_1 = f x
+but is expected to have type
+  ∃ x_1 ∈ K, f x_1 = f x
+Source line 35:
+    have hkmap : f x ∈ K.map f := by simpa [hEq] using hxmap
+                                     ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [hEq] using hxmap
+
+ERROR .LspCheck.lean:38:5-38:26
+Type mismatch: After simplification, term
+  hy
+ has type
+  x ∈ K
+but is expected to have type
+  x ∈ H
+Source line 38:
+    simpa [this] using hy
+    ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [this] using hy
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:34:39-34:41
+Application type mismatch: The argument
+  hx
+has type
+  x ∈ ↑K
+but is expected to have type
+  x ∈ ↑H
+in the application
+  And.intro hx
+Source line 34:
+    have hxmap : f x ∈ H.map f := ⟨x, hx, rfl⟩
+                                      ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:35:38-35:61
+Type mismatch: After simplification, term
+  hxmap
+ has type
+  ∃ x_1 ∈ H, f x_1 = f x
+but is expected to have type
+  ∃ x_1 ∈ K, f x_1 = f x
+Source line 35:
+    have hkmap : f x ∈ K.map f := by simpa [hEq] using hxmap
+                                     ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [hEq] using hxmap
+
+ERROR .LspCheck.lean:38:5-38:26
+Type mismatch: After simplification, term
+  hy
+ has type
+  x ∈ K
+but is expected to have type
+  x ∈ H
+Source line 38:
+    simpa [this] using hy
+    ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [this] using hy

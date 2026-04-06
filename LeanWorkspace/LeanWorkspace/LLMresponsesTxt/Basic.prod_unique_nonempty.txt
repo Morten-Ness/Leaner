@@ -1,0 +1,185 @@
+FILE: Basic.prod_unique_nonempty.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.prod_unique_nonempty.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {ι κ G M : Type*} {s s₁ s₂ : Finset ι} {a : ι}
+
+variable [CommMonoid M] {f g : ι → M}
+
+theorem prod_unique_nonempty [Unique ι] (s : Finset ι) (f : ι → M) (h : s.Nonempty) :
+    ∏ x ∈ s, f x = f default := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι κ G M : Type*} {s s₁ s₂ : Finset ι} {a : ι}
+
+variable [CommMonoid M] {f g : ι → M}
+
+theorem prod_unique_nonempty [Unique ι] (s : Finset ι) (f : ι → M) (h : s.Nonempty) :
+    ∏ x ∈ s, f x = f default := by
+  rcases h with ⟨x, hx⟩
+  have hx' : x = default := Subsingleton.elim _ _
+  subst hx'
+  simpa using Finset.prod_eq_single default (by
+    intro y hy hne
+    exact (hne (Subsingleton.elim _ _)).elim) hx
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:47-14:49
+Application type mismatch: The argument
+  hx
+has type
+  default ∈ s
+but is expected to have type
+  default ∉ ?m.39 → ?m.40 default = 1
+in the application
+  Finset.prod_eq_single default ?m.43 hx
+Source line 14:
+    exact (hne (Subsingleton.elim _ _)).elim) hx
+                                              ^^
+Highlighted span: hx
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:47-14:49
+Application type mismatch: The argument
+  hx
+has type
+  default ∈ s
+but is expected to have type
+  default ∉ ?m.39 → ?m.40 default = 1
+in the application
+  Finset.prod_eq_single default ?m.43 hx
+Source line 14:
+    exact (hne (Subsingleton.elim _ _)).elim) hx
+                                              ^^
+Highlighted span: hx
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι κ G M : Type*} {s s₁ s₂ : Finset ι} {a : ι}
+
+variable [CommMonoid M] {f g : ι → M}
+
+theorem prod_unique_nonempty [Unique ι] (s : Finset ι) (f : ι → M) (h : s.Nonempty) :
+    ∏ x ∈ s, f x = f default := by
+  classical
+  rcases h with ⟨x, hx⟩
+  have hs : s = {default} := by
+    ext y
+    constructor
+    · intro hy
+      have : y = default := Subsingleton.elim _ _
+      simp [this]
+    · intro hy
+      simpa using hx
+  simp [hs]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:18:7-18:21
+Type mismatch: After simplification, term
+  hx
+ has type
+  x ∈ s
+but is expected to have type
+  y ∈ s
+Source line 18:
+      simpa using hx
+      ^^^^^^^^^^^^^^
+Highlighted span: simpa using hx
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:18:7-18:21
+Type mismatch: After simplification, term
+  hx
+ has type
+  x ∈ s
+but is expected to have type
+  y ∈ s
+Source line 18:
+      simpa using hx
+      ^^^^^^^^^^^^^^
+Highlighted span: simpa using hx
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι κ G M : Type*} {s s₁ s₂ : Finset ι} {a : ι}
+
+variable [CommMonoid M] {f g : ι → M}
+
+theorem prod_unique_nonempty [Unique ι] (s : Finset ι) (f : ι → M) (h : s.Nonempty) :
+    ∏ x ∈ s, f x = f default := by
+  classical
+  rcases h with ⟨x, hx⟩
+  have hxd : x = default := Subsingleton.elim _ _
+  subst hxd
+  have hs : s = {default} := by
+    apply Finset.Subsingleton.eq_singleton_of_nonempty
+    · infer_instance
+    · exact ⟨default, hx⟩
+  simp [hs]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:11-14:55
+Unknown constant `Finset.Subsingleton.eq_singleton_of_nonempty`
+Source line 14:
+    apply Finset.Subsingleton.eq_singleton_of_nonempty
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.Subsingleton.eq_singleton_of_nonempty
+
+ERROR .LspCheck.lean:15:5-15:21
+No goals to be solved
+Source line 15:
+    · infer_instance
+    ^^^^^^^^^^^^^^^^
+Highlighted span: · infer_instance
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:11-14:55
+Unknown constant `Finset.Subsingleton.eq_singleton_of_nonempty`
+Source line 14:
+    apply Finset.Subsingleton.eq_singleton_of_nonempty
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.Subsingleton.eq_singleton_of_nonempty
+
+ERROR .LspCheck.lean:15:5-15:21
+No goals to be solved
+Source line 15:
+    · infer_instance
+    ^^^^^^^^^^^^^^^^
+Highlighted span: · infer_instance

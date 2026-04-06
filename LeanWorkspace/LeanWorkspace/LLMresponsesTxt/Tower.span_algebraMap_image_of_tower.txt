@@ -1,0 +1,146 @@
+FILE: Tower.span_algebraMap_image_of_tower.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Tower.span_algebraMap_image_of_tower.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable (R : Type u) (S : Type v) (A : Type w) (B : Type u₁) (M : Type v₁)
+
+variable [CommSemiring R] [Semiring S] [AddCommMonoid A]
+
+variable [Algebra R S] [Module S A] [Module R A] [IsScalarTower R S A]
+
+theorem span_algebraMap_image_of_tower {S T : Type*} [CommSemiring S] [Semiring T] [Module R S]
+    [Algebra R T] [Algebra S T] [IsScalarTower R S T] (a : Set S) :
+    Submodule.span R (algebraMap S T '' a) =
+      (Submodule.span R a).map ((Algebra.linearMap S T).restrictScalars R) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (R : Type u) (S : Type v) (A : Type w) (B : Type u₁) (M : Type v₁)
+
+variable [CommSemiring R] [Semiring S] [AddCommMonoid A]
+
+variable [Algebra R S] [Module S A] [Module R A] [IsScalarTower R S A]
+
+theorem span_algebraMap_image_of_tower {S T : Type*} [CommSemiring S] [Semiring T] [Module R S]
+    [Algebra R T] [Algebra S T] [IsScalarTower R S T] (a : Set S) :
+    Submodule.span R (algebraMap S T '' a) =
+      (Submodule.span R a).map ((Algebra.linearMap S T).restrictScalars R) := by
+  rw [Submodule.map_span]
+  congr
+  ext x
+  constructor
+  · rintro ⟨y, hy, rfl⟩
+    exact ⟨y, Submodule.subset_span hy, rfl⟩
+  · rintro ⟨y, hy, rfl⟩
+    exact Submodule.span_induction hy
+      (fun z hz => Submodule.subset_span ⟨z, hz, rfl⟩)
+      (by simpa using (Submodule.zero_mem (Submodule.span R (algebraMap S T '' a))))
+      (fun x y hx hy => Submodule.add_mem _ hx hy)
+      (fun c z hz => by
+        rw [LinearMap.restrictScalars_apply, Algebra.linearMap_apply]
+        exact Submodule.smul_mem (Submodule.span R (algebraMap S T '' a)) c hz)
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:3-15:8
+No goals to be solved
+Source line 15:
+  ext x
+  ^^^^^
+Highlighted span: ext x
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:3-15:8
+No goals to be solved
+Source line 15:
+  ext x
+  ^^^^^
+Highlighted span: ext x
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (R : Type u) (S : Type v) (A : Type w) (B : Type u₁) (M : Type v₁)
+
+variable [CommSemiring R] [Semiring S] [AddCommMonoid A]
+
+variable [Algebra R S] [Module S A] [Module R A] [IsScalarTower R S A]
+
+theorem span_algebraMap_image_of_tower {S T : Type*} [CommSemiring S] [Semiring T] [Module R S]
+    [Algebra R T] [Algebra S T] [IsScalarTower R S T] (a : Set S) :
+    Submodule.span R (algebraMap S T '' a) =
+      (Submodule.span R a).map ((Algebra.linearMap S T).restrictScalars R) := by
+  rw [Submodule.map_span]
+  congr with x
+  constructor
+  · rintro ⟨y, hy, rfl⟩
+    exact ⟨y, Submodule.subset_span hy, rfl⟩
+  · rintro ⟨y, hy, rfl⟩
+    exact Submodule.span_induction hy
+      (fun z hz => Submodule.subset_span ⟨z, hz, rfl⟩)
+      (by simpa using (Submodule.zero_mem (Submodule.span R (algebraMap S T '' a))))
+      (fun x y hx hy => Submodule.add_mem _ hx hy)
+      (fun c z hz => by
+        rw [LinearMap.restrictScalars_apply, Algebra.linearMap_apply]
+        exact Submodule.smul_mem (Submodule.span R (algebraMap S T '' a)) c hz)
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:3-15:14
+No goals to be solved
+Source line 15:
+  constructor
+  ^^^^^^^^^^^
+Highlighted span: constructor
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:3-15:14
+No goals to be solved
+Source line 15:
+  constructor
+  ^^^^^^^^^^^
+Highlighted span: constructor
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (R : Type u) (S : Type v) (A : Type w) (B : Type u₁) (M : Type v₁)
+
+variable [CommSemiring R] [Semiring S] [AddCommMonoid A]
+
+variable [Algebra R S] [Module S A] [Module R A] [IsScalarTower R S A]
+
+theorem span_algebraMap_image_of_tower {S T : Type*} [CommSemiring S] [Semiring T] [Module R S]
+    [Algebra R T] [Algebra S T] [IsScalarTower R S T] (a : Set S) :
+    Submodule.span R (algebraMap S T '' a) =
+      (Submodule.span R a).map ((Algebra.linearMap S T).restrictScalars R) := by
+  rw [Submodule.map_span]
+  rfl
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

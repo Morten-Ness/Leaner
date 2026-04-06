@@ -1,0 +1,166 @@
+FILE: Basic.iUnion_inv_smul.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.iUnion_inv_smul.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Pointwise
+
+variable {F α β γ : Type*}
+
+variable [Group α] [MulAction α β] {s t A B : Set β} {a b : α} {x : β}
+
+theorem iUnion_inv_smul : ⋃ g : α, g⁻¹ • s = ⋃ g : α, g • s := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise
+
+variable {F α β γ : Type*}
+
+variable [Group α] [MulAction α β] {s t A B : Set β} {a b : α} {x : β}
+
+theorem iUnion_inv_smul : ⋃ g : α, g⁻¹ • s = ⋃ g : α, g • s := by
+  ext x
+  constructor
+  · rintro ⟨g, hx⟩
+    exact ⟨g⁻¹, hx⟩
+  · rintro ⟨g, hx⟩
+    exact ⟨g⁻¹, hx⟩
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:12-13:15
+failed to synthesize instance of type class
+  Inv (Set β)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 13:
+    exact ⟨g⁻¹, hx⟩
+           ^^^
+Highlighted span: g⁻¹
+
+ERROR .LspCheck.lean:15:12-15:15
+failed to synthesize instance of type class
+  Inv (Set β)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 15:
+    exact ⟨g⁻¹, hx⟩
+           ^^^
+Highlighted span: g⁻¹
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:12-13:15
+failed to synthesize instance of type class
+  Inv (Set β)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 13:
+    exact ⟨g⁻¹, hx⟩
+           ^^^
+Highlighted span: g⁻¹
+
+ERROR .LspCheck.lean:15:12-15:15
+failed to synthesize instance of type class
+  Inv (Set β)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 15:
+    exact ⟨g⁻¹, hx⟩
+           ^^^
+Highlighted span: g⁻¹
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise
+
+variable {F α β γ : Type*}
+
+variable [Group α] [MulAction α β] {s t A B : Set β} {a b : α} {x : β}
+
+theorem iUnion_inv_smul : ⋃ g : α, g⁻¹ • s = ⋃ g : α, g • s := by
+  ext x
+  constructor
+  · rintro mem
+    rcases Set.mem_iUnion.mp mem with ⟨g, hx⟩
+    exact Set.mem_iUnion.mpr ⟨g⁻¹, hx⟩
+  · rintro mem
+    rcases Set.mem_iUnion.mp mem with ⟨g, hx⟩
+    exact Set.mem_iUnion.mpr ⟨g⁻¹, hx⟩
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:17:36-17:38
+Application type mismatch: The argument
+  hx
+has type
+  x ∈ g • s
+but is expected to have type
+  x ∈ g⁻¹⁻¹ • s
+in the application
+  Exists.intro g⁻¹ hx
+Source line 17:
+    exact Set.mem_iUnion.mpr ⟨g⁻¹, hx⟩
+                                   ^^
+Highlighted span: hx
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:17:36-17:38
+Application type mismatch: The argument
+  hx
+has type
+  x ∈ g • s
+but is expected to have type
+  x ∈ g⁻¹⁻¹ • s
+in the application
+  Exists.intro g⁻¹ hx
+Source line 17:
+    exact Set.mem_iUnion.mpr ⟨g⁻¹, hx⟩
+                                   ^^
+Highlighted span: hx
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise
+
+variable {F α β γ : Type*}
+
+variable [Group α] [MulAction α β] {s t A B : Set β} {a b : α} {x : β}
+
+theorem iUnion_inv_smul : ⋃ g : α, g⁻¹ • s = ⋃ g : α, g • s := by
+  ext x
+  simp only [Set.mem_iUnion]
+  constructor
+  · rintro ⟨g, hg⟩
+    exact ⟨g⁻¹, by simpa using hg⟩
+  · rintro ⟨g, hg⟩
+    exact ⟨g⁻¹, by simpa using hg⟩
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

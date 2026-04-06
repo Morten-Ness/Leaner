@@ -1,0 +1,290 @@
+FILE: Basis.surjective_coord.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basis.surjective_coord.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {ι ι' G G' k V P : Type*} [AddCommGroup V] [AddTorsor V P]
+
+variable [Ring k] [Module k V] (b : AffineBasis ι k P) {s : Finset ι} {i j : ι} (e : ι ≃ ι')
+
+theorem surjective_coord [Nontrivial ι] (i : ι) : Function.Surjective <| b.coord i := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι ι' G G' k V P : Type*} [AddCommGroup V] [AddTorsor V P]
+
+variable [Ring k] [Module k V] (b : AffineBasis ι k P) {s : Finset ι} {i j : ι} (e : ι ≃ ι')
+
+theorem surjective_coord [Nontrivial ι] (i : ι) : Function.Surjective <| b.coord i := by
+  classical
+  intro x
+  by_cases hx : x = 1
+  · refine ⟨b i, ?_⟩
+    simp [AffineBasis.coord_apply_eq, hx]
+  · obtain ⟨j, hji⟩ := exists_ne i
+    refine ⟨b j, ?_⟩
+    rw [AffineBasis.coord_apply_eq]
+    by_cases h : i = j
+    · exact (hji h.symm).elim
+    · simp [h, hx]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:9-15:35
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (AffineBasis.coord ?b ?i) (?b ?i)
+in the target expression
+  (b.coord i) (b j) = x
+
+case neg
+ι : Type u_1
+k : Type u_5
+V : Type u_6
+P : Type u_7
+inst✝⁴ : AddCommGroup V
+inst✝³ : AddTorsor V P
+inst✝² : Ring k
+inst✝¹ : Module k V
+b : AffineBasis ι k P
+inst✝ : Nontrivial ι
+i : ι
+x : k
+hx : ¬x = 1
+j : ι
+hji : j ≠ i
+⊢ (b.coord i) (b j) = x
+Source line 15:
+    rw [AffineBasis.coord_apply_eq]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineBasis.coord_apply_eq
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:9-15:35
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (AffineBasis.coord ?b ?i) (?b ?i)
+in the target expression
+  (b.coord i) (b j) = x
+
+case neg
+ι : Type u_1
+k : Type u_5
+V : Type u_6
+P : Type u_7
+inst✝⁴ : AddCommGroup V
+inst✝³ : AddTorsor V P
+inst✝² : Ring k
+inst✝¹ : Module k V
+b : AffineBasis ι k P
+inst✝ : Nontrivial ι
+i : ι
+x : k
+hx : ¬x = 1
+j : ι
+hji : j ≠ i
+⊢ (b.coord i) (b j) = x
+Source line 15:
+    rw [AffineBasis.coord_apply_eq]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineBasis.coord_apply_eq
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι ι' G G' k V P : Type*} [AddCommGroup V] [AddTorsor V P]
+
+variable [Ring k] [Module k V] (b : AffineBasis ι k P) {s : Finset ι} {i j : ι} (e : ι ≃ ι')
+
+theorem surjective_coord [Nontrivial ι] (i : ι) : Function.Surjective <| b.coord i := by
+  classical
+  intro x
+  by_cases hx : x = 1
+  · refine ⟨b i, ?_⟩
+    simp [b.coord_apply, hx]
+  · obtain ⟨j, hji⟩ := exists_ne i
+    refine ⟨b j, ?_⟩
+    simp [b.coord_apply, hji, hx]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:3-14:1
+unsolved goals
+case neg
+ι : Type u_1
+k : Type u_5
+V : Type u_6
+P : Type u_7
+inst✝⁴ : AddCommGroup V
+inst✝³ : AddTorsor V P
+inst✝² : Ring k
+inst✝¹ : Module k V
+b : AffineBasis ι k P
+inst✝ : Nontrivial ι
+i : ι
+x : k
+hx : ¬x = 1
+j : ι
+hji : j ≠ i
+⊢ (if i = j then 1 else 0) = x
+Source line 13:
+  · obtain ⟨j, hji⟩ := exists_ne i
+  ^
+Highlighted span: ·
+
+WARNING .LspCheck.lean:15:26-15:29
+This simp argument is unused:
+  hji
+
+Hint: Omit it from the simp argument list.
+  simp [b.coord_apply, hj̵i̵,̵ ̵h̵x]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 15:
+    simp [b.coord_apply, hji, hx]
+                         ^^^
+Highlighted span: hji
+
+WARNING .LspCheck.lean:15:31-15:33
+This simp argument is unused:
+  hx
+
+Hint: Omit it from the simp argument list.
+  simp [b.coord_apply, hji,̵ ̵h̵x̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 15:
+    simp [b.coord_apply, hji, hx]
+                              ^^
+Highlighted span: hx
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:3-14:1
+unsolved goals
+case neg
+ι : Type u_1
+k : Type u_5
+V : Type u_6
+P : Type u_7
+inst✝⁴ : AddCommGroup V
+inst✝³ : AddTorsor V P
+inst✝² : Ring k
+inst✝¹ : Module k V
+b : AffineBasis ι k P
+inst✝ : Nontrivial ι
+i : ι
+x : k
+hx : ¬x = 1
+j : ι
+hji : j ≠ i
+⊢ (if i = j then 1 else 0) = x
+Source line 13:
+  · obtain ⟨j, hji⟩ := exists_ne i
+  ^
+Highlighted span: ·
+
+WARNING .LspCheck.lean:15:26-15:29
+This simp argument is unused:
+  hji
+
+Hint: Omit it from the simp argument list.
+  simp [b.coord_apply, hj̵i̵,̵ ̵h̵x]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 15:
+    simp [b.coord_apply, hji, hx]
+                         ^^^
+Highlighted span: hji
+
+WARNING .LspCheck.lean:15:31-15:33
+This simp argument is unused:
+  hx
+
+Hint: Omit it from the simp argument list.
+  simp [b.coord_apply, hji,̵ ̵h̵x̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 15:
+    simp [b.coord_apply, hji, hx]
+                              ^^
+Highlighted span: hx
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι ι' G G' k V P : Type*} [AddCommGroup V] [AddTorsor V P]
+
+variable [Ring k] [Module k V] (b : AffineBasis ι k P) {s : Finset ι} {i j : ι} (e : ι ≃ ι')
+
+theorem surjective_coord [Nontrivial ι] (i : ι) : Function.Surjective <| b.coord i := by
+  classical
+  intro x
+  by_cases hx : x = 1
+  · refine ⟨b i, ?_⟩
+    simp [b.coord_apply, hx]
+  · obtain ⟨j, hji'⟩ := exists_ne i
+    refine ⟨b j, ?_⟩
+    have hji : i ≠ j := fun h => hji' h.symm
+    rw [b.coord_apply]
+    simp [hji]
+    exfalso
+    exact hx rfl
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:19:14-19:17
+Application type mismatch: The argument
+  rfl
+has type
+  ?m.79 = ?m.79
+but is expected to have type
+  x = 1
+in the application
+  hx rfl
+Source line 19:
+    exact hx rfl
+             ^^^
+Highlighted span: rfl
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:19:14-19:17
+Application type mismatch: The argument
+  rfl
+has type
+  ?m.79 = ?m.79
+but is expected to have type
+  x = 1
+in the application
+  hx rfl
+Source line 19:
+    exact hx rfl
+             ^^^
+Highlighted span: rfl

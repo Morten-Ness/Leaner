@@ -1,0 +1,369 @@
+FILE: Lattice.adjoin_union.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Lattice.adjoin_union.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+
+variable [CommSemiring R] [CommSemiring S] [Semiring A] [Semiring B]
+
+variable [Algebra R S] [Algebra R A] [Algebra S A] [Algebra R B] [IsScalarTower R S A]
+
+variable {s t : Set A}
+
+theorem adjoin_union (s t : Set A) : Algebra.adjoin R (s ∪ t) = Algebra.adjoin R s ⊔ Algebra.adjoin R t := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+
+variable [CommSemiring R] [CommSemiring S] [Semiring A] [Semiring B]
+
+variable [Algebra R S] [Algebra R A] [Algebra S A] [Algebra R B] [IsScalarTower R S A]
+
+variable {s t : Set A}
+
+theorem adjoin_union (s t : Set A) : Algebra.adjoin R (s ∪ t) = Algebra.adjoin R s ⊔ Algebra.adjoin R t := by
+  rw [Algebra.adjoin_union]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:3:20-3:22
+unknown universe level `uR`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                   ^^
+Highlighted span: uR
+
+ERROR .LspCheck.lean:3:34-3:36
+unknown universe level `uS`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                                 ^^
+Highlighted span: uS
+
+ERROR .LspCheck.lean:3:48-3:50
+unknown universe level `uA`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                                               ^^
+Highlighted span: uA
+
+ERROR .LspCheck.lean:3:62-3:64
+unknown universe level `uB`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                                                             ^^
+Highlighted span: uB
+
+WARNING .LspCheck.lean:11:9-11:21
+declaration uses `sorry`
+Source line 11:
+theorem adjoin_union (s t : Set A) : Algebra.adjoin R (s ∪ t) = Algebra.adjoin R s ⊔ Algebra.adjoin R t := by
+        ^^^^^^^^^^^^
+Highlighted span: adjoin_union
+
+WARNING .LspCheck.lean:11:101-11:110
+This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+Source line 11:
+theorem adjoin_union (s t : Set A) : Algebra.adjoin R (s ∪ t) = Algebra.adjoin R s ⊔ Algebra.adjoin R t := by
+                                                                                                    ^^^^^^^^^
+Highlighted span: R t := by
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:3:20-3:22
+unknown universe level `uR`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                   ^^
+Highlighted span: uR
+
+ERROR .LspCheck.lean:3:34-3:36
+unknown universe level `uS`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                                 ^^
+Highlighted span: uS
+
+ERROR .LspCheck.lean:3:48-3:50
+unknown universe level `uA`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                                               ^^
+Highlighted span: uA
+
+ERROR .LspCheck.lean:3:62-3:64
+unknown universe level `uB`
+Source line 3:
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+                                                             ^^
+Highlighted span: uB
+
+WARNING .LspCheck.lean:11:9-11:21
+declaration uses `sorry`
+Source line 11:
+theorem adjoin_union (s t : Set A) : Algebra.adjoin R (s ∪ t) = Algebra.adjoin R s ⊔ Algebra.adjoin R t := by
+        ^^^^^^^^^^^^
+Highlighted span: adjoin_union
+
+WARNING .LspCheck.lean:11:101-11:110
+This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+Source line 11:
+theorem adjoin_union (s t : Set A) : Algebra.adjoin R (s ∪ t) = Algebra.adjoin R s ⊔ Algebra.adjoin R t := by
+                                                                                                    ^^^^^^^^^
+Highlighted span: R t := by
+
+===== ASSISTANT =====
+import Mathlib
+
+universe uR uS uA uB
+
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+
+variable [CommSemiring R] [CommSemiring S] [Semiring A] [Semiring B]
+
+variable [Algebra R S] [Algebra R A] [Algebra S A] [Algebra R B]
+variable [IsScalarTower R S A]
+
+variable {s t : Set A}
+
+theorem adjoin_union (s t : Set A) :
+    Algebra.adjoin R (s ∪ t) = Algebra.adjoin R s ⊔ Algebra.adjoin R t := by
+  ext x
+  constructor
+  · intro hx
+    refine Algebra.adjoin_le ?_ hx
+    intro y hy
+    rcases hy with hy | hy
+    · exact le_sup_left (Algebra.subset_adjoin hy)
+    · exact le_sup_right (Algebra.subset_adjoin hy)
+  · intro hx
+    refine sup_le ?_ ?_ hx
+    · exact Algebra.adjoin_le <| by
+        intro y hy
+        exact Algebra.subset_adjoin (Or.inl hy)
+    · exact Algebra.adjoin_le <| by
+        intro y hy
+        exact Algebra.subset_adjoin (Or.inr hy)
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:22:13-22:51
+Function expected at
+  le_sup_left
+but this term has type
+  ?m.73 ≤ ?m.73 ⊔ ?m.74
+
+Note: Expected a function because this term is being applied to the argument
+  (Algebra.subset_adjoin hy)
+Source line 22:
+    · exact le_sup_left (Algebra.subset_adjoin hy)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: le_sup_left (Algebra.subset_adjoin hy)
+
+ERROR .LspCheck.lean:23:13-23:52
+Function expected at
+  le_sup_right
+but this term has type
+  ?m.79 ≤ ?m.78 ⊔ ?m.79
+
+Note: Expected a function because this term is being applied to the argument
+  (Algebra.subset_adjoin hy)
+Source line 23:
+    · exact le_sup_right (Algebra.subset_adjoin hy)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: le_sup_right (Algebra.subset_adjoin hy)
+
+ERROR .LspCheck.lean:25:12-25:27
+Function expected at
+  sup_le ?m.88 ?m.89
+but this term has type
+  ?m.85 ⊔ ?m.86 ≤ ?m.87
+
+Note: Expected a function because this term is being applied to the argument
+  hx
+Source line 25:
+    refine sup_le ?_ ?_ hx
+           ^^^^^^^^^^^^^^^
+Highlighted span: sup_le ?_ ?_ hx
+
+ERROR .LspCheck.lean:26:5-27:1
+No goals to be solved
+Source line 26:
+    · exact Algebra.adjoin_le <| by
+    ^
+Highlighted span: ·
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:22:13-22:51
+Function expected at
+  le_sup_left
+but this term has type
+  ?m.73 ≤ ?m.73 ⊔ ?m.74
+
+Note: Expected a function because this term is being applied to the argument
+  (Algebra.subset_adjoin hy)
+Source line 22:
+    · exact le_sup_left (Algebra.subset_adjoin hy)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: le_sup_left (Algebra.subset_adjoin hy)
+
+ERROR .LspCheck.lean:23:13-23:52
+Function expected at
+  le_sup_right
+but this term has type
+  ?m.79 ≤ ?m.78 ⊔ ?m.79
+
+Note: Expected a function because this term is being applied to the argument
+  (Algebra.subset_adjoin hy)
+Source line 23:
+    · exact le_sup_right (Algebra.subset_adjoin hy)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: le_sup_right (Algebra.subset_adjoin hy)
+
+ERROR .LspCheck.lean:25:12-25:27
+Function expected at
+  sup_le ?m.88 ?m.89
+but this term has type
+  ?m.85 ⊔ ?m.86 ≤ ?m.87
+
+Note: Expected a function because this term is being applied to the argument
+  hx
+Source line 25:
+    refine sup_le ?_ ?_ hx
+           ^^^^^^^^^^^^^^^
+Highlighted span: sup_le ?_ ?_ hx
+
+ERROR .LspCheck.lean:26:5-27:1
+No goals to be solved
+Source line 26:
+    · exact Algebra.adjoin_le <| by
+    ^
+Highlighted span: ·
+
+===== ASSISTANT =====
+import Mathlib
+
+universe uR uS uA uB
+
+variable {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+
+variable [CommSemiring R] [CommSemiring S] [Semiring A] [Semiring B]
+
+variable [Algebra R S] [Algebra R A] [Algebra S A] [Algebra R B]
+variable [IsScalarTower R S A]
+
+variable {s t : Set A}
+
+theorem adjoin_union (s t : Set A) :
+    Algebra.adjoin R (s ∪ t) = Algebra.adjoin R s ⊔ Algebra.adjoin R t := by
+  ext x
+  constructor
+  · intro hx
+    refine Algebra.adjoin_le ?_ hx
+    intro y hy
+    rcases hy with hy | hy
+    · exact le_sup_of_le_left (Algebra.subset_adjoin hy)
+    · exact le_sup_of_le_right (Algebra.subset_adjoin hy)
+  · intro hx
+    exact sup_le
+      (Algebra.adjoin_le <| by
+        intro y hy
+        exact Algebra.subset_adjoin (Or.inl hy))
+      (Algebra.adjoin_le <| by
+        intro y hy
+        exact Algebra.subset_adjoin (Or.inr hy))
+      hx
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:22:31-22:57
+Application type mismatch: The argument
+  Algebra.subset_adjoin hy
+has type
+  y ∈ ↑(Algebra.adjoin ?m.76 s)
+but is expected to have type
+  ?m.75 ≤ ?m.73
+in the application
+  le_sup_of_le_left (Algebra.subset_adjoin hy)
+Source line 22:
+    · exact le_sup_of_le_left (Algebra.subset_adjoin hy)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (Algebra.subset_adjoin hy)
+
+ERROR .LspCheck.lean:23:32-23:58
+Application type mismatch: The argument
+  Algebra.subset_adjoin hy
+has type
+  y ∈ ↑(Algebra.adjoin ?m.89 t)
+but is expected to have type
+  ?m.88 ≤ ?m.87
+in the application
+  le_sup_of_le_right (Algebra.subset_adjoin hy)
+Source line 23:
+    · exact le_sup_of_le_right (Algebra.subset_adjoin hy)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (Algebra.subset_adjoin hy)
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:22:31-22:57
+Application type mismatch: The argument
+  Algebra.subset_adjoin hy
+has type
+  y ∈ ↑(Algebra.adjoin ?m.76 s)
+but is expected to have type
+  ?m.75 ≤ ?m.73
+in the application
+  le_sup_of_le_left (Algebra.subset_adjoin hy)
+Source line 22:
+    · exact le_sup_of_le_left (Algebra.subset_adjoin hy)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (Algebra.subset_adjoin hy)
+
+ERROR .LspCheck.lean:23:32-23:58
+Application type mismatch: The argument
+  Algebra.subset_adjoin hy
+has type
+  y ∈ ↑(Algebra.adjoin ?m.89 t)
+but is expected to have type
+  ?m.88 ≤ ?m.87
+in the application
+  le_sup_of_le_right (Algebra.subset_adjoin hy)
+Source line 23:
+    · exact le_sup_of_le_right (Algebra.subset_adjoin hy)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (Algebra.subset_adjoin hy)

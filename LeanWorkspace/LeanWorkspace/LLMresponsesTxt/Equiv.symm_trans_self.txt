@@ -1,0 +1,97 @@
+FILE: Equiv.symm_trans_self.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Equiv.symm_trans_self.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped AddConstMap
+
+variable {G H K : Type*} [Add G] [Add H] [Add K] {a : G} {b : H} {c : K}
+
+theorem symm_trans_self (e : G ≃+c[a, b] H) : e.symm.trans e = .refl b := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped AddConstMap
+
+variable {G H K : Type*} [Add G] [Add H] [Add K] {a : G} {b : H} {c : K}
+
+theorem symm_trans_self (e : G ≃+c[a, b] H) : e.symm.trans e = .refl b := by
+  ext x
+  rfl
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:9:3-9:6
+Tactic `rfl` failed: The left-hand side
+  (e.symm.trans e) x
+is not definitionally equal to the right-hand side
+  (AddConstEquiv.refl b) x
+
+case h
+G : Type u_1
+H : Type u_2
+inst✝¹ : Add G
+inst✝ : Add H
+a : G
+b : H
+e : G ≃+c[a, b] H
+x : H
+⊢ (e.symm.trans e) x = (AddConstEquiv.refl b) x
+Source line 9:
+  rfl
+  ^^^
+Highlighted span: rfl
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:9:3-9:6
+Tactic `rfl` failed: The left-hand side
+  (e.symm.trans e) x
+is not definitionally equal to the right-hand side
+  (AddConstEquiv.refl b) x
+
+case h
+G : Type u_1
+H : Type u_2
+inst✝¹ : Add G
+inst✝ : Add H
+a : G
+b : H
+e : G ≃+c[a, b] H
+x : H
+⊢ (e.symm.trans e) x = (AddConstEquiv.refl b) x
+Source line 9:
+  rfl
+  ^^^
+Highlighted span: rfl
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped AddConstMap
+
+variable {G H K : Type*} [Add G] [Add H] [Add K] {a : G} {b : H} {c : K}
+
+theorem symm_trans_self (e : G ≃+c[a, b] H) : e.symm.trans e = .refl b := by
+  ext x
+  exact e.apply_symm_apply x
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

@@ -1,0 +1,193 @@
+FILE: Ker.map_subtype_le_map_subtype.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Ker.map_subtype_le_map_subtype.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N] (H : Subgroup G)
+
+variable (f : G →* N)
+
+theorem map_subtype_le_map_subtype {G' : Subgroup G} {H K : Subgroup G'} :
+    H.map G'.subtype ≤ K.map G'.subtype ↔ H ≤ K := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N] (H : Subgroup G)
+
+variable (f : G →* N)
+
+theorem map_subtype_le_map_subtype {G' : Subgroup G} {H K : Subgroup G'} :
+    H.map G'.subtype ≤ K.map G'.subtype ↔ H ≤ K := by
+  constructor
+  · intro h x hx
+    rcases h ⟨x, hx, rfl⟩ with ⟨y, hy, hxy⟩
+    exact hxy ▸ hy
+  · intro h x hx
+    rcases hx with ⟨y, hy, rfl⟩
+    exact ⟨y, h hy, rfl⟩
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:18:11-18:19
+invalid `▸` notation, expected result type of cast is 
+  x ∈ K
+however, the equality 
+  hxy
+of type 
+  G'.subtype y = G'.subtype x
+does not contain the expected result type on either the left or the right hand side
+Source line 18:
+    exact hxy ▸ hy
+          ^^^^^^^^
+Highlighted span: hxy ▸ hy
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:18:11-18:19
+invalid `▸` notation, expected result type of cast is 
+  x ∈ K
+however, the equality 
+  hxy
+of type 
+  G'.subtype y = G'.subtype x
+does not contain the expected result type on either the left or the right hand side
+Source line 18:
+    exact hxy ▸ hy
+          ^^^^^^^^
+Highlighted span: hxy ▸ hy
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N] (H : Subgroup G)
+
+variable (f : G →* N)
+
+theorem map_subtype_le_map_subtype {G' : Subgroup G} {H K : Subgroup G'} :
+    H.map G'.subtype ≤ K.map G'.subtype ↔ H ≤ K := by
+  constructor
+  · intro h x hx
+    rcases h ⟨x, hx, rfl⟩ with ⟨y, hy, hxy⟩
+    exact by
+      rw [Subtype.ext_iff] at hxy
+      rw [← hxy]
+      exact hy
+  · intro h x hx
+    rcases hx with ⟨y, hy, rfl⟩
+    exact ⟨y, h hy, rfl⟩
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:19:11-19:26
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.61 = ?m.62
+in the target expression
+  G'.subtype y = G'.subtype x
+
+G : Type u_1
+inst✝ : Group G
+G' : Subgroup G
+H K : Subgroup ↥G'
+h : Subgroup.map G'.subtype H ≤ Subgroup.map G'.subtype K
+x : ↥G'
+hx : x ∈ H
+y : ↥G'
+hy : y ∈ ↑K
+hxy : G'.subtype y = G'.subtype x
+⊢ x ∈ K
+Source line 19:
+      rw [Subtype.ext_iff] at hxy
+          ^^^^^^^^^^^^^^^
+Highlighted span: Subtype.ext_iff
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:19:11-19:26
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.61 = ?m.62
+in the target expression
+  G'.subtype y = G'.subtype x
+
+G : Type u_1
+inst✝ : Group G
+G' : Subgroup G
+H K : Subgroup ↥G'
+h : Subgroup.map G'.subtype H ≤ Subgroup.map G'.subtype K
+x : ↥G'
+hx : x ∈ H
+y : ↥G'
+hy : y ∈ ↑K
+hxy : G'.subtype y = G'.subtype x
+⊢ x ∈ K
+Source line 19:
+      rw [Subtype.ext_iff] at hxy
+          ^^^^^^^^^^^^^^^
+Highlighted span: Subtype.ext_iff
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N] (H : Subgroup G)
+
+variable (f : G →* N)
+
+theorem map_subtype_le_map_subtype {G' : Subgroup G} {H K : Subgroup G'} :
+    H.map G'.subtype ≤ K.map G'.subtype ↔ H ≤ K := by
+  constructor
+  · intro h x hx
+    rcases h ⟨x, hx, rfl⟩ with ⟨y, hy, hxy⟩
+    exact by
+      cases Subtype.ext hxy
+      exact hy
+  · intro h x hx
+    rcases hx with ⟨y, hy, rfl⟩
+    exact ⟨y, h hy, rfl⟩
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

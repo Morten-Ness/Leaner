@@ -1,0 +1,32 @@
+FILE: Basic.map_nsmul_add.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.map_nsmul_add.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_nsmul_add [AddCommMonoid G] [AddMonoid H] [AddConstMapClass F G H a b]
+    (f : F) (n : ℕ) (x : G) : f (n • a + x) = f x + n • b := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_nsmul_add [AddCommMonoid G] [AddMonoid H] [AddConstMapClass F G H a b]
+    (f : F) (n : ℕ) (x : G) : f (n • a + x) = f x + n • b := by
+  simpa [add_comm, add_left_comm, add_assoc] using AddConstMapClass.map_nsmul_add (F := F) (a := a) (b := b) f n x
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+PASS

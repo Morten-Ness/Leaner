@@ -1,0 +1,307 @@
+FILE: Lattice.iSup_induction.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Lattice.iSup_induction.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable (R : Type u) {A : Type v} {B : Type w}
+
+variable [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B]
+
+theorem iSup_induction {ι : Sort*} (S : ι → Subalgebra R A) {motive : A → Prop}
+    {x : A} (mem : x ∈ ⨆ i, S i)
+    (basic : ∀ i, ∀ a ∈ S i, motive a)
+    (add : ∀ a b, motive a → motive b → motive (a + b))
+    (mul : ∀ a b, motive a → motive b → motive (a * b))
+    (algebraMap : ∀ r, motive (algebraMap R A r)) : motive x := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (R : Type u) {A : Type v} {B : Type w}
+
+variable [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B]
+
+theorem iSup_induction {ι : Sort*} (S : ι → Subalgebra R A) {motive : A → Prop}
+    {x : A} (mem : x ∈ ⨆ i, S i)
+    (basic : ∀ i, ∀ a ∈ S i, motive a)
+    (add : ∀ a b, motive a → motive b → motive (a + b))
+    (mul : ∀ a b, motive a → motive b → motive (a * b))
+    (algebraMap : ∀ r, motive (algebraMap R A r)) : motive x := by
+  let T : Subalgebra R A :=
+    { carrier := {a : A | motive a}
+      algebraMap_mem' := algebraMap
+      mul_mem' := fun _ _ => mul _ _
+      add_mem' := fun _ _ => add _ _
+      zero_mem' := by simpa using algebraMap 0
+      one_mem' := by simpa using algebraMap 1 }
+  have hle : ∀ i, S i ≤ T := by
+    intro i a ha
+    exact basic i a ha
+  have hx : x ∈ T := by
+    exact show x ∈ ⨆ i, S i from mem |> (show (⨆ i, S i) ≤ T from iSup_le hle)
+  exact hx
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:30-16:37
+Type mismatch
+  mul ?m.49 ?m.50
+has type
+  motive ?m.49 → motive ?m.50 → motive (?m.49 * ?m.50)
+but is expected to have type
+  a✝ * b✝ ∈ {a | motive a}
+Source line 16:
+      mul_mem' := fun _ _ => mul _ _
+                             ^^^^^^^
+Highlighted span: mul _ _
+
+ERROR .LspCheck.lean:17:30-17:37
+Type mismatch
+  add ?m.54 ?m.55
+has type
+  motive ?m.54 → motive ?m.55 → motive (?m.54 + ?m.55)
+but is expected to have type
+  a✝ + b✝ ∈ {a | motive a}
+Source line 17:
+      add_mem' := fun _ _ => add _ _
+                             ^^^^^^^
+Highlighted span: add _ _
+
+ERROR .LspCheck.lean:24:34-24:79
+Type mismatch
+  (have this := iSup_le hle;
+    this)
+    mem
+has type
+  x ∈ T
+but is expected to have type
+  x ∈ ⨆ i, S i
+Source line 24:
+    exact show x ∈ ⨆ i, S i from mem |> (show (⨆ i, S i) ≤ T from iSup_le hle)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: mem |> (show (⨆ i, S i) ≤ T from iSup_le hle)
+
+ERROR .LspCheck.lean:24:11-24:79
+Type mismatch
+  this
+has type
+  x ∈ ⨆ i, S i
+but is expected to have type
+  x ∈ T
+Source line 24:
+    exact show x ∈ ⨆ i, S i from mem |> (show (⨆ i, S i) ≤ T from iSup_le hle)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: show x ∈ ⨆ i, S i from mem |> (show (⨆ i, S i) ≤ T from iSup_le hle)
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:30-16:37
+Type mismatch
+  mul ?m.49 ?m.50
+has type
+  motive ?m.49 → motive ?m.50 → motive (?m.49 * ?m.50)
+but is expected to have type
+  a✝ * b✝ ∈ {a | motive a}
+Source line 16:
+      mul_mem' := fun _ _ => mul _ _
+                             ^^^^^^^
+Highlighted span: mul _ _
+
+ERROR .LspCheck.lean:17:30-17:37
+Type mismatch
+  add ?m.54 ?m.55
+has type
+  motive ?m.54 → motive ?m.55 → motive (?m.54 + ?m.55)
+but is expected to have type
+  a✝ + b✝ ∈ {a | motive a}
+Source line 17:
+      add_mem' := fun _ _ => add _ _
+                             ^^^^^^^
+Highlighted span: add _ _
+
+ERROR .LspCheck.lean:24:34-24:79
+Type mismatch
+  (have this := iSup_le hle;
+    this)
+    mem
+has type
+  x ∈ T
+but is expected to have type
+  x ∈ ⨆ i, S i
+Source line 24:
+    exact show x ∈ ⨆ i, S i from mem |> (show (⨆ i, S i) ≤ T from iSup_le hle)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: mem |> (show (⨆ i, S i) ≤ T from iSup_le hle)
+
+ERROR .LspCheck.lean:24:11-24:79
+Type mismatch
+  this
+has type
+  x ∈ ⨆ i, S i
+but is expected to have type
+  x ∈ T
+Source line 24:
+    exact show x ∈ ⨆ i, S i from mem |> (show (⨆ i, S i) ≤ T from iSup_le hle)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: show x ∈ ⨆ i, S i from mem |> (show (⨆ i, S i) ≤ T from iSup_le hle)
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (R : Type u) {A : Type v} {B : Type w}
+
+variable [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B]
+
+theorem iSup_induction {ι : Sort*} (S : ι → Subalgebra R A) {motive : A → Prop}
+    {x : A} (mem : x ∈ ⨆ i, S i)
+    (basic : ∀ i, ∀ a ∈ S i, motive a)
+    (add : ∀ a b, motive a → motive b → motive (a + b))
+    (mul : ∀ a b, motive a → motive b → motive (a * b))
+    (algebraMap : ∀ r, motive (algebraMap R A r)) : motive x := by
+  let T : Subalgebra R A :=
+    { carrier := {a : A | motive a}
+      algebraMap_mem' := algebraMap
+      mul_mem' := fun a b ha hb => mul a b ha hb
+      add_mem' := fun a b ha hb => add a b ha hb
+      zero_mem' := by simpa using algebraMap 0
+      one_mem' := by simpa using algebraMap 1 }
+  have hle : ∀ i, S i ≤ T := by
+    intro i a ha
+    exact basic i a ha
+  have hs : (⨆ i, S i) ≤ T := iSup_le hle
+  have hx : x ∈ T := hs mem
+  exact hx
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:40-16:41
+Application type mismatch: The argument
+  a
+has type
+  a✝ ∈ {a | motive a}
+of sort `Prop` but is expected to have type
+  A
+of sort `Type v` in the application
+  mul a
+Source line 16:
+      mul_mem' := fun a b ha hb => mul a b ha hb
+                                       ^
+Highlighted span: a
+
+ERROR .LspCheck.lean:22:5-22:23
+Type mismatch
+  basic i a ha
+has type
+  motive a
+but is expected to have type
+  a ∈ T
+Source line 22:
+    exact basic i a ha
+    ^^^^^^^^^^^^^^^^^^
+Highlighted span: exact basic i a ha
+
+ERROR .LspCheck.lean:25:3-25:11
+Type mismatch
+  hx
+has type
+  x ∈ T
+but is expected to have type
+  motive x
+Source line 25:
+  exact hx
+  ^^^^^^^^
+Highlighted span: exact hx
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:40-16:41
+Application type mismatch: The argument
+  a
+has type
+  a✝ ∈ {a | motive a}
+of sort `Prop` but is expected to have type
+  A
+of sort `Type v` in the application
+  mul a
+Source line 16:
+      mul_mem' := fun a b ha hb => mul a b ha hb
+                                       ^
+Highlighted span: a
+
+ERROR .LspCheck.lean:22:5-22:23
+Type mismatch
+  basic i a ha
+has type
+  motive a
+but is expected to have type
+  a ∈ T
+Source line 22:
+    exact basic i a ha
+    ^^^^^^^^^^^^^^^^^^
+Highlighted span: exact basic i a ha
+
+ERROR .LspCheck.lean:25:3-25:11
+Type mismatch
+  hx
+has type
+  x ∈ T
+but is expected to have type
+  motive x
+Source line 25:
+  exact hx
+  ^^^^^^^^
+Highlighted span: exact hx
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (R : Type u) {A : Type v} {B : Type w}
+
+variable [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B]
+
+theorem iSup_induction {ι : Sort*} (S : ι → Subalgebra R A) {motive : A → Prop}
+    {x : A} (mem : x ∈ ⨆ i, S i)
+    (basic : ∀ i, ∀ a ∈ S i, motive a)
+    (add : ∀ a b, motive a → motive b → motive (a + b))
+    (mul : ∀ a b, motive a → motive b → motive (a * b))
+    (algebraMap : ∀ r, motive (algebraMap R A r)) : motive x := by
+  let T : Subalgebra R A :=
+    { carrier := {a : A | motive a}
+      algebraMap_mem' := algebraMap
+      mul_mem' := by
+        intro a b ha hb
+        exact mul a b ha hb
+      add_mem' := by
+        intro a b ha hb
+        exact add a b ha hb
+      zero_mem' := by simpa using algebraMap 0
+      one_mem' := by simpa using algebraMap 1 }
+  have hle : ∀ i, S i ≤ T := by
+    intro i a ha
+    exact basic i a ha
+  have hs : (⨆ i, S i) ≤ T := iSup_le hle
+  exact hs mem
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

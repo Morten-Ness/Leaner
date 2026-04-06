@@ -1,0 +1,151 @@
+FILE: Basic.eq_div_of_mul_eq_left.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.eq_div_of_mul_eq_left.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R : Type u}
+
+variable [EuclideanDomain R]
+
+theorem eq_div_of_mul_eq_left {a b c : R} (hb : b ≠ 0) (h : a * b = c) : a = c / b := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type u}
+
+variable [EuclideanDomain R]
+
+theorem eq_div_of_mul_eq_left {a b c : R} (hb : b ≠ 0) (h : a * b = c) : a = c / b := by
+  rw [← h]
+  exact EuclideanDomain.mul_div_cancel_left₀ _ hb
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:9:9-9:45
+Unknown constant `EuclideanDomain.mul_div_cancel_left₀`
+Source line 9:
+  exact EuclideanDomain.mul_div_cancel_left₀ _ hb
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: EuclideanDomain.mul_div_cancel_left₀
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:9:9-9:45
+Unknown constant `EuclideanDomain.mul_div_cancel_left₀`
+Source line 9:
+  exact EuclideanDomain.mul_div_cancel_left₀ _ hb
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: EuclideanDomain.mul_div_cancel_left₀
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type u}
+
+variable [EuclideanDomain R]
+
+theorem eq_div_of_mul_eq_left {a b c : R} (hb : b ≠ 0) (h : a * b = c) : a = c / b := by
+  rw [← h]
+  simpa [mul_comm] using (EuclideanDomain.mul_div_right _ hb)
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:9:27-9:56
+Unknown constant `EuclideanDomain.mul_div_right`
+Source line 9:
+  simpa [mul_comm] using (EuclideanDomain.mul_div_right _ hb)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: EuclideanDomain.mul_div_right
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:9:27-9:56
+Unknown constant `EuclideanDomain.mul_div_right`
+Source line 9:
+  simpa [mul_comm] using (EuclideanDomain.mul_div_right _ hb)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: EuclideanDomain.mul_div_right
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type u}
+
+variable [EuclideanDomain R]
+
+theorem eq_div_of_mul_eq_left {a b c : R} (hb : b ≠ 0) (h : a * b = c) : a = c / b := by
+  rw [← h]
+  exact (div_eq_iff hb).2 rfl
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:9:21-9:23
+Application type mismatch: The argument
+  hb
+has type
+  b ≠
+    @OfNat.ofNat R 0
+      (@Zero.toOfNat0 R
+        (@MulZeroClass.toZero R
+          CommRing.toNonUnitalCommRing.toNonUnitalNonAssocCommRing.toNonUnitalNonAssocSemiring.toMulZeroClass))
+but is expected to have type
+  ?m.19 ≠
+    @OfNat.ofNat ?m.24 0
+      (@Zero.toOfNat0 ?m.24
+        (@MulZeroClass.toZero ?m.24 GroupWithZero.toMonoidWithZero.toMulZeroOneClass.toMulZeroClass))
+in the application
+  div_eq_iff hb
+Source line 9:
+  exact (div_eq_iff hb).2 rfl
+                    ^^
+Highlighted span: hb
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:9:21-9:23
+Application type mismatch: The argument
+  hb
+has type
+  b ≠
+    @OfNat.ofNat R 0
+      (@Zero.toOfNat0 R
+        (@MulZeroClass.toZero R
+          CommRing.toNonUnitalCommRing.toNonUnitalNonAssocCommRing.toNonUnitalNonAssocSemiring.toMulZeroClass))
+but is expected to have type
+  ?m.19 ≠
+    @OfNat.ofNat ?m.24 0
+      (@Zero.toOfNat0 ?m.24
+        (@MulZeroClass.toZero ?m.24 GroupWithZero.toMonoidWithZero.toMulZeroOneClass.toMulZeroClass))
+in the application
+  div_eq_iff hb
+Source line 9:
+  exact (div_eq_iff hb).2 rfl
+                    ^^
+Highlighted span: hb

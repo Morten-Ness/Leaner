@@ -1,0 +1,287 @@
+FILE: Membership.mem_sSup_of_directedOn.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Membership.mem_sSup_of_directedOn.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {M A B : Type*}
+
+variable [MulOneClass M]
+
+theorem mem_sSup_of_directedOn {S : Set (Submonoid M)} (Sne : S.Nonempty)
+    (hS : DirectedOn (· ≤ ·) S) {x : M} : x ∈ sSup S ↔ ∃ s ∈ S, x ∈ s := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M A B : Type*}
+
+variable [MulOneClass M]
+
+theorem mem_sSup_of_directedOn {S : Set (Submonoid M)} (Sne : S.Nonempty)
+    (hS : DirectedOn (· ≤ ·) S) {x : M} : x ∈ sSup S ↔ ∃ s ∈ S, x ∈ s := by
+  classical
+  constructor
+  · intro hx
+    change x ∈ Submonoid.closure (Set.iUnion fun s : S => ((s : Submonoid M) : Set M)) at hx
+    rw [Submonoid.sSup_eq_closure] at hx
+    rw [Submonoid.mem_closure_iff] at hx
+    rcases hx with ⟨L, hLfin, hLsub, hxL⟩
+    rcases Sne with ⟨s₀, hs₀⟩
+    let T : Finset (Submonoid M) := hLfin.biUnion fun y =>
+      if hy : y ∈ Set.iUnion fun s : S => ((s : Submonoid M) : Set M) then
+        {Classical.choose hy}
+      else
+        ∅
+    have hTsub : ∀ t ∈ T, t ∈ S := by
+      intro t ht
+      simp only [T]
+      rw [Finset.mem_biUnion] at ht
+      rcases ht with ⟨y, hyL, ht⟩
+      split_ifs at ht with hy
+      · simpa [ht] using (Classical.choose_spec hy).1
+      · simp at ht
+    have hLcovered : ∀ y ∈ L, ∃ t ∈ T, y ∈ (t : Set M) := by
+      intro y hyL
+      have hyU : y ∈ Set.iUnion fun s : S => ((s : Submonoid M) : Set M) := hLsub hyL
+      refine ⟨Classical.choose hyU, ?_, ?_⟩
+      · simp only [T]
+        rw [Finset.mem_biUnion]
+        refine ⟨y, hyL, ?_⟩
+        simp [hyU]
+      · exact (Classical.choose_spec hyU).2
+    have hex : ∃ s ∈ S, ∀ t ∈ T, t ≤ s := by
+      refine Finset.induction_on T ?base ?step
+      · exact ⟨s₀, hs₀, by intro t ht; simp at ht⟩
+      · intro a T haT ih
+        rcases ih with ⟨s, hsS, hs⟩
+        have haS : a ∈ S := hTsub a (by simp [haT])
+        rcases hS haS hsS with ⟨u, huS, hau, hsu⟩
+        refine ⟨u, huS, ?_⟩
+        intro t ht
+        rw [Finset.mem_insert] at ht
+        rcases ht with rfl | ht
+        · exact hau
+        · exact le_trans (hs t ht) hsu
+    rcases hex with ⟨s, hsS, hsT⟩
+    refine ⟨s, hsS, ?_⟩
+    apply hxL
+    intro y hyL
+    rcases hLcovered y hyL with ⟨t, htT, hyt⟩
+    exact hsT t htT hyt
+  · rintro ⟨s, hsS, hxs⟩
+    rw [Submonoid.sSup_eq_closure]
+    rw [Submonoid.subset_closure]
+    change x ∈ Set.iUnion fun s : S => ((s : Submonoid M) : Set M)
+    exact Set.mem_iUnion.2 ⟨⟨s, hsS⟩, hxs⟩
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:5-12:93
+'change' tactic failed, pattern
+  x ∈ Submonoid.closure (⋃ s, ↑↑s)
+is not definitionally equal to target
+  x ∈ sSup S
+Source line 12:
+    change x ∈ Submonoid.closure (Set.iUnion fun s : S => ((s : Submonoid M) : Set M)) at hx
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: change x ∈ Submonoid.closure (Set.iUnion fun s : S => ((s : Submonoid M) : Set M)) at hx
+
+ERROR .LspCheck.lean:59:9-59:34
+Unknown constant `Submonoid.sSup_eq_closure`
+Source line 59:
+    rw [Submonoid.sSup_eq_closure]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submonoid.sSup_eq_closure
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:5-12:93
+'change' tactic failed, pattern
+  x ∈ Submonoid.closure (⋃ s, ↑↑s)
+is not definitionally equal to target
+  x ∈ sSup S
+Source line 12:
+    change x ∈ Submonoid.closure (Set.iUnion fun s : S => ((s : Submonoid M) : Set M)) at hx
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: change x ∈ Submonoid.closure (Set.iUnion fun s : S => ((s : Submonoid M) : Set M)) at hx
+
+ERROR .LspCheck.lean:59:9-59:34
+Unknown constant `Submonoid.sSup_eq_closure`
+Source line 59:
+    rw [Submonoid.sSup_eq_closure]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submonoid.sSup_eq_closure
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M A B : Type*}
+
+variable [MulOneClass M]
+
+theorem mem_sSup_of_directedOn {S : Set (Submonoid M)} (Sne : S.Nonempty)
+    (hS : DirectedOn (· ≤ ·) S) {x : M} : x ∈ sSup S ↔ ∃ s ∈ S, x ∈ s := by
+  classical
+  let P : Submonoid M :=
+    {
+      carrier := {x : M | ∃ s ∈ S, x ∈ s}
+      one_mem' := by
+        rcases Sne with ⟨s, hs⟩
+        exact ⟨s, hs, s.one_mem⟩
+      mul_mem' := by
+        intro a b ha hb
+        rcases ha with ⟨sa, hsa, ha⟩
+        rcases hb with ⟨sb, hsb, hb⟩
+        rcases hS hsa hsb with ⟨sc, hsc, hle_a, hle_b⟩
+        exact ⟨sc, hsc, hle_a ha, hle_b hb⟩
+    }
+  have h_upper : ∀ s ∈ S, s ≤ P := by
+    intro s hs x hx
+    exact ⟨s, hs, hx⟩
+  have h_least : ∀ Q : Submonoid M, (∀ s ∈ S, s ≤ Q) → P ≤ Q := by
+    intro Q hQ x hx
+    rcases hx with ⟨s, hs, hx⟩
+    exact hQ s hs hx
+  have hsSup_eq : sSup S = P := by
+    apply le_antisymm
+    · exact sSup_le h_upper
+    · exact h_least (sSup S) (by intro s hs; exact le_sSup hs)
+  constructor
+  · intro hx
+    rw [hsSup_eq] at hx
+    exact hx
+  · rintro ⟨s, hs, hx⟩
+    rw [hsSup_eq]
+    exact ⟨s, hs, hx⟩
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:20:19-20:22
+Application type mismatch: The argument
+  hsa
+has type
+  sa ∈ S
+of sort `Prop` but is expected to have type
+  Submonoid M
+of sort `Type u_1` in the application
+  hS hsa
+Source line 20:
+        rcases hS hsa hsb with ⟨sc, hsc, hle_a, hle_b⟩
+                  ^^^
+Highlighted span: hsa
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:20:19-20:22
+Application type mismatch: The argument
+  hsa
+has type
+  sa ∈ S
+of sort `Prop` but is expected to have type
+  Submonoid M
+of sort `Type u_1` in the application
+  hS hsa
+Source line 20:
+        rcases hS hsa hsb with ⟨sc, hsc, hle_a, hle_b⟩
+                  ^^^
+Highlighted span: hsa
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M A B : Type*}
+
+variable [MulOneClass M]
+
+theorem mem_sSup_of_directedOn {S : Set (Submonoid M)} (Sne : S.Nonempty)
+    (hS : DirectedOn (· ≤ ·) S) {x : M} : x ∈ sSup S ↔ ∃ s ∈ S, x ∈ s := by
+  classical
+  let P : Submonoid M :=
+    {
+      carrier := {x : M | ∃ s ∈ S, x ∈ s}
+      one_mem' := by
+        rcases Sne with ⟨s, hs⟩
+        exact ⟨s, hs, s.one_mem⟩
+      mul_mem' := by
+        intro a b ha hb
+        rcases ha with ⟨sa, hsa, ha⟩
+        rcases hb with ⟨sb, hsb, hb⟩
+        rcases hS hsa hsb with ⟨sc, hsc, hle_a, hle_b⟩
+        exact ⟨sc, hsc, hle_a ha, hle_b hb⟩
+    }
+  have h_upper : ∀ s ∈ S, s ≤ P := by
+    intro s hs x hx
+    exact ⟨s, hs, hx⟩
+  have h_least : ∀ Q : Submonoid M, (∀ s ∈ S, s ≤ Q) → P ≤ Q := by
+    intro Q hQ x hx
+    rcases hx with ⟨s, hs, hx⟩
+    exact hQ s hs hx
+  have hsSup_eq : sSup S = P := by
+    apply le_antisymm
+    · exact sSup_le h_upper
+    · exact h_least (sSup S) (by intro s hs; exact le_sSup hs)
+  constructor
+  · intro hx
+    rw [hsSup_eq] at hx
+    exact hx
+  · rintro ⟨s, hs, hx⟩
+    rw [hsSup_eq]
+    exact ⟨s, hs, hx⟩
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:20:19-20:22
+Application type mismatch: The argument
+  hsa
+has type
+  sa ∈ S
+of sort `Prop` but is expected to have type
+  Submonoid M
+of sort `Type u_1` in the application
+  hS hsa
+Source line 20:
+        rcases hS hsa hsb with ⟨sc, hsc, hle_a, hle_b⟩
+                  ^^^
+Highlighted span: hsa
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:20:19-20:22
+Application type mismatch: The argument
+  hsa
+has type
+  sa ∈ S
+of sort `Prop` but is expected to have type
+  Submonoid M
+of sort `Type u_1` in the application
+  hS hsa
+Source line 20:
+        rcases hS hsa hsb with ⟨sc, hsc, hle_a, hle_b⟩
+                  ^^^
+Highlighted span: hsa

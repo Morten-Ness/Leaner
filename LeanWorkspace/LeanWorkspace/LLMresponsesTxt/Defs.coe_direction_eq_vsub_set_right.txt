@@ -1,0 +1,286 @@
+FILE: Defs.coe_direction_eq_vsub_set_right.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Defs.coe_direction_eq_vsub_set_right.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable (k : Type*) {V : Type*} (P : Type*) [Ring k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {k P}
+
+theorem coe_direction_eq_vsub_set_right {s : AffineSubspace k P} {p : P} (hp : p ∈ s) :
+    (s.direction : Set V) = (· -ᵥ p) '' s := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (k : Type*) {V : Type*} (P : Type*) [Ring k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {k P}
+
+theorem coe_direction_eq_vsub_set_right {s : AffineSubspace k P} {p : P} (hp : p ∈ s) :
+    (s.direction : Set V) = (· -ᵥ p) '' s := by
+  ext v
+  constructor
+  · intro hv
+    refine ⟨v +ᵥ p, ?_, ?_⟩
+    · simpa [AffineSubspace.mem_direction_iff_eq_vsub_right hp] using hv
+    · simp
+  · rintro ⟨q, hq, rfl⟩
+    simpa [AffineSubspace.mem_direction_iff_eq_vsub_right hp] using hq
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:7-14:73
+Type mismatch: After simplification, term
+  hv
+ has type
+  ∃ p₂ ∈ s, v = p₂ -ᵥ p
+but is expected to have type
+  v +ᵥ p ∈ s
+Source line 14:
+    · simpa [AffineSubspace.mem_direction_iff_eq_vsub_right hp] using hv
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [AffineSubspace.mem_direction_iff_eq_vsub_right hp] using hv
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:7-14:73
+Type mismatch: After simplification, term
+  hv
+ has type
+  ∃ p₂ ∈ s, v = p₂ -ᵥ p
+but is expected to have type
+  v +ᵥ p ∈ s
+Source line 14:
+    · simpa [AffineSubspace.mem_direction_iff_eq_vsub_right hp] using hv
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [AffineSubspace.mem_direction_iff_eq_vsub_right hp] using hv
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (k : Type*) {V : Type*} (P : Type*) [Ring k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {k P}
+
+theorem coe_direction_eq_vsub_set_right {s : AffineSubspace k P} {p : P} (hp : p ∈ s) :
+    (s.direction : Set V) = (· -ᵥ p) '' s := by
+  ext v
+  constructor
+  · intro hv
+    rw [AffineSubspace.mem_direction_iff_eq_vsub_right hp] at hv
+    rcases hv with ⟨q, hq, rfl⟩
+    refine ⟨q, hq, ?_⟩
+    simp
+  · rintro ⟨q, hq, rfl⟩
+    rw [AffineSubspace.mem_direction_iff_eq_vsub_right hp]
+    exact ⟨q, hq, rfl⟩
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:9-13:58
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?v ∈ s.direction
+in the target expression
+  v ∈ ↑s.direction
+
+case h.mp
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+inst✝ : AddTorsor V P
+s : AffineSubspace k P
+p : P
+hp : p ∈ s
+v : V
+hv : v ∈ ↑s.direction
+⊢ v ∈ (fun x ↦ x -ᵥ p) '' ↑s
+Source line 13:
+    rw [AffineSubspace.mem_direction_iff_eq_vsub_right hp] at hv
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.mem_direction_iff_eq_vsub_right hp
+
+ERROR .LspCheck.lean:18:9-18:58
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?v ∈ s.direction
+in the target expression
+  (fun x ↦ x -ᵥ p) q ∈ ↑s.direction
+
+case h.mpr
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+inst✝ : AddTorsor V P
+s : AffineSubspace k P
+p : P
+hp : p ∈ s
+q : P
+hq : q ∈ ↑s
+⊢ (fun x ↦ x -ᵥ p) q ∈ ↑s.direction
+Source line 18:
+    rw [AffineSubspace.mem_direction_iff_eq_vsub_right hp]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.mem_direction_iff_eq_vsub_right hp
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:9-13:58
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?v ∈ s.direction
+in the target expression
+  v ∈ ↑s.direction
+
+case h.mp
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+inst✝ : AddTorsor V P
+s : AffineSubspace k P
+p : P
+hp : p ∈ s
+v : V
+hv : v ∈ ↑s.direction
+⊢ v ∈ (fun x ↦ x -ᵥ p) '' ↑s
+Source line 13:
+    rw [AffineSubspace.mem_direction_iff_eq_vsub_right hp] at hv
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.mem_direction_iff_eq_vsub_right hp
+
+ERROR .LspCheck.lean:18:9-18:58
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?v ∈ s.direction
+in the target expression
+  (fun x ↦ x -ᵥ p) q ∈ ↑s.direction
+
+case h.mpr
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+inst✝ : AddTorsor V P
+s : AffineSubspace k P
+p : P
+hp : p ∈ s
+q : P
+hq : q ∈ ↑s
+⊢ (fun x ↦ x -ᵥ p) q ∈ ↑s.direction
+Source line 18:
+    rw [AffineSubspace.mem_direction_iff_eq_vsub_right hp]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.mem_direction_iff_eq_vsub_right hp
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (k : Type*) {V : Type*} (P : Type*) [Ring k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {k P}
+
+theorem coe_direction_eq_vsub_set_right {s : AffineSubspace k P} {p : P} (hp : p ∈ s) :
+    (s.direction : Set V) = (· -ᵥ p) '' s := by
+  ext v
+  constructor
+  · intro hv
+    rcases (AffineSubspace.mem_direction_iff_eq_vsub_right hp).mp hv with ⟨q, hq, rfl⟩
+    exact ⟨q, hq, rfl⟩
+  · rintro ⟨q, hq, rfl⟩
+    exact (AffineSubspace.mem_direction_iff_eq_vsub_right hp).2 ⟨q, hq, rfl⟩
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:64-13:66
+Invalid field `mp`: The environment does not contain `Function.mp`, so it is not possible to project the field `mp` from an expression
+  AffineSubspace.mem_direction_iff_eq_vsub_right hp
+of type
+  ∀ (v : V), v ∈ s.direction ↔ ∃ p₂ ∈ s, v = p₂ -ᵥ p
+Source line 13:
+    rcases (AffineSubspace.mem_direction_iff_eq_vsub_right hp).mp hv with ⟨q, hq, rfl⟩
+                                                               ^^
+Highlighted span: mp
+
+ERROR .LspCheck.lean:13:75-13:87
+Tactic `rcases` failed: `x✝ : ?m.48` is not an inductive datatype
+Source line 13:
+    rcases (AffineSubspace.mem_direction_iff_eq_vsub_right hp).mp hv with ⟨q, hq, rfl⟩
+                                                                          ^^^^^^^^^^^^
+Highlighted span: ⟨q, hq, rfl⟩
+
+ERROR .LspCheck.lean:16:11-16:77
+Invalid projection: Projections cannot be used on functions, and
+  AffineSubspace.mem_direction_iff_eq_vsub_right hp
+has function type
+  ∀ (v : V), v ∈ s.direction ↔ ∃ p₂ ∈ s, v = p₂ -ᵥ p
+Source line 16:
+    exact (AffineSubspace.mem_direction_iff_eq_vsub_right hp).2 ⟨q, hq, rfl⟩
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (AffineSubspace.mem_direction_iff_eq_vsub_right hp).2 ⟨q, hq, rfl⟩
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:64-13:66
+Invalid field `mp`: The environment does not contain `Function.mp`, so it is not possible to project the field `mp` from an expression
+  AffineSubspace.mem_direction_iff_eq_vsub_right hp
+of type
+  ∀ (v : V), v ∈ s.direction ↔ ∃ p₂ ∈ s, v = p₂ -ᵥ p
+Source line 13:
+    rcases (AffineSubspace.mem_direction_iff_eq_vsub_right hp).mp hv with ⟨q, hq, rfl⟩
+                                                               ^^
+Highlighted span: mp
+
+ERROR .LspCheck.lean:13:75-13:87
+Tactic `rcases` failed: `x✝ : ?m.48` is not an inductive datatype
+Source line 13:
+    rcases (AffineSubspace.mem_direction_iff_eq_vsub_right hp).mp hv with ⟨q, hq, rfl⟩
+                                                                          ^^^^^^^^^^^^
+Highlighted span: ⟨q, hq, rfl⟩
+
+ERROR .LspCheck.lean:16:11-16:77
+Invalid projection: Projections cannot be used on functions, and
+  AffineSubspace.mem_direction_iff_eq_vsub_right hp
+has function type
+  ∀ (v : V), v ∈ s.direction ↔ ∃ p₂ ∈ s, v = p₂ -ᵥ p
+Source line 16:
+    exact (AffineSubspace.mem_direction_iff_eq_vsub_right hp).2 ⟨q, hq, rfl⟩
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (AffineSubspace.mem_direction_iff_eq_vsub_right hp).2 ⟨q, hq, rfl⟩

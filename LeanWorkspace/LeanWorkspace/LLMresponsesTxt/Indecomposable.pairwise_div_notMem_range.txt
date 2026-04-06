@@ -1,0 +1,674 @@
+FILE: Indecomposable.pairwise_div_notMem_range.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Indecomposable.pairwise_div_notMem_range.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {ι M G S : Type*} [Monoid M] [CommGroup G] [LinearOrder S]
+
+theorem pairwise_div_notMem_range [InvolutiveInv ι]
+    (v : ι → G)
+    (hv_one : ∀ i, v i ≠ 1)
+    (hv_inv : ∀ i, v i⁻¹ = (v i)⁻¹)
+    (s t : Set ι)
+    (hst : s ⊆ {i | IsMulIndecomposable v t i})
+    (hv_t : ∀ i, i ∈ t ∨ i⁻¹ ∈ t) :
+    s.Pairwise fun i j ↦ v i / v j ∉ Set.range v := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι M G S : Type*} [Monoid M] [CommGroup G] [LinearOrder S]
+
+theorem pairwise_div_notMem_range [InvolutiveInv ι]
+    (v : ι → G)
+    (hv_one : ∀ i, v i ≠ 1)
+    (hv_inv : ∀ i, v i⁻¹ = (v i)⁻¹)
+    (s t : Set ι)
+    (hst : s ⊆ {i | IsMulIndecomposable v t i})
+    (hv_t : ∀ i, i ∈ t ∨ i⁻¹ ∈ t) :
+    s.Pairwise fun i j ↦ v i / v j ∉ Set.range v := by
+  intro i hi j hj hij
+  have hi' : IsMulIndecomposable v t i := hst hi
+  have hneq : v i / v j ≠ 1 := by
+    intro h
+    have hvij : v i = v j := by
+      simpa [div_eq_iff] using h
+    have hij' : i ≠ j := hij
+    exact hij' (hi'.inj hvij)
+  intro hmem
+  rcases hmem with ⟨k, hk⟩
+  have hk' : k ∈ t ∨ k⁻¹ ∈ t := hv_t k
+  rcases hk' with hkt | hkinvt
+  · exact hneq (hi'.not_mem hkt hk)
+  · have hkinv : v i / v j = (v k⁻¹) := by
+      rw [hv_inv] at hk
+      simpa [div_eq_mul_inv, mul_comm] using hk
+    exact hneq (hi'.not_mem hkinvt hkinv)
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:18:7-18:33
+Type mismatch: After simplification, term
+  h
+ has type
+  v i / v j = 1
+but is expected to have type
+  v i = v j
+Source line 18:
+      simpa [div_eq_iff] using h
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [div_eq_iff] using h
+
+ERROR .LspCheck.lean:20:21-20:24
+Invalid field `inj`: The environment does not contain `And.inj`, so it is not possible to project the field `inj` from an expression
+  hi'
+of type
+  i ∈ t ∧ ∀ j ∈ t, ∀ k ∈ t, v i = v j * v k → v j = 1 ∨ v k = 1
+Source line 20:
+    exact hij' (hi'.inj hvij)
+                    ^^^
+Highlighted span: inj
+
+ERROR .LspCheck.lean:25:21-25:28
+Invalid field `not_mem`: The environment does not contain `And.not_mem`, so it is not possible to project the field `not_mem` from an expression
+  hi'
+of type
+  i ∈ t ∧ ∀ j ∈ t, ∀ k ∈ t, v i = v j * v k → v j = 1 ∨ v k = 1
+Source line 25:
+  · exact hneq (hi'.not_mem hkt hk)
+                    ^^^^^^^
+Highlighted span: not_mem
+
+ERROR .LspCheck.lean:27:11-27:17
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  v ?i⁻¹
+in the target expression
+  v k = v i / v j
+
+ι : Type u_1
+G : Type u_3
+inst✝¹ : CommGroup G
+inst✝ : InvolutiveInv ι
+v : ι → G
+hv_one : ∀ (i : ι), v i ≠ 1
+hv_inv : ∀ (i : ι), v i⁻¹ = (v i)⁻¹
+s t : Set ι
+hst : s ⊆ {i | IsMulIndecomposable v t i}
+hv_t : ∀ (i : ι), i ∈ t ∨ i⁻¹ ∈ t
+i : ι
+hi : i ∈ s
+j : ι
+hj : j ∈ s
+hij : i ≠ j
+hi' : IsMulIndecomposable v t i
+hneq : v i / v j ≠ 1
+k : ι
+hk : v k = v i / v j
+hkinvt : k⁻¹ ∈ t
+⊢ v i / v j = v k⁻¹
+Source line 27:
+      rw [hv_inv] at hk
+          ^^^^^^
+Highlighted span: hv_inv
+
+ERROR .LspCheck.lean:29:21-29:28
+Invalid field `not_mem`: The environment does not contain `And.not_mem`, so it is not possible to project the field `not_mem` from an expression
+  hi'
+of type
+  i ∈ t ∧ ∀ j ∈ t, ∀ k ∈ t, v i = v j * v k → v j = 1 ∨ v k = 1
+Source line 29:
+    exact hneq (hi'.not_mem hkinvt hkinv)
+                    ^^^^^^^
+Highlighted span: not_mem
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:18:7-18:33
+Type mismatch: After simplification, term
+  h
+ has type
+  v i / v j = 1
+but is expected to have type
+  v i = v j
+Source line 18:
+      simpa [div_eq_iff] using h
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [div_eq_iff] using h
+
+ERROR .LspCheck.lean:20:21-20:24
+Invalid field `inj`: The environment does not contain `And.inj`, so it is not possible to project the field `inj` from an expression
+  hi'
+of type
+  i ∈ t ∧ ∀ j ∈ t, ∀ k ∈ t, v i = v j * v k → v j = 1 ∨ v k = 1
+Source line 20:
+    exact hij' (hi'.inj hvij)
+                    ^^^
+Highlighted span: inj
+
+ERROR .LspCheck.lean:25:21-25:28
+Invalid field `not_mem`: The environment does not contain `And.not_mem`, so it is not possible to project the field `not_mem` from an expression
+  hi'
+of type
+  i ∈ t ∧ ∀ j ∈ t, ∀ k ∈ t, v i = v j * v k → v j = 1 ∨ v k = 1
+Source line 25:
+  · exact hneq (hi'.not_mem hkt hk)
+                    ^^^^^^^
+Highlighted span: not_mem
+
+ERROR .LspCheck.lean:27:11-27:17
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  v ?i⁻¹
+in the target expression
+  v k = v i / v j
+
+ι : Type u_1
+G : Type u_3
+inst✝¹ : CommGroup G
+inst✝ : InvolutiveInv ι
+v : ι → G
+hv_one : ∀ (i : ι), v i ≠ 1
+hv_inv : ∀ (i : ι), v i⁻¹ = (v i)⁻¹
+s t : Set ι
+hst : s ⊆ {i | IsMulIndecomposable v t i}
+hv_t : ∀ (i : ι), i ∈ t ∨ i⁻¹ ∈ t
+i : ι
+hi : i ∈ s
+j : ι
+hj : j ∈ s
+hij : i ≠ j
+hi' : IsMulIndecomposable v t i
+hneq : v i / v j ≠ 1
+k : ι
+hk : v k = v i / v j
+hkinvt : k⁻¹ ∈ t
+⊢ v i / v j = v k⁻¹
+Source line 27:
+      rw [hv_inv] at hk
+          ^^^^^^
+Highlighted span: hv_inv
+
+ERROR .LspCheck.lean:29:21-29:28
+Invalid field `not_mem`: The environment does not contain `And.not_mem`, so it is not possible to project the field `not_mem` from an expression
+  hi'
+of type
+  i ∈ t ∧ ∀ j ∈ t, ∀ k ∈ t, v i = v j * v k → v j = 1 ∨ v k = 1
+Source line 29:
+    exact hneq (hi'.not_mem hkinvt hkinv)
+                    ^^^^^^^
+Highlighted span: not_mem
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι M G S : Type*} [Monoid M] [CommGroup G] [LinearOrder S]
+
+theorem pairwise_div_notMem_range [InvolutiveInv ι]
+    (v : ι → G)
+    (hv_one : ∀ i, v i ≠ 1)
+    (hv_inv : ∀ i, v i⁻¹ = (v i)⁻¹)
+    (s t : Set ι)
+    (hst : s ⊆ {i | IsMulIndecomposable v t i})
+    (hv_t : ∀ i, i ∈ t ∨ i⁻¹ ∈ t) :
+    s.Pairwise fun i j ↦ v i / v j ∉ Set.range v := by
+  intro i hi j hj hij hmem
+  rcases hmem with ⟨k, rfl⟩
+  have hi' : IsMulIndecomposable v t i := hst hi
+  rcases hi' with ⟨hit, hindecomp⟩
+  have hk : k ∈ t := by
+    rcases hv_t k with hkt | hkinvt
+    · exact hkt
+    · have hk1 : v k = 1 := by
+        apply inv_eq_one.mp
+        rw [← hv_inv k]
+        exact hv_one i (hindecomp hkinvt hit (by simp [div_eq_mul_inv, mul_comm, mul_left_comm, mul_assoc]) |>.resolve_right (hv_one i))
+      exact False.elim (hv_one k hk1)
+  have hjt : j ∈ t := by
+    rcases hv_t j with hjt | hjinvt
+    · exact hjt
+    · have hj1 : v j = 1 := by
+        have h := hindecomp hk hjinvt (by
+          rw [hv_inv j, div_eq_mul_inv, mul_assoc])
+        exact h.resolve_left (hv_one k)
+      exact False.elim (hv_one j hj1)
+  have hdecomp : v i = v k * v j := by
+    simp [div_eq_mul_inv, mul_assoc, mul_left_comm, mul_comm]
+  have hk1_or_hj1 : v k = 1 ∨ v j = 1 := hindecomp hk hjt hdecomp
+  cases hk1_or_hj1 with
+  | inl hk1 =>
+      exact hv_one k hk1
+  | inr hj1 =>
+      exact hv_one j hj1
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:24-14:27
+Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  v k = v i / v j
+
+ι : Type u_1
+G : Type u_3
+inst✝¹ : CommGroup G
+inst✝ : InvolutiveInv ι
+v : ι → G
+hv_one : ∀ (i : ι), v i ≠ 1
+hv_inv : ∀ (i : ι), v i⁻¹ = (v i)⁻¹
+s t : Set ι
+hst : s ⊆ {i | IsMulIndecomposable v t i}
+hv_t : ∀ (i : ι), i ∈ t ∨ i⁻¹ ∈ t
+i : ι
+hi : i ∈ s
+j : ι
+hj : j ∈ s
+hij : i ≠ j
+k : ι
+h✝ : v k = v i / v j
+⊢ False
+Source line 14:
+  rcases hmem with ⟨k, rfl⟩
+                       ^^^
+Highlighted span: rfl
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:24-14:27
+Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  v k = v i / v j
+
+ι : Type u_1
+G : Type u_3
+inst✝¹ : CommGroup G
+inst✝ : InvolutiveInv ι
+v : ι → G
+hv_one : ∀ (i : ι), v i ≠ 1
+hv_inv : ∀ (i : ι), v i⁻¹ = (v i)⁻¹
+s t : Set ι
+hst : s ⊆ {i | IsMulIndecomposable v t i}
+hv_t : ∀ (i : ι), i ∈ t ∨ i⁻¹ ∈ t
+i : ι
+hi : i ∈ s
+j : ι
+hj : j ∈ s
+hij : i ≠ j
+k : ι
+h✝ : v k = v i / v j
+⊢ False
+Source line 14:
+  rcases hmem with ⟨k, rfl⟩
+                       ^^^
+Highlighted span: rfl
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι M G S : Type*} [Monoid M] [CommGroup G] [LinearOrder S]
+
+theorem pairwise_div_notMem_range [InvolutiveInv ι]
+    (v : ι → G)
+    (hv_one : ∀ i, v i ≠ 1)
+    (hv_inv : ∀ i, v i⁻¹ = (v i)⁻¹)
+    (s t : Set ι)
+    (hst : s ⊆ {i | IsMulIndecomposable v t i})
+    (hv_t : ∀ i, i ∈ t ∨ i⁻¹ ∈ t) :
+    s.Pairwise fun i j ↦ v i / v j ∉ Set.range v := by
+  intro i hi j hj hij hmem
+  rcases hmem with ⟨k, hk⟩
+  have hi' : IsMulIndecomposable v t i := hst hi
+  rcases hi' with ⟨hit, hindecomp⟩
+  have hk_or_hkinv : k ∈ t ∨ k⁻¹ ∈ t := hv_t k
+  cases hk_or_hkinv with
+  | inl hkt =>
+      have hjt : j ∈ t := by
+        rcases hv_t j with hjt | hjinvt
+        · exact hjt
+        · have hkj1 : v k = 1 ∨ v i = 1 := hindecomp hkt hjinvt (by
+            rw [hk]
+            calc
+              v i / v j = (v k) * (v j⁻¹) := by
+                rw [hk]
+              _ = v k * v (j⁻¹) := by rw [hv_inv]
+            )
+          have hji1 : v j = 1 := by
+            cases hkj1 with
+            | inl hk1 =>
+                exfalso
+                exact hv_one k hk1
+            | inr hi1 =>
+                exfalso
+                exact hv_one i hi1
+          exact False.elim (hv_one j hji1)
+      have hdecomp : v i = v k * v j := by
+        calc
+          v i = (v i / v j) * v j := by
+            simp [div_eq_mul_inv, mul_assoc]
+          _ = v k * v j := by rw [← hk]
+      have hk1_or_hj1 : v k = 1 ∨ v j = 1 := hindecomp hkt hjt hdecomp
+      cases hk1_or_hj1 with
+      | inl hk1 => exact hv_one k hk1
+      | inr hj1 => exact hv_one j hj1
+  | inr hkinvt =>
+      have hk' : v (k⁻¹) = v i / v j := by
+        rw [hv_inv]
+        exact inv_eq_iff_eq_inv.mp (by rw [hk, inv_inv])
+      have hkt' : k⁻¹ ∈ t := hkinvt
+      have hjt : j ∈ t := by
+        rcases hv_t j with hjt | hjinvt
+        · exact hjt
+        · have hkji1 : v (k⁻¹) = 1 ∨ v i = 1 := hindecomp hkt' hjinvt (by
+            calc
+              v i = (v i / v j) * v (j⁻¹) := by
+                rw [div_eq_mul_inv, hv_inv]
+                simp [mul_assoc]
+              _ = v (k⁻¹) * v (j⁻¹) := by rw [hk']
+          )
+          have hj1 : v j = 1 := by
+            cases hkji1 with
+            | inl hk1 =>
+                exfalso
+                exact hv_one (k⁻¹) hk1
+            | inr hi1 =>
+                exfalso
+                exact hv_one i hi1
+          exact False.elim (hv_one j hj1)
+      have hdecomp : v i = v (k⁻¹) * v j := by
+        calc
+          v i = (v i / v j) * v j := by
+            simp [div_eq_mul_inv, mul_assoc]
+          _ = v (k⁻¹) * v j := by rw [hk',]
+      have hk1_or_hj1 : v (k⁻¹) = 1 ∨ v j = 1 := hindecomp hkt' hjt hdecomp
+      cases hk1_or_hj1 with
+      | inl hk1 => exact hv_one (k⁻¹) hk1
+      | inr hj1 => exact hv_one j hj1
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:23:54-23:57
+Application type mismatch: The argument
+  hkt
+has type
+  k ∈ t
+of sort `Prop` but is expected to have type
+  ι
+of sort `Type u_1` in the application
+  hindecomp hkt
+Source line 23:
+        · have hkj1 : v k = 1 ∨ v i = 1 := hindecomp hkt hjinvt (by
+                                                     ^^^
+Highlighted span: hkt
+
+ERROR .LspCheck.lean:24:17-24:19
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  v k
+in the target expression
+  ι
+
+ι : Type u_1
+G : Type u_3
+inst✝¹ : CommGroup G
+inst✝ : InvolutiveInv ι
+v : ι → G
+hv_one : ∀ (i : ι), v i ≠ 1
+hv_inv : ∀ (i : ι), v i⁻¹ = (v i)⁻¹
+s t : Set ι
+hst : s ⊆ {i | IsMulIndecomposable v t i}
+hv_t : ∀ (i : ι), i ∈ t ∨ i⁻¹ ∈ t
+i : ι
+hi : i ∈ s
+j : ι
+hj : j ∈ s
+hij : i ≠ j
+k : ι
+hk : v k = v i / v j
+hit : i ∈ t
+hindecomp : ∀ j ∈ t, ∀ k ∈ t, v i = v j * v k → v j = 1 ∨ v k = 1
+hkt : k ∈ t
+hjinvt : j⁻¹ ∈ t
+⊢ ι
+Source line 24:
+            rw [hk]
+                ^^
+Highlighted span: hk
+
+ERROR .LspCheck.lean:44:56-44:59
+Application type mismatch: The argument
+  hkt
+has type
+  k ∈ t
+of sort `Prop` but is expected to have type
+  ι
+of sort `Type u_1` in the application
+  hindecomp hkt
+Source line 44:
+      have hk1_or_hj1 : v k = 1 ∨ v j = 1 := hindecomp hkt hjt hdecomp
+                                                       ^^^
+Highlighted span: hkt
+
+ERROR .LspCheck.lean:51:44-51:46
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  v k
+in the target expression
+  ?m.267⁻¹ = ?m.268
+
+ι : Type u_1
+G : Type u_3
+inst✝¹ : CommGroup G
+inst✝ : InvolutiveInv ι
+v : ι → G
+hv_one : ∀ (i : ι), v i ≠ 1
+hv_inv : ∀ (i : ι), v i⁻¹ = (v i)⁻¹
+s t : Set ι
+hst : s ⊆ {i | IsMulIndecomposable v t i}
+hv_t : ∀ (i : ι), i ∈ t ∨ i⁻¹ ∈ t
+i : ι
+hi : i ∈ s
+j : ι
+hj : j ∈ s
+hij : i ≠ j
+k : ι
+hk : v k = v i / v j
+hit : i ∈ t
+hindecomp : ∀ j ∈ t, ∀ k ∈ t, v i = v j * v k → v j = 1 ∨ v k = 1
+hkinvt : k⁻¹ ∈ t
+⊢ ?m.267⁻¹ = ?m.268
+Source line 51:
+        exact inv_eq_iff_eq_inv.mp (by rw [hk, inv_inv])
+                                           ^^
+Highlighted span: hk
+
+ERROR .LspCheck.lean:56:59-56:63
+Application type mismatch: The argument
+  hkt'
+has type
+  k⁻¹ ∈ t
+of sort `Prop` but is expected to have type
+  ι
+of sort `Type u_1` in the application
+  hindecomp hkt'
+Source line 56:
+        · have hkji1 : v (k⁻¹) = 1 ∨ v i = 1 := hindecomp hkt' hjinvt (by
+                                                          ^^^^
+Highlighted span: hkt'
+
+ERROR .LspCheck.lean:57:13-57:17
+'calc' expression has type
+  v i = v k⁻¹ * v j⁻¹
+of sort `Prop` but is expected to have type
+  ι
+of sort `Type u_1`
+Source line 57:
+            calc
+            ^^^^
+Highlighted span: calc
+
+ERROR .LspCheck.lean:77:60-77:64
+Application type mismatch: The argument
+  hkt'
+has type
+  k⁻¹ ∈ t
+of sort `Prop` but is expected to have type
+  ι
+of sort `Type u_1` in the application
+  hindecomp hkt'
+Source line 77:
+      have hk1_or_hj1 : v (k⁻¹) = 1 ∨ v j = 1 := hindecomp hkt' hjt hdecomp
+                                                           ^^^^
+Highlighted span: hkt'
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:23:54-23:57
+Application type mismatch: The argument
+  hkt
+has type
+  k ∈ t
+of sort `Prop` but is expected to have type
+  ι
+of sort `Type u_1` in the application
+  hindecomp hkt
+Source line 23:
+        · have hkj1 : v k = 1 ∨ v i = 1 := hindecomp hkt hjinvt (by
+                                                     ^^^
+Highlighted span: hkt
+
+ERROR .LspCheck.lean:24:17-24:19
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  v k
+in the target expression
+  ι
+
+ι : Type u_1
+G : Type u_3
+inst✝¹ : CommGroup G
+inst✝ : InvolutiveInv ι
+v : ι → G
+hv_one : ∀ (i : ι), v i ≠ 1
+hv_inv : ∀ (i : ι), v i⁻¹ = (v i)⁻¹
+s t : Set ι
+hst : s ⊆ {i | IsMulIndecomposable v t i}
+hv_t : ∀ (i : ι), i ∈ t ∨ i⁻¹ ∈ t
+i : ι
+hi : i ∈ s
+j : ι
+hj : j ∈ s
+hij : i ≠ j
+k : ι
+hk : v k = v i / v j
+hit : i ∈ t
+hindecomp : ∀ j ∈ t, ∀ k ∈ t, v i = v j * v k → v j = 1 ∨ v k = 1
+hkt : k ∈ t
+hjinvt : j⁻¹ ∈ t
+⊢ ι
+Source line 24:
+            rw [hk]
+                ^^
+Highlighted span: hk
+
+ERROR .LspCheck.lean:44:56-44:59
+Application type mismatch: The argument
+  hkt
+has type
+  k ∈ t
+of sort `Prop` but is expected to have type
+  ι
+of sort `Type u_1` in the application
+  hindecomp hkt
+Source line 44:
+      have hk1_or_hj1 : v k = 1 ∨ v j = 1 := hindecomp hkt hjt hdecomp
+                                                       ^^^
+Highlighted span: hkt
+
+ERROR .LspCheck.lean:51:44-51:46
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  v k
+in the target expression
+  ?m.267⁻¹ = ?m.268
+
+ι : Type u_1
+G : Type u_3
+inst✝¹ : CommGroup G
+inst✝ : InvolutiveInv ι
+v : ι → G
+hv_one : ∀ (i : ι), v i ≠ 1
+hv_inv : ∀ (i : ι), v i⁻¹ = (v i)⁻¹
+s t : Set ι
+hst : s ⊆ {i | IsMulIndecomposable v t i}
+hv_t : ∀ (i : ι), i ∈ t ∨ i⁻¹ ∈ t
+i : ι
+hi : i ∈ s
+j : ι
+hj : j ∈ s
+hij : i ≠ j
+k : ι
+hk : v k = v i / v j
+hit : i ∈ t
+hindecomp : ∀ j ∈ t, ∀ k ∈ t, v i = v j * v k → v j = 1 ∨ v k = 1
+hkinvt : k⁻¹ ∈ t
+⊢ ?m.267⁻¹ = ?m.268
+Source line 51:
+        exact inv_eq_iff_eq_inv.mp (by rw [hk, inv_inv])
+                                           ^^
+Highlighted span: hk
+
+ERROR .LspCheck.lean:56:59-56:63
+Application type mismatch: The argument
+  hkt'
+has type
+  k⁻¹ ∈ t
+of sort `Prop` but is expected to have type
+  ι
+of sort `Type u_1` in the application
+  hindecomp hkt'
+Source line 56:
+        · have hkji1 : v (k⁻¹) = 1 ∨ v i = 1 := hindecomp hkt' hjinvt (by
+                                                          ^^^^
+Highlighted span: hkt'
+
+ERROR .LspCheck.lean:57:13-57:17
+'calc' expression has type
+  v i = v k⁻¹ * v j⁻¹
+of sort `Prop` but is expected to have type
+  ι
+of sort `Type u_1`
+Source line 57:
+            calc
+            ^^^^
+Highlighted span: calc
+
+ERROR .LspCheck.lean:77:60-77:64
+Application type mismatch: The argument
+  hkt'
+has type
+  k⁻¹ ∈ t
+of sort `Prop` but is expected to have type
+  ι
+of sort `Type u_1` in the application
+  hindecomp hkt'
+Source line 77:
+      have hk1_or_hj1 : v (k⁻¹) = 1 ∨ v j = 1 := hindecomp hkt' hjt hdecomp
+                                                           ^^^^
+Highlighted span: hkt'

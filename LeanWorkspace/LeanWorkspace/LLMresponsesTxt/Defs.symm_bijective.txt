@@ -1,0 +1,86 @@
+FILE: Defs.symm_bijective.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Defs.symm_bijective.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {F α β M N P G H : Type*}
+
+variable [EquivLike F α β]
+
+variable [Mul M] [Mul N] [Mul P]
+
+theorem symm_bijective : Function.Bijective (MulEquiv.symm : (M ≃* N) → N ≃* M) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F α β M N P G H : Type*}
+
+variable [EquivLike F α β]
+
+variable [Mul M] [Mul N] [Mul P]
+
+theorem symm_bijective : Function.Bijective (MulEquiv.symm : (M ≃* N) → N ≃* M) :=
+by
+  constructor
+  · intro f g h
+    exact MulEquiv.symm_injective h
+  · intro f
+    refine ⟨f.symm, ?_⟩
+    simp
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:11-13:34
+Unknown constant `MulEquiv.symm_injective`
+Source line 13:
+    exact MulEquiv.symm_injective h
+          ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: MulEquiv.symm_injective
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:11-13:34
+Unknown constant `MulEquiv.symm_injective`
+Source line 13:
+    exact MulEquiv.symm_injective h
+          ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: MulEquiv.symm_injective
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F α β M N P G H : Type*}
+
+variable [EquivLike F α β]
+
+variable [Mul M] [Mul N] [Mul P]
+
+theorem symm_bijective : Function.Bijective (MulEquiv.symm : (M ≃* N) → N ≃* M) :=
+by
+  constructor
+  · intro f g h
+    have := congrArg MulEquiv.symm h
+    simpa using this
+  · intro f
+    refine ⟨f.symm, ?_⟩
+    rfl
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

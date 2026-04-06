@@ -1,0 +1,268 @@
+FILE: MulOpposite.op_sSup.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: MulOpposite.op_sSup.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {ι : Sort*} {R A : Type*} [CommSemiring R] [Semiring A] [Algebra R A]
+
+theorem op_sSup (S : Set (Subalgebra R A)) : (sSup S).op = sSup (.unop ⁻¹' S) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι : Sort*} {R A : Type*} [CommSemiring R] [Semiring A] [Algebra R A]
+
+theorem op_sSup (S : Set (Subalgebra R A)) : (sSup S).op = sSup (.unop ⁻¹' S) := by
+  ext x
+  change x.unop ∈ sSup S ↔ x ∈ sSup (.unop ⁻¹' S)
+  constructor
+  · intro hx
+    rw [Submodule.mem_sSup_of_directed] at hx
+    · rcases hx with ⟨s, hs, hxs⟩
+      rw [Submodule.mem_sSup_of_directed]
+      · refine ⟨s.op, hs, ?_⟩
+        simpa using hxs
+      · intro a ha b hb
+        refine ⟨a ⊔ b, ?_, ?_, ?_⟩
+        · exact Set.mem_preimage.2 <| Set.mem_union ha hb
+        · exact le_sup_left
+        · exact le_sup_right
+    · intro a ha b hb
+      refine ⟨a ⊔ b, Set.mem_union ha hb, le_sup_left, le_sup_right⟩
+  · intro hx
+    rw [Submodule.mem_sSup_of_directed]
+    · rcases hx with ⟨s, hs, hxs⟩
+      rw [Submodule.mem_sSup_of_directed]
+      · refine ⟨s.unop, hs, ?_⟩
+        simpa using hxs
+      · intro a ha b hb
+        refine ⟨a ⊔ b, ?_, ?_, ?_⟩
+        · exact Set.mem_preimage.2 <| Set.mem_union ha hb
+        · exact le_sup_left
+        · exact le_sup_right
+    · intro a ha b hb
+      refine ⟨a ⊔ b, Set.mem_union ha hb, le_sup_left, le_sup_right⟩
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:5:1-6:1
+(deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+Source line 5:
+theorem op_sSup (S : Set (Subalgebra R A)) : (sSup S).op = sSup (.unop ⁻¹' S) := by
+^
+Highlighted span: t
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:5:1-6:1
+(deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+Source line 5:
+theorem op_sSup (S : Set (Subalgebra R A)) : (sSup S).op = sSup (.unop ⁻¹' S) := by
+^
+Highlighted span: t
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι : Sort*} {R A : Type*} [CommSemiring R] [Semiring A] [Algebra R A]
+
+theorem op_sSup (S : Set (Subalgebra R A)) : (sSup S).op = sSup (.unop ⁻¹' S) := by
+  ext x
+  constructor
+  · intro hx
+    rw [Subalgebra.mem_op] at hx ⊢
+    exact le_sSup ⟨(sSup S), le_rfl, hx⟩
+  · intro hx
+    rw [Subalgebra.mem_op] at hx
+    rcases Subalgebra.mem_sSup_of_directedOn ?_ hx with ⟨P, hP, hxP⟩
+    · exact show x ∈ sSup S from le_sSup ⟨P.unop, hP, hxP⟩
+    · intro a ha b hb
+      refine ⟨a ⊔ b, ?_, ?_, ?_⟩
+      · exact Set.mem_preimage.2 (show a.unop ⊔ b.unop ∈ S from sup_mem ha hb)
+      · exact le_sup_left
+      · exact le_sup_right
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:9:9-9:26
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.57 ∈ Subalgebra.op ?m.58
+in the target expression
+  x ∈ sSup (Subalgebra.unop ⁻¹' S)
+
+case h.mp
+R : Type u_2
+A : Type u_3
+inst✝² : CommSemiring R
+inst✝¹ : Semiring A
+inst✝ : Algebra R A
+S : Set (Subalgebra R A)
+x : Aᵐᵒᵖ
+hx : MulOpposite.unop x ∈ sSup S
+⊢ x ∈ sSup (Subalgebra.unop ⁻¹' S)
+Source line 9:
+    rw [Subalgebra.mem_op] at hx ⊢
+        ^^^^^^^^^^^^^^^^^
+Highlighted span: Subalgebra.mem_op
+
+ERROR .LspCheck.lean:12:9-12:26
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.66 ∈ Subalgebra.op ?m.67
+in the target expression
+  x ∈ sSup (Subalgebra.unop ⁻¹' S)
+
+case h.mpr
+R : Type u_2
+A : Type u_3
+inst✝² : CommSemiring R
+inst✝¹ : Semiring A
+inst✝ : Algebra R A
+S : Set (Subalgebra R A)
+x : Aᵐᵒᵖ
+hx : x ∈ sSup (Subalgebra.unop ⁻¹' S)
+⊢ x ∈ (sSup S).op
+Source line 12:
+    rw [Subalgebra.mem_op] at hx
+        ^^^^^^^^^^^^^^^^^
+Highlighted span: Subalgebra.mem_op
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:9:9-9:26
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.57 ∈ Subalgebra.op ?m.58
+in the target expression
+  x ∈ sSup (Subalgebra.unop ⁻¹' S)
+
+case h.mp
+R : Type u_2
+A : Type u_3
+inst✝² : CommSemiring R
+inst✝¹ : Semiring A
+inst✝ : Algebra R A
+S : Set (Subalgebra R A)
+x : Aᵐᵒᵖ
+hx : MulOpposite.unop x ∈ sSup S
+⊢ x ∈ sSup (Subalgebra.unop ⁻¹' S)
+Source line 9:
+    rw [Subalgebra.mem_op] at hx ⊢
+        ^^^^^^^^^^^^^^^^^
+Highlighted span: Subalgebra.mem_op
+
+ERROR .LspCheck.lean:12:9-12:26
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.66 ∈ Subalgebra.op ?m.67
+in the target expression
+  x ∈ sSup (Subalgebra.unop ⁻¹' S)
+
+case h.mpr
+R : Type u_2
+A : Type u_3
+inst✝² : CommSemiring R
+inst✝¹ : Semiring A
+inst✝ : Algebra R A
+S : Set (Subalgebra R A)
+x : Aᵐᵒᵖ
+hx : x ∈ sSup (Subalgebra.unop ⁻¹' S)
+⊢ x ∈ (sSup S).op
+Source line 12:
+    rw [Subalgebra.mem_op] at hx
+        ^^^^^^^^^^^^^^^^^
+Highlighted span: Subalgebra.mem_op
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι : Sort*} {R A : Type*} [CommSemiring R] [Semiring A] [Algebra R A]
+
+theorem op_sSup (S : Set (Subalgebra R A)) : (sSup S).op = sSup (.unop ⁻¹' S) := by
+  ext x
+  constructor
+  · intro hx
+    rw [Subalgebra.mem_sSup_of_directedOn] at hx
+    · rw [Subalgebra.mem_sSup_of_directedOn]
+      · rcases hx with ⟨P, hP, hxP⟩
+        exact ⟨P.op, hP, hxP⟩
+      · intro a ha b hb
+        refine ⟨a ⊔ b, ?_, le_sup_left, le_sup_right⟩
+        exact Set.mem_preimage.2 (show a.unop ⊔ b.unop ∈ S from sup_mem ha hb)
+    · intro a ha b hb
+      exact ⟨a ⊔ b, Set.mem_union ha hb, le_sup_left, le_sup_right⟩
+  · intro hx
+    rw [Subalgebra.mem_sSup_of_directedOn] at hx
+    · rw [Subalgebra.mem_op]
+      rw [Subalgebra.mem_sSup_of_directedOn]
+      · rcases hx with ⟨P, hP, hxP⟩
+        exact ⟨P.unop, hP, hxP⟩
+      · intro a ha b hb
+        refine ⟨a ⊔ b, ?_, le_sup_left, le_sup_right⟩
+        exact Set.mem_preimage.2 (show a.unop ⊔ b.unop ∈ S from sup_mem ha hb)
+    · intro a ha b hb
+      refine ⟨a ⊔ b, ?_, le_sup_left, le_sup_right⟩
+      exact Set.mem_preimage.2 (show a.unop ⊔ b.unop ∈ S from sup_mem ha hb)
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:9:9-9:42
+Unknown constant `Subalgebra.mem_sSup_of_directedOn`
+Source line 9:
+    rw [Subalgebra.mem_sSup_of_directedOn] at hx
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subalgebra.mem_sSup_of_directedOn
+
+ERROR .LspCheck.lean:19:9-19:42
+Unknown constant `Subalgebra.mem_sSup_of_directedOn`
+Source line 19:
+    rw [Subalgebra.mem_sSup_of_directedOn] at hx
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subalgebra.mem_sSup_of_directedOn
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:9:9-9:42
+Unknown constant `Subalgebra.mem_sSup_of_directedOn`
+Source line 9:
+    rw [Subalgebra.mem_sSup_of_directedOn] at hx
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subalgebra.mem_sSup_of_directedOn
+
+ERROR .LspCheck.lean:19:9-19:42
+Unknown constant `Subalgebra.mem_sSup_of_directedOn`
+Source line 19:
+    rw [Subalgebra.mem_sSup_of_directedOn] at hx
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subalgebra.mem_sSup_of_directedOn

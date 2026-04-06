@@ -1,0 +1,399 @@
+FILE: Basic.range_faceOpposite_reindex.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.range_faceOpposite_reindex.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable (k : Type*) {V V₂ V₃ : Type*} (P P₂ P₃ : Type*)
+
+variable [Ring k] [AddCommGroup V] [AddCommGroup V₂] [AddCommGroup V₃]
+
+variable [Module k V] [Module k V₂] [Module k V₃]
+
+variable [AddTorsor V P] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃]
+
+variable {P P₂ P₃}
+
+variable {k}
+
+theorem range_faceOpposite_reindex {m n : ℕ} [NeZero m] [NeZero n] (s : Affine.Simplex k P m)
+    (e : Fin (m + 1) ≃ Fin (n + 1)) (i : Fin (n + 1)) :
+    Set.range ((s.reindex e).faceOpposite i).points =
+      Set.range (s.faceOpposite (e.symm i)).points := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (k : Type*) {V V₂ V₃ : Type*} (P P₂ P₃ : Type*)
+
+variable [Ring k] [AddCommGroup V] [AddCommGroup V₂] [AddCommGroup V₃]
+
+variable [Module k V] [Module k V₂] [Module k V₃]
+
+variable [AddTorsor V P] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃]
+
+variable {P P₂ P₃}
+
+variable {k}
+
+theorem range_faceOpposite_reindex {m n : ℕ} [NeZero m] [NeZero n] (s : Affine.Simplex k P m)
+    (e : Fin (m + 1) ≃ Fin (n + 1)) (i : Fin (n + 1)) :
+    Set.range ((s.reindex e).faceOpposite i).points =
+      Set.range (s.faceOpposite (e.symm i)).points := by
+  ext x
+  constructor
+  · rintro ⟨j, rfl⟩
+    refine ⟨(finSumFinEquiv.symm.trans e.symm.trans finSumFinEquiv) j, ?_⟩
+    simp [Affine.Simplex.faceOpposite, Affine.Simplex.reindex]
+  · rintro ⟨j, rfl⟩
+    refine ⟨(finSumFinEquiv.symm.trans e.trans finSumFinEquiv) j, ?_⟩
+    simp [Affine.Simplex.faceOpposite, Affine.Simplex.reindex]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:22:13-22:70
+Function expected at
+  (finSumFinEquiv.symm.trans ?m.130) ?m.134
+but this term has type
+  ?m.124
+
+Note: Expected a function because this term is being applied to the argument
+  j
+Source line 22:
+    refine ⟨(finSumFinEquiv.symm.trans e.symm.trans finSumFinEquiv) j, ?_⟩
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (finSumFinEquiv.symm.trans e.symm.trans finSumFinEquiv) j
+
+ERROR .LspCheck.lean:22:53-22:67
+Application type mismatch: The argument
+  finSumFinEquiv
+has type
+  Fin ?m.132 ⊕ Fin ?m.133 ≃ Fin (?m.132 + ?m.133)
+but is expected to have type
+  Fin (?m.118 + ?m.119)
+in the application
+  (finSumFinEquiv.symm.trans ?m.130) finSumFinEquiv
+Source line 22:
+    refine ⟨(finSumFinEquiv.symm.trans e.symm.trans finSumFinEquiv) j, ?_⟩
+                                                    ^^^^^^^^^^^^^^
+Highlighted span: finSumFinEquiv
+
+ERROR .LspCheck.lean:25:13-25:65
+Function expected at
+  (finSumFinEquiv.symm.trans ?m.165) ?m.169
+but this term has type
+  ?m.161
+
+Note: Expected a function because this term is being applied to the argument
+  j
+Source line 25:
+    refine ⟨(finSumFinEquiv.symm.trans e.trans finSumFinEquiv) j, ?_⟩
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (finSumFinEquiv.symm.trans e.trans finSumFinEquiv) j
+
+ERROR .LspCheck.lean:25:48-25:62
+Application type mismatch: The argument
+  finSumFinEquiv
+has type
+  Fin ?m.167 ⊕ Fin ?m.168 ≃ Fin (?m.167 + ?m.168)
+but is expected to have type
+  Fin (?m.155 + ?m.156)
+in the application
+  (finSumFinEquiv.symm.trans ?m.165) finSumFinEquiv
+Source line 25:
+    refine ⟨(finSumFinEquiv.symm.trans e.trans finSumFinEquiv) j, ?_⟩
+                                               ^^^^^^^^^^^^^^
+Highlighted span: finSumFinEquiv
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:22:13-22:70
+Function expected at
+  (finSumFinEquiv.symm.trans ?m.130) ?m.134
+but this term has type
+  ?m.124
+
+Note: Expected a function because this term is being applied to the argument
+  j
+Source line 22:
+    refine ⟨(finSumFinEquiv.symm.trans e.symm.trans finSumFinEquiv) j, ?_⟩
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (finSumFinEquiv.symm.trans e.symm.trans finSumFinEquiv) j
+
+ERROR .LspCheck.lean:22:53-22:67
+Application type mismatch: The argument
+  finSumFinEquiv
+has type
+  Fin ?m.132 ⊕ Fin ?m.133 ≃ Fin (?m.132 + ?m.133)
+but is expected to have type
+  Fin (?m.118 + ?m.119)
+in the application
+  (finSumFinEquiv.symm.trans ?m.130) finSumFinEquiv
+Source line 22:
+    refine ⟨(finSumFinEquiv.symm.trans e.symm.trans finSumFinEquiv) j, ?_⟩
+                                                    ^^^^^^^^^^^^^^
+Highlighted span: finSumFinEquiv
+
+ERROR .LspCheck.lean:25:13-25:65
+Function expected at
+  (finSumFinEquiv.symm.trans ?m.165) ?m.169
+but this term has type
+  ?m.161
+
+Note: Expected a function because this term is being applied to the argument
+  j
+Source line 25:
+    refine ⟨(finSumFinEquiv.symm.trans e.trans finSumFinEquiv) j, ?_⟩
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (finSumFinEquiv.symm.trans e.trans finSumFinEquiv) j
+
+ERROR .LspCheck.lean:25:48-25:62
+Application type mismatch: The argument
+  finSumFinEquiv
+has type
+  Fin ?m.167 ⊕ Fin ?m.168 ≃ Fin (?m.167 + ?m.168)
+but is expected to have type
+  Fin (?m.155 + ?m.156)
+in the application
+  (finSumFinEquiv.symm.trans ?m.165) finSumFinEquiv
+Source line 25:
+    refine ⟨(finSumFinEquiv.symm.trans e.trans finSumFinEquiv) j, ?_⟩
+                                               ^^^^^^^^^^^^^^
+Highlighted span: finSumFinEquiv
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (k : Type*) {V V₂ V₃ : Type*} (P P₂ P₃ : Type*)
+
+variable [Ring k] [AddCommGroup V] [AddCommGroup V₂] [AddCommGroup V₃]
+
+variable [Module k V] [Module k V₂] [Module k V₃]
+
+variable [AddTorsor V P] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃]
+
+variable {P P₂ P₃}
+
+variable {k}
+
+theorem range_faceOpposite_reindex {m n : ℕ} [NeZero m] [NeZero n] (s : Affine.Simplex k P m)
+    (e : Fin (m + 1) ≃ Fin (n + 1)) (i : Fin (n + 1)) :
+    Set.range ((s.reindex e).faceOpposite i).points =
+      Set.range (s.faceOpposite (e.symm i)).points := by
+  ext x
+  simp [Affine.Simplex.faceOpposite, Affine.Simplex.reindex, Set.mem_range, eq_comm]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:18:55-19:1
+unsolved goals
+case h
+k : Type u_1
+V : Type u_2
+P : Type u_5
+inst✝⁵ : Ring k
+inst✝⁴ : AddCommGroup V
+inst✝³ : Module k V
+inst✝² : AddTorsor V P
+m n : ℕ
+inst✝¹ : NeZero m
+inst✝ : NeZero n
+s : Affine.Simplex k P m
+e : Fin (m + 1) ≃ Fin (n + 1)
+i : Fin (n + 1)
+x : P
+⊢ (∃ x_1, ¬i = x_1 ∧ x = s.points (e.symm x_1)) ↔ ∃ x_1, ¬x_1 = e.symm i ∧ x = s.points x_1
+Source line 18:
+      Set.range (s.faceOpposite (e.symm i)).points := by
+                                                      ^
+Highlighted span: b
+
+WARNING .LspCheck.lean:20:62-20:75
+This simp argument is unused:
+  Set.mem_range
+
+Hint: Omit it from the simp argument list.
+  simp [Affine.Simplex.faceOpposite, Affine.Simplex.reindex, S̵e̵t̵.̵m̵e̵m̵_̵r̵a̵n̵g̵e̵,̵ ̵eq_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 20:
+  simp [Affine.Simplex.faceOpposite, Affine.Simplex.reindex, Set.mem_range, eq_comm]
+                                                             ^^^^^^^^^^^^^
+Highlighted span: Set.mem_range
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:18:55-19:1
+unsolved goals
+case h
+k : Type u_1
+V : Type u_2
+P : Type u_5
+inst✝⁵ : Ring k
+inst✝⁴ : AddCommGroup V
+inst✝³ : Module k V
+inst✝² : AddTorsor V P
+m n : ℕ
+inst✝¹ : NeZero m
+inst✝ : NeZero n
+s : Affine.Simplex k P m
+e : Fin (m + 1) ≃ Fin (n + 1)
+i : Fin (n + 1)
+x : P
+⊢ (∃ x_1, ¬i = x_1 ∧ x = s.points (e.symm x_1)) ↔ ∃ x_1, ¬x_1 = e.symm i ∧ x = s.points x_1
+Source line 18:
+      Set.range (s.faceOpposite (e.symm i)).points := by
+                                                      ^
+Highlighted span: b
+
+WARNING .LspCheck.lean:20:62-20:75
+This simp argument is unused:
+  Set.mem_range
+
+Hint: Omit it from the simp argument list.
+  simp [Affine.Simplex.faceOpposite, Affine.Simplex.reindex, S̵e̵t̵.̵m̵e̵m̵_̵r̵a̵n̵g̵e̵,̵ ̵eq_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 20:
+  simp [Affine.Simplex.faceOpposite, Affine.Simplex.reindex, Set.mem_range, eq_comm]
+                                                             ^^^^^^^^^^^^^
+Highlighted span: Set.mem_range
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (k : Type*) {V V₂ V₃ : Type*} (P P₂ P₃ : Type*)
+
+variable [Ring k] [AddCommGroup V] [AddCommGroup V₂] [AddCommGroup V₃]
+
+variable [Module k V] [Module k V₂] [Module k V₃]
+
+variable [AddTorsor V P] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃]
+
+variable {P P₂ P₃}
+
+variable {k}
+
+theorem range_faceOpposite_reindex {m n : ℕ} [NeZero m] [NeZero n] (s : Affine.Simplex k P m)
+    (e : Fin (m + 1) ≃ Fin (n + 1)) (i : Fin (n + 1)) :
+    Set.range ((s.reindex e).faceOpposite i).points =
+      Set.range (s.faceOpposite (e.symm i)).points := by
+  ext x
+  constructor
+  · rintro ⟨j, hj, rfl⟩
+    exact ⟨e.symm j, by simpa using hj, rfl⟩
+  · rintro ⟨j, hj, rfl⟩
+    exact ⟨e j, by simpa using hj, rfl⟩
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:22:19-22:20
+Application type mismatch: The argument
+  j
+has type
+  Fin (n - 1 + 1)
+but is expected to have type
+  Fin (n + 1)
+in the application
+  e.symm j
+Source line 22:
+    exact ⟨e.symm j, by simpa using hj, rfl⟩
+                  ^
+Highlighted span: j
+
+ERROR .LspCheck.lean:22:11-22:45
+Insufficient number of fields for `⟨...⟩` constructor: Constructor `Eq.refl` does not have explicit fields, but 2 were provided
+Source line 22:
+    exact ⟨e.symm j, by simpa using hj, rfl⟩
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ⟨e.symm j, by simpa using hj, rfl⟩
+
+ERROR .LspCheck.lean:24:14-24:15
+Application type mismatch: The argument
+  j
+has type
+  Fin (m - 1 + 1)
+but is expected to have type
+  Fin (m + 1)
+in the application
+  e j
+Source line 24:
+    exact ⟨e j, by simpa using hj, rfl⟩
+             ^
+Highlighted span: j
+
+ERROR .LspCheck.lean:24:11-24:40
+Insufficient number of fields for `⟨...⟩` constructor: Constructor `Eq.refl` does not have explicit fields, but 2 were provided
+Source line 24:
+    exact ⟨e j, by simpa using hj, rfl⟩
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ⟨e j, by simpa using hj, rfl⟩
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:22:19-22:20
+Application type mismatch: The argument
+  j
+has type
+  Fin (n - 1 + 1)
+but is expected to have type
+  Fin (n + 1)
+in the application
+  e.symm j
+Source line 22:
+    exact ⟨e.symm j, by simpa using hj, rfl⟩
+                  ^
+Highlighted span: j
+
+ERROR .LspCheck.lean:22:11-22:45
+Insufficient number of fields for `⟨...⟩` constructor: Constructor `Eq.refl` does not have explicit fields, but 2 were provided
+Source line 22:
+    exact ⟨e.symm j, by simpa using hj, rfl⟩
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ⟨e.symm j, by simpa using hj, rfl⟩
+
+ERROR .LspCheck.lean:24:14-24:15
+Application type mismatch: The argument
+  j
+has type
+  Fin (m - 1 + 1)
+but is expected to have type
+  Fin (m + 1)
+in the application
+  e j
+Source line 24:
+    exact ⟨e j, by simpa using hj, rfl⟩
+             ^
+Highlighted span: j
+
+ERROR .LspCheck.lean:24:11-24:40
+Insufficient number of fields for `⟨...⟩` constructor: Constructor `Eq.refl` does not have explicit fields, but 2 were provided
+Source line 24:
+    exact ⟨e j, by simpa using hj, rfl⟩
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ⟨e j, by simpa using hj, rfl⟩

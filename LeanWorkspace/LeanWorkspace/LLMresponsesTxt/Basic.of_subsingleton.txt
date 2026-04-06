@@ -1,0 +1,222 @@
+FILE: Basic.of_subsingleton.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.of_subsingleton.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Pointwise Ring
+
+variable {R : Type u} {A : Type v}
+
+variable [CommSemiring R] [Ring A] [Algebra R A]
+
+theorem of_subsingleton [Subsingleton A] (a : A) : spectrum R a = ∅ := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise Ring
+
+variable {R : Type u} {A : Type v}
+
+variable [CommSemiring R] [Ring A] [Algebra R A]
+
+theorem of_subsingleton [Subsingleton A] (a : A) : spectrum R a = ∅ := by
+  ext x
+  simp [spectrum, Subsingleton.elim x 0]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:19-11:40
+failed to synthesize instance of type class
+  Subsingleton R
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 11:
+  simp [spectrum, Subsingleton.elim x 0]
+                  ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subsingleton.elim x 0
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:19-11:40
+failed to synthesize instance of type class
+  Subsingleton R
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 11:
+  simp [spectrum, Subsingleton.elim x 0]
+                  ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subsingleton.elim x 0
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise Ring
+
+variable {R : Type u} {A : Type v}
+
+variable [CommSemiring R] [Ring A] [Algebra R A]
+
+theorem of_subsingleton [Subsingleton A] (a : A) : spectrum R a = ∅ := by
+  ext x
+  simp only [Set.mem_empty_iff_false, Set.mem_setOf_eq, spectrum]
+  have hx : algebraMap R A x - a = 0 := Subsingleton.elim _ _
+  rw [hx]
+  simp
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:7-13:9
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (algebraMap R A) x - a
+in the target expression
+  x ∈ (resolventSet R a)ᶜ ↔ False
+
+case h
+R : Type u
+A : Type v
+inst✝³ : CommSemiring R
+inst✝² : Ring A
+inst✝¹ : Algebra R A
+inst✝ : Subsingleton A
+a : A
+x : R
+hx : (algebraMap R A) x - a = 0
+⊢ x ∈ (resolventSet R a)ᶜ ↔ False
+Source line 13:
+  rw [hx]
+      ^^
+Highlighted span: hx
+
+WARNING .LspCheck.lean:11:39-11:55
+This simp argument is unused:
+  Set.mem_setOf_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [Set.mem_empty_iff_false, S̵e̵t̵.̵m̵e̵m̵_̵s̵e̵t̵O̵f̵_̵e̵q̵,̵ ̵spectrum]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 11:
+  simp only [Set.mem_empty_iff_false, Set.mem_setOf_eq, spectrum]
+                                      ^^^^^^^^^^^^^^^^
+Highlighted span: Set.mem_setOf_eq
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:7-13:9
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (algebraMap R A) x - a
+in the target expression
+  x ∈ (resolventSet R a)ᶜ ↔ False
+
+case h
+R : Type u
+A : Type v
+inst✝³ : CommSemiring R
+inst✝² : Ring A
+inst✝¹ : Algebra R A
+inst✝ : Subsingleton A
+a : A
+x : R
+hx : (algebraMap R A) x - a = 0
+⊢ x ∈ (resolventSet R a)ᶜ ↔ False
+Source line 13:
+  rw [hx]
+      ^^
+Highlighted span: hx
+
+WARNING .LspCheck.lean:11:39-11:55
+This simp argument is unused:
+  Set.mem_setOf_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [Set.mem_empty_iff_false, S̵e̵t̵.̵m̵e̵m̵_̵s̵e̵t̵O̵f̵_̵e̵q̵,̵ ̵spectrum]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 11:
+  simp only [Set.mem_empty_iff_false, Set.mem_setOf_eq, spectrum]
+                                      ^^^^^^^^^^^^^^^^
+Highlighted span: Set.mem_setOf_eq
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise Ring
+
+variable {R : Type u} {A : Type v}
+
+variable [CommSemiring R] [Ring A] [Algebra R A]
+
+theorem of_subsingleton [Subsingleton A] (a : A) : spectrum R a = ∅ := by
+  ext x
+  rw [spectrum, Set.mem_empty_iff_false]
+  change ¬ IsUnit (algebraMap R A x - a) ↔ False
+  have h : algebraMap R A x - a = 0 := Subsingleton.elim _ _
+  rw [h]
+  simp
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:9:72-10:1
+unsolved goals
+case h
+R : Type u
+A : Type v
+inst✝³ : CommSemiring R
+inst✝² : Ring A
+inst✝¹ : Algebra R A
+inst✝ : Subsingleton A
+a : A
+x : R
+h : (algebraMap R A) x - a = 0
+⊢ 0 = 1
+Source line 9:
+theorem of_subsingleton [Subsingleton A] (a : A) : spectrum R a = ∅ := by
+                                                                       ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:9:72-10:1
+unsolved goals
+case h
+R : Type u
+A : Type v
+inst✝³ : CommSemiring R
+inst✝² : Ring A
+inst✝¹ : Algebra R A
+inst✝ : Subsingleton A
+a : A
+x : R
+h : (algebraMap R A) x - a = 0
+⊢ 0 = 1
+Source line 9:
+theorem of_subsingleton [Subsingleton A] (a : A) : spectrum R a = ∅ := by
+                                                                       ^
+Highlighted span: b

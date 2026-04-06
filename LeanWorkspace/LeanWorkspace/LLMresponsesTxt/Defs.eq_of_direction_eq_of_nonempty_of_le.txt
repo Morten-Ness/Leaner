@@ -1,0 +1,238 @@
+FILE: Defs.eq_of_direction_eq_of_nonempty_of_le.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Defs.eq_of_direction_eq_of_nonempty_of_le.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+  [S : AddTorsor V P] {ι : Sort*}
+
+theorem eq_of_direction_eq_of_nonempty_of_le {s₁ s₂ : AffineSubspace k P}
+    (hd : s₁.direction = s₂.direction) (hn : (s₁ : Set P).Nonempty) (hle : s₁ ≤ s₂) : s₁ = s₂ := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+  [S : AddTorsor V P] {ι : Sort*}
+
+theorem eq_of_direction_eq_of_nonempty_of_le {s₁ s₂ : AffineSubspace k P}
+    (hd : s₁.direction = s₂.direction) (hn : (s₁ : Set P).Nonempty) (hle : s₁ ≤ s₂) : s₁ = s₂ := by
+  rcases hn with ⟨p, hp⟩
+  apply le_antisymm hle
+  intro q hq
+  have hp' : p ∈ s₂ := hle hp
+  have hdir : q -ᵥ p ∈ s₂.direction := by
+    rw [← hd]
+    exact s₁.vsub_mem_direction hq hp
+  exact s₂.vadd_mem_of_mem_direction hp' hdir
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:33-14:35
+Application type mismatch: The argument
+  hq
+has type
+  q ∈ s₂
+but is expected to have type
+  q ∈ s₁
+in the application
+  AffineSubspace.vsub_mem_direction hq
+Source line 14:
+    exact s₁.vsub_mem_direction hq hp
+                                ^^
+Highlighted span: hq
+
+ERROR .LspCheck.lean:15:42-15:46
+Application type mismatch: The argument
+  hdir
+has type
+  Membership.mem.{u_2, u_2} s₂.direction (q -ᵥ p)
+but is expected to have type
+  Membership.mem.{u_3, u_3} s₂ ?m.92
+in the application
+  AffineSubspace.vadd_mem_of_mem_direction ?m.91 hdir
+Source line 15:
+  exact s₂.vadd_mem_of_mem_direction hp' hdir
+                                         ^^^^
+Highlighted span: hdir
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:33-14:35
+Application type mismatch: The argument
+  hq
+has type
+  q ∈ s₂
+but is expected to have type
+  q ∈ s₁
+in the application
+  AffineSubspace.vsub_mem_direction hq
+Source line 14:
+    exact s₁.vsub_mem_direction hq hp
+                                ^^
+Highlighted span: hq
+
+ERROR .LspCheck.lean:15:42-15:46
+Application type mismatch: The argument
+  hdir
+has type
+  Membership.mem.{u_2, u_2} s₂.direction (q -ᵥ p)
+but is expected to have type
+  Membership.mem.{u_3, u_3} s₂ ?m.92
+in the application
+  AffineSubspace.vadd_mem_of_mem_direction ?m.91 hdir
+Source line 15:
+  exact s₂.vadd_mem_of_mem_direction hp' hdir
+                                         ^^^^
+Highlighted span: hdir
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+  [S : AddTorsor V P] {ι : Sort*}
+
+theorem eq_of_direction_eq_of_nonempty_of_le {s₁ s₂ : AffineSubspace k P}
+    (hd : s₁.direction = s₂.direction) (hn : (s₁ : Set P).Nonempty) (hle : s₁ ≤ s₂) : s₁ = s₂ := by
+  rcases hn with ⟨p, hp⟩
+  have hp₂ : p ∈ s₂ := hle hp
+  apply le_antisymm hle
+  intro q hq₂
+  have hdir₂ : q -ᵥ p ∈ s₂.direction := s₂.vsub_mem_direction hq₂ hp₂
+  rw [← hd] at hdir₂
+  exact s₁.vadd_mem_of_mem_direction hp hdir₂
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:41-14:46
+Application type mismatch: The argument
+  hdir₂
+has type
+  Membership.mem.{u_2, u_2} s₁.direction (q -ᵥ p)
+but is expected to have type
+  Membership.mem.{u_3, u_3} s₁ ?m.94
+in the application
+  AffineSubspace.vadd_mem_of_mem_direction ?m.93 hdir₂
+Source line 14:
+  exact s₁.vadd_mem_of_mem_direction hp hdir₂
+                                        ^^^^^
+Highlighted span: hdir₂
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:41-14:46
+Application type mismatch: The argument
+  hdir₂
+has type
+  Membership.mem.{u_2, u_2} s₁.direction (q -ᵥ p)
+but is expected to have type
+  Membership.mem.{u_3, u_3} s₁ ?m.94
+in the application
+  AffineSubspace.vadd_mem_of_mem_direction ?m.93 hdir₂
+Source line 14:
+  exact s₁.vadd_mem_of_mem_direction hp hdir₂
+                                        ^^^^^
+Highlighted span: hdir₂
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+  [S : AddTorsor V P] {ι : Sort*}
+
+theorem eq_of_direction_eq_of_nonempty_of_le {s₁ s₂ : AffineSubspace k P}
+    (hd : s₁.direction = s₂.direction) (hn : (s₁ : Set P).Nonempty) (hle : s₁ ≤ s₂) : s₁ = s₂ := by
+  rcases hn with ⟨p, hp⟩
+  have hp₂ : p ∈ s₂ := hle hp
+  apply le_antisymm hle
+  intro q hq₂
+  have hdir₂ : q -ᵥ p ∈ s₂.direction := s₂.vsub_mem_direction hq₂ hp₂
+  rw [← hd] at hdir₂
+  have hq₁ : (q -ᵥ p) +ᵥ p ∈ s₁ := s₁.vadd_mem_of_mem_direction hp hdir₂
+  simpa using hq₁
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:68-14:73
+Application type mismatch: The argument
+  hdir₂
+has type
+  Membership.mem.{u_2, u_2} s₁.direction (q -ᵥ p)
+but is expected to have type
+  Membership.mem.{u_3, u_3} s₁ p
+in the application
+  AffineSubspace.vadd_mem_of_mem_direction ?m.103 hdir₂
+Source line 14:
+  have hq₁ : (q -ᵥ p) +ᵥ p ∈ s₁ := s₁.vadd_mem_of_mem_direction hp hdir₂
+                                                                   ^^^^^
+Highlighted span: hdir₂
+
+ERROR .LspCheck.lean:14:65-14:67
+Application type mismatch: The argument
+  hp
+has type
+  Membership.mem.{u_3, u_3} (↑s₁) p
+but is expected to have type
+  Membership.mem.{u_2, u_2} s₁.direction (q -ᵥ p)
+in the application
+  @AffineSubspace.vadd_mem_of_mem_direction k V P inst✝² inst✝¹ inst✝ S s₁ (q -ᵥ p) hp
+Source line 14:
+  have hq₁ : (q -ᵥ p) +ᵥ p ∈ s₁ := s₁.vadd_mem_of_mem_direction hp hdir₂
+                                                                ^^
+Highlighted span: hp
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:68-14:73
+Application type mismatch: The argument
+  hdir₂
+has type
+  Membership.mem.{u_2, u_2} s₁.direction (q -ᵥ p)
+but is expected to have type
+  Membership.mem.{u_3, u_3} s₁ p
+in the application
+  AffineSubspace.vadd_mem_of_mem_direction ?m.103 hdir₂
+Source line 14:
+  have hq₁ : (q -ᵥ p) +ᵥ p ∈ s₁ := s₁.vadd_mem_of_mem_direction hp hdir₂
+                                                                   ^^^^^
+Highlighted span: hdir₂
+
+ERROR .LspCheck.lean:14:65-14:67
+Application type mismatch: The argument
+  hp
+has type
+  Membership.mem.{u_3, u_3} (↑s₁) p
+but is expected to have type
+  Membership.mem.{u_2, u_2} s₁.direction (q -ᵥ p)
+in the application
+  @AffineSubspace.vadd_mem_of_mem_direction k V P inst✝² inst✝¹ inst✝ S s₁ (q -ᵥ p) hp
+Source line 14:
+  have hq₁ : (q -ᵥ p) +ᵥ p ∈ s₁ := s₁.vadd_mem_of_mem_direction hp hdir₂
+                                                                ^^
+Highlighted span: hp

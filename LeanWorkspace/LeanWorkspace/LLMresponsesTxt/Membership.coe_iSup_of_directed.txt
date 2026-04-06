@@ -1,0 +1,209 @@
+FILE: Membership.coe_iSup_of_directed.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Membership.coe_iSup_of_directed.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {M A B : Type*}
+
+variable [MulOneClass M]
+
+theorem coe_iSup_of_directed {ι} [Nonempty ι] {S : ι → Submonoid M} (hS : Directed (· ≤ ·) S) :
+    ((⨆ i, S i : Submonoid M) : Set M) = ⋃ i, S i := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M A B : Type*}
+
+variable [MulOneClass M]
+
+theorem coe_iSup_of_directed {ι} [Nonempty ι] {S : ι → Submonoid M} (hS : Directed (· ≤ ·) S) :
+    ((⨆ i, S i : Submonoid M) : Set M) = ⋃ i, S i := by
+  ext x
+  constructor
+  · intro hx
+    rcases Submonoid.mem_iSup_of_directed hS with ⟨i, hi⟩
+    exact Set.mem_iUnion.2 ⟨i, hi hx⟩
+  · intro hx
+    rcases Set.mem_iUnion.1 hx with ⟨i, hi⟩
+    exact Submonoid.mem_iSup_of_directed hS i hi
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:29-13:30
+Application type mismatch: The argument
+  i
+has type
+  ?m.41 ∈ ⨆ i, S i → ∃ i, ?m.41 ∈ S i
+of sort `Prop` but is expected to have type
+  ι
+of sort `Sort u_4` in the application
+  Exists.intro i
+Source line 13:
+    exact Set.mem_iUnion.2 ⟨i, hi hx⟩
+                            ^
+Highlighted span: i
+
+ERROR .LspCheck.lean:13:35-13:37
+Application type mismatch: The argument
+  hx
+has type
+  x ∈ ↑(⨆ i, S i)
+but is expected to have type
+  ∃ i, ?m.41 ∈ S i
+in the application
+  hi hx
+Source line 13:
+    exact Set.mem_iUnion.2 ⟨i, hi hx⟩
+                                  ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:16:11-16:49
+Function expected at
+  Submonoid.mem_iSup_of_directed hS
+but this term has type
+  ?m.84 ∈ ⨆ i, S i ↔ ∃ i, ?m.84 ∈ S i
+
+Note: Expected a function because this term is being applied to the argument
+  i
+Source line 16:
+    exact Submonoid.mem_iSup_of_directed hS i hi
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submonoid.mem_iSup_of_directed hS i hi
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:29-13:30
+Application type mismatch: The argument
+  i
+has type
+  ?m.41 ∈ ⨆ i, S i → ∃ i, ?m.41 ∈ S i
+of sort `Prop` but is expected to have type
+  ι
+of sort `Sort u_4` in the application
+  Exists.intro i
+Source line 13:
+    exact Set.mem_iUnion.2 ⟨i, hi hx⟩
+                            ^
+Highlighted span: i
+
+ERROR .LspCheck.lean:13:35-13:37
+Application type mismatch: The argument
+  hx
+has type
+  x ∈ ↑(⨆ i, S i)
+but is expected to have type
+  ∃ i, ?m.41 ∈ S i
+in the application
+  hi hx
+Source line 13:
+    exact Set.mem_iUnion.2 ⟨i, hi hx⟩
+                                  ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:16:11-16:49
+Function expected at
+  Submonoid.mem_iSup_of_directed hS
+but this term has type
+  ?m.84 ∈ ⨆ i, S i ↔ ∃ i, ?m.84 ∈ S i
+
+Note: Expected a function because this term is being applied to the argument
+  i
+Source line 16:
+    exact Submonoid.mem_iSup_of_directed hS i hi
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submonoid.mem_iSup_of_directed hS i hi
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M A B : Type*}
+
+variable [MulOneClass M]
+
+theorem coe_iSup_of_directed {ι} [Nonempty ι] {S : ι → Submonoid M} (hS : Directed (· ≤ ·) S) :
+    ((⨆ i, S i : Submonoid M) : Set M) = ⋃ i, S i := by
+  ext x
+  rw [Submonoid.mem_carrier, Set.mem_iUnion]
+  exact Submonoid.mem_iSup_of_directed hS
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:7-10:28
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.33 ∈ (Submonoid.toSubsemigroup ?m.32).carrier
+in the target expression
+  x ∈ ↑(⨆ i, S i) ↔ x ∈ ⋃ i, ↑(S i)
+
+case h
+M : Type u_1
+inst✝¹ : MulOneClass M
+ι : Sort u_4
+inst✝ : Nonempty ι
+S : ι → Submonoid M
+hS : Directed (fun x1 x2 ↦ x1 ≤ x2) S
+x : M
+⊢ x ∈ ↑(⨆ i, S i) ↔ x ∈ ⋃ i, ↑(S i)
+Source line 10:
+  rw [Submonoid.mem_carrier, Set.mem_iUnion]
+      ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submonoid.mem_carrier
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:7-10:28
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.33 ∈ (Submonoid.toSubsemigroup ?m.32).carrier
+in the target expression
+  x ∈ ↑(⨆ i, S i) ↔ x ∈ ⋃ i, ↑(S i)
+
+case h
+M : Type u_1
+inst✝¹ : MulOneClass M
+ι : Sort u_4
+inst✝ : Nonempty ι
+S : ι → Submonoid M
+hS : Directed (fun x1 x2 ↦ x1 ≤ x2) S
+x : M
+⊢ x ∈ ↑(⨆ i, S i) ↔ x ∈ ⋃ i, ↑(S i)
+Source line 10:
+  rw [Submonoid.mem_carrier, Set.mem_iUnion]
+      ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submonoid.mem_carrier
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M A B : Type*}
+
+variable [MulOneClass M]
+
+theorem coe_iSup_of_directed {ι} [Nonempty ι] {S : ι → Submonoid M} (hS : Directed (· ≤ ·) S) :
+    ((⨆ i, S i : Submonoid M) : Set M) = ⋃ i, S i := by
+  ext x
+  rw [Set.mem_iUnion]
+  exact Submonoid.mem_iSup_of_directed hS
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

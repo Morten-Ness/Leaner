@@ -1,0 +1,382 @@
+FILE: Basic.linear_eqOn_vectorSpan.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.linear_eqOn_vectorSpan.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {k V₁ P₁ V₂ P₂ V₃ P₃ : Type*} [Ring k]
+
+variable [AddCommGroup V₁] [Module k V₁] [AddTorsor V₁ P₁]
+
+variable [AddCommGroup V₂] [Module k V₂] [AddTorsor V₂ P₂]
+
+variable [AddCommGroup V₃] [Module k V₃] [AddTorsor V₃ P₃]
+
+variable (f : P₁ →ᵃ[k] P₂)
+
+theorem linear_eqOn_vectorSpan {V₂ P₂ : Type*} [AddCommGroup V₂] [Module k V₂] [AddTorsor V₂ P₂]
+    {s : Set P₁} {f g : P₁ →ᵃ[k] P₂}
+    (h_agree : s.EqOn f g) : Set.EqOn f.linear g.linear (vectorSpan k s) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k V₁ P₁ V₂ P₂ V₃ P₃ : Type*} [Ring k]
+
+variable [AddCommGroup V₁] [Module k V₁] [AddTorsor V₁ P₁]
+
+variable [AddCommGroup V₂] [Module k V₂] [AddTorsor V₂ P₂]
+
+variable [AddCommGroup V₃] [Module k V₃] [AddTorsor V₃ P₃]
+
+variable (f : P₁ →ᵃ[k] P₂)
+
+theorem linear_eqOn_vectorSpan {V₂ P₂ : Type*} [AddCommGroup V₂] [Module k V₂] [AddTorsor V₂ P₂]
+    {s : Set P₁} {f g : P₁ →ᵃ[k] P₂}
+    (h_agree : s.EqOn f g) : Set.EqOn f.linear g.linear (vectorSpan k s) := by
+  classical
+  rcases Set.eq_empty_or_nonempty s with rfl | hs
+  · intro v hv
+    rw [vectorSpan_empty] at hv
+    simpa using hv
+  · rcases hs with ⟨p₀, hp₀⟩
+    intro v hv
+    rw [AffineMap.linear_eq_zero_iff_eq_const] at *
+    refine Submodule.span_induction hv ?h ?zero ?add ?smul
+    · intro w hw
+      rw [Set.mem_setOf_eq] at hw
+      rcases hw with ⟨p, hp, rfl⟩
+      change f p -ᵥ f p₀ = g p -ᵥ g p₀
+      rw [h_agree hp, h_agree hp₀]
+    · simp
+    · intro x y hx hy
+      simp [hx, hy]
+    · intro a x hx
+      simp [hx]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:20:5-20:19
+Type mismatch: After simplification, term
+  hv
+ has type
+  Eq.{u_2 + 1} v 0
+but is expected to have type
+  Eq.{u_8 + 1} (f.linear v) (g.linear v)
+Source line 20:
+    simpa using hv
+    ^^^^^^^^^^^^^^
+Highlighted span: simpa using hv
+
+ERROR .LspCheck.lean:23:9-23:46
+Tactic `rewrite` failed: Did not find an occurrence of the pattern in the current goal
+
+case inr
+k : Type u_1
+V₁ : Type u_2
+P₁ : Type u_3
+inst✝⁶ : Ring k
+inst✝⁵ : AddCommGroup V₁
+inst✝⁴ : Module k V₁
+inst✝³ : AddTorsor V₁ P₁
+V₂ : Type u_8
+P₂ : Type u_9
+inst✝² : AddCommGroup V₂
+inst✝¹ : Module k V₂
+inst✝ : AddTorsor V₂ P₂
+s : Set P₁
+f g : P₁ →ᵃ[k] P₂
+h_agree : Set.EqOn (⇑f) (⇑g) s
+p₀ : P₁
+hp₀ : p₀ ∈ s
+v : V₁
+hv : v ∈ ↑(vectorSpan k s)
+⊢ f.linear v = g.linear v
+Source line 23:
+    rw [AffineMap.linear_eq_zero_iff_eq_const] at *
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineMap.linear_eq_zero_iff_eq_const
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:20:5-20:19
+Type mismatch: After simplification, term
+  hv
+ has type
+  Eq.{u_2 + 1} v 0
+but is expected to have type
+  Eq.{u_8 + 1} (f.linear v) (g.linear v)
+Source line 20:
+    simpa using hv
+    ^^^^^^^^^^^^^^
+Highlighted span: simpa using hv
+
+ERROR .LspCheck.lean:23:9-23:46
+Tactic `rewrite` failed: Did not find an occurrence of the pattern in the current goal
+
+case inr
+k : Type u_1
+V₁ : Type u_2
+P₁ : Type u_3
+inst✝⁶ : Ring k
+inst✝⁵ : AddCommGroup V₁
+inst✝⁴ : Module k V₁
+inst✝³ : AddTorsor V₁ P₁
+V₂ : Type u_8
+P₂ : Type u_9
+inst✝² : AddCommGroup V₂
+inst✝¹ : Module k V₂
+inst✝ : AddTorsor V₂ P₂
+s : Set P₁
+f g : P₁ →ᵃ[k] P₂
+h_agree : Set.EqOn (⇑f) (⇑g) s
+p₀ : P₁
+hp₀ : p₀ ∈ s
+v : V₁
+hv : v ∈ ↑(vectorSpan k s)
+⊢ f.linear v = g.linear v
+Source line 23:
+    rw [AffineMap.linear_eq_zero_iff_eq_const] at *
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineMap.linear_eq_zero_iff_eq_const
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k V₁ P₁ V₂ P₂ V₃ P₃ : Type*} [Ring k]
+
+variable [AddCommGroup V₁] [Module k V₁] [AddTorsor V₁ P₁]
+
+variable [AddCommGroup V₂] [Module k V₂] [AddTorsor V₂ P₂]
+
+variable [AddCommGroup V₃] [Module k V₃] [AddTorsor V₃ P₃]
+
+variable (f : P₁ →ᵃ[k] P₂)
+
+theorem linear_eqOn_vectorSpan {V₂ P₂ : Type*} [AddCommGroup V₂] [Module k V₂] [AddTorsor V₂ P₂]
+    {s : Set P₁} {f g : P₁ →ᵃ[k] P₂}
+    (h_agree : s.EqOn f g) : Set.EqOn f.linear g.linear (vectorSpan k s) := by
+  classical
+  rcases Set.eq_empty_or_nonempty s with rfl | hs
+  · intro v hv
+    rw [vectorSpan_empty] at hv
+    rw [Submodule.mem_bot] at hv
+    simp [hv]
+  · rcases hs with ⟨p₀, hp₀⟩
+    have hfg : f.linear = g.linear := by
+      ext v
+      rw [AffineMap.linearMap_vsub_eq_sub]
+      have h1 := h_agree hp₀
+      have h2 := h_agree hp₀
+      simp only [h1, h2]
+    intro v hv
+    simpa [hfg] using rfl
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:20:9-20:26
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?x ∈ ⊥
+in the target expression
+  v ∈ ↑⊥
+
+case inl
+k : Type u_1
+V₁ : Type u_2
+P₁ : Type u_3
+inst✝⁶ : Ring k
+inst✝⁵ : AddCommGroup V₁
+inst✝⁴ : Module k V₁
+inst✝³ : AddTorsor V₁ P₁
+V₂ : Type u_8
+P₂ : Type u_9
+inst✝² : AddCommGroup V₂
+inst✝¹ : Module k V₂
+inst✝ : AddTorsor V₂ P₂
+f g : P₁ →ᵃ[k] P₂
+h_agree : Set.EqOn ⇑f ⇑g ∅
+v : V₁
+hv : v ∈ ↑⊥
+⊢ f.linear v = g.linear v
+Source line 20:
+    rw [Submodule.mem_bot] at hv
+        ^^^^^^^^^^^^^^^^^
+Highlighted span: Submodule.mem_bot
+
+ERROR .LspCheck.lean:25:11-25:42
+Unknown constant `AffineMap.linearMap_vsub_eq_sub`
+Source line 25:
+      rw [AffineMap.linearMap_vsub_eq_sub]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineMap.linearMap_vsub_eq_sub
+
+WARNING .LspCheck.lean:30:5-30:26
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 30:
+    simpa [hfg] using rfl
+    ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [hfg] using rfl
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:20:9-20:26
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?x ∈ ⊥
+in the target expression
+  v ∈ ↑⊥
+
+case inl
+k : Type u_1
+V₁ : Type u_2
+P₁ : Type u_3
+inst✝⁶ : Ring k
+inst✝⁵ : AddCommGroup V₁
+inst✝⁴ : Module k V₁
+inst✝³ : AddTorsor V₁ P₁
+V₂ : Type u_8
+P₂ : Type u_9
+inst✝² : AddCommGroup V₂
+inst✝¹ : Module k V₂
+inst✝ : AddTorsor V₂ P₂
+f g : P₁ →ᵃ[k] P₂
+h_agree : Set.EqOn ⇑f ⇑g ∅
+v : V₁
+hv : v ∈ ↑⊥
+⊢ f.linear v = g.linear v
+Source line 20:
+    rw [Submodule.mem_bot] at hv
+        ^^^^^^^^^^^^^^^^^
+Highlighted span: Submodule.mem_bot
+
+ERROR .LspCheck.lean:25:11-25:42
+Unknown constant `AffineMap.linearMap_vsub_eq_sub`
+Source line 25:
+      rw [AffineMap.linearMap_vsub_eq_sub]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineMap.linearMap_vsub_eq_sub
+
+WARNING .LspCheck.lean:30:5-30:26
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 30:
+    simpa [hfg] using rfl
+    ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [hfg] using rfl
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k V₁ P₁ V₂ P₂ V₃ P₃ : Type*} [Ring k]
+
+variable [AddCommGroup V₁] [Module k V₁] [AddTorsor V₁ P₁]
+
+variable [AddCommGroup V₂] [Module k V₂] [AddTorsor V₂ P₂]
+
+variable [AddCommGroup V₃] [Module k V₃] [AddTorsor V₃ P₃]
+
+variable (f : P₁ →ᵃ[k] P₂)
+
+theorem linear_eqOn_vectorSpan {V₂ P₂ : Type*} [AddCommGroup V₂] [Module k V₂] [AddTorsor V₂ P₂]
+    {s : Set P₁} {f g : P₁ →ᵃ[k] P₂}
+    (h_agree : s.EqOn f g) : Set.EqOn f.linear g.linear (vectorSpan k s) := by
+  classical
+  by_cases hs : s.Nonempty
+  · rcases hs with ⟨p₀, hp₀⟩
+    have hlin :
+        ∀ p ∈ s, f.linear (p -ᵥ p₀) = g.linear (p -ᵥ p₀) := by
+      intro p hp
+      rw [AffineMap.linear_apply]
+      rw [AffineMap.linear_apply]
+      rw [h_agree hp, h_agree hp₀]
+    intro v hv
+    rw [vectorSpan_eq_span_vsub_set_right_ne k hs] at hv
+    refine Submodule.span_induction hv hlin ?_ ?_ ?_
+    · simpa using hp₀
+    · simp
+    · intro x y hx hy
+      simp [hx, hy]
+    · intro a x hx
+      simp [hx]
+  · have hs' : s = ∅ := Set.not_nonempty_iff_eq_empty.mp hs
+    subst hs'
+    intro v hv
+    rw [vectorSpan_empty] at hv
+    exact hv.elim
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:22:11-22:33
+Unknown constant `AffineMap.linear_apply`
+Source line 22:
+      rw [AffineMap.linear_apply]
+          ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineMap.linear_apply
+
+ERROR .LspCheck.lean:26:48-26:50
+Unknown identifier `hs`
+Source line 26:
+    rw [vectorSpan_eq_span_vsub_set_right_ne k hs] at hv
+                                               ^^
+Highlighted span: hs
+
+ERROR .LspCheck.lean:38:14-38:18
+Invalid field `elim`: The environment does not contain `Eq.elim`, so it is not possible to project the field `elim` from an expression
+  hv
+of type `v = 0`
+Source line 38:
+    exact hv.elim
+             ^^^^
+Highlighted span: elim
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:22:11-22:33
+Unknown constant `AffineMap.linear_apply`
+Source line 22:
+      rw [AffineMap.linear_apply]
+          ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineMap.linear_apply
+
+ERROR .LspCheck.lean:26:48-26:50
+Unknown identifier `hs`
+Source line 26:
+    rw [vectorSpan_eq_span_vsub_set_right_ne k hs] at hv
+                                               ^^
+Highlighted span: hs
+
+ERROR .LspCheck.lean:38:14-38:18
+Invalid field `elim`: The environment does not contain `Eq.elim`, so it is not possible to project the field `elim` from an expression
+  hv
+of type `v = 0`
+Source line 38:
+    exact hv.elim
+             ^^^^
+Highlighted span: elim

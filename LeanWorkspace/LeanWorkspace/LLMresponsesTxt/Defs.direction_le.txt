@@ -1,0 +1,201 @@
+FILE: Defs.direction_le.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Defs.direction_le.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+  [S : AddTorsor V P] {ι : Sort*}
+
+variable (k V)
+
+variable (P)
+
+variable {k V P}
+
+variable (k V) {p₁ p₂ : P}
+
+variable (P) in
+
+variable {P}
+
+theorem direction_le {s₁ s₂ : AffineSubspace k P} (h : s₁ ≤ s₂) : s₁.direction ≤ s₂.direction := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+  [S : AddTorsor V P] {ι : Sort*}
+
+variable (k V)
+
+variable (P)
+
+variable {k V P}
+
+variable (k V) {p₁ p₂ : P}
+
+variable (P) in
+
+variable {P}
+
+theorem direction_le {s₁ s₂ : AffineSubspace k P} (h : s₁ ≤ s₂) : s₁.direction ≤ s₂.direction := by
+  intro v hv
+  rcases hv with ⟨p1, hp1, p2, hp2, hv⟩
+  exact ⟨p1, h hp1, p2, h hp2, hv⟩
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+WARNING .LspCheck.lean:15:1-15:1
+Please, write a comment here or remove this line, but do not place empty lines within commands!
+Context:
+                  ↓
+  ⏎variable (P) in⏎⏎variable {P}⏎
+
+Note: This linter can be disabled with `set_option linter.style.emptyLine false`
+Source line 15:
+
+^
+Highlighted span: 
+
+ERROR .LspCheck.lean:20:18-20:40
+Tactic `rcases` failed: `hv : ∀ t ∈ Set.range fun s ↦ ⋂ (_ : s ∈ {p | ↑s₁ -ᵥ ↑s₁ ⊆ ↑p}), ↑s,
+  v ∈ t` is not an inductive datatype
+Source line 20:
+  rcases hv with ⟨p1, hp1, p2, hp2, hv⟩
+                 ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ⟨p1, hp1, p2, hp2, hv⟩
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+WARNING .LspCheck.lean:15:1-15:1
+Please, write a comment here or remove this line, but do not place empty lines within commands!
+Context:
+                  ↓
+  ⏎variable (P) in⏎⏎variable {P}⏎
+
+Note: This linter can be disabled with `set_option linter.style.emptyLine false`
+Source line 15:
+
+^
+Highlighted span: 
+
+ERROR .LspCheck.lean:20:18-20:40
+Tactic `rcases` failed: `hv : ∀ t ∈ Set.range fun s ↦ ⋂ (_ : s ∈ {p | ↑s₁ -ᵥ ↑s₁ ⊆ ↑p}), ↑s,
+  v ∈ t` is not an inductive datatype
+Source line 20:
+  rcases hv with ⟨p1, hp1, p2, hp2, hv⟩
+                 ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ⟨p1, hp1, p2, hp2, hv⟩
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+  [S : AddTorsor V P] {ι : Sort*}
+
+variable (k V)
+
+variable (P)
+
+variable {k V P}
+
+variable (k V) {p₁ p₂ : P}
+variable (P) in
+variable {P}
+
+theorem direction_le {s₁ s₂ : AffineSubspace k P} (h : s₁ ≤ s₂) : s₁.direction ≤ s₂.direction :=
+  s₁.direction_mono h
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:17:6-17:20
+Invalid field `direction_mono`: The environment does not contain `AffineSubspace.direction_mono`, so it is not possible to project the field `direction_mono` from an expression
+  s₁
+of type `AffineSubspace k P`
+Source line 17:
+  s₁.direction_mono h
+     ^^^^^^^^^^^^^^
+Highlighted span: direction_mono
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:17:6-17:20
+Invalid field `direction_mono`: The environment does not contain `AffineSubspace.direction_mono`, so it is not possible to project the field `direction_mono` from an expression
+  s₁
+of type `AffineSubspace k P`
+Source line 17:
+  s₁.direction_mono h
+     ^^^^^^^^^^^^^^
+Highlighted span: direction_mono
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+  [S : AddTorsor V P] {ι : Sort*}
+
+variable (k V)
+
+variable (P)
+
+variable {k V P}
+
+variable (k V) {p₁ p₂ : P}
+variable (P) in
+variable {P}
+
+theorem direction_le {s₁ s₂ : AffineSubspace k P} (h : s₁ ≤ s₂) : s₁.direction ≤ s₂.direction := by
+  rw [AffineSubspace.direction]
+  rw [AffineSubspace.direction]
+  intro v hv
+  simp only [Submodule.mem_mk, Set.mem_setOf_eq] at hv ⊢
+  intro t ht
+  rcases ht with ⟨s, rfl⟩
+  intro hs
+  exact hv _ (by
+    intro p hp
+    exact h hp) hs
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:20:3-20:57
+`simp` made no progress
+Source line 20:
+  simp only [Submodule.mem_mk, Set.mem_setOf_eq] at hv ⊢
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simp only [Submodule.mem_mk, Set.mem_setOf_eq] at hv ⊢
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:20:3-20:57
+`simp` made no progress
+Source line 20:
+  simp only [Submodule.mem_mk, Set.mem_setOf_eq] at hv ⊢
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simp only [Submodule.mem_mk, Set.mem_setOf_eq] at hv ⊢

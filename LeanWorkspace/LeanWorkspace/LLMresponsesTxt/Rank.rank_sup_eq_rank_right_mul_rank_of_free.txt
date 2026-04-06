@@ -1,0 +1,444 @@
+FILE: Rank.rank_sup_eq_rank_right_mul_rank_of_free.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Rank.rank_sup_eq_rank_right_mul_rank_of_free.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R S : Type*} [CommRing R] [CommRing S] [Algebra R S]
+  (A B : Subalgebra R S)
+
+variable [Module.Free R B] [Module.Free B (Algebra.adjoin B (A : Set S))]
+
+theorem rank_sup_eq_rank_right_mul_rank_of_free :
+    Module.rank R ↥(A ⊔ B) = Module.rank R B * Module.rank B (Algebra.adjoin B (A : Set S)) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R S : Type*} [CommRing R] [CommRing S] [Algebra R S]
+  (A B : Subalgebra R S)
+
+variable [Module.Free R B] [Module.Free B (Algebra.adjoin B (A : Set S))]
+
+theorem rank_sup_eq_rank_right_mul_rank_of_free :
+    Module.rank R ↥(A ⊔ B) = Module.rank R B * Module.rank B (Algebra.adjoin B (A : Set S)) := by
+  rw [show (A ⊔ B) = Algebra.adjoin B (A : Set S) by
+    ext x
+    simp [Subalgebra.mem_sup]]
+  simpa using Module.Free.rank_mul_rank (R := R) (A := B) (B := Algebra.adjoin B (A : Set S))
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:22-10:50
+Type mismatch
+  Algebra.adjoin ↥B ↑A
+has type
+  Subalgebra.{u_2, u_2} (↥B) S
+but is expected to have type
+  Subalgebra.{u_1, u_2} R S
+Source line 10:
+  rw [show (A ⊔ B) = Algebra.adjoin B (A : Set S) by
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Algebra.adjoin B (A : Set S)
+
+ERROR .LspCheck.lean:9:96-10:1
+unsolved goals
+R : Type u_1
+S : Type u_2
+inst✝⁴ : CommRing R
+inst✝³ : CommRing S
+inst✝² : Algebra R S
+A B : Subalgebra R S
+inst✝¹ : Module.Free R ↥B
+inst✝ : Module.Free ↥B ↥(Algebra.adjoin ↥B ↑A)
+⊢ Module.rank R ↥(A ⊔ B) = Module.rank R ↥B * Module.rank ↥B ↥(Algebra.adjoin ↥B ↑A)
+Source line 9:
+    Module.rank R ↥(A ⊔ B) = Module.rank R B * Module.rank B (Algebra.adjoin B (A : Set S)) := by
+                                                                                               ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:22-10:50
+Type mismatch
+  Algebra.adjoin ↥B ↑A
+has type
+  Subalgebra.{u_2, u_2} (↥B) S
+but is expected to have type
+  Subalgebra.{u_1, u_2} R S
+Source line 10:
+  rw [show (A ⊔ B) = Algebra.adjoin B (A : Set S) by
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Algebra.adjoin B (A : Set S)
+
+ERROR .LspCheck.lean:9:96-10:1
+unsolved goals
+R : Type u_1
+S : Type u_2
+inst✝⁴ : CommRing R
+inst✝³ : CommRing S
+inst✝² : Algebra R S
+A B : Subalgebra R S
+inst✝¹ : Module.Free R ↥B
+inst✝ : Module.Free ↥B ↥(Algebra.adjoin ↥B ↑A)
+⊢ Module.rank R ↥(A ⊔ B) = Module.rank R ↥B * Module.rank ↥B ↥(Algebra.adjoin ↥B ↑A)
+Source line 9:
+    Module.rank R ↥(A ⊔ B) = Module.rank R B * Module.rank B (Algebra.adjoin B (A : Set S)) := by
+                                                                                               ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R S : Type*} [CommRing R] [CommRing S] [Algebra R S]
+  (A B : Subalgebra R S)
+
+variable [Module.Free R B] [Module.Free B (Algebra.adjoin B (A : Set S))]
+
+theorem rank_sup_eq_rank_right_mul_rank_of_free :
+    Module.rank R ↥(A ⊔ B) = Module.rank R B * Module.rank B (Algebra.adjoin B (A : Set S)) := by
+  simpa [Subalgebra.adjoin_eq_sup] using
+    (Module.Free.rank_mul_rank (R := R) (A := B) (B := Algebra.adjoin B (A : Set S)))
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:10-10:34
+Unknown constant `Subalgebra.adjoin_eq_sup`
+Source line 10:
+  simpa [Subalgebra.adjoin_eq_sup] using
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subalgebra.adjoin_eq_sup
+
+ERROR .LspCheck.lean:11:6-11:31
+Unknown constant `Module.Free.rank_mul_rank`
+Source line 11:
+    (Module.Free.rank_mul_rank (R := R) (A := B) (B := Algebra.adjoin B (A : Set S)))
+     ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Module.Free.rank_mul_rank
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:10-10:34
+Unknown constant `Subalgebra.adjoin_eq_sup`
+Source line 10:
+  simpa [Subalgebra.adjoin_eq_sup] using
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subalgebra.adjoin_eq_sup
+
+ERROR .LspCheck.lean:11:6-11:31
+Unknown constant `Module.Free.rank_mul_rank`
+Source line 11:
+    (Module.Free.rank_mul_rank (R := R) (A := B) (B := Algebra.adjoin B (A : Set S)))
+     ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Module.Free.rank_mul_rank
+
+===== ASSISTANT =====
+import Mathlib
+
+open Cardinal
+
+variable {R S : Type*} [CommRing R] [CommRing S] [Algebra R S]
+  (A B : Subalgebra R S)
+
+variable [Module.Free R B] [Module.Free B (Algebra.adjoin B (A : Set S))]
+
+theorem rank_sup_eq_rank_right_mul_rank_of_free :
+    Module.rank R ↥(A ⊔ B) = Module.rank R B * Module.rank B (Algebra.adjoin B (A : Set S)) := by
+  let K : Subalgebra R S := B.copy (↑B) rfl
+  have hK : K = B := by
+    ext x
+    rfl
+  have hsup : A ⊔ B = (Algebra.adjoin K (A : Set S)).toSubalgebra := by
+    ext x
+    change x ∈ A ⊔ B ↔ x ∈ (Algebra.adjoin K (A : Set S)).toSubalgebra
+    simp [Subalgebra.mem_sup]
+  rw [hsup]
+  let e : K ≃ₐ[R] B := {
+    toFun := fun x => ⟨x.1, x.2⟩
+    invFun := fun x => ⟨x.1, by simpa [K, Subalgebra.copy] using x.2⟩
+    left_inv := by intro x; ext <;> rfl
+    right_inv := by intro x; ext <;> rfl
+    map_mul' := by intro x y; rfl
+    map_add' := by intro x y; rfl
+    map_zero' := rfl
+    map_one' := rfl
+    commutes' := by intro r; rfl }
+  let E : (Algebra.adjoin K (A : Set S)) ≃ₗ[R] (Algebra.adjoin B (A : Set S)) :=
+    RestrictScalars.linearEquiv R
+      ((Subalgebra.equivOfEq
+        (by
+          ext x
+          change x ∈ Algebra.adjoin K (A : Set S) ↔ x ∈ Algebra.adjoin B (A : Set S)
+          simp [K, Subalgebra.copy]))
+        : Algebra.adjoin K (A : Set S) ≃ₐ[K] Algebra.adjoin B (A : Set S)).toLinearEquiv
+  have hrank1 :
+      Module.rank R ↥((Algebra.adjoin K (A : Set S)).toSubmodule) =
+        Module.rank R (Algebra.adjoin B (A : Set S)) := by
+    simpa using Cardinal.lift_id (Module.rank R (Algebra.adjoin B (A : Set S)))
+  have hrank2 : Module.rank R K = Module.rank R B := by
+    simpa [K] using Cardinal.lift_id (Module.rank R B)
+  have hmul :
+      Module.rank R (Algebra.adjoin B (A : Set S)) =
+        Module.rank R B * Module.rank B (Algebra.adjoin B (A : Set S)) := by
+    classical
+    let b : Basis (Basis.ofVectorSpaceIndex R B) R B := Module.Free.chooseBasis R B
+    let c : Basis (Basis.ofVectorSpaceIndex B (Algebra.adjoin B (A : Set S))) B
+        (Algebra.adjoin B (A : Set S)) := Module.Free.chooseBasis B (Algebra.adjoin B (A : Set S))
+    let bc := b.smul c
+    simpa [Module.rank, bc.mk_eq_rank', b.mk_eq_rank', c.mk_eq_rank'] using bc.mk_eq_rank
+  rw [hrank1, hmul]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:54-16:66
+Invalid field `toSubalgebra`: The environment does not contain `Subalgebra.toSubalgebra`, so it is not possible to project the field `toSubalgebra` from an expression
+  Algebra.adjoin ↥K ↑A
+of type `Subalgebra (↥K) S`
+Source line 16:
+  have hsup : A ⊔ B = (Algebra.adjoin K (A : Set S)).toSubalgebra := by
+                                                     ^^^^^^^^^^^^
+Highlighted span: toSubalgebra
+
+ERROR .LspCheck.lean:18:59-18:71
+Invalid field `toSubalgebra`: The environment does not contain `Subalgebra.toSubalgebra`, so it is not possible to project the field `toSubalgebra` from an expression
+  Algebra.adjoin ↥K ↑A
+of type `Subalgebra (↥K) S`
+Source line 18:
+    change x ∈ A ⊔ B ↔ x ∈ (Algebra.adjoin K (A : Set S)).toSubalgebra
+                                                          ^^^^^^^^^^^^
+Highlighted span: toSubalgebra
+
+ERROR .LspCheck.lean:19:11-19:29
+Unknown constant `Subalgebra.mem_sup`
+Source line 19:
+    simp [Subalgebra.mem_sup]
+          ^^^^^^^^^^^^^^^^^^
+Highlighted span: Subalgebra.mem_sup
+
+ERROR .LspCheck.lean:16:70-17:1
+unsolved goals
+case h
+R : Type u_1
+S : Type u_2
+inst✝⁴ : CommRing R
+inst✝³ : CommRing S
+inst✝² : Algebra R S
+A B : Subalgebra R S
+inst✝¹ : Module.Free R ↥B
+inst✝ : Module.Free ↥B ↥(Algebra.adjoin ↥B ↑A)
+K : Subalgebra R S := B.copy ↑B ⋯
+hK : K = B
+x : S
+⊢ x ∈ A ⊔ B ↔ x ∈ sorry ()
+Source line 16:
+  have hsup : A ⊔ B = (Algebra.adjoin K (A : Set S)).toSubalgebra := by
+                                                                     ^
+Highlighted span: b
+
+ERROR .LspCheck.lean:28:5-28:14
+`map_zero'` is not a field of structure `AlgEquiv`
+Source line 28:
+    map_zero' := rfl
+    ^^^^^^^^^
+Highlighted span: map_zero'
+
+ERROR .LspCheck.lean:29:5-29:13
+`map_one'` is not a field of structure `AlgEquiv`
+Source line 29:
+    map_one' := rfl
+    ^^^^^^^^
+Highlighted span: map_one'
+
+WARNING .LspCheck.lean:23:33-23:69
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 23:
+    invFun := fun x => ⟨x.1, by simpa [K, Subalgebra.copy] using x.2⟩
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [K, Subalgebra.copy] using x.2
+
+ERROR .LspCheck.lean:32:5-32:32
+Unknown constant `RestrictScalars.linearEquiv`
+Source line 32:
+    RestrictScalars.linearEquiv R
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: RestrictScalars.linearEquiv
+
+ERROR .LspCheck.lean:42:5-42:80
+Type mismatch: After simplification, term
+  lift_id (Module.rank R ↥(Algebra.adjoin ↥B ↑A))
+ has type
+  True
+but is expected to have type
+  Module.rank R ↥(Subalgebra.toSubmodule (Algebra.adjoin ↥K ↑A)) = Module.rank R ↥(Algebra.adjoin ↥B ↑A)
+Source line 42:
+    simpa using Cardinal.lift_id (Module.rank R (Algebra.adjoin B (A : Set S)))
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa using Cardinal.lift_id (Module.rank R (Algebra.adjoin B (A : Set S)))
+
+ERROR .LspCheck.lean:44:5-44:55
+Type mismatch: After simplification, term
+  lift_id (Module.rank R ↥B)
+ has type
+  True
+but is expected to have type
+  Module.rank R ↥(B.copy ↑B ⋯) = Module.rank R ↥B
+Source line 44:
+    simpa [K] using Cardinal.lift_id (Module.rank R B)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [K] using Cardinal.lift_id (Module.rank R B)
+
+ERROR .LspCheck.lean:49:13-49:18
+Unknown identifier `Basis`
+Source line 49:
+    let b : Basis (Basis.ofVectorSpaceIndex R B) R B := Module.Free.chooseBasis R B
+            ^^^^^
+Highlighted span: Basis
+
+ERROR .LspCheck.lean:50:13-50:18
+Unknown identifier `Basis`
+Source line 50:
+    let c : Basis (Basis.ofVectorSpaceIndex B (Algebra.adjoin B (A : Set S))) B
+            ^^^^^
+Highlighted span: Basis
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:54-16:66
+Invalid field `toSubalgebra`: The environment does not contain `Subalgebra.toSubalgebra`, so it is not possible to project the field `toSubalgebra` from an expression
+  Algebra.adjoin ↥K ↑A
+of type `Subalgebra (↥K) S`
+Source line 16:
+  have hsup : A ⊔ B = (Algebra.adjoin K (A : Set S)).toSubalgebra := by
+                                                     ^^^^^^^^^^^^
+Highlighted span: toSubalgebra
+
+ERROR .LspCheck.lean:18:59-18:71
+Invalid field `toSubalgebra`: The environment does not contain `Subalgebra.toSubalgebra`, so it is not possible to project the field `toSubalgebra` from an expression
+  Algebra.adjoin ↥K ↑A
+of type `Subalgebra (↥K) S`
+Source line 18:
+    change x ∈ A ⊔ B ↔ x ∈ (Algebra.adjoin K (A : Set S)).toSubalgebra
+                                                          ^^^^^^^^^^^^
+Highlighted span: toSubalgebra
+
+ERROR .LspCheck.lean:19:11-19:29
+Unknown constant `Subalgebra.mem_sup`
+Source line 19:
+    simp [Subalgebra.mem_sup]
+          ^^^^^^^^^^^^^^^^^^
+Highlighted span: Subalgebra.mem_sup
+
+ERROR .LspCheck.lean:16:70-17:1
+unsolved goals
+case h
+R : Type u_1
+S : Type u_2
+inst✝⁴ : CommRing R
+inst✝³ : CommRing S
+inst✝² : Algebra R S
+A B : Subalgebra R S
+inst✝¹ : Module.Free R ↥B
+inst✝ : Module.Free ↥B ↥(Algebra.adjoin ↥B ↑A)
+K : Subalgebra R S := B.copy ↑B ⋯
+hK : K = B
+x : S
+⊢ x ∈ A ⊔ B ↔ x ∈ sorry ()
+Source line 16:
+  have hsup : A ⊔ B = (Algebra.adjoin K (A : Set S)).toSubalgebra := by
+                                                                     ^
+Highlighted span: b
+
+ERROR .LspCheck.lean:28:5-28:14
+`map_zero'` is not a field of structure `AlgEquiv`
+Source line 28:
+    map_zero' := rfl
+    ^^^^^^^^^
+Highlighted span: map_zero'
+
+ERROR .LspCheck.lean:29:5-29:13
+`map_one'` is not a field of structure `AlgEquiv`
+Source line 29:
+    map_one' := rfl
+    ^^^^^^^^
+Highlighted span: map_one'
+
+WARNING .LspCheck.lean:23:33-23:69
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 23:
+    invFun := fun x => ⟨x.1, by simpa [K, Subalgebra.copy] using x.2⟩
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [K, Subalgebra.copy] using x.2
+
+ERROR .LspCheck.lean:32:5-32:32
+Unknown constant `RestrictScalars.linearEquiv`
+Source line 32:
+    RestrictScalars.linearEquiv R
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: RestrictScalars.linearEquiv
+
+ERROR .LspCheck.lean:42:5-42:80
+Type mismatch: After simplification, term
+  lift_id (Module.rank R ↥(Algebra.adjoin ↥B ↑A))
+ has type
+  True
+but is expected to have type
+  Module.rank R ↥(Subalgebra.toSubmodule (Algebra.adjoin ↥K ↑A)) = Module.rank R ↥(Algebra.adjoin ↥B ↑A)
+Source line 42:
+    simpa using Cardinal.lift_id (Module.rank R (Algebra.adjoin B (A : Set S)))
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa using Cardinal.lift_id (Module.rank R (Algebra.adjoin B (A : Set S)))
+
+ERROR .LspCheck.lean:44:5-44:55
+Type mismatch: After simplification, term
+  lift_id (Module.rank R ↥B)
+ has type
+  True
+but is expected to have type
+  Module.rank R ↥(B.copy ↑B ⋯) = Module.rank R ↥B
+Source line 44:
+    simpa [K] using Cardinal.lift_id (Module.rank R B)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [K] using Cardinal.lift_id (Module.rank R B)
+
+ERROR .LspCheck.lean:49:13-49:18
+Unknown identifier `Basis`
+Source line 49:
+    let b : Basis (Basis.ofVectorSpaceIndex R B) R B := Module.Free.chooseBasis R B
+            ^^^^^
+Highlighted span: Basis
+
+ERROR .LspCheck.lean:50:13-50:18
+Unknown identifier `Basis`
+Source line 50:
+    let c : Basis (Basis.ofVectorSpaceIndex B (Algebra.adjoin B (A : Set S))) B
+            ^^^^^
+Highlighted span: Basis

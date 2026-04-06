@@ -1,0 +1,204 @@
+FILE: Combination.sum_smul_vsub_const_eq_weightedVSub.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Combination.sum_smul_vsub_const_eq_weightedVSub.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+theorem sum_smul_vsub_const_eq_weightedVSub (w : ι → k) (p₁ : ι → P) (p₂ : P)
+    (h : ∑ i ∈ s, w i = 0) : (∑ i ∈ s, w i • (p₁ i -ᵥ p₂)) = s.weightedVSub p₁ w := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+theorem sum_smul_vsub_const_eq_weightedVSub (w : ι → k) (p₁ : ι → P) (p₂ : P)
+    (h : ∑ i ∈ s, w i = 0) : (∑ i ∈ s, w i • (p₁ i -ᵥ p₂)) = s.weightedVSub p₁ w := by
+  simpa [Finset.weightedVSub, h] using (Finset.sum_vsub_eq_sum_vsub_sub_of_sum_eq_zero (s := s) (g := w) (p := p₁) (b := p₂) h)
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:41-13:87
+Unknown constant `Finset.sum_vsub_eq_sum_vsub_sub_of_sum_eq_zero`
+Source line 13:
+  simpa [Finset.weightedVSub, h] using (Finset.sum_vsub_eq_sum_vsub_sub_of_sum_eq_zero (s := s) (g := w) (p := p₁) (b := p₂) h)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.sum_vsub_eq_sum_vsub_sub_of_sum_eq_zero
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:41-13:87
+Unknown constant `Finset.sum_vsub_eq_sum_vsub_sub_of_sum_eq_zero`
+Source line 13:
+  simpa [Finset.weightedVSub, h] using (Finset.sum_vsub_eq_sum_vsub_sub_of_sum_eq_zero (s := s) (g := w) (p := p₁) (b := p₂) h)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.sum_vsub_eq_sum_vsub_sub_of_sum_eq_zero
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+theorem sum_smul_vsub_const_eq_weightedVSub (w : ι → k) (p₁ : ι → P) (p₂ : P)
+    (h : ∑ i ∈ s, w i = 0) : (∑ i ∈ s, w i • (p₁ i -ᵥ p₂)) = s.weightedVSub p₁ w := by
+  classical
+  refine Finset.induction_on s ?_ ?_
+  · simp [Finset.weightedVSub]
+  · intro a s ha ih
+    simp only [Finset.sum_insert, ha, not_false_eq_true] at h ⊢
+    rw [Finset.weightedVSub_insert, ha]
+    have hs : ∑ x ∈ s, w x = -w a := by
+      linarith
+    rw [ih hs]
+    calc
+      w a • (p₁ a -ᵥ p₂) + ∑ x ∈ s, w x • (p₁ x -ᵥ p₂)
+          = w a • (p₁ a -ᵥ p₂) + (∑ x ∈ s, w x • (p₁ x -ᵥ p₁ a) + (∑ x ∈ s, w x) • (p₁ a -ᵥ p₂)) := by
+              rw [vsub_sum_smul_vsub_eq]
+      _ = w a • (p₁ a -ᵥ p₂) + (∑ x ∈ s, w x • (p₁ x -ᵥ p₁ a) + (-w a) • (p₁ a -ᵥ p₂)) := by
+            rw [hs]
+      _ = ∑ x ∈ s, w x • (p₁ x -ᵥ p₁ a) + (w a • (p₁ a -ᵥ p₂) + (-w a) • (p₁ a -ᵥ p₂)) := by
+            abel
+      _ = ∑ x ∈ s, w x • (p₁ x -ᵥ p₁ a) + ((w a + -w a) • (p₁ a -ᵥ p₂)) := by
+            rw [add_smul]
+      _ = ∑ x ∈ s, w x • (p₁ x -ᵥ p₁ a) := by
+            simp
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:18:9-18:35
+Unknown constant `Finset.weightedVSub_insert`
+Source line 18:
+    rw [Finset.weightedVSub_insert, ha]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.weightedVSub_insert
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:18:9-18:35
+Unknown constant `Finset.weightedVSub_insert`
+Source line 18:
+    rw [Finset.weightedVSub_insert, ha]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.weightedVSub_insert
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+theorem sum_smul_vsub_const_eq_weightedVSub (w : ι → k) (p₁ : ι → P) (p₂ : P)
+    (h : ∑ i ∈ s, w i = 0) : (∑ i ∈ s, w i • (p₁ i -ᵥ p₂)) = s.weightedVSub p₁ w := by
+  classical
+  rw [Finset.weightedVSub_eq_finset_sum_vsub (s := s) (w := w) (z := p₂)]
+  simp [h]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:7-14:45
+Unknown constant `Finset.weightedVSub_eq_finset_sum_vsub`
+Source line 14:
+  rw [Finset.weightedVSub_eq_finset_sum_vsub (s := s) (w := w) (z := p₂)]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.weightedVSub_eq_finset_sum_vsub
+
+ERROR .LspCheck.lean:12:85-13:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s : Finset ι
+w : ι → k
+p₁ : ι → P
+p₂ : P
+h : ∑ i ∈ s, w i = 0
+⊢ ∑ i ∈ s, w i • (p₁ i -ᵥ p₂) = (s.weightedVSub p₁) w
+Source line 12:
+    (h : ∑ i ∈ s, w i = 0) : (∑ i ∈ s, w i • (p₁ i -ᵥ p₂)) = s.weightedVSub p₁ w := by
+                                                                                    ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:7-14:45
+Unknown constant `Finset.weightedVSub_eq_finset_sum_vsub`
+Source line 14:
+  rw [Finset.weightedVSub_eq_finset_sum_vsub (s := s) (w := w) (z := p₂)]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.weightedVSub_eq_finset_sum_vsub
+
+ERROR .LspCheck.lean:12:85-13:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s : Finset ι
+w : ι → k
+p₁ : ι → P
+p₂ : P
+h : ∑ i ∈ s, w i = 0
+⊢ ∑ i ∈ s, w i • (p₁ i -ᵥ p₂) = (s.weightedVSub p₁) w
+Source line 12:
+    (h : ∑ i ∈ s, w i = 0) : (∑ i ∈ s, w i • (p₁ i -ᵥ p₂)) = s.weightedVSub p₁ w := by
+                                                                                    ^
+Highlighted span: b

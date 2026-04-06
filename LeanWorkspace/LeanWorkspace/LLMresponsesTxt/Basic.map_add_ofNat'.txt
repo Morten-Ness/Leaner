@@ -1,0 +1,493 @@
+FILE: Basic.map_add_ofNat'.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.map_add_ofNat'.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_add_ofNat' [AddMonoidWithOne G] [AddMonoid H] [AddConstMapClass F G H 1 b]
+    (f : F) (x : G) (n : ℕ) [n.AtLeastTwo] :
+    f (x + ofNat(n)) = f x + (ofNat(n) : ℕ) • b := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_add_ofNat' [AddMonoidWithOne G] [AddMonoid H] [AddConstMapClass F G H 1 b]
+    (f : F) (x : G) (n : ℕ) [n.AtLeastTwo] :
+    f (x + ofNat(n)) = f x + (ofNat(n) : ℕ) • b := by
+  simpa using AddConstMapClass.map_natCast_add (F := F) (G := G) (H := H) (f := f) (n := n) (a := x)
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:8:15-8:47
+Unknown constant `AddConstMapClass.map_natCast_add`
+Source line 8:
+  simpa using AddConstMapClass.map_natCast_add (F := F) (G := G) (H := H) (f := f) (n := n) (a := x)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AddConstMapClass.map_natCast_add
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:8:15-8:47
+Unknown constant `AddConstMapClass.map_natCast_add`
+Source line 8:
+  simpa using AddConstMapClass.map_natCast_add (F := F) (G := G) (H := H) (f := f) (n := n) (a := x)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AddConstMapClass.map_natCast_add
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_add_ofNat' [AddMonoidWithOne G] [AddMonoid H] [AddConstMapClass F G H 1 b]
+    (f : F) (x : G) (n : ℕ) [n.AtLeastTwo] :
+    f (x + ofNat(n)) = f x + (ofNat(n) : ℕ) • b := by
+  induction' n using Nat.recAux with n ih
+  · cases ‹Nat.AtLeastTwo 0›
+  · cases ‹Nat.AtLeastTwo 1›
+  · rw [Nat.ofNat_eq_coe, Nat.succ_eq_add_one, Nat.succ_eq_add_one, add_assoc]
+    rw [map_add_const]
+    rw [ih]
+    simp [add_assoc, add_left_comm, add_comm]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:9:11-9:29
+Tactic `assumption` failed
+
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝⁴ : FunLike F G H
+b : H
+inst✝³ : AddMonoidWithOne G
+inst✝² : AddMonoid H
+inst✝¹ : AddConstMapClass F G H 1 b
+f : F
+x : G
+n : ℕ
+inst✝ : n.AtLeastTwo
+⊢ Nat.AtLeastTwo 0
+Source line 9:
+  · cases ‹Nat.AtLeastTwo 0›
+          ^^^^^^^^^^^^^^^^^^
+Highlighted span: ‹Nat.AtLeastTwo 0›
+
+ERROR .LspCheck.lean:9:5-9:29
+Tactic `generalize` failed: result is not type correct
+  Nat.AtLeastTwo 0 → f (x + OfNat.ofNat 0) = f x + OfNat.ofNat 0 • b
+
+case zero
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝⁴ : FunLike F G H
+b : H
+inst✝³ : AddMonoidWithOne G
+inst✝² : AddMonoid H
+inst✝¹ : AddConstMapClass F G H 1 b
+f : F
+x : G
+n : ℕ
+inst✝ : n.AtLeastTwo
+⊢ f (x + OfNat.ofNat 0) = f x + OfNat.ofNat 0 • b
+Source line 9:
+  · cases ‹Nat.AtLeastTwo 0›
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: cases ‹Nat.AtLeastTwo 0›
+
+ERROR .LspCheck.lean:10:11-10:29
+Tactic `assumption` failed
+
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝⁴ : FunLike F G H
+b : H
+inst✝³ : AddMonoidWithOne G
+inst✝² : AddMonoid H
+inst✝¹ : AddConstMapClass F G H 1 b
+f : F
+x : G
+n✝ : ℕ
+inst✝ : n✝.AtLeastTwo
+n : ℕ
+ih : f (x + OfNat.ofNat n) = f x + OfNat.ofNat n • b
+⊢ Nat.AtLeastTwo 1
+Source line 10:
+  · cases ‹Nat.AtLeastTwo 1›
+          ^^^^^^^^^^^^^^^^^^
+Highlighted span: ‹Nat.AtLeastTwo 1›
+
+ERROR .LspCheck.lean:10:5-10:29
+Tactic `generalize` failed: result is not type correct
+  Nat.AtLeastTwo 1 → f (x + OfNat.ofNat (n + 1)) = f x + OfNat.ofNat (n + 1) • b
+
+case succ
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝⁴ : FunLike F G H
+b : H
+inst✝³ : AddMonoidWithOne G
+inst✝² : AddMonoid H
+inst✝¹ : AddConstMapClass F G H 1 b
+f : F
+x : G
+n✝ : ℕ
+inst✝ : n✝.AtLeastTwo
+n : ℕ
+ih : f (x + OfNat.ofNat n) = f x + OfNat.ofNat n • b
+⊢ f (x + OfNat.ofNat (n + 1)) = f x + OfNat.ofNat (n + 1) • b
+Source line 10:
+  · cases ‹Nat.AtLeastTwo 1›
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: cases ‹Nat.AtLeastTwo 1›
+
+ERROR .LspCheck.lean:11:3-12:1
+No goals to be solved
+Source line 11:
+  · rw [Nat.ofNat_eq_coe, Nat.succ_eq_add_one, Nat.succ_eq_add_one, add_assoc]
+  ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:5:9-5:23
+(kernel) application type mismatch
+  instOfNatAtLeastTwo
+argument has type
+  n✝.AtLeastTwo
+but function has type
+  [n.AtLeastTwo] → OfNat G n
+Source line 5:
+theorem map_add_ofNat' [AddMonoidWithOne G] [AddMonoid H] [AddConstMapClass F G H 1 b]
+        ^^^^^^^^^^^^^^
+Highlighted span: map_add_ofNat'
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:9:11-9:29
+Tactic `assumption` failed
+
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝⁴ : FunLike F G H
+b : H
+inst✝³ : AddMonoidWithOne G
+inst✝² : AddMonoid H
+inst✝¹ : AddConstMapClass F G H 1 b
+f : F
+x : G
+n : ℕ
+inst✝ : n.AtLeastTwo
+⊢ Nat.AtLeastTwo 0
+Source line 9:
+  · cases ‹Nat.AtLeastTwo 0›
+          ^^^^^^^^^^^^^^^^^^
+Highlighted span: ‹Nat.AtLeastTwo 0›
+
+ERROR .LspCheck.lean:9:5-9:29
+Tactic `generalize` failed: result is not type correct
+  Nat.AtLeastTwo 0 → f (x + OfNat.ofNat 0) = f x + OfNat.ofNat 0 • b
+
+case zero
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝⁴ : FunLike F G H
+b : H
+inst✝³ : AddMonoidWithOne G
+inst✝² : AddMonoid H
+inst✝¹ : AddConstMapClass F G H 1 b
+f : F
+x : G
+n : ℕ
+inst✝ : n.AtLeastTwo
+⊢ f (x + OfNat.ofNat 0) = f x + OfNat.ofNat 0 • b
+Source line 9:
+  · cases ‹Nat.AtLeastTwo 0›
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: cases ‹Nat.AtLeastTwo 0›
+
+ERROR .LspCheck.lean:10:11-10:29
+Tactic `assumption` failed
+
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝⁴ : FunLike F G H
+b : H
+inst✝³ : AddMonoidWithOne G
+inst✝² : AddMonoid H
+inst✝¹ : AddConstMapClass F G H 1 b
+f : F
+x : G
+n✝ : ℕ
+inst✝ : n✝.AtLeastTwo
+n : ℕ
+ih : f (x + OfNat.ofNat n) = f x + OfNat.ofNat n • b
+⊢ Nat.AtLeastTwo 1
+Source line 10:
+  · cases ‹Nat.AtLeastTwo 1›
+          ^^^^^^^^^^^^^^^^^^
+Highlighted span: ‹Nat.AtLeastTwo 1›
+
+ERROR .LspCheck.lean:10:5-10:29
+Tactic `generalize` failed: result is not type correct
+  Nat.AtLeastTwo 1 → f (x + OfNat.ofNat (n + 1)) = f x + OfNat.ofNat (n + 1) • b
+
+case succ
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝⁴ : FunLike F G H
+b : H
+inst✝³ : AddMonoidWithOne G
+inst✝² : AddMonoid H
+inst✝¹ : AddConstMapClass F G H 1 b
+f : F
+x : G
+n✝ : ℕ
+inst✝ : n✝.AtLeastTwo
+n : ℕ
+ih : f (x + OfNat.ofNat n) = f x + OfNat.ofNat n • b
+⊢ f (x + OfNat.ofNat (n + 1)) = f x + OfNat.ofNat (n + 1) • b
+Source line 10:
+  · cases ‹Nat.AtLeastTwo 1›
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: cases ‹Nat.AtLeastTwo 1›
+
+ERROR .LspCheck.lean:11:3-12:1
+No goals to be solved
+Source line 11:
+  · rw [Nat.ofNat_eq_coe, Nat.succ_eq_add_one, Nat.succ_eq_add_one, add_assoc]
+  ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:5:9-5:23
+(kernel) application type mismatch
+  instOfNatAtLeastTwo
+argument has type
+  n✝.AtLeastTwo
+but function has type
+  [n.AtLeastTwo] → OfNat G n
+Source line 5:
+theorem map_add_ofNat' [AddMonoidWithOne G] [AddMonoid H] [AddConstMapClass F G H 1 b]
+        ^^^^^^^^^^^^^^
+Highlighted span: map_add_ofNat'
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_add_ofNat' [AddMonoidWithOne G] [AddMonoid H] [AddConstMapClass F G H 1 b]
+    (f : F) (x : G) (n : ℕ) [h : n.AtLeastTwo] :
+    f (x + ofNat(n)) = f x + (ofNat(n) : ℕ) • b := by
+  have h' : 2 ≤ n := h.1
+  obtain ⟨m, rfl⟩ := Nat.exists_eq_add_of_le h'
+  induction m with
+  | zero =>
+      simp [map_add_const, two_nsmul, add_assoc]
+  | succ m ih =>
+      rw [Nat.add_assoc, ← Nat.succ_eq_add_one, ← Nat.succ_eq_add_one]
+      rw [show ofNat (m + 2 + 1) = (ofNat (m + 2) : G) + 1 by simp [Nat.add_assoc]]
+      rw [add_assoc, map_add_const, ih]
+      simp [add_assoc, add_left_comm, add_comm, nsmul_add]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:13-12:26
+Unknown identifier `map_add_const`
+Source line 12:
+      simp [map_add_const, two_nsmul, add_assoc]
+            ^^^^^^^^^^^^^
+Highlighted span: map_add_const
+
+ERROR .LspCheck.lean:11:10-12:1
+unsolved goals
+case zero
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝³ : FunLike F G H
+b : H
+inst✝² : AddMonoidWithOne G
+inst✝¹ : AddMonoid H
+inst✝ : AddConstMapClass F G H 1 b
+f : F
+x : G
+m : ℕ
+h : (2 + m).AtLeastTwo
+h' : 2 ≤ 2 + 0
+⊢ f (x + OfNat.ofNat 2) = f x + (b + b)
+Source line 11:
+  | zero =>
+         ^
+Highlighted span: =
+
+ERROR .LspCheck.lean:14:11-14:24
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?n + ?m + ?k
+in the target expression
+  f (x + OfNat.ofNat (2 + (m + 1))) = f x + OfNat.ofNat (2 + (m + 1)) • b
+
+case succ
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝³ : FunLike F G H
+b : H
+inst✝² : AddMonoidWithOne G
+inst✝¹ : AddMonoid H
+inst✝ : AddConstMapClass F G H 1 b
+f : F
+x : G
+m✝ : ℕ
+h : (2 + m✝).AtLeastTwo
+m : ℕ
+ih : 2 ≤ 2 + m → f (x + OfNat.ofNat (2 + m)) = f x + OfNat.ofNat (2 + m) • b
+h' : 2 ≤ 2 + (m + 1)
+⊢ f (x + OfNat.ofNat (2 + (m + 1))) = f x + OfNat.ofNat (2 + (m + 1)) • b
+Source line 14:
+      rw [Nat.add_assoc, ← Nat.succ_eq_add_one, ← Nat.succ_eq_add_one]
+          ^^^^^^^^^^^^^
+Highlighted span: Nat.add_assoc
+
+ERROR .LspCheck.lean:5:9-5:23
+(kernel) application type mismatch
+  instOfNatAtLeastTwo
+argument has type
+  (2 + m✝).AtLeastTwo
+but function has type
+  [(2 + m).AtLeastTwo] → OfNat G (2 + m)
+Source line 5:
+theorem map_add_ofNat' [AddMonoidWithOne G] [AddMonoid H] [AddConstMapClass F G H 1 b]
+        ^^^^^^^^^^^^^^
+Highlighted span: map_add_ofNat'
+
+WARNING .LspCheck.lean:12:39-12:48
+This simp argument is unused:
+  add_assoc
+
+Hint: Omit it from the simp argument list.
+  simp [map_add_const, two_nsmul,̵ ̵a̵d̵d̵_̵a̵s̵s̵o̵c̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 12:
+      simp [map_add_const, two_nsmul, add_assoc]
+                                      ^^^^^^^^^
+Highlighted span: add_assoc
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:13-12:26
+Unknown identifier `map_add_const`
+Source line 12:
+      simp [map_add_const, two_nsmul, add_assoc]
+            ^^^^^^^^^^^^^
+Highlighted span: map_add_const
+
+ERROR .LspCheck.lean:11:10-12:1
+unsolved goals
+case zero
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝³ : FunLike F G H
+b : H
+inst✝² : AddMonoidWithOne G
+inst✝¹ : AddMonoid H
+inst✝ : AddConstMapClass F G H 1 b
+f : F
+x : G
+m : ℕ
+h : (2 + m).AtLeastTwo
+h' : 2 ≤ 2 + 0
+⊢ f (x + OfNat.ofNat 2) = f x + (b + b)
+Source line 11:
+  | zero =>
+         ^
+Highlighted span: =
+
+ERROR .LspCheck.lean:14:11-14:24
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?n + ?m + ?k
+in the target expression
+  f (x + OfNat.ofNat (2 + (m + 1))) = f x + OfNat.ofNat (2 + (m + 1)) • b
+
+case succ
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝³ : FunLike F G H
+b : H
+inst✝² : AddMonoidWithOne G
+inst✝¹ : AddMonoid H
+inst✝ : AddConstMapClass F G H 1 b
+f : F
+x : G
+m✝ : ℕ
+h : (2 + m✝).AtLeastTwo
+m : ℕ
+ih : 2 ≤ 2 + m → f (x + OfNat.ofNat (2 + m)) = f x + OfNat.ofNat (2 + m) • b
+h' : 2 ≤ 2 + (m + 1)
+⊢ f (x + OfNat.ofNat (2 + (m + 1))) = f x + OfNat.ofNat (2 + (m + 1)) • b
+Source line 14:
+      rw [Nat.add_assoc, ← Nat.succ_eq_add_one, ← Nat.succ_eq_add_one]
+          ^^^^^^^^^^^^^
+Highlighted span: Nat.add_assoc
+
+ERROR .LspCheck.lean:5:9-5:23
+(kernel) application type mismatch
+  instOfNatAtLeastTwo
+argument has type
+  (2 + m✝).AtLeastTwo
+but function has type
+  [(2 + m).AtLeastTwo] → OfNat G (2 + m)
+Source line 5:
+theorem map_add_ofNat' [AddMonoidWithOne G] [AddMonoid H] [AddConstMapClass F G H 1 b]
+        ^^^^^^^^^^^^^^
+Highlighted span: map_add_ofNat'
+
+WARNING .LspCheck.lean:12:39-12:48
+This simp argument is unused:
+  add_assoc
+
+Hint: Omit it from the simp argument list.
+  simp [map_add_const, two_nsmul,̵ ̵a̵d̵d̵_̵a̵s̵s̵o̵c̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 12:
+      simp [map_add_const, two_nsmul, add_assoc]
+                                      ^^^^^^^^^
+Highlighted span: add_assoc

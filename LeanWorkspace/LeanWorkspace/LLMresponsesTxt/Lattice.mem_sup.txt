@@ -1,0 +1,134 @@
+FILE: Lattice.mem_sup.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Lattice.mem_sup.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G]
+
+variable (H K : Subgroup G)
+
+variable {k : Set G}
+
+variable {C : Type*} [CommGroup C] {s t : Subgroup C} {x : C}
+
+theorem mem_sup : x ∈ s ⊔ t ↔ ∃ y ∈ s, ∃ z ∈ t, y * z = x := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G]
+
+variable (H K : Subgroup G)
+
+variable {k : Set G}
+
+variable {C : Type*} [CommGroup C] {s t : Subgroup C} {x : C}
+
+theorem mem_sup : x ∈ s ⊔ t ↔ ∃ y ∈ s, ∃ z ∈ t, y * z = x := by
+  constructor
+  · intro hx
+    refine Subgroup.supr_induction ?_ ?_ ?_ ?_ hx
+    · intro a ha
+      refine ⟨a, ha, 1, t.one_mem, by simp⟩
+    · intro b hb
+      refine ⟨1, s.one_mem, b, hb, by simp⟩
+    · simp
+    · intro a b ha hb
+      rcases ha with ⟨y₁, hy₁, z₁, hz₁, rfl⟩
+      rcases hb with ⟨y₂, hy₂, z₂, hz₂, rfl⟩
+      refine ⟨y₁ * y₂, s.mul_mem hy₁ hy₂, z₁ * z₂, t.mul_mem hz₁ hz₂, ?_⟩
+      simp [mul_assoc, mul_left_comm, mul_comm]
+  · rintro ⟨y, hy, z, hz, rfl⟩
+    exact mul_mem_sup hy hz
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:12-16:35
+Unknown constant `Subgroup.supr_induction`
+Source line 16:
+    refine Subgroup.supr_induction ?_ ?_ ?_ ?_ hx
+           ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subgroup.supr_induction
+
+ERROR .LspCheck.lean:17:5-18:1
+No goals to be solved
+Source line 17:
+    · intro a ha
+    ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:28:11-28:22
+Unknown identifier `mul_mem_sup`
+Source line 28:
+    exact mul_mem_sup hy hz
+          ^^^^^^^^^^^
+Highlighted span: mul_mem_sup
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:12-16:35
+Unknown constant `Subgroup.supr_induction`
+Source line 16:
+    refine Subgroup.supr_induction ?_ ?_ ?_ ?_ hx
+           ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subgroup.supr_induction
+
+ERROR .LspCheck.lean:17:5-18:1
+No goals to be solved
+Source line 17:
+    · intro a ha
+    ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:28:11-28:22
+Unknown identifier `mul_mem_sup`
+Source line 28:
+    exact mul_mem_sup hy hz
+          ^^^^^^^^^^^
+Highlighted span: mul_mem_sup
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G]
+
+variable (H K : Subgroup G)
+
+variable {k : Set G}
+
+variable {C : Type*} [CommGroup C] {s t : Subgroup C} {x : C}
+
+theorem mem_sup : x ∈ s ⊔ t ↔ ∃ y ∈ s, ∃ z ∈ t, y * z = x := by
+  constructor
+  · intro hx
+    rw [Subgroup.mem_sup] at hx
+    rcases hx with ⟨y, hy, z, hz, rfl⟩
+    exact ⟨y, hy, z, hz, rfl⟩
+  · rintro ⟨y, hy, z, hz, rfl⟩
+    rw [Subgroup.mem_sup]
+    exact ⟨y, hy, z, hz, rfl⟩
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

@@ -1,0 +1,235 @@
+FILE: Lattice.coe_eq_singleton.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Lattice.coe_eq_singleton.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G]
+
+variable (H K : Subgroup G)
+
+theorem coe_eq_singleton {H : Subgroup G} : (∃ g : G, (H : Set G) = {g}) ↔ H = ⊥ := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G]
+
+variable (H K : Subgroup G)
+
+theorem coe_eq_singleton {H : Subgroup G} : (∃ g : G, (H : Set G) = {g}) ↔ H = ⊥ := by
+  constructor
+  · rintro ⟨g, rfl⟩
+    apply le_antisymm
+    · intro x hx
+      simpa using hx
+    · intro x hx
+      simp at hx
+      simp [hx]
+  · intro h
+    refine ⟨1, ?_⟩
+    rw [h]
+    ext x
+    simp
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:16-11:19
+Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  ↑H = {g}
+
+case mp
+G : Type u_1
+inst✝ : Group G
+H : Subgroup G
+g : G
+h✝ : ↑H = {g}
+⊢ H = ⊥
+Source line 11:
+  · rintro ⟨g, rfl⟩
+               ^^^
+Highlighted span: rfl
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:16-11:19
+Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  ↑H = {g}
+
+case mp
+G : Type u_1
+inst✝ : Group G
+H : Subgroup G
+g : G
+h✝ : ↑H = {g}
+⊢ H = ⊥
+Source line 11:
+  · rintro ⟨g, rfl⟩
+               ^^^
+Highlighted span: rfl
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G]
+
+variable (H K : Subgroup G)
+
+theorem coe_eq_singleton {H : Subgroup G} : (∃ g : G, (H : Set G) = {g}) ↔ H = ⊥ := by
+  constructor
+  · rintro ⟨g, hg⟩
+    have h1 : (1 : G) = g := by
+      have : (1 : G) ∈ (H : Set G) := H.one_mem
+      rw [hg] at this
+      simpa using this
+    apply le_antisymm
+    · intro x hx
+      have hx' : x ∈ ({g} : Set G) := by
+        rw [← hg]
+        exact hx
+      have : x = g := by simpa using hx'
+      simpa [h1] using this
+    · intro x hx
+      rw [Subgroup.mem_bot] at hx
+      rw [hg]
+      simp [hx, h1]
+  · intro h
+    refine ⟨1, ?_⟩
+    rw [h]
+    ext x
+    simp [Subgroup.mem_bot]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:25:11-25:13
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑H
+in the target expression
+  x ∈ H
+
+case mp.a
+G : Type u_1
+inst✝ : Group G
+H : Subgroup G
+g : G
+hg : ↑H = {g}
+h1 : 1 = g
+x : G
+hx : x = 1
+⊢ x ∈ H
+Source line 25:
+      rw [hg]
+          ^^
+Highlighted span: hg
+
+WARNING .LspCheck.lean:31:11-31:27
+This simp argument is unused:
+  Subgroup.mem_bot
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵S̵u̵b̵g̵r̵o̵u̵p̵.̵m̵e̵m̵_̵b̵o̵t̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 31:
+    simp [Subgroup.mem_bot]
+          ^^^^^^^^^^^^^^^^
+Highlighted span: Subgroup.mem_bot
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:25:11-25:13
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑H
+in the target expression
+  x ∈ H
+
+case mp.a
+G : Type u_1
+inst✝ : Group G
+H : Subgroup G
+g : G
+hg : ↑H = {g}
+h1 : 1 = g
+x : G
+hx : x = 1
+⊢ x ∈ H
+Source line 25:
+      rw [hg]
+          ^^
+Highlighted span: hg
+
+WARNING .LspCheck.lean:31:11-31:27
+This simp argument is unused:
+  Subgroup.mem_bot
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵S̵u̵b̵g̵r̵o̵u̵p̵.̵m̵e̵m̵_̵b̵o̵t̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 31:
+    simp [Subgroup.mem_bot]
+          ^^^^^^^^^^^^^^^^
+Highlighted span: Subgroup.mem_bot
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G]
+
+variable (H K : Subgroup G)
+
+theorem coe_eq_singleton {H : Subgroup G} : (∃ g : G, (H : Set G) = {g}) ↔ H = ⊥ := by
+  constructor
+  · rintro ⟨g, hg⟩
+    have h1 : (1 : G) = g := by
+      have : (1 : G) ∈ (H : Set G) := H.one_mem
+      rw [hg] at this
+      simpa using this
+    apply le_antisymm
+    · intro x hx
+      have hx' : x ∈ ({g} : Set G) := by
+        rw [← hg]
+        exact hx
+      have hxg : x = g := by simpa using hx'
+      rw [Subgroup.mem_bot]
+      simpa [h1] using hxg
+    · intro x hx
+      rw [Subgroup.mem_bot] at hx
+      subst hx
+      exact H.one_mem
+  · intro h
+    refine ⟨1, ?_⟩
+    rw [h]
+    ext x
+    simp
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

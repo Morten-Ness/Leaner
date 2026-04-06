@@ -1,0 +1,193 @@
+FILE: Basic.of_AlgEquiv.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.of_AlgEquiv.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped TensorProduct
+
+variable (R A B : Type*) [CommSemiring R] [Ring A] [Ring B] [Algebra R A] [Algebra R B]
+
+theorem of_AlgEquiv (e : A ≃ₐ[R] B) [IsAzumaya R A] : IsAzumaya R B := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped TensorProduct
+
+variable (R A B : Type*) [CommSemiring R] [Ring A] [Ring B] [Algebra R A] [Algebra R B]
+
+theorem of_AlgEquiv (e : A ≃ₐ[R] B) [IsAzumaya R A] : IsAzumaya R B := by
+  letI : IsAzumaya R A := ‹IsAzumaya R A›
+  exact IsAzumaya.of_iso (A := A) (B := B) e.toRingEquiv
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:9:9-9:25
+Unknown constant `IsAzumaya.of_iso`
+Source line 9:
+  exact IsAzumaya.of_iso (A := A) (B := B) e.toRingEquiv
+        ^^^^^^^^^^^^^^^^
+Highlighted span: IsAzumaya.of_iso
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:9:9-9:25
+Unknown constant `IsAzumaya.of_iso`
+Source line 9:
+  exact IsAzumaya.of_iso (A := A) (B := B) e.toRingEquiv
+        ^^^^^^^^^^^^^^^^
+Highlighted span: IsAzumaya.of_iso
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped TensorProduct
+
+variable (R A B : Type*) [CommSemiring R] [Ring A] [Ring B] [Algebra R A] [Algebra R B]
+
+theorem of_AlgEquiv (e : A ≃ₐ[R] B) [IsAzumaya R A] : IsAzumaya R B := by
+  let _ : Module.Free R A := Module.Free.of_equiv e.toLinearEquiv
+  let _ : Module.Finite R A := Module.Finite.of_injective e.toLinearMap e.injective
+  let _ : IsCentral R A := by
+    letI := ‹IsAzumaya R A›.toIsCentral
+    exact IsCentral.of_algEquiv e.symm
+  constructor
+  · infer_instance
+  · infer_instance
+  · infer_instance
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:8:51-8:66
+Application type mismatch: The argument
+  e.toLinearEquiv
+has type
+  LinearEquiv.{u_1, u_1, u_2, u_3} (RingHom.id R) A B
+but is expected to have type
+  LinearEquiv.{?u.954.742, u_1, ?u.954.740, u_2} ?m.30 ?m.22 A
+in the application
+  @Module.Free.of_equiv ?m.20 R ?m.22 A ?m.24 ?m.25 ?m.26 inst✝⁵.toSemiring
+    Ring.toNonAssocRing.toNonUnitalNonAssocSemiring.toAddCommMonoid Algebra.toModule ?m.30 ?m.31 ?m.32 ?m.33
+    e.toLinearEquiv
+Source line 8:
+  let _ : Module.Free R A := Module.Free.of_equiv e.toLinearEquiv
+                                                  ^^^^^^^^^^^^^^^
+Highlighted span: e.toLinearEquiv
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:8:51-8:66
+Application type mismatch: The argument
+  e.toLinearEquiv
+has type
+  LinearEquiv.{u_1, u_1, u_2, u_3} (RingHom.id R) A B
+but is expected to have type
+  LinearEquiv.{?u.954.742, u_1, ?u.954.740, u_2} ?m.30 ?m.22 A
+in the application
+  @Module.Free.of_equiv ?m.20 R ?m.22 A ?m.24 ?m.25 ?m.26 inst✝⁵.toSemiring
+    Ring.toNonAssocRing.toNonUnitalNonAssocSemiring.toAddCommMonoid Algebra.toModule ?m.30 ?m.31 ?m.32 ?m.33
+    e.toLinearEquiv
+Source line 8:
+  let _ : Module.Free R A := Module.Free.of_equiv e.toLinearEquiv
+                                                  ^^^^^^^^^^^^^^^
+Highlighted span: e.toLinearEquiv
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped TensorProduct
+
+variable (R A B : Type*) [CommSemiring R] [Ring A] [Ring B] [Algebra R A] [Algebra R B]
+
+theorem of_AlgEquiv (e : A ≃ₐ[R] B) [IsAzumaya R A] : IsAzumaya R B := by
+  classical
+  letI : Module.Free R B :=
+    Module.Free.of_basis
+      (Basis.ofEquivFun e.toLinearEquiv.symm (Module.Free.chooseBasis R A))
+  letI : Module.Finite R B := by
+    let hA : Module.Finite R A := inferInstance
+    exact Module.Finite.of_surjective e.toLinearMap e.surjective
+  letI : IsCentral R B := by
+    letI : IsCentral R A := IsAzumaya.toIsCentral (R := R) (A := A)
+    exact IsCentral.of_algEquiv e.symm
+  exact ⟨inferInstance, inferInstance, inferInstance⟩
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:8-11:24
+Unknown identifier `Basis.ofEquivFun`
+Source line 11:
+      (Basis.ofEquivFun e.toLinearEquiv.symm (Module.Free.chooseBasis R A))
+       ^^^^^^^^^^^^^^^^
+Highlighted span: Basis.ofEquivFun
+
+ERROR .LspCheck.lean:7:72-8:1
+unsolved goals
+R : Type u_1
+A : Type u_2
+B : Type u_3
+inst✝⁵ : CommSemiring R
+inst✝⁴ : Ring A
+inst✝³ : Ring B
+inst✝² : Algebra R A
+inst✝¹ : Algebra R B
+e : A ≃ₐ[R] B
+inst✝ : IsAzumaya R A
+⊢ IsAzumaya R B
+Source line 7:
+theorem of_AlgEquiv (e : A ≃ₐ[R] B) [IsAzumaya R A] : IsAzumaya R B := by
+                                                                       ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:8-11:24
+Unknown identifier `Basis.ofEquivFun`
+Source line 11:
+      (Basis.ofEquivFun e.toLinearEquiv.symm (Module.Free.chooseBasis R A))
+       ^^^^^^^^^^^^^^^^
+Highlighted span: Basis.ofEquivFun
+
+ERROR .LspCheck.lean:7:72-8:1
+unsolved goals
+R : Type u_1
+A : Type u_2
+B : Type u_3
+inst✝⁵ : CommSemiring R
+inst✝⁴ : Ring A
+inst✝³ : Ring B
+inst✝² : Algebra R A
+inst✝¹ : Algebra R B
+e : A ≃ₐ[R] B
+inst✝ : IsAzumaya R A
+⊢ IsAzumaya R B
+Source line 7:
+theorem of_AlgEquiv (e : A ≃ₐ[R] B) [IsAzumaya R A] : IsAzumaya R B := by
+                                                                       ^
+Highlighted span: b

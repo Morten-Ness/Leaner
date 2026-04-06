@@ -1,0 +1,342 @@
+FILE: Translations.stream_succ_of_some.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Translations.stream_succ_of_some.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {K : Type*} [DivisionRing K] [LinearOrder K] [FloorRing K] {v : K}
+
+variable {n : ℕ}
+
+theorem stream_succ_of_some {p : GenContFract.IntFractPair K} (h : GenContFract.IntFractPair.stream v n = some p)
+    (h' : p.fr ≠ 0) : GenContFract.IntFractPair.stream v (n + 1) = some (GenContFract.IntFractPair.of p.fr⁻¹) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {K : Type*} [DivisionRing K] [LinearOrder K] [FloorRing K] {v : K}
+
+variable {n : ℕ}
+
+theorem stream_succ_of_some {p : GenContFract.IntFractPair K} (h : GenContFract.IntFractPair.stream v n = some p)
+    (h' : p.fr ≠ 0) : GenContFract.IntFractPair.stream v (n + 1) = some (GenContFract.IntFractPair.of p.fr⁻¹) := by
+  simpa [Nat.add_comm, Nat.add_left_comm, Nat.add_assoc] using
+    GenContFract.IntFractPair.stream_succ_some h h'
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:5-10:47
+Unknown constant `GenContFract.IntFractPair.stream_succ_some`
+Source line 10:
+    GenContFract.IntFractPair.stream_succ_some h h'
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: GenContFract.IntFractPair.stream_succ_some
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:5-10:47
+Unknown constant `GenContFract.IntFractPair.stream_succ_some`
+Source line 10:
+    GenContFract.IntFractPair.stream_succ_some h h'
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: GenContFract.IntFractPair.stream_succ_some
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {K : Type*} [DivisionRing K] [LinearOrder K] [FloorRing K] {v : K}
+
+variable {n : ℕ}
+
+theorem stream_succ_of_some {p : GenContFract.IntFractPair K} (h : GenContFract.IntFractPair.stream v n = some p)
+    (h' : p.fr ≠ 0) : GenContFract.IntFractPair.stream v (n + 1) = some (GenContFract.IntFractPair.of p.fr⁻¹) := by
+  induction n generalizing v with
+  | zero =>
+      simp [GenContFract.IntFractPair.stream] at h ⊢
+      injection h with hp
+      subst hp
+      simp [GenContFract.IntFractPair.stream, h']
+  | succ n ih =>
+      simp [GenContFract.IntFractPair.stream] at h ⊢
+      split at h
+      · rename_i q hq
+        exact ih h h'
+      · contradiction
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:7-12:26
+Tactic `injection` failed: equality of constructor applications expected
+
+case zero
+K : Type u_1
+inst✝² : DivisionRing K
+inst✝¹ : LinearOrder K
+inst✝ : FloorRing K
+p : GenContFract.IntFractPair K
+h' : p.fr ≠ 0
+v : K
+h : GenContFract.IntFractPair.of v = p
+⊢ ¬(GenContFract.IntFractPair.of v).fr = 0 ∧
+    GenContFract.IntFractPair.of (GenContFract.IntFractPair.of v).fr⁻¹ = GenContFract.IntFractPair.of p.fr⁻¹
+Source line 12:
+      injection h with hp
+      ^^^^^^^^^^^^^^^^^^^
+Highlighted span: injection h with hp
+
+ERROR .LspCheck.lean:17:7-17:17
+Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  ((GenContFract.IntFractPair.stream v n).bind fun ap_n ↦
+      if ap_n.fr = 0 then none else some (GenContFract.IntFractPair.of ap_n.fr⁻¹)) =
+    some p
+of `h`
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case succ
+K : Type u_1
+inst✝² : DivisionRing K
+inst✝¹ : LinearOrder K
+inst✝ : FloorRing K
+p : GenContFract.IntFractPair K
+h' : p.fr ≠ 0
+n : ℕ
+ih :
+  ∀ {v : K},
+    GenContFract.IntFractPair.stream v n = some p →
+      GenContFract.IntFractPair.stream v (n + 1) = some (GenContFract.IntFractPair.of p.fr⁻¹)
+v : K
+h :
+  ((GenContFract.IntFractPair.stream v n).bind fun ap_n ↦
+      if ap_n.fr = 0 then none else some (GenContFract.IntFractPair.of ap_n.fr⁻¹)) =
+    some p
+⊢ (((GenContFract.IntFractPair.stream v n).bind fun ap_n ↦
+          if ap_n.fr = 0 then none else some (GenContFract.IntFractPair.of ap_n.fr⁻¹)).bind
+      fun ap_n ↦ if ap_n.fr = 0 then none else some (GenContFract.IntFractPair.of ap_n.fr⁻¹)) =
+    some (GenContFract.IntFractPair.of p.fr⁻¹)
+Source line 17:
+      split at h
+      ^^^^^^^^^^
+Highlighted span: split at h
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:7-12:26
+Tactic `injection` failed: equality of constructor applications expected
+
+case zero
+K : Type u_1
+inst✝² : DivisionRing K
+inst✝¹ : LinearOrder K
+inst✝ : FloorRing K
+p : GenContFract.IntFractPair K
+h' : p.fr ≠ 0
+v : K
+h : GenContFract.IntFractPair.of v = p
+⊢ ¬(GenContFract.IntFractPair.of v).fr = 0 ∧
+    GenContFract.IntFractPair.of (GenContFract.IntFractPair.of v).fr⁻¹ = GenContFract.IntFractPair.of p.fr⁻¹
+Source line 12:
+      injection h with hp
+      ^^^^^^^^^^^^^^^^^^^
+Highlighted span: injection h with hp
+
+ERROR .LspCheck.lean:17:7-17:17
+Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  ((GenContFract.IntFractPair.stream v n).bind fun ap_n ↦
+      if ap_n.fr = 0 then none else some (GenContFract.IntFractPair.of ap_n.fr⁻¹)) =
+    some p
+of `h`
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case succ
+K : Type u_1
+inst✝² : DivisionRing K
+inst✝¹ : LinearOrder K
+inst✝ : FloorRing K
+p : GenContFract.IntFractPair K
+h' : p.fr ≠ 0
+n : ℕ
+ih :
+  ∀ {v : K},
+    GenContFract.IntFractPair.stream v n = some p →
+      GenContFract.IntFractPair.stream v (n + 1) = some (GenContFract.IntFractPair.of p.fr⁻¹)
+v : K
+h :
+  ((GenContFract.IntFractPair.stream v n).bind fun ap_n ↦
+      if ap_n.fr = 0 then none else some (GenContFract.IntFractPair.of ap_n.fr⁻¹)) =
+    some p
+⊢ (((GenContFract.IntFractPair.stream v n).bind fun ap_n ↦
+          if ap_n.fr = 0 then none else some (GenContFract.IntFractPair.of ap_n.fr⁻¹)).bind
+      fun ap_n ↦ if ap_n.fr = 0 then none else some (GenContFract.IntFractPair.of ap_n.fr⁻¹)) =
+    some (GenContFract.IntFractPair.of p.fr⁻¹)
+Source line 17:
+      split at h
+      ^^^^^^^^^^
+Highlighted span: split at h
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {K : Type*} [DivisionRing K] [LinearOrder K] [FloorRing K] {v : K}
+
+variable {n : ℕ}
+
+theorem stream_succ_of_some {p : GenContFract.IntFractPair K} (h : GenContFract.IntFractPair.stream v n = some p)
+    (h' : p.fr ≠ 0) : GenContFract.IntFractPair.stream v (n + 1) = some (GenContFract.IntFractPair.of p.fr⁻¹) := by
+  cases n with
+  | zero =>
+      simp [GenContFract.IntFractPair.stream] at h ⊢
+      subst h
+      simp [GenContFract.IntFractPair.stream, h']
+  | succ n =>
+      simp [GenContFract.IntFractPair.stream, h, h']
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:12-15:1
+unsolved goals
+case succ
+K : Type u_1
+inst✝² : DivisionRing K
+inst✝¹ : LinearOrder K
+inst✝ : FloorRing K
+v : K
+p : GenContFract.IntFractPair K
+h' : p.fr ≠ 0
+n : ℕ
+h : GenContFract.IntFractPair.stream v (n + 1) = some p
+⊢ (((GenContFract.IntFractPair.stream v n).bind fun ap_n ↦
+          if ap_n.fr = 0 then none else some (GenContFract.IntFractPair.of ap_n.fr⁻¹)).bind
+      fun ap_n ↦ if ap_n.fr = 0 then none else some (GenContFract.IntFractPair.of ap_n.fr⁻¹)) =
+    some (GenContFract.IntFractPair.of p.fr⁻¹)
+Source line 14:
+  | succ n =>
+           ^
+Highlighted span: =
+
+WARNING .LspCheck.lean:13:13-13:45
+This simp argument is unused:
+  GenContFract.IntFractPair.stream
+
+Hint: Omit it from the simp argument list.
+  simp [G̵e̵n̵C̵o̵n̵t̵F̵r̵a̵c̵t̵.̵I̵n̵t̵F̵r̵a̵c̵t̵P̵a̵i̵r̵.̵s̵t̵r̵e̵a̵m̵,̵ ̵h']
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 13:
+      simp [GenContFract.IntFractPair.stream, h']
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: GenContFract.IntFractPair.stream
+
+WARNING .LspCheck.lean:15:47-15:48
+This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [GenContFract.IntFractPair.stream, h,̵ ̵h̵']
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 15:
+      simp [GenContFract.IntFractPair.stream, h, h']
+                                              ^
+Highlighted span: h
+
+WARNING .LspCheck.lean:15:50-15:52
+This simp argument is unused:
+  h'
+
+Hint: Omit it from the simp argument list.
+  simp [GenContFract.IntFractPair.stream, h,̵ ̵h̵'̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 15:
+      simp [GenContFract.IntFractPair.stream, h, h']
+                                                 ^^
+Highlighted span: h'
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:12-15:1
+unsolved goals
+case succ
+K : Type u_1
+inst✝² : DivisionRing K
+inst✝¹ : LinearOrder K
+inst✝ : FloorRing K
+v : K
+p : GenContFract.IntFractPair K
+h' : p.fr ≠ 0
+n : ℕ
+h : GenContFract.IntFractPair.stream v (n + 1) = some p
+⊢ (((GenContFract.IntFractPair.stream v n).bind fun ap_n ↦
+          if ap_n.fr = 0 then none else some (GenContFract.IntFractPair.of ap_n.fr⁻¹)).bind
+      fun ap_n ↦ if ap_n.fr = 0 then none else some (GenContFract.IntFractPair.of ap_n.fr⁻¹)) =
+    some (GenContFract.IntFractPair.of p.fr⁻¹)
+Source line 14:
+  | succ n =>
+           ^
+Highlighted span: =
+
+WARNING .LspCheck.lean:13:13-13:45
+This simp argument is unused:
+  GenContFract.IntFractPair.stream
+
+Hint: Omit it from the simp argument list.
+  simp [G̵e̵n̵C̵o̵n̵t̵F̵r̵a̵c̵t̵.̵I̵n̵t̵F̵r̵a̵c̵t̵P̵a̵i̵r̵.̵s̵t̵r̵e̵a̵m̵,̵ ̵h']
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 13:
+      simp [GenContFract.IntFractPair.stream, h']
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: GenContFract.IntFractPair.stream
+
+WARNING .LspCheck.lean:15:47-15:48
+This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [GenContFract.IntFractPair.stream, h,̵ ̵h̵']
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 15:
+      simp [GenContFract.IntFractPair.stream, h, h']
+                                              ^
+Highlighted span: h
+
+WARNING .LspCheck.lean:15:50-15:52
+This simp argument is unused:
+  h'
+
+Hint: Omit it from the simp argument list.
+  simp [GenContFract.IntFractPair.stream, h,̵ ̵h̵'̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 15:
+      simp [GenContFract.IntFractPair.stream, h, h']
+                                                 ^^
+Highlighted span: h'

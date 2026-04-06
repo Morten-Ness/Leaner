@@ -1,0 +1,307 @@
+FILE: Operations.map_sup.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Operations.map_sup.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+variable {F : Type*} [FunLike F M N] [mc : MonoidHomClass F M N]
+
+theorem map_sup (S T : Submonoid M) (f : F) : (S ⊔ T).map f = S.map f ⊔ T.map f := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+variable {F : Type*} [FunLike F M N] [mc : MonoidHomClass F M N]
+
+theorem map_sup (S T : Submonoid M) (f : F) : (S ⊔ T).map f = S.map f ⊔ T.map f := by
+  ext x
+  constructor
+  · intro hx
+    rcases hx with ⟨y, hy, rfl⟩
+    rw [Submonoid.mem_sup] at hy
+    rcases hy with ⟨s, hs, t, ht, rfl⟩
+    rw [map_mul]
+    exact Submonoid.mul_mem_sup (show f s ∈ S.map f from ⟨s, hs, rfl⟩)
+      (show f t ∈ T.map f from ⟨t, ht, rfl⟩)
+  · intro hx
+    rw [Submonoid.mem_sup] at hx ⊢
+    rcases hx with ⟨y, hy, z, hz, hxyz⟩
+    rcases hy with ⟨s, hs, rfl⟩
+    rcases hz with ⟨t, ht, rfl⟩
+    refine ⟨s, hs, t, ht, ?_⟩
+    simpa [map_mul] using hxyz
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:9-12:26
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.72 ∈ ?m.70 ⊔ ?m.71
+in the target expression
+  y ∈ ↑(S ⊔ T)
+
+case h.mp
+M : Type u_1
+N : Type u_2
+inst✝² : MulOneClass M
+inst✝¹ : MulOneClass N
+F : Type u_4
+inst✝ : FunLike F M N
+mc : MonoidHomClass F M N
+S T : Submonoid M
+f : F
+y : M
+hy : y ∈ ↑(S ⊔ T)
+⊢ f y ∈ Submonoid.map f S ⊔ Submonoid.map f T
+Source line 12:
+    rw [Submonoid.mem_sup] at hy
+        ^^^^^^^^^^^^^^^^^
+Highlighted span: Submonoid.mem_sup
+
+ERROR .LspCheck.lean:18:9-18:26
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.79 ∈ ?m.77 ⊔ ?m.78
+in the target expression
+  x ∈ Submonoid.map f S ⊔ Submonoid.map f T
+
+case h.mpr
+M : Type u_1
+N : Type u_2
+inst✝² : MulOneClass M
+inst✝¹ : MulOneClass N
+F : Type u_4
+inst✝ : FunLike F M N
+mc : MonoidHomClass F M N
+S T : Submonoid M
+f : F
+x : N
+hx : x ∈ Submonoid.map f S ⊔ Submonoid.map f T
+⊢ x ∈ Submonoid.map f (S ⊔ T)
+Source line 18:
+    rw [Submonoid.mem_sup] at hx ⊢
+        ^^^^^^^^^^^^^^^^^
+Highlighted span: Submonoid.mem_sup
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:9-12:26
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.72 ∈ ?m.70 ⊔ ?m.71
+in the target expression
+  y ∈ ↑(S ⊔ T)
+
+case h.mp
+M : Type u_1
+N : Type u_2
+inst✝² : MulOneClass M
+inst✝¹ : MulOneClass N
+F : Type u_4
+inst✝ : FunLike F M N
+mc : MonoidHomClass F M N
+S T : Submonoid M
+f : F
+y : M
+hy : y ∈ ↑(S ⊔ T)
+⊢ f y ∈ Submonoid.map f S ⊔ Submonoid.map f T
+Source line 12:
+    rw [Submonoid.mem_sup] at hy
+        ^^^^^^^^^^^^^^^^^
+Highlighted span: Submonoid.mem_sup
+
+ERROR .LspCheck.lean:18:9-18:26
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.79 ∈ ?m.77 ⊔ ?m.78
+in the target expression
+  x ∈ Submonoid.map f S ⊔ Submonoid.map f T
+
+case h.mpr
+M : Type u_1
+N : Type u_2
+inst✝² : MulOneClass M
+inst✝¹ : MulOneClass N
+F : Type u_4
+inst✝ : FunLike F M N
+mc : MonoidHomClass F M N
+S T : Submonoid M
+f : F
+x : N
+hx : x ∈ Submonoid.map f S ⊔ Submonoid.map f T
+⊢ x ∈ Submonoid.map f (S ⊔ T)
+Source line 18:
+    rw [Submonoid.mem_sup] at hx ⊢
+        ^^^^^^^^^^^^^^^^^
+Highlighted span: Submonoid.mem_sup
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+variable {F : Type*} [FunLike F M N] [mc : MonoidHomClass F M N]
+
+theorem map_sup (S T : Submonoid M) (f : F) : (S ⊔ T).map f = S.map f ⊔ T.map f := by
+  ext x
+  constructor
+  · intro hx
+    rcases hx with ⟨y, hy, rfl⟩
+    exact Submonoid.mem_sup.mpr <| by
+      rcases Submonoid.mem_sup.mp hy with ⟨s, hs, t, ht, rfl⟩
+      refine ⟨f s, ?_, f t, ?_, by simpa using map_mul f s t⟩
+      · exact ⟨s, hs, rfl⟩
+      · exact ⟨t, ht, rfl⟩
+  · intro hx
+    rcases Submonoid.mem_sup.mp hx with ⟨y, hy, z, hz, rfl⟩
+    rcases hy with ⟨s, hs, rfl⟩
+    rcases hz with ⟨t, ht, rfl⟩
+    refine ⟨s * t, Submonoid.mul_mem _ ?_ ?_, by simpa using (map_mul f s t).symm⟩
+    · exact Submonoid.subset_sup_left hs
+    · exact Submonoid.subset_sup_right ht
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:35-13:37
+Application type mismatch: The argument
+  hy
+has type
+  y ∈ ↑(S ⊔ T)
+but is expected to have type
+  ?m.80 ∈ ?m.78 ⊔ ?m.79
+in the application
+  Submonoid.mem_sup.mp hy
+Source line 13:
+      rcases Submonoid.mem_sup.mp hy with ⟨s, hs, t, ht, rfl⟩
+                                  ^^
+Highlighted span: hy
+
+ERROR .LspCheck.lean:18:33-18:35
+Application type mismatch: The argument
+  hx
+has type
+  x ∈ Submonoid.map f S ⊔ Submonoid.map f T
+but is expected to have type
+  ?m.93 ∈ ?m.91 ⊔ ?m.92
+in the application
+  Submonoid.mem_sup.mp hx
+Source line 18:
+    rcases Submonoid.mem_sup.mp hx with ⟨y, hy, z, hz, rfl⟩
+                                ^^
+Highlighted span: hx
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:35-13:37
+Application type mismatch: The argument
+  hy
+has type
+  y ∈ ↑(S ⊔ T)
+but is expected to have type
+  ?m.80 ∈ ?m.78 ⊔ ?m.79
+in the application
+  Submonoid.mem_sup.mp hy
+Source line 13:
+      rcases Submonoid.mem_sup.mp hy with ⟨s, hs, t, ht, rfl⟩
+                                  ^^
+Highlighted span: hy
+
+ERROR .LspCheck.lean:18:33-18:35
+Application type mismatch: The argument
+  hx
+has type
+  x ∈ Submonoid.map f S ⊔ Submonoid.map f T
+but is expected to have type
+  ?m.93 ∈ ?m.91 ⊔ ?m.92
+in the application
+  Submonoid.mem_sup.mp hx
+Source line 18:
+    rcases Submonoid.mem_sup.mp hx with ⟨y, hy, z, hz, rfl⟩
+                                ^^
+Highlighted span: hx
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+variable {F : Type*} [FunLike F M N] [mc : MonoidHomClass F M N]
+
+theorem map_sup (S T : Submonoid M) (f : F) : (S ⊔ T).map f = S.map f ⊔ T.map f := by
+  ext x
+  constructor
+  · intro hx
+    rcases hx with ⟨y, hy, rfl⟩
+    change f y ∈ S.map f ⊔ T.map f
+    rcases hy with ⟨s, hs, t, ht, rfl⟩
+    exact ⟨f s, ⟨s, hs, rfl⟩, f t, ⟨t, ht, rfl⟩, by simpa using map_mul f s t⟩
+  · intro hx
+    change x ∈ (S.map f ⊔ T.map f) at hx
+    rcases hx with ⟨y, hy, z, hz, rfl⟩
+    rcases hy with ⟨s, hs, rfl⟩
+    rcases hz with ⟨t, ht, rfl⟩
+    refine ⟨s * t, ?_, by simpa using (map_mul f s t).symm⟩
+    exact ⟨s, hs, t, ht, rfl⟩
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:20-13:39
+Tactic `rcases` failed: `hy : ∀ t ∈ Set.range fun t ↦ ⋂ (_ : t ∈ {x | S ≤ x ∧ T ≤ x}), ↑t,
+  y ∈ t` is not an inductive datatype
+Source line 13:
+    rcases hy with ⟨s, hs, t, ht, rfl⟩
+                   ^^^^^^^^^^^^^^^^^^^
+Highlighted span: ⟨s, hs, t, ht, rfl⟩
+
+ERROR .LspCheck.lean:17:20-17:39
+Tactic `rcases` failed: `hx : ∀
+  t ∈ Set.range fun t ↦ ⋂ (_ : t ∈ {x | Submonoid.map f S ≤ x ∧ Submonoid.map f T ≤ x}), ↑t,
+  x ∈ t` is not an inductive datatype
+Source line 17:
+    rcases hx with ⟨y, hy, z, hz, rfl⟩
+                   ^^^^^^^^^^^^^^^^^^^
+Highlighted span: ⟨y, hy, z, hz, rfl⟩
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:20-13:39
+Tactic `rcases` failed: `hy : ∀ t ∈ Set.range fun t ↦ ⋂ (_ : t ∈ {x | S ≤ x ∧ T ≤ x}), ↑t,
+  y ∈ t` is not an inductive datatype
+Source line 13:
+    rcases hy with ⟨s, hs, t, ht, rfl⟩
+                   ^^^^^^^^^^^^^^^^^^^
+Highlighted span: ⟨s, hs, t, ht, rfl⟩
+
+ERROR .LspCheck.lean:17:20-17:39
+Tactic `rcases` failed: `hx : ∀
+  t ∈ Set.range fun t ↦ ⋂ (_ : t ∈ {x | Submonoid.map f S ≤ x ∧ Submonoid.map f T ≤ x}), ↑t,
+  x ∈ t` is not an inductive datatype
+Source line 17:
+    rcases hx with ⟨y, hy, z, hz, rfl⟩
+                   ^^^^^^^^^^^^^^^^^^^
+Highlighted span: ⟨y, hy, z, hz, rfl⟩

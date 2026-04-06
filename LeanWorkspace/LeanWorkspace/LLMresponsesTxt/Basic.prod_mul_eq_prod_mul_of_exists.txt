@@ -1,0 +1,290 @@
+FILE: Basic.prod_mul_eq_prod_mul_of_exists.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.prod_mul_eq_prod_mul_of_exists.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {α ι γ A B C : Type*} [AddCommMonoid A] [AddCommMonoid B] [AddCommMonoid C]
+
+variable {t : ι → A → C}
+
+variable {s : Finset α} {f : α → ι →₀ A} (i : ι)
+
+variable (g : ι →₀ A) (k : ι → A → γ → B) (x : γ)
+
+variable {β M M' N P G H R S : Type*}
+
+theorem prod_mul_eq_prod_mul_of_exists [Zero M] [CommMonoid N]
+    {f : α →₀ M} {g : α → M → N} {n₁ n₂ : N}
+    (a : α) (ha : a ∈ f.support)
+    (h : g a (f a) * n₁ = g a (f a) * n₂) :
+    f.prod g * n₁ = f.prod g * n₂ := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α ι γ A B C : Type*} [AddCommMonoid A] [AddCommMonoid B] [AddCommMonoid C]
+
+variable {t : ι → A → C}
+
+variable {s : Finset α} {f : α → ι →₀ A} (i : ι)
+
+variable (g : ι →₀ A) (k : ι → A → γ → B) (x : γ)
+
+variable {β M M' N P G H R S : Type*}
+
+theorem prod_mul_eq_prod_mul_of_exists [Zero M] [CommMonoid N]
+    {f : α →₀ M} {g : α → M → N} {n₁ n₂ : N}
+    (a : α) (ha : a ∈ f.support)
+    (h : g a (f a) * n₁ = g a (f a) * n₂) :
+    f.prod g * n₁ = f.prod g * n₂ := by
+  classical
+  rw [Finsupp.prod, Finset.prod_mul_distrib]
+  rw [Finsupp.prod, Finset.prod_mul_distrib]
+  let s := f.support.erase a
+  have hs : f.support = insert a s := by
+    simp [s, ha]
+  rw [hs]
+  simp [ha, h, s, Finset.prod_insert]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:19:21-19:44
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∏ x ∈ ?m.52, ?m.54 x * ?m.55 x
+in the target expression
+  (∏ a ∈ f.support, g a (f a)) * n₁ = (∏ a ∈ f.support, g a (f a)) * n₂
+
+α : Type u_1
+M : Type u_8
+N : Type u_10
+inst✝¹ : Zero M
+inst✝ : CommMonoid N
+f : α →₀ M
+g : α → M → N
+n₁ n₂ : N
+a : α
+ha : a ∈ f.support
+h : g a (f a) * n₁ = g a (f a) * n₂
+⊢ (∏ a ∈ f.support, g a (f a)) * n₁ = (∏ a ∈ f.support, g a (f a)) * n₂
+Source line 19:
+  rw [Finsupp.prod, Finset.prod_mul_distrib]
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.prod_mul_distrib
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:19:21-19:44
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∏ x ∈ ?m.52, ?m.54 x * ?m.55 x
+in the target expression
+  (∏ a ∈ f.support, g a (f a)) * n₁ = (∏ a ∈ f.support, g a (f a)) * n₂
+
+α : Type u_1
+M : Type u_8
+N : Type u_10
+inst✝¹ : Zero M
+inst✝ : CommMonoid N
+f : α →₀ M
+g : α → M → N
+n₁ n₂ : N
+a : α
+ha : a ∈ f.support
+h : g a (f a) * n₁ = g a (f a) * n₂
+⊢ (∏ a ∈ f.support, g a (f a)) * n₁ = (∏ a ∈ f.support, g a (f a)) * n₂
+Source line 19:
+  rw [Finsupp.prod, Finset.prod_mul_distrib]
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.prod_mul_distrib
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α ι γ A B C : Type*} [AddCommMonoid A] [AddCommMonoid B] [AddCommMonoid C]
+
+variable {t : ι → A → C}
+
+variable {s : Finset α} {f : α → ι →₀ A} (i : ι)
+
+variable (g : ι →₀ A) (k : ι → A → γ → B) (x : γ)
+
+variable {β M M' N P G H R S : Type*}
+
+theorem prod_mul_eq_prod_mul_of_exists [Zero M] [CommMonoid N]
+    {f : α →₀ M} {g : α → M → N} {n₁ n₂ : N}
+    (a : α) (ha : a ∈ f.support)
+    (h : g a (f a) * n₁ = g a (f a) * n₂) :
+    f.prod g * n₁ = f.prod g * n₂ := by
+  classical
+  rw [Finsupp.prod]
+  let s : Finset α := f.support.erase a
+  have hs : f.support = insert a s := by
+    simp [s, ha]
+  rw [hs, Finset.prod_insert]
+  · simpa [mul_assoc] using congrArg (fun x => (∏ b in s, g b (f b)) * x) h
+  · simp [s]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:24:52-24:55
+unexpected token 'in'; expected ','
+Source line 24:
+  · simpa [mul_assoc] using congrArg (fun x => (∏ b in s, g b (f b)) * x) h
+                                                   ^^^
+Highlighted span:  in
+
+ERROR .LspCheck.lean:24:51-24:52
+typeclass instance problem is stuck
+  Fintype (?m.90 x)
+
+Note: Lean will not try to resolve this typeclass instance problem because the type argument to `Fintype` contains metavariables. This argument must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+Source line 24:
+  · simpa [mul_assoc] using congrArg (fun x => (∏ b in s, g b (f b)) * x) h
+                                                  ^
+Highlighted span: b
+
+ERROR .LspCheck.lean:17:38-18:1
+unsolved goals
+α : Type u_1
+M : Type u_8
+N : Type u_10
+inst✝¹ : Zero M
+inst✝ : CommMonoid N
+f : α →₀ M
+g : α → M → N
+n₁ n₂ : N
+a : α
+ha : a ∈ f.support
+h : g a (f a) * n₁ = g a (f a) * n₂
+s : Finset α := f.support.erase a
+hs : f.support = insert a s
+⊢ a ∉ s
+Source line 17:
+    f.prod g * n₁ = f.prod g * n₂ := by
+                                     ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:24:52-24:55
+unexpected token 'in'; expected ','
+Source line 24:
+  · simpa [mul_assoc] using congrArg (fun x => (∏ b in s, g b (f b)) * x) h
+                                                   ^^^
+Highlighted span:  in
+
+ERROR .LspCheck.lean:24:51-24:52
+typeclass instance problem is stuck
+  Fintype (?m.90 x)
+
+Note: Lean will not try to resolve this typeclass instance problem because the type argument to `Fintype` contains metavariables. This argument must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+Source line 24:
+  · simpa [mul_assoc] using congrArg (fun x => (∏ b in s, g b (f b)) * x) h
+                                                  ^
+Highlighted span: b
+
+ERROR .LspCheck.lean:17:38-18:1
+unsolved goals
+α : Type u_1
+M : Type u_8
+N : Type u_10
+inst✝¹ : Zero M
+inst✝ : CommMonoid N
+f : α →₀ M
+g : α → M → N
+n₁ n₂ : N
+a : α
+ha : a ∈ f.support
+h : g a (f a) * n₁ = g a (f a) * n₂
+s : Finset α := f.support.erase a
+hs : f.support = insert a s
+⊢ a ∉ s
+Source line 17:
+    f.prod g * n₁ = f.prod g * n₂ := by
+                                     ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α ι γ A B C : Type*} [AddCommMonoid A] [AddCommMonoid B] [AddCommMonoid C]
+
+variable {t : ι → A → C}
+
+variable {s : Finset α} {f : α → ι →₀ A} (i : ι)
+
+variable (g : ι →₀ A) (k : ι → A → γ → B) (x : γ)
+
+variable {β M M' N P G H R S : Type*}
+
+theorem prod_mul_eq_prod_mul_of_exists [Zero M] [CommMonoid N]
+    {f : α →₀ M} {g : α → M → N} {n₁ n₂ : N}
+    (a : α) (ha : a ∈ f.support)
+    (h : g a (f a) * n₁ = g a (f a) * n₂) :
+    f.prod g * n₁ = f.prod g * n₂ := by
+  classical
+  rw [Finsupp.prod]
+  let s : Finset α := f.support.erase a
+  have hs : f.support = insert a s := by
+    simp [s, ha]
+  rw [hs, Finset.prod_insert]
+  · have h' := congrArg (fun y => (∏ b ∈ s, g b (f b)) * y) h
+    simpa [mul_assoc] using h'
+  · simp [s]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:25:5-25:31
+Type mismatch: After simplification, term
+  h'
+ has type
+  (∏ b ∈ s, g b (f b)) * (g a (f a) * n₁) = (∏ b ∈ s, g b (f b)) * (g a (f a) * n₂)
+but is expected to have type
+  g a (f a) * ((∏ x ∈ s, g x (f x)) * n₁) = g a (f a) * ((∏ x ∈ s, g x (f x)) * n₂)
+Source line 25:
+    simpa [mul_assoc] using h'
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [mul_assoc] using h'
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:25:5-25:31
+Type mismatch: After simplification, term
+  h'
+ has type
+  (∏ b ∈ s, g b (f b)) * (g a (f a) * n₁) = (∏ b ∈ s, g b (f b)) * (g a (f a) * n₂)
+but is expected to have type
+  g a (f a) * ((∏ x ∈ s, g x (f x)) * n₁) = g a (f a) * ((∏ x ∈ s, g x (f x)) * n₂)
+Source line 25:
+    simpa [mul_assoc] using h'
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [mul_assoc] using h'

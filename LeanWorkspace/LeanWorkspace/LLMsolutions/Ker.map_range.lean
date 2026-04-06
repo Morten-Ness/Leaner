@@ -1,0 +1,17 @@
+import Mathlib
+
+open scoped Int
+
+variable {G G' G'' : Type*} [Group G] [Group G'] [Group G'']
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} {P : Type*} [Group N] [Group P] (K : Subgroup G)
+
+theorem map_range (g : N →* P) (f : G →* N) : f.range.map g = (g.comp f).range := by
+  ext x
+  constructor
+  · rintro ⟨y, ⟨z, rfl⟩, rfl⟩
+    exact ⟨z, rfl⟩
+  · rintro ⟨z, rfl⟩
+    exact ⟨f z, ⟨z, rfl⟩, rfl⟩

@@ -1,0 +1,40 @@
+FILE: Membership.powers_le.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Membership.powers_le.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {M A B : Type*}
+
+variable [Monoid M] {a : M}
+
+theorem powers_le {n : M} {P : Submonoid M} : Submonoid.powers n ≤ P ↔ n ∈ P := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M A B : Type*}
+
+variable [Monoid M] {a : M}
+
+theorem powers_le {n : M} {P : Submonoid M} : Submonoid.powers n ≤ P ↔ n ∈ P := by
+  constructor
+  · intro h
+    exact h (show n ∈ Submonoid.powers n by exact ⟨1, by simp⟩)
+  · intro hn
+    intro x hx
+    rcases hx with ⟨m, rfl⟩
+    exact P.pow_mem hn m
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+PASS

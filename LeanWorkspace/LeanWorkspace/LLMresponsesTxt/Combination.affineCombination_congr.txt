@@ -1,0 +1,444 @@
+FILE: Combination.affineCombination_congr.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Combination.affineCombination_congr.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+variable (k)
+
+variable {k}
+
+theorem affineCombination_congr {w₁ w₂ : ι → k} (hw : ∀ i ∈ s, w₁ i = w₂ i) {p₁ p₂ : ι → P}
+    (hp : ∀ i ∈ s, p₁ i = p₂ i) : s.affineCombination k p₁ w₁ = s.affineCombination k p₂ w₂ := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+variable (k)
+
+variable {k}
+
+theorem affineCombination_congr {w₁ w₂ : ι → k} (hw : ∀ i ∈ s, w₁ i = w₂ i) {p₁ p₂ : ι → P}
+    (hp : ∀ i ∈ s, p₁ i = p₂ i) : s.affineCombination k p₁ w₁ = s.affineCombination k p₂ w₂ := by
+  classical
+  induction s using Finset.induction_on with
+  | empty =>
+      simp [Finset.affineCombination]
+  | @insert a s ha ih =>
+      simp only [Finset.mem_insert, forall_eq_or_imp] at hw hp
+      rcases hw with ⟨hwa, hws⟩
+      rcases hp with ⟨hpa, hps⟩
+      simp [Finset.affineCombination, ha, hwa, hpa, ih hws hps]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:21:23-22:1
+unsolved goals
+case insert
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s✝ : Finset ι
+w₁ w₂ : ι → k
+p₁ p₂ : ι → P
+a : ι
+s : Finset ι
+ha : a ∉ s
+ih :
+  (∀ i ∈ s, w₁ i = w₂ i) →
+    (∀ i ∈ s, p₁ i = p₂ i) → (Finset.affineCombination k s p₁) w₁ = (Finset.affineCombination k s p₂) w₂
+hwa : w₁ a = w₂ a
+hws : ∀ a ∈ s, w₁ a = w₂ a
+hpa : p₁ a = p₂ a
+hps : ∀ a ∈ s, p₁ a = p₂ a
+⊢ ∑ i ∈ s, w₁ i • (p₁ i -ᵥ Classical.choice ⋯) = ∑ i ∈ s, w₂ i • (p₂ i -ᵥ Classical.choice ⋯)
+Source line 21:
+  | @insert a s ha ih =>
+                      ^
+Highlighted span: =
+
+WARNING .LspCheck.lean:25:53-25:63
+This simp argument is unused:
+  ih hws hps
+
+Hint: Omit it from the simp argument list.
+  simp [Finset.affineCombination, ha, hwa, hpa,̵ ̵i̵h̵ ̵h̵w̵s̵ ̵h̵p̵s̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 25:
+      simp [Finset.affineCombination, ha, hwa, hpa, ih hws hps]
+                                                    ^^^^^^^^^^
+Highlighted span: ih hws hps
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:21:23-22:1
+unsolved goals
+case insert
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s✝ : Finset ι
+w₁ w₂ : ι → k
+p₁ p₂ : ι → P
+a : ι
+s : Finset ι
+ha : a ∉ s
+ih :
+  (∀ i ∈ s, w₁ i = w₂ i) →
+    (∀ i ∈ s, p₁ i = p₂ i) → (Finset.affineCombination k s p₁) w₁ = (Finset.affineCombination k s p₂) w₂
+hwa : w₁ a = w₂ a
+hws : ∀ a ∈ s, w₁ a = w₂ a
+hpa : p₁ a = p₂ a
+hps : ∀ a ∈ s, p₁ a = p₂ a
+⊢ ∑ i ∈ s, w₁ i • (p₁ i -ᵥ Classical.choice ⋯) = ∑ i ∈ s, w₂ i • (p₂ i -ᵥ Classical.choice ⋯)
+Source line 21:
+  | @insert a s ha ih =>
+                      ^
+Highlighted span: =
+
+WARNING .LspCheck.lean:25:53-25:63
+This simp argument is unused:
+  ih hws hps
+
+Hint: Omit it from the simp argument list.
+  simp [Finset.affineCombination, ha, hwa, hpa,̵ ̵i̵h̵ ̵h̵w̵s̵ ̵h̵p̵s̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 25:
+      simp [Finset.affineCombination, ha, hwa, hpa, ih hws hps]
+                                                    ^^^^^^^^^^
+Highlighted span: ih hws hps
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+variable (k)
+
+variable {k}
+
+theorem affineCombination_congr {w₁ w₂ : ι → k} (hw : ∀ i ∈ s, w₁ i = w₂ i) {p₁ p₂ : ι → P}
+    (hp : ∀ i ∈ s, p₁ i = p₂ i) : s.affineCombination k p₁ w₁ = s.affineCombination k p₂ w₂ := by
+  classical
+  simp only [Finset.affineCombination]
+  congr 1
+  · ext i
+    by_cases hi : i ∈ s
+    · exact hp i hi
+    · rfl
+  · apply Finset.sum_congr rfl
+    intro i hi
+    rw [hw i hi, hp i hi]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:21:19-21:24
+failed to synthesize instance of type class
+  Membership (ι → k) (Finset ι)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 21:
+    by_cases hi : i ∈ s
+                  ^^^^^
+Highlighted span: i ∈ s
+
+ERROR .LspCheck.lean:22:16-22:17
+Application type mismatch: The argument
+  i
+has type
+  ι → k
+of sort `Type (max u_1 u_4)` but is expected to have type
+  ι
+of sort `Type u_4` in the application
+  hp i
+Source line 22:
+    · exact hp i hi
+               ^
+Highlighted span: i
+
+ERROR .LspCheck.lean:23:7-23:10
+Tactic `rfl` failed: The left-hand side
+  { toFun := fun w ↦ (s.weightedVSubOfPoint p₁ (Classical.choice ⋯)) w +ᵥ Classical.choice ⋯,
+      linear := s.weightedVSub p₁, map_vadd' := ⋯ }
+    i
+is not definitionally equal to the right-hand side
+  { toFun := fun w ↦ (s.weightedVSubOfPoint p₂ (Classical.choice ⋯)) w +ᵥ Classical.choice ⋯,
+      linear := s.weightedVSub p₂, map_vadd' := ⋯ }
+    i
+
+case neg
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s : Finset ι
+w₁ w₂ : ι → k
+hw : ∀ i ∈ s, w₁ i = w₂ i
+p₁ p₂ : ι → P
+hp : ∀ i ∈ s, p₁ i = p₂ i
+i : ι → k
+hi : ¬sorry
+⊢ { toFun := fun w ↦ (s.weightedVSubOfPoint p₁ (Classical.choice ⋯)) w +ᵥ Classical.choice ⋯,
+        linear := s.weightedVSub p₁, map_vadd' := ⋯ }
+      i =
+    { toFun := fun w ↦ (s.weightedVSubOfPoint p₂ (Classical.choice ⋯)) w +ᵥ Classical.choice ⋯,
+        linear := s.weightedVSub p₂, map_vadd' := ⋯ }
+      i
+Source line 23:
+    · rfl
+      ^^^
+Highlighted span: rfl
+
+ERROR .LspCheck.lean:24:5-24:31
+Tactic `apply` failed: could not unify the conclusion of `Finset.sum_congr rfl`
+  Finset.sum ?m.120 ?m.117 = Finset.sum ?m.120 ?m.118
+with the goal
+  w₁ = w₂
+
+Note: The full type of `Finset.sum_congr rfl` is
+  (∀ x ∈ ?m.120, ?m.117 x = ?m.118 x) → Finset.sum ?m.120 ?m.117 = Finset.sum ?m.120 ?m.118
+
+case h.e_6.h
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s : Finset ι
+w₁ w₂ : ι → k
+hw : ∀ i ∈ s, w₁ i = w₂ i
+p₁ p₂ : ι → P
+hp : ∀ i ∈ s, p₁ i = p₂ i
+⊢ w₁ = w₂
+Source line 24:
+  · apply Finset.sum_congr rfl
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: apply Finset.sum_congr rfl
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:21:19-21:24
+failed to synthesize instance of type class
+  Membership (ι → k) (Finset ι)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 21:
+    by_cases hi : i ∈ s
+                  ^^^^^
+Highlighted span: i ∈ s
+
+ERROR .LspCheck.lean:22:16-22:17
+Application type mismatch: The argument
+  i
+has type
+  ι → k
+of sort `Type (max u_1 u_4)` but is expected to have type
+  ι
+of sort `Type u_4` in the application
+  hp i
+Source line 22:
+    · exact hp i hi
+               ^
+Highlighted span: i
+
+ERROR .LspCheck.lean:23:7-23:10
+Tactic `rfl` failed: The left-hand side
+  { toFun := fun w ↦ (s.weightedVSubOfPoint p₁ (Classical.choice ⋯)) w +ᵥ Classical.choice ⋯,
+      linear := s.weightedVSub p₁, map_vadd' := ⋯ }
+    i
+is not definitionally equal to the right-hand side
+  { toFun := fun w ↦ (s.weightedVSubOfPoint p₂ (Classical.choice ⋯)) w +ᵥ Classical.choice ⋯,
+      linear := s.weightedVSub p₂, map_vadd' := ⋯ }
+    i
+
+case neg
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s : Finset ι
+w₁ w₂ : ι → k
+hw : ∀ i ∈ s, w₁ i = w₂ i
+p₁ p₂ : ι → P
+hp : ∀ i ∈ s, p₁ i = p₂ i
+i : ι → k
+hi : ¬sorry
+⊢ { toFun := fun w ↦ (s.weightedVSubOfPoint p₁ (Classical.choice ⋯)) w +ᵥ Classical.choice ⋯,
+        linear := s.weightedVSub p₁, map_vadd' := ⋯ }
+      i =
+    { toFun := fun w ↦ (s.weightedVSubOfPoint p₂ (Classical.choice ⋯)) w +ᵥ Classical.choice ⋯,
+        linear := s.weightedVSub p₂, map_vadd' := ⋯ }
+      i
+Source line 23:
+    · rfl
+      ^^^
+Highlighted span: rfl
+
+ERROR .LspCheck.lean:24:5-24:31
+Tactic `apply` failed: could not unify the conclusion of `Finset.sum_congr rfl`
+  Finset.sum ?m.120 ?m.117 = Finset.sum ?m.120 ?m.118
+with the goal
+  w₁ = w₂
+
+Note: The full type of `Finset.sum_congr rfl` is
+  (∀ x ∈ ?m.120, ?m.117 x = ?m.118 x) → Finset.sum ?m.120 ?m.117 = Finset.sum ?m.120 ?m.118
+
+case h.e_6.h
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s : Finset ι
+w₁ w₂ : ι → k
+hw : ∀ i ∈ s, w₁ i = w₂ i
+p₁ p₂ : ι → P
+hp : ∀ i ∈ s, p₁ i = p₂ i
+⊢ w₁ = w₂
+Source line 24:
+  · apply Finset.sum_congr rfl
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: apply Finset.sum_congr rfl
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+variable (k)
+
+variable {k}
+
+theorem affineCombination_congr {w₁ w₂ : ι → k} (hw : ∀ i ∈ s, w₁ i = w₂ i) {p₁ p₂ : ι → P}
+    (hp : ∀ i ∈ s, p₁ i = p₂ i) : s.affineCombination k p₁ w₁ = s.affineCombination k p₂ w₂ := by
+  classical
+  subst hp
+  subst hw
+  rfl
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:18:3-18:11
+Tactic `subst` failed: did not find equation for eliminating 'hp'
+
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s : Finset ι
+w₁ w₂ : ι → k
+hw : ∀ i ∈ s, w₁ i = w₂ i
+p₁ p₂ : ι → P
+hp : ∀ i ∈ s, p₁ i = p₂ i
+⊢ (Finset.affineCombination k s p₁) w₁ = (Finset.affineCombination k s p₂) w₂
+Source line 18:
+  subst hp
+  ^^^^^^^^
+Highlighted span: subst hp
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:18:3-18:11
+Tactic `subst` failed: did not find equation for eliminating 'hp'
+
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+s : Finset ι
+w₁ w₂ : ι → k
+hw : ∀ i ∈ s, w₁ i = w₂ i
+p₁ p₂ : ι → P
+hp : ∀ i ∈ s, p₁ i = p₂ i
+⊢ (Finset.affineCombination k s p₁) w₁ = (Finset.affineCombination k s p₂) w₂
+Source line 18:
+  subst hp
+  ^^^^^^^^
+Highlighted span: subst hp

@@ -1,0 +1,304 @@
+FILE: Combination.affineCombination_indicator_subset.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Combination.affineCombination_indicator_subset.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+variable (k)
+
+variable {k}
+
+theorem affineCombination_indicator_subset (w : ι → k) (p : ι → P) {s₁ s₂ : Finset ι}
+    (h : s₁ ⊆ s₂) :
+    s₁.affineCombination k p w = s₂.affineCombination k p (Set.indicator (↑s₁) w) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+variable (k)
+
+variable {k}
+
+theorem affineCombination_indicator_subset (w : ι → k) (p : ι → P) {s₁ s₂ : Finset ι}
+    (h : s₁ ⊆ s₂) :
+    s₁.affineCombination k p w = s₂.affineCombination k p (Set.indicator (↑s₁) w) := by
+  classical
+  rw [Finset.affineCombination_eq_of_equal_weights]
+  intro i hi
+  by_cases his₁ : i ∈ s₁
+  · simp [Set.indicator_of_mem, his₁]
+  · exfalso
+    exact his₁ (h hi)
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:19:7-19:51
+Unknown constant `Finset.affineCombination_eq_of_equal_weights`
+Source line 19:
+  rw [Finset.affineCombination_eq_of_equal_weights]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.affineCombination_eq_of_equal_weights
+
+ERROR .LspCheck.lean:17:86-18:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+w : ι → k
+p : ι → P
+s₁ s₂ : Finset ι
+h : s₁ ⊆ s₂
+⊢ (Finset.affineCombination k s₁ p) w = (Finset.affineCombination k s₂ p) ((↑s₁).indicator w)
+Source line 17:
+    s₁.affineCombination k p w = s₂.affineCombination k p (Set.indicator (↑s₁) w) := by
+                                                                                     ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:19:7-19:51
+Unknown constant `Finset.affineCombination_eq_of_equal_weights`
+Source line 19:
+  rw [Finset.affineCombination_eq_of_equal_weights]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.affineCombination_eq_of_equal_weights
+
+ERROR .LspCheck.lean:17:86-18:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝² : Ring k
+inst✝¹ : AddCommGroup V
+inst✝ : Module k V
+S : AddTorsor V P
+ι : Type u_4
+w : ι → k
+p : ι → P
+s₁ s₂ : Finset ι
+h : s₁ ⊆ s₂
+⊢ (Finset.affineCombination k s₁ p) w = (Finset.affineCombination k s₂ p) ((↑s₁).indicator w)
+Source line 17:
+    s₁.affineCombination k p w = s₂.affineCombination k p (Set.indicator (↑s₁) w) := by
+                                                                                     ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+variable (k)
+
+variable {k}
+
+theorem affineCombination_indicator_subset (w : ι → k) (p : ι → P) {s₁ s₂ : Finset ι}
+    (h : s₁ ⊆ s₂) :
+    s₁.affineCombination k p w = s₂.affineCombination k p (Set.indicator (↑s₁) w) := by
+  classical
+  let z : k := ∑ i in s₁, w i
+  let v : V := ∑ i in s₁, w i • (p i -ᵥ p (Classical.choose s₁.Nonempty))
+  by_cases hs₁ : s₁.Nonempty
+  · rcases hs₁ with ⟨i0, hi0⟩
+    simp only [Finset.affineCombination, hs₁, dif_pos hs₁]
+    have hsum :
+        ∑ i in s₂, Set.indicator (↑s₁) w i • (p i -ᵥ p i0) =
+          ∑ i in s₁, w i • (p i -ᵥ p i0) := by
+      refine Finset.sum_subset h ?_
+      · intro i hi hs2
+        simp [Set.indicator_of_not_mem, hs2]
+      · intro i hi hi'
+        simp [Set.indicator_of_mem, hi]
+    have hweights :
+        ∑ i in s₂, Set.indicator (↑s₁) w i = ∑ i in s₁, w i := by
+      refine Finset.sum_subset h ?_
+      · intro i hi hs2
+        simp [Set.indicator_of_not_mem, hs2]
+      · intro i hi hi'
+        simp [Set.indicator_of_mem, hi]
+    rw [dif_pos (show s₂.Nonempty from ⟨i0, h hi0⟩), hsum, hweights]
+  · have hs₁' : s₁ = ∅ := Finset.not_nonempty_iff_eq_empty.mp hs₁
+    subst hs₁'
+    simp [Finset.affineCombination]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:19:19-19:22
+unexpected token 'in'; expected ','
+Source line 19:
+  let z : k := ∑ i in s₁, w i
+                  ^^^
+Highlighted span:  in
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:19:19-19:22
+unexpected token 'in'; expected ','
+Source line 19:
+  let z : k := ∑ i in s₁, w i
+                  ^^^
+Highlighted span:  in
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+variable (k)
+
+variable {k}
+
+theorem affineCombination_indicator_subset (w : ι → k) (p : ι → P) {s₁ s₂ : Finset ι}
+    (h : s₁ ⊆ s₂) :
+    s₁.affineCombination k p w = s₂.affineCombination k p (Set.indicator (↑s₁) w) := by
+  classical
+  by_cases hs₁ : s₁.Nonempty
+  · rcases hs₁ with ⟨i0, hi0⟩
+    simp only [Finset.affineCombination, hs₁, dif_pos hs₁]
+    have hs₂ : s₂.Nonempty := ⟨i0, h hi0⟩
+    simp only [dif_pos hs₂]
+    have hsum_v :
+        ∑ i ∈ s₂, Set.indicator (↑s₁) w i • (p i -ᵥ p i0) =
+          ∑ i ∈ s₁, w i • (p i -ᵥ p i0) := by
+      rw [← Finset.sum_attach s₂, ← Finset.sum_attach s₁]
+      refine Finset.sum_bij (fun x _ => ⟨x.1, ?_⟩) ?_ ?_ ?_ ?_
+      · exact x.2
+      · intro x hx
+        simp at hx
+        simp [Set.indicator_of_mem, hx.1]
+      · intro x hx
+        simp at hx
+        simp [hx.1]
+      · intro x₁ x₂ hx₁ hx₂ hxeq
+        exact Subtype.ext hxeq
+      · intro y hy
+        refine ⟨⟨y.1, h y.2⟩, ?_, ?_, ?_⟩
+        · exact y.2
+        · simp [Set.indicator_of_mem, y.2]
+        · rfl
+    have hsum_w :
+        ∑ i ∈ s₂, Set.indicator (↑s₁) w i = ∑ i ∈ s₁, w i := by
+      rw [← Finset.sum_attach s₂, ← Finset.sum_attach s₁]
+      refine Finset.sum_bij (fun x _ => ⟨x.1, ?_⟩) ?_ ?_ ?_ ?_
+      · exact x.2
+      · intro x hx
+        simp at hx
+        simp [Set.indicator_of_mem, hx.1]
+      · intro x hx
+        simp at hx
+        simp [hx.1]
+      · intro x₁ x₂ hx₁ hx₂ hxeq
+        exact Subtype.ext hxeq
+      · intro y hy
+        refine ⟨⟨y.1, h y.2⟩, ?_, ?_, ?_⟩
+        · exact y.2
+        · simp [Set.indicator_of_mem, y.2]
+        · rfl
+    rw [hsum_v, hsum_w]
+  · have hs₁' : s₁ = ∅ := Finset.not_nonempty_iff_eq_empty.mp hs₁
+    subst hs₁'
+    simp [Finset.affineCombination]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:21:42-21:45
+Unknown identifier `hs₁`
+Source line 21:
+    simp only [Finset.affineCombination, hs₁, dif_pos hs₁]
+                                         ^^^
+Highlighted span: hs₁
+
+ERROR .LspCheck.lean:21:55-21:58
+Unknown identifier `hs₁`
+Source line 21:
+    simp only [Finset.affineCombination, hs₁, dif_pos hs₁]
+                                                      ^^^
+Highlighted span: hs₁
+
+ERROR .LspCheck.lean:23:5-23:28
+`simp` made no progress
+Source line 23:
+    simp only [dif_pos hs₂]
+    ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simp only [dif_pos hs₂]
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:21:42-21:45
+Unknown identifier `hs₁`
+Source line 21:
+    simp only [Finset.affineCombination, hs₁, dif_pos hs₁]
+                                         ^^^
+Highlighted span: hs₁
+
+ERROR .LspCheck.lean:21:55-21:58
+Unknown identifier `hs₁`
+Source line 21:
+    simp only [Finset.affineCombination, hs₁, dif_pos hs₁]
+                                                      ^^^
+Highlighted span: hs₁
+
+ERROR .LspCheck.lean:23:5-23:28
+`simp` made no progress
+Source line 23:
+    simp only [dif_pos hs₂]
+    ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simp only [dif_pos hs₂]

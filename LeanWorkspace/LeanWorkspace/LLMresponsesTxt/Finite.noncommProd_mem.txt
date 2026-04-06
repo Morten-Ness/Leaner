@@ -1,0 +1,102 @@
+FILE: Finite.noncommProd_mem.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Finite.noncommProd_mem.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {G : Type*} [Group G]
+
+variable {A : Type*} [AddGroup A]
+
+variable (H K : Subgroup G)
+
+theorem noncommProd_mem (K : Subgroup G) {ι : Type*} {t : Finset ι} {f : ι → G} (comm) :
+    (∀ c ∈ t, f c ∈ K) → t.noncommProd f comm ∈ K := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G : Type*} [Group G]
+
+variable {A : Type*} [AddGroup A]
+
+variable (H K : Subgroup G)
+
+theorem noncommProd_mem (K : Subgroup G) {ι : Type*} {t : Finset ι} {f : ι → G} (comm) :
+    (∀ c ∈ t, f c ∈ K) → t.noncommProd f comm ∈ K := by
+  classical
+  intro hf
+  refine Finset.induction_on t ?h0 ?hstep
+  · simp
+  · intro a s ha hs
+    simp only [Finset.noncommProd_insert_of_not_mem ha]
+    exact K.mul_mem (hf a (Finset.mem_insert_self a s)) <|
+      hs (by
+        intro c hc
+        exact hf c (Finset.mem_insert_of_mem hc))
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:10-13:42
+failed to elaborate eliminator, motive is not type correct:
+  fun x ↦ x.noncommProd f comm ∈ K
+Source line 13:
+  refine Finset.induction_on t ?h0 ?hstep
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.induction_on t ?h0 ?hstep
+
+ERROR .LspCheck.lean:14:3-14:9
+No goals to be solved
+Source line 14:
+  · simp
+  ^^^^^^
+Highlighted span: · simp
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:10-13:42
+failed to elaborate eliminator, motive is not type correct:
+  fun x ↦ x.noncommProd f comm ∈ K
+Source line 13:
+  refine Finset.induction_on t ?h0 ?hstep
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.induction_on t ?h0 ?hstep
+
+ERROR .LspCheck.lean:14:3-14:9
+No goals to be solved
+Source line 14:
+  · simp
+  ^^^^^^
+Highlighted span: · simp
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G : Type*} [Group G]
+
+variable {A : Type*} [AddGroup A]
+
+variable (H K : Subgroup G)
+
+theorem noncommProd_mem (K : Subgroup G) {ι : Type*} {t : Finset ι} {f : ι → G} (comm) :
+    (∀ c ∈ t, f c ∈ K) → t.noncommProd f comm ∈ K := by
+  intro hf
+  simpa using K.noncommProd_mem comm hf
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

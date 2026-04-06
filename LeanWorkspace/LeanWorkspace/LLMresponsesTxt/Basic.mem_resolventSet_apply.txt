@@ -1,0 +1,201 @@
+FILE: Basic.mem_resolventSet_apply.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.mem_resolventSet_apply.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Pointwise Ring
+
+variable {F R A B : Type*} [CommSemiring R] [Ring A] [Algebra R A] [Ring B] [Algebra R B]
+
+variable [FunLike F A B] [AlgHomClass F R A B]
+
+theorem mem_resolventSet_apply (φ : F) {a : A} {r : R} (h : r ∈ resolventSet R a) :
+    r ∈ resolventSet R ((φ : A → B) a) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise Ring
+
+variable {F R A B : Type*} [CommSemiring R] [Ring A] [Algebra R A] [Ring B] [Algebra R B]
+
+variable [FunLike F A B] [AlgHomClass F R A B]
+
+theorem mem_resolventSet_apply (φ : F) {a : A} {r : R} (h : r ∈ resolventSet R a) :
+    r ∈ resolventSet R ((φ : A → B) a) := by
+  simpa [resolventSet, Set.mem_setOf_eq, map_sub, map_algebraMap] using
+    isUnit_map (φ := φ) h
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:51-11:65
+Unknown identifier `map_algebraMap`
+Source line 11:
+  simpa [resolventSet, Set.mem_setOf_eq, map_sub, map_algebraMap] using
+                                                  ^^^^^^^^^^^^^^
+Highlighted span: map_algebraMap
+
+ERROR .LspCheck.lean:12:5-12:15
+Unknown identifier `isUnit_map`
+Source line 12:
+    isUnit_map (φ := φ) h
+    ^^^^^^^^^^
+Highlighted span: isUnit_map
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:51-11:65
+Unknown identifier `map_algebraMap`
+Source line 11:
+  simpa [resolventSet, Set.mem_setOf_eq, map_sub, map_algebraMap] using
+                                                  ^^^^^^^^^^^^^^
+Highlighted span: map_algebraMap
+
+ERROR .LspCheck.lean:12:5-12:15
+Unknown identifier `isUnit_map`
+Source line 12:
+    isUnit_map (φ := φ) h
+    ^^^^^^^^^^
+Highlighted span: isUnit_map
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise Ring
+
+variable {F R A B : Type*} [CommSemiring R] [Ring A] [Algebra R A] [Ring B] [Algebra R B]
+
+variable [FunLike F A B] [AlgHomClass F R A B]
+
+theorem mem_resolventSet_apply (φ : F) {a : A} {r : R} (h : r ∈ resolventSet R a) :
+    r ∈ resolventSet R ((φ : A → B) a) := by
+  rw [resolventSet, Set.mem_setOf_eq] at h ⊢
+  let ψ : A →ₐ[R] B := AlgHomClass.toAlgHom φ
+  have hunit : IsUnit (ψ (algebraMap R A r - a)) := h
+  simpa [AlgHom.map_sub, AlgHom.commutes] using hunit.map ψ
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:53-13:54
+Type mismatch
+  h
+has type
+  IsUnit.{u_3} ((algebraMap R A) r - a)
+but is expected to have type
+  IsUnit.{u_4} (ψ ((algebraMap R A) r - a))
+Source line 13:
+  have hunit : IsUnit (ψ (algebraMap R A r - a)) := h
+                                                    ^
+Highlighted span: h
+
+ERROR .LspCheck.lean:14:10-14:24
+Unknown constant `AlgHom.map_sub`
+Source line 14:
+  simpa [AlgHom.map_sub, AlgHom.commutes] using hunit.map ψ
+         ^^^^^^^^^^^^^^
+Highlighted span: AlgHom.map_sub
+
+ERROR .LspCheck.lean:14:49-14:60
+failed to synthesize instance of type class
+  FunLike (A →ₐ[R] B) B ?m.88
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 14:
+  simpa [AlgHom.map_sub, AlgHom.commutes] using hunit.map ψ
+                                                ^^^^^^^^^^^
+Highlighted span: hunit.map ψ
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:53-13:54
+Type mismatch
+  h
+has type
+  IsUnit.{u_3} ((algebraMap R A) r - a)
+but is expected to have type
+  IsUnit.{u_4} (ψ ((algebraMap R A) r - a))
+Source line 13:
+  have hunit : IsUnit (ψ (algebraMap R A r - a)) := h
+                                                    ^
+Highlighted span: h
+
+ERROR .LspCheck.lean:14:10-14:24
+Unknown constant `AlgHom.map_sub`
+Source line 14:
+  simpa [AlgHom.map_sub, AlgHom.commutes] using hunit.map ψ
+         ^^^^^^^^^^^^^^
+Highlighted span: AlgHom.map_sub
+
+ERROR .LspCheck.lean:14:49-14:60
+failed to synthesize instance of type class
+  FunLike (A →ₐ[R] B) B ?m.88
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 14:
+  simpa [AlgHom.map_sub, AlgHom.commutes] using hunit.map ψ
+                                                ^^^^^^^^^^^
+Highlighted span: hunit.map ψ
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise Ring
+
+variable {F R A B : Type*} [CommSemiring R] [Ring A] [Algebra R A] [Ring B] [Algebra R B]
+
+variable [FunLike F A B] [AlgHomClass F R A B]
+
+theorem mem_resolventSet_apply (φ : F) {a : A} {r : R} (h : r ∈ resolventSet R a) :
+    r ∈ resolventSet R ((φ : A → B) a) := by
+  rw [resolventSet, Set.mem_setOf_eq] at h ⊢
+  let ψ : A →+* B := AlgHomClass.toAlgHom φ.toRingHom
+  have hmap := IsUnit.map ψ h
+  simpa [map_sub, AlgHomClass.commutes] using hmap
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:43-12:54
+Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  φ
+has type `F` which does not have the necessary form.
+Source line 12:
+  let ψ : A →+* B := AlgHomClass.toAlgHom φ.toRingHom
+                                          ^^^^^^^^^^^
+Highlighted span: φ.toRingHom
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:43-12:54
+Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  φ
+has type `F` which does not have the necessary form.
+Source line 12:
+  let ψ : A →+* B := AlgHomClass.toAlgHom φ.toRingHom
+                                          ^^^^^^^^^^^
+Highlighted span: φ.toRingHom

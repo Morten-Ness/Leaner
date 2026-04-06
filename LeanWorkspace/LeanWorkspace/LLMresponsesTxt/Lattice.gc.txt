@@ -1,0 +1,92 @@
+FILE: Lattice.gc.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Lattice.gc.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable (R : Type u) {A : Type v} {B : Type w}
+
+variable [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B]
+
+theorem gc : GaloisConnection (Algebra.adjoin R : Set A → Subalgebra R A) (↑) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (R : Type u) {A : Type v} {B : Type w}
+
+variable [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B]
+
+theorem gc : GaloisConnection (Algebra.adjoin R : Set A → Subalgebra R A) (↑) := by
+  intro s S
+  constructor
+  · intro hs
+    exact Algebra.subset_adjoin hs
+  · intro hs
+    exact Algebra.adjoin_le hs
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:33-11:35
+Application type mismatch: The argument
+  hs
+has type
+  Algebra.adjoin R s ≤ S
+but is expected to have type
+  ?m.33 ∈ ?m.32
+in the application
+  Algebra.subset_adjoin hs
+Source line 11:
+    exact Algebra.subset_adjoin hs
+                                ^^
+Highlighted span: hs
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:33-11:35
+Application type mismatch: The argument
+  hs
+has type
+  Algebra.adjoin R s ≤ S
+but is expected to have type
+  ?m.33 ∈ ?m.32
+in the application
+  Algebra.subset_adjoin hs
+Source line 11:
+    exact Algebra.subset_adjoin hs
+                                ^^
+Highlighted span: hs
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (R : Type u) {A : Type v} {B : Type w}
+
+variable [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B]
+
+theorem gc : GaloisConnection (Algebra.adjoin R : Set A → Subalgebra R A) (↑) := by
+  intro s S
+  constructor
+  · intro hs
+    intro x hx
+    exact hs (Algebra.subset_adjoin hx)
+  · intro hs
+    exact Algebra.adjoin_le hs
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

@@ -1,0 +1,1011 @@
+FILE: Exact.Exact.split_tfae.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Exact.Exact.split_tfae.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R M M' N N' P P' : Type*}
+
+variable [Semiring R]
+
+variable [AddCommGroup M] [AddCommGroup N] [AddCommGroup P] [Module R M] [Module R N] [Module R P]
+
+variable {f : M →ₗ[R] N} {g : N →ₗ[R] P}
+
+theorem Exact.split_tfae
+    {R M N P} [Semiring R] [AddCommGroup M] [AddCommGroup N]
+    [AddCommGroup P] [Module R M] [Module R N] [Module R P] {f : M →ₗ[R] N} {g : N →ₗ[R] P}
+    (h : Function.Exact f g) (hf : Function.Injective f) (hg : Function.Surjective g) :
+    List.TFAE [
+      ∃ l, g ∘ₗ l = LinearMap.id,
+      ∃ l, l ∘ₗ f = LinearMap.id,
+      ∃ e : N ≃ₗ[R] M × P, f = e.symm ∘ₗ LinearMap.inl R M P ∧ g = LinearMap.snd R M P ∘ₗ e] := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R M M' N N' P P' : Type*}
+
+variable [Semiring R]
+
+variable [AddCommGroup M] [AddCommGroup N] [AddCommGroup P] [Module R M] [Module R N] [Module R P]
+
+variable {f : M →ₗ[R] N} {g : N →ₗ[R] P}
+
+theorem Exact.split_tfae
+    {R M N P} [Semiring R] [AddCommGroup M] [AddCommGroup N]
+    [AddCommGroup P] [Module R M] [Module R N] [Module R P] {f : M →ₗ[R] N} {g : N →ₗ[R] P}
+    (h : Function.Exact f g) (hf : Function.Injective f) (hg : Function.Surjective g) :
+    List.TFAE [
+      ∃ l, g ∘ₗ l = LinearMap.id,
+      ∃ l, l ∘ₗ f = LinearMap.id,
+      ∃ e : N ≃ₗ[R] M × P, f = e.symm ∘ₗ LinearMap.inl R M P ∧ g = LinearMap.snd R M P ∘ₗ e] := by
+  classical
+  rw [List.tfae_iff_cycle]
+  refine ⟨?_, ?_, ?_⟩
+  · rintro ⟨l, hl⟩
+    refine ⟨?_⟩
+    let k : N →ₗ[R] M :=
+      { toFun := fun n => hf.invFun (n - l (g n))
+        map_add' := by
+          intro x y
+          apply hf
+          simp [h.eq_ker, map_add, sub_eq_add_neg, add_comm, add_left_comm, add_assoc]
+        map_smul' := by
+          intro a x
+          apply hf
+          simp [h.eq_ker, map_smul, sub_eq_add_neg] }
+    refine ⟨k, ?_⟩
+    ext m
+    apply hf
+    have hk0 : k (f m) = m := by
+      apply hf
+      have : f (k (f m)) = f m - l (g (f m)) := by
+        simp [k]
+      rw [this]
+      simp [h]
+    exact hk0
+  · rintro ⟨l, hl⟩
+    refine ⟨?_⟩
+    let s : P →ₗ[R] N :=
+      { toFun := fun p => Classical.choose (hg p)
+        map_add' := by
+          intro x y
+          have hx : g (Classical.choose (hg x)) = x := Classical.choose_spec (hg x)
+          have hy : g (Classical.choose (hg y)) = y := Classical.choose_spec (hg y)
+          have hxy : g (Classical.choose (hg (x + y))) = x + y := Classical.choose_spec (hg (x + y))
+          have hz : g (Classical.choose (hg x) + Classical.choose (hg y) - Classical.choose (hg (x + y))) = 0 := by
+            simp [hx, hy, hxy]
+          have hz' : ∃ m, f m = Classical.choose (hg x) + Classical.choose (hg y) - Classical.choose (hg (x + y)) := h hz
+          rcases hz' with ⟨m, hm⟩
+          apply hl ▸ hf := by
+            sorry
+        map_smul' := by
+          intro a x
+          have hx : g (Classical.choose (hg x)) = x := Classical.choose_spec (hg x)
+          have hax : g (Classical.choose (hg (a • x))) = a • x := Classical.choose_spec (hg (a • x))
+          have hz : g (a • Classical.choose (hg x) - Classical.choose (hg (a • x))) = 0 := by
+            simp [hx, hax]
+          have hz' : ∃ m, f m = a • Classical.choose (hg x) - Classical.choose (hg (a • x)) := h hz
+          rcases hz' with ⟨m, hm⟩
+          apply hl ▸ hf := by
+            sorry }
+    refine ⟨s, ?_⟩
+    ext p
+    exact Classical.choose_spec (hg p)
+  · rintro ⟨l, hl⟩
+    refine ⟨?_⟩
+    let e : N ≃ₗ[R] M × P :=
+      { toFun := fun n => (l n, g n)
+        invFun := fun mp => f mp.1 + Classical.choose (hg mp.2)
+        left_inv := by
+          intro n
+          apply hf
+          simp [h.eq_ker]
+        right_inv := by
+          intro mp
+          ext
+          · simp [hl]
+          · simp [Classical.choose_spec (hg mp.2)]
+        map_add' := by
+          intro x y
+          ext <;> simp [map_add]
+        map_smul' := by
+          intro a x
+          ext <;> simp [map_smul] }
+    refine ⟨e, ?_, ?_⟩
+    · ext m
+      apply hf
+      simp [e, hl]
+    · ext n
+      simp [e]
+  · rintro ⟨e, hf', hg'⟩
+    refine ⟨e ∘ₗ LinearMap.inr R M P, ?_⟩
+    ext p
+    simp [hg']
+  · rintro ⟨e, hf', hg'⟩
+    refine ⟨LinearMap.fst R M P ∘ₗ e, ?_⟩
+    ext m
+    simp [hf']
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:57:24-57:27
+unexpected token ':='; expected '}'
+Source line 57:
+          apply hl ▸ hf := by
+                       ^^^
+Highlighted span:  :=
+
+ERROR .LspCheck.lean:20:7-20:26
+Unknown constant `List.tfae_iff_cycle`
+Source line 20:
+  rw [List.tfae_iff_cycle]
+      ^^^^^^^^^^^^^^^^^^^
+Highlighted span: List.tfae_iff_cycle
+
+ERROR .LspCheck.lean:18:97-19:1
+unsolved goals
+R : Type u_8
+M : Type u_9
+N : Type u_10
+P : Type u_11
+inst✝⁶ : Semiring R
+inst✝⁵ : AddCommGroup M
+inst✝⁴ : AddCommGroup N
+inst✝³ : AddCommGroup P
+inst✝² : Module R M
+inst✝¹ : Module R N
+inst✝ : Module R P
+f : M →ₗ[R] N
+g : N →ₗ[R] P
+h : Function.Exact ⇑f ⇑g
+hf : Function.Injective ⇑f
+hg : Function.Surjective ⇑g
+⊢ [∃ l, g ∘ₗ l = LinearMap.id, ∃ l, l ∘ₗ f = LinearMap.id,
+      ∃ e, f = ↑e.symm ∘ₗ LinearMap.inl R M P ∧ g = LinearMap.snd R M P ∘ₗ ↑e].TFAE
+Source line 18:
+      ∃ e : N ≃ₗ[R] M × P, f = e.symm ∘ₗ LinearMap.inl R M P ∧ g = LinearMap.snd R M P ∘ₗ e] := by
+                                                                                                ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:57:24-57:27
+unexpected token ':='; expected '}'
+Source line 57:
+          apply hl ▸ hf := by
+                       ^^^
+Highlighted span:  :=
+
+ERROR .LspCheck.lean:20:7-20:26
+Unknown constant `List.tfae_iff_cycle`
+Source line 20:
+  rw [List.tfae_iff_cycle]
+      ^^^^^^^^^^^^^^^^^^^
+Highlighted span: List.tfae_iff_cycle
+
+ERROR .LspCheck.lean:18:97-19:1
+unsolved goals
+R : Type u_8
+M : Type u_9
+N : Type u_10
+P : Type u_11
+inst✝⁶ : Semiring R
+inst✝⁵ : AddCommGroup M
+inst✝⁴ : AddCommGroup N
+inst✝³ : AddCommGroup P
+inst✝² : Module R M
+inst✝¹ : Module R N
+inst✝ : Module R P
+f : M →ₗ[R] N
+g : N →ₗ[R] P
+h : Function.Exact ⇑f ⇑g
+hf : Function.Injective ⇑f
+hg : Function.Surjective ⇑g
+⊢ [∃ l, g ∘ₗ l = LinearMap.id, ∃ l, l ∘ₗ f = LinearMap.id,
+      ∃ e, f = ↑e.symm ∘ₗ LinearMap.inl R M P ∧ g = LinearMap.snd R M P ∘ₗ ↑e].TFAE
+Source line 18:
+      ∃ e : N ≃ₗ[R] M × P, f = e.symm ∘ₗ LinearMap.inl R M P ∧ g = LinearMap.snd R M P ∘ₗ e] := by
+                                                                                                ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R M M' N N' P P' : Type*}
+
+variable [Semiring R]
+
+variable [AddCommGroup M] [AddCommGroup N] [AddCommGroup P] [Module R M] [Module R N] [Module R P]
+
+variable {f : M →ₗ[R] N} {g : N →ₗ[R] P}
+
+theorem Exact.split_tfae
+    {R M N P} [Semiring R] [AddCommGroup M] [AddCommGroup N]
+    [AddCommGroup P] [Module R M] [Module R N] [Module R P] {f : M →ₗ[R] N} {g : N →ₗ[R] P}
+    (h : Function.Exact f g) (hf : Function.Injective f) (hg : Function.Surjective g) :
+    List.TFAE [
+      ∃ l, g ∘ₗ l = LinearMap.id,
+      ∃ l, l ∘ₗ f = LinearMap.id,
+      ∃ e : N ≃ₗ[R] M × P, f = e.symm ∘ₗ LinearMap.inl R M P ∧ g = LinearMap.snd R M P ∘ₗ e] := by
+  classical
+  let s : P →ₗ[R] N := LinearMap.rightInverseOfSurjective g hg
+  have hs : g.comp s = LinearMap.id := LinearMap.comp_rightInverseOfSurjective _ _
+  let r : N →ₗ[R] N := LinearMap.id - s.comp g
+  have hr_ker : ∀ n, g (r n) = 0 := by
+    intro n
+    change (g.comp r) n = 0
+    simp [r, hs]
+  have hr_mem_range : ∀ n, ∃ m, f m = r n := by
+    intro n
+    exact h (hr_ker n)
+  let k : N →ₗ[R] M :=
+    { toFun := fun n => Classical.choose (hr_mem_range n)
+      map_add' := by
+        intro x y
+        apply hf
+        have hx : f (Classical.choose (hr_mem_range x)) = r x := Classical.choose_spec (hr_mem_range x)
+        have hy : f (Classical.choose (hr_mem_range y)) = r y := Classical.choose_spec (hr_mem_range y)
+        have hxy : f (Classical.choose (hr_mem_range (x + y))) = r (x + y) := Classical.choose_spec (hr_mem_range (x + y))
+        rw [hx, hy, hxy]
+        simp [r, map_add, sub_eq_add_neg, add_comm, add_left_comm, add_assoc]
+      map_smul' := by
+        intro a x
+        apply hf
+        have hx : f (Classical.choose (hr_mem_range x)) = r x := Classical.choose_spec (hr_mem_range x)
+        have hax : f (Classical.choose (hr_mem_range (a • x))) = r (a • x) := Classical.choose_spec (hr_mem_range (a • x))
+        rw [hx, hax]
+        simp [r, map_smul, sub_eq_add_neg] }
+  have hk_spec : ∀ n, f (k n) = r n := by
+    intro n
+    exact Classical.choose_spec (hr_mem_range n)
+  have hk_left : k.comp f = LinearMap.id := by
+    ext m
+    apply hf
+    rw [LinearMap.comp_apply, LinearMap.id_apply, hk_spec, r]
+    simp [h (by simp)]
+  let e : N ≃ₗ[R] M × P :=
+    { toFun := fun n => (k n, g n)
+      invFun := fun mp => f mp.1 + s mp.2
+      left_inv := by
+        intro n
+        apply hf
+        rw [map_add, hk_spec]
+        dsimp [r]
+        abel_nf
+      right_inv := by
+        intro mp
+        ext
+        · change k (f mp.1 + s mp.2) = mp.1
+          apply hf
+          rw [hk_spec, r, map_add, hs]
+          simp [hk_left]
+        · change g (f mp.1 + s mp.2) = mp.2
+          simp [hs]
+      map_add' := by
+        intro x y
+        ext <;> simp [map_add]
+      map_smul' := by
+        intro a x
+        ext <;> simp [map_smul] }
+  have h1 : (∃ l, g ∘ₗ l = LinearMap.id) := ⟨s, hs⟩
+  have h2 : (∃ l, l ∘ₗ f = LinearMap.id) := ⟨k, hk_left⟩
+  have h3 : (∃ e : N ≃ₗ[R] M × P, f = e.symm ∘ₗ LinearMap.inl R M P ∧ g = LinearMap.snd R M P ∘ₗ e) := by
+    refine ⟨e, ?_, ?_⟩
+    · ext m
+      apply hf
+      change f (((e.symm : M × P →ₗ[R] N) ∘ₗ LinearMap.inl R M P) m) = f (f m)
+      simp [LinearEquiv.symm_apply_apply, e]
+    · ext n
+      rfl
+  exact List.TFAE.of_forall fun i => by
+    fin_cases i <;> simpa using h1
+    fin_cases i <;> simpa using h2
+    fin_cases i <;> simpa using h3
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:20:24-20:58
+Unknown constant `LinearMap.rightInverseOfSurjective`
+Source line 20:
+  let s : P →ₗ[R] N := LinearMap.rightInverseOfSurjective g hg
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: LinearMap.rightInverseOfSurjective
+
+ERROR .LspCheck.lean:21:40-21:79
+Unknown constant `LinearMap.comp_rightInverseOfSurjective`
+Source line 21:
+  have hs : g.comp s = LinearMap.id := LinearMap.comp_rightInverseOfSurjective _ _
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: LinearMap.comp_rightInverseOfSurjective
+
+ERROR .LspCheck.lean:23:37-24:1
+unsolved goals
+R : Type u_8
+M : Type u_9
+N : Type u_10
+P : Type u_11
+inst✝⁶ : Semiring R
+inst✝⁵ : AddCommGroup M
+inst✝⁴ : AddCommGroup N
+inst✝³ : AddCommGroup P
+inst✝² : Module R M
+inst✝¹ : Module R N
+inst✝ : Module R P
+f : M →ₗ[R] N
+g : N →ₗ[R] P
+h : Function.Exact ⇑f ⇑g
+hf : Function.Injective ⇑f
+hg : Function.Surjective ⇑g
+s : P →ₗ[R] N := sorry
+hs : g ∘ₗ s = LinearMap.id
+r : N →ₗ[R] N := LinearMap.id - s ∘ₗ g
+n : N
+⊢ g n - g (s (g n)) = 0
+Source line 23:
+  have hr_ker : ∀ n, g (r n) = 0 := by
+                                    ^
+Highlighted span: b
+
+ERROR .LspCheck.lean:29:13-29:23
+Application type mismatch: The argument
+  hr_ker n
+has type
+  g (r n) = 0
+of sort `Prop` but is expected to have type
+  N
+of sort `Type u_10` in the application
+  h (hr_ker n)
+Source line 29:
+    exact h (hr_ker n)
+            ^^^^^^^^^^
+Highlighted span: (hr_ker n)
+
+ERROR .LspCheck.lean:38:13-38:15
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  f (Classical.choose ⋯)
+in the target expression
+  f (Classical.choose ⋯) = f (Classical.choose ⋯ + Classical.choose ⋯)
+
+case a
+R : Type u_8
+M : Type u_9
+N : Type u_10
+P : Type u_11
+inst✝⁶ : Semiring R
+inst✝⁵ : AddCommGroup M
+inst✝⁴ : AddCommGroup N
+inst✝³ : AddCommGroup P
+inst✝² : Module R M
+inst✝¹ : Module R N
+inst✝ : Module R P
+f : M →ₗ[R] N
+g : N →ₗ[R] P
+h : Function.Exact ⇑f ⇑g
+hf : Function.Injective ⇑f
+hg : Function.Surjective ⇑g
+s : P →ₗ[R] N := sorry
+hs : g ∘ₗ s = LinearMap.id
+r : N →ₗ[R] N := LinearMap.id - s ∘ₗ g
+hr_ker : ∀ (n : N), g (r n) = 0
+hr_mem_range : ∀ (n : N), ∃ m, f m = r n
+x y : N
+hx : f (Classical.choose ⋯) = r x
+hy : f (Classical.choose ⋯) = r y
+hxy : f (Classical.choose ⋯) = r (x + y)
+⊢ f (Classical.choose ⋯) = f (Classical.choose ⋯ + Classical.choose ⋯)
+Source line 38:
+        rw [hx, hy, hxy]
+            ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:45:13-45:15
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  f (Classical.choose ⋯)
+in the target expression
+  f (Classical.choose ⋯) = f ((RingHom.id R) a • Classical.choose ⋯)
+
+case a
+R : Type u_8
+M : Type u_9
+N : Type u_10
+P : Type u_11
+inst✝⁶ : Semiring R
+inst✝⁵ : AddCommGroup M
+inst✝⁴ : AddCommGroup N
+inst✝³ : AddCommGroup P
+inst✝² : Module R M
+inst✝¹ : Module R N
+inst✝ : Module R P
+f : M →ₗ[R] N
+g : N →ₗ[R] P
+h : Function.Exact ⇑f ⇑g
+hf : Function.Injective ⇑f
+hg : Function.Surjective ⇑g
+s : P →ₗ[R] N := sorry
+hs : g ∘ₗ s = LinearMap.id
+r : N →ₗ[R] N := LinearMap.id - s ∘ₗ g
+hr_ker : ∀ (n : N), g (r n) = 0
+hr_mem_range : ∀ (n : N), ∃ m, f m = r n
+a : R
+x : N
+hx : f (Classical.choose ⋯) = r x
+hax : f (Classical.choose ⋯) = r (a • x)
+⊢ f (Classical.choose ⋯) = f ((RingHom.id R) a • Classical.choose ⋯)
+Source line 45:
+        rw [hx, hax]
+            ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:53:60-53:61
+Invalid rewrite argument: Expected an equality or iff proof or definition name, but `r` is a value of type
+  N →ₗ[R] N
+Source line 53:
+    rw [LinearMap.comp_apply, LinearMap.id_apply, hk_spec, r]
+                                                           ^
+Highlighted span: r
+
+ERROR .LspCheck.lean:60:9-60:17
+Tactic `apply` failed: could not unify the conclusion of `hf`
+  Eq.{u_9 + 1} ?a₁ ?a₂
+with the goal
+  Eq.{u_10 + 1} ((fun mp ↦ f mp.1 + s mp.2) ((fun n ↦ (k n, g n)) n)) n
+
+Note: The full type of `hf` is
+  Function.Injective ⇑f
+
+R : Type u_8
+M : Type u_9
+N : Type u_10
+P : Type u_11
+inst✝⁶ : Semiring R
+inst✝⁵ : AddCommGroup M
+inst✝⁴ : AddCommGroup N
+inst✝³ : AddCommGroup P
+inst✝² : Module R M
+inst✝¹ : Module R N
+inst✝ : Module R P
+f : M →ₗ[R] N
+g : N →ₗ[R] P
+h : Function.Exact ⇑f ⇑g
+hf : Function.Injective ⇑f
+hg : Function.Surjective ⇑g
+s : P →ₗ[R] N := sorry
+hs : g ∘ₗ s = LinearMap.id
+r : N →ₗ[R] N := LinearMap.id - s ∘ₗ g
+hr_ker : ∀ (n : N), g (r n) = 0
+hr_mem_range : ∀ (n : N), ∃ m, f m = r n
+k : N →ₗ[R] M := { toFun := fun n ↦ Classical.choose ⋯, map_add' := ⋯, map_smul' := ⋯ }
+hk_spec : ∀ (n : N), f (k n) = r n
+hk_left : k ∘ₗ f = LinearMap.id
+n : N
+⊢ (fun mp ↦ f mp.1 + s mp.2) ((fun n ↦ (k n, g n)) n) = n
+Source line 60:
+        apply hf
+        ^^^^^^^^
+Highlighted span: apply hf
+
+ERROR .LspCheck.lean:69:24-69:25
+Invalid rewrite argument: Expected an equality or iff proof or definition name, but `r` is a value of type
+  N →ₗ[R] N
+Source line 69:
+          rw [hk_spec, r, map_add, hs]
+                       ^
+Highlighted span: r
+
+ERROR .LspCheck.lean:71:9-72:1
+unsolved goals
+case snd
+R : Type u_8
+M : Type u_9
+N : Type u_10
+P : Type u_11
+inst✝⁶ : Semiring R
+inst✝⁵ : AddCommGroup M
+inst✝⁴ : AddCommGroup N
+inst✝³ : AddCommGroup P
+inst✝² : Module R M
+inst✝¹ : Module R N
+inst✝ : Module R P
+f : M →ₗ[R] N
+g : N →ₗ[R] P
+h : Function.Exact ⇑f ⇑g
+hf : Function.Injective ⇑f
+hg : Function.Surjective ⇑g
+s : P →ₗ[R] N := sorry
+hs : g ∘ₗ s = LinearMap.id
+r : N →ₗ[R] N := LinearMap.id - s ∘ₗ g
+hr_ker : ∀ (n : N), g (r n) = 0
+hr_mem_range : ∀ (n : N), ∃ m, f m = r n
+k : N →ₗ[R] M := { toFun := fun n ↦ Classical.choose ⋯, map_add' := ⋯, map_smul' := ⋯ }
+hk_spec : ∀ (n : N), f (k n) = r n
+hk_left : k ∘ₗ f = LinearMap.id
+mp : M × P
+⊢ g (f mp.1) + g (s mp.2) = mp.2
+Source line 71:
+        · change g (f mp.1 + s mp.2) = mp.2
+        ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:84:7-84:15
+Tactic `apply` failed: could not unify the conclusion of `hf`
+  Eq.{u_9 + 1} ?a₁ ?a₂
+with the goal
+  Eq.{u_10 + 1} (f m) ((↑e.symm ∘ₗ LinearMap.inl R M P) m)
+
+Note: The full type of `hf` is
+  Function.Injective ⇑f
+
+case refine_1.h
+R : Type u_8
+M : Type u_9
+N : Type u_10
+P : Type u_11
+inst✝⁶ : Semiring R
+inst✝⁵ : AddCommGroup M
+inst✝⁴ : AddCommGroup N
+inst✝³ : AddCommGroup P
+inst✝² : Module R M
+inst✝¹ : Module R N
+inst✝ : Module R P
+f : M →ₗ[R] N
+g : N →ₗ[R] P
+h : Function.Exact ⇑f ⇑g
+hf : Function.Injective ⇑f
+hg : Function.Surjective ⇑g
+s : P →ₗ[R] N := sorry
+hs : g ∘ₗ s = LinearMap.id
+r : N →ₗ[R] N := LinearMap.id - s ∘ₗ g
+hr_ker : ∀ (n : N), g (r n) = 0
+hr_mem_range : ∀ (n : N), ∃ m, f m = r n
+k : N →ₗ[R] M := { toFun := fun n ↦ Classical.choose ⋯, map_add' := ⋯, map_smul' := ⋯ }
+hk_spec : ∀ (n : N), f (k n) = r n
+hk_left : k ∘ₗ f = LinearMap.id
+e : N ≃ₗ[R] M × P :=
+  { toFun := fun n ↦ (k n, g n), map_add' := ⋯, map_smul' := ⋯, invFun := fun mp ↦ f mp.1 + s mp.2, left_inv := ⋯,
+    right_inv := ⋯ }
+h1 : ∃ l, g ∘ₗ l = LinearMap.id
+h2 : ∃ l, l ∘ₗ f = LinearMap.id
+m : M
+⊢ f m = (↑e.symm ∘ₗ LinearMap.inl R M P) m
+Source line 84:
+      apply hf
+      ^^^^^^^^
+Highlighted span: apply hf
+
+ERROR .LspCheck.lean:89:9-89:28
+Unknown constant `List.TFAE.of_forall`
+Source line 89:
+  exact List.TFAE.of_forall fun i => by
+        ^^^^^^^^^^^^^^^^^^^
+Highlighted span: List.TFAE.of_forall
+
+WARNING .LspCheck.lean:26:14-26:16
+This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp [r,̵ ̵h̵s̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 26:
+    simp [r, hs]
+             ^^
+Highlighted span: hs
+
+WARNING .LspCheck.lean:72:17-72:19
+This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵s̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 72:
+          simp [hs]
+                ^^
+Highlighted span: hs
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:20:24-20:58
+Unknown constant `LinearMap.rightInverseOfSurjective`
+Source line 20:
+  let s : P →ₗ[R] N := LinearMap.rightInverseOfSurjective g hg
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: LinearMap.rightInverseOfSurjective
+
+ERROR .LspCheck.lean:21:40-21:79
+Unknown constant `LinearMap.comp_rightInverseOfSurjective`
+Source line 21:
+  have hs : g.comp s = LinearMap.id := LinearMap.comp_rightInverseOfSurjective _ _
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: LinearMap.comp_rightInverseOfSurjective
+
+ERROR .LspCheck.lean:23:37-24:1
+unsolved goals
+R : Type u_8
+M : Type u_9
+N : Type u_10
+P : Type u_11
+inst✝⁶ : Semiring R
+inst✝⁵ : AddCommGroup M
+inst✝⁴ : AddCommGroup N
+inst✝³ : AddCommGroup P
+inst✝² : Module R M
+inst✝¹ : Module R N
+inst✝ : Module R P
+f : M →ₗ[R] N
+g : N →ₗ[R] P
+h : Function.Exact ⇑f ⇑g
+hf : Function.Injective ⇑f
+hg : Function.Surjective ⇑g
+s : P →ₗ[R] N := sorry
+hs : g ∘ₗ s = LinearMap.id
+r : N →ₗ[R] N := LinearMap.id - s ∘ₗ g
+n : N
+⊢ g n - g (s (g n)) = 0
+Source line 23:
+  have hr_ker : ∀ n, g (r n) = 0 := by
+                                    ^
+Highlighted span: b
+
+ERROR .LspCheck.lean:29:13-29:23
+Application type mismatch: The argument
+  hr_ker n
+has type
+  g (r n) = 0
+of sort `Prop` but is expected to have type
+  N
+of sort `Type u_10` in the application
+  h (hr_ker n)
+Source line 29:
+    exact h (hr_ker n)
+            ^^^^^^^^^^
+Highlighted span: (hr_ker n)
+
+ERROR .LspCheck.lean:38:13-38:15
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  f (Classical.choose ⋯)
+in the target expression
+  f (Classical.choose ⋯) = f (Classical.choose ⋯ + Classical.choose ⋯)
+
+case a
+R : Type u_8
+M : Type u_9
+N : Type u_10
+P : Type u_11
+inst✝⁶ : Semiring R
+inst✝⁵ : AddCommGroup M
+inst✝⁴ : AddCommGroup N
+inst✝³ : AddCommGroup P
+inst✝² : Module R M
+inst✝¹ : Module R N
+inst✝ : Module R P
+f : M →ₗ[R] N
+g : N →ₗ[R] P
+h : Function.Exact ⇑f ⇑g
+hf : Function.Injective ⇑f
+hg : Function.Surjective ⇑g
+s : P →ₗ[R] N := sorry
+hs : g ∘ₗ s = LinearMap.id
+r : N →ₗ[R] N := LinearMap.id - s ∘ₗ g
+hr_ker : ∀ (n : N), g (r n) = 0
+hr_mem_range : ∀ (n : N), ∃ m, f m = r n
+x y : N
+hx : f (Classical.choose ⋯) = r x
+hy : f (Classical.choose ⋯) = r y
+hxy : f (Classical.choose ⋯) = r (x + y)
+⊢ f (Classical.choose ⋯) = f (Classical.choose ⋯ + Classical.choose ⋯)
+Source line 38:
+        rw [hx, hy, hxy]
+            ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:45:13-45:15
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  f (Classical.choose ⋯)
+in the target expression
+  f (Classical.choose ⋯) = f ((RingHom.id R) a • Classical.choose ⋯)
+
+case a
+R : Type u_8
+M : Type u_9
+N : Type u_10
+P : Type u_11
+inst✝⁶ : Semiring R
+inst✝⁵ : AddCommGroup M
+inst✝⁴ : AddCommGroup N
+inst✝³ : AddCommGroup P
+inst✝² : Module R M
+inst✝¹ : Module R N
+inst✝ : Module R P
+f : M →ₗ[R] N
+g : N →ₗ[R] P
+h : Function.Exact ⇑f ⇑g
+hf : Function.Injective ⇑f
+hg : Function.Surjective ⇑g
+s : P →ₗ[R] N := sorry
+hs : g ∘ₗ s = LinearMap.id
+r : N →ₗ[R] N := LinearMap.id - s ∘ₗ g
+hr_ker : ∀ (n : N), g (r n) = 0
+hr_mem_range : ∀ (n : N), ∃ m, f m = r n
+a : R
+x : N
+hx : f (Classical.choose ⋯) = r x
+hax : f (Classical.choose ⋯) = r (a • x)
+⊢ f (Classical.choose ⋯) = f ((RingHom.id R) a • Classical.choose ⋯)
+Source line 45:
+        rw [hx, hax]
+            ^^
+Highlighted span: hx
+
+ERROR .LspCheck.lean:53:60-53:61
+Invalid rewrite argument: Expected an equality or iff proof or definition name, but `r` is a value of type
+  N →ₗ[R] N
+Source line 53:
+    rw [LinearMap.comp_apply, LinearMap.id_apply, hk_spec, r]
+                                                           ^
+Highlighted span: r
+
+ERROR .LspCheck.lean:60:9-60:17
+Tactic `apply` failed: could not unify the conclusion of `hf`
+  Eq.{u_9 + 1} ?a₁ ?a₂
+with the goal
+  Eq.{u_10 + 1} ((fun mp ↦ f mp.1 + s mp.2) ((fun n ↦ (k n, g n)) n)) n
+
+Note: The full type of `hf` is
+  Function.Injective ⇑f
+
+R : Type u_8
+M : Type u_9
+N : Type u_10
+P : Type u_11
+inst✝⁶ : Semiring R
+inst✝⁵ : AddCommGroup M
+inst✝⁴ : AddCommGroup N
+inst✝³ : AddCommGroup P
+inst✝² : Module R M
+inst✝¹ : Module R N
+inst✝ : Module R P
+f : M →ₗ[R] N
+g : N →ₗ[R] P
+h : Function.Exact ⇑f ⇑g
+hf : Function.Injective ⇑f
+hg : Function.Surjective ⇑g
+s : P →ₗ[R] N := sorry
+hs : g ∘ₗ s = LinearMap.id
+r : N →ₗ[R] N := LinearMap.id - s ∘ₗ g
+hr_ker : ∀ (n : N), g (r n) = 0
+hr_mem_range : ∀ (n : N), ∃ m, f m = r n
+k : N →ₗ[R] M := { toFun := fun n ↦ Classical.choose ⋯, map_add' := ⋯, map_smul' := ⋯ }
+hk_spec : ∀ (n : N), f (k n) = r n
+hk_left : k ∘ₗ f = LinearMap.id
+n : N
+⊢ (fun mp ↦ f mp.1 + s mp.2) ((fun n ↦ (k n, g n)) n) = n
+Source line 60:
+        apply hf
+        ^^^^^^^^
+Highlighted span: apply hf
+
+ERROR .LspCheck.lean:69:24-69:25
+Invalid rewrite argument: Expected an equality or iff proof or definition name, but `r` is a value of type
+  N →ₗ[R] N
+Source line 69:
+          rw [hk_spec, r, map_add, hs]
+                       ^
+Highlighted span: r
+
+ERROR .LspCheck.lean:71:9-72:1
+unsolved goals
+case snd
+R : Type u_8
+M : Type u_9
+N : Type u_10
+P : Type u_11
+inst✝⁶ : Semiring R
+inst✝⁵ : AddCommGroup M
+inst✝⁴ : AddCommGroup N
+inst✝³ : AddCommGroup P
+inst✝² : Module R M
+inst✝¹ : Module R N
+inst✝ : Module R P
+f : M →ₗ[R] N
+g : N →ₗ[R] P
+h : Function.Exact ⇑f ⇑g
+hf : Function.Injective ⇑f
+hg : Function.Surjective ⇑g
+s : P →ₗ[R] N := sorry
+hs : g ∘ₗ s = LinearMap.id
+r : N →ₗ[R] N := LinearMap.id - s ∘ₗ g
+hr_ker : ∀ (n : N), g (r n) = 0
+hr_mem_range : ∀ (n : N), ∃ m, f m = r n
+k : N →ₗ[R] M := { toFun := fun n ↦ Classical.choose ⋯, map_add' := ⋯, map_smul' := ⋯ }
+hk_spec : ∀ (n : N), f (k n) = r n
+hk_left : k ∘ₗ f = LinearMap.id
+mp : M × P
+⊢ g (f mp.1) + g (s mp.2) = mp.2
+Source line 71:
+        · change g (f mp.1 + s mp.2) = mp.2
+        ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:84:7-84:15
+Tactic `apply` failed: could not unify the conclusion of `hf`
+  Eq.{u_9 + 1} ?a₁ ?a₂
+with the goal
+  Eq.{u_10 + 1} (f m) ((↑e.symm ∘ₗ LinearMap.inl R M P) m)
+
+Note: The full type of `hf` is
+  Function.Injective ⇑f
+
+case refine_1.h
+R : Type u_8
+M : Type u_9
+N : Type u_10
+P : Type u_11
+inst✝⁶ : Semiring R
+inst✝⁵ : AddCommGroup M
+inst✝⁴ : AddCommGroup N
+inst✝³ : AddCommGroup P
+inst✝² : Module R M
+inst✝¹ : Module R N
+inst✝ : Module R P
+f : M →ₗ[R] N
+g : N →ₗ[R] P
+h : Function.Exact ⇑f ⇑g
+hf : Function.Injective ⇑f
+hg : Function.Surjective ⇑g
+s : P →ₗ[R] N := sorry
+hs : g ∘ₗ s = LinearMap.id
+r : N →ₗ[R] N := LinearMap.id - s ∘ₗ g
+hr_ker : ∀ (n : N), g (r n) = 0
+hr_mem_range : ∀ (n : N), ∃ m, f m = r n
+k : N →ₗ[R] M := { toFun := fun n ↦ Classical.choose ⋯, map_add' := ⋯, map_smul' := ⋯ }
+hk_spec : ∀ (n : N), f (k n) = r n
+hk_left : k ∘ₗ f = LinearMap.id
+e : N ≃ₗ[R] M × P :=
+  { toFun := fun n ↦ (k n, g n), map_add' := ⋯, map_smul' := ⋯, invFun := fun mp ↦ f mp.1 + s mp.2, left_inv := ⋯,
+    right_inv := ⋯ }
+h1 : ∃ l, g ∘ₗ l = LinearMap.id
+h2 : ∃ l, l ∘ₗ f = LinearMap.id
+m : M
+⊢ f m = (↑e.symm ∘ₗ LinearMap.inl R M P) m
+Source line 84:
+      apply hf
+      ^^^^^^^^
+Highlighted span: apply hf
+
+ERROR .LspCheck.lean:89:9-89:28
+Unknown constant `List.TFAE.of_forall`
+Source line 89:
+  exact List.TFAE.of_forall fun i => by
+        ^^^^^^^^^^^^^^^^^^^
+Highlighted span: List.TFAE.of_forall
+
+WARNING .LspCheck.lean:26:14-26:16
+This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp [r,̵ ̵h̵s̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 26:
+    simp [r, hs]
+             ^^
+Highlighted span: hs
+
+WARNING .LspCheck.lean:72:17-72:19
+This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵s̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 72:
+          simp [hs]
+                ^^
+Highlighted span: hs
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R M M' N N' P P' : Type*}
+
+variable [Semiring R]
+
+variable [AddCommGroup M] [AddCommGroup N] [AddCommGroup P] [Module R M] [Module R N] [Module R P]
+
+variable {f : M →ₗ[R] N} {g : N →ₗ[R] P}
+
+theorem Exact.split_tfae
+    {R M N P} [Semiring R] [AddCommGroup M] [AddCommGroup N]
+    [AddCommGroup P] [Module R M] [Module R N] [Module R P] {f : M →ₗ[R] N} {g : N →ₗ[R] P}
+    (h : Function.Exact f g) (hf : Function.Injective f) (hg : Function.Surjective g) :
+    List.TFAE [
+      ∃ l, g ∘ₗ l = LinearMap.id,
+      ∃ l, l ∘ₗ f = LinearMap.id,
+      ∃ e : N ≃ₗ[R] M × P, f = e.symm ∘ₗ LinearMap.inl R M P ∧ g = LinearMap.snd R M P ∘ₗ e] := by
+  classical
+  rcases h.split hf hg with ⟨s, hs, r, hr, e, rfl⟩
+  have h0 : (∃ l, g ∘ₗ l = LinearMap.id) := ⟨s, hs⟩
+  have h1 : (∃ l, l ∘ₗ f = LinearMap.id) := ⟨r, hr⟩
+  have h2 : (∃ e' : N ≃ₗ[R] M × P,
+      f = e'.symm ∘ₗ LinearMap.inl R M P ∧ g = LinearMap.snd R M P ∘ₗ e') := by
+    refine ⟨e, ?_, ?_⟩
+    · ext m
+      simp
+    · ext n
+      simp
+  refine List.tfae_of_cycle ?_
+  intro i hi
+  fin_cases i
+  · simpa using (show h0 → h1 from fun _ => h1)
+  · simpa using (show h1 → h2 from fun _ => h2)
+  · simpa using (show h2 → h0 from fun _ => h0)
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:20:12-20:17
+Invalid field `split`: The environment does not contain `Function.split`, so it is not possible to project the field `split` from an expression
+  h
+of type
+  ∀ (y : N), g y = 0 ↔ y ∈ Set.range ⇑f
+Source line 20:
+  rcases h.split hf hg with ⟨s, hs, r, hr, e, rfl⟩
+           ^^^^^
+Highlighted span: split
+
+ERROR .LspCheck.lean:20:29-20:51
+Tactic `rcases` failed: `x✝ : ?m.227` is not an inductive datatype
+Source line 20:
+  rcases h.split hf hg with ⟨s, hs, r, hr, e, rfl⟩
+                            ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ⟨s, hs, r, hr, e, rfl⟩
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:20:12-20:17
+Invalid field `split`: The environment does not contain `Function.split`, so it is not possible to project the field `split` from an expression
+  h
+of type
+  ∀ (y : N), g y = 0 ↔ y ∈ Set.range ⇑f
+Source line 20:
+  rcases h.split hf hg with ⟨s, hs, r, hr, e, rfl⟩
+           ^^^^^
+Highlighted span: split
+
+ERROR .LspCheck.lean:20:29-20:51
+Tactic `rcases` failed: `x✝ : ?m.227` is not an inductive datatype
+Source line 20:
+  rcases h.split hf hg with ⟨s, hs, r, hr, e, rfl⟩
+                            ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: ⟨s, hs, r, hr, e, rfl⟩

@@ -1,0 +1,258 @@
+FILE: Operations.mul_induction_on.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Operations.mul_induction_on.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R : Type u} [Semiring R] {A : Type v} [Semiring A] [Module R A]
+
+variable {M : Type*} [AddCommMonoid M] [Module R M] [Module A M] [IsScalarTower R A M]
+
+variable [IsScalarTower R A A]
+
+variable (S T : Set A) {M N P Q : Submodule R A} {m n : A}
+
+theorem mul_induction_on {C : A → Prop} {r : A} (hr : r ∈ M * N)
+    (hm : ∀ m ∈ M, ∀ n ∈ N, C (m * n)) (ha : ∀ x y, C x → C y → C (x + y)) : C r := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type u} [Semiring R] {A : Type v} [Semiring A] [Module R A]
+
+variable {M : Type*} [AddCommMonoid M] [Module R M] [Module A M] [IsScalarTower R A M]
+
+variable [IsScalarTower R A A]
+
+variable (S T : Set A) {M N P Q : Submodule R A} {m n : A}
+
+theorem mul_induction_on {C : A → Prop} {r : A} (hr : r ∈ M * N)
+    (hm : ∀ m ∈ M, ∀ n ∈ N, C (m * n)) (ha : ∀ x y, C x → C y → C (x + y)) : C r := by
+  rw [Submodule.mul_mem_iff_exists_finset] at hr
+  rcases hr with ⟨s, hs⟩
+  classical
+  revert hs
+  refine Finset.induction_on s ?_ ?_
+  · intro hs
+    simp at hs
+  · intro a s ha_s ih hs
+    rw [Finset.sum_insert ha_s] at hs
+    exact ha _ _ (hm _ hs.1 _ hs.2.1) (ih hs.2.2)
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:7-13:42
+Unknown constant `Submodule.mul_mem_iff_exists_finset`
+Source line 13:
+  rw [Submodule.mul_mem_iff_exists_finset] at hr
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submodule.mul_mem_iff_exists_finset
+
+ERROR .LspCheck.lean:12:85-13:1
+unsolved goals
+R : Type u
+inst✝³ : Semiring R
+A : Type v
+inst✝² : Semiring A
+inst✝¹ : Module R A
+inst✝ : IsScalarTower R A A
+M N : Submodule R A
+C : A → Prop
+r : A
+hr : r ∈ M * N
+hm : ∀ m ∈ M, ∀ n ∈ N, C (m * n)
+ha : ∀ (x y : A), C x → C y → C (x + y)
+⊢ C r
+Source line 12:
+    (hm : ∀ m ∈ M, ∀ n ∈ N, C (m * n)) (ha : ∀ x y, C x → C y → C (x + y)) : C r := by
+                                                                                    ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:7-13:42
+Unknown constant `Submodule.mul_mem_iff_exists_finset`
+Source line 13:
+  rw [Submodule.mul_mem_iff_exists_finset] at hr
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submodule.mul_mem_iff_exists_finset
+
+ERROR .LspCheck.lean:12:85-13:1
+unsolved goals
+R : Type u
+inst✝³ : Semiring R
+A : Type v
+inst✝² : Semiring A
+inst✝¹ : Module R A
+inst✝ : IsScalarTower R A A
+M N : Submodule R A
+C : A → Prop
+r : A
+hr : r ∈ M * N
+hm : ∀ m ∈ M, ∀ n ∈ N, C (m * n)
+ha : ∀ (x y : A), C x → C y → C (x + y)
+⊢ C r
+Source line 12:
+    (hm : ∀ m ∈ M, ∀ n ∈ N, C (m * n)) (ha : ∀ x y, C x → C y → C (x + y)) : C r := by
+                                                                                    ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type u} [Semiring R] {A : Type v} [Semiring A] [Module R A]
+
+variable {M : Type*} [AddCommMonoid M] [Module R M] [Module A M] [IsScalarTower R A M]
+
+variable [IsScalarTower R A A]
+
+variable (S T : Set A) {M N P Q : Submodule R A} {m n : A}
+
+theorem mul_induction_on {C : A → Prop} {r : A} (hr : r ∈ M * N)
+    (hm : ∀ m ∈ M, ∀ n ∈ N, C (m * n)) (ha : ∀ x y, C x → C y → C (x + y)) : C r := by
+  refine Submodule.mul_induction_on ?_ hr hm ?_
+  · simpa using ha
+  · have h0m : (0 : A) ∈ M := M.zero_mem
+    have h0n : (0 : A) ∈ N := N.zero_mem
+    simpa using hm 0 h0m 0 h0n
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:40-13:42
+Type mismatch
+  hr
+has type
+  r ∈ M * N
+but is expected to have type
+  ∀ m ∈ ?m.57, ∀ n ∈ ?m.58, ∀ (x : ?m.64), C r
+Source line 13:
+  refine Submodule.mul_induction_on ?_ hr hm ?_
+                                       ^^
+Highlighted span: hr
+
+ERROR .LspCheck.lean:13:43-13:45
+Type mismatch
+  hm
+has type
+  ∀ m ∈ M, ∀ n ∈ N, C (m * n)
+but is expected to have type
+  ∀ (x : ?m.53) (y : ?m.53), (∀ (x : ?m.64), C r) → (∀ (x : ?m.64), C r) → ∀ (x : ?m.64), C r
+Source line 13:
+  refine Submodule.mul_induction_on ?_ hr hm ?_
+                                          ^^
+Highlighted span: hm
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:40-13:42
+Type mismatch
+  hr
+has type
+  r ∈ M * N
+but is expected to have type
+  ∀ m ∈ ?m.57, ∀ n ∈ ?m.58, ∀ (x : ?m.64), C r
+Source line 13:
+  refine Submodule.mul_induction_on ?_ hr hm ?_
+                                       ^^
+Highlighted span: hr
+
+ERROR .LspCheck.lean:13:43-13:45
+Type mismatch
+  hm
+has type
+  ∀ m ∈ M, ∀ n ∈ N, C (m * n)
+but is expected to have type
+  ∀ (x : ?m.53) (y : ?m.53), (∀ (x : ?m.64), C r) → (∀ (x : ?m.64), C r) → ∀ (x : ?m.64), C r
+Source line 13:
+  refine Submodule.mul_induction_on ?_ hr hm ?_
+                                          ^^
+Highlighted span: hm
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type u} [Semiring R] {A : Type v} [Semiring A] [Module R A]
+
+variable {M : Type*} [AddCommMonoid M] [Module R M] [Module A M] [IsScalarTower R A M]
+
+variable [IsScalarTower R A A]
+
+variable (S T : Set A) {M N P Q : Submodule R A} {m n : A}
+
+theorem mul_induction_on {C : A → Prop} {r : A} (hr : r ∈ M * N)
+    (hm : ∀ m ∈ M, ∀ n ∈ N, C (m * n)) (ha : ∀ x y, C x → C y → C (x + y)) : C r := by
+  classical
+  simpa using hr using
+    (Submodule.mul_induction_on (p := C) (M := M) (N := N) (r := r) hr hm
+      (by
+        intro x y hx hy
+        exact ha x y hx hy)
+      (by
+        exact hm 0 M.zero_mem 0 N.zero_mem))
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:3-14:17
+Type mismatch: After simplification, term
+  hr
+ has type
+  r ∈ M * N
+but is expected to have type
+  C r
+Source line 14:
+  simpa using hr using
+  ^^^^^^^^^^^^^^
+Highlighted span: simpa using hr
+
+ERROR .LspCheck.lean:14:18-14:23
+unexpected token 'using'; expected command
+Source line 14:
+  simpa using hr using
+                 ^^^^^
+Highlighted span: using
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:3-14:17
+Type mismatch: After simplification, term
+  hr
+ has type
+  r ∈ M * N
+but is expected to have type
+  C r
+Source line 14:
+  simpa using hr using
+  ^^^^^^^^^^^^^^
+Highlighted span: simpa using hr
+
+ERROR .LspCheck.lean:14:18-14:23
+unexpected token 'using'; expected command
+Source line 14:
+  simpa using hr using
+                 ^^^^^
+Highlighted span: using

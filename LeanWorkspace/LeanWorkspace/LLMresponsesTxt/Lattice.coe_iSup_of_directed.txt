@@ -1,0 +1,264 @@
+FILE: Lattice.coe_iSup_of_directed.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Lattice.coe_iSup_of_directed.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G]
+
+variable (H K : Subgroup G)
+
+variable {k : Set G}
+
+theorem coe_iSup_of_directed {ι} [Nonempty ι] {S : ι → Subgroup G} (hS : Directed (· ≤ ·) S) :
+    ((⨆ i, S i : Subgroup G) : Set G) = ⋃ i, S i := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G]
+
+variable (H K : Subgroup G)
+
+variable {k : Set G}
+
+theorem coe_iSup_of_directed {ι} [Nonempty ι] {S : ι → Subgroup G} (hS : Directed (· ≤ ·) S) :
+    ((⨆ i, S i : Subgroup G) : Set G) = ⋃ i, S i := by
+  ext x
+  constructor
+  · intro hx
+    rw [Subgroup.mem_iSup_of_directed hS] at hx
+    simpa [Set.mem_iUnion] using hx
+  · intro hx
+    rw [Set.mem_iUnion] at hx
+    rw [Subgroup.mem_iSup_of_directed hS]
+    simpa using hx
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:9-16:41
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.43 ∈ iSup S
+in the target expression
+  x ∈ ↑(⨆ i, S i)
+
+case h.mp
+G : Type u_1
+inst✝¹ : Group G
+ι : Sort u_2
+inst✝ : Nonempty ι
+S : ι → Subgroup G
+hS : Directed (fun x1 x2 ↦ x1 ≤ x2) S
+x : G
+hx : x ∈ ↑(⨆ i, S i)
+⊢ x ∈ ⋃ i, ↑(S i)
+Source line 16:
+    rw [Subgroup.mem_iSup_of_directed hS] at hx
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subgroup.mem_iSup_of_directed hS
+
+ERROR .LspCheck.lean:20:9-20:41
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.59 ∈ iSup S
+in the target expression
+  x ∈ ↑(⨆ i, S i)
+
+case h.mpr
+G : Type u_1
+inst✝¹ : Group G
+ι : Sort u_2
+inst✝ : Nonempty ι
+S : ι → Subgroup G
+hS : Directed (fun x1 x2 ↦ x1 ≤ x2) S
+x : G
+hx : ∃ i, x ∈ ↑(S i)
+⊢ x ∈ ↑(⨆ i, S i)
+Source line 20:
+    rw [Subgroup.mem_iSup_of_directed hS]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subgroup.mem_iSup_of_directed hS
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:9-16:41
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.43 ∈ iSup S
+in the target expression
+  x ∈ ↑(⨆ i, S i)
+
+case h.mp
+G : Type u_1
+inst✝¹ : Group G
+ι : Sort u_2
+inst✝ : Nonempty ι
+S : ι → Subgroup G
+hS : Directed (fun x1 x2 ↦ x1 ≤ x2) S
+x : G
+hx : x ∈ ↑(⨆ i, S i)
+⊢ x ∈ ⋃ i, ↑(S i)
+Source line 16:
+    rw [Subgroup.mem_iSup_of_directed hS] at hx
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subgroup.mem_iSup_of_directed hS
+
+ERROR .LspCheck.lean:20:9-20:41
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.59 ∈ iSup S
+in the target expression
+  x ∈ ↑(⨆ i, S i)
+
+case h.mpr
+G : Type u_1
+inst✝¹ : Group G
+ι : Sort u_2
+inst✝ : Nonempty ι
+S : ι → Subgroup G
+hS : Directed (fun x1 x2 ↦ x1 ≤ x2) S
+x : G
+hx : ∃ i, x ∈ ↑(S i)
+⊢ x ∈ ↑(⨆ i, S i)
+Source line 20:
+    rw [Subgroup.mem_iSup_of_directed hS]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subgroup.mem_iSup_of_directed hS
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G]
+
+variable (H K : Subgroup G)
+
+variable {k : Set G}
+
+theorem coe_iSup_of_directed {ι} [Nonempty ι] {S : ι → Subgroup G} (hS : Directed (· ≤ ·) S) :
+    ((⨆ i, S i : Subgroup G) : Set G) = ⋃ i, S i := by
+  ext x
+  simp only [Set.mem_iUnion]
+  constructor
+  · intro hx
+    exact Subgroup.mem_iSup_of_directed hS.mp hx
+  · intro hx
+    exact Subgroup.mem_iSup_of_directed hS.mpr hx
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:17:44-17:46
+Invalid field `mp`: The environment does not contain `Function.mp`, so it is not possible to project the field `mp` from an expression
+  hS
+of type
+  ∀ (x y : ι), ∃ z, (fun x1 x2 ↦ x1 ≤ x2) (S x) (S z) ∧ (fun x1 x2 ↦ x1 ≤ x2) (S y) (S z)
+Source line 17:
+    exact Subgroup.mem_iSup_of_directed hS.mp hx
+                                           ^^
+Highlighted span: mp
+
+ERROR .LspCheck.lean:19:44-19:47
+Invalid field `mpr`: The environment does not contain `Function.mpr`, so it is not possible to project the field `mpr` from an expression
+  hS
+of type
+  ∀ (x y : ι), ∃ z, (fun x1 x2 ↦ x1 ≤ x2) (S x) (S z) ∧ (fun x1 x2 ↦ x1 ≤ x2) (S y) (S z)
+Source line 19:
+    exact Subgroup.mem_iSup_of_directed hS.mpr hx
+                                           ^^^
+Highlighted span: mpr
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:17:44-17:46
+Invalid field `mp`: The environment does not contain `Function.mp`, so it is not possible to project the field `mp` from an expression
+  hS
+of type
+  ∀ (x y : ι), ∃ z, (fun x1 x2 ↦ x1 ≤ x2) (S x) (S z) ∧ (fun x1 x2 ↦ x1 ≤ x2) (S y) (S z)
+Source line 17:
+    exact Subgroup.mem_iSup_of_directed hS.mp hx
+                                           ^^
+Highlighted span: mp
+
+ERROR .LspCheck.lean:19:44-19:47
+Invalid field `mpr`: The environment does not contain `Function.mpr`, so it is not possible to project the field `mpr` from an expression
+  hS
+of type
+  ∀ (x y : ι), ∃ z, (fun x1 x2 ↦ x1 ≤ x2) (S x) (S z) ∧ (fun x1 x2 ↦ x1 ≤ x2) (S y) (S z)
+Source line 19:
+    exact Subgroup.mem_iSup_of_directed hS.mpr hx
+                                           ^^^
+Highlighted span: mpr
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G]
+
+variable (H K : Subgroup G)
+
+variable {k : Set G}
+
+theorem coe_iSup_of_directed {ι} [Nonempty ι] {S : ι → Subgroup G} (hS : Directed (· ≤ ·) S) :
+    ((⨆ i, S i : Subgroup G) : Set G) = ⋃ i, S i := by
+  ext x
+  simp only [Set.mem_iUnion]
+  exact Subgroup.mem_iSup_of_directed hS x
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:9-15:43
+Function expected at
+  Subgroup.mem_iSup_of_directed hS
+but this term has type
+  ?m.38 ∈ iSup S ↔ ∃ i, ?m.38 ∈ S i
+
+Note: Expected a function because this term is being applied to the argument
+  x
+Source line 15:
+  exact Subgroup.mem_iSup_of_directed hS x
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subgroup.mem_iSup_of_directed hS x
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:9-15:43
+Function expected at
+  Subgroup.mem_iSup_of_directed hS
+but this term has type
+  ?m.38 ∈ iSup S ↔ ∃ i, ?m.38 ∈ S i
+
+Note: Expected a function because this term is being applied to the argument
+  x
+Source line 15:
+  exact Subgroup.mem_iSup_of_directed hS x
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subgroup.mem_iSup_of_directed hS x

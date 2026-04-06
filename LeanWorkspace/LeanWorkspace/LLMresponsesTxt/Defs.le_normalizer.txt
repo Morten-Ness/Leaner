@@ -1,0 +1,160 @@
+FILE: Defs.le_normalizer.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Defs.le_normalizer.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G] {A : Type*} [AddGroup A]
+
+variable (H : Subgroup G)
+
+theorem le_normalizer : H ≤ Subgroup.normalizer H := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G] {A : Type*} [AddGroup A]
+
+variable (H : Subgroup G)
+
+theorem le_normalizer : H ≤ Subgroup.normalizer H := by
+  intro h hh
+  rw [Subgroup.mem_normalizer_iff]
+  intro n hn
+  exact H.mul_mem (H.mul_mem hh hn) (H.inv_mem hh)
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:11-12:13
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+G : Type u_1
+inst✝ : Group G
+H : Subgroup G
+h : G
+hh : h ∈ H
+n : G
+⊢ n ∈ H ↔ h * n * h⁻¹ ∈ H
+Source line 12:
+  intro n hn
+          ^^
+Highlighted span: hn
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:11-12:13
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+G : Type u_1
+inst✝ : Group G
+H : Subgroup G
+h : G
+hh : h ∈ H
+n : G
+⊢ n ∈ H ↔ h * n * h⁻¹ ∈ H
+Source line 12:
+  intro n hn
+          ^^
+Highlighted span: hn
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G] {A : Type*} [AddGroup A]
+
+variable (H : Subgroup G)
+
+theorem le_normalizer : H ≤ Subgroup.normalizer H := by
+  intro h hh
+  rw [Subgroup.mem_normalizer_iff]
+  constructor
+  · intro hn
+    exact H.mul_mem (H.mul_mem hh hn) (H.inv_mem hh)
+  · intro hn
+    have h_inv : h⁻¹ ∈ H := H.inv_mem hh
+    have hh' : h ∈ H := hh
+    have : h⁻¹ * (h * n * h⁻¹) * h ∈ H :=
+      H.mul_mem (H.mul_mem h_inv hn) hh'
+    simpa [mul_assoc] using this
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:3-12:14
+Tactic `constructor` failed: target is not an inductive datatype
+
+G : Type u_1
+inst✝ : Group G
+H : Subgroup G
+h : G
+hh : h ∈ H
+⊢ ∀ (h_1 : G), h_1 ∈ H ↔ h * h_1 * h⁻¹ ∈ H
+Source line 12:
+  constructor
+  ^^^^^^^^^^^
+Highlighted span: constructor
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:3-12:14
+Tactic `constructor` failed: target is not an inductive datatype
+
+G : Type u_1
+inst✝ : Group G
+H : Subgroup G
+h : G
+hh : h ∈ H
+⊢ ∀ (h_1 : G), h_1 ∈ H ↔ h * h_1 * h⁻¹ ∈ H
+Source line 12:
+  constructor
+  ^^^^^^^^^^^
+Highlighted span: constructor
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G] {A : Type*} [AddGroup A]
+
+variable (H : Subgroup G)
+
+theorem le_normalizer : H ≤ Subgroup.normalizer H := by
+  intro h hh
+  rw [Subgroup.mem_normalizer_iff]
+  intro n
+  constructor
+  · intro hn
+    exact H.mul_mem (H.mul_mem hh hn) (H.inv_mem hh)
+  · intro hn
+    have h_inv : h⁻¹ ∈ H := H.inv_mem hh
+    have : h⁻¹ * (h * n * h⁻¹) * h ∈ H := H.mul_mem (H.mul_mem h_inv hn) hh
+    simpa [mul_assoc] using this
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

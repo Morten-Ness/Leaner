@@ -1,0 +1,159 @@
+FILE: NonUnitalSubalgebra.inclusion_injective.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: NonUnitalSubalgebra.inclusion_injective.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R : Type u} {A : Type v} {B : Type w}
+
+variable [CommSemiring R]
+
+variable [NonUnitalNonAssocSemiring A] [Module R A]
+
+variable (S : NonUnitalSubalgebra R A)
+
+variable [NonUnitalNonAssocSemiring B] [Module R B]
+
+theorem inclusion_injective {S T : NonUnitalSubalgebra R A} (h : S ≤ T) :
+    Function.Injective (NonUnitalSubalgebra.inclusion h) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type u} {A : Type v} {B : Type w}
+
+variable [CommSemiring R]
+
+variable [NonUnitalNonAssocSemiring A] [Module R A]
+
+variable (S : NonUnitalSubalgebra R A)
+
+variable [NonUnitalNonAssocSemiring B] [Module R B]
+
+theorem inclusion_injective {S T : NonUnitalSubalgebra R A} (h : S ≤ T) :
+    Function.Injective (NonUnitalSubalgebra.inclusion h) := by
+  intro x y hxy
+  ext
+  exact congrArg Subtype.val hxy
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:17:30-17:33
+Application type mismatch: The argument
+  hxy
+has type
+  (NonUnitalSubalgebra.inclusion h) x = (NonUnitalSubalgebra.inclusion h) y
+but is expected to have type
+  x = y
+in the application
+  congrArg Subtype.val hxy
+Source line 17:
+  exact congrArg Subtype.val hxy
+                             ^^^
+Highlighted span: hxy
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:17:30-17:33
+Application type mismatch: The argument
+  hxy
+has type
+  (NonUnitalSubalgebra.inclusion h) x = (NonUnitalSubalgebra.inclusion h) y
+but is expected to have type
+  x = y
+in the application
+  congrArg Subtype.val hxy
+Source line 17:
+  exact congrArg Subtype.val hxy
+                             ^^^
+Highlighted span: hxy
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type u} {A : Type v} {B : Type w}
+
+variable [CommSemiring R]
+
+variable [NonUnitalNonAssocSemiring A] [Module R A]
+
+variable (S : NonUnitalSubalgebra R A)
+
+variable [NonUnitalNonAssocSemiring B] [Module R B]
+
+theorem inclusion_injective {S T : NonUnitalSubalgebra R A} (h : S ≤ T) :
+    Function.Injective (NonUnitalSubalgebra.inclusion h) := by
+  intro x y hxy
+  cases x with
+  | mk x hx =>
+    cases y with
+    | mk y hy =>
+      change x = y at hxy
+      simp only [Subtype.mk.injEq] at hxy
+      subst hxy
+      rfl
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:20:7-20:26
+'change' tactic failed, pattern
+  x = y
+is not definitionally equal to target
+  (NonUnitalSubalgebra.inclusion h) ⟨x, hx⟩ = (NonUnitalSubalgebra.inclusion h) ⟨y, hy⟩
+Source line 20:
+      change x = y at hxy
+      ^^^^^^^^^^^^^^^^^^^
+Highlighted span: change x = y at hxy
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:20:7-20:26
+'change' tactic failed, pattern
+  x = y
+is not definitionally equal to target
+  (NonUnitalSubalgebra.inclusion h) ⟨x, hx⟩ = (NonUnitalSubalgebra.inclusion h) ⟨y, hy⟩
+Source line 20:
+      change x = y at hxy
+      ^^^^^^^^^^^^^^^^^^^
+Highlighted span: change x = y at hxy
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type u} {A : Type v} {B : Type w}
+
+variable [CommSemiring R]
+
+variable [NonUnitalNonAssocSemiring A] [Module R A]
+
+variable (S : NonUnitalSubalgebra R A)
+
+variable [NonUnitalNonAssocSemiring B] [Module R B]
+
+theorem inclusion_injective {S T : NonUnitalSubalgebra R A} (h : S ≤ T) :
+    Function.Injective (NonUnitalSubalgebra.inclusion h) := by
+  intro x y hxy
+  exact Subtype.ext <| congrArg ((↑) : T → A) hxy
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

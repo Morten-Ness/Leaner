@@ -1,0 +1,366 @@
+FILE: Basic.map_sub_nsmul.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.map_sub_nsmul.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_sub_nsmul [AddGroup G] [AddGroup H] [AddConstMapClass F G H a b]
+    (f : F) (x : G) (n : ℕ) : f (x - n • a) = f x - n • b := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_sub_nsmul [AddGroup G] [AddGroup H] [AddConstMapClass F G H a b]
+    (f : F) (x : G) (n : ℕ) : f (x - n • a) = f x - n • b := by
+  simpa [sub_eq_add_neg, nsmul_neg] using
+    (map_add_nsmul (F := F) (a := -a) (b := -b) f x n)
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:8:6-8:19
+Unknown identifier `map_add_nsmul`
+Source line 8:
+    (map_add_nsmul (F := F) (a := -a) (b := -b) f x n)
+     ^^^^^^^^^^^^^
+Highlighted span: map_add_nsmul
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:8:6-8:19
+Unknown identifier `map_add_nsmul`
+Source line 8:
+    (map_add_nsmul (F := F) (a := -a) (b := -b) f x n)
+     ^^^^^^^^^^^^^
+Highlighted span: map_add_nsmul
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_sub_nsmul [AddGroup G] [AddGroup H] [AddConstMapClass F G H a b]
+    (f : F) (x : G) (n : ℕ) : f (x - n • a) = f x - n • b := by
+  induction n with
+  | zero =>
+      simp
+  | succ n ih =>
+      calc
+        f (x - Nat.succ n • a)
+            = f ((x - n • a) - a) := by simp [sub_eq_add_neg, add_assoc, add_left_comm, add_comm]
+        _ = f (x - n • a) - b := by
+              simpa [sub_eq_add_neg] using (map_add (f := f) (x := x - n • a) (y := -a))
+        _ = (f x - n • b) - b := by rw [ih]
+        _ = f x - Nat.succ n • b := by simp [sub_eq_add_neg, add_assoc, add_left_comm, add_comm]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:38-13:98
+unsolved goals
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝³ : FunLike F G H
+a : G
+b : H
+inst✝² : AddGroup G
+inst✝¹ : AddGroup H
+inst✝ : AddConstMapClass F G H a b
+f : F
+x : G
+n : ℕ
+ih : f (x - n • a) = f x - n • b
+⊢ f (x + -((n + 1) • a)) = f (x + (-(n • a) + -a))
+Source line 13:
+            = f ((x - n • a) - a) := by simp [sub_eq_add_neg, add_assoc, add_left_comm, add_comm]
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: by simp [sub_eq_add_neg, add_assoc, add_left_comm, add_comm]
+
+ERROR .LspCheck.lean:15:45-15:88
+failed to synthesize instance of type class
+  AddHomClass F G H
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 15:
+              simpa [sub_eq_add_neg] using (map_add (f := f) (x := x - n • a) (y := -a))
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: map_add (f := f) (x := x - n • a) (y := -a)
+
+ERROR .LspCheck.lean:17:37-17:97
+unsolved goals
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝³ : FunLike F G H
+a : G
+b : H
+inst✝² : AddGroup G
+inst✝¹ : AddGroup H
+inst✝ : AddConstMapClass F G H a b
+f : F
+x : G
+n : ℕ
+ih : f (x - n • a) = f x - n • b
+⊢ -(n • b) + -b = -((n + 1) • b)
+Source line 17:
+        _ = f x - Nat.succ n • b := by simp [sub_eq_add_neg, add_assoc, add_left_comm, add_comm]
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: by simp [sub_eq_add_neg, add_assoc, add_left_comm, add_comm]
+
+WARNING .LspCheck.lean:13:74-13:87
+This simp argument is unused:
+  add_left_comm
+
+Hint: Omit it from the simp argument list.
+  simp [sub_eq_add_neg, add_assoc, a̵d̵d̵_̵l̵e̵f̵t̵_̵c̵o̵m̵m̵,̵ ̵add_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 13:
+            = f ((x - n • a) - a) := by simp [sub_eq_add_neg, add_assoc, add_left_comm, add_comm]
+                                                                         ^^^^^^^^^^^^^
+Highlighted span: add_left_comm
+
+WARNING .LspCheck.lean:13:89-13:97
+This simp argument is unused:
+  add_comm
+
+Hint: Omit it from the simp argument list.
+  simp [sub_eq_add_neg, add_assoc, add_left_comm,̵ ̵a̵d̵d̵_̵c̵o̵m̵m̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 13:
+            = f ((x - n • a) - a) := by simp [sub_eq_add_neg, add_assoc, add_left_comm, add_comm]
+                                                                                        ^^^^^^^^
+Highlighted span: add_comm
+
+WARNING .LspCheck.lean:17:73-17:86
+This simp argument is unused:
+  add_left_comm
+
+Hint: Omit it from the simp argument list.
+  simp [sub_eq_add_neg, add_assoc, a̵d̵d̵_̵l̵e̵f̵t̵_̵c̵o̵m̵m̵,̵ ̵add_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 17:
+        _ = f x - Nat.succ n • b := by simp [sub_eq_add_neg, add_assoc, add_left_comm, add_comm]
+                                                                        ^^^^^^^^^^^^^
+Highlighted span: add_left_comm
+
+WARNING .LspCheck.lean:17:88-17:96
+This simp argument is unused:
+  add_comm
+
+Hint: Omit it from the simp argument list.
+  simp [sub_eq_add_neg, add_assoc, add_left_comm,̵ ̵a̵d̵d̵_̵c̵o̵m̵m̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 17:
+        _ = f x - Nat.succ n • b := by simp [sub_eq_add_neg, add_assoc, add_left_comm, add_comm]
+                                                                                       ^^^^^^^^
+Highlighted span: add_comm
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:38-13:98
+unsolved goals
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝³ : FunLike F G H
+a : G
+b : H
+inst✝² : AddGroup G
+inst✝¹ : AddGroup H
+inst✝ : AddConstMapClass F G H a b
+f : F
+x : G
+n : ℕ
+ih : f (x - n • a) = f x - n • b
+⊢ f (x + -((n + 1) • a)) = f (x + (-(n • a) + -a))
+Source line 13:
+            = f ((x - n • a) - a) := by simp [sub_eq_add_neg, add_assoc, add_left_comm, add_comm]
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: by simp [sub_eq_add_neg, add_assoc, add_left_comm, add_comm]
+
+ERROR .LspCheck.lean:15:45-15:88
+failed to synthesize instance of type class
+  AddHomClass F G H
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 15:
+              simpa [sub_eq_add_neg] using (map_add (f := f) (x := x - n • a) (y := -a))
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: map_add (f := f) (x := x - n • a) (y := -a)
+
+ERROR .LspCheck.lean:17:37-17:97
+unsolved goals
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝³ : FunLike F G H
+a : G
+b : H
+inst✝² : AddGroup G
+inst✝¹ : AddGroup H
+inst✝ : AddConstMapClass F G H a b
+f : F
+x : G
+n : ℕ
+ih : f (x - n • a) = f x - n • b
+⊢ -(n • b) + -b = -((n + 1) • b)
+Source line 17:
+        _ = f x - Nat.succ n • b := by simp [sub_eq_add_neg, add_assoc, add_left_comm, add_comm]
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: by simp [sub_eq_add_neg, add_assoc, add_left_comm, add_comm]
+
+WARNING .LspCheck.lean:13:74-13:87
+This simp argument is unused:
+  add_left_comm
+
+Hint: Omit it from the simp argument list.
+  simp [sub_eq_add_neg, add_assoc, a̵d̵d̵_̵l̵e̵f̵t̵_̵c̵o̵m̵m̵,̵ ̵add_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 13:
+            = f ((x - n • a) - a) := by simp [sub_eq_add_neg, add_assoc, add_left_comm, add_comm]
+                                                                         ^^^^^^^^^^^^^
+Highlighted span: add_left_comm
+
+WARNING .LspCheck.lean:13:89-13:97
+This simp argument is unused:
+  add_comm
+
+Hint: Omit it from the simp argument list.
+  simp [sub_eq_add_neg, add_assoc, add_left_comm,̵ ̵a̵d̵d̵_̵c̵o̵m̵m̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 13:
+            = f ((x - n • a) - a) := by simp [sub_eq_add_neg, add_assoc, add_left_comm, add_comm]
+                                                                                        ^^^^^^^^
+Highlighted span: add_comm
+
+WARNING .LspCheck.lean:17:73-17:86
+This simp argument is unused:
+  add_left_comm
+
+Hint: Omit it from the simp argument list.
+  simp [sub_eq_add_neg, add_assoc, a̵d̵d̵_̵l̵e̵f̵t̵_̵c̵o̵m̵m̵,̵ ̵add_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 17:
+        _ = f x - Nat.succ n • b := by simp [sub_eq_add_neg, add_assoc, add_left_comm, add_comm]
+                                                                        ^^^^^^^^^^^^^
+Highlighted span: add_left_comm
+
+WARNING .LspCheck.lean:17:88-17:96
+This simp argument is unused:
+  add_comm
+
+Hint: Omit it from the simp argument list.
+  simp [sub_eq_add_neg, add_assoc, add_left_comm,̵ ̵a̵d̵d̵_̵c̵o̵m̵m̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 17:
+        _ = f x - Nat.succ n • b := by simp [sub_eq_add_neg, add_assoc, add_left_comm, add_comm]
+                                                                                       ^^^^^^^^
+Highlighted span: add_comm
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_sub_nsmul [AddGroup G] [AddGroup H] [AddConstMapClass F G H a b]
+    (f : F) (x : G) (n : ℕ) : f (x - n • a) = f x - n • b := by
+  induction n with
+  | zero =>
+      simp
+  | succ n ih =>
+      rw [succ_nsmul, sub_eq_add_neg, sub_eq_add_neg, ← add_assoc]
+      rw [AddConstMapClass.map_add_const (F := F) (f := f) (x := x - n • a)]
+      rw [ih]
+      simp [succ_nsmul, sub_eq_add_neg, add_assoc]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:55-11:66
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?a + (?b + ?c)
+in the target expression
+  f (x + -(n • a + a)) = f x + -((n + 1) • b)
+
+case succ
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝³ : FunLike F G H
+a : G
+b : H
+inst✝² : AddGroup G
+inst✝¹ : AddGroup H
+inst✝ : AddConstMapClass F G H a b
+f : F
+x : G
+n : ℕ
+ih : f (x - n • a) = f x - n • b
+⊢ f (x + -(n • a + a)) = f x + -((n + 1) • b)
+Source line 11:
+      rw [succ_nsmul, sub_eq_add_neg, sub_eq_add_neg, ← add_assoc]
+                                                      ^^^^^^^^^^^
+Highlighted span: ← add_assoc
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:55-11:66
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?a + (?b + ?c)
+in the target expression
+  f (x + -(n • a + a)) = f x + -((n + 1) • b)
+
+case succ
+F : Type u_1
+G : Type u_2
+H : Type u_3
+inst✝³ : FunLike F G H
+a : G
+b : H
+inst✝² : AddGroup G
+inst✝¹ : AddGroup H
+inst✝ : AddConstMapClass F G H a b
+f : F
+x : G
+n : ℕ
+ih : f (x - n • a) = f x - n • b
+⊢ f (x + -(n • a + a)) = f x + -((n + 1) • b)
+Source line 11:
+      rw [succ_nsmul, sub_eq_add_neg, sub_eq_add_neg, ← add_assoc]
+                                                      ^^^^^^^^^^^
+Highlighted span: ← add_assoc

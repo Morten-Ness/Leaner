@@ -1,0 +1,288 @@
+FILE: Basic.prod_sum_index.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.prod_sum_index.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {α ι γ A B C : Type*} [AddCommMonoid A] [AddCommMonoid B] [AddCommMonoid C]
+
+variable {t : ι → A → C}
+
+variable {s : Finset α} {f : α → ι →₀ A} (i : ι)
+
+variable (g : ι →₀ A) (k : ι → A → γ → B) (x : γ)
+
+variable {β M M' N P G H R S : Type*}
+
+theorem prod_sum_index [Zero M] [AddCommMonoid N] [CommMonoid P] {f : α →₀ M}
+    {g : α → M → β →₀ N} {h : β → N → P} (h_zero : ∀ a, h a 0 = 1)
+    (h_add : ∀ a b₁ b₂, h a (b₁ + b₂) = h a b₁ * h a b₂) :
+    (f.sum g).prod h = f.prod fun a b => (g a b).prod h := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α ι γ A B C : Type*} [AddCommMonoid A] [AddCommMonoid B] [AddCommMonoid C]
+
+variable {t : ι → A → C}
+
+variable {s : Finset α} {f : α → ι →₀ A} (i : ι)
+
+variable (g : ι →₀ A) (k : ι → A → γ → B) (x : γ)
+
+variable {β M M' N P G H R S : Type*}
+
+theorem prod_sum_index [Zero M] [AddCommMonoid N] [CommMonoid P] {f : α →₀ M}
+    {g : α → M → β →₀ N} {h : β → N → P} (h_zero : ∀ a, h a 0 = 1)
+    (h_add : ∀ a b₁ b₂, h a (b₁ + b₂) = h a b₁ * h a b₂) :
+    (f.sum g).prod h = f.prod fun a b => (g a b).prod h := by
+  classical
+  refine Finsupp.induction ?hz ?ha f
+  · simp [Finsupp.sum]
+  · intro a b f ha hf
+    rw [Finsupp.sum_add_index]
+    · rw [Finsupp.prod_add_index]
+      · rw [hf]
+        simp [h_add]
+      · intro c
+        exact h_zero c
+      · intro c n₁ n₂
+        exact h_add c n₁ n₂
+    · intro a'
+      simp
+    · intro a' b₁ b₂
+      simp [Finsupp.add_apply]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:18:36-18:37
+Type mismatch
+  f
+has type
+  α →₀ M
+of sort `Type (max u_8 u_1)` but is expected to have type
+  ∀ (a : ?m.49) (b : ?m.50) (f_1 : ?m.49 →₀ ?m.50),
+    a ∉ f_1.support →
+      b ≠ 0 → ((f.sum g).prod h = f.prod fun a b ↦ (g a b).prod h) → (f.sum g).prod h = f.prod fun a b ↦ (g a b).prod h
+of sort `Prop`
+Source line 18:
+  refine Finsupp.induction ?hz ?ha f
+                                   ^
+Highlighted span: f
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:18:36-18:37
+Type mismatch
+  f
+has type
+  α →₀ M
+of sort `Type (max u_8 u_1)` but is expected to have type
+  ∀ (a : ?m.49) (b : ?m.50) (f_1 : ?m.49 →₀ ?m.50),
+    a ∉ f_1.support →
+      b ≠ 0 → ((f.sum g).prod h = f.prod fun a b ↦ (g a b).prod h) → (f.sum g).prod h = f.prod fun a b ↦ (g a b).prod h
+of sort `Prop`
+Source line 18:
+  refine Finsupp.induction ?hz ?ha f
+                                   ^
+Highlighted span: f
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α ι γ A B C : Type*} [AddCommMonoid A] [AddCommMonoid B] [AddCommMonoid C]
+
+variable {t : ι → A → C}
+
+variable {s : Finset α} {f : α → ι →₀ A} (i : ι)
+
+variable (g : ι →₀ A) (k : ι → A → γ → B) (x : γ)
+
+variable {β M M' N P G H R S : Type*}
+
+theorem prod_sum_index [Zero M] [AddCommMonoid N] [CommMonoid P] {f : α →₀ M}
+    {g : α → M → β →₀ N} {h : β → N → P} (h_zero : ∀ a, h a 0 = 1)
+    (h_add : ∀ a b₁ b₂, h a (b₁ + b₂) = h a b₁ * h a b₂) :
+    (f.sum g).prod h = f.prod fun a b => (g a b).prod h := by
+  classical
+  refine Finsupp.induction_linear ?_ ?_ f
+  · simp [h_zero]
+  · intro a b f ha hb hf
+    rw [Finsupp.sum_add_index]
+    · rw [Finsupp.prod_add_index]
+      · simp [hf, h_add]
+      · intro c
+        exact h_zero c
+      · intro c n₁ n₂
+        exact h_add c n₁ n₂
+    · intro a'
+      simp
+    · intro a' b₁ b₂
+      simp [Finsupp.add_apply]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:18:10-18:42
+failed to elaborate eliminator, insufficient number of arguments, expected type:
+  (f.sum g).prod h = f.prod fun a b ↦ (g a b).prod h
+Source line 18:
+  refine Finsupp.induction_linear ?_ ?_ f
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finsupp.induction_linear ?_ ?_ f
+
+ERROR .LspCheck.lean:18:41-18:42
+Type mismatch
+  f
+has type
+  α →₀ M
+of sort `Type (max u_8 u_1)` but is expected to have type
+  ∀ (f g : ?m.49 →₀ ?m.50), ?m.52 f → ?m.52 g → ?m.52 (f + g)
+of sort `Prop`
+Source line 18:
+  refine Finsupp.induction_linear ?_ ?_ f
+                                        ^
+Highlighted span: f
+
+ERROR .LspCheck.lean:19:3-19:18
+No goals to be solved
+Source line 19:
+  · simp [h_zero]
+  ^^^^^^^^^^^^^^^
+Highlighted span: · simp [h_zero]
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:18:10-18:42
+failed to elaborate eliminator, insufficient number of arguments, expected type:
+  (f.sum g).prod h = f.prod fun a b ↦ (g a b).prod h
+Source line 18:
+  refine Finsupp.induction_linear ?_ ?_ f
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finsupp.induction_linear ?_ ?_ f
+
+ERROR .LspCheck.lean:18:41-18:42
+Type mismatch
+  f
+has type
+  α →₀ M
+of sort `Type (max u_8 u_1)` but is expected to have type
+  ∀ (f g : ?m.49 →₀ ?m.50), ?m.52 f → ?m.52 g → ?m.52 (f + g)
+of sort `Prop`
+Source line 18:
+  refine Finsupp.induction_linear ?_ ?_ f
+                                        ^
+Highlighted span: f
+
+ERROR .LspCheck.lean:19:3-19:18
+No goals to be solved
+Source line 19:
+  · simp [h_zero]
+  ^^^^^^^^^^^^^^^
+Highlighted span: · simp [h_zero]
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {α ι γ A B C : Type*} [AddCommMonoid A] [AddCommMonoid B] [AddCommMonoid C]
+
+variable {t : ι → A → C}
+
+variable {s : Finset α} {f : α → ι →₀ A} (i : ι)
+
+variable (g : ι →₀ A) (k : ι → A → γ → B) (x : γ)
+
+variable {β M M' N P G H R S : Type*}
+
+theorem prod_sum_index [Zero M] [AddCommMonoid N] [CommMonoid P] {f : α →₀ M}
+    {g : α → M → β →₀ N} {h : β → N → P} (h_zero : ∀ a, h a 0 = 1)
+    (h_add : ∀ a b₁ b₂, h a (b₁ + b₂) = h a b₁ * h a b₂) :
+    (f.sum g).prod h = f.prod fun a b => (g a b).prod h := by
+  classical
+  rw [Finsupp.prod]
+  simp_rw [Finsupp.sum]
+  rw [Finset.prod_sigma']
+  refine Finset.prod_congr rfl ?_
+  intro a ha
+  rw [Finset.prod_fiberwise_of_maps_to]
+  · simp
+  · intro b hb
+    exact Finset.mem_univ _
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:20:7-20:25
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∏ a ∈ ?s, ∏ s ∈ ?t a, ?f a s
+in the target expression
+  ∏ x ∈ (∑ a ∈ f.support, g a (f a)).support, h x ((∑ a ∈ f.support, g a (f a)) x) = f.prod fun a b ↦ (g a b).prod h
+
+α : Type u_1
+β : Type u_7
+M : Type u_8
+N : Type u_10
+P : Type u_11
+inst✝² : Zero M
+inst✝¹ : AddCommMonoid N
+inst✝ : CommMonoid P
+f : α →₀ M
+g : α → M → β →₀ N
+h : β → N → P
+h_zero : ∀ (a : β), h a 0 = 1
+h_add : ∀ (a : β) (b₁ b₂ : N), h a (b₁ + b₂) = h a b₁ * h a b₂
+⊢ ∏ x ∈ (∑ a ∈ f.support, g a (f a)).support, h x ((∑ a ∈ f.support, g a (f a)) x) = f.prod fun a b ↦ (g a b).prod h
+Source line 20:
+  rw [Finset.prod_sigma']
+      ^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.prod_sigma'
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:20:7-20:25
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∏ a ∈ ?s, ∏ s ∈ ?t a, ?f a s
+in the target expression
+  ∏ x ∈ (∑ a ∈ f.support, g a (f a)).support, h x ((∑ a ∈ f.support, g a (f a)) x) = f.prod fun a b ↦ (g a b).prod h
+
+α : Type u_1
+β : Type u_7
+M : Type u_8
+N : Type u_10
+P : Type u_11
+inst✝² : Zero M
+inst✝¹ : AddCommMonoid N
+inst✝ : CommMonoid P
+f : α →₀ M
+g : α → M → β →₀ N
+h : β → N → P
+h_zero : ∀ (a : β), h a 0 = 1
+h_add : ∀ (a : β) (b₁ b₂ : N), h a (b₁ + b₂) = h a b₁ * h a b₂
+⊢ ∏ x ∈ (∑ a ∈ f.support, g a (f a)).support, h x ((∑ a ∈ f.support, g a (f a)) x) = f.prod fun a b ↦ (g a b).prod h
+Source line 20:
+  rw [Finset.prod_sigma']
+      ^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.prod_sigma'

@@ -1,0 +1,331 @@
+FILE: Exact.Exact.split_tfae'.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Exact.Exact.split_tfae'.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R M M' N N' P P' : Type*}
+
+variable [Semiring R]
+
+variable [AddCommGroup M] [AddCommGroup N] [AddCommGroup P] [Module R M] [Module R N] [Module R P]
+
+variable {f : M →ₗ[R] N} {g : N →ₗ[R] P}
+
+theorem Exact.split_tfae' (h : Function.Exact f g) :
+    List.TFAE [
+      Function.Injective f ∧ ∃ l, g ∘ₗ l = LinearMap.id,
+      Function.Surjective g ∧ ∃ l, l ∘ₗ f = LinearMap.id,
+      ∃ e : N ≃ₗ[R] M × P, f = e.symm ∘ₗ LinearMap.inl R M P ∧ g = LinearMap.snd R M P ∘ₗ e] := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R M M' N N' P P' : Type*}
+
+variable [Semiring R]
+
+variable [AddCommGroup M] [AddCommGroup N] [AddCommGroup P] [Module R M] [Module R N] [Module R P]
+
+variable {f : M →ₗ[R] N} {g : N →ₗ[R] P}
+
+theorem Exact.split_tfae' (h : Function.Exact f g) :
+    List.TFAE [
+      Function.Injective f ∧ ∃ l, g ∘ₗ l = LinearMap.id,
+      Function.Surjective g ∧ ∃ l, l ∘ₗ f = LinearMap.id,
+      ∃ e : N ≃ₗ[R] M × P, f = e.symm ∘ₗ LinearMap.inl R M P ∧ g = LinearMap.snd R M P ∘ₗ e] := by
+  simpa using h.split_tfae
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:3-16:27
+Type mismatch: After simplification, term
+  Function.Exact.split_tfae h
+ has type
+  Function.Injective ⇑f →
+    Function.Surjective ⇑g →
+      [∃ l, g ∘ₗ l = LinearMap.id, ∃ l, l ∘ₗ f = LinearMap.id,
+          ∃ e, f = ↑e.symm ∘ₗ LinearMap.inl R M P ∧ g = LinearMap.snd R M P ∘ₗ ↑e].TFAE
+but is expected to have type
+  [Function.Injective ⇑f ∧ ∃ l, g ∘ₗ l = LinearMap.id, Function.Surjective ⇑g ∧ ∃ l, l ∘ₗ f = LinearMap.id,
+      ∃ e, f = ↑e.symm ∘ₗ LinearMap.inl R M P ∧ g = LinearMap.snd R M P ∘ₗ ↑e].TFAE
+Source line 16:
+  simpa using h.split_tfae
+  ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa using h.split_tfae
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:3-16:27
+Type mismatch: After simplification, term
+  Function.Exact.split_tfae h
+ has type
+  Function.Injective ⇑f →
+    Function.Surjective ⇑g →
+      [∃ l, g ∘ₗ l = LinearMap.id, ∃ l, l ∘ₗ f = LinearMap.id,
+          ∃ e, f = ↑e.symm ∘ₗ LinearMap.inl R M P ∧ g = LinearMap.snd R M P ∘ₗ ↑e].TFAE
+but is expected to have type
+  [Function.Injective ⇑f ∧ ∃ l, g ∘ₗ l = LinearMap.id, Function.Surjective ⇑g ∧ ∃ l, l ∘ₗ f = LinearMap.id,
+      ∃ e, f = ↑e.symm ∘ₗ LinearMap.inl R M P ∧ g = LinearMap.snd R M P ∘ₗ ↑e].TFAE
+Source line 16:
+  simpa using h.split_tfae
+  ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa using h.split_tfae
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R M M' N N' P P' : Type*}
+
+variable [Semiring R]
+
+variable [AddCommGroup M] [AddCommGroup N] [AddCommGroup P] [Module R M] [Module R N] [Module R P]
+
+variable {f : M →ₗ[R] N} {g : N →ₗ[R] P}
+
+theorem Exact.split_tfae' (h : Function.Exact f g) :
+    List.TFAE [
+      Function.Injective f ∧ ∃ l, g ∘ₗ l = LinearMap.id,
+      Function.Surjective g ∧ ∃ l, l ∘ₗ f = LinearMap.id,
+      ∃ e : N ≃ₗ[R] M × P, f = e.symm ∘ₗ LinearMap.inl R M P ∧ g = LinearMap.snd R M P ∘ₗ e] := by
+  rcases h.split_tfae with hsplit
+  by_cases hf : Function.Injective f
+  · by_cases hg : Function.Surjective g
+    · have h12 : List.TFAE
+        [∃ l, g ∘ₗ l = LinearMap.id,
+         ∃ l, l ∘ₗ f = LinearMap.id,
+         ∃ e : N ≃ₗ[R] M × P, f = e.symm ∘ₗ LinearMap.inl R M P ∧ g = LinearMap.snd R M P ∘ₗ e] :=
+        hsplit hf hg
+      rcases List.tfae_cons.mp h12 with ⟨h1, hrest⟩
+      rcases List.tfae_cons.mp hrest with ⟨h12', h23'⟩
+      refine List.tfae_of_forall ?_
+      intro i hi
+      fin_cases i
+      · exact (h1.and congrArg (And.left) h12').symm
+      · exact h12'
+      · exact h23'
+    · exfalso
+      exact hg (h.2.range_eq_top)
+  · exfalso
+    exact hf h.1
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:24:14-24:31
+Unknown constant `List.tfae_cons.mp`
+Source line 24:
+      rcases List.tfae_cons.mp h12 with ⟨h1, hrest⟩
+             ^^^^^^^^^^^^^^^^^
+Highlighted span: List.tfae_cons.mp
+
+ERROR .LspCheck.lean:24:41-24:52
+Tactic `rcases` failed: `x✝ : ?m.400` is not an inductive datatype
+Source line 24:
+      rcases List.tfae_cons.mp h12 with ⟨h1, hrest⟩
+                                        ^^^^^^^^^^^
+Highlighted span: ⟨h1, hrest⟩
+
+ERROR .LspCheck.lean:33:17-33:33
+Invalid projection: Projections cannot be used on functions, and
+  h
+has function type
+  ∀ (y : N), g y = 0 ↔ y ∈ Set.range ⇑f
+Source line 33:
+      exact hg (h.2.range_eq_top)
+                ^^^^^^^^^^^^^^^^
+Highlighted span: h.2.range_eq_top
+
+ERROR .LspCheck.lean:35:14-35:17
+Invalid projection: Projections cannot be used on functions, and
+  h
+has function type
+  ∀ (y : N), g y = 0 ↔ y ∈ Set.range ⇑f
+Source line 35:
+    exact hf h.1
+             ^^^
+Highlighted span: h.1
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:24:14-24:31
+Unknown constant `List.tfae_cons.mp`
+Source line 24:
+      rcases List.tfae_cons.mp h12 with ⟨h1, hrest⟩
+             ^^^^^^^^^^^^^^^^^
+Highlighted span: List.tfae_cons.mp
+
+ERROR .LspCheck.lean:24:41-24:52
+Tactic `rcases` failed: `x✝ : ?m.400` is not an inductive datatype
+Source line 24:
+      rcases List.tfae_cons.mp h12 with ⟨h1, hrest⟩
+                                        ^^^^^^^^^^^
+Highlighted span: ⟨h1, hrest⟩
+
+ERROR .LspCheck.lean:33:17-33:33
+Invalid projection: Projections cannot be used on functions, and
+  h
+has function type
+  ∀ (y : N), g y = 0 ↔ y ∈ Set.range ⇑f
+Source line 33:
+      exact hg (h.2.range_eq_top)
+                ^^^^^^^^^^^^^^^^
+Highlighted span: h.2.range_eq_top
+
+ERROR .LspCheck.lean:35:14-35:17
+Invalid projection: Projections cannot be used on functions, and
+  h
+has function type
+  ∀ (y : N), g y = 0 ↔ y ∈ Set.range ⇑f
+Source line 35:
+    exact hf h.1
+             ^^^
+Highlighted span: h.1
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R M M' N N' P P' : Type*}
+
+variable [Semiring R]
+
+variable [AddCommGroup M] [AddCommGroup N] [AddCommGroup P] [Module R M] [Module R N] [Module R P]
+
+variable {f : M →ₗ[R] N} {g : N →ₗ[R] P}
+
+theorem Exact.split_tfae' (h : Function.Exact f g) :
+    List.TFAE [
+      Function.Injective f ∧ ∃ l, g ∘ₗ l = LinearMap.id,
+      Function.Surjective g ∧ ∃ l, l ∘ₗ f = LinearMap.id,
+      ∃ e : N ≃ₗ[R] M × P, f = e.symm ∘ₗ LinearMap.inl R M P ∧ g = LinearMap.snd R M P ∘ₗ e] := by
+  constructor
+  · intro h1
+    rcases h1 with ⟨hf, l, hl⟩
+    have hg : Function.Surjective g := by
+      intro p
+      refine ⟨l p, ?_⟩
+      simpa using congrArg (fun u => u p) hl
+    rcases (h.split_tfae hf hg).out 0 (by simp) with h01
+    exact ⟨hg, h01 ⟨l, hl⟩⟩
+  · intro h2
+    rcases h2 with ⟨hg, l, hl⟩
+    have hf : Function.Injective f := by
+      intro x y hxy
+      have := congrArg l hxy
+      simpa using this
+    rcases (h.split_tfae hf hg).out 1 (by simp) with h12
+    exact h12 ⟨l, hl⟩
+  · intro h3
+    rcases h3 with ⟨e, hf_eq, hg_eq⟩
+    have hf : Function.Injective f := by
+      rw [hf_eq]
+      exact (e.symm.injective.comp <| (LinearMap.inl R M P).injective)
+    have hg : Function.Surjective g := by
+      rw [hg_eq]
+      exact (LinearMap.snd R M P).surjective.comp e.surjective
+    rcases (h.split_tfae hf hg).out 2 (by simp) with h20
+    exact h20 ⟨e, hf_eq, hg_eq⟩
+  · intro h1
+    rcases h1 with ⟨hf, l, hl⟩
+    have hg : Function.Surjective g := by
+      intro p
+      refine ⟨l p, ?_⟩
+      simpa using congrArg (fun u => u p) hl
+    rcases (h.split_tfae hf hg).mp with ⟨_, hrest⟩
+    rcases hrest.mp with ⟨_, h23⟩
+    exact h23.mp
+  · intro h2
+    rcases h2 with ⟨hg, l, hl⟩
+    have hf : Function.Injective f := by
+      intro x y hxy
+      have := congrArg l hxy
+      simpa using this
+    rcases (h.split_tfae hf hg).mp with ⟨h12, _⟩
+    exact h12.mpr
+  · intro h3
+    rcases h3 with ⟨e, hf_eq, hg_eq⟩
+    have hf : Function.Injective f := by
+      rw [hf_eq]
+      exact (e.symm.injective.comp <| (LinearMap.inl R M P).injective)
+    have hg : Function.Surjective g := by
+      rw [hg_eq]
+      exact (LinearMap.snd R M P).surjective.comp e.surjective
+    rcases (h.split_tfae hf hg).mp with ⟨h12, hrest⟩
+    rcases hrest.mp with ⟨h23, _⟩
+    exact h23.mpr ⟨e, hf_eq, hg_eq⟩
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:3-16:14
+Tactic `constructor` failed: target is not an inductive datatype
+
+R : Type u_1
+M : Type u_2
+N : Type u_4
+P : Type u_6
+inst✝⁶ : Semiring R
+inst✝⁵ : AddCommGroup M
+inst✝⁴ : AddCommGroup N
+inst✝³ : AddCommGroup P
+inst✝² : Module R M
+inst✝¹ : Module R N
+inst✝ : Module R P
+f : M →ₗ[R] N
+g : N →ₗ[R] P
+h : Function.Exact ⇑f ⇑g
+⊢ [Function.Injective ⇑f ∧ ∃ l, g ∘ₗ l = LinearMap.id, Function.Surjective ⇑g ∧ ∃ l, l ∘ₗ f = LinearMap.id,
+      ∃ e, f = ↑e.symm ∘ₗ LinearMap.inl R M P ∧ g = LinearMap.snd R M P ∘ₗ ↑e].TFAE
+Source line 16:
+  constructor
+  ^^^^^^^^^^^
+Highlighted span: constructor
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:3-16:14
+Tactic `constructor` failed: target is not an inductive datatype
+
+R : Type u_1
+M : Type u_2
+N : Type u_4
+P : Type u_6
+inst✝⁶ : Semiring R
+inst✝⁵ : AddCommGroup M
+inst✝⁴ : AddCommGroup N
+inst✝³ : AddCommGroup P
+inst✝² : Module R M
+inst✝¹ : Module R N
+inst✝ : Module R P
+f : M →ₗ[R] N
+g : N →ₗ[R] P
+h : Function.Exact ⇑f ⇑g
+⊢ [Function.Injective ⇑f ∧ ∃ l, g ∘ₗ l = LinearMap.id, Function.Surjective ⇑g ∧ ∃ l, l ∘ₗ f = LinearMap.id,
+      ∃ e, f = ↑e.symm ∘ₗ LinearMap.inl R M P ∧ g = LinearMap.snd R M P ∘ₗ ↑e].TFAE
+Source line 16:
+  constructor
+  ^^^^^^^^^^^
+Highlighted span: constructor

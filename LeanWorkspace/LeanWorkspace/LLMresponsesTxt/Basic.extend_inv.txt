@@ -1,0 +1,108 @@
+FILE: Basic.extend_inv.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.extend_inv.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {I : Type u}
+
+variable {α β γ : Type*}
+
+variable {f : I → Type v₁} {g : I → Type v₂} {h : I → Type v₃}
+
+variable (x y : ∀ i, f i) (i : I)
+
+theorem extend_inv [Inv γ] (f : α → β) (g : α → γ) (e : β → γ) :
+    Function.extend f g⁻¹ e⁻¹ = (Function.extend f g e)⁻¹ := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {I : Type u}
+
+variable {α β γ : Type*}
+
+variable {f : I → Type v₁} {g : I → Type v₂} {h : I → Type v₃}
+
+variable (x y : ∀ i, f i) (i : I)
+
+theorem extend_inv [Inv γ] (f : α → β) (g : α → γ) (e : β → γ) :
+    Function.extend f g⁻¹ e⁻¹ = (Function.extend f g e)⁻¹ := by
+  funext b
+  simp [Function.extend]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:62-13:1
+unsolved goals
+case h
+α : Type u_1
+β : Type u_2
+γ : Type u_3
+inst✝ : Inv γ
+f : α → β
+g : α → γ
+e : β → γ
+b : β
+⊢ (if h : ∃ a, f a = b then (g (Classical.choose h))⁻¹ else (e b)⁻¹) =
+    (if h : ∃ a, f a = b then g (Classical.choose h) else e b)⁻¹
+Source line 12:
+    Function.extend f g⁻¹ e⁻¹ = (Function.extend f g e)⁻¹ := by
+                                                             ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:62-13:1
+unsolved goals
+case h
+α : Type u_1
+β : Type u_2
+γ : Type u_3
+inst✝ : Inv γ
+f : α → β
+g : α → γ
+e : β → γ
+b : β
+⊢ (if h : ∃ a, f a = b then (g (Classical.choose h))⁻¹ else (e b)⁻¹) =
+    (if h : ∃ a, f a = b then g (Classical.choose h) else e b)⁻¹
+Source line 12:
+    Function.extend f g⁻¹ e⁻¹ = (Function.extend f g e)⁻¹ := by
+                                                             ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {I : Type u}
+
+variable {α β γ : Type*}
+
+variable {f : I → Type v₁} {g : I → Type v₂} {h : I → Type v₃}
+
+variable (x y : ∀ i, f i) (i : I)
+
+theorem extend_inv [Inv γ] (f : α → β) (g : α → γ) (e : β → γ) :
+    Function.extend f g⁻¹ e⁻¹ = (Function.extend f g e)⁻¹ := by
+  funext b
+  by_cases hb : ∃ a, f a = b
+  · simp [Function.extend, hb]
+  · simp [Function.extend, hb]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

@@ -1,0 +1,157 @@
+FILE: Basic.range_comp_val.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.range_comp_val.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R : Type u} {A : Type v} {B : Type w}
+
+variable [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B]
+
+variable (S T U : Subalgebra R A)
+
+variable {S T U} (h : S ≤ T)
+
+variable (f : A →ₐ[R] B)
+
+theorem range_comp_val : (f.comp S.val).range = S.map f := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type u} {A : Type v} {B : Type w}
+
+variable [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B]
+
+variable (S T U : Subalgebra R A)
+
+variable {S T U} (h : S ≤ T)
+
+variable (f : A →ₐ[R] B)
+
+theorem range_comp_val : (f.comp S.val).range = S.map f := by
+  ext b
+  constructor
+  · rintro ⟨x, rfl⟩
+    exact ⟨x, rfl⟩
+  · rintro ⟨x, rfl⟩
+    exact ⟨x, rfl⟩
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:17:15-17:18
+Application type mismatch: The argument
+  rfl
+has type
+  ?m.87 = ?m.87
+but is expected to have type
+  ↑x ∈ ↑S.toSubsemiring ∧ ↑f ↑x = (f.comp S.val).toRingHom x
+in the application
+  Exists.intro (↑x) rfl
+Source line 17:
+    exact ⟨x, rfl⟩
+              ^^^
+Highlighted span: rfl
+
+ERROR .LspCheck.lean:18:16-18:19
+Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  x ∈ ↑S.toSubsemiring ∧ ↑f x = b
+
+case h.mpr
+R : Type u
+A : Type v
+B : Type w
+inst✝⁴ : CommSemiring R
+inst✝³ : Semiring A
+inst✝² : Algebra R A
+inst✝¹ : Semiring B
+inst✝ : Algebra R B
+S : Subalgebra R A
+f : A →ₐ[R] B
+b : B
+x : A
+h✝ : x ∈ ↑S.toSubsemiring ∧ ↑f x = b
+⊢ b ∈ (f.comp S.val).range
+Source line 18:
+  · rintro ⟨x, rfl⟩
+               ^^^
+Highlighted span: rfl
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:17:15-17:18
+Application type mismatch: The argument
+  rfl
+has type
+  ?m.87 = ?m.87
+but is expected to have type
+  ↑x ∈ ↑S.toSubsemiring ∧ ↑f ↑x = (f.comp S.val).toRingHom x
+in the application
+  Exists.intro (↑x) rfl
+Source line 17:
+    exact ⟨x, rfl⟩
+              ^^^
+Highlighted span: rfl
+
+ERROR .LspCheck.lean:18:16-18:19
+Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  x ∈ ↑S.toSubsemiring ∧ ↑f x = b
+
+case h.mpr
+R : Type u
+A : Type v
+B : Type w
+inst✝⁴ : CommSemiring R
+inst✝³ : Semiring A
+inst✝² : Algebra R A
+inst✝¹ : Semiring B
+inst✝ : Algebra R B
+S : Subalgebra R A
+f : A →ₐ[R] B
+b : B
+x : A
+h✝ : x ∈ ↑S.toSubsemiring ∧ ↑f x = b
+⊢ b ∈ (f.comp S.val).range
+Source line 18:
+  · rintro ⟨x, rfl⟩
+               ^^^
+Highlighted span: rfl
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type u} {A : Type v} {B : Type w}
+
+variable [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B]
+
+variable (S T U : Subalgebra R A)
+
+variable {S T U} (h : S ≤ T)
+
+variable (f : A →ₐ[R] B)
+
+theorem range_comp_val : (f.comp S.val).range = S.map f := by
+  ext b
+  constructor
+  · rintro ⟨x, rfl⟩
+    exact ⟨x, x.2, rfl⟩
+  · rintro ⟨y, hy, rfl⟩
+    exact ⟨⟨y, hy⟩, rfl⟩
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

@@ -1,0 +1,302 @@
+FILE: NonUnitalSubalgebra.commute_of_mem_adjoin_singleton_of_commute.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: NonUnitalSubalgebra.commute_of_mem_adjoin_singleton_of_commute.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R A : Type*} [CommSemiring R] [NonUnitalSemiring A]
+
+variable [Module R A] [IsScalarTower R A A] [SMulCommClass R A A]
+
+theorem commute_of_mem_adjoin_singleton_of_commute {a b c : A}
+    (hc : c ∈ NonUnitalAlgebra.adjoin R {b}) (h : Commute a b) :
+    Commute a c := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R A : Type*} [CommSemiring R] [NonUnitalSemiring A]
+
+variable [Module R A] [IsScalarTower R A A] [SMulCommClass R A A]
+
+theorem commute_of_mem_adjoin_singleton_of_commute {a b c : A}
+    (hc : c ∈ NonUnitalAlgebra.adjoin R {b}) (h : Commute a b) :
+    Commute a c := by
+  refine NonUnitalAlgebra.adjoin_induction ?_ hc ?_ ?_ ?_
+  · intro x hx
+    rw [Set.mem_singleton_iff] at hx
+    simpa [hx] using h
+  · simpa using Commute.zero_right a
+  · intro x y hx hy
+    exact hx.add_right hy
+  · intro r x hx
+    simpa [Algebra.smul_def] using hx.mul_left (algebraMap R A r)
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:10-10:58
+failed to elaborate eliminator, insufficient number of arguments, expected type:
+  Commute a c
+Source line 10:
+  refine NonUnitalAlgebra.adjoin_induction ?_ hc ?_ ?_ ?_
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: NonUnitalAlgebra.adjoin_induction ?_ hc ?_ ?_ ?_
+
+ERROR .LspCheck.lean:10:47-10:49
+Type mismatch
+  hc
+has type
+  c ∈ NonUnitalAlgebra.adjoin R {b}
+but is expected to have type
+  ∀ (x y : ?m.26) (hx : x ∈ NonUnitalAlgebra.adjoin ?m.25 ?m.32) (hy : y ∈ NonUnitalAlgebra.adjoin ?m.25 ?m.32),
+    ?m.33 x hx → ?m.33 y hy → ?m.33 (x + y) ⋯
+Source line 10:
+  refine NonUnitalAlgebra.adjoin_induction ?_ hc ?_ ?_ ?_
+                                              ^^
+Highlighted span: hc
+
+ERROR .LspCheck.lean:11:3-12:1
+No goals to be solved
+Source line 11:
+  · intro x hx
+  ^
+Highlighted span: ·
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:10-10:58
+failed to elaborate eliminator, insufficient number of arguments, expected type:
+  Commute a c
+Source line 10:
+  refine NonUnitalAlgebra.adjoin_induction ?_ hc ?_ ?_ ?_
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: NonUnitalAlgebra.adjoin_induction ?_ hc ?_ ?_ ?_
+
+ERROR .LspCheck.lean:10:47-10:49
+Type mismatch
+  hc
+has type
+  c ∈ NonUnitalAlgebra.adjoin R {b}
+but is expected to have type
+  ∀ (x y : ?m.26) (hx : x ∈ NonUnitalAlgebra.adjoin ?m.25 ?m.32) (hy : y ∈ NonUnitalAlgebra.adjoin ?m.25 ?m.32),
+    ?m.33 x hx → ?m.33 y hy → ?m.33 (x + y) ⋯
+Source line 10:
+  refine NonUnitalAlgebra.adjoin_induction ?_ hc ?_ ?_ ?_
+                                              ^^
+Highlighted span: hc
+
+ERROR .LspCheck.lean:11:3-12:1
+No goals to be solved
+Source line 11:
+  · intro x hx
+  ^
+Highlighted span: ·
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R A : Type*} [CommSemiring R] [NonUnitalSemiring A]
+
+variable [Module R A] [IsScalarTower R A A] [SMulCommClass R A A]
+
+theorem commute_of_mem_adjoin_singleton_of_commute {a b c : A}
+    (hc : c ∈ NonUnitalAlgebra.adjoin R {b}) (h : Commute a b) :
+    Commute a c := by
+  let S : NonUnitalSubalgebra R A :=
+    { val := {x : A | Commute a x}
+      algebraMap_mem' := by
+        intro r
+        simpa [Algebra.smul_def] using (Commute.all (algebraMap R A r) a).symm
+      mul_mem' := by
+        intro x y hx hy
+        exact hx.mul_right hy
+      add_mem' := by
+        intro x y hx hy
+        exact hx.add_right hy
+      zero_mem' := by
+        simpa using Commute.zero_right a }
+  have hb : b ∈ S := by
+    simpa [S] using h
+  have hle : NonUnitalAlgebra.adjoin R {b} ≤ S :=
+    NonUnitalAlgebra.adjoin_le fun x hx => by
+      rw [Set.mem_singleton_iff] at hx
+      simpa [hx] using hb
+  exact hle hc
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:7-11:10
+`val` is not a field of structure `NonUnitalSubalgebra`
+Source line 11:
+    { val := {x : A | Commute a x}
+      ^^^
+Highlighted span: val
+
+ERROR .LspCheck.lean:12:7-12:22
+`algebraMap_mem'` is not a field of structure `NonUnitalSubalgebra`
+Source line 12:
+      algebraMap_mem' := by
+      ^^^^^^^^^^^^^^^
+Highlighted span: algebraMap_mem'
+
+ERROR .LspCheck.lean:11:5-12:1
+Fields missing: `carrier`, `smul_mem'`
+
+Hint: Add missing fields:
+  
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲a̲r̲r̲i̲e̲r̲ ̲:̲=̲ ̲_̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲s̲m̲u̲l̲_̲m̲e̲m̲'̲ ̲:̲=̲ ̲_̲
+Source line 11:
+    { val := {x : A | Commute a x}
+    ^
+Highlighted span: {
+
+ERROR .LspCheck.lean:29:3-29:15
+Type mismatch
+  hle hc
+has type
+  c ∈ S
+but is expected to have type
+  Commute a c
+Source line 29:
+  exact hle hc
+  ^^^^^^^^^^^^
+Highlighted span: exact hle hc
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:7-11:10
+`val` is not a field of structure `NonUnitalSubalgebra`
+Source line 11:
+    { val := {x : A | Commute a x}
+      ^^^
+Highlighted span: val
+
+ERROR .LspCheck.lean:12:7-12:22
+`algebraMap_mem'` is not a field of structure `NonUnitalSubalgebra`
+Source line 12:
+      algebraMap_mem' := by
+      ^^^^^^^^^^^^^^^
+Highlighted span: algebraMap_mem'
+
+ERROR .LspCheck.lean:11:5-12:1
+Fields missing: `carrier`, `smul_mem'`
+
+Hint: Add missing fields:
+  
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲a̲r̲r̲i̲e̲r̲ ̲:̲=̲ ̲_̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲s̲m̲u̲l̲_̲m̲e̲m̲'̲ ̲:̲=̲ ̲_̲
+Source line 11:
+    { val := {x : A | Commute a x}
+    ^
+Highlighted span: {
+
+ERROR .LspCheck.lean:29:3-29:15
+Type mismatch
+  hle hc
+has type
+  c ∈ S
+but is expected to have type
+  Commute a c
+Source line 29:
+  exact hle hc
+  ^^^^^^^^^^^^
+Highlighted span: exact hle hc
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R A : Type*} [CommSemiring R] [NonUnitalSemiring A]
+
+variable [Module R A] [IsScalarTower R A A] [SMulCommClass R A A]
+
+theorem commute_of_mem_adjoin_singleton_of_commute {a b c : A}
+    (hc : c ∈ NonUnitalAlgebra.adjoin R {b}) (h : Commute a b) :
+    Commute a c := by
+  let S : NonUnitalSubalgebra R A :=
+    { carrier := {x : A | Commute a x}
+      zero_mem' := by
+        simpa using Commute.zero_right a
+      add_mem' := by
+        intro x y hx hy
+        exact hx.add_right hy
+      mul_mem' := by
+        intro x y hx hy
+        exact hx.mul_right hy
+      smul_mem' := by
+        intro r x hx
+        simpa [Algebra.smul_def] using hx.mul_left (algebraMap R A r) }
+  have hb : b ∈ S := by
+    simpa [S] using h
+  have hle : NonUnitalAlgebra.adjoin R {b} ≤ S :=
+    NonUnitalAlgebra.adjoin_le fun x hx => by
+      rw [Set.mem_singleton_iff] at hx
+      simpa [hx] using hb
+  exact hle hc
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+WARNING .LspCheck.lean:13:9-13:41
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 13:
+        simpa using Commute.zero_right a
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa using Commute.zero_right a
+
+ERROR .LspCheck.lean:22:53-22:69
+failed to synthesize instance of type class
+  Semiring A
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 22:
+        simpa [Algebra.smul_def] using hx.mul_left (algebraMap R A r) }
+                                                    ^^^^^^^^^^^^^^^^
+Highlighted span: algebraMap R A r
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+WARNING .LspCheck.lean:13:9-13:41
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 13:
+        simpa using Commute.zero_right a
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa using Commute.zero_right a
+
+ERROR .LspCheck.lean:22:53-22:69
+failed to synthesize instance of type class
+  Semiring A
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 22:
+        simpa [Algebra.smul_def] using hx.mul_left (algebraMap R A r) }
+                                                    ^^^^^^^^^^^^^^^^
+Highlighted span: algebraMap R A r

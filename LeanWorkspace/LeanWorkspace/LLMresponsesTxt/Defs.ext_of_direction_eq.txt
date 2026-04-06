@@ -1,0 +1,321 @@
+FILE: Defs.ext_of_direction_eq.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Defs.ext_of_direction_eq.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable (k : Type*) {V : Type*} (P : Type*) [Ring k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {k P}
+
+theorem ext_of_direction_eq {s₁ s₂ : AffineSubspace k P} (hd : s₁.direction = s₂.direction)
+    (hn : ((s₁ : Set P) ∩ s₂).Nonempty) : s₁ = s₂ := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (k : Type*) {V : Type*} (P : Type*) [Ring k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {k P}
+
+theorem ext_of_direction_eq {s₁ s₂ : AffineSubspace k P} (hd : s₁.direction = s₂.direction)
+    (hn : ((s₁ : Set P) ∩ s₂).Nonempty) : s₁ = s₂ := by
+  rcases hn with ⟨p, hp1, hp2⟩
+  rw [AffineSubspace.ext_iff]
+  intro q
+  constructor
+  · intro hq
+    rw [← s₁.vadd_mem_iff_mem_direction hp1, hd]
+    exact s₂.vsub_mem_direction hp2 hq
+  · intro hq
+    rw [← s₂.vadd_mem_iff_mem_direction hp2, ← hd]
+    exact s₁.vsub_mem_direction hp1 hq
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:9-12:10
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+inst✝ : AddTorsor V P
+s₁ s₂ : AffineSubspace k P
+hd : s₁.direction = s₂.direction
+p : P
+hp1 : p ∈ ↑s₁
+hp2 : p ∈ ↑s₂
+⊢ ↑s₁ = ↑s₂
+Source line 12:
+  intro q
+        ^
+Highlighted span: q
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:9-12:10
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+k : Type u_1
+V : Type u_2
+P : Type u_3
+inst✝³ : Ring k
+inst✝² : AddCommGroup V
+inst✝¹ : Module k V
+inst✝ : AddTorsor V P
+s₁ s₂ : AffineSubspace k P
+hd : s₁.direction = s₂.direction
+p : P
+hp1 : p ∈ ↑s₁
+hp2 : p ∈ ↑s₂
+⊢ ↑s₁ = ↑s₂
+Source line 12:
+  intro q
+        ^
+Highlighted span: q
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (k : Type*) {V : Type*} (P : Type*) [Ring k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {k P}
+
+theorem ext_of_direction_eq {s₁ s₂ : AffineSubspace k P} (hd : s₁.direction = s₂.direction)
+    (hn : ((s₁ : Set P) ∩ s₂).Nonempty) : s₁ = s₂ := by
+  rcases hn with ⟨p, hp1, hp2⟩
+  ext q
+  constructor
+  · intro hq
+    rw [← s₁.vadd_mem_iff_mem_direction hp1, hd]
+    exact s₂.vsub_mem_direction hp2 hq
+  · intro hq
+    rw [← s₂.vadd_mem_iff_mem_direction hp2, ← hd]
+    exact s₁.vsub_mem_direction hp1 hq
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:41-14:44
+Application type mismatch: The argument
+  hp1
+has type
+  p ∈ ↑s₁
+of sort `Prop` but is expected to have type
+  V
+of sort `Type u_2` in the application
+  @AffineSubspace.vadd_mem_iff_mem_direction k V P inst✝³ inst✝² inst✝¹ inst✝ s₁ hp1
+Source line 14:
+    rw [← s₁.vadd_mem_iff_mem_direction hp1, hd]
+                                        ^^^
+Highlighted span: hp1
+
+ERROR .LspCheck.lean:17:41-17:44
+Application type mismatch: The argument
+  hp2
+has type
+  p ∈ ↑s₂
+of sort `Prop` but is expected to have type
+  V
+of sort `Type u_2` in the application
+  @AffineSubspace.vadd_mem_iff_mem_direction k V P inst✝³ inst✝² inst✝¹ inst✝ s₂ hp2
+Source line 17:
+    rw [← s₂.vadd_mem_iff_mem_direction hp2, ← hd]
+                                        ^^^
+Highlighted span: hp2
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:41-14:44
+Application type mismatch: The argument
+  hp1
+has type
+  p ∈ ↑s₁
+of sort `Prop` but is expected to have type
+  V
+of sort `Type u_2` in the application
+  @AffineSubspace.vadd_mem_iff_mem_direction k V P inst✝³ inst✝² inst✝¹ inst✝ s₁ hp1
+Source line 14:
+    rw [← s₁.vadd_mem_iff_mem_direction hp1, hd]
+                                        ^^^
+Highlighted span: hp1
+
+ERROR .LspCheck.lean:17:41-17:44
+Application type mismatch: The argument
+  hp2
+has type
+  p ∈ ↑s₂
+of sort `Prop` but is expected to have type
+  V
+of sort `Type u_2` in the application
+  @AffineSubspace.vadd_mem_iff_mem_direction k V P inst✝³ inst✝² inst✝¹ inst✝ s₂ hp2
+Source line 17:
+    rw [← s₂.vadd_mem_iff_mem_direction hp2, ← hd]
+                                        ^^^
+Highlighted span: hp2
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (k : Type*) {V : Type*} (P : Type*) [Ring k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {k P}
+
+theorem ext_of_direction_eq {s₁ s₂ : AffineSubspace k P} (hd : s₁.direction = s₂.direction)
+    (hn : ((s₁ : Set P) ∩ s₂).Nonempty) : s₁ = s₂ := by
+  rcases hn with ⟨p, hp1, hp2⟩
+  ext q
+  constructor
+  · intro hq
+    have hdir : q -ᵥ p ∈ s₁.direction := s₁.vsub_mem_direction hp1 hq
+    rwa [hd, s₂.vadd_mem_iff_mem_direction hp2] at hdir
+  · intro hq
+    have hdir : q -ᵥ p ∈ s₂.direction := s₂.vsub_mem_direction hp2 hq
+    rwa [← hd, s₁.vadd_mem_iff_mem_direction hp1] at hdir
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:64-14:67
+Application type mismatch: The argument
+  hp1
+has type
+  p ∈ ↑s₁
+but is expected to have type
+  q ∈ s₁
+in the application
+  AffineSubspace.vsub_mem_direction hp1
+Source line 14:
+    have hdir : q -ᵥ p ∈ s₁.direction := s₁.vsub_mem_direction hp1 hq
+                                                               ^^^
+Highlighted span: hp1
+
+ERROR .LspCheck.lean:15:44-15:47
+Application type mismatch: The argument
+  hp2
+has type
+  p ∈ ↑s₂
+of sort `Prop` but is expected to have type
+  V
+of sort `Type u_2` in the application
+  @AffineSubspace.vadd_mem_iff_mem_direction k V P inst✝³ inst✝² inst✝¹ inst✝ s₂ hp2
+Source line 15:
+    rwa [hd, s₂.vadd_mem_iff_mem_direction hp2] at hdir
+                                           ^^^
+Highlighted span: hp2
+
+ERROR .LspCheck.lean:17:64-17:67
+Application type mismatch: The argument
+  hp2
+has type
+  p ∈ ↑s₂
+but is expected to have type
+  q ∈ s₂
+in the application
+  AffineSubspace.vsub_mem_direction hp2
+Source line 17:
+    have hdir : q -ᵥ p ∈ s₂.direction := s₂.vsub_mem_direction hp2 hq
+                                                               ^^^
+Highlighted span: hp2
+
+ERROR .LspCheck.lean:18:46-18:49
+Application type mismatch: The argument
+  hp1
+has type
+  p ∈ ↑s₁
+of sort `Prop` but is expected to have type
+  V
+of sort `Type u_2` in the application
+  @AffineSubspace.vadd_mem_iff_mem_direction k V P inst✝³ inst✝² inst✝¹ inst✝ s₁ hp1
+Source line 18:
+    rwa [← hd, s₁.vadd_mem_iff_mem_direction hp1] at hdir
+                                             ^^^
+Highlighted span: hp1
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:64-14:67
+Application type mismatch: The argument
+  hp1
+has type
+  p ∈ ↑s₁
+but is expected to have type
+  q ∈ s₁
+in the application
+  AffineSubspace.vsub_mem_direction hp1
+Source line 14:
+    have hdir : q -ᵥ p ∈ s₁.direction := s₁.vsub_mem_direction hp1 hq
+                                                               ^^^
+Highlighted span: hp1
+
+ERROR .LspCheck.lean:15:44-15:47
+Application type mismatch: The argument
+  hp2
+has type
+  p ∈ ↑s₂
+of sort `Prop` but is expected to have type
+  V
+of sort `Type u_2` in the application
+  @AffineSubspace.vadd_mem_iff_mem_direction k V P inst✝³ inst✝² inst✝¹ inst✝ s₂ hp2
+Source line 15:
+    rwa [hd, s₂.vadd_mem_iff_mem_direction hp2] at hdir
+                                           ^^^
+Highlighted span: hp2
+
+ERROR .LspCheck.lean:17:64-17:67
+Application type mismatch: The argument
+  hp2
+has type
+  p ∈ ↑s₂
+but is expected to have type
+  q ∈ s₂
+in the application
+  AffineSubspace.vsub_mem_direction hp2
+Source line 17:
+    have hdir : q -ᵥ p ∈ s₂.direction := s₂.vsub_mem_direction hp2 hq
+                                                               ^^^
+Highlighted span: hp2
+
+ERROR .LspCheck.lean:18:46-18:49
+Application type mismatch: The argument
+  hp1
+has type
+  p ∈ ↑s₁
+of sort `Prop` but is expected to have type
+  V
+of sort `Type u_2` in the application
+  @AffineSubspace.vadd_mem_iff_mem_direction k V P inst✝³ inst✝² inst✝¹ inst✝ s₁ hp1
+Source line 18:
+    rwa [← hd, s₁.vadd_mem_iff_mem_direction hp1] at hdir
+                                             ^^^
+Highlighted span: hp1

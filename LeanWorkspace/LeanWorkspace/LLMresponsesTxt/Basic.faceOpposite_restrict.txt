@@ -1,0 +1,561 @@
+FILE: Basic.faceOpposite_restrict.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.faceOpposite_restrict.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable (k : Type*) {V V₂ V₃ : Type*} (P P₂ P₃ : Type*)
+
+variable [Ring k] [AddCommGroup V] [AddCommGroup V₂] [AddCommGroup V₃]
+
+variable [Module k V] [Module k V₂] [Module k V₃]
+
+variable [AddTorsor V P] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃]
+
+variable {P P₂ P₃}
+
+variable {k}
+
+theorem faceOpposite_restrict {n : ℕ} [NeZero n] (s : Affine.Simplex k P n) {S : AffineSubspace k P}
+    (hS : affineSpan k (Set.range s.points) ≤ S) (i : Fin (n + 1)) :
+    letI := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (k : Type*) {V V₂ V₃ : Type*} (P P₂ P₃ : Type*)
+
+variable [Ring k] [AddCommGroup V] [AddCommGroup V₂] [AddCommGroup V₃]
+
+variable [Module k V] [Module k V₂] [Module k V₃]
+
+variable [AddTorsor V P] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃]
+
+variable {P P₂ P₃}
+
+variable {k}
+
+theorem faceOpposite_restrict {n : ℕ} [NeZero n] (s : Affine.Simplex k P n) {S : AffineSubspace k P}
+    (hS : affineSpan k (Set.range s.points) ≤ S) (i : Fin (n + 1)) :
+    letI := AffineSubspace.instAddTorsorSubtypeMem S
+    affineSpan k (Set.range (s.faceOpposite i).points) ≤ AffineSubspace.map S.subtype (⊤ : AffineSubspace k S) := by
+  letI := AffineSubspace.instAddTorsorSubtypeMem S
+  rw [AffineSubspace.map_subtype_top]
+  refine le_trans ?_ hS
+  rw [Affine.Simplex.faceOpposite_range]
+  exact affineSpan_mono (Set.range_comp_subset_range _ _)
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:17:13-17:51
+Unknown constant `AffineSubspace.instAddTorsorSubtypeMem`
+Source line 17:
+    letI := AffineSubspace.instAddTorsorSubtypeMem S
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.instAddTorsorSubtypeMem
+
+ERROR .LspCheck.lean:18:77-18:86
+failed to synthesize instance of type class
+  Nonempty ↥S
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 18:
+    affineSpan k (Set.range (s.faceOpposite i).points) ≤ AffineSubspace.map S.subtype (⊤ : AffineSubspace k S) := by
+                                                                            ^^^^^^^^^
+Highlighted span: S.subtype
+
+ERROR .LspCheck.lean:18:92-18:110
+failed to synthesize instance of type class
+  AddTorsor ?m.92 ↥S
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 18:
+    affineSpan k (Set.range (s.faceOpposite i).points) ≤ AffineSubspace.map S.subtype (⊤ : AffineSubspace k S) := by
+                                                                                           ^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace k S
+
+ERROR .LspCheck.lean:18:58-18:111
+failed to synthesize instance of type class
+  AddTorsor ↥S.direction ↥S
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 18:
+    affineSpan k (Set.range (s.faceOpposite i).points) ≤ AffineSubspace.map S.subtype (⊤ : AffineSubspace k S) := by
+                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.map S.subtype (⊤ : AffineSubspace k S)
+
+ERROR .LspCheck.lean:19:11-19:49
+Unknown constant `AffineSubspace.instAddTorsorSubtypeMem`
+Source line 19:
+  letI := AffineSubspace.instAddTorsorSubtypeMem S
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.instAddTorsorSubtypeMem
+
+ERROR .LspCheck.lean:18:115-19:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_5
+inst✝⁴ : Ring k
+inst✝³ : AddCommGroup V
+inst✝² : Module k V
+inst✝¹ : AddTorsor V P
+n : ℕ
+inst✝ : NeZero n
+s : Affine.Simplex k P n
+S : AffineSubspace k P
+hS : affineSpan k (Set.range s.points) ≤ S
+i : Fin (n + 1)
+⊢ affineSpan k (Set.range (s.faceOpposite i).points) ≤ sorry
+Source line 18:
+    affineSpan k (Set.range (s.faceOpposite i).points) ≤ AffineSubspace.map S.subtype (⊤ : AffineSubspace k S) := by
+                                                                                                                  ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:17:13-17:51
+Unknown constant `AffineSubspace.instAddTorsorSubtypeMem`
+Source line 17:
+    letI := AffineSubspace.instAddTorsorSubtypeMem S
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.instAddTorsorSubtypeMem
+
+ERROR .LspCheck.lean:18:77-18:86
+failed to synthesize instance of type class
+  Nonempty ↥S
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 18:
+    affineSpan k (Set.range (s.faceOpposite i).points) ≤ AffineSubspace.map S.subtype (⊤ : AffineSubspace k S) := by
+                                                                            ^^^^^^^^^
+Highlighted span: S.subtype
+
+ERROR .LspCheck.lean:18:92-18:110
+failed to synthesize instance of type class
+  AddTorsor ?m.92 ↥S
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 18:
+    affineSpan k (Set.range (s.faceOpposite i).points) ≤ AffineSubspace.map S.subtype (⊤ : AffineSubspace k S) := by
+                                                                                           ^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace k S
+
+ERROR .LspCheck.lean:18:58-18:111
+failed to synthesize instance of type class
+  AddTorsor ↥S.direction ↥S
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 18:
+    affineSpan k (Set.range (s.faceOpposite i).points) ≤ AffineSubspace.map S.subtype (⊤ : AffineSubspace k S) := by
+                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.map S.subtype (⊤ : AffineSubspace k S)
+
+ERROR .LspCheck.lean:19:11-19:49
+Unknown constant `AffineSubspace.instAddTorsorSubtypeMem`
+Source line 19:
+  letI := AffineSubspace.instAddTorsorSubtypeMem S
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.instAddTorsorSubtypeMem
+
+ERROR .LspCheck.lean:18:115-19:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_5
+inst✝⁴ : Ring k
+inst✝³ : AddCommGroup V
+inst✝² : Module k V
+inst✝¹ : AddTorsor V P
+n : ℕ
+inst✝ : NeZero n
+s : Affine.Simplex k P n
+S : AffineSubspace k P
+hS : affineSpan k (Set.range s.points) ≤ S
+i : Fin (n + 1)
+⊢ affineSpan k (Set.range (s.faceOpposite i).points) ≤ sorry
+Source line 18:
+    affineSpan k (Set.range (s.faceOpposite i).points) ≤ AffineSubspace.map S.subtype (⊤ : AffineSubspace k S) := by
+                                                                                                                  ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (k : Type*) {V V₂ V₃ : Type*} (P P₂ P₃ : Type*)
+
+variable [Ring k] [AddCommGroup V] [AddCommGroup V₂] [AddCommGroup V₃]
+
+variable [Module k V] [Module k V₂] [Module k V₃]
+
+variable [AddTorsor V P] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃]
+
+variable [Nonempty P] [Nonempty P₂] [Nonempty P₃]
+
+variable {P P₂ P₃}
+
+variable {k}
+
+theorem faceOpposite_restrict {n : ℕ} [NeZero n] (s : Affine.Simplex k P n) {S : AffineSubspace k P}
+    (hS : affineSpan k (Set.range s.points) ≤ S) (i : Fin (n + 1)) :
+    letI := S.toAddTorsor
+    affineSpan k (Set.range (s.faceOpposite i).points) ≤ AffineSubspace.map S.subtype (⊤ : AffineSubspace k S) := by
+  letI := S.toAddTorsor
+  rw [AffineSubspace.map_subtype_top]
+  refine le_trans ?_ hS
+  rw [Affine.Simplex.faceOpposite_range]
+  exact affineSpan_mono (Set.range_comp_subset_range _ _)
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:19:13-19:26
+failed to synthesize instance of type class
+  Nonempty ↥S
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 19:
+    letI := S.toAddTorsor
+            ^^^^^^^^^^^^^
+Highlighted span: S.toAddTorsor
+
+ERROR .LspCheck.lean:20:87-20:111
+Application type mismatch: The argument
+  ⊤
+has type
+  @AffineSubspace k (↥S.direction) (↥S) inst✝¹³ S.direction.addCommGroup S.direction.module this
+but is expected to have type
+  @AffineSubspace k (↥S.direction) (↥S) inst✝¹³ S.direction.addCommGroup S.direction.module S.toAddTorsor
+in the application
+  AffineSubspace.map S.subtype ⊤
+Source line 20:
+    affineSpan k (Set.range (s.faceOpposite i).points) ≤ AffineSubspace.map S.subtype (⊤ : AffineSubspace k S) := by
+                                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (⊤ : AffineSubspace k S)
+
+ERROR .LspCheck.lean:20:58-20:111
+synthesized type class instance is not definitionally equal to expression inferred by typing rules, synthesized
+  this
+inferred
+  S.toAddTorsor
+Source line 20:
+    affineSpan k (Set.range (s.faceOpposite i).points) ≤ AffineSubspace.map S.subtype (⊤ : AffineSubspace k S) := by
+                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.map S.subtype (⊤ : AffineSubspace k S)
+
+ERROR .LspCheck.lean:21:11-21:24
+failed to synthesize instance of type class
+  Nonempty ↥S
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 21:
+  letI := S.toAddTorsor
+          ^^^^^^^^^^^^^
+Highlighted span: S.toAddTorsor
+
+ERROR .LspCheck.lean:22:7-22:37
+Unknown constant `AffineSubspace.map_subtype_top`
+Source line 22:
+  rw [AffineSubspace.map_subtype_top]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.map_subtype_top
+
+ERROR .LspCheck.lean:20:115-21:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_5
+inst✝⁵ : Ring k
+inst✝⁴ : AddCommGroup V
+inst✝³ : Module k V
+inst✝² : AddTorsor V P
+inst✝¹ : Nonempty P
+n : ℕ
+inst✝ : NeZero n
+s : Affine.Simplex k P n
+S : AffineSubspace k P
+hS : affineSpan k (Set.range s.points) ≤ S
+i : Fin (n + 1)
+this : AddTorsor ↥S.direction ↥S := sorry
+⊢ affineSpan k (Set.range (s.faceOpposite i).points) ≤ sorry
+Source line 20:
+    affineSpan k (Set.range (s.faceOpposite i).points) ≤ AffineSubspace.map S.subtype (⊤ : AffineSubspace k S) := by
+                                                                                                                  ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:19:13-19:26
+failed to synthesize instance of type class
+  Nonempty ↥S
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 19:
+    letI := S.toAddTorsor
+            ^^^^^^^^^^^^^
+Highlighted span: S.toAddTorsor
+
+ERROR .LspCheck.lean:20:87-20:111
+Application type mismatch: The argument
+  ⊤
+has type
+  @AffineSubspace k (↥S.direction) (↥S) inst✝¹³ S.direction.addCommGroup S.direction.module this
+but is expected to have type
+  @AffineSubspace k (↥S.direction) (↥S) inst✝¹³ S.direction.addCommGroup S.direction.module S.toAddTorsor
+in the application
+  AffineSubspace.map S.subtype ⊤
+Source line 20:
+    affineSpan k (Set.range (s.faceOpposite i).points) ≤ AffineSubspace.map S.subtype (⊤ : AffineSubspace k S) := by
+                                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (⊤ : AffineSubspace k S)
+
+ERROR .LspCheck.lean:20:58-20:111
+synthesized type class instance is not definitionally equal to expression inferred by typing rules, synthesized
+  this
+inferred
+  S.toAddTorsor
+Source line 20:
+    affineSpan k (Set.range (s.faceOpposite i).points) ≤ AffineSubspace.map S.subtype (⊤ : AffineSubspace k S) := by
+                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.map S.subtype (⊤ : AffineSubspace k S)
+
+ERROR .LspCheck.lean:21:11-21:24
+failed to synthesize instance of type class
+  Nonempty ↥S
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 21:
+  letI := S.toAddTorsor
+          ^^^^^^^^^^^^^
+Highlighted span: S.toAddTorsor
+
+ERROR .LspCheck.lean:22:7-22:37
+Unknown constant `AffineSubspace.map_subtype_top`
+Source line 22:
+  rw [AffineSubspace.map_subtype_top]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.map_subtype_top
+
+ERROR .LspCheck.lean:20:115-21:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_5
+inst✝⁵ : Ring k
+inst✝⁴ : AddCommGroup V
+inst✝³ : Module k V
+inst✝² : AddTorsor V P
+inst✝¹ : Nonempty P
+n : ℕ
+inst✝ : NeZero n
+s : Affine.Simplex k P n
+S : AffineSubspace k P
+hS : affineSpan k (Set.range s.points) ≤ S
+i : Fin (n + 1)
+this : AddTorsor ↥S.direction ↥S := sorry
+⊢ affineSpan k (Set.range (s.faceOpposite i).points) ≤ sorry
+Source line 20:
+    affineSpan k (Set.range (s.faceOpposite i).points) ≤ AffineSubspace.map S.subtype (⊤ : AffineSubspace k S) := by
+                                                                                                                  ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable (k : Type*) {V V₂ V₃ : Type*} (P P₂ P₃ : Type*)
+
+variable [Ring k] [AddCommGroup V] [AddCommGroup V₂] [AddCommGroup V₃]
+
+variable [Module k V] [Module k V₂] [Module k V₃]
+
+variable [AddTorsor V P] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃]
+
+variable {P P₂ P₃}
+
+variable {k}
+
+theorem faceOpposite_restrict {n : ℕ} [NeZero n] (s : Affine.Simplex k P n) {S : AffineSubspace k P}
+    (hS : affineSpan k (Set.range s.points) ≤ S) (i : Fin (n + 1)) :
+    letI := Classical.choice S.toNonempty
+    letI := S.toAddTorsor
+    affineSpan k (Set.range (s.faceOpposite i).points) ≤ AffineSubspace.map S.subtype (⊤ : AffineSubspace k S) := by
+  letI := Classical.choice S.toNonempty
+  letI := S.toAddTorsor
+  change affineSpan k (Set.range (s.faceOpposite i).points) ≤ S
+  refine le_trans ?_ hS
+  rw [Affine.Simplex.faceOpposite_range]
+  exact affineSpan_mono (Set.range_comp_subset_range _ _)
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:17:32-17:42
+Invalid field `toNonempty`: The environment does not contain `AffineSubspace.toNonempty`, so it is not possible to project the field `toNonempty` from an expression
+  S
+of type `AffineSubspace k P`
+Source line 17:
+    letI := Classical.choice S.toNonempty
+                               ^^^^^^^^^^
+Highlighted span: toNonempty
+
+ERROR .LspCheck.lean:18:13-18:26
+failed to synthesize instance of type class
+  Nonempty ↥S
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 18:
+    letI := S.toAddTorsor
+            ^^^^^^^^^^^^^
+Highlighted span: S.toAddTorsor
+
+ERROR .LspCheck.lean:19:87-19:111
+Application type mismatch: The argument
+  ⊤
+has type
+  @AffineSubspace k (↥S.direction) (↥S) inst✝¹⁰ S.direction.addCommGroup S.direction.module this
+but is expected to have type
+  @AffineSubspace k (↥S.direction) (↥S) inst✝¹⁰ S.direction.addCommGroup S.direction.module S.toAddTorsor
+in the application
+  AffineSubspace.map S.subtype ⊤
+Source line 19:
+    affineSpan k (Set.range (s.faceOpposite i).points) ≤ AffineSubspace.map S.subtype (⊤ : AffineSubspace k S) := by
+                                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (⊤ : AffineSubspace k S)
+
+ERROR .LspCheck.lean:19:58-19:111
+synthesized type class instance is not definitionally equal to expression inferred by typing rules, synthesized
+  this
+inferred
+  S.toAddTorsor
+Source line 19:
+    affineSpan k (Set.range (s.faceOpposite i).points) ≤ AffineSubspace.map S.subtype (⊤ : AffineSubspace k S) := by
+                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.map S.subtype (⊤ : AffineSubspace k S)
+
+ERROR .LspCheck.lean:20:30-20:40
+Invalid field `toNonempty`: The environment does not contain `AffineSubspace.toNonempty`, so it is not possible to project the field `toNonempty` from an expression
+  S
+of type `AffineSubspace k P`
+Source line 20:
+  letI := Classical.choice S.toNonempty
+                             ^^^^^^^^^^
+Highlighted span: toNonempty
+
+ERROR .LspCheck.lean:19:115-20:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_5
+inst✝⁴ : Ring k
+inst✝³ : AddCommGroup V
+inst✝² : Module k V
+inst✝¹ : AddTorsor V P
+n : ℕ
+inst✝ : NeZero n
+s : Affine.Simplex k P n
+S : AffineSubspace k P
+hS : affineSpan k (Set.range s.points) ≤ S
+i : Fin (n + 1)
+⊢ affineSpan k (Set.range (s.faceOpposite i).points) ≤ sorry
+Source line 19:
+    affineSpan k (Set.range (s.faceOpposite i).points) ≤ AffineSubspace.map S.subtype (⊤ : AffineSubspace k S) := by
+                                                                                                                  ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:17:32-17:42
+Invalid field `toNonempty`: The environment does not contain `AffineSubspace.toNonempty`, so it is not possible to project the field `toNonempty` from an expression
+  S
+of type `AffineSubspace k P`
+Source line 17:
+    letI := Classical.choice S.toNonempty
+                               ^^^^^^^^^^
+Highlighted span: toNonempty
+
+ERROR .LspCheck.lean:18:13-18:26
+failed to synthesize instance of type class
+  Nonempty ↥S
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 18:
+    letI := S.toAddTorsor
+            ^^^^^^^^^^^^^
+Highlighted span: S.toAddTorsor
+
+ERROR .LspCheck.lean:19:87-19:111
+Application type mismatch: The argument
+  ⊤
+has type
+  @AffineSubspace k (↥S.direction) (↥S) inst✝¹⁰ S.direction.addCommGroup S.direction.module this
+but is expected to have type
+  @AffineSubspace k (↥S.direction) (↥S) inst✝¹⁰ S.direction.addCommGroup S.direction.module S.toAddTorsor
+in the application
+  AffineSubspace.map S.subtype ⊤
+Source line 19:
+    affineSpan k (Set.range (s.faceOpposite i).points) ≤ AffineSubspace.map S.subtype (⊤ : AffineSubspace k S) := by
+                                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (⊤ : AffineSubspace k S)
+
+ERROR .LspCheck.lean:19:58-19:111
+synthesized type class instance is not definitionally equal to expression inferred by typing rules, synthesized
+  this
+inferred
+  S.toAddTorsor
+Source line 19:
+    affineSpan k (Set.range (s.faceOpposite i).points) ≤ AffineSubspace.map S.subtype (⊤ : AffineSubspace k S) := by
+                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineSubspace.map S.subtype (⊤ : AffineSubspace k S)
+
+ERROR .LspCheck.lean:20:30-20:40
+Invalid field `toNonempty`: The environment does not contain `AffineSubspace.toNonempty`, so it is not possible to project the field `toNonempty` from an expression
+  S
+of type `AffineSubspace k P`
+Source line 20:
+  letI := Classical.choice S.toNonempty
+                             ^^^^^^^^^^
+Highlighted span: toNonempty
+
+ERROR .LspCheck.lean:19:115-20:1
+unsolved goals
+k : Type u_1
+V : Type u_2
+P : Type u_5
+inst✝⁴ : Ring k
+inst✝³ : AddCommGroup V
+inst✝² : Module k V
+inst✝¹ : AddTorsor V P
+n : ℕ
+inst✝ : NeZero n
+s : Affine.Simplex k P n
+S : AffineSubspace k P
+hS : affineSpan k (Set.range s.points) ≤ S
+i : Fin (n + 1)
+⊢ affineSpan k (Set.range (s.faceOpposite i).points) ≤ sorry
+Source line 19:
+    affineSpan k (Set.range (s.faceOpposite i).points) ≤ AffineSubspace.map S.subtype (⊤ : AffineSubspace k S) := by
+                                                                                                                  ^
+Highlighted span: b

@@ -1,0 +1,77 @@
+FILE: Defs.xgcdAux_rec.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Defs.xgcdAux_rec.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R : Type u} [EuclideanDomain R]
+
+variable [DecidableEq R]
+
+theorem xgcdAux_rec {r s t r' s' t' : R} (h : r ≠ 0) :
+    EuclideanDomain.xgcdAux r s t r' s' t' = EuclideanDomain.xgcdAux (r' % r) (s' - r' / r * s) (t' - r' / r * t) r s t := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type u} [EuclideanDomain R]
+
+variable [DecidableEq R]
+
+theorem xgcdAux_rec {r s t r' s' t' : R} (h : r ≠ 0) :
+    EuclideanDomain.xgcdAux r s t r' s' t' = EuclideanDomain.xgcdAux (r' % r) (s' - r' / r * s) (t' - r' / r * t) r s t := by
+  simpa [EuclideanDomain.xgcdAux, h]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:9:3-9:37
+Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+Source line 9:
+  simpa [EuclideanDomain.xgcdAux, h]
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [EuclideanDomain.xgcdAux, h]
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:9:3-9:37
+Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+Source line 9:
+  simpa [EuclideanDomain.xgcdAux, h]
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [EuclideanDomain.xgcdAux, h]
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type u} [EuclideanDomain R]
+
+variable [DecidableEq R]
+
+theorem xgcdAux_rec {r s t r' s' t' : R} (h : r ≠ 0) :
+    EuclideanDomain.xgcdAux r s t r' s' t' = EuclideanDomain.xgcdAux (r' % r) (s' - r' / r * s) (t' - r' / r * t) r s t := by
+  rw [EuclideanDomain.xgcdAux]
+  simp [h]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

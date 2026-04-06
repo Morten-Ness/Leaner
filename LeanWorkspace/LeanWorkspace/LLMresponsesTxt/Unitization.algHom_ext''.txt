@@ -1,0 +1,291 @@
+FILE: Unitization.algHom_ext''.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Unitization.algHom_ext''.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {S R A : Type*} [CommSemiring S] [CommSemiring R] [NonUnitalSemiring A] [Module R A]
+  [SMulCommClass R A A] [IsScalarTower R A A] {B : Type*} [Semiring B] [Algebra S B] [Algebra S R]
+  [DistribMulAction S A] [IsScalarTower S R A] {C : Type*} [Semiring C] [Algebra R C]
+
+theorem algHom_ext'' {F : Type*}
+    [FunLike F (Unitization R A) C] [AlgHomClass F R (Unitization R A) C] {φ ψ : F}
+    (h : ∀ a : A, φ a = ψ a) : φ = ψ := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {S R A : Type*} [CommSemiring S] [CommSemiring R] [NonUnitalSemiring A] [Module R A]
+  [SMulCommClass R A A] [IsScalarTower R A A] {B : Type*} [Semiring B] [Algebra S B] [Algebra S R]
+  [DistribMulAction S A] [IsScalarTower S R A] {C : Type*} [Semiring C] [Algebra R C]
+
+theorem algHom_ext'' {F : Type*}
+    [FunLike F (Unitization R A) C] [AlgHomClass F R (Unitization R A) C] {φ ψ : F}
+    (h : ∀ a : A, φ a = ψ a) : φ = ψ := by
+  funext x
+  rcases x with ⟨r, a⟩
+  calc
+    φ (r, a) = φ (r, 0) + φ (0, a) := by
+      rw [← map_add φ (r, 0) (0, a)]
+      rfl
+    _ = ψ (r, 0) + ψ (0, a) := by
+      congr 1
+      · rw [show (r, 0 : A) = algebraMap R (Unitization R A) r by rfl]
+        exact map_algebraMap φ r
+      · exact h a
+    _ = ψ (r, a) := by
+      rw [← map_add ψ (r, 0) (0, a)]
+      rfl
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:18:23-18:25
+unexpected token ':'; expected ')'
+Source line 18:
+      · rw [show (r, 0 : A) = algebraMap R (Unitization R A) r by rfl]
+                      ^^
+Highlighted span:  :
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:18:23-18:25
+unexpected token ':'; expected ')'
+Source line 18:
+      · rw [show (r, 0 : A) = algebraMap R (Unitization R A) r by rfl]
+                      ^^
+Highlighted span:  :
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {S R A : Type*} [CommSemiring S] [CommSemiring R] [NonUnitalSemiring A] [Module R A]
+  [SMulCommClass R A A] [IsScalarTower R A A] {B : Type*} [Semiring B] [Algebra S B] [Algebra S R]
+  [DistribMulAction S A] [IsScalarTower S R A] {C : Type*} [Semiring C] [Algebra R C]
+
+theorem algHom_ext'' {F : Type*}
+    [FunLike F (Unitization R A) C] [AlgHomClass F R (Unitization R A) C] {φ ψ : F}
+    (h : ∀ a : A, φ a = ψ a) : φ = ψ := by
+  ext x
+  rcases x with ⟨r, a⟩
+  calc
+    φ (r, a) = φ (r, 0) + φ (0, a) := by
+      rw [← map_add φ (r, 0) (0, a)]
+      rfl
+    _ = ψ (r, 0) + ψ (0, a) := by
+      congr
+      · rw [show ((r, (0 : A)) : Unitization R A) = algebraMap R (Unitization R A) r by rfl]
+        exact map_algebraMap φ r
+      · exact h a
+    _ = ψ (r, a) := by
+      rw [← map_add ψ (r, 0) (0, a)]
+      rfl
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:3-10:8
+No applicable extensionality theorem found for type
+  F
+
+Note: Extensionality theorems can be registered by marking them with the `[ext]` attribute
+Source line 10:
+  ext x
+  ^^^^^
+Highlighted span: ext x
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:3-10:8
+No applicable extensionality theorem found for type
+  F
+
+Note: Extensionality theorems can be registered by marking them with the `[ext]` attribute
+Source line 10:
+  ext x
+  ^^^^^
+Highlighted span: ext x
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {S R A : Type*} [CommSemiring S] [CommSemiring R] [NonUnitalSemiring A] [Module R A]
+  [SMulCommClass R A A] [IsScalarTower R A A] {B : Type*} [Semiring B] [Algebra S B] [Algebra S R]
+  [DistribMulAction S A] [IsScalarTower S R A] {C : Type*} [Semiring C] [Algebra R C]
+
+theorem algHom_ext'' {F : Type*}
+    [FunLike F (Unitization R A) C] [AlgHomClass F R (Unitization R A) C] {φ ψ : F}
+    (h : ∀ a : A, φ a = ψ a) : φ = ψ := by
+  apply DFunLike.ext
+  intro x
+  rcases x with ⟨r, a⟩
+  calc
+    φ (r, a) = φ ((r, (0 : A)) + (0, a)) := by rfl
+    _ = φ (r, 0) + φ (0, a) := by rw [map_add]
+    _ = ψ (r, 0) + ψ (0, a) := by
+      congr
+      · rw [show ((r, (0 : A)) : Unitization R A) = algebraMap R (Unitization R A) r by rfl]
+        exact map_algebraMap φ r
+      · exact h a
+    _ = ψ (r, a) := by
+      rw [← map_add]
+      rfl
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:7-14:13
+Application type mismatch: The argument
+  (r, a)
+has type
+  R × A
+but is expected to have type
+  Unitization R A
+in the application
+  φ (r, a)
+Source line 14:
+    φ (r, a) = φ ((r, (0 : A)) + (0, a)) := by rfl
+      ^^^^^^
+Highlighted span: (r, a)
+
+ERROR .LspCheck.lean:15:11-15:17
+Application type mismatch: The argument
+  (r, 0)
+has type
+  R × ?m.77
+but is expected to have type
+  Unitization R A
+in the application
+  φ (r, 0)
+Source line 15:
+    _ = φ (r, 0) + φ (0, a) := by rw [map_add]
+          ^^^^^^
+Highlighted span: (r, 0)
+
+ERROR .LspCheck.lean:14:19-14:40
+failed to synthesize instance of type class
+  HAdd (R × A) (ℕ × A) (Unitization R A)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 14:
+    φ (r, a) = φ ((r, (0 : A)) + (0, a)) := by rfl
+                  ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (r, (0 : A)) + (0, a)
+
+ERROR .LspCheck.lean:16:11-16:17
+Application type mismatch: The argument
+  (r, 0)
+has type
+  R × ?m.99
+but is expected to have type
+  Unitization R A
+in the application
+  ψ (r, 0)
+Source line 16:
+    _ = ψ (r, 0) + ψ (0, a) := by
+          ^^^^^^
+Highlighted span: (r, 0)
+
+ERROR .LspCheck.lean:21:11-21:17
+Application type mismatch: The argument
+  (r, a)
+has type
+  R × A
+but is expected to have type
+  Unitization R A
+in the application
+  ψ (r, a)
+Source line 21:
+    _ = ψ (r, a) := by
+          ^^^^^^
+Highlighted span: (r, a)
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:7-14:13
+Application type mismatch: The argument
+  (r, a)
+has type
+  R × A
+but is expected to have type
+  Unitization R A
+in the application
+  φ (r, a)
+Source line 14:
+    φ (r, a) = φ ((r, (0 : A)) + (0, a)) := by rfl
+      ^^^^^^
+Highlighted span: (r, a)
+
+ERROR .LspCheck.lean:15:11-15:17
+Application type mismatch: The argument
+  (r, 0)
+has type
+  R × ?m.77
+but is expected to have type
+  Unitization R A
+in the application
+  φ (r, 0)
+Source line 15:
+    _ = φ (r, 0) + φ (0, a) := by rw [map_add]
+          ^^^^^^
+Highlighted span: (r, 0)
+
+ERROR .LspCheck.lean:14:19-14:40
+failed to synthesize instance of type class
+  HAdd (R × A) (ℕ × A) (Unitization R A)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 14:
+    φ (r, a) = φ ((r, (0 : A)) + (0, a)) := by rfl
+                  ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (r, (0 : A)) + (0, a)
+
+ERROR .LspCheck.lean:16:11-16:17
+Application type mismatch: The argument
+  (r, 0)
+has type
+  R × ?m.99
+but is expected to have type
+  Unitization R A
+in the application
+  ψ (r, 0)
+Source line 16:
+    _ = ψ (r, 0) + ψ (0, a) := by
+          ^^^^^^
+Highlighted span: (r, 0)
+
+ERROR .LspCheck.lean:21:11-21:17
+Application type mismatch: The argument
+  (r, a)
+has type
+  R × A
+but is expected to have type
+  Unitization R A
+in the application
+  ψ (r, a)
+Source line 21:
+    _ = ψ (r, a) := by
+          ^^^^^^
+Highlighted span: (r, a)

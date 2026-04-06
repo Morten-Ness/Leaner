@@ -1,0 +1,252 @@
+FILE: Basic.smul_bijective.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.smul_bijective.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {G M A B α β : Type*}
+
+variable [Monoid α] [MulAction α β]
+
+theorem smul_bijective {m : α} (hm : IsUnit m) :
+    Function.Bijective (fun (a : β) ↦ m • a) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G M A B α β : Type*}
+
+variable [Monoid α] [MulAction α β]
+
+theorem smul_bijective {m : α} (hm : IsUnit m) :
+    Function.Bijective (fun (a : β) ↦ m • a) := by
+  rcases hm with ⟨u, rfl⟩
+  constructor
+  · intro a b h
+    simpa using congrArg (fun x => ↑u⁻¹ • x) h
+  · intro b
+    refine ⟨↑u⁻¹ • b, ?_⟩
+    simp
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:5-12:47
+Type mismatch: After simplification, term
+  congrArg (fun x ↦ u⁻¹ • x) h
+ has type
+  u⁻¹ • ↑u • a = u⁻¹ • ↑u • b
+but is expected to have type
+  a = b
+Source line 12:
+    simpa using congrArg (fun x => ↑u⁻¹ • x) h
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa using congrArg (fun x => ↑u⁻¹ • x) h
+
+ERROR .LspCheck.lean:13:3-14:1
+unsolved goals
+case right
+α : Type u_5
+β : Type u_6
+inst✝¹ : Monoid α
+inst✝ : MulAction α β
+u : αˣ
+b : β
+⊢ ↑u • u⁻¹ • b = b
+Source line 13:
+  · intro b
+  ^
+Highlighted span: ·
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:5-12:47
+Type mismatch: After simplification, term
+  congrArg (fun x ↦ u⁻¹ • x) h
+ has type
+  u⁻¹ • ↑u • a = u⁻¹ • ↑u • b
+but is expected to have type
+  a = b
+Source line 12:
+    simpa using congrArg (fun x => ↑u⁻¹ • x) h
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa using congrArg (fun x => ↑u⁻¹ • x) h
+
+ERROR .LspCheck.lean:13:3-14:1
+unsolved goals
+case right
+α : Type u_5
+β : Type u_6
+inst✝¹ : Monoid α
+inst✝ : MulAction α β
+u : αˣ
+b : β
+⊢ ↑u • u⁻¹ • b = b
+Source line 13:
+  · intro b
+  ^
+Highlighted span: ·
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G M A B α β : Type*}
+
+variable [Monoid α] [MulAction α β]
+
+theorem smul_bijective {m : α} (hm : IsUnit m) :
+    Function.Bijective (fun (a : β) ↦ m • a) := by
+  rcases hm with ⟨u, rfl⟩
+  constructor
+  · intro a b h
+    have h' := congrArg (fun x => ↑u⁻¹ • x) h
+    simpa [smul_smul] using h'
+  · intro b
+    refine ⟨↑u⁻¹ • b, ?_⟩
+    simpa [smul_smul] using (one_smul α b).symm
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:5-13:31
+Type mismatch: After simplification, term
+  h'
+ has type
+  ↑u • a = ↑u • b
+but is expected to have type
+  a = b
+Source line 13:
+    simpa [smul_smul] using h'
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [smul_smul] using h'
+
+ERROR .LspCheck.lean:16:5-16:48
+Type mismatch: After simplification, term
+  Eq.symm (one_smul α b)
+ has type
+  True
+but is expected to have type
+  ↑u • u⁻¹ • b = b
+Source line 16:
+    simpa [smul_smul] using (one_smul α b).symm
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [smul_smul] using (one_smul α b).symm
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:5-13:31
+Type mismatch: After simplification, term
+  h'
+ has type
+  ↑u • a = ↑u • b
+but is expected to have type
+  a = b
+Source line 13:
+    simpa [smul_smul] using h'
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [smul_smul] using h'
+
+ERROR .LspCheck.lean:16:5-16:48
+Type mismatch: After simplification, term
+  Eq.symm (one_smul α b)
+ has type
+  True
+but is expected to have type
+  ↑u • u⁻¹ • b = b
+Source line 16:
+    simpa [smul_smul] using (one_smul α b).symm
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [smul_smul] using (one_smul α b).symm
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G M A B α β : Type*}
+
+variable [Monoid α] [MulAction α β]
+
+theorem smul_bijective {m : α} (hm : IsUnit m) :
+    Function.Bijective (fun (a : β) ↦ m • a) := by
+  rcases hm with ⟨u, rfl⟩
+  constructor
+  · intro a b h
+    have h' := congrArg (fun x => ↑u⁻¹ • x) h
+    simpa only [smul_smul, Units.val_inv_eq_inv_val, Units.inv_mul, one_smul] using h'
+  · intro b
+    refine ⟨↑u⁻¹ • b, ?_⟩
+    simpa only [smul_smul, Units.val_inv_eq_inv_val, Units.mul_inv, one_smul] using rfl
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:5-13:87
+Type mismatch: After simplification, term
+  h'
+ has type
+  u⁻¹ • ↑u • a = u⁻¹ • ↑u • b
+but is expected to have type
+  a = b
+Source line 13:
+    simpa only [smul_smul, Units.val_inv_eq_inv_val, Units.inv_mul, one_smul] using h'
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa only [smul_smul, Units.val_inv_eq_inv_val, Units.inv_mul, one_smul] using h'
+
+ERROR .LspCheck.lean:16:5-16:88
+Type mismatch: After simplification, term
+  rfl
+ has type
+  True
+but is expected to have type
+  ↑u • u⁻¹ • b = b
+Source line 16:
+    simpa only [smul_smul, Units.val_inv_eq_inv_val, Units.mul_inv, one_smul] using rfl
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa only [smul_smul, Units.val_inv_eq_inv_val, Units.mul_inv, one_smul] using rfl
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:5-13:87
+Type mismatch: After simplification, term
+  h'
+ has type
+  u⁻¹ • ↑u • a = u⁻¹ • ↑u • b
+but is expected to have type
+  a = b
+Source line 13:
+    simpa only [smul_smul, Units.val_inv_eq_inv_val, Units.inv_mul, one_smul] using h'
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa only [smul_smul, Units.val_inv_eq_inv_val, Units.inv_mul, one_smul] using h'
+
+ERROR .LspCheck.lean:16:5-16:88
+Type mismatch: After simplification, term
+  rfl
+ has type
+  True
+but is expected to have type
+  ↑u • u⁻¹ • b = b
+Source line 16:
+    simpa only [smul_smul, Units.val_inv_eq_inv_val, Units.mul_inv, one_smul] using rfl
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa only [smul_smul, Units.val_inv_eq_inv_val, Units.mul_inv, one_smul] using rfl

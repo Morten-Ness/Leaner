@@ -1,0 +1,170 @@
+FILE: Defs.conj_mem'.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Defs.conj_mem'.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G] {A : Type*} [AddGroup A]
+
+variable {H : Subgroup G}
+
+theorem conj_mem' (nH : H.Normal) (n : G) (hn : n ∈ H) (g : G) :
+    g⁻¹ * n * g ∈ H := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G] {A : Type*} [AddGroup A]
+
+variable {H : Subgroup G}
+
+theorem conj_mem' (nH : H.Normal) (n : G) (hn : n ∈ H) (g : G) :
+    g⁻¹ * n * g ∈ H := by
+  simpa [mul_assoc] using nH.conj_mem hn g
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:39-11:41
+Application type mismatch: The argument
+  hn
+has type
+  n ∈ H
+of sort `Prop` but is expected to have type
+  G
+of sort `Type u_1` in the application
+  Subgroup.Normal.conj_mem nH hn
+Source line 11:
+  simpa [mul_assoc] using nH.conj_mem hn g
+                                      ^^
+Highlighted span: hn
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:39-11:41
+Application type mismatch: The argument
+  hn
+has type
+  n ∈ H
+of sort `Prop` but is expected to have type
+  G
+of sort `Type u_1` in the application
+  Subgroup.Normal.conj_mem nH hn
+Source line 11:
+  simpa [mul_assoc] using nH.conj_mem hn g
+                                      ^^
+Highlighted span: hn
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G] {A : Type*} [AddGroup A]
+
+variable {H : Subgroup G}
+
+theorem conj_mem' (nH : H.Normal) (n : G) (hn : n ∈ H) (g : G) :
+    g⁻¹ * n * g ∈ H := by
+  simpa [mul_assoc] using nH.conj_mem g hn
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:41-11:43
+Application type mismatch: The argument
+  hn
+has type
+  n ∈ H
+but is expected to have type
+  g ∈ H
+in the application
+  Subgroup.Normal.conj_mem nH g hn
+Source line 11:
+  simpa [mul_assoc] using nH.conj_mem g hn
+                                        ^^
+Highlighted span: hn
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:41-11:43
+Application type mismatch: The argument
+  hn
+has type
+  n ∈ H
+but is expected to have type
+  g ∈ H
+in the application
+  Subgroup.Normal.conj_mem nH g hn
+Source line 11:
+  simpa [mul_assoc] using nH.conj_mem g hn
+                                        ^^
+Highlighted span: hn
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Int
+
+variable {G : Type*} [Group G] {A : Type*} [AddGroup A]
+
+variable {H : Subgroup G}
+
+theorem conj_mem' (nH : H.Normal) (n : G) (hn : n ∈ H) (g : G) :
+    g⁻¹ * n * g ∈ H := by
+  exact nH.conj_mem n hn g
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:3-11:27
+Type mismatch
+  Subgroup.Normal.conj_mem nH n hn g
+has type
+  g * n * g⁻¹ ∈ H
+but is expected to have type
+  g⁻¹ * n * g ∈ H
+Source line 11:
+  exact nH.conj_mem n hn g
+  ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: exact nH.conj_mem n hn g
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:3-11:27
+Type mismatch
+  Subgroup.Normal.conj_mem nH n hn g
+has type
+  g * n * g⁻¹ ∈ H
+but is expected to have type
+  g⁻¹ * n * g ∈ H
+Source line 11:
+  exact nH.conj_mem n hn g
+  ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: exact nH.conj_mem n hn g

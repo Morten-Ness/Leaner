@@ -1,0 +1,192 @@
+FILE: Units.eq_one_or_neg_one_of_mul_eq_neg_one.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Units.eq_one_or_neg_one_of_mul_eq_neg_one.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {u v : ℤ}
+
+theorem eq_one_or_neg_one_of_mul_eq_neg_one (h : u * v = -1) : u = 1 ∨ u = -1 := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {u v : ℤ}
+
+theorem eq_one_or_neg_one_of_mul_eq_neg_one (h : u * v = -1) : u = 1 ∨ u = -1 := by
+  have hu : IsUnit u := by
+    refine ⟨⟨u, v, ?_, ?_⟩, rfl⟩
+    · simpa [mul_comm] using h
+    · simpa using h
+  rcases Int.isUnit_iff.mp hu with hu' | hu'
+  · exact Or.inl hu'
+  · exact Or.inr hu'
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:8:7-8:31
+Type mismatch: After simplification, term
+  h
+ has type
+  u * v = -1
+but is expected to have type
+  u * v = 1
+Source line 8:
+    · simpa [mul_comm] using h
+      ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [mul_comm] using h
+
+ERROR .LspCheck.lean:9:7-9:20
+Type mismatch: After simplification, term
+  h
+ has type
+  u * v = -1
+but is expected to have type
+  v * u = 1
+Source line 9:
+    · simpa using h
+      ^^^^^^^^^^^^^
+Highlighted span: simpa using h
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:8:7-8:31
+Type mismatch: After simplification, term
+  h
+ has type
+  u * v = -1
+but is expected to have type
+  u * v = 1
+Source line 8:
+    · simpa [mul_comm] using h
+      ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [mul_comm] using h
+
+ERROR .LspCheck.lean:9:7-9:20
+Type mismatch: After simplification, term
+  h
+ has type
+  u * v = -1
+but is expected to have type
+  v * u = 1
+Source line 9:
+    · simpa using h
+      ^^^^^^^^^^^^^
+Highlighted span: simpa using h
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {u v : ℤ}
+
+theorem eq_one_or_neg_one_of_mul_eq_neg_one (h : u * v = -1) : u = 1 ∨ u = -1 := by
+  by_cases hu : u = 1
+  · exact Or.inl hu
+  · right
+    have hv : v = -u := by
+      nlinarith [h]
+    nlinarith [h, hu]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:7-10:20
+linarith failed to find a contradiction
+case h1.h
+u v : ℤ
+h : u * v = -1
+hu : ¬u = 1
+a✝ : v < -u
+⊢ False
+failed
+Source line 10:
+      nlinarith [h]
+      ^^^^^^^^^^^^^
+Highlighted span: nlinarith [h]
+
+ERROR .LspCheck.lean:11:5-11:22
+linarith failed to find a contradiction
+case neg.h.h2.h
+u v : ℤ
+h : u * v = -1
+hu : ¬u = 1
+hv : v = -u
+a✝ : -1 < u
+⊢ False
+failed
+Source line 11:
+    nlinarith [h, hu]
+    ^^^^^^^^^^^^^^^^^
+Highlighted span: nlinarith [h, hu]
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:7-10:20
+linarith failed to find a contradiction
+case h1.h
+u v : ℤ
+h : u * v = -1
+hu : ¬u = 1
+a✝ : v < -u
+⊢ False
+failed
+Source line 10:
+      nlinarith [h]
+      ^^^^^^^^^^^^^
+Highlighted span: nlinarith [h]
+
+ERROR .LspCheck.lean:11:5-11:22
+linarith failed to find a contradiction
+case neg.h.h2.h
+u v : ℤ
+h : u * v = -1
+hu : ¬u = 1
+hv : v = -u
+a✝ : -1 < u
+⊢ False
+failed
+Source line 11:
+    nlinarith [h, hu]
+    ^^^^^^^^^^^^^^^^^
+Highlighted span: nlinarith [h, hu]
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {u v : ℤ}
+
+theorem eq_one_or_neg_one_of_mul_eq_neg_one (h : u * v = -1) : u = 1 ∨ u = -1 := by
+  have hu : IsUnit u := by
+    refine ⟨⟨u, -v, ?_, ?_⟩, rfl⟩
+    · calc
+        u * (-v) = -(u * v) := by ring
+        _ = -(-1) := by rw [h]
+        _ = 1 := by norm_num
+    · calc
+        (-v) * u = -(v * u) := by ring
+        _ = -(u * v) := by rw [mul_comm]
+        _ = -(-1) := by rw [h]
+        _ = 1 := by norm_num
+  simpa [Int.isUnit_iff] using hu
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

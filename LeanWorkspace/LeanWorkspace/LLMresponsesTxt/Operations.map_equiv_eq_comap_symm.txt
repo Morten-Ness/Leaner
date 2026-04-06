@@ -1,0 +1,162 @@
+FILE: Operations.map_equiv_eq_comap_symm.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Operations.map_equiv_eq_comap_symm.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+variable {F : Type*} [FunLike F M N] [mc : MonoidHomClass F M N]
+
+variable {M : Type*} [MulOneClass M] (S : Submonoid M)
+
+theorem map_equiv_eq_comap_symm (f : M ≃* N) (K : Submonoid M) :
+    K.map f = K.comap f.symm := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+variable {F : Type*} [FunLike F M N] [mc : MonoidHomClass F M N]
+
+variable {M : Type*} [MulOneClass M] (S : Submonoid M)
+
+theorem map_equiv_eq_comap_symm (f : M ≃* N) (K : Submonoid M) :
+    K.map f = K.comap f.symm := by
+  ext x
+  rfl
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:3-12:6
+Tactic `rfl` failed: The left-hand side
+  x ∈ Submonoid.map f K
+is not definitionally equal to the right-hand side
+  x ∈ Submonoid.comap f.symm K
+
+case h
+N : Type u_2
+inst✝¹ : MulOneClass N
+M : Type u_5
+inst✝ : MulOneClass M
+f : M ≃* N
+K : Submonoid M
+x : N
+⊢ x ∈ Submonoid.map f K ↔ x ∈ Submonoid.comap f.symm K
+Source line 12:
+  rfl
+  ^^^
+Highlighted span: rfl
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:3-12:6
+Tactic `rfl` failed: The left-hand side
+  x ∈ Submonoid.map f K
+is not definitionally equal to the right-hand side
+  x ∈ Submonoid.comap f.symm K
+
+case h
+N : Type u_2
+inst✝¹ : MulOneClass N
+M : Type u_5
+inst✝ : MulOneClass M
+f : M ≃* N
+K : Submonoid M
+x : N
+⊢ x ∈ Submonoid.map f K ↔ x ∈ Submonoid.comap f.symm K
+Source line 12:
+  rfl
+  ^^^
+Highlighted span: rfl
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+variable {F : Type*} [FunLike F M N] [mc : MonoidHomClass F M N]
+
+variable {M : Type*} [MulOneClass M] (S : Submonoid M)
+
+theorem map_equiv_eq_comap_symm (f : M ≃* N) (K : Submonoid M) :
+    K.map f = K.comap f.symm := by
+  ext x
+  constructor
+  · rintro ⟨y, hy, rfl⟩
+    exact hy
+  · intro hx
+    refine ⟨f.symm x, hx, ?_⟩
+    exact f.apply_symm_apply x
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:5-14:13
+Type mismatch
+  hy
+has type
+  Membership.mem.{u_5, u_5} (↑K) y
+but is expected to have type
+  Membership.mem.{u_2, u_2} (Submonoid.comap f.symm K) (f y)
+Source line 14:
+    exact hy
+    ^^^^^^^^
+Highlighted span: exact hy
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:5-14:13
+Type mismatch
+  hy
+has type
+  Membership.mem.{u_5, u_5} (↑K) y
+but is expected to have type
+  Membership.mem.{u_2, u_2} (Submonoid.comap f.symm K) (f y)
+Source line 14:
+    exact hy
+    ^^^^^^^^
+Highlighted span: exact hy
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+variable {F : Type*} [FunLike F M N] [mc : MonoidHomClass F M N]
+
+variable {M : Type*} [MulOneClass M] (S : Submonoid M)
+
+theorem map_equiv_eq_comap_symm (f : M ≃* N) (K : Submonoid M) :
+    K.map f = K.comap f.symm := by
+  ext x
+  constructor
+  · rintro ⟨y, hy, rfl⟩
+    show f.symm (f y) ∈ K
+    simpa using hy
+  · intro hx
+    refine ⟨f.symm x, hx, ?_⟩
+    exact f.apply_symm_apply x
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

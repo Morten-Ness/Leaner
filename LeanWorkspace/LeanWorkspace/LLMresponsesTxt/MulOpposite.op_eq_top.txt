@@ -1,0 +1,47 @@
+FILE: MulOpposite.op_eq_top.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: MulOpposite.op_eq_top.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {ι : Sort*} {M : Type*} [MulOneClass M]
+
+theorem op_eq_top {S : Submonoid M} : S.op = ⊤ ↔ S = ⊤ := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι : Sort*} {M : Type*} [MulOneClass M]
+
+theorem op_eq_top {S : Submonoid M} : S.op = ⊤ ↔ S = ⊤ := by
+  constructor
+  · intro h
+    ext x
+    constructor
+    · intro hx
+      trivial
+    · intro _
+      have hop : MulOpposite.op x ∈ S.op := by
+        simpa [h]
+      simpa using hop
+  · intro h
+    ext x
+    constructor
+    · intro hx
+      trivial
+    · intro _
+      have hS : S = ⊤ := h
+      simpa [hS] using (show MulOpposite.unop x ∈ S from trivial)
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+PASS

@@ -1,0 +1,38 @@
+FILE: Lattice.map_comap_eq.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Lattice.map_comap_eq.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R A B : Type*} [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B]
+
+theorem map_comap_eq (f : A →ₐ[R] B) (S : Subalgebra R B) : (S.comap f).map f = S ⊓ f.range := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R A B : Type*} [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B]
+
+theorem map_comap_eq (f : A →ₐ[R] B) (S : Subalgebra R B) : (S.comap f).map f = S ⊓ f.range := by
+  ext x
+  constructor
+  · intro hx
+    rcases hx with ⟨y, hy, rfl⟩
+    exact ⟨hy, ⟨y, rfl⟩⟩
+  · intro hx
+    rcases hx with ⟨hxS, hxR⟩
+    rcases hxR with ⟨y, rfl⟩
+    exact ⟨y, hxS, rfl⟩
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+PASS

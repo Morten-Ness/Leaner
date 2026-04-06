@@ -1,0 +1,122 @@
+FILE: Operations.mulSingle_mem_pi.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Operations.mulSingle_mem_pi.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+variable {ι : Type*} {M : ι → Type*} [∀ i, MulOneClass (M i)]
+
+theorem mulSingle_mem_pi [DecidableEq ι] {I : Set ι} {S : ∀ i, Submonoid (M i)} (i : ι) (x : M i) :
+    Pi.mulSingle i x ∈ Submonoid.pi I S ↔ i ∈ I → x ∈ S i := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+variable {ι : Type*} {M : ι → Type*} [∀ i, MulOneClass (M i)]
+
+theorem mulSingle_mem_pi [DecidableEq ι] {I : Set ι} {S : ∀ i, Submonoid (M i)} (i : ι) (x : M i) :
+    Pi.mulSingle i x ∈ Submonoid.pi I S ↔ i ∈ I → x ∈ S i := by
+  constructor
+  · intro hx hi
+    exact hx hi
+  · intro hx j hj
+    by_cases hji : j = i
+    · subst hji
+      exact hx hj
+    · simp [Pi.mulSingle, hji]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:14-11:16
+Application type mismatch: The argument
+  hi
+has type
+  i ∈ I
+of sort `Prop` but is expected to have type
+  ι
+of sort `Type u_4` in the application
+  hx hi
+Source line 11:
+    exact hx hi
+             ^^
+Highlighted span: hi
+
+ERROR .LspCheck.lean:15:7-15:18
+Type mismatch
+  hx hj
+has type
+  x ∈ S j
+but is expected to have type
+  Pi.mulSingle j x j ∈ (fun i ↦ (S i).carrier) j
+Source line 15:
+      exact hx hj
+      ^^^^^^^^^^^
+Highlighted span: exact hx hj
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:14-11:16
+Application type mismatch: The argument
+  hi
+has type
+  i ∈ I
+of sort `Prop` but is expected to have type
+  ι
+of sort `Type u_4` in the application
+  hx hi
+Source line 11:
+    exact hx hi
+             ^^
+Highlighted span: hi
+
+ERROR .LspCheck.lean:15:7-15:18
+Type mismatch
+  hx hj
+has type
+  x ∈ S j
+but is expected to have type
+  Pi.mulSingle j x j ∈ (fun i ↦ (S i).carrier) j
+Source line 15:
+      exact hx hj
+      ^^^^^^^^^^^
+Highlighted span: exact hx hj
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+variable {ι : Type*} {M : ι → Type*} [∀ i, MulOneClass (M i)]
+
+theorem mulSingle_mem_pi [DecidableEq ι] {I : Set ι} {S : ∀ i, Submonoid (M i)} (i : ι) (x : M i) :
+    Pi.mulSingle i x ∈ Submonoid.pi I S ↔ i ∈ I → x ∈ S i := by
+  constructor
+  · intro hx hi
+    simpa [Submonoid.pi, Set.mem_setOf_eq] using hx i hi
+  · intro hx j hj
+    by_cases hji : j = i
+    · subst hji
+      simpa [Pi.mulSingle] using hx hj
+    · simp [Pi.mulSingle, hji]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

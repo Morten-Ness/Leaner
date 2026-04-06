@@ -1,0 +1,169 @@
+FILE: Combination.affineCombination_apply_const.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Combination.affineCombination_apply_const.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+variable (k)
+
+variable {k}
+
+theorem affineCombination_apply_const (w : ι → k) (p : P) (h : ∑ i ∈ s, w i = 1) :
+    s.affineCombination k (fun _ => p) w = p := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+variable (k)
+
+variable {k}
+
+theorem affineCombination_apply_const (w : ι → k) (p : P) (h : ∑ i ∈ s, w i = 1) :
+    s.affineCombination k (fun _ => p) w = p := by
+  simpa using Finset.affineCombination_eq_self_of_sum_eq_one (s := s) (k := k) (p := p) (w := w) h
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:17:15-17:61
+Unknown constant `Finset.affineCombination_eq_self_of_sum_eq_one`
+Source line 17:
+  simpa using Finset.affineCombination_eq_self_of_sum_eq_one (s := s) (k := k) (p := p) (w := w) h
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.affineCombination_eq_self_of_sum_eq_one
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:17:15-17:61
+Unknown constant `Finset.affineCombination_eq_self_of_sum_eq_one`
+Source line 17:
+  simpa using Finset.affineCombination_eq_self_of_sum_eq_one (s := s) (k := k) (p := p) (w := w) h
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.affineCombination_eq_self_of_sum_eq_one
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+variable (k)
+
+variable {k}
+
+theorem affineCombination_apply_const (w : ι → k) (p : P) (h : ∑ i ∈ s, w i = 1) :
+    s.affineCombination k (fun _ => p) w = p := by
+  classical
+  rcases s.eq_empty_or_nonempty with rfl | hs
+  · simpa using h
+  · obtain ⟨i, hi⟩ := hs
+    rw [Finset.affineCombination_eq_weightedVSubOfPoint_vadd (s := s) (k := k) (p := fun _ => p)
+      (w := w) (i := i) hi]
+    simp [h]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:19:5-19:18
+Type mismatch: After simplification, term
+  h
+ has type
+  Eq.{u_1 + 1} 0 1
+but is expected to have type
+  Eq.{u_3 + 1} ((Finset.affineCombination k ∅ fun x ↦ p) w) p
+Source line 19:
+  · simpa using h
+    ^^^^^^^^^^^^^
+Highlighted span: simpa using h
+
+ERROR .LspCheck.lean:21:9-21:61
+Unknown constant `Finset.affineCombination_eq_weightedVSubOfPoint_vadd`
+Source line 21:
+    rw [Finset.affineCombination_eq_weightedVSubOfPoint_vadd (s := s) (k := k) (p := fun _ => p)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.affineCombination_eq_weightedVSubOfPoint_vadd
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:19:5-19:18
+Type mismatch: After simplification, term
+  h
+ has type
+  Eq.{u_1 + 1} 0 1
+but is expected to have type
+  Eq.{u_3 + 1} ((Finset.affineCombination k ∅ fun x ↦ p) w) p
+Source line 19:
+  · simpa using h
+    ^^^^^^^^^^^^^
+Highlighted span: simpa using h
+
+ERROR .LspCheck.lean:21:9-21:61
+Unknown constant `Finset.affineCombination_eq_weightedVSubOfPoint_vadd`
+Source line 21:
+    rw [Finset.affineCombination_eq_weightedVSubOfPoint_vadd (s := s) (k := k) (p := fun _ => p)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.affineCombination_eq_weightedVSubOfPoint_vadd
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped BigOperators
+
+variable {k : Type*} {V : Type*} {P : Type*} [Ring k] [AddCommGroup V] [Module k V]
+
+variable [S : AddTorsor V P]
+
+variable {ι : Type*} (s : Finset ι)
+
+variable {ι₂ : Type*} (s₂ : Finset ι₂)
+
+variable (k)
+
+variable {k}
+
+theorem affineCombination_apply_const (w : ι → k) (p : P) (h : ∑ i ∈ s, w i = 1) :
+    s.affineCombination k (fun _ => p) w = p := by
+  classical
+  simp [Finset.affineCombination, h]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

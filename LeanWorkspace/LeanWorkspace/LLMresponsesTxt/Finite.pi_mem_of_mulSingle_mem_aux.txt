@@ -1,0 +1,438 @@
+FILE: Finite.pi_mem_of_mulSingle_mem_aux.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Finite.pi_mem_of_mulSingle_mem_aux.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {G : Type*} [Group G]
+
+variable {A : Type*} [AddGroup A]
+
+variable {η : Type*} {f : η → Type*} [∀ i, Group (f i)]
+
+theorem pi_mem_of_mulSingle_mem_aux [DecidableEq η] (I : Finset η) {H : Subgroup (∀ i, f i)}
+    (x : ∀ i, f i) (h1 : ∀ i, i ∉ I → x i = 1) (h2 : ∀ i, i ∈ I → Pi.mulSingle i (x i) ∈ H) :
+    x ∈ H := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G : Type*} [Group G]
+
+variable {A : Type*} [AddGroup A]
+
+variable {η : Type*} {f : η → Type*} [∀ i, Group (f i)]
+
+theorem pi_mem_of_mulSingle_mem_aux [DecidableEq η] (I : Finset η) {H : Subgroup (∀ i, f i)}
+    (x : ∀ i, f i) (h1 : ∀ i, i ∉ I → x i = 1) (h2 : ∀ i, i ∈ I → Pi.mulSingle i (x i) ∈ H) :
+    x ∈ H := by
+  classical
+  refine Finset.induction_on I ?base ?step
+  · have hx : x = 1 := by
+      funext i
+      exact h1 i (by simp)
+    rw [hx]
+    exact H.one_mem
+  · intro a s ha hs
+    have hxa : Pi.mulSingle a (x a) ∈ H := h2 a (by simp)
+    have hsx : (fun i => if i = a then 1 else x i) ∈ H := by
+      apply hs
+      · intro i hi
+        by_cases hia : i = a
+        · subst hia
+          exfalso
+          exact hi (by simp)
+        · simp [Pi.mulSingle, hia]
+          exact h1 i (by
+            intro his
+            exact hi (by simp [his]))
+      · intro i hi
+        have : i ∈ insert a s := by simp [hi]
+        by_cases hia : i = a
+        · subst hia
+          exfalso
+          exact hi ha
+        · simpa [Pi.mulSingle, hia] using h2 i this
+    have hmul : Pi.mulSingle a (x a) * (fun i => if i = a then 1 else x i) = x := by
+      funext i
+      by_cases hia : i = a
+      · subst hia
+        simp [Pi.mulSingle]
+      · simp [Pi.mulSingle, hia]
+    rw [← hmul]
+    exact H.mul_mem hxa hsx
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:16:22-16:26
+`simp` made no progress
+Source line 16:
+      exact h1 i (by simp)
+                     ^^^^
+Highlighted span: simp
+
+ERROR .LspCheck.lean:20:53-20:57
+`simp` made no progress
+Source line 20:
+    have hxa : Pi.mulSingle a (x a) ∈ H := h2 a (by simp)
+                                                    ^^^^
+Highlighted span: simp
+
+ERROR .LspCheck.lean:22:7-22:15
+Tactic `apply` failed: could not unify the type of `hs`
+  x ∈ H
+with the goal
+  (fun i ↦ if i = a then 1 else x i) ∈ H
+
+η : Type u_3
+f : η → Type u_4
+inst✝¹ : (i : η) → Group (f i)
+inst✝ : DecidableEq η
+I : Finset η
+H : Subgroup ((i : η) → f i)
+x : (i : η) → f i
+h1 : ∀ i ∉ I, x i = 1
+h2 : ∀ i ∈ I, Pi.mulSingle i (x i) ∈ H
+a : η
+s : Finset η
+ha : a ∉ s
+hs : x ∈ H
+hxa : Pi.mulSingle a (x a) ∈ H
+⊢ (fun i ↦ if i = a then 1 else x i) ∈ H
+Source line 22:
+      apply hs
+      ^^^^^^^^
+Highlighted span: apply hs
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:16:22-16:26
+`simp` made no progress
+Source line 16:
+      exact h1 i (by simp)
+                     ^^^^
+Highlighted span: simp
+
+ERROR .LspCheck.lean:20:53-20:57
+`simp` made no progress
+Source line 20:
+    have hxa : Pi.mulSingle a (x a) ∈ H := h2 a (by simp)
+                                                    ^^^^
+Highlighted span: simp
+
+ERROR .LspCheck.lean:22:7-22:15
+Tactic `apply` failed: could not unify the type of `hs`
+  x ∈ H
+with the goal
+  (fun i ↦ if i = a then 1 else x i) ∈ H
+
+η : Type u_3
+f : η → Type u_4
+inst✝¹ : (i : η) → Group (f i)
+inst✝ : DecidableEq η
+I : Finset η
+H : Subgroup ((i : η) → f i)
+x : (i : η) → f i
+h1 : ∀ i ∉ I, x i = 1
+h2 : ∀ i ∈ I, Pi.mulSingle i (x i) ∈ H
+a : η
+s : Finset η
+ha : a ∉ s
+hs : x ∈ H
+hxa : Pi.mulSingle a (x a) ∈ H
+⊢ (fun i ↦ if i = a then 1 else x i) ∈ H
+Source line 22:
+      apply hs
+      ^^^^^^^^
+Highlighted span: apply hs
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G : Type*} [Group G]
+
+variable {A : Type*} [AddGroup A]
+
+variable {η : Type*} {f : η → Type*} [∀ i, Group (f i)]
+
+theorem pi_mem_of_mulSingle_mem_aux [DecidableEq η] (I : Finset η) {H : Subgroup (∀ i, f i)}
+    (x : ∀ i, f i) (h1 : ∀ i, i ∉ I → x i = 1) (h2 : ∀ i, i ∈ I → Pi.mulSingle i (x i) ∈ H) :
+    x ∈ H := by
+  classical
+  refine Finset.induction_on I ?_ ?_
+  · have hx : x = 1 := by
+      funext i
+      exact h1 i (by
+        intro hi
+        exact Finset.not_mem_empty i hi)
+    rw [hx]
+    exact H.one_mem
+  · intro a s ha hs
+    let y : ∀ i, f i := fun i => if i = a then 1 else x i
+    have hy1 : ∀ i, i ∉ s → y i = 1 := by
+      intro i hi
+      by_cases hia : i = a
+      · simp [y, hia]
+      · have his : i ∉ insert a s := by
+          intro hmem
+          rw [Finset.mem_insert] at hmem
+          exact hmem.elim hia hi
+        have hx1 : x i = 1 := h1 i his
+        simp [y, hia, hx1]
+    have hy2 : ∀ i, i ∈ s → Pi.mulSingle i (y i) ∈ H := by
+      intro i hi
+      have hinsert : i ∈ insert a s := Finset.mem_insert_of_mem hi
+      have hia : i ≠ a := by
+        intro hEq
+        subst hEq
+        exact ha hi
+      have hyx : y i = x i := by simp [y, hia]
+      rw [hyx]
+      exact h2 i hinsert
+    have hy : y ∈ H := hs y hy1 hy2
+    have hxa : Pi.mulSingle a (x a) ∈ H := h2 a (Finset.mem_insert_self a s)
+    have hmul : Pi.mulSingle a (x a) * y = x := by
+      funext i
+      by_cases hia : i = a
+      · subst hia
+        simp [y, Pi.mulSingle]
+      · simp [y, Pi.mulSingle, hia]
+    rw [← hmul]
+    exact H.mul_mem hxa hy
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:18:15-18:35
+Unknown constant `Finset.not_mem_empty`
+Source line 18:
+        exact Finset.not_mem_empty i hi)
+              ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.not_mem_empty
+
+ERROR .LspCheck.lean:31:36-31:39
+Application type mismatch: The argument
+  his
+has type
+  i ∉ insert a s
+but is expected to have type
+  i ∉ I
+in the application
+  h1 i his
+Source line 31:
+        have hx1 : x i = 1 := h1 i his
+                                   ^^^
+Highlighted span: his
+
+ERROR .LspCheck.lean:42:18-42:25
+Application type mismatch: The argument
+  hinsert
+has type
+  i ∈ insert a s
+but is expected to have type
+  i ∈ I
+in the application
+  h2 i hinsert
+Source line 42:
+      exact h2 i hinsert
+                 ^^^^^^^
+Highlighted span: hinsert
+
+ERROR .LspCheck.lean:43:24-43:36
+Function expected at
+  hs
+but this term has type
+  x ∈ H
+
+Note: Expected a function because this term is being applied to the argument
+  y
+Source line 43:
+    have hy : y ∈ H := hs y hy1 hy2
+                       ^^^^^^^^^^^^
+Highlighted span: hs y hy1 hy2
+
+ERROR .LspCheck.lean:44:49-44:77
+Application type mismatch: The argument
+  Finset.mem_insert_self a s
+has type
+  a ∈ insert a s
+but is expected to have type
+  a ∈ I
+in the application
+  h2 a (Finset.mem_insert_self a s)
+Source line 44:
+    have hxa : Pi.mulSingle a (x a) ∈ H := h2 a (Finset.mem_insert_self a s)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (Finset.mem_insert_self a s)
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:18:15-18:35
+Unknown constant `Finset.not_mem_empty`
+Source line 18:
+        exact Finset.not_mem_empty i hi)
+              ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Finset.not_mem_empty
+
+ERROR .LspCheck.lean:31:36-31:39
+Application type mismatch: The argument
+  his
+has type
+  i ∉ insert a s
+but is expected to have type
+  i ∉ I
+in the application
+  h1 i his
+Source line 31:
+        have hx1 : x i = 1 := h1 i his
+                                   ^^^
+Highlighted span: his
+
+ERROR .LspCheck.lean:42:18-42:25
+Application type mismatch: The argument
+  hinsert
+has type
+  i ∈ insert a s
+but is expected to have type
+  i ∈ I
+in the application
+  h2 i hinsert
+Source line 42:
+      exact h2 i hinsert
+                 ^^^^^^^
+Highlighted span: hinsert
+
+ERROR .LspCheck.lean:43:24-43:36
+Function expected at
+  hs
+but this term has type
+  x ∈ H
+
+Note: Expected a function because this term is being applied to the argument
+  y
+Source line 43:
+    have hy : y ∈ H := hs y hy1 hy2
+                       ^^^^^^^^^^^^
+Highlighted span: hs y hy1 hy2
+
+ERROR .LspCheck.lean:44:49-44:77
+Application type mismatch: The argument
+  Finset.mem_insert_self a s
+has type
+  a ∈ insert a s
+but is expected to have type
+  a ∈ I
+in the application
+  h2 a (Finset.mem_insert_self a s)
+Source line 44:
+    have hxa : Pi.mulSingle a (x a) ∈ H := h2 a (Finset.mem_insert_self a s)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (Finset.mem_insert_self a s)
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G : Type*} [Group G]
+
+variable {A : Type*} [AddGroup A]
+
+variable {η : Type*} {f : η → Type*} [∀ i, Group (f i)]
+
+theorem pi_mem_of_mulSingle_mem_aux [DecidableEq η] (I : Finset η) {H : Subgroup (∀ i, f i)}
+    (x : ∀ i, f i) (h1 : ∀ i, i ∉ I → x i = 1) (h2 : ∀ i, i ∈ I → Pi.mulSingle i (x i) ∈ H) :
+    x ∈ H := by
+  classical
+  subst I
+  classical
+  let F : Finset (∀ i, f i) := I.image (fun i => Pi.mulSingle i (x i))
+  have hprod : F.prod id = x := by
+    classical
+    refine funext ?_
+    intro j
+    rw [Finset.prod_image]
+    · induction I using Finset.induction_on with
+      | empty =>
+          simp [F]
+      | @insert a s ha ih =>
+          simp only [Finset.image_insert, ha, Finset.prod_insert, Finset.mem_image, id]
+          have hneq : Pi.mulSingle a (x a) j * ∏ x_1 in s.image (fun i => Pi.mulSingle i (x i)), x_1 j = x j := by
+            by_cases hja : j = a
+            · subst hja
+              have hsone : ∀ i ∈ s, Pi.mulSingle i (x i) a = 1 := by
+                intro i hi
+                simp [Pi.mulSingle, hi, ha]
+              simp [hsone, ih]
+            · have hmulone : Pi.mulSingle a (x a) j = 1 := by
+                simp [Pi.mulSingle, hja]
+              have hxs : x j = ∏ x_1 in s.image (fun i => Pi.mulSingle i (x i)), x_1 j := by
+                have hjnot : j ∉ insert a s := by
+                  intro hjin
+                  rw [Finset.mem_insert] at hjin
+                  exact hjin.elim hja (h1 j)
+                have hxj : x j = 1 := h1 j hjnot
+                rw [hxj]
+                symmetry
+                clear h1 h2
+                induction s using Finset.induction_on with
+                | empty =>
+                    simp
+                | @insert b t hbt iht =>
+                    simp only [Finset.image_insert, hbt, Finset.prod_insert]
+                    have hbja : j ≠ b := by
+                      intro hbj
+                      subst hbj
+                      exact hjnot (by simp)
+                    simp [Pi.mulSingle, hbja, iht]
+              rw [hmulone, one_mul, hxs]
+          exact hneq
+    · intro a ha b hb hab
+      exact Pi.mulSingle_injective hab
+  rw [← hprod]
+  refine Subgroup.prod_mem ?_ ?_
+  · intro y hy
+    rw [Finset.mem_image] at hy
+    rcases hy with ⟨i, hi, rfl⟩
+    exact h2 i hi
+  · simp
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:26:53-26:56
+unexpected token 'in'; expected ','
+Source line 26:
+          have hneq : Pi.mulSingle a (x a) j * ∏ x_1 in s.image (fun i => Pi.mulSingle i (x i)), x_1 j = x j := by
+                                                    ^^^
+Highlighted span:  in
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:26:53-26:56
+unexpected token 'in'; expected ','
+Source line 26:
+          have hneq : Pi.mulSingle a (x a) j * ∏ x_1 in s.image (fun i => Pi.mulSingle i (x i)), x_1 j = x j := by
+                                                    ^^^
+Highlighted span:  in

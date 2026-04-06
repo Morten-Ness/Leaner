@@ -1,0 +1,41 @@
+FILE: Operations.mem_map_equiv.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Operations.mem_map_equiv.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {M N P σ : Type*}
+
+variable [Mul M] [Mul N] [Mul P] (S : Subsemigroup M)
+
+theorem mem_map_equiv {f : M ≃* N} {K : Subsemigroup M} {x : N} :
+    x ∈ K.map (f : M →ₙ* N) ↔ f.symm x ∈ K := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M N P σ : Type*}
+
+variable [Mul M] [Mul N] [Mul P] (S : Subsemigroup M)
+
+theorem mem_map_equiv {f : M ≃* N} {K : Subsemigroup M} {x : N} :
+    x ∈ K.map (f : M →ₙ* N) ↔ f.symm x ∈ K := by
+  constructor
+  · rintro ⟨y, hy, rfl⟩
+    simpa using hy
+  · intro hx
+    refine ⟨f.symm x, hx, ?_⟩
+    exact f.apply_symm_apply x
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+PASS

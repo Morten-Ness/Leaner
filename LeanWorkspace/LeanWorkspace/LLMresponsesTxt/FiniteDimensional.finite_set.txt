@@ -1,0 +1,225 @@
+FILE: FiniteDimensional.finite_set.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: FiniteDimensional.finite_set.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {ι : Type u₁} {k : Type u₂} {V : Type u₃} {P : Type u₄}
+
+variable [AddCommGroup V] [AddTorsor V P]
+
+variable [DivisionRing k] [Module k V]
+
+theorem finite_set [FiniteDimensional k V] {s : Set ι} (b : AffineBasis s k P) :
+    s.Finite := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι : Type u₁} {k : Type u₂} {V : Type u₃} {P : Type u₄}
+
+variable [AddCommGroup V] [AddTorsor V P]
+
+variable [DivisionRing k] [Module k V]
+
+theorem finite_set [FiniteDimensional k V] {s : Set ι} (b : AffineBasis s k P) :
+    s.Finite := by
+  classical
+  let p : P := Classical.choice (AffineBasis.nonempty b)
+  let vb : Basis s k V := b.basisOf p
+  exact vb.finite_index_of_finiteDimensional
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:55-12:56
+Application type mismatch: The argument
+  b
+has type
+  AffineBasis.{u₁, u₂, u₃, u₄} (↑s) k P
+but is expected to have type
+  AffineBasis.{u₄, ?u.3032.18, ?u.3032.17, ?u.3032.16} P ?m.17 ?m.19
+in the application
+  AffineBasis.nonempty b
+Source line 12:
+  let p : P := Classical.choice (AffineBasis.nonempty b)
+                                                      ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:55-12:56
+Application type mismatch: The argument
+  b
+has type
+  AffineBasis.{u₁, u₂, u₃, u₄} (↑s) k P
+but is expected to have type
+  AffineBasis.{u₄, ?u.3032.18, ?u.3032.17, ?u.3032.16} P ?m.17 ?m.19
+in the application
+  AffineBasis.nonempty b
+Source line 12:
+  let p : P := Classical.choice (AffineBasis.nonempty b)
+                                                      ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι : Type u₁} {k : Type u₂} {V : Type u₃} {P : Type u₄}
+
+variable [AddCommGroup V] [AddTorsor V P]
+
+variable [DivisionRing k] [Module k V]
+
+theorem finite_set [FiniteDimensional k V] {s : Set ι} (b : AffineBasis s k P) :
+    s.Finite := by
+  classical
+  let i : s := Classical.choice b.index_nonempty
+  let vb : Basis s k V := b.basisOf i
+  exact vb.finite_index_of_finiteDimensional
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:35-12:49
+Invalid field `index_nonempty`: The environment does not contain `AffineBasis.index_nonempty`, so it is not possible to project the field `index_nonempty` from an expression
+  b
+of type `AffineBasis (↑s) k P`
+Source line 12:
+  let i : s := Classical.choice b.index_nonempty
+                                  ^^^^^^^^^^^^^^
+Highlighted span: index_nonempty
+
+ERROR .LspCheck.lean:13:12-13:17
+Unknown identifier `Basis`
+Source line 13:
+  let vb : Basis s k V := b.basisOf i
+           ^^^^^
+Highlighted span: Basis
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:35-12:49
+Invalid field `index_nonempty`: The environment does not contain `AffineBasis.index_nonempty`, so it is not possible to project the field `index_nonempty` from an expression
+  b
+of type `AffineBasis (↑s) k P`
+Source line 12:
+  let i : s := Classical.choice b.index_nonempty
+                                  ^^^^^^^^^^^^^^
+Highlighted span: index_nonempty
+
+ERROR .LspCheck.lean:13:12-13:17
+Unknown identifier `Basis`
+Source line 13:
+  let vb : Basis s k V := b.basisOf i
+           ^^^^^
+Highlighted span: Basis
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι : Type u₁} {k : Type u₂} {V : Type u₃} {P : Type u₄}
+
+variable [AddCommGroup V] [AddTorsor V P]
+
+variable [DivisionRing k] [Module k V]
+
+theorem finite_set [FiniteDimensional k V] {s : Set ι} (b : AffineBasis s k P) :
+    s.Finite := by
+  classical
+  by_cases hs : s.Nonempty
+  · let i : s := Classical.choice hs
+    let vb := b.basisOf i
+    exact vb.finite
+  · exact Set.not_nonempty_iff_eq_empty.mp hs |> by
+      intro h
+      simpa [h] using Set.toFinite (∅ : Set ι)
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:35-13:37
+Application type mismatch: The argument
+  hs
+has type
+  s.Nonempty
+but is expected to have type
+  Nonempty ↑s
+in the application
+  Classical.choice hs
+Source line 13:
+  · let i : s := Classical.choice hs
+                                  ^^
+Highlighted span: hs
+
+ERROR .LspCheck.lean:15:14-15:20
+Invalid field `finite`: The environment does not contain `Module.Basis.finite`, so it is not possible to project the field `finite` from an expression
+  vb
+of type
+  Module.Basis { j // j ≠ i } k V
+Source line 15:
+    exact vb.finite
+             ^^^^^^
+Highlighted span: finite
+
+ERROR .LspCheck.lean:16:50-17:1
+invalid 'by' tactic, expected type has not been provided
+Source line 16:
+  · exact Set.not_nonempty_iff_eq_empty.mp hs |> by
+                                                 ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:35-13:37
+Application type mismatch: The argument
+  hs
+has type
+  s.Nonempty
+but is expected to have type
+  Nonempty ↑s
+in the application
+  Classical.choice hs
+Source line 13:
+  · let i : s := Classical.choice hs
+                                  ^^
+Highlighted span: hs
+
+ERROR .LspCheck.lean:15:14-15:20
+Invalid field `finite`: The environment does not contain `Module.Basis.finite`, so it is not possible to project the field `finite` from an expression
+  vb
+of type
+  Module.Basis { j // j ≠ i } k V
+Source line 15:
+    exact vb.finite
+             ^^^^^^
+Highlighted span: finite
+
+ERROR .LspCheck.lean:16:50-17:1
+invalid 'by' tactic, expected type has not been provided
+Source line 16:
+  · exact Set.not_nonempty_iff_eq_empty.mp hs |> by
+                                                 ^
+Highlighted span: b

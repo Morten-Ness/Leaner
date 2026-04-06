@@ -1,0 +1,349 @@
+FILE: Directed.coe_iSup_of_directed.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Directed.coe_iSup_of_directed.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R A B : Type*} [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B]
+
+variable (S : Subalgebra R A)
+
+variable {ι : Type*} [Nonempty ι] {K : ι → Subalgebra R A}
+
+theorem coe_iSup_of_directed (dir : Directed (· ≤ ·) K) : ↑(iSup K) = ⋃ i, (K i : Set A) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R A B : Type*} [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B]
+
+variable (S : Subalgebra R A)
+
+variable {ι : Type*} [Nonempty ι] {K : ι → Subalgebra R A}
+
+theorem coe_iSup_of_directed (dir : Directed (· ≤ ·) K) : ↑(iSup K) = ⋃ i, (K i : Set A) := by
+  ext x
+  simp only [Set.mem_iUnion]
+  constructor
+  · intro hx
+    rw [Subalgebra.mem_iSup_of_directed dir] at hx
+    simpa using hx
+  · rintro ⟨i, hi⟩
+    rw [Subalgebra.mem_iSup_of_directed dir]
+    exact ⟨i, hi⟩
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:9-14:40
+Unknown constant `Subalgebra.mem_iSup_of_directed`
+Source line 14:
+    rw [Subalgebra.mem_iSup_of_directed dir] at hx
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subalgebra.mem_iSup_of_directed
+
+ERROR .LspCheck.lean:17:9-17:40
+Unknown constant `Subalgebra.mem_iSup_of_directed`
+Source line 17:
+    rw [Subalgebra.mem_iSup_of_directed dir]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subalgebra.mem_iSup_of_directed
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:9-14:40
+Unknown constant `Subalgebra.mem_iSup_of_directed`
+Source line 14:
+    rw [Subalgebra.mem_iSup_of_directed dir] at hx
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subalgebra.mem_iSup_of_directed
+
+ERROR .LspCheck.lean:17:9-17:40
+Unknown constant `Subalgebra.mem_iSup_of_directed`
+Source line 17:
+    rw [Subalgebra.mem_iSup_of_directed dir]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subalgebra.mem_iSup_of_directed
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R A B : Type*} [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B]
+
+variable (S : Subalgebra R A)
+
+variable {ι : Type*} [Nonempty ι] {K : ι → Subalgebra R A}
+
+theorem coe_iSup_of_directed (dir : Directed (· ≤ ·) K) : ↑(iSup K) = ⋃ i, (K i : Set A) := by
+  ext x
+  constructor
+  · intro hx
+    change x ∈ ⋃ i, (K i : Set A)
+    rw [show iSup K = sSup (Set.range K) by rw [iSup_subtype]]
+    change x ∈ ↑(sSup (Set.range K))
+    rw [Subalgebra.mem_sSup_of_directed]
+    · simpa [Set.mem_range, Set.mem_iUnion] using hx
+    · rintro _ ⟨i, rfl⟩ _ ⟨j, rfl⟩
+      exact dir i j
+  · intro hx
+    change x ∈ (iSup K : Subalgebra R A)
+    rw [show iSup K = sSup (Set.range K) by rw [iSup_subtype]]
+    rw [Subalgebra.mem_sSup_of_directed]
+    · simpa [Set.mem_range, Set.mem_iUnion] using hx
+    · rintro _ ⟨i, rfl⟩ _ ⟨j, rfl⟩
+      exact dir i j
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:9-14:62
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  iSup K
+in the target expression
+  x ∈ ⋃ i, ↑(K i)
+
+case h.mp
+R : Type u_1
+A : Type u_2
+inst✝³ : CommSemiring R
+inst✝² : Semiring A
+inst✝¹ : Algebra R A
+ι : Type u_4
+inst✝ : Nonempty ι
+K : ι → Subalgebra R A
+dir : Directed (fun x1 x2 ↦ x1 ≤ x2) K
+x : A
+hx : x ∈ ↑(iSup K)
+⊢ x ∈ ⋃ i, ↑(K i)
+Source line 14:
+    rw [show iSup K = sSup (Set.range K) by rw [iSup_subtype]]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: show iSup K = sSup (Set.range K) by rw [iSup_subtype]
+
+ERROR .LspCheck.lean:14:49-14:61
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  iSup ?m.73
+in the target expression
+  iSup K = sSup (Set.range K)
+
+R : Type u_1
+A : Type u_2
+inst✝³ : CommSemiring R
+inst✝² : Semiring A
+inst✝¹ : Algebra R A
+ι : Type u_4
+inst✝ : Nonempty ι
+K : ι → Subalgebra R A
+dir : Directed (fun x1 x2 ↦ x1 ≤ x2) K
+x : A
+hx : x ∈ ↑(iSup K)
+⊢ iSup K = sSup (Set.range K)
+Source line 14:
+    rw [show iSup K = sSup (Set.range K) by rw [iSup_subtype]]
+                                                ^^^^^^^^^^^^
+Highlighted span: iSup_subtype
+
+ERROR .LspCheck.lean:22:49-22:61
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  iSup ?m.89
+in the target expression
+  iSup K = sSup (Set.range K)
+
+R : Type u_1
+A : Type u_2
+inst✝³ : CommSemiring R
+inst✝² : Semiring A
+inst✝¹ : Algebra R A
+ι : Type u_4
+inst✝ : Nonempty ι
+K : ι → Subalgebra R A
+dir : Directed (fun x1 x2 ↦ x1 ≤ x2) K
+x : A
+hx : x ∈ ⋃ i, ↑(K i)
+⊢ iSup K = sSup (Set.range K)
+Source line 22:
+    rw [show iSup K = sSup (Set.range K) by rw [iSup_subtype]]
+                                                ^^^^^^^^^^^^
+Highlighted span: iSup_subtype
+
+ERROR .LspCheck.lean:23:9-23:40
+Unknown constant `Subalgebra.mem_sSup_of_directed`
+Source line 23:
+    rw [Subalgebra.mem_sSup_of_directed]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subalgebra.mem_sSup_of_directed
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:9-14:62
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  iSup K
+in the target expression
+  x ∈ ⋃ i, ↑(K i)
+
+case h.mp
+R : Type u_1
+A : Type u_2
+inst✝³ : CommSemiring R
+inst✝² : Semiring A
+inst✝¹ : Algebra R A
+ι : Type u_4
+inst✝ : Nonempty ι
+K : ι → Subalgebra R A
+dir : Directed (fun x1 x2 ↦ x1 ≤ x2) K
+x : A
+hx : x ∈ ↑(iSup K)
+⊢ x ∈ ⋃ i, ↑(K i)
+Source line 14:
+    rw [show iSup K = sSup (Set.range K) by rw [iSup_subtype]]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: show iSup K = sSup (Set.range K) by rw [iSup_subtype]
+
+ERROR .LspCheck.lean:14:49-14:61
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  iSup ?m.73
+in the target expression
+  iSup K = sSup (Set.range K)
+
+R : Type u_1
+A : Type u_2
+inst✝³ : CommSemiring R
+inst✝² : Semiring A
+inst✝¹ : Algebra R A
+ι : Type u_4
+inst✝ : Nonempty ι
+K : ι → Subalgebra R A
+dir : Directed (fun x1 x2 ↦ x1 ≤ x2) K
+x : A
+hx : x ∈ ↑(iSup K)
+⊢ iSup K = sSup (Set.range K)
+Source line 14:
+    rw [show iSup K = sSup (Set.range K) by rw [iSup_subtype]]
+                                                ^^^^^^^^^^^^
+Highlighted span: iSup_subtype
+
+ERROR .LspCheck.lean:22:49-22:61
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  iSup ?m.89
+in the target expression
+  iSup K = sSup (Set.range K)
+
+R : Type u_1
+A : Type u_2
+inst✝³ : CommSemiring R
+inst✝² : Semiring A
+inst✝¹ : Algebra R A
+ι : Type u_4
+inst✝ : Nonempty ι
+K : ι → Subalgebra R A
+dir : Directed (fun x1 x2 ↦ x1 ≤ x2) K
+x : A
+hx : x ∈ ⋃ i, ↑(K i)
+⊢ iSup K = sSup (Set.range K)
+Source line 22:
+    rw [show iSup K = sSup (Set.range K) by rw [iSup_subtype]]
+                                                ^^^^^^^^^^^^
+Highlighted span: iSup_subtype
+
+ERROR .LspCheck.lean:23:9-23:40
+Unknown constant `Subalgebra.mem_sSup_of_directed`
+Source line 23:
+    rw [Subalgebra.mem_sSup_of_directed]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subalgebra.mem_sSup_of_directed
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R A B : Type*} [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B]
+
+variable (S : Subalgebra R A)
+
+variable {ι : Type*} [Nonempty ι] {K : ι → Subalgebra R A}
+
+theorem coe_iSup_of_directed (dir : Directed (· ≤ ·) K) : ↑(iSup K) = ⋃ i, (K i : Set A) := by
+  classical
+  ext x
+  simp only [Set.mem_iUnion]
+  constructor
+  · intro hx
+    let L : Subalgebra R A := sSup (Set.range K)
+    have hL : L = iSup K := by
+      apply le_antisymm
+      · refine sSup_le ?_
+        rintro _ ⟨i, rfl⟩
+        exact le_iSup K i
+      · refine iSup_le ?_
+        intro i
+        exact le_sSup ⟨i, rfl⟩
+    have hx' : x ∈ L := by simpa [L, hL] using hx
+    refine Subalgebra.sSup_induction (s := Set.range K) (p := fun y => ∃ i, y ∈ K i) ?hS ?h0 ?h1 ?hmul ?hsmul hx'
+    · rintro _ ⟨i, rfl⟩ hy
+      exact ⟨i, hy⟩
+    · exact Classical.choice ‹Nonempty ι› |> fun i => ⟨i, (K i).zero_mem⟩
+    · rintro a b ⟨i, ha⟩ ⟨j, hb⟩
+      rcases dir i j with ⟨k, hik, hjk⟩
+      exact ⟨k, (K k).add_mem (hik ha) (hjk hb)⟩
+    · rintro a b ⟨i, ha⟩ ⟨j, hb⟩
+      rcases dir i j with ⟨k, hik, hjk⟩
+      exact ⟨k, (K k).mul_mem (hik ha) (hjk hb)⟩
+    · intro r a ha
+      rcases ha with ⟨i, ha⟩
+      exact ⟨i, (K i).algebraMap_mem r ▸ (K i).mul_mem ((K i).algebraMap_mem r) ha⟩
+  · rintro ⟨i, hx⟩
+    exact show x ∈ iSup K from le_iSup K i hx
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:25:12-25:37
+Unknown constant `Subalgebra.sSup_induction`
+Source line 25:
+    refine Subalgebra.sSup_induction (s := Set.range K) (p := fun y => ∃ i, y ∈ K i) ?hS ?h0 ?h1 ?hmul ?hsmul hx'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subalgebra.sSup_induction
+
+ERROR .LspCheck.lean:26:5-27:1
+No goals to be solved
+Source line 26:
+    · rintro _ ⟨i, rfl⟩ hy
+    ^
+Highlighted span: ·
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:25:12-25:37
+Unknown constant `Subalgebra.sSup_induction`
+Source line 25:
+    refine Subalgebra.sSup_induction (s := Set.range K) (p := fun y => ∃ i, y ∈ K i) ?hS ?h0 ?h1 ?hmul ?hsmul hx'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Subalgebra.sSup_induction
+
+ERROR .LspCheck.lean:26:5-27:1
+No goals to be solved
+Source line 26:
+    · rintro _ ⟨i, rfl⟩ hy
+    ^
+Highlighted span: ·

@@ -1,0 +1,110 @@
+FILE: Basic.isUnit_iff_singleton_aux.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.isUnit_iff_singleton_aux.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Pointwise
+
+variable {F α β γ : Type*}
+
+variable [DecidableEq α] [DecidableEq β]
+
+variable [Group α] [DivisionMonoid β] [FunLike F α β] [MonoidHomClass F α β]
+
+variable (f : F) {s t : Finset α} {a b : α}
+
+theorem isUnit_iff_singleton_aux {α} [Group α] {s : Finset α} :
+    (∃ a, s = {a} ∧ IsUnit a) ↔ ∃ a, s = {a} := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise
+
+variable {F α β γ : Type*}
+
+variable [DecidableEq α] [DecidableEq β]
+
+variable [Group α] [DivisionMonoid β] [FunLike F α β] [MonoidHomClass F α β]
+
+variable (f : F) {s t : Finset α} {a b : α}
+
+theorem isUnit_iff_singleton_aux {α} [Group α] {s : Finset α} :
+    (∃ a, s = {a} ∧ IsUnit a) ↔ ∃ a, s = {a} := by
+  constructor
+  · rintro ⟨a, rfl, ha⟩
+    exact ⟨a, rfl⟩
+  · rintro ⟨a, rfl⟩
+    exact ⟨a, rfl, isUnit_iff_ne_zero.mpr (one_ne_zero)⟩
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:19:20-19:56
+Application type mismatch: The argument
+  isUnit_iff_ne_zero.mpr one_ne_zero
+has type
+  IsUnit 1
+but is expected to have type
+  IsUnit a
+in the application
+  ⟨rfl, isUnit_iff_ne_zero.mpr one_ne_zero⟩
+Source line 19:
+    exact ⟨a, rfl, isUnit_iff_ne_zero.mpr (one_ne_zero)⟩
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: isUnit_iff_ne_zero.mpr (one_ne_zero)
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:19:20-19:56
+Application type mismatch: The argument
+  isUnit_iff_ne_zero.mpr one_ne_zero
+has type
+  IsUnit 1
+but is expected to have type
+  IsUnit a
+in the application
+  ⟨rfl, isUnit_iff_ne_zero.mpr one_ne_zero⟩
+Source line 19:
+    exact ⟨a, rfl, isUnit_iff_ne_zero.mpr (one_ne_zero)⟩
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: isUnit_iff_ne_zero.mpr (one_ne_zero)
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise
+
+variable {F α β γ : Type*}
+
+variable [DecidableEq α] [DecidableEq β]
+
+variable [Group α] [DivisionMonoid β] [FunLike F α β] [MonoidHomClass F α β]
+
+variable (f : F) {s t : Finset α} {a b : α}
+
+theorem isUnit_iff_singleton_aux {α} [Group α] {s : Finset α} :
+    (∃ a, s = {a} ∧ IsUnit a) ↔ ∃ a, s = {a} := by
+  constructor
+  · rintro ⟨a, ha, hua⟩
+    exact ⟨a, ha⟩
+  · rintro ⟨a, ha⟩
+    exact ⟨a, ha, Group.isUnit a⟩
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

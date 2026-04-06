@@ -1,0 +1,95 @@
+FILE: ModEq.modEq_sub_iff_add_modEq.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: ModEq.modEq_sub_iff_add_modEq.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {G : Type*} [AddCommGroup G] {p a a₁ a₂ b b₁ b₂ c : G} {n : ℕ} {z : ℤ}
+
+theorem modEq_sub_iff_add_modEq : a ≡ b - c [PMOD p] ↔ a + c ≡ b [PMOD p] := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G : Type*} [AddCommGroup G] {p a a₁ a₂ b b₁ b₂ c : G} {n : ℕ} {z : ℤ}
+
+theorem modEq_sub_iff_add_modEq : a ≡ b - c [PMOD p] ↔ a + c ≡ b [PMOD p] := by
+  rw [sub_eq_add_neg, AddCommGroup.modeq_iff_eq_add_zsmul, AddCommGroup.modeq_iff_eq_add_zsmul]
+  constructor
+  · rintro ⟨z, rfl⟩
+    refine ⟨z, ?_⟩
+    abel
+  · rintro ⟨z, h⟩
+    refine ⟨z, ?_⟩
+    rw [← h]
+    abel
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:6:23-6:58
+Unknown constant `AddCommGroup.modeq_iff_eq_add_zsmul`
+Source line 6:
+  rw [sub_eq_add_neg, AddCommGroup.modeq_iff_eq_add_zsmul, AddCommGroup.modeq_iff_eq_add_zsmul]
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AddCommGroup.modeq_iff_eq_add_zsmul
+
+ERROR .LspCheck.lean:5:78-6:1
+unsolved goals
+G : Type u_1
+inst✝ : AddCommGroup G
+p a b c : G
+⊢ a ≡ b + -c [PMOD p] ↔ a + c ≡ b [PMOD p]
+Source line 5:
+theorem modEq_sub_iff_add_modEq : a ≡ b - c [PMOD p] ↔ a + c ≡ b [PMOD p] := by
+                                                                             ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:6:23-6:58
+Unknown constant `AddCommGroup.modeq_iff_eq_add_zsmul`
+Source line 6:
+  rw [sub_eq_add_neg, AddCommGroup.modeq_iff_eq_add_zsmul, AddCommGroup.modeq_iff_eq_add_zsmul]
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AddCommGroup.modeq_iff_eq_add_zsmul
+
+ERROR .LspCheck.lean:5:78-6:1
+unsolved goals
+G : Type u_1
+inst✝ : AddCommGroup G
+p a b c : G
+⊢ a ≡ b + -c [PMOD p] ↔ a + c ≡ b [PMOD p]
+Source line 5:
+theorem modEq_sub_iff_add_modEq : a ≡ b - c [PMOD p] ↔ a + c ≡ b [PMOD p] := by
+                                                                             ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G : Type*} [AddCommGroup G] {p a a₁ a₂ b b₁ b₂ c : G} {n : ℕ} {z : ℤ}
+
+theorem modEq_sub_iff_add_modEq : a ≡ b - c [PMOD p] ↔ a + c ≡ b [PMOD p] := by
+  constructor
+  · intro h
+    simpa [sub_eq_add_neg, add_assoc, add_left_comm, add_comm] using h.add_right c
+  · intro h
+    simpa [sub_eq_add_neg, add_assoc, add_left_comm, add_comm] using h.add_right (-c)
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

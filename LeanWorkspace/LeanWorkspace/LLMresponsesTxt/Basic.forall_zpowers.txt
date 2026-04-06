@@ -1,0 +1,43 @@
+FILE: Basic.forall_zpowers.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.forall_zpowers.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {G : Type*} [Group G]
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N]
+
+theorem forall_zpowers {x : G} {p : Subgroup.zpowers x → Prop} : (∀ g, p g) ↔ ∀ m : ℤ, p ⟨x ^ m, m, rfl⟩ := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G : Type*} [Group G]
+
+variable {A : Type*} [AddGroup A]
+
+variable {N : Type*} [Group N]
+
+theorem forall_zpowers {x : G} {p : Subgroup.zpowers x → Prop} : (∀ g, p g) ↔ ∀ m : ℤ, p ⟨x ^ m, m, rfl⟩ := by
+  constructor
+  · intro h m
+    exact h ⟨x ^ m, m, rfl⟩
+  · intro h g
+    rcases g with ⟨g, m, rfl⟩
+    exact h m
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+PASS

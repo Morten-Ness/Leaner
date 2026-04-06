@@ -1,0 +1,216 @@
+FILE: Basic.map_nat_add'.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.map_nat_add'.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_nat_add' [AddCommMonoidWithOne G] [AddMonoid H] [AddConstMapClass F G H 1 b]
+    (f : F) (n : ℕ) (x : G) : f (↑n + x) = f x + n • b := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_nat_add' [AddCommMonoidWithOne G] [AddMonoid H] [AddConstMapClass F G H 1 b]
+    (f : F) (n : ℕ) (x : G) : f (↑n + x) = f x + n • b := by
+  induction n with
+  | zero =>
+      simp
+  | succ n ih =>
+      calc
+        f (↑(n + 1) + x) = f (1 + (↑n + x)) := by
+          simp [Nat.succ_eq_add_one, add_assoc, add_comm, add_left_comm]
+        _ = f (↑n + x) + b := by
+          simpa using (AddConstMapClass.map_add_const (F := F) (f := f) (a := (↑n + x)))
+        _ = (f x + n • b) + b := by rw [ih]
+        _ = f x + (n + 1) • b := by
+          simp [succ_nsmul, add_assoc]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:24-15:88
+failed to synthesize instance of type class
+  AddConstMapClass F G ?m.117 (?m.121 + x) ?m.126
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 15:
+          simpa using (AddConstMapClass.map_add_const (F := F) (f := f) (a := (↑n + x)))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AddConstMapClass.map_add_const (F := F) (f := f) (a := (↑n + x))
+
+WARNING .LspCheck.lean:13:17-13:36
+This simp argument is unused:
+  Nat.succ_eq_add_one
+
+Hint: Omit it from the simp argument list.
+  simp [̵N̵a̵t̵.̵s̵u̵c̵c̵_̵e̵q̵_̵a̵d̵d̵_̵o̵n̵e̵,̵ ̵a̵d̵d̵_̵a̵s̵s̵o̵c̵,̵[̲a̲d̲d̲_̲a̲s̲s̲o̲c̲,̲ add_comm, add_left_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 13:
+          simp [Nat.succ_eq_add_one, add_assoc, add_comm, add_left_comm]
+                ^^^^^^^^^^^^^^^^^^^
+Highlighted span: Nat.succ_eq_add_one
+
+WARNING .LspCheck.lean:13:59-13:72
+This simp argument is unused:
+  add_left_comm
+
+Hint: Omit it from the simp argument list.
+  simp [Nat.succ_eq_add_one, add_assoc, add_comm,̵ ̵a̵d̵d̵_̵l̵e̵f̵t̵_̵c̵o̵m̵m̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 13:
+          simp [Nat.succ_eq_add_one, add_assoc, add_comm, add_left_comm]
+                                                          ^^^^^^^^^^^^^
+Highlighted span: add_left_comm
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:24-15:88
+failed to synthesize instance of type class
+  AddConstMapClass F G ?m.117 (?m.121 + x) ?m.126
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 15:
+          simpa using (AddConstMapClass.map_add_const (F := F) (f := f) (a := (↑n + x)))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AddConstMapClass.map_add_const (F := F) (f := f) (a := (↑n + x))
+
+WARNING .LspCheck.lean:13:17-13:36
+This simp argument is unused:
+  Nat.succ_eq_add_one
+
+Hint: Omit it from the simp argument list.
+  simp [̵N̵a̵t̵.̵s̵u̵c̵c̵_̵e̵q̵_̵a̵d̵d̵_̵o̵n̵e̵,̵ ̵a̵d̵d̵_̵a̵s̵s̵o̵c̵,̵[̲a̲d̲d̲_̲a̲s̲s̲o̲c̲,̲ add_comm, add_left_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 13:
+          simp [Nat.succ_eq_add_one, add_assoc, add_comm, add_left_comm]
+                ^^^^^^^^^^^^^^^^^^^
+Highlighted span: Nat.succ_eq_add_one
+
+WARNING .LspCheck.lean:13:59-13:72
+This simp argument is unused:
+  add_left_comm
+
+Hint: Omit it from the simp argument list.
+  simp [Nat.succ_eq_add_one, add_assoc, add_comm,̵ ̵a̵d̵d̵_̵l̵e̵f̵t̵_̵c̵o̵m̵m̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 13:
+          simp [Nat.succ_eq_add_one, add_assoc, add_comm, add_left_comm]
+                                                          ^^^^^^^^^^^^^
+Highlighted span: add_left_comm
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_nat_add' [AddCommMonoidWithOne G] [AddMonoid H] [AddConstMapClass F G H 1 b]
+    (f : F) (n : ℕ) (x : G) : f (↑n + x) = f x + n • b := by
+  induction n with
+  | zero =>
+      simp
+  | succ n ih =>
+      calc
+        f (↑(n + 1) + x) = f (1 + (↑n + x)) := by
+          simp [add_assoc, add_comm]
+        _ = f (↑n + x) + b := by
+          simpa [add_comm] using (AddConstMapClass.map_add_const (f := f) (a := (↑n + x)))
+        _ = (f x + n • b) + b := by rw [ih]
+        _ = f x + (n + 1) • b := by
+          simp [succ_nsmul, add_assoc]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:35-15:90
+failed to synthesize instance of type class
+  AddConstMapClass F G ?m.119 (?m.123 + x) ?m.128
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 15:
+          simpa [add_comm] using (AddConstMapClass.map_add_const (f := f) (a := (↑n + x)))
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AddConstMapClass.map_add_const (f := f) (a := (↑n + x))
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:35-15:90
+failed to synthesize instance of type class
+  AddConstMapClass F G ?m.119 (?m.123 + x) ?m.128
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 15:
+          simpa [add_comm] using (AddConstMapClass.map_add_const (f := f) (a := (↑n + x)))
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AddConstMapClass.map_add_const (f := f) (a := (↑n + x))
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F G H : Type*} [FunLike F G H] {a : G} {b : H}
+
+theorem map_nat_add' [AddCommMonoidWithOne G] [AddMonoid H] [AddConstMapClass F G H 1 b]
+    (f : F) (n : ℕ) (x : G) : f (↑n + x) = f x + n • b := by
+  simpa [nsmul_eq_mul, map_natCast_add'] using map_nat_add (f := f) n x
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:7:24-7:40
+Unknown identifier `map_natCast_add'`
+Source line 7:
+  simpa [nsmul_eq_mul, map_natCast_add'] using map_nat_add (f := f) n x
+                       ^^^^^^^^^^^^^^^^
+Highlighted span: map_natCast_add'
+
+ERROR .LspCheck.lean:7:48-7:59
+Unknown identifier `map_nat_add`
+Source line 7:
+  simpa [nsmul_eq_mul, map_natCast_add'] using map_nat_add (f := f) n x
+                                               ^^^^^^^^^^^
+Highlighted span: map_nat_add
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:7:24-7:40
+Unknown identifier `map_natCast_add'`
+Source line 7:
+  simpa [nsmul_eq_mul, map_natCast_add'] using map_nat_add (f := f) n x
+                       ^^^^^^^^^^^^^^^^
+Highlighted span: map_natCast_add'
+
+ERROR .LspCheck.lean:7:48-7:59
+Unknown identifier `map_nat_add`
+Source line 7:
+  simpa [nsmul_eq_mul, map_natCast_add'] using map_nat_add (f := f) n x
+                                               ^^^^^^^^^^^
+Highlighted span: map_nat_add

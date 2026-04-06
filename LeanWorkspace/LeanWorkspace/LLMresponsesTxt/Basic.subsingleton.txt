@@ -1,0 +1,83 @@
+FILE: Basic.subsingleton.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.subsingleton.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {G H : Type*} [Mul G] [Mul H] {A B : Finset G} {a0 b0 : G}
+
+theorem subsingleton (h : UniqueMul A B a0 b0) :
+    Subsingleton { ab : G × G // ab.1 ∈ A ∧ ab.2 ∈ B ∧ ab.1 * ab.2 = a0 * b0 } := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G H : Type*} [Mul G] [Mul H] {A B : Finset G} {a0 b0 : G}
+
+theorem subsingleton (h : UniqueMul A B a0 b0) :
+    Subsingleton { ab : G × G // ab.1 ∈ A ∧ ab.2 ∈ B ∧ ab.1 * ab.2 = a0 * b0 } := by
+  classical
+  refine ⟨?_⟩
+  intro x y
+  apply Subtype.ext
+  exact h.eq x.property.1 x.property.2 x.property.3 y.property.1 y.property.2 y.property.3
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:11-11:13
+Invalid field `eq`: The environment does not contain `Function.eq`, so it is not possible to project the field `eq` from an expression
+  h
+of type
+  ?m.40 ∈ A → ?m.41 ∈ B → ?m.40 * ?m.41 = a0 * b0 → ?m.40 = a0 ∧ ?m.41 = b0
+Source line 11:
+  exact h.eq x.property.1 x.property.2 x.property.3 y.property.1 y.property.2 y.property.3
+          ^^
+Highlighted span: eq
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:11-11:13
+Invalid field `eq`: The environment does not contain `Function.eq`, so it is not possible to project the field `eq` from an expression
+  h
+of type
+  ?m.40 ∈ A → ?m.41 ∈ B → ?m.40 * ?m.41 = a0 * b0 → ?m.40 = a0 ∧ ?m.41 = b0
+Source line 11:
+  exact h.eq x.property.1 x.property.2 x.property.3 y.property.1 y.property.2 y.property.3
+          ^^
+Highlighted span: eq
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {G H : Type*} [Mul G] [Mul H] {A B : Finset G} {a0 b0 : G}
+
+theorem subsingleton (h : UniqueMul A B a0 b0) :
+    Subsingleton { ab : G × G // ab.1 ∈ A ∧ ab.2 ∈ B ∧ ab.1 * ab.2 = a0 * b0 } := by
+  classical
+  refine ⟨?_⟩
+  intro x y
+  apply Subtype.ext
+  rcases x with ⟨⟨x1, x2⟩, hxA, hxB, hx⟩
+  rcases y with ⟨⟨y1, y2⟩, hyA, hyB, hy⟩
+  dsimp at hxA hxB hx hyA hyB hy
+  rcases h hxA hxB hx with ⟨rfl, rfl⟩
+  rcases h hyA hyB hy with ⟨rfl, rfl⟩
+  rfl
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

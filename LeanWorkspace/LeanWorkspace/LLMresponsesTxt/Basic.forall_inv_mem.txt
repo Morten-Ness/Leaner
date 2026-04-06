@@ -1,0 +1,38 @@
+FILE: Basic.forall_inv_mem.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.forall_inv_mem.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {F α β γ : Type*}
+
+variable [InvolutiveInv α] {s t : Set α} {a : α}
+
+theorem forall_inv_mem {p : α → Prop} : (∀ x, x⁻¹ ∈ s → p x) ↔ ∀ x ∈ s, p x⁻¹ := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F α β γ : Type*}
+
+variable [InvolutiveInv α] {s t : Set α} {a : α}
+
+theorem forall_inv_mem {p : α → Prop} : (∀ x, x⁻¹ ∈ s → p x) ↔ ∀ x ∈ s, p x⁻¹ := by
+  constructor
+  · intro h x hx
+    exact h x⁻¹ (by simpa using hx)
+  · intro h x hx
+    simpa using h x⁻¹ hx
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+PASS

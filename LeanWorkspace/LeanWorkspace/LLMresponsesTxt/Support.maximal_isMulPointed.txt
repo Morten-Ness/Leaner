@@ -1,0 +1,189 @@
+FILE: Support.maximal_isMulPointed.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Support.maximal_isMulPointed.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Pointwise
+
+variable {G : Type*} [Group G] (M : Submonoid G)
+
+theorem maximal_isMulPointed (hMp : M.IsMulPointed) (hMs : M.IsMulSpanning) :
+    Maximal Submonoid.IsMulPointed M := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise
+
+variable {G : Type*} [Group G] (M : Submonoid G)
+
+theorem maximal_isMulPointed (hMp : M.IsMulPointed) (hMs : M.IsMulSpanning) :
+    Maximal Submonoid.IsMulPointed M := by
+  classical
+  refine ⟨hMp, ?_⟩
+  intro P hP hMP
+  ext g
+  constructor
+  · intro hg
+    exact hMP hg
+  · intro hg
+    rw [Submonoid.isMulSpanning_iff] at hMs
+    obtain ⟨m, hm, n, hn, rfl⟩ := hMs g
+    have hmP : m ∈ P := hMP hm
+    have hnP : n⁻¹ ∈ P := hP.inv_mem hn
+    simpa [mul_assoc] using P.mul_mem hmP hnP
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:3-12:8
+This extensionality tactic only applies to equalities, not
+  ∀ ⦃x : G⦄, x ∈ P → x ∈ M
+Source line 12:
+  ext g
+  ^^^^^
+Highlighted span: ext g
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:3-12:8
+This extensionality tactic only applies to equalities, not
+  ∀ ⦃x : G⦄, x ∈ P → x ∈ M
+Source line 12:
+  ext g
+  ^^^^^
+Highlighted span: ext g
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise
+
+variable {G : Type*} [Group G] (M : Submonoid G)
+
+theorem maximal_isMulPointed (hMp : M.IsMulPointed) (hMs : M.IsMulSpanning) :
+    Maximal Submonoid.IsMulPointed M := by
+  classical
+  refine ⟨hMp, ?_⟩
+  intro P hP hMP
+  apply le_antisymm hMP
+  rw [Submonoid.isMulSpanning_iff] at hMs
+  intro g hgP
+  obtain ⟨m, hmM, n, hnM, rfl⟩ := hMs g
+  have hmP : m ∈ P := by
+    apply hMP
+    exact hmM
+  have hninvP : n⁻¹ ∈ P := by
+    apply hP.inv_mem
+    apply hMP
+    exact hnM
+  simpa [mul_assoc] using P.mul_mem hmP hninvP
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:3-12:24
+Tactic `apply` failed: could not unify the type of `le_antisymm hMP`
+  P ≤ M → M = P
+with the goal
+  P ≤ M
+
+G : Type u_1
+inst✝ : Group G
+M : Submonoid G
+hMp : M.IsMulPointed
+hMs : M.IsMulSpanning
+P : Submonoid G
+hP : P.IsMulPointed
+hMP : M ≤ P
+⊢ P ≤ M
+Source line 12:
+  apply le_antisymm hMP
+  ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: apply le_antisymm hMP
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:3-12:24
+Tactic `apply` failed: could not unify the type of `le_antisymm hMP`
+  P ≤ M → M = P
+with the goal
+  P ≤ M
+
+G : Type u_1
+inst✝ : Group G
+M : Submonoid G
+hMp : M.IsMulPointed
+hMs : M.IsMulSpanning
+P : Submonoid G
+hP : P.IsMulPointed
+hMP : M ≤ P
+⊢ P ≤ M
+Source line 12:
+  apply le_antisymm hMP
+  ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: apply le_antisymm hMP
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Pointwise
+
+variable {G : Type*} [Group G] (M : Submonoid G)
+
+theorem maximal_isMulPointed (hMp : M.IsMulPointed) (hMs : M.IsMulSpanning) :
+    Maximal Submonoid.IsMulPointed M := by
+  classical
+  refine ⟨hMp, ?_⟩
+  intro P hP hMP
+  rw [show P = M by
+    apply le_antisymm
+    · rw [Submonoid.isMulSpanning_iff] at hMs
+      intro g hgP
+      obtain ⟨m, hmM, n, hnM, rfl⟩ := hMs g
+      have hmP : m ∈ P := hMP hmM
+      have hninvP : n⁻¹ ∈ P := hP.inv_mem (hMP hnM)
+      simpa [mul_assoc] using P.mul_mem hmP hninvP
+    · exact hMP]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:11-14:38
+Unknown constant `Submonoid.isMulSpanning_iff`
+Source line 14:
+    · rw [Submonoid.isMulSpanning_iff] at hMs
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submonoid.isMulSpanning_iff
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:11-14:38
+Unknown constant `Submonoid.isMulSpanning_iff`
+Source line 14:
+    · rw [Submonoid.isMulSpanning_iff] at hMs
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submonoid.isMulSpanning_iff

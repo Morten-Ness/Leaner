@@ -1,0 +1,94 @@
+FILE: Centroid.faceOppositeCentroid_mem_affineSpan_face.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Centroid.faceOppositeCentroid_mem_affineSpan_face.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [DivisionRing k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {n : ℕ}
+
+variable [NeZero n]
+
+theorem faceOppositeCentroid_mem_affineSpan_face [CharZero k] (s : Affine.Simplex k P n)
+    (i : Fin (n + 1)) :
+    s.faceOppositeCentroid i ∈ affineSpan k (Set.range (s.faceOpposite i).points) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [DivisionRing k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {n : ℕ}
+
+variable [NeZero n]
+
+theorem faceOppositeCentroid_mem_affineSpan_face [CharZero k] (s : Affine.Simplex k P n)
+    (i : Fin (n + 1)) :
+    s.faceOppositeCentroid i ∈ affineSpan k (Set.range (s.faceOpposite i).points) := by
+  simpa using (s.faceOpposite i).centroid_mem_affineSpan k
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:15-13:59
+Function expected at
+  Affine.Simplex.centroid_mem_affineSpan (s.faceOpposite i)
+but this term has type
+  (s.faceOpposite i).centroid ∈ affineSpan k (Set.range (s.faceOpposite i).points)
+
+Note: Expected a function because this term is being applied to the argument
+  k
+Source line 13:
+  simpa using (s.faceOpposite i).centroid_mem_affineSpan k
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (s.faceOpposite i).centroid_mem_affineSpan k
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:15-13:59
+Function expected at
+  Affine.Simplex.centroid_mem_affineSpan (s.faceOpposite i)
+but this term has type
+  (s.faceOpposite i).centroid ∈ affineSpan k (Set.range (s.faceOpposite i).points)
+
+Note: Expected a function because this term is being applied to the argument
+  k
+Source line 13:
+  simpa using (s.faceOpposite i).centroid_mem_affineSpan k
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: (s.faceOpposite i).centroid_mem_affineSpan k
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V : Type*} {P : Type*} [DivisionRing k] [AddCommGroup V] [Module k V]
+  [AddTorsor V P]
+
+variable {n : ℕ}
+
+variable [NeZero n]
+
+theorem faceOppositeCentroid_mem_affineSpan_face [CharZero k] (s : Affine.Simplex k P n)
+    (i : Fin (n + 1)) :
+    s.faceOppositeCentroid i ∈ affineSpan k (Set.range (s.faceOpposite i).points) := by
+  simpa [Affine.Simplex.faceOppositeCentroid] using (s.faceOpposite i).centroid_mem_affineSpan
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

@@ -1,0 +1,2587 @@
+FILE: NonUnitalSubalgebra.adjoin_induction₂.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: NonUnitalSubalgebra.adjoin_induction₂.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {F : Type*} (R : Type u) {A : Type v} {B : Type w}
+
+variable [CommSemiring R] [NonUnitalNonAssocSemiring A] [Module R A]
+
+variable [NonUnitalNonAssocSemiring B] [Module R B]
+
+variable [FunLike F A B] [NonUnitalAlgHomClass F R A B]
+
+variable [IsScalarTower R A A] [SMulCommClass R A A]
+
+theorem adjoin_induction₂ {s : Set A} {p : ∀ x y, x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop}
+    (mem_mem : ∀ (x) (y) (hx : x ∈ s) (hy : y ∈ s), p x y (NonUnitalAlgebra.subset_adjoin R hx) (NonUnitalAlgebra.subset_adjoin R hy))
+    (zero_left : ∀ x hx, p 0 x (zero_mem _) hx) (zero_right : ∀ x hx, p x 0 hx (zero_mem _))
+    (add_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x + y) z (add_mem hx hy) hz)
+    (add_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y + z) hx (add_mem hy hz))
+    (mul_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x * y) z (mul_mem hx hy) hz)
+    (mul_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y * z) hx (mul_mem hy hz))
+    (smul_left : ∀ r x y hx hy, p x y hx hy → p (r • x) y (SMulMemClass.smul_mem r hx) hy)
+    (smul_right : ∀ r x y hx hy, p x y hx hy → p x (r • y) hx (SMulMemClass.smul_mem r hy))
+    {x y : A} (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s) :
+    p x y hx hy := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F : Type*} (R : Type u) {A : Type v} {B : Type w}
+
+variable [CommSemiring R] [NonUnitalNonAssocSemiring A] [Module R A]
+
+variable [NonUnitalNonAssocSemiring B] [Module R B]
+
+variable [FunLike F A B] [NonUnitalAlgHomClass F R A B]
+
+variable [IsScalarTower R A A] [SMulCommClass R A A]
+
+theorem adjoin_induction₂ {s : Set A} {p : ∀ x y, x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop}
+    (mem_mem : ∀ (x) (y) (hx : x ∈ s) (hy : y ∈ s), p x y (NonUnitalAlgebra.subset_adjoin R hx) (NonUnitalAlgebra.subset_adjoin R hy))
+    (zero_left : ∀ x hx, p 0 x (zero_mem _) hx) (zero_right : ∀ x hx, p x 0 hx (zero_mem _))
+    (add_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x + y) z (add_mem hx hy) hz)
+    (add_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y + z) hx (add_mem hy hz))
+    (mul_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x * y) z (mul_mem hx hy) hz)
+    (mul_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y * z) hx (mul_mem hy hz))
+    (smul_left : ∀ r x y hx hy, p x y hx hy → p (r • x) y (SMulMemClass.smul_mem r hx) hy)
+    (smul_right : ∀ r x y hx hy, p x y hx hy → p x (r • y) hx (SMulMemClass.smul_mem r hy))
+    {x y : A} (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s) :
+    p x y hx hy := by
+  let q : ∀ x, x ∈ NonUnitalAlgebra.adjoin R s → Prop :=
+    fun x hx => ∀ y (hy : y ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy
+  have hq_mem : ∀ x (hx : x ∈ s), q x (NonUnitalAlgebra.subset_adjoin R hx) := by
+    intro x hx y hy
+    refine NonUnitalAlgebra.adjoin_induction R ?hy ?mem ?zero ?add ?mul ?smul
+    · exact hy
+    · intro y hy'
+      exact mem_mem x y hx hy'
+    · exact zero_right x (NonUnitalAlgebra.subset_adjoin R hx)
+    · intro a b ha hb
+      exact add_right x a b (NonUnitalAlgebra.subset_adjoin R hx) _ _ ha hb
+    · intro a b ha hb
+      exact mul_right x a b (NonUnitalAlgebra.subset_adjoin R hx) _ _ ha hb
+    · intro r a ha
+      exact smul_right r x a (NonUnitalAlgebra.subset_adjoin R hx) _ ha
+  have hq_zero : q 0 (zero_mem _) := by
+    intro y hy
+    exact zero_left y hy
+  have hq_add :
+      ∀ x y hx hy, q x hx → q y hy → q (x + y) (add_mem hx hy) := by
+    intro x y hx hy hx' hy' z hz
+    exact add_left x y z hx hy hz (hx' z hz) (hy' z hz)
+  have hq_mul :
+      ∀ x y hx hy, q x hx → q y hy → q (x * y) (mul_mem hx hy) := by
+    intro x y hx hy hx' hy' z hz
+    exact mul_left x y z hx hy hz (hx' z hz) (hy' z hz)
+  have hq_smul :
+      ∀ r x hx, q x hx → q (r • x) (SMulMemClass.smul_mem r hx) := by
+    intro r x hx hx' y hy
+    exact smul_left r x y hx hy (hx' y hy)
+  exact
+    NonUnitalAlgebra.adjoin_induction R hx
+      (p := q)
+      hy
+      hq_mem
+      hq_zero
+      hq_add
+      hq_mul
+      hq_smul
+      y hy
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:28:46-28:47
+Type mismatch
+  R
+has type
+  Type u
+of sort `Type (u + 1)` but is expected to have type
+  ∀ x_1 ∈ ?m.261, ∀ (x_2 : ?m.270), p x y ⋯ hy
+of sort `Prop`
+Source line 28:
+    refine NonUnitalAlgebra.adjoin_induction R ?hy ?mem ?zero ?add ?mul ?smul
+                                             ^
+Highlighted span: R
+
+ERROR .LspCheck.lean:29:7-29:15
+Type mismatch
+  hy
+has type
+  y ∈ NonUnitalAlgebra.adjoin R s
+of sort `Prop` but is expected to have type
+  Type ?u.43107.6506
+of sort `Type (?u.43107.6506 + 1)`
+Source line 29:
+    · exact hy
+      ^^^^^^^^
+Highlighted span: exact hy
+
+ERROR .LspCheck.lean:30:13-30:14
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case refine_2
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x✝ y✝ : A
+hx✝ : x✝ ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+q : (x : A) → x ∈ NonUnitalAlgebra.adjoin R s → Prop := ⋯
+x : A
+hx : x ∈ s
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+⊢ Type ?u.43107.6505
+Source line 30:
+    · intro y hy'
+            ^
+Highlighted span: y
+
+ERROR .LspCheck.lean:33:13-33:14
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case refine_4
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x✝ y✝ : A
+hx✝ : x✝ ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+q : (x : A) → x ∈ NonUnitalAlgebra.adjoin R s → Prop := ⋯
+x : A
+hx : x ∈ s
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+⊢ NonUnitalNonAssocSemiring sorry
+Source line 33:
+    · intro a b ha hb
+            ^
+Highlighted span: a
+
+ERROR .LspCheck.lean:35:13-35:14
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case refine_5
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x✝ y✝ : A
+hx✝ : x✝ ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+q : (x : A) → x ∈ NonUnitalAlgebra.adjoin R s → Prop := ⋯
+x : A
+hx : x ∈ s
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+⊢ Module sorry sorry
+Source line 35:
+    · intro a b ha hb
+            ^
+Highlighted span: a
+
+ERROR .LspCheck.lean:37:13-37:14
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case refine_6
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x✝ y✝ : A
+hx✝ : x✝ ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+q : (x : A) → x ∈ NonUnitalAlgebra.adjoin R s → Prop := ⋯
+x : A
+hx : x ∈ s
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+⊢ IsScalarTower sorry sorry sorry
+Source line 37:
+    · intro r a ha
+            ^
+Highlighted span: r
+
+ERROR .LspCheck.lean:26:80-27:1
+unsolved goals
+case refine_7
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x✝ y✝ : A
+hx✝ : x✝ ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+q : (x : A) → x ∈ NonUnitalAlgebra.adjoin R s → Prop := ⋯
+x : A
+hx : x ∈ s
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+⊢ SMulCommClass sorry sorry sorry
+
+case refine_8
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x✝ y✝ : A
+hx✝ : x✝ ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+q : (x : A) → x ∈ NonUnitalAlgebra.adjoin R s → Prop := ⋯
+x : A
+hx : x ∈ s
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+⊢ Set sorry
+
+case refine_9
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x✝ y✝ : A
+hx✝ : x✝ ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+q : (x : A) → x ∈ NonUnitalAlgebra.adjoin R s → Prop :=
+  fun x hx ↦ ∀ (y : A) (hy : y ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy
+x : A
+hx : x ∈ s
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+⊢ ∀ x_1 ∈ ?refine_8, ∀ (x_2 : ?refine_11), p x y ⋯ hy
+
+case refine_10
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x✝ y✝ : A
+hx✝ : x✝ ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+q : (x : A) → x ∈ NonUnitalAlgebra.adjoin R s → Prop := ⋯
+x : A
+hx : x ∈ s
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+⊢ sorry
+
+case mul
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x✝ y✝ : A
+hx✝ : x✝ ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+q : (x : A) → x ∈ NonUnitalAlgebra.adjoin R s → Prop :=
+  fun x hx ↦ ∀ (y : A) (hy : y ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy
+x : A
+hx : x ∈ s
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+⊢ ?refine_10 ∈ NonUnitalAlgebra.adjoin sorry ?refine_8
+
+case refine_11
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x✝ y✝ : A
+hx✝ : x✝ ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+q : (x : A) → x ∈ NonUnitalAlgebra.adjoin R s → Prop := ⋯
+x : A
+hx : x ∈ s
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+⊢ Sort ?u.43107.6559
+
+case smul
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x✝ y✝ : A
+hx✝ : x✝ ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+q : (x : A) → x ∈ NonUnitalAlgebra.adjoin R s → Prop :=
+  fun x hx ↦ ∀ (y : A) (hy : y ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy
+x : A
+hx : x ∈ s
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+⊢ ?refine_11
+
+case hy
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x✝ y✝ : A
+hx✝ : x✝ ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+q : (x : A) → x ∈ NonUnitalAlgebra.adjoin R s → Prop :=
+  fun x hx ↦ ∀ (y : A) (hy : y ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy
+x : A
+hx : x ∈ s
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+⊢ ∀ (x_1 y_1 : sorry),
+    x_1 ∈ NonUnitalAlgebra.adjoin sorry ?refine_8 →
+      y_1 ∈ NonUnitalAlgebra.adjoin sorry ?refine_8 →
+        (∀ (x_2 : ?refine_11), p x y ⋯ hy) → (∀ (x_2 : ?refine_11), p x y ⋯ hy) → ∀ (x_2 : ?refine_11), p x y ⋯ hy
+
+case mem
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x✝ y✝ : A
+hx✝ : x✝ ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+q : (x : A) → x ∈ NonUnitalAlgebra.adjoin R s → Prop :=
+  fun x hx ↦ ∀ (y : A) (hy : y ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy
+x : A
+hx : x ∈ s
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+⊢ ∀ (x_1 : ?refine_11), p x y ⋯ hy
+
+case zero
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x✝ y✝ : A
+hx✝ : x✝ ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+q : (x : A) → x ∈ NonUnitalAlgebra.adjoin R s → Prop :=
+  fun x hx ↦ ∀ (y : A) (hy : y ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy
+x : A
+hx : x ∈ s
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+⊢ ∀ (x_1 y_1 : sorry),
+    x_1 ∈ NonUnitalAlgebra.adjoin sorry ?refine_8 →
+      y_1 ∈ NonUnitalAlgebra.adjoin sorry ?refine_8 →
+        (∀ (x_2 : ?refine_11), p x y ⋯ hy) → (∀ (x_2 : ?refine_11), p x y ⋯ hy) → ∀ (x_2 : ?refine_11), p x y ⋯ hy
+
+case add
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x✝ y✝ : A
+hx✝ : x✝ ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+q : (x : A) → x ∈ NonUnitalAlgebra.adjoin R s → Prop :=
+  fun x hx ↦ ∀ (y : A) (hy : y ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy
+x : A
+hx : x ∈ s
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+⊢ ∀ (r : sorry),
+    ∀ x_1 ∈ NonUnitalAlgebra.adjoin sorry ?refine_8,
+      (∀ (x_2 : ?refine_11), p x y ⋯ hy) → ∀ (x_2 : ?refine_11), p x y ⋯ hy
+Source line 26:
+  have hq_mem : ∀ x (hx : x ∈ s), q x (NonUnitalAlgebra.subset_adjoin R hx) := by
+                                                                               ^
+Highlighted span: b
+
+ERROR .LspCheck.lean:55:39-55:40
+Application type mismatch: The argument
+  R
+has type
+  Type u
+of sort `Type (u + 1)` but is expected to have type
+  ∀ (x : A) (hx : x ∈ s), q x ⋯
+of sort `Prop` in the application
+  NonUnitalAlgebra.adjoin_induction R
+Source line 55:
+    NonUnitalAlgebra.adjoin_induction R hx
+                                      ^
+Highlighted span: R
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:28:46-28:47
+Type mismatch
+  R
+has type
+  Type u
+of sort `Type (u + 1)` but is expected to have type
+  ∀ x_1 ∈ ?m.261, ∀ (x_2 : ?m.270), p x y ⋯ hy
+of sort `Prop`
+Source line 28:
+    refine NonUnitalAlgebra.adjoin_induction R ?hy ?mem ?zero ?add ?mul ?smul
+                                             ^
+Highlighted span: R
+
+ERROR .LspCheck.lean:29:7-29:15
+Type mismatch
+  hy
+has type
+  y ∈ NonUnitalAlgebra.adjoin R s
+of sort `Prop` but is expected to have type
+  Type ?u.43107.6506
+of sort `Type (?u.43107.6506 + 1)`
+Source line 29:
+    · exact hy
+      ^^^^^^^^
+Highlighted span: exact hy
+
+ERROR .LspCheck.lean:30:13-30:14
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case refine_2
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x✝ y✝ : A
+hx✝ : x✝ ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+q : (x : A) → x ∈ NonUnitalAlgebra.adjoin R s → Prop := ⋯
+x : A
+hx : x ∈ s
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+⊢ Type ?u.43107.6505
+Source line 30:
+    · intro y hy'
+            ^
+Highlighted span: y
+
+ERROR .LspCheck.lean:33:13-33:14
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case refine_4
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x✝ y✝ : A
+hx✝ : x✝ ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+q : (x : A) → x ∈ NonUnitalAlgebra.adjoin R s → Prop := ⋯
+x : A
+hx : x ∈ s
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+⊢ NonUnitalNonAssocSemiring sorry
+Source line 33:
+    · intro a b ha hb
+            ^
+Highlighted span: a
+
+ERROR .LspCheck.lean:35:13-35:14
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case refine_5
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x✝ y✝ : A
+hx✝ : x✝ ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+q : (x : A) → x ∈ NonUnitalAlgebra.adjoin R s → Prop := ⋯
+x : A
+hx : x ∈ s
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+⊢ Module sorry sorry
+Source line 35:
+    · intro a b ha hb
+            ^
+Highlighted span: a
+
+ERROR .LspCheck.lean:37:13-37:14
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case refine_6
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x✝ y✝ : A
+hx✝ : x✝ ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+q : (x : A) → x ∈ NonUnitalAlgebra.adjoin R s → Prop := ⋯
+x : A
+hx : x ∈ s
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+⊢ IsScalarTower sorry sorry sorry
+Source line 37:
+    · intro r a ha
+            ^
+Highlighted span: r
+
+ERROR .LspCheck.lean:26:80-27:1
+unsolved goals
+case refine_7
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x✝ y✝ : A
+hx✝ : x✝ ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+q : (x : A) → x ∈ NonUnitalAlgebra.adjoin R s → Prop := ⋯
+x : A
+hx : x ∈ s
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+⊢ SMulCommClass sorry sorry sorry
+
+case refine_8
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x✝ y✝ : A
+hx✝ : x✝ ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+q : (x : A) → x ∈ NonUnitalAlgebra.adjoin R s → Prop := ⋯
+x : A
+hx : x ∈ s
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+⊢ Set sorry
+
+case refine_9
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x✝ y✝ : A
+hx✝ : x✝ ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+q : (x : A) → x ∈ NonUnitalAlgebra.adjoin R s → Prop :=
+  fun x hx ↦ ∀ (y : A) (hy : y ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy
+x : A
+hx : x ∈ s
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+⊢ ∀ x_1 ∈ ?refine_8, ∀ (x_2 : ?refine_11), p x y ⋯ hy
+
+case refine_10
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x✝ y✝ : A
+hx✝ : x✝ ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+q : (x : A) → x ∈ NonUnitalAlgebra.adjoin R s → Prop := ⋯
+x : A
+hx : x ∈ s
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+⊢ sorry
+
+case mul
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x✝ y✝ : A
+hx✝ : x✝ ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+q : (x : A) → x ∈ NonUnitalAlgebra.adjoin R s → Prop :=
+  fun x hx ↦ ∀ (y : A) (hy : y ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy
+x : A
+hx : x ∈ s
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+⊢ ?refine_10 ∈ NonUnitalAlgebra.adjoin sorry ?refine_8
+
+case refine_11
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x✝ y✝ : A
+hx✝ : x✝ ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+q : (x : A) → x ∈ NonUnitalAlgebra.adjoin R s → Prop := ⋯
+x : A
+hx : x ∈ s
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+⊢ Sort ?u.43107.6559
+
+case smul
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x✝ y✝ : A
+hx✝ : x✝ ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+q : (x : A) → x ∈ NonUnitalAlgebra.adjoin R s → Prop :=
+  fun x hx ↦ ∀ (y : A) (hy : y ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy
+x : A
+hx : x ∈ s
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+⊢ ?refine_11
+
+case hy
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x✝ y✝ : A
+hx✝ : x✝ ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+q : (x : A) → x ∈ NonUnitalAlgebra.adjoin R s → Prop :=
+  fun x hx ↦ ∀ (y : A) (hy : y ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy
+x : A
+hx : x ∈ s
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+⊢ ∀ (x_1 y_1 : sorry),
+    x_1 ∈ NonUnitalAlgebra.adjoin sorry ?refine_8 →
+      y_1 ∈ NonUnitalAlgebra.adjoin sorry ?refine_8 →
+        (∀ (x_2 : ?refine_11), p x y ⋯ hy) → (∀ (x_2 : ?refine_11), p x y ⋯ hy) → ∀ (x_2 : ?refine_11), p x y ⋯ hy
+
+case mem
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x✝ y✝ : A
+hx✝ : x✝ ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+q : (x : A) → x ∈ NonUnitalAlgebra.adjoin R s → Prop :=
+  fun x hx ↦ ∀ (y : A) (hy : y ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy
+x : A
+hx : x ∈ s
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+⊢ ∀ (x_1 : ?refine_11), p x y ⋯ hy
+
+case zero
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x✝ y✝ : A
+hx✝ : x✝ ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+q : (x : A) → x ∈ NonUnitalAlgebra.adjoin R s → Prop :=
+  fun x hx ↦ ∀ (y : A) (hy : y ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy
+x : A
+hx : x ∈ s
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+⊢ ∀ (x_1 y_1 : sorry),
+    x_1 ∈ NonUnitalAlgebra.adjoin sorry ?refine_8 →
+      y_1 ∈ NonUnitalAlgebra.adjoin sorry ?refine_8 →
+        (∀ (x_2 : ?refine_11), p x y ⋯ hy) → (∀ (x_2 : ?refine_11), p x y ⋯ hy) → ∀ (x_2 : ?refine_11), p x y ⋯ hy
+
+case add
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x✝ y✝ : A
+hx✝ : x✝ ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+q : (x : A) → x ∈ NonUnitalAlgebra.adjoin R s → Prop :=
+  fun x hx ↦ ∀ (y : A) (hy : y ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy
+x : A
+hx : x ∈ s
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+⊢ ∀ (r : sorry),
+    ∀ x_1 ∈ NonUnitalAlgebra.adjoin sorry ?refine_8,
+      (∀ (x_2 : ?refine_11), p x y ⋯ hy) → ∀ (x_2 : ?refine_11), p x y ⋯ hy
+Source line 26:
+  have hq_mem : ∀ x (hx : x ∈ s), q x (NonUnitalAlgebra.subset_adjoin R hx) := by
+                                                                               ^
+Highlighted span: b
+
+ERROR .LspCheck.lean:55:39-55:40
+Application type mismatch: The argument
+  R
+has type
+  Type u
+of sort `Type (u + 1)` but is expected to have type
+  ∀ (x : A) (hx : x ∈ s), q x ⋯
+of sort `Prop` in the application
+  NonUnitalAlgebra.adjoin_induction R
+Source line 55:
+    NonUnitalAlgebra.adjoin_induction R hx
+                                      ^
+Highlighted span: R
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F : Type*} (R : Type u) {A : Type v} {B : Type w}
+
+variable [CommSemiring R] [NonUnitalNonAssocSemiring A] [Module R A]
+
+variable [NonUnitalNonAssocSemiring B] [Module R B]
+
+variable [FunLike F A B] [NonUnitalAlgHomClass F R A B]
+
+variable [IsScalarTower R A A] [SMulCommClass R A A]
+
+theorem adjoin_induction₂ {s : Set A} {p : ∀ x y, x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop}
+    (mem_mem : ∀ (x) (y) (hx : x ∈ s) (hy : y ∈ s), p x y (NonUnitalAlgebra.subset_adjoin R hx) (NonUnitalAlgebra.subset_adjoin R hy))
+    (zero_left : ∀ x hx, p 0 x (zero_mem _) hx) (zero_right : ∀ x hx, p x 0 hx (zero_mem _))
+    (add_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x + y) z (add_mem hx hy) hz)
+    (add_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y + z) hx (add_mem hy hz))
+    (mul_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x * y) z (mul_mem hx hy) hz)
+    (mul_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y * z) hx (mul_mem hy hz))
+    (smul_left : ∀ r x y hx hy, p x y hx hy → p (r • x) y (SMulMemClass.smul_mem r hx) hy)
+    (smul_right : ∀ r x y hx hy, p x y hx hy → p x (r • y) hx (SMulMemClass.smul_mem r hy))
+    {x y : A} (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s) :
+    p x y hx hy := by
+  let S : NonUnitalSubalgebra R A :=
+    { carrier := {x | ∀ y (hy : y ∈ NonUnitalAlgebra.adjoin R s), p x y (show x ∈ NonUnitalAlgebra.adjoin R s from by
+          exact NonUnitalAlgebra.adjoin_le (by
+            intro z hz
+            exact NonUnitalAlgebra.subset_adjoin R hz)) hy}
+      zero_mem' := by
+        intro y hy
+        exact zero_left y hy
+      add_mem' := by
+        intro a b ha hb y hy
+        exact add_left a b y
+          (by
+            exact NonUnitalAlgebra.adjoin_le (by
+              intro z hz
+              exact NonUnitalAlgebra.subset_adjoin R hz))
+          (by
+            exact NonUnitalAlgebra.adjoin_le (by
+              intro z hz
+              exact NonUnitalAlgebra.subset_adjoin R hz))
+          hy (ha y hy) (hb y hy)
+      mul_mem' := by
+        intro a b ha hb y hy
+        exact mul_left a b y
+          (by
+            exact NonUnitalAlgebra.adjoin_le (by
+              intro z hz
+              exact NonUnitalAlgebra.subset_adjoin R hz))
+          (by
+            exact NonUnitalAlgebra.adjoin_le (by
+              intro z hz
+              exact NonUnitalAlgebra.subset_adjoin R hz))
+          hy (ha y hy) (hb y hy)
+      smul_mem' := by
+        intro r a ha y hy
+        exact smul_left r a y
+          (by
+            exact NonUnitalAlgebra.adjoin_le (by
+              intro z hz
+              exact NonUnitalAlgebra.subset_adjoin R hz))
+          hy (ha y hy) }
+  have hs : s ⊆ S := by
+    intro a ha b hb
+    have hba : p a b (NonUnitalAlgebra.subset_adjoin R ha) hb := by
+      exact
+        NonUnitalAlgebra.adjoin_induction (K := R) (s := s)
+          (p := fun b => p a b (NonUnitalAlgebra.subset_adjoin R ha) (by
+            simpa using b.property))
+          hb
+          (by
+            intro b hb'
+            exact mem_mem a b ha hb')
+          (by
+            exact zero_right a (NonUnitalAlgebra.subset_adjoin R ha))
+          (by
+            intro u v hu hv
+            exact add_right a u v (NonUnitalAlgebra.subset_adjoin R ha) _ _ hu hv)
+          (by
+            intro u v hu hv
+            exact mul_right a u v (NonUnitalAlgebra.subset_adjoin R ha) _ _ hu hv)
+          (by
+            intro r u hu
+            exact smul_right r a u (NonUnitalAlgebra.subset_adjoin R ha) _ hu)
+    simpa using hba
+  have hxS : x ∈ S := by
+    exact NonUnitalAlgebra.adjoin_le hs hx
+  exact hxS y hy
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:28:19-28:54
+typeclass instance problem is stuck
+  SMulCommClass R ?m.268 ?m.268
+
+Note: Lean will not try to resolve this typeclass instance problem because the second, third, fourth, and fifth type arguments to `SMulCommClass` contain metavariables. These arguments must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+Source line 28:
+            exact NonUnitalAlgebra.subset_adjoin R hz)) hy}
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: NonUnitalAlgebra.subset_adjoin R hz
+
+ERROR .LspCheck.lean:36:47-37:1
+unsolved goals
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x y✝ : A
+hx : x ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+a b : A
+ha : a ∈ {x | ∀ (y : A) (hy : y ∈ NonUnitalAlgebra.adjoin R s), p x y ⋯ hy}
+hb : b ∈ {x | ∀ (y : A) (hy : y ∈ NonUnitalAlgebra.adjoin R s), p x y ⋯ hy}
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+z : ?m.310
+hz : z ∈ ?m.296
+⊢ z ∈ ↑(NonUnitalAlgebra.adjoin R ?m.296)
+Source line 36:
+            exact NonUnitalAlgebra.adjoin_le (by
+                                              ^
+Highlighted span: b
+
+ERROR .LspCheck.lean:36:13-37:1
+Type mismatch
+  NonUnitalAlgebra.adjoin_le fun ⦃z⦄ ↦ ?m.298
+has type
+  NonUnitalAlgebra.adjoin R ?m.296 ≤ NonUnitalAlgebra.adjoin R ?m.296
+but is expected to have type
+  a ∈ NonUnitalAlgebra.adjoin R s
+Source line 36:
+            exact NonUnitalAlgebra.adjoin_le (by
+            ^
+Highlighted span: e
+
+ERROR .LspCheck.lean:40:47-41:1
+unsolved goals
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x y✝ : A
+hx : x ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+a b : A
+ha : a ∈ {x | ∀ (y : A) (hy : y ∈ NonUnitalAlgebra.adjoin R s), p x y ⋯ hy}
+hb : b ∈ {x | ∀ (y : A) (hy : y ∈ NonUnitalAlgebra.adjoin R s), p x y ⋯ hy}
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+z : ?m.338
+hz : z ∈ ?m.324
+⊢ z ∈ ↑(NonUnitalAlgebra.adjoin R ?m.324)
+Source line 40:
+            exact NonUnitalAlgebra.adjoin_le (by
+                                              ^
+Highlighted span: b
+
+ERROR .LspCheck.lean:40:13-41:1
+Type mismatch
+  NonUnitalAlgebra.adjoin_le fun ⦃z⦄ ↦ ?m.326
+has type
+  NonUnitalAlgebra.adjoin R ?m.324 ≤ NonUnitalAlgebra.adjoin R ?m.324
+but is expected to have type
+  b ∈ NonUnitalAlgebra.adjoin R s
+Source line 40:
+            exact NonUnitalAlgebra.adjoin_le (by
+            ^
+Highlighted span: e
+
+ERROR .LspCheck.lean:48:47-49:1
+unsolved goals
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x y✝ : A
+hx : x ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+a b : A
+ha : a ∈ {x | ∀ (y : A) (hy : y ∈ NonUnitalAlgebra.adjoin R s), p x y ⋯ hy}
+hb : b ∈ {x | ∀ (y : A) (hy : y ∈ NonUnitalAlgebra.adjoin R s), p x y ⋯ hy}
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+z : ?m.384
+hz : z ∈ ?m.370
+⊢ z ∈ ↑(NonUnitalAlgebra.adjoin R ?m.370)
+Source line 48:
+            exact NonUnitalAlgebra.adjoin_le (by
+                                              ^
+Highlighted span: b
+
+ERROR .LspCheck.lean:48:13-49:1
+Type mismatch
+  NonUnitalAlgebra.adjoin_le fun ⦃z⦄ ↦ ?m.372
+has type
+  NonUnitalAlgebra.adjoin R ?m.370 ≤ NonUnitalAlgebra.adjoin R ?m.370
+but is expected to have type
+  a ∈ NonUnitalAlgebra.adjoin R s
+Source line 48:
+            exact NonUnitalAlgebra.adjoin_le (by
+            ^
+Highlighted span: e
+
+ERROR .LspCheck.lean:52:47-53:1
+unsolved goals
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x y✝ : A
+hx : x ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+a b : A
+ha : a ∈ {x | ∀ (y : A) (hy : y ∈ NonUnitalAlgebra.adjoin R s), p x y ⋯ hy}
+hb : b ∈ {x | ∀ (y : A) (hy : y ∈ NonUnitalAlgebra.adjoin R s), p x y ⋯ hy}
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+z : ?m.412
+hz : z ∈ ?m.398
+⊢ z ∈ ↑(NonUnitalAlgebra.adjoin R ?m.398)
+Source line 52:
+            exact NonUnitalAlgebra.adjoin_le (by
+                                              ^
+Highlighted span: b
+
+ERROR .LspCheck.lean:52:13-53:1
+Type mismatch
+  NonUnitalAlgebra.adjoin_le fun ⦃z⦄ ↦ ?m.400
+has type
+  NonUnitalAlgebra.adjoin R ?m.398 ≤ NonUnitalAlgebra.adjoin R ?m.398
+but is expected to have type
+  b ∈ NonUnitalAlgebra.adjoin R s
+Source line 52:
+            exact NonUnitalAlgebra.adjoin_le (by
+            ^
+Highlighted span: e
+
+ERROR .LspCheck.lean:60:47-61:1
+unsolved goals
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x y✝ : A
+hx : x ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+r : R
+a : A
+ha : a ∈ {x | ∀ (y : A) (hy : y ∈ NonUnitalAlgebra.adjoin R s), p x y ⋯ hy}
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+z : ?m.451
+hz : z ∈ ?m.437
+⊢ z ∈ ↑(NonUnitalAlgebra.adjoin R ?m.437)
+Source line 60:
+            exact NonUnitalAlgebra.adjoin_le (by
+                                              ^
+Highlighted span: b
+
+ERROR .LspCheck.lean:60:13-61:1
+Type mismatch
+  NonUnitalAlgebra.adjoin_le fun ⦃z⦄ ↦ ?m.439
+has type
+  NonUnitalAlgebra.adjoin R ?m.437 ≤ NonUnitalAlgebra.adjoin R ?m.437
+but is expected to have type
+  a ∈ NonUnitalAlgebra.adjoin R s
+Source line 60:
+            exact NonUnitalAlgebra.adjoin_le (by
+            ^
+Highlighted span: e
+
+ERROR .LspCheck.lean:69:26-70:1
+Type mismatch
+  p a b ⋯ ?m.497
+has type
+  Prop
+but is expected to have type
+  b ∈ NonUnitalAlgebra.adjoin ?m.481 s → Prop
+Source line 69:
+          (p := fun b => p a b (NonUnitalAlgebra.subset_adjoin R ha) (by
+                         ^
+Highlighted span: p
+
+ERROR .LspCheck.lean:68:43-68:51
+Invalid argument name `K` for function `NonUnitalAlgebra.adjoin_induction`
+
+Hint: Perhaps you meant one of the following parameter names:
+  • `R`: K̵R̲
+  • `A`: K̵A̲
+  • `mem`: K̵m̲e̲m̲
+  • `add`: K̵a̲d̲d̲
+  • `zero`: K̵z̲e̲r̲o̲
+  • `mul`: K̵m̲u̲l̲
+  • `smul`: K̵s̲m̲u̲l̲
+  • `x`: K̵x̲
+  • `hx`: K̵h̲x̲
+Source line 68:
+        NonUnitalAlgebra.adjoin_induction (K := R) (s := s)
+                                          ^^^^^^^^
+Highlighted span: (K := R)
+
+ERROR .LspCheck.lean:70:25-70:35
+Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  b
+has type `A` which does not have the necessary form.
+Source line 70:
+            simpa using b.property))
+                        ^^^^^^^^^^
+Highlighted span: b.property
+
+ERROR .LspCheck.lean:74:34-74:37
+Application type mismatch: The argument
+  hb'
+has type
+  A
+of sort `Type v` but is expected to have type
+  b ∈ s
+of sort `Prop` in the application
+  mem_mem a b ha hb'
+Source line 74:
+            exact mem_mem a b ha hb')
+                                 ^^^
+Highlighted span: hb'
+
+ERROR .LspCheck.lean:79:77-79:79
+Application type mismatch: The argument
+  hu
+has type
+  u ∈ NonUnitalAlgebra.adjoin ?m.481 s
+but is expected to have type
+  p a u ⋯ ?m.541
+in the application
+  add_right a u v (NonUnitalAlgebra.subset_adjoin R ha) ?m.541 ?m.542 hu
+Source line 79:
+            exact add_right a u v (NonUnitalAlgebra.subset_adjoin R ha) _ _ hu hv)
+                                                                            ^^
+Highlighted span: hu
+
+ERROR .LspCheck.lean:84:23-84:25
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x y : A
+hx : x ∈ NonUnitalAlgebra.adjoin R s
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+S : NonUnitalSubalgebra R A :=
+  { carrier := {x | ∀ (y : A) (hy : y ∈ NonUnitalAlgebra.adjoin R s), p x y ⋯ hy}, add_mem' := ⋯, zero_mem' := ⋯,
+    mul_mem' := ⋯, smul_mem' := ⋯ }
+a : A
+ha : a ∈ s
+b : A
+hb : b ∈ NonUnitalAlgebra.adjoin R s
+r : Set A
+u : r ∈ Set.range fun s_1 ↦ ⋂ (_ : s_1 ∈ {p | ↑(NonUnitalSubsemiring.closure s) ⊆ ↑p}), ↑s_1
+⊢ ?m.504 ∈ r
+Source line 84:
+            intro r u hu
+                      ^^
+Highlighted span: hu
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:28:19-28:54
+typeclass instance problem is stuck
+  SMulCommClass R ?m.268 ?m.268
+
+Note: Lean will not try to resolve this typeclass instance problem because the second, third, fourth, and fifth type arguments to `SMulCommClass` contain metavariables. These arguments must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+Source line 28:
+            exact NonUnitalAlgebra.subset_adjoin R hz)) hy}
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: NonUnitalAlgebra.subset_adjoin R hz
+
+ERROR .LspCheck.lean:36:47-37:1
+unsolved goals
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x y✝ : A
+hx : x ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+a b : A
+ha : a ∈ {x | ∀ (y : A) (hy : y ∈ NonUnitalAlgebra.adjoin R s), p x y ⋯ hy}
+hb : b ∈ {x | ∀ (y : A) (hy : y ∈ NonUnitalAlgebra.adjoin R s), p x y ⋯ hy}
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+z : ?m.310
+hz : z ∈ ?m.296
+⊢ z ∈ ↑(NonUnitalAlgebra.adjoin R ?m.296)
+Source line 36:
+            exact NonUnitalAlgebra.adjoin_le (by
+                                              ^
+Highlighted span: b
+
+ERROR .LspCheck.lean:36:13-37:1
+Type mismatch
+  NonUnitalAlgebra.adjoin_le fun ⦃z⦄ ↦ ?m.298
+has type
+  NonUnitalAlgebra.adjoin R ?m.296 ≤ NonUnitalAlgebra.adjoin R ?m.296
+but is expected to have type
+  a ∈ NonUnitalAlgebra.adjoin R s
+Source line 36:
+            exact NonUnitalAlgebra.adjoin_le (by
+            ^
+Highlighted span: e
+
+ERROR .LspCheck.lean:40:47-41:1
+unsolved goals
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x y✝ : A
+hx : x ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+a b : A
+ha : a ∈ {x | ∀ (y : A) (hy : y ∈ NonUnitalAlgebra.adjoin R s), p x y ⋯ hy}
+hb : b ∈ {x | ∀ (y : A) (hy : y ∈ NonUnitalAlgebra.adjoin R s), p x y ⋯ hy}
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+z : ?m.338
+hz : z ∈ ?m.324
+⊢ z ∈ ↑(NonUnitalAlgebra.adjoin R ?m.324)
+Source line 40:
+            exact NonUnitalAlgebra.adjoin_le (by
+                                              ^
+Highlighted span: b
+
+ERROR .LspCheck.lean:40:13-41:1
+Type mismatch
+  NonUnitalAlgebra.adjoin_le fun ⦃z⦄ ↦ ?m.326
+has type
+  NonUnitalAlgebra.adjoin R ?m.324 ≤ NonUnitalAlgebra.adjoin R ?m.324
+but is expected to have type
+  b ∈ NonUnitalAlgebra.adjoin R s
+Source line 40:
+            exact NonUnitalAlgebra.adjoin_le (by
+            ^
+Highlighted span: e
+
+ERROR .LspCheck.lean:48:47-49:1
+unsolved goals
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x y✝ : A
+hx : x ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+a b : A
+ha : a ∈ {x | ∀ (y : A) (hy : y ∈ NonUnitalAlgebra.adjoin R s), p x y ⋯ hy}
+hb : b ∈ {x | ∀ (y : A) (hy : y ∈ NonUnitalAlgebra.adjoin R s), p x y ⋯ hy}
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+z : ?m.384
+hz : z ∈ ?m.370
+⊢ z ∈ ↑(NonUnitalAlgebra.adjoin R ?m.370)
+Source line 48:
+            exact NonUnitalAlgebra.adjoin_le (by
+                                              ^
+Highlighted span: b
+
+ERROR .LspCheck.lean:48:13-49:1
+Type mismatch
+  NonUnitalAlgebra.adjoin_le fun ⦃z⦄ ↦ ?m.372
+has type
+  NonUnitalAlgebra.adjoin R ?m.370 ≤ NonUnitalAlgebra.adjoin R ?m.370
+but is expected to have type
+  a ∈ NonUnitalAlgebra.adjoin R s
+Source line 48:
+            exact NonUnitalAlgebra.adjoin_le (by
+            ^
+Highlighted span: e
+
+ERROR .LspCheck.lean:52:47-53:1
+unsolved goals
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x y✝ : A
+hx : x ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+a b : A
+ha : a ∈ {x | ∀ (y : A) (hy : y ∈ NonUnitalAlgebra.adjoin R s), p x y ⋯ hy}
+hb : b ∈ {x | ∀ (y : A) (hy : y ∈ NonUnitalAlgebra.adjoin R s), p x y ⋯ hy}
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+z : ?m.412
+hz : z ∈ ?m.398
+⊢ z ∈ ↑(NonUnitalAlgebra.adjoin R ?m.398)
+Source line 52:
+            exact NonUnitalAlgebra.adjoin_le (by
+                                              ^
+Highlighted span: b
+
+ERROR .LspCheck.lean:52:13-53:1
+Type mismatch
+  NonUnitalAlgebra.adjoin_le fun ⦃z⦄ ↦ ?m.400
+has type
+  NonUnitalAlgebra.adjoin R ?m.398 ≤ NonUnitalAlgebra.adjoin R ?m.398
+but is expected to have type
+  b ∈ NonUnitalAlgebra.adjoin R s
+Source line 52:
+            exact NonUnitalAlgebra.adjoin_le (by
+            ^
+Highlighted span: e
+
+ERROR .LspCheck.lean:60:47-61:1
+unsolved goals
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x y✝ : A
+hx : x ∈ NonUnitalAlgebra.adjoin R s
+hy✝ : y✝ ∈ NonUnitalAlgebra.adjoin R s
+r : R
+a : A
+ha : a ∈ {x | ∀ (y : A) (hy : y ∈ NonUnitalAlgebra.adjoin R s), p x y ⋯ hy}
+y : A
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+z : ?m.451
+hz : z ∈ ?m.437
+⊢ z ∈ ↑(NonUnitalAlgebra.adjoin R ?m.437)
+Source line 60:
+            exact NonUnitalAlgebra.adjoin_le (by
+                                              ^
+Highlighted span: b
+
+ERROR .LspCheck.lean:60:13-61:1
+Type mismatch
+  NonUnitalAlgebra.adjoin_le fun ⦃z⦄ ↦ ?m.439
+has type
+  NonUnitalAlgebra.adjoin R ?m.437 ≤ NonUnitalAlgebra.adjoin R ?m.437
+but is expected to have type
+  a ∈ NonUnitalAlgebra.adjoin R s
+Source line 60:
+            exact NonUnitalAlgebra.adjoin_le (by
+            ^
+Highlighted span: e
+
+ERROR .LspCheck.lean:69:26-70:1
+Type mismatch
+  p a b ⋯ ?m.497
+has type
+  Prop
+but is expected to have type
+  b ∈ NonUnitalAlgebra.adjoin ?m.481 s → Prop
+Source line 69:
+          (p := fun b => p a b (NonUnitalAlgebra.subset_adjoin R ha) (by
+                         ^
+Highlighted span: p
+
+ERROR .LspCheck.lean:68:43-68:51
+Invalid argument name `K` for function `NonUnitalAlgebra.adjoin_induction`
+
+Hint: Perhaps you meant one of the following parameter names:
+  • `R`: K̵R̲
+  • `A`: K̵A̲
+  • `mem`: K̵m̲e̲m̲
+  • `add`: K̵a̲d̲d̲
+  • `zero`: K̵z̲e̲r̲o̲
+  • `mul`: K̵m̲u̲l̲
+  • `smul`: K̵s̲m̲u̲l̲
+  • `x`: K̵x̲
+  • `hx`: K̵h̲x̲
+Source line 68:
+        NonUnitalAlgebra.adjoin_induction (K := R) (s := s)
+                                          ^^^^^^^^
+Highlighted span: (K := R)
+
+ERROR .LspCheck.lean:70:25-70:35
+Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  b
+has type `A` which does not have the necessary form.
+Source line 70:
+            simpa using b.property))
+                        ^^^^^^^^^^
+Highlighted span: b.property
+
+ERROR .LspCheck.lean:74:34-74:37
+Application type mismatch: The argument
+  hb'
+has type
+  A
+of sort `Type v` but is expected to have type
+  b ∈ s
+of sort `Prop` in the application
+  mem_mem a b ha hb'
+Source line 74:
+            exact mem_mem a b ha hb')
+                                 ^^^
+Highlighted span: hb'
+
+ERROR .LspCheck.lean:79:77-79:79
+Application type mismatch: The argument
+  hu
+has type
+  u ∈ NonUnitalAlgebra.adjoin ?m.481 s
+but is expected to have type
+  p a u ⋯ ?m.541
+in the application
+  add_right a u v (NonUnitalAlgebra.subset_adjoin R ha) ?m.541 ?m.542 hu
+Source line 79:
+            exact add_right a u v (NonUnitalAlgebra.subset_adjoin R ha) _ _ hu hv)
+                                                                            ^^
+Highlighted span: hu
+
+ERROR .LspCheck.lean:84:23-84:25
+Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+R : Type u
+A : Type v
+inst✝⁴ : CommSemiring R
+inst✝³ : NonUnitalNonAssocSemiring A
+inst✝² : Module R A
+inst✝¹ : IsScalarTower R A A
+inst✝ : SMulCommClass R A A
+s : Set A
+p : (x y : A) → x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop
+mem_mem : ∀ (x y : A) (hx : x ∈ s) (hy : y ∈ s), p x y ⋯ ⋯
+zero_left : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p 0 x ⋯ hx
+zero_right : ∀ (x : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s), p x 0 hx ⋯
+add_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x + y) z ⋯ hz
+add_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y + z) hx ⋯
+mul_left :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x z hx hz → p y z hy hz → p (x * y) z ⋯ hz
+mul_right :
+  ∀ (x y z : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s)
+    (hz : z ∈ NonUnitalAlgebra.adjoin R s), p x y hx hy → p x z hx hz → p x (y * z) hx ⋯
+smul_left :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p (r • x) y ⋯ hy
+smul_right :
+  ∀ (r : R) (x y : A) (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s),
+    p x y hx hy → p x (r • y) hx ⋯
+x y : A
+hx : x ∈ NonUnitalAlgebra.adjoin R s
+hy : y ∈ NonUnitalAlgebra.adjoin R s
+S : NonUnitalSubalgebra R A :=
+  { carrier := {x | ∀ (y : A) (hy : y ∈ NonUnitalAlgebra.adjoin R s), p x y ⋯ hy}, add_mem' := ⋯, zero_mem' := ⋯,
+    mul_mem' := ⋯, smul_mem' := ⋯ }
+a : A
+ha : a ∈ s
+b : A
+hb : b ∈ NonUnitalAlgebra.adjoin R s
+r : Set A
+u : r ∈ Set.range fun s_1 ↦ ⋂ (_ : s_1 ∈ {p | ↑(NonUnitalSubsemiring.closure s) ⊆ ↑p}), ↑s_1
+⊢ ?m.504 ∈ r
+Source line 84:
+            intro r u hu
+                      ^^
+Highlighted span: hu
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {F : Type*} (R : Type u) {A : Type v} {B : Type w}
+
+variable [CommSemiring R] [NonUnitalNonAssocSemiring A] [Module R A]
+
+variable [NonUnitalNonAssocSemiring B] [Module R B]
+
+variable [FunLike F A B] [NonUnitalAlgHomClass F R A B]
+
+variable [IsScalarTower R A A] [SMulCommClass R A A]
+
+theorem adjoin_induction₂ {s : Set A} {p : ∀ x y, x ∈ NonUnitalAlgebra.adjoin R s → y ∈ NonUnitalAlgebra.adjoin R s → Prop}
+    (mem_mem : ∀ (x) (y) (hx : x ∈ s) (hy : y ∈ s), p x y (NonUnitalAlgebra.subset_adjoin R hx) (NonUnitalAlgebra.subset_adjoin R hy))
+    (zero_left : ∀ x hx, p 0 x (zero_mem _) hx) (zero_right : ∀ x hx, p x 0 hx (zero_mem _))
+    (add_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x + y) z (add_mem hx hy) hz)
+    (add_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y + z) hx (add_mem hy hz))
+    (mul_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x * y) z (mul_mem hx hy) hz)
+    (mul_right : ∀ x y z hx hy hz, p x y hx hy → p x z hx hz → p x (y * z) hx (mul_mem hy hz))
+    (smul_left : ∀ r x y hx hy, p x y hx hy → p (r • x) y (SMulMemClass.smul_mem r hx) hy)
+    (smul_right : ∀ r x y hx hy, p x y hx hy → p x (r • y) hx (SMulMemClass.smul_mem r hy))
+    {x y : A} (hx : x ∈ NonUnitalAlgebra.adjoin R s) (hy : y ∈ NonUnitalAlgebra.adjoin R s) :
+    p x y hx hy := by
+  let q : A → Prop := fun x => ∀ y (hy : y ∈ NonUnitalAlgebra.adjoin R s), ∀ hx' : x ∈ NonUnitalAlgebra.adjoin R s, p x y hx' hy
+  have hmem : ∀ x ∈ s, q x := by
+    intro x hxS y hyS hxA
+    have hxA' : x ∈ NonUnitalAlgebra.adjoin R s := NonUnitalAlgebra.subset_adjoin R hxS
+    exact
+      cast (by cases Subsingleton.elim hxA hxA'; rfl) (mem_mem x y hxS ?_)
+    where
+      _ : y ∈ s := by
+        sorry
+  have hzero : q 0 := by
+    intro y hyS hx0
+    exact zero_left y hyS
+  have hadd : ∀ a b, q a → q b → q (a + b) := by
+    intro a b ha hb y hyS hsum
+    have ha' : a ∈ NonUnitalAlgebra.adjoin R s := by
+      exact (show a ∈ NonUnitalAlgebra.adjoin R s from by
+        have : a + b ∈ NonUnitalAlgebra.adjoin R s := hsum
+        exact (NonUnitalAlgebra.adjoin R s).add_mem ?_ ?_)
+    have hb' : b ∈ NonUnitalAlgebra.adjoin R s := by
+      exact (show b ∈ NonUnitalAlgebra.adjoin R s from by
+        have : a + b ∈ NonUnitalAlgebra.adjoin R s := hsum
+        exact (NonUnitalAlgebra.adjoin R s).add_mem ?_ ?_)
+    exact add_left a b y ha' hb' hyS (ha y hyS ha') (hb y hyS hb')
+  have hmul : ∀ a b, q a → q b → q (a * b) := by
+    intro a b ha hb y hyS hmulab
+    have ha' : a ∈ NonUnitalAlgebra.adjoin R s := by
+      exact NonUnitalAlgebra.mul_mem_left (s := NonUnitalAlgebra.adjoin R s) ?_ hmulab
+    have hb' : b ∈ NonUnitalAlgebra.adjoin R s := by
+      exact NonUnitalAlgebra.mul_mem_right (s := NonUnitalAlgebra.adjoin R s) ?_ hmulab
+    exact mul_left a b y ha' hb' hyS (ha y hyS ha') (hb y hyS hb')
+  have hsmul : ∀ r a, q a → q (r • a) := by
+    intro r a ha y hyS hs
+    have ha' : a ∈ NonUnitalAlgebra.adjoin R s := by
+      sorry
+    exact smul_left r a y ha' hyS (ha y hyS ha')
+  have hxq : q x := by
+    refine NonUnitalAlgebra.adjoin_induction (R := R) (s := s) (p := q) hx ?_ ?_ ?_ ?_ ?_
+    · exact hmem
+    · exact hzero
+    · intro a b ha hb
+      exact hadd a b ha hb
+    · intro a b ha hb
+      exact hmul a b ha hb
+    · intro r a ha
+      exact hsmul r a ha
+  exact hxq y hy hx
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:31:7-31:8
+'let rec' expressions must be named
+Source line 31:
+      _ : y ∈ s := by
+      ^
+Highlighted span: _
+
+ERROR .LspCheck.lean:33:3-33:7
+unexpected token 'have'; expected command
+Source line 33:
+  have hzero : q 0 := by
+  ^^^^
+Highlighted span: have
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:31:7-31:8
+'let rec' expressions must be named
+Source line 31:
+      _ : y ∈ s := by
+      ^
+Highlighted span: _
+
+ERROR .LspCheck.lean:33:3-33:7
+unexpected token 'have'; expected command
+Source line 33:
+  have hzero : q 0 := by
+  ^^^^
+Highlighted span: have

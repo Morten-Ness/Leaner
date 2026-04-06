@@ -1,0 +1,71 @@
+FILE: Operations.monotone_map.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Operations.monotone_map.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+variable {F : Type*} [FunLike F M N] [mc : MonoidHomClass F M N]
+
+theorem monotone_map {f : F} : Monotone (Submonoid.map f) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+variable {F : Type*} [FunLike F M N] [mc : MonoidHomClass F M N]
+
+theorem monotone_map {f : F} : Monotone (Submonoid.map f) := by
+  intro A B hAB
+  exact Submonoid.map_le_map hAB
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:9:9-9:29
+Unknown constant `Submonoid.map_le_map`
+Source line 9:
+  exact Submonoid.map_le_map hAB
+        ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submonoid.map_le_map
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:9:9-9:29
+Unknown constant `Submonoid.map_le_map`
+Source line 9:
+  exact Submonoid.map_le_map hAB
+        ^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Submonoid.map_le_map
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M N P : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass P] (S : Submonoid M)
+
+variable {F : Type*} [FunLike F M N] [mc : MonoidHomClass F M N]
+
+theorem monotone_map {f : F} : Monotone (Submonoid.map f) := by
+  intro A B hAB
+  show Submonoid.map f A ≤ Submonoid.map f B
+  rintro y ⟨x, hx, rfl⟩
+  exact ⟨x, hAB hx, rfl⟩
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

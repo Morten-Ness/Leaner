@@ -1,0 +1,1240 @@
+FILE: Exact.exact_iff_of_surjective_of_bijective_of_injective.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Exact.exact_iff_of_surjective_of_bijective_of_injective.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R M M' N N' P P' : Type*}
+
+variable [Ring R] [AddCommGroup M] [AddCommGroup N] [AddCommGroup P]
+    [Module R M] [Module R N] [Module R P]
+    {f : M →ₗ[R] N} {g : N →ₗ[R] P}
+
+theorem exact_iff_of_surjective_of_bijective_of_injective
+    {M₁ M₂ M₃ N₁ N₂ N₃ : Type*} [AddCommMonoid M₁] [AddCommMonoid M₂] [AddCommMonoid M₃]
+    [AddCommMonoid N₁] [AddCommMonoid N₂] [AddCommMonoid N₃]
+    [Module R M₁] [Module R M₂] [Module R M₃]
+    [Module R N₁] [Module R N₂] [Module R N₃]
+    (f : M₁ →ₗ[R] M₂) (g : M₂ →ₗ[R] M₃) (f' : N₁ →ₗ[R] N₂) (g' : N₂ →ₗ[R] N₃)
+    (τ₁ : M₁ →ₗ[R] N₁) (τ₂ : M₂ →ₗ[R] N₂) (τ₃ : M₃ →ₗ[R] N₃)
+    (comm₁₂ : f'.comp τ₁ = τ₂.comp f) (comm₂₃ : g'.comp τ₂ = τ₃.comp g)
+    (h₁ : Function.Surjective τ₁) (h₂ : Function.Bijective τ₂) (h₃ : Function.Injective τ₃) :
+    Function.Exact f g ↔ Function.Exact f' g' := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R M M' N N' P P' : Type*}
+
+variable [Ring R] [AddCommGroup M] [AddCommGroup N] [AddCommGroup P]
+    [Module R M] [Module R N] [Module R P]
+    {f : M →ₗ[R] N} {g : N →ₗ[R] P}
+
+theorem exact_iff_of_surjective_of_bijective_of_injective
+    {M₁ M₂ M₃ N₁ N₂ N₃ : Type*} [AddCommMonoid M₁] [AddCommMonoid M₂] [AddCommMonoid M₃]
+    [AddCommMonoid N₁] [AddCommMonoid N₂] [AddCommMonoid N₃]
+    [Module R M₁] [Module R M₂] [Module R M₃]
+    [Module R N₁] [Module R N₂] [Module R N₃]
+    (f : M₁ →ₗ[R] M₂) (g : M₂ →ₗ[R] M₃) (f' : N₁ →ₗ[R] N₂) (g' : N₂ →ₗ[R] N₃)
+    (τ₁ : M₁ →ₗ[R] N₁) (τ₂ : M₂ →ₗ[R] N₂) (τ₃ : M₃ →ₗ[R] N₃)
+    (comm₁₂ : f'.comp τ₁ = τ₂.comp f) (comm₂₃ : g'.comp τ₂ = τ₃.comp g)
+    (h₁ : Function.Surjective τ₁) (h₂ : Function.Bijective τ₂) (h₃ : Function.Injective τ₃) :
+    Function.Exact f g ↔ Function.Exact f' g' := by
+  rcases h₂ with ⟨h₂inj, h₂surj⟩
+  constructor
+  · intro hex
+    refine ⟨?_, ?_⟩
+    · intro x
+      apply h₃
+      rw [← LinearMap.comp_apply, comm₂₃, LinearMap.comp_apply]
+      exact hex.1 x
+    · intro y hy
+      rcases h₂surj y with ⟨x, rfl⟩
+      have hx : g x = 0 := by
+        apply h₃
+        rw [map_zero, ← LinearMap.comp_apply, comm₂₃, LinearMap.comp_apply]
+        exact hy
+      rcases hex.2 x hx with ⟨z, rfl⟩
+      rcases h₁ z with ⟨w, rfl⟩
+      refine ⟨w, ?_⟩
+      rw [← LinearMap.comp_apply, comm₁₂, LinearMap.comp_apply]
+  · intro hex
+    refine ⟨?_, ?_⟩
+    · intro x
+      apply h₂inj
+      rw [LinearMap.map_zero, ← LinearMap.comp_apply, comm₂₃, LinearMap.comp_apply]
+      exact hex.1 (τ₁ x)
+    · intro x hx
+      have hx' : g' (τ₂ x) = 0 := by
+        rw [← LinearMap.comp_apply, comm₂₃, LinearMap.comp_apply, hx, map_zero]
+      rcases hex.2 (τ₂ x) hx' with ⟨y, hy⟩
+      rcases h₁ y with ⟨z, rfl⟩
+      refine ⟨z, ?_⟩
+      apply h₂inj
+      rw [← hy, ← LinearMap.comp_apply, comm₁₂, LinearMap.comp_apply]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:22:12-22:20
+Invalid `⟨...⟩` notation: The expected type
+  ∀ (y : N₂), g' y = 0 ↔ y ∈ Set.range ⇑f'
+is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+Source line 22:
+    refine ⟨?_, ?_⟩
+           ^^^^^^^^
+Highlighted span: ⟨?_, ?_⟩
+
+ERROR .LspCheck.lean:23:5-24:1
+No goals to be solved
+Source line 23:
+    · intro x
+    ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:38:12-38:20
+Invalid `⟨...⟩` notation: The expected type
+  ∀ (y : M₂), g y = 0 ↔ y ∈ Set.range ⇑f
+is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+Source line 38:
+    refine ⟨?_, ?_⟩
+           ^^^^^^^^
+Highlighted span: ⟨?_, ?_⟩
+
+ERROR .LspCheck.lean:39:5-40:1
+No goals to be solved
+Source line 39:
+    · intro x
+    ^
+Highlighted span: ·
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:22:12-22:20
+Invalid `⟨...⟩` notation: The expected type
+  ∀ (y : N₂), g' y = 0 ↔ y ∈ Set.range ⇑f'
+is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+Source line 22:
+    refine ⟨?_, ?_⟩
+           ^^^^^^^^
+Highlighted span: ⟨?_, ?_⟩
+
+ERROR .LspCheck.lean:23:5-24:1
+No goals to be solved
+Source line 23:
+    · intro x
+    ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:38:12-38:20
+Invalid `⟨...⟩` notation: The expected type
+  ∀ (y : M₂), g y = 0 ↔ y ∈ Set.range ⇑f
+is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+Source line 38:
+    refine ⟨?_, ?_⟩
+           ^^^^^^^^
+Highlighted span: ⟨?_, ?_⟩
+
+ERROR .LspCheck.lean:39:5-40:1
+No goals to be solved
+Source line 39:
+    · intro x
+    ^
+Highlighted span: ·
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R M M' N N' P P' : Type*}
+
+variable [Ring R] [AddCommGroup M] [AddCommGroup N] [AddCommGroup P]
+    [Module R M] [Module R N] [Module R P]
+    {f : M →ₗ[R] N} {g : N →ₗ[R] P}
+
+theorem exact_iff_of_surjective_of_bijective_of_injective
+    {M₁ M₂ M₃ N₁ N₂ N₃ : Type*} [AddCommMonoid M₁] [AddCommMonoid M₂] [AddCommMonoid M₃]
+    [AddCommMonoid N₁] [AddCommMonoid N₂] [AddCommMonoid N₃]
+    [Module R M₁] [Module R M₂] [Module R M₃]
+    [Module R N₁] [Module R N₂] [Module R N₃]
+    (f : M₁ →ₗ[R] M₂) (g : M₂ →ₗ[R] M₃) (f' : N₁ →ₗ[R] N₂) (g' : N₂ →ₗ[R] N₃)
+    (τ₁ : M₁ →ₗ[R] N₁) (τ₂ : M₂ →ₗ[R] N₂) (τ₃ : M₃ →ₗ[R] N₃)
+    (comm₁₂ : f'.comp τ₁ = τ₂.comp f) (comm₂₃ : g'.comp τ₂ = τ₃.comp g)
+    (h₁ : Function.Surjective τ₁) (h₂ : Function.Bijective τ₂) (h₃ : Function.Injective τ₃) :
+    Function.Exact f g ↔ Function.Exact f' g' := by
+  rcases h₂ with ⟨h₂inj, h₂surj⟩
+  constructor
+  · intro hex
+    intro y
+    constructor
+    · intro hy
+      rcases h₂surj y with ⟨x, rfl⟩
+      have hx : g x = 0 := by
+        apply h₃
+        rw [LinearMap.map_zero, ← LinearMap.comp_apply, comm₂₃, LinearMap.comp_apply]
+        exact hy
+      rcases (hex x).mp hx with ⟨z, rfl⟩
+      rcases h₁ z with ⟨w, rfl⟩
+      refine ⟨w, ?_⟩
+      rw [← LinearMap.comp_apply, comm₁₂, LinearMap.comp_apply]
+    · rintro ⟨x, rfl⟩
+      rw [← LinearMap.comp_apply, comm₂₃, LinearMap.comp_apply]
+      exact (hex (τ₁ x)).mpr ⟨x, rfl⟩
+  · intro hex
+    intro y
+    constructor
+    · intro hy
+      have hy' : g' (τ₂ y) = 0 := by
+        rw [← LinearMap.comp_apply, comm₂₃, LinearMap.comp_apply, hy, LinearMap.map_zero]
+      rcases (hex (τ₂ y)).mp hy' with ⟨x, hx⟩
+      rcases h₁ x with ⟨z, rfl⟩
+      refine ⟨z, ?_⟩
+      apply h₂inj
+      rw [← hx, ← LinearMap.comp_apply, comm₁₂, LinearMap.comp_apply]
+    · rintro ⟨x, rfl⟩
+      apply h₂inj
+      rw [LinearMap.map_zero, ← LinearMap.comp_apply, comm₂₃, LinearMap.comp_apply]
+      exact (hex (τ₁ x)).mpr ⟨x, rfl⟩
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:28:57-28:63
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  g' ∘ₗ τ₂
+in the target expression
+  (τ₃ ∘ₗ g) x = 0
+
+case a
+R : Type u_1
+inst✝¹² : Ring R
+M₁ : Type u_8
+M₂ : Type u_9
+M₃ : Type u_10
+N₁ : Type u_11
+N₂ : Type u_12
+N₃ : Type u_13
+inst✝¹¹ : AddCommMonoid M₁
+inst✝¹⁰ : AddCommMonoid M₂
+inst✝⁹ : AddCommMonoid M₃
+inst✝⁸ : AddCommMonoid N₁
+inst✝⁷ : AddCommMonoid N₂
+inst✝⁶ : AddCommMonoid N₃
+inst✝⁵ : Module R M₁
+inst✝⁴ : Module R M₂
+inst✝³ : Module R M₃
+inst✝² : Module R N₁
+inst✝¹ : Module R N₂
+inst✝ : Module R N₃
+f : M₁ →ₗ[R] M₂
+g : M₂ →ₗ[R] M₃
+f' : N₁ →ₗ[R] N₂
+g' : N₂ →ₗ[R] N₃
+τ₁ : M₁ →ₗ[R] N₁
+τ₂ : M₂ →ₗ[R] N₂
+τ₃ : M₃ →ₗ[R] N₃
+comm₁₂ : f' ∘ₗ τ₁ = τ₂ ∘ₗ f
+comm₂₃ : g' ∘ₗ τ₂ = τ₃ ∘ₗ g
+h₁ : Function.Surjective ⇑τ₁
+h₃ : Function.Injective ⇑τ₃
+h₂inj : Function.Injective ⇑τ₂
+h₂surj : Function.Surjective ⇑τ₂
+hex : Function.Exact ⇑f ⇑g
+x : M₂
+hy : g' (τ₂ x) = 0
+⊢ (τ₃ ∘ₗ g) x = 0
+Source line 28:
+        rw [LinearMap.map_zero, ← LinearMap.comp_apply, comm₂₃, LinearMap.comp_apply]
+                                                        ^^^^^^
+Highlighted span: comm₂₃
+
+ERROR .LspCheck.lean:31:17-31:18
+Application type mismatch: The argument
+  z
+has type
+  M₁
+of sort `Type u_8` but is expected to have type
+  N₁
+of sort `Type u_11` in the application
+  h₁ z
+Source line 31:
+      rcases h₁ z with ⟨w, rfl⟩
+                ^
+Highlighted span: z
+
+ERROR .LspCheck.lean:35:35-35:41
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  g' ∘ₗ τ₂
+in the target expression
+  (g' ∘ₗ f') x = 0
+
+case mp.mpr
+R : Type u_1
+inst✝¹² : Ring R
+M₁ : Type u_8
+M₂ : Type u_9
+M₃ : Type u_10
+N₁ : Type u_11
+N₂ : Type u_12
+N₃ : Type u_13
+inst✝¹¹ : AddCommMonoid M₁
+inst✝¹⁰ : AddCommMonoid M₂
+inst✝⁹ : AddCommMonoid M₃
+inst✝⁸ : AddCommMonoid N₁
+inst✝⁷ : AddCommMonoid N₂
+inst✝⁶ : AddCommMonoid N₃
+inst✝⁵ : Module R M₁
+inst✝⁴ : Module R M₂
+inst✝³ : Module R M₃
+inst✝² : Module R N₁
+inst✝¹ : Module R N₂
+inst✝ : Module R N₃
+f : M₁ →ₗ[R] M₂
+g : M₂ →ₗ[R] M₃
+f' : N₁ →ₗ[R] N₂
+g' : N₂ →ₗ[R] N₃
+τ₁ : M₁ →ₗ[R] N₁
+τ₂ : M₂ →ₗ[R] N₂
+τ₃ : M₃ →ₗ[R] N₃
+comm₁₂ : f' ∘ₗ τ₁ = τ₂ ∘ₗ f
+comm₂₃ : g' ∘ₗ τ₂ = τ₃ ∘ₗ g
+h₁ : Function.Surjective ⇑τ₁
+h₃ : Function.Injective ⇑τ₃
+h₂inj : Function.Injective ⇑τ₂
+h₂surj : Function.Surjective ⇑τ₂
+hex : Function.Exact ⇑f ⇑g
+x : N₁
+⊢ (g' ∘ₗ f') x = 0
+Source line 35:
+      rw [← LinearMap.comp_apply, comm₂₃, LinearMap.comp_apply]
+                                  ^^^^^^
+Highlighted span: comm₂₃
+
+ERROR .LspCheck.lean:47:41-47:47
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  f' ∘ₗ τ₁
+in the target expression
+  (τ₂ ∘ₗ f) z = f' (τ₁ z)
+
+case mpr.mp.a
+R : Type u_1
+inst✝¹² : Ring R
+M₁ : Type u_8
+M₂ : Type u_9
+M₃ : Type u_10
+N₁ : Type u_11
+N₂ : Type u_12
+N₃ : Type u_13
+inst✝¹¹ : AddCommMonoid M₁
+inst✝¹⁰ : AddCommMonoid M₂
+inst✝⁹ : AddCommMonoid M₃
+inst✝⁸ : AddCommMonoid N₁
+inst✝⁷ : AddCommMonoid N₂
+inst✝⁶ : AddCommMonoid N₃
+inst✝⁵ : Module R M₁
+inst✝⁴ : Module R M₂
+inst✝³ : Module R M₃
+inst✝² : Module R N₁
+inst✝¹ : Module R N₂
+inst✝ : Module R N₃
+f : M₁ →ₗ[R] M₂
+g : M₂ →ₗ[R] M₃
+f' : N₁ →ₗ[R] N₂
+g' : N₂ →ₗ[R] N₃
+τ₁ : M₁ →ₗ[R] N₁
+τ₂ : M₂ →ₗ[R] N₂
+τ₃ : M₃ →ₗ[R] N₃
+comm₁₂ : f' ∘ₗ τ₁ = τ₂ ∘ₗ f
+comm₂₃ : g' ∘ₗ τ₂ = τ₃ ∘ₗ g
+h₁ : Function.Surjective ⇑τ₁
+h₃ : Function.Injective ⇑τ₃
+h₂inj : Function.Injective ⇑τ₂
+h₂surj : Function.Surjective ⇑τ₂
+hex : Function.Exact ⇑f' ⇑g'
+y : M₂
+hy : g y = 0
+hy' : g' (τ₂ y) = 0
+z : M₁
+hx : f' (τ₁ z) = τ₂ y
+⊢ (τ₂ ∘ₗ f) z = f' (τ₁ z)
+Source line 47:
+      rw [← hx, ← LinearMap.comp_apply, comm₁₂, LinearMap.comp_apply]
+                                        ^^^^^^
+Highlighted span: comm₁₂
+
+ERROR .LspCheck.lean:49:7-49:18
+Tactic `apply` failed: could not unify the conclusion of `h₂inj`
+  Eq.{u_9 + 1} ?a₁ ?a₂
+with the goal
+  Eq.{u_10 + 1} (g (f x)) 0
+
+Note: The full type of `h₂inj` is
+  Function.Injective ⇑τ₂
+
+case mpr.mpr
+R : Type u_1
+inst✝¹² : Ring R
+M₁ : Type u_8
+M₂ : Type u_9
+M₃ : Type u_10
+N₁ : Type u_11
+N₂ : Type u_12
+N₃ : Type u_13
+inst✝¹¹ : AddCommMonoid M₁
+inst✝¹⁰ : AddCommMonoid M₂
+inst✝⁹ : AddCommMonoid M₃
+inst✝⁸ : AddCommMonoid N₁
+inst✝⁷ : AddCommMonoid N₂
+inst✝⁶ : AddCommMonoid N₃
+inst✝⁵ : Module R M₁
+inst✝⁴ : Module R M₂
+inst✝³ : Module R M₃
+inst✝² : Module R N₁
+inst✝¹ : Module R N₂
+inst✝ : Module R N₃
+f : M₁ →ₗ[R] M₂
+g : M₂ →ₗ[R] M₃
+f' : N₁ →ₗ[R] N₂
+g' : N₂ →ₗ[R] N₃
+τ₁ : M₁ →ₗ[R] N₁
+τ₂ : M₂ →ₗ[R] N₂
+τ₃ : M₃ →ₗ[R] N₃
+comm₁₂ : f' ∘ₗ τ₁ = τ₂ ∘ₗ f
+comm₂₃ : g' ∘ₗ τ₂ = τ₃ ∘ₗ g
+h₁ : Function.Surjective ⇑τ₁
+h₃ : Function.Injective ⇑τ₃
+h₂inj : Function.Injective ⇑τ₂
+h₂surj : Function.Surjective ⇑τ₂
+hex : Function.Exact ⇑f' ⇑g'
+x : M₁
+⊢ g (f x) = 0
+Source line 49:
+      apply h₂inj
+      ^^^^^^^^^^^
+Highlighted span: apply h₂inj
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:28:57-28:63
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  g' ∘ₗ τ₂
+in the target expression
+  (τ₃ ∘ₗ g) x = 0
+
+case a
+R : Type u_1
+inst✝¹² : Ring R
+M₁ : Type u_8
+M₂ : Type u_9
+M₃ : Type u_10
+N₁ : Type u_11
+N₂ : Type u_12
+N₃ : Type u_13
+inst✝¹¹ : AddCommMonoid M₁
+inst✝¹⁰ : AddCommMonoid M₂
+inst✝⁹ : AddCommMonoid M₃
+inst✝⁸ : AddCommMonoid N₁
+inst✝⁷ : AddCommMonoid N₂
+inst✝⁶ : AddCommMonoid N₃
+inst✝⁵ : Module R M₁
+inst✝⁴ : Module R M₂
+inst✝³ : Module R M₃
+inst✝² : Module R N₁
+inst✝¹ : Module R N₂
+inst✝ : Module R N₃
+f : M₁ →ₗ[R] M₂
+g : M₂ →ₗ[R] M₃
+f' : N₁ →ₗ[R] N₂
+g' : N₂ →ₗ[R] N₃
+τ₁ : M₁ →ₗ[R] N₁
+τ₂ : M₂ →ₗ[R] N₂
+τ₃ : M₃ →ₗ[R] N₃
+comm₁₂ : f' ∘ₗ τ₁ = τ₂ ∘ₗ f
+comm₂₃ : g' ∘ₗ τ₂ = τ₃ ∘ₗ g
+h₁ : Function.Surjective ⇑τ₁
+h₃ : Function.Injective ⇑τ₃
+h₂inj : Function.Injective ⇑τ₂
+h₂surj : Function.Surjective ⇑τ₂
+hex : Function.Exact ⇑f ⇑g
+x : M₂
+hy : g' (τ₂ x) = 0
+⊢ (τ₃ ∘ₗ g) x = 0
+Source line 28:
+        rw [LinearMap.map_zero, ← LinearMap.comp_apply, comm₂₃, LinearMap.comp_apply]
+                                                        ^^^^^^
+Highlighted span: comm₂₃
+
+ERROR .LspCheck.lean:31:17-31:18
+Application type mismatch: The argument
+  z
+has type
+  M₁
+of sort `Type u_8` but is expected to have type
+  N₁
+of sort `Type u_11` in the application
+  h₁ z
+Source line 31:
+      rcases h₁ z with ⟨w, rfl⟩
+                ^
+Highlighted span: z
+
+ERROR .LspCheck.lean:35:35-35:41
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  g' ∘ₗ τ₂
+in the target expression
+  (g' ∘ₗ f') x = 0
+
+case mp.mpr
+R : Type u_1
+inst✝¹² : Ring R
+M₁ : Type u_8
+M₂ : Type u_9
+M₃ : Type u_10
+N₁ : Type u_11
+N₂ : Type u_12
+N₃ : Type u_13
+inst✝¹¹ : AddCommMonoid M₁
+inst✝¹⁰ : AddCommMonoid M₂
+inst✝⁹ : AddCommMonoid M₃
+inst✝⁸ : AddCommMonoid N₁
+inst✝⁷ : AddCommMonoid N₂
+inst✝⁶ : AddCommMonoid N₃
+inst✝⁵ : Module R M₁
+inst✝⁴ : Module R M₂
+inst✝³ : Module R M₃
+inst✝² : Module R N₁
+inst✝¹ : Module R N₂
+inst✝ : Module R N₃
+f : M₁ →ₗ[R] M₂
+g : M₂ →ₗ[R] M₃
+f' : N₁ →ₗ[R] N₂
+g' : N₂ →ₗ[R] N₃
+τ₁ : M₁ →ₗ[R] N₁
+τ₂ : M₂ →ₗ[R] N₂
+τ₃ : M₃ →ₗ[R] N₃
+comm₁₂ : f' ∘ₗ τ₁ = τ₂ ∘ₗ f
+comm₂₃ : g' ∘ₗ τ₂ = τ₃ ∘ₗ g
+h₁ : Function.Surjective ⇑τ₁
+h₃ : Function.Injective ⇑τ₃
+h₂inj : Function.Injective ⇑τ₂
+h₂surj : Function.Surjective ⇑τ₂
+hex : Function.Exact ⇑f ⇑g
+x : N₁
+⊢ (g' ∘ₗ f') x = 0
+Source line 35:
+      rw [← LinearMap.comp_apply, comm₂₃, LinearMap.comp_apply]
+                                  ^^^^^^
+Highlighted span: comm₂₃
+
+ERROR .LspCheck.lean:47:41-47:47
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  f' ∘ₗ τ₁
+in the target expression
+  (τ₂ ∘ₗ f) z = f' (τ₁ z)
+
+case mpr.mp.a
+R : Type u_1
+inst✝¹² : Ring R
+M₁ : Type u_8
+M₂ : Type u_9
+M₃ : Type u_10
+N₁ : Type u_11
+N₂ : Type u_12
+N₃ : Type u_13
+inst✝¹¹ : AddCommMonoid M₁
+inst✝¹⁰ : AddCommMonoid M₂
+inst✝⁹ : AddCommMonoid M₃
+inst✝⁸ : AddCommMonoid N₁
+inst✝⁷ : AddCommMonoid N₂
+inst✝⁶ : AddCommMonoid N₃
+inst✝⁵ : Module R M₁
+inst✝⁴ : Module R M₂
+inst✝³ : Module R M₃
+inst✝² : Module R N₁
+inst✝¹ : Module R N₂
+inst✝ : Module R N₃
+f : M₁ →ₗ[R] M₂
+g : M₂ →ₗ[R] M₃
+f' : N₁ →ₗ[R] N₂
+g' : N₂ →ₗ[R] N₃
+τ₁ : M₁ →ₗ[R] N₁
+τ₂ : M₂ →ₗ[R] N₂
+τ₃ : M₃ →ₗ[R] N₃
+comm₁₂ : f' ∘ₗ τ₁ = τ₂ ∘ₗ f
+comm₂₃ : g' ∘ₗ τ₂ = τ₃ ∘ₗ g
+h₁ : Function.Surjective ⇑τ₁
+h₃ : Function.Injective ⇑τ₃
+h₂inj : Function.Injective ⇑τ₂
+h₂surj : Function.Surjective ⇑τ₂
+hex : Function.Exact ⇑f' ⇑g'
+y : M₂
+hy : g y = 0
+hy' : g' (τ₂ y) = 0
+z : M₁
+hx : f' (τ₁ z) = τ₂ y
+⊢ (τ₂ ∘ₗ f) z = f' (τ₁ z)
+Source line 47:
+      rw [← hx, ← LinearMap.comp_apply, comm₁₂, LinearMap.comp_apply]
+                                        ^^^^^^
+Highlighted span: comm₁₂
+
+ERROR .LspCheck.lean:49:7-49:18
+Tactic `apply` failed: could not unify the conclusion of `h₂inj`
+  Eq.{u_9 + 1} ?a₁ ?a₂
+with the goal
+  Eq.{u_10 + 1} (g (f x)) 0
+
+Note: The full type of `h₂inj` is
+  Function.Injective ⇑τ₂
+
+case mpr.mpr
+R : Type u_1
+inst✝¹² : Ring R
+M₁ : Type u_8
+M₂ : Type u_9
+M₃ : Type u_10
+N₁ : Type u_11
+N₂ : Type u_12
+N₃ : Type u_13
+inst✝¹¹ : AddCommMonoid M₁
+inst✝¹⁰ : AddCommMonoid M₂
+inst✝⁹ : AddCommMonoid M₃
+inst✝⁸ : AddCommMonoid N₁
+inst✝⁷ : AddCommMonoid N₂
+inst✝⁶ : AddCommMonoid N₃
+inst✝⁵ : Module R M₁
+inst✝⁴ : Module R M₂
+inst✝³ : Module R M₃
+inst✝² : Module R N₁
+inst✝¹ : Module R N₂
+inst✝ : Module R N₃
+f : M₁ →ₗ[R] M₂
+g : M₂ →ₗ[R] M₃
+f' : N₁ →ₗ[R] N₂
+g' : N₂ →ₗ[R] N₃
+τ₁ : M₁ →ₗ[R] N₁
+τ₂ : M₂ →ₗ[R] N₂
+τ₃ : M₃ →ₗ[R] N₃
+comm₁₂ : f' ∘ₗ τ₁ = τ₂ ∘ₗ f
+comm₂₃ : g' ∘ₗ τ₂ = τ₃ ∘ₗ g
+h₁ : Function.Surjective ⇑τ₁
+h₃ : Function.Injective ⇑τ₃
+h₂inj : Function.Injective ⇑τ₂
+h₂surj : Function.Surjective ⇑τ₂
+hex : Function.Exact ⇑f' ⇑g'
+x : M₁
+⊢ g (f x) = 0
+Source line 49:
+      apply h₂inj
+      ^^^^^^^^^^^
+Highlighted span: apply h₂inj
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R M M' N N' P P' : Type*}
+
+variable [Ring R] [AddCommGroup M] [AddCommGroup N] [AddCommGroup P]
+    [Module R M] [Module R N] [Module R P]
+    {f : M →ₗ[R] N} {g : N →ₗ[R] P}
+
+theorem exact_iff_of_surjective_of_bijective_of_injective
+    {M₁ M₂ M₃ N₁ N₂ N₃ : Type*} [AddCommMonoid M₁] [AddCommMonoid M₂] [AddCommMonoid M₃]
+    [AddCommMonoid N₁] [AddCommMonoid N₂] [AddCommMonoid N₃]
+    [Module R M₁] [Module R M₂] [Module R M₃]
+    [Module R N₁] [Module R N₂] [Module R N₃]
+    (f : M₁ →ₗ[R] M₂) (g : M₂ →ₗ[R] M₃) (f' : N₁ →ₗ[R] N₂) (g' : N₂ →ₗ[R] N₃)
+    (τ₁ : M₁ →ₗ[R] N₁) (τ₂ : M₂ →ₗ[R] N₂) (τ₃ : M₃ →ₗ[R] N₃)
+    (comm₁₂ : f'.comp τ₁ = τ₂.comp f) (comm₂₃ : g'.comp τ₂ = τ₃.comp g)
+    (h₁ : Function.Surjective τ₁) (h₂ : Function.Bijective τ₂) (h₃ : Function.Injective τ₃) :
+    Function.Exact f g ↔ Function.Exact f' g' := by
+  rcases h₂ with ⟨h₂inj, h₂surj⟩
+  constructor
+  · intro hex
+    intro y
+    constructor
+    · intro hy
+      rcases h₂surj y with ⟨x, rfl⟩
+      have hx : g x = 0 := by
+        apply h₃
+        rw [← comm₂₃]
+        exact hy
+      rcases (hex x).mp hx with ⟨z, rfl⟩
+      refine ⟨τ₁ z, ?_⟩
+      rw [comm₁₂]
+    · rintro ⟨x, rfl⟩
+      have : g' (f' x) = g' (τ₂ (f x)) := by
+        rw [comm₁₂]
+      rw [this]
+      rw [comm₂₃]
+      exact (hex (f x)).mpr ⟨x, rfl⟩
+  · intro hex
+    intro y
+    constructor
+    · intro hy
+      have hy' : g' (τ₂ y) = 0 := by
+        rw [comm₂₃, hy, map_zero]
+      rcases (hex (τ₂ y)).mp hy' with ⟨x, hx⟩
+      rcases h₁ x with ⟨z, rfl⟩
+      refine ⟨z, ?_⟩
+      apply h₂inj
+      rw [← hx, comm₁₂]
+    · rintro ⟨x, rfl⟩
+      apply h₃
+      rw [comm₂₃, (hex (τ₂ (f x))).mpr ⟨τ₁ x, by rw [comm₁₂]⟩, map_zero]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:28:13-28:21
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  τ₃ ∘ₗ g
+in the target expression
+  τ₃ (g x) = τ₃ 0
+
+case a
+R : Type u_1
+inst✝¹² : Ring R
+M₁ : Type u_8
+M₂ : Type u_9
+M₃ : Type u_10
+N₁ : Type u_11
+N₂ : Type u_12
+N₃ : Type u_13
+inst✝¹¹ : AddCommMonoid M₁
+inst✝¹⁰ : AddCommMonoid M₂
+inst✝⁹ : AddCommMonoid M₃
+inst✝⁸ : AddCommMonoid N₁
+inst✝⁷ : AddCommMonoid N₂
+inst✝⁶ : AddCommMonoid N₃
+inst✝⁵ : Module R M₁
+inst✝⁴ : Module R M₂
+inst✝³ : Module R M₃
+inst✝² : Module R N₁
+inst✝¹ : Module R N₂
+inst✝ : Module R N₃
+f : M₁ →ₗ[R] M₂
+g : M₂ →ₗ[R] M₃
+f' : N₁ →ₗ[R] N₂
+g' : N₂ →ₗ[R] N₃
+τ₁ : M₁ →ₗ[R] N₁
+τ₂ : M₂ →ₗ[R] N₂
+τ₃ : M₃ →ₗ[R] N₃
+comm₁₂ : f' ∘ₗ τ₁ = τ₂ ∘ₗ f
+comm₂₃ : g' ∘ₗ τ₂ = τ₃ ∘ₗ g
+h₁ : Function.Surjective ⇑τ₁
+h₃ : Function.Injective ⇑τ₃
+h₂inj : Function.Injective ⇑τ₂
+h₂surj : Function.Surjective ⇑τ₂
+hex : Function.Exact ⇑f ⇑g
+x : M₂
+hy : g' (τ₂ x) = 0
+⊢ τ₃ (g x) = τ₃ 0
+Source line 28:
+        rw [← comm₂₃]
+            ^^^^^^^^
+Highlighted span: ← comm₂₃
+
+ERROR .LspCheck.lean:32:11-32:17
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  f' ∘ₗ τ₁
+in the target expression
+  f' (τ₁ z) = τ₂ (f z)
+
+case mp.mp
+R : Type u_1
+inst✝¹² : Ring R
+M₁ : Type u_8
+M₂ : Type u_9
+M₃ : Type u_10
+N₁ : Type u_11
+N₂ : Type u_12
+N₃ : Type u_13
+inst✝¹¹ : AddCommMonoid M₁
+inst✝¹⁰ : AddCommMonoid M₂
+inst✝⁹ : AddCommMonoid M₃
+inst✝⁸ : AddCommMonoid N₁
+inst✝⁷ : AddCommMonoid N₂
+inst✝⁶ : AddCommMonoid N₃
+inst✝⁵ : Module R M₁
+inst✝⁴ : Module R M₂
+inst✝³ : Module R M₃
+inst✝² : Module R N₁
+inst✝¹ : Module R N₂
+inst✝ : Module R N₃
+f : M₁ →ₗ[R] M₂
+g : M₂ →ₗ[R] M₃
+f' : N₁ →ₗ[R] N₂
+g' : N₂ →ₗ[R] N₃
+τ₁ : M₁ →ₗ[R] N₁
+τ₂ : M₂ →ₗ[R] N₂
+τ₃ : M₃ →ₗ[R] N₃
+comm₁₂ : f' ∘ₗ τ₁ = τ₂ ∘ₗ f
+comm₂₃ : g' ∘ₗ τ₂ = τ₃ ∘ₗ g
+h₁ : Function.Surjective ⇑τ₁
+h₃ : Function.Injective ⇑τ₃
+h₂inj : Function.Injective ⇑τ₂
+h₂surj : Function.Surjective ⇑τ₂
+hex : Function.Exact ⇑f ⇑g
+z : M₁
+hy : g' (τ₂ (f z)) = 0
+hx : g (f z) = 0
+⊢ f' (τ₁ z) = τ₂ (f z)
+Source line 32:
+      rw [comm₁₂]
+          ^^^^^^
+Highlighted span: comm₁₂
+
+ERROR .LspCheck.lean:34:36-34:37
+Application type mismatch: The argument
+  x
+has type
+  N₁
+of sort `Type u_11` but is expected to have type
+  M₁
+of sort `Type u_8` in the application
+  f x
+Source line 34:
+      have : g' (f' x) = g' (τ₂ (f x)) := by
+                                   ^
+Highlighted span: x
+
+ERROR .LspCheck.lean:44:13-44:19
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  g' ∘ₗ τ₂
+in the target expression
+  g' (τ₂ y) = 0
+
+R : Type u_1
+inst✝¹² : Ring R
+M₁ : Type u_8
+M₂ : Type u_9
+M₃ : Type u_10
+N₁ : Type u_11
+N₂ : Type u_12
+N₃ : Type u_13
+inst✝¹¹ : AddCommMonoid M₁
+inst✝¹⁰ : AddCommMonoid M₂
+inst✝⁹ : AddCommMonoid M₃
+inst✝⁸ : AddCommMonoid N₁
+inst✝⁷ : AddCommMonoid N₂
+inst✝⁶ : AddCommMonoid N₃
+inst✝⁵ : Module R M₁
+inst✝⁴ : Module R M₂
+inst✝³ : Module R M₃
+inst✝² : Module R N₁
+inst✝¹ : Module R N₂
+inst✝ : Module R N₃
+f : M₁ →ₗ[R] M₂
+g : M₂ →ₗ[R] M₃
+f' : N₁ →ₗ[R] N₂
+g' : N₂ →ₗ[R] N₃
+τ₁ : M₁ →ₗ[R] N₁
+τ₂ : M₂ →ₗ[R] N₂
+τ₃ : M₃ →ₗ[R] N₃
+comm₁₂ : f' ∘ₗ τ₁ = τ₂ ∘ₗ f
+comm₂₃ : g' ∘ₗ τ₂ = τ₃ ∘ₗ g
+h₁ : Function.Surjective ⇑τ₁
+h₃ : Function.Injective ⇑τ₃
+h₂inj : Function.Injective ⇑τ₂
+h₂surj : Function.Surjective ⇑τ₂
+hex : Function.Exact ⇑f' ⇑g'
+y : M₂
+hy : g y = 0
+⊢ g' (τ₂ y) = 0
+Source line 44:
+        rw [comm₂₃, hy, map_zero]
+            ^^^^^^
+Highlighted span: comm₂₃
+
+ERROR .LspCheck.lean:49:17-49:23
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  f' ∘ₗ τ₁
+in the target expression
+  τ₂ (f z) = f' (τ₁ z)
+
+case mpr.mp.a
+R : Type u_1
+inst✝¹² : Ring R
+M₁ : Type u_8
+M₂ : Type u_9
+M₃ : Type u_10
+N₁ : Type u_11
+N₂ : Type u_12
+N₃ : Type u_13
+inst✝¹¹ : AddCommMonoid M₁
+inst✝¹⁰ : AddCommMonoid M₂
+inst✝⁹ : AddCommMonoid M₃
+inst✝⁸ : AddCommMonoid N₁
+inst✝⁷ : AddCommMonoid N₂
+inst✝⁶ : AddCommMonoid N₃
+inst✝⁵ : Module R M₁
+inst✝⁴ : Module R M₂
+inst✝³ : Module R M₃
+inst✝² : Module R N₁
+inst✝¹ : Module R N₂
+inst✝ : Module R N₃
+f : M₁ →ₗ[R] M₂
+g : M₂ →ₗ[R] M₃
+f' : N₁ →ₗ[R] N₂
+g' : N₂ →ₗ[R] N₃
+τ₁ : M₁ →ₗ[R] N₁
+τ₂ : M₂ →ₗ[R] N₂
+τ₃ : M₃ →ₗ[R] N₃
+comm₁₂ : f' ∘ₗ τ₁ = τ₂ ∘ₗ f
+comm₂₃ : g' ∘ₗ τ₂ = τ₃ ∘ₗ g
+h₁ : Function.Surjective ⇑τ₁
+h₃ : Function.Injective ⇑τ₃
+h₂inj : Function.Injective ⇑τ₂
+h₂surj : Function.Surjective ⇑τ₂
+hex : Function.Exact ⇑f' ⇑g'
+y : M₂
+hy : g y = 0
+hy' : g' (τ₂ y) = 0
+z : M₁
+hx : f' (τ₁ z) = τ₂ y
+⊢ τ₂ (f z) = f' (τ₁ z)
+Source line 49:
+      rw [← hx, comm₁₂]
+                ^^^^^^
+Highlighted span: comm₁₂
+
+ERROR .LspCheck.lean:52:11-52:17
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  g' ∘ₗ τ₂
+in the target expression
+  τ₃ (g (f x)) = τ₃ 0
+
+case mpr.mpr.a
+R : Type u_1
+inst✝¹² : Ring R
+M₁ : Type u_8
+M₂ : Type u_9
+M₃ : Type u_10
+N₁ : Type u_11
+N₂ : Type u_12
+N₃ : Type u_13
+inst✝¹¹ : AddCommMonoid M₁
+inst✝¹⁰ : AddCommMonoid M₂
+inst✝⁹ : AddCommMonoid M₃
+inst✝⁸ : AddCommMonoid N₁
+inst✝⁷ : AddCommMonoid N₂
+inst✝⁶ : AddCommMonoid N₃
+inst✝⁵ : Module R M₁
+inst✝⁴ : Module R M₂
+inst✝³ : Module R M₃
+inst✝² : Module R N₁
+inst✝¹ : Module R N₂
+inst✝ : Module R N₃
+f : M₁ →ₗ[R] M₂
+g : M₂ →ₗ[R] M₃
+f' : N₁ →ₗ[R] N₂
+g' : N₂ →ₗ[R] N₃
+τ₁ : M₁ →ₗ[R] N₁
+τ₂ : M₂ →ₗ[R] N₂
+τ₃ : M₃ →ₗ[R] N₃
+comm₁₂ : f' ∘ₗ τ₁ = τ₂ ∘ₗ f
+comm₂₃ : g' ∘ₗ τ₂ = τ₃ ∘ₗ g
+h₁ : Function.Surjective ⇑τ₁
+h₃ : Function.Injective ⇑τ₃
+h₂inj : Function.Injective ⇑τ₂
+h₂surj : Function.Surjective ⇑τ₂
+hex : Function.Exact ⇑f' ⇑g'
+x : M₁
+⊢ τ₃ (g (f x)) = τ₃ 0
+Source line 52:
+      rw [comm₂₃, (hex (τ₂ (f x))).mpr ⟨τ₁ x, by rw [comm₁₂]⟩, map_zero]
+          ^^^^^^
+Highlighted span: comm₂₃
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:28:13-28:21
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  τ₃ ∘ₗ g
+in the target expression
+  τ₃ (g x) = τ₃ 0
+
+case a
+R : Type u_1
+inst✝¹² : Ring R
+M₁ : Type u_8
+M₂ : Type u_9
+M₃ : Type u_10
+N₁ : Type u_11
+N₂ : Type u_12
+N₃ : Type u_13
+inst✝¹¹ : AddCommMonoid M₁
+inst✝¹⁰ : AddCommMonoid M₂
+inst✝⁹ : AddCommMonoid M₃
+inst✝⁸ : AddCommMonoid N₁
+inst✝⁷ : AddCommMonoid N₂
+inst✝⁶ : AddCommMonoid N₃
+inst✝⁵ : Module R M₁
+inst✝⁴ : Module R M₂
+inst✝³ : Module R M₃
+inst✝² : Module R N₁
+inst✝¹ : Module R N₂
+inst✝ : Module R N₃
+f : M₁ →ₗ[R] M₂
+g : M₂ →ₗ[R] M₃
+f' : N₁ →ₗ[R] N₂
+g' : N₂ →ₗ[R] N₃
+τ₁ : M₁ →ₗ[R] N₁
+τ₂ : M₂ →ₗ[R] N₂
+τ₃ : M₃ →ₗ[R] N₃
+comm₁₂ : f' ∘ₗ τ₁ = τ₂ ∘ₗ f
+comm₂₃ : g' ∘ₗ τ₂ = τ₃ ∘ₗ g
+h₁ : Function.Surjective ⇑τ₁
+h₃ : Function.Injective ⇑τ₃
+h₂inj : Function.Injective ⇑τ₂
+h₂surj : Function.Surjective ⇑τ₂
+hex : Function.Exact ⇑f ⇑g
+x : M₂
+hy : g' (τ₂ x) = 0
+⊢ τ₃ (g x) = τ₃ 0
+Source line 28:
+        rw [← comm₂₃]
+            ^^^^^^^^
+Highlighted span: ← comm₂₃
+
+ERROR .LspCheck.lean:32:11-32:17
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  f' ∘ₗ τ₁
+in the target expression
+  f' (τ₁ z) = τ₂ (f z)
+
+case mp.mp
+R : Type u_1
+inst✝¹² : Ring R
+M₁ : Type u_8
+M₂ : Type u_9
+M₃ : Type u_10
+N₁ : Type u_11
+N₂ : Type u_12
+N₃ : Type u_13
+inst✝¹¹ : AddCommMonoid M₁
+inst✝¹⁰ : AddCommMonoid M₂
+inst✝⁹ : AddCommMonoid M₃
+inst✝⁸ : AddCommMonoid N₁
+inst✝⁷ : AddCommMonoid N₂
+inst✝⁶ : AddCommMonoid N₃
+inst✝⁵ : Module R M₁
+inst✝⁴ : Module R M₂
+inst✝³ : Module R M₃
+inst✝² : Module R N₁
+inst✝¹ : Module R N₂
+inst✝ : Module R N₃
+f : M₁ →ₗ[R] M₂
+g : M₂ →ₗ[R] M₃
+f' : N₁ →ₗ[R] N₂
+g' : N₂ →ₗ[R] N₃
+τ₁ : M₁ →ₗ[R] N₁
+τ₂ : M₂ →ₗ[R] N₂
+τ₃ : M₃ →ₗ[R] N₃
+comm₁₂ : f' ∘ₗ τ₁ = τ₂ ∘ₗ f
+comm₂₃ : g' ∘ₗ τ₂ = τ₃ ∘ₗ g
+h₁ : Function.Surjective ⇑τ₁
+h₃ : Function.Injective ⇑τ₃
+h₂inj : Function.Injective ⇑τ₂
+h₂surj : Function.Surjective ⇑τ₂
+hex : Function.Exact ⇑f ⇑g
+z : M₁
+hy : g' (τ₂ (f z)) = 0
+hx : g (f z) = 0
+⊢ f' (τ₁ z) = τ₂ (f z)
+Source line 32:
+      rw [comm₁₂]
+          ^^^^^^
+Highlighted span: comm₁₂
+
+ERROR .LspCheck.lean:34:36-34:37
+Application type mismatch: The argument
+  x
+has type
+  N₁
+of sort `Type u_11` but is expected to have type
+  M₁
+of sort `Type u_8` in the application
+  f x
+Source line 34:
+      have : g' (f' x) = g' (τ₂ (f x)) := by
+                                   ^
+Highlighted span: x
+
+ERROR .LspCheck.lean:44:13-44:19
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  g' ∘ₗ τ₂
+in the target expression
+  g' (τ₂ y) = 0
+
+R : Type u_1
+inst✝¹² : Ring R
+M₁ : Type u_8
+M₂ : Type u_9
+M₃ : Type u_10
+N₁ : Type u_11
+N₂ : Type u_12
+N₃ : Type u_13
+inst✝¹¹ : AddCommMonoid M₁
+inst✝¹⁰ : AddCommMonoid M₂
+inst✝⁹ : AddCommMonoid M₃
+inst✝⁸ : AddCommMonoid N₁
+inst✝⁷ : AddCommMonoid N₂
+inst✝⁶ : AddCommMonoid N₃
+inst✝⁵ : Module R M₁
+inst✝⁴ : Module R M₂
+inst✝³ : Module R M₃
+inst✝² : Module R N₁
+inst✝¹ : Module R N₂
+inst✝ : Module R N₃
+f : M₁ →ₗ[R] M₂
+g : M₂ →ₗ[R] M₃
+f' : N₁ →ₗ[R] N₂
+g' : N₂ →ₗ[R] N₃
+τ₁ : M₁ →ₗ[R] N₁
+τ₂ : M₂ →ₗ[R] N₂
+τ₃ : M₃ →ₗ[R] N₃
+comm₁₂ : f' ∘ₗ τ₁ = τ₂ ∘ₗ f
+comm₂₃ : g' ∘ₗ τ₂ = τ₃ ∘ₗ g
+h₁ : Function.Surjective ⇑τ₁
+h₃ : Function.Injective ⇑τ₃
+h₂inj : Function.Injective ⇑τ₂
+h₂surj : Function.Surjective ⇑τ₂
+hex : Function.Exact ⇑f' ⇑g'
+y : M₂
+hy : g y = 0
+⊢ g' (τ₂ y) = 0
+Source line 44:
+        rw [comm₂₃, hy, map_zero]
+            ^^^^^^
+Highlighted span: comm₂₃
+
+ERROR .LspCheck.lean:49:17-49:23
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  f' ∘ₗ τ₁
+in the target expression
+  τ₂ (f z) = f' (τ₁ z)
+
+case mpr.mp.a
+R : Type u_1
+inst✝¹² : Ring R
+M₁ : Type u_8
+M₂ : Type u_9
+M₃ : Type u_10
+N₁ : Type u_11
+N₂ : Type u_12
+N₃ : Type u_13
+inst✝¹¹ : AddCommMonoid M₁
+inst✝¹⁰ : AddCommMonoid M₂
+inst✝⁹ : AddCommMonoid M₃
+inst✝⁸ : AddCommMonoid N₁
+inst✝⁷ : AddCommMonoid N₂
+inst✝⁶ : AddCommMonoid N₃
+inst✝⁵ : Module R M₁
+inst✝⁴ : Module R M₂
+inst✝³ : Module R M₃
+inst✝² : Module R N₁
+inst✝¹ : Module R N₂
+inst✝ : Module R N₃
+f : M₁ →ₗ[R] M₂
+g : M₂ →ₗ[R] M₃
+f' : N₁ →ₗ[R] N₂
+g' : N₂ →ₗ[R] N₃
+τ₁ : M₁ →ₗ[R] N₁
+τ₂ : M₂ →ₗ[R] N₂
+τ₃ : M₃ →ₗ[R] N₃
+comm₁₂ : f' ∘ₗ τ₁ = τ₂ ∘ₗ f
+comm₂₃ : g' ∘ₗ τ₂ = τ₃ ∘ₗ g
+h₁ : Function.Surjective ⇑τ₁
+h₃ : Function.Injective ⇑τ₃
+h₂inj : Function.Injective ⇑τ₂
+h₂surj : Function.Surjective ⇑τ₂
+hex : Function.Exact ⇑f' ⇑g'
+y : M₂
+hy : g y = 0
+hy' : g' (τ₂ y) = 0
+z : M₁
+hx : f' (τ₁ z) = τ₂ y
+⊢ τ₂ (f z) = f' (τ₁ z)
+Source line 49:
+      rw [← hx, comm₁₂]
+                ^^^^^^
+Highlighted span: comm₁₂
+
+ERROR .LspCheck.lean:52:11-52:17
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  g' ∘ₗ τ₂
+in the target expression
+  τ₃ (g (f x)) = τ₃ 0
+
+case mpr.mpr.a
+R : Type u_1
+inst✝¹² : Ring R
+M₁ : Type u_8
+M₂ : Type u_9
+M₃ : Type u_10
+N₁ : Type u_11
+N₂ : Type u_12
+N₃ : Type u_13
+inst✝¹¹ : AddCommMonoid M₁
+inst✝¹⁰ : AddCommMonoid M₂
+inst✝⁹ : AddCommMonoid M₃
+inst✝⁸ : AddCommMonoid N₁
+inst✝⁷ : AddCommMonoid N₂
+inst✝⁶ : AddCommMonoid N₃
+inst✝⁵ : Module R M₁
+inst✝⁴ : Module R M₂
+inst✝³ : Module R M₃
+inst✝² : Module R N₁
+inst✝¹ : Module R N₂
+inst✝ : Module R N₃
+f : M₁ →ₗ[R] M₂
+g : M₂ →ₗ[R] M₃
+f' : N₁ →ₗ[R] N₂
+g' : N₂ →ₗ[R] N₃
+τ₁ : M₁ →ₗ[R] N₁
+τ₂ : M₂ →ₗ[R] N₂
+τ₃ : M₃ →ₗ[R] N₃
+comm₁₂ : f' ∘ₗ τ₁ = τ₂ ∘ₗ f
+comm₂₃ : g' ∘ₗ τ₂ = τ₃ ∘ₗ g
+h₁ : Function.Surjective ⇑τ₁
+h₃ : Function.Injective ⇑τ₃
+h₂inj : Function.Injective ⇑τ₂
+h₂surj : Function.Surjective ⇑τ₂
+hex : Function.Exact ⇑f' ⇑g'
+x : M₁
+⊢ τ₃ (g (f x)) = τ₃ 0
+Source line 52:
+      rw [comm₂₃, (hex (τ₂ (f x))).mpr ⟨τ₁ x, by rw [comm₁₂]⟩, map_zero]
+          ^^^^^^
+Highlighted span: comm₂₃

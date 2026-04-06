@@ -1,0 +1,47 @@
+FILE: Basic.range_comp.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Basic.range_comp.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R' : Type u'} {R : Type u} {A : Type v} {B : Type w} {C : Type w'}
+
+variable [CommSemiring R]
+
+variable [Semiring A] [Algebra R A] [Semiring B] [Algebra R B] [Semiring C] [Algebra R C]
+
+variable (φ : A →ₐ[R] B)
+
+theorem range_comp (f : A →ₐ[R] B) (g : B →ₐ[R] C) : (g.comp f).range = f.range.map g := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R' : Type u'} {R : Type u} {A : Type v} {B : Type w} {C : Type w'}
+
+variable [CommSemiring R]
+
+variable [Semiring A] [Algebra R A] [Semiring B] [Algebra R B] [Semiring C] [Algebra R C]
+
+variable (φ : A →ₐ[R] B)
+
+theorem range_comp (f : A →ₐ[R] B) (g : B →ₐ[R] C) : (g.comp f).range = f.range.map g := by
+  ext x
+  constructor
+  · rintro ⟨a, rfl⟩
+    exact ⟨f a, ⟨a, rfl⟩, rfl⟩
+  · rintro ⟨b, ⟨a, rfl⟩, rfl⟩
+    exact ⟨a, rfl⟩
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+PASS

@@ -1,0 +1,199 @@
+FILE: Membership.pow_right_injective_iff_pow_injective.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Membership.pow_right_injective_iff_pow_injective.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {M A B : Type*}
+
+variable [Monoid M] {a : M}
+
+theorem pow_right_injective_iff_pow_injective {n : M} :
+    (Function.Injective fun m : ℕ => n ^ m) ↔ Function.Injective (Submonoid.pow n) := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M A B : Type*}
+
+variable [Monoid M] {a : M}
+
+theorem pow_right_injective_iff_pow_injective {n : M} :
+    (Function.Injective fun m : ℕ => n ^ m) ↔ Function.Injective (Submonoid.pow n) := by
+  constructor
+  · intro h x y hxy
+    exact h hxy
+  · intro h x y hxy
+    exact h hxy
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:13-11:16
+Application type mismatch: The argument
+  hxy
+has type
+  Submonoid.pow n x = Submonoid.pow n y
+but is expected to have type
+  (fun m ↦ n ^ m) x = (fun m ↦ n ^ m) y
+in the application
+  h hxy
+Source line 11:
+    exact h hxy
+            ^^^
+Highlighted span: hxy
+
+ERROR .LspCheck.lean:13:13-13:16
+Application type mismatch: The argument
+  hxy
+has type
+  (fun m ↦ n ^ m) x = (fun m ↦ n ^ m) y
+but is expected to have type
+  Submonoid.pow n x = Submonoid.pow n y
+in the application
+  h hxy
+Source line 13:
+    exact h hxy
+            ^^^
+Highlighted span: hxy
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:13-11:16
+Application type mismatch: The argument
+  hxy
+has type
+  Submonoid.pow n x = Submonoid.pow n y
+but is expected to have type
+  (fun m ↦ n ^ m) x = (fun m ↦ n ^ m) y
+in the application
+  h hxy
+Source line 11:
+    exact h hxy
+            ^^^
+Highlighted span: hxy
+
+ERROR .LspCheck.lean:13:13-13:16
+Application type mismatch: The argument
+  hxy
+has type
+  (fun m ↦ n ^ m) x = (fun m ↦ n ^ m) y
+but is expected to have type
+  Submonoid.pow n x = Submonoid.pow n y
+in the application
+  h hxy
+Source line 13:
+    exact h hxy
+            ^^^
+Highlighted span: hxy
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M A B : Type*}
+
+variable [Monoid M] {a : M}
+
+theorem pow_right_injective_iff_pow_injective {n : M} :
+    (Function.Injective fun m : ℕ => n ^ m) ↔ Function.Injective (Submonoid.pow n) := by
+  constructor
+  · intro h x y hxy
+    apply h
+    simpa [Submonoid.pow]
+      using hxy
+  · intro h x y hxy
+    apply h
+    simpa [Submonoid.pow]
+      using hxy
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:5-13:1
+Type mismatch: After simplification, term
+  hxy
+ has type
+  ((powersHom M) n).mrangeRestrict (Multiplicative.ofAdd x) = ((powersHom M) n).mrangeRestrict (Multiplicative.ofAdd y)
+but is expected to have type
+  n ^ x = n ^ y
+Source line 12:
+    simpa [Submonoid.pow]
+    ^
+Highlighted span: s
+
+ERROR .LspCheck.lean:16:5-17:1
+Type mismatch: After simplification, term
+  hxy
+ has type
+  n ^ x = n ^ y
+but is expected to have type
+  ((powersHom M) n).mrangeRestrict (Multiplicative.ofAdd x) = ((powersHom M) n).mrangeRestrict (Multiplicative.ofAdd y)
+Source line 16:
+    simpa [Submonoid.pow]
+    ^
+Highlighted span: s
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:5-13:1
+Type mismatch: After simplification, term
+  hxy
+ has type
+  ((powersHom M) n).mrangeRestrict (Multiplicative.ofAdd x) = ((powersHom M) n).mrangeRestrict (Multiplicative.ofAdd y)
+but is expected to have type
+  n ^ x = n ^ y
+Source line 12:
+    simpa [Submonoid.pow]
+    ^
+Highlighted span: s
+
+ERROR .LspCheck.lean:16:5-17:1
+Type mismatch: After simplification, term
+  hxy
+ has type
+  n ^ x = n ^ y
+but is expected to have type
+  ((powersHom M) n).mrangeRestrict (Multiplicative.ofAdd x) = ((powersHom M) n).mrangeRestrict (Multiplicative.ofAdd y)
+Source line 16:
+    simpa [Submonoid.pow]
+    ^
+Highlighted span: s
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {M A B : Type*}
+
+variable [Monoid M] {a : M}
+
+theorem pow_right_injective_iff_pow_injective {n : M} :
+    (Function.Injective fun m : ℕ => n ^ m) ↔ Function.Injective (Submonoid.pow n) := by
+  constructor
+  · intro h x y hxy
+    apply h
+    exact congrArg Subtype.val hxy
+  · intro h x y hxy
+    apply h
+    ext
+    exact hxy
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

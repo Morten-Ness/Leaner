@@ -1,0 +1,96 @@
+FILE: Operations.smul_induction_on.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Operations.smul_induction_on.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {R : Type u} [Semiring R] {A : Type v} [Semiring A] [Module R A]
+
+variable {M : Type*} [AddCommMonoid M] [Module R M] [Module A M] [IsScalarTower R A M]
+
+variable {I J : Submodule R A} {N P : Submodule R M}
+
+theorem smul_induction_on {p : M → Prop} {x} (H : x ∈ I • N) (smul : ∀ r ∈ I, ∀ n ∈ N, p (r • n))
+    (add : ∀ x y, p x → p y → p (x + y)) : p x := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type u} [Semiring R] {A : Type v} [Semiring A] [Module R A]
+
+variable {M : Type*} [AddCommMonoid M] [Module R M] [Module A M] [IsScalarTower R A M]
+
+variable {I J : Submodule R A} {N P : Submodule R M}
+
+theorem smul_induction_on {p : M → Prop} {x} (H : x ∈ I • N) (smul : ∀ r ∈ I, ∀ n ∈ N, p (r • n))
+    (add : ∀ x y, p x → p y → p (x + y)) : p x := by
+  rcases H with ⟨y, hy, rfl⟩
+  refine Submodule.smul_induction_on ?_ ?_ ?_
+  · exact hy
+  · intro r hr n hn
+    exact smul r hr n hn
+  · intro x y hx hy
+    exact add x y hx hy
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:17-11:29
+Tactic `rcases` failed: `H : ∀
+  t ∈
+    Set.range fun t ↦
+      ⋂ (_ : t ∈ upperBounds (Set.range fun s ↦ AddSubmonoid.map (DistribSMul.toAddMonoidHom M ↑s) N.toAddSubmonoid)),
+        ↑t,
+  x ∈ t` is not an inductive datatype
+Source line 11:
+  rcases H with ⟨y, hy, rfl⟩
+                ^^^^^^^^^^^^
+Highlighted span: ⟨y, hy, rfl⟩
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:17-11:29
+Tactic `rcases` failed: `H : ∀
+  t ∈
+    Set.range fun t ↦
+      ⋂ (_ : t ∈ upperBounds (Set.range fun s ↦ AddSubmonoid.map (DistribSMul.toAddMonoidHom M ↑s) N.toAddSubmonoid)),
+        ↑t,
+  x ∈ t` is not an inductive datatype
+Source line 11:
+  rcases H with ⟨y, hy, rfl⟩
+                ^^^^^^^^^^^^
+Highlighted span: ⟨y, hy, rfl⟩
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {R : Type u} [Semiring R] {A : Type v} [Semiring A] [Module R A]
+
+variable {M : Type*} [AddCommMonoid M] [Module R M] [Module A M] [IsScalarTower R A M]
+
+variable {I J : Submodule R A} {N P : Submodule R M}
+
+theorem smul_induction_on {p : M → Prop} {x} (H : x ∈ I • N) (smul : ∀ r ∈ I, ∀ n ∈ N, p (r • n))
+    (add : ∀ x y, p x → p y → p (x + y)) : p x := by
+  refine Submodule.smul_induction_on (p := p) (I := I) (N := N) H ?_ ?_
+  · intro r hr n hn
+    exact smul r hr n hn
+  · intro x y hx hy
+    exact add x y hx hy
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+PASS

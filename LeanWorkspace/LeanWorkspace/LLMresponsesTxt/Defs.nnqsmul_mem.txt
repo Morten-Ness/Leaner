@@ -1,0 +1,175 @@
+FILE: Defs.nnqsmul_mem.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Defs.nnqsmul_mem.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {K : Type u} {L : Type v} {M : Type w}
+
+variable [DivisionRing K] [DivisionRing L] [DivisionRing M]
+
+variable (S : Type*) [SetLike S K] [h : SubfieldClass S K]
+
+variable {S} {x : K}
+
+theorem nnqsmul_mem (s : S) (q : ℚ≥0) (hx : x ∈ s) : q • x ∈ s := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {K : Type u} {L : Type v} {M : Type w}
+
+variable [DivisionRing K] [DivisionRing L] [DivisionRing M]
+
+variable (S : Type*) [SetLike S K] [h : SubfieldClass S K]
+
+variable {S} {x : K}
+
+theorem nnqsmul_mem (s : S) (q : ℚ≥0) (hx : x ∈ s) : q • x ∈ s := by
+  rcases q with ⟨q, hq⟩
+  change (q : K) * x ∈ s
+  by_cases hq0 : q = 0
+  · subst hq0
+    simpa using h.zero_mem s
+  · have hq0' : (q : K) ≠ 0 := by
+      exact_mod_cast hq0
+    exact h.mul_mem hx (h.inv_mem (show (q : K)⁻¹ ∈ s from by
+      exact h.inv_mem (show (q : K) ∈ s from by
+        exact h.ratCast_mem s q)))
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:3-13:25
+'change' tactic failed, pattern
+  ↑q * x ∈ s
+is not definitionally equal to target
+  ⟨q, hq⟩ • x ∈ s
+Source line 13:
+  change (q : K) * x ∈ s
+  ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: change (q : K) * x ∈ s
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:3-13:25
+'change' tactic failed, pattern
+  ↑q * x ∈ s
+is not definitionally equal to target
+  ⟨q, hq⟩ • x ∈ s
+Source line 13:
+  change (q : K) * x ∈ s
+  ^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: change (q : K) * x ∈ s
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {K : Type u} {L : Type v} {M : Type w}
+
+variable [DivisionRing K] [DivisionRing L] [DivisionRing M]
+
+variable (S : Type*) [SetLike S K] [h : SubfieldClass S K]
+
+variable {S} {x : K}
+
+theorem nnqsmul_mem (s : S) (q : ℚ≥0) (hx : x ∈ s) : q • x ∈ s := by
+  induction q using NNReal.rec with
+  | eq_0 =>
+      simpa using h.zero_mem s
+  | @quotient_mk q hq =>
+      rw [show (NNReal.ofReal q) • x = ((q : K) * x) by
+        simp [NNReal.smul_def, max_eq_left hq]]
+      by_cases hq0 : q = 0
+      · subst hq0
+        simpa using h.zero_mem s
+      · exact h.mul_mem (show (q : K) ∈ s from h.ratCast_mem s q) hx
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:21-12:31
+Unknown constant `NNReal.rec`
+Source line 12:
+  induction q using NNReal.rec with
+                    ^^^^^^^^^^
+Highlighted span: NNReal.rec
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:21-12:31
+Unknown constant `NNReal.rec`
+Source line 12:
+  induction q using NNReal.rec with
+                    ^^^^^^^^^^
+Highlighted span: NNReal.rec
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {K : Type u} {L : Type v} {M : Type w}
+
+variable [DivisionRing K] [DivisionRing L] [DivisionRing M]
+
+variable (S : Type*) [SetLike S K] [h : SubfieldClass S K]
+
+variable {S} {x : K}
+
+theorem nnqsmul_mem (s : S) (q : ℚ≥0) (hx : x ∈ s) : q • x ∈ s := by
+  obtain ⟨q, rfl⟩ := Rat.nnratCast_surjective q
+  simpa [NNRat.smul_def] using h.mul_mem (h.ratCast_mem s q) hx
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:22-12:46
+Unknown constant `Rat.nnratCast_surjective`
+Source line 12:
+  obtain ⟨q, rfl⟩ := Rat.nnratCast_surjective q
+                     ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Rat.nnratCast_surjective
+
+ERROR .LspCheck.lean:12:10-12:18
+Tactic `rcases` failed: `x✝ : ?m.14` is not an inductive datatype
+Source line 12:
+  obtain ⟨q, rfl⟩ := Rat.nnratCast_surjective q
+         ^^^^^^^^
+Highlighted span: ⟨q, rfl⟩
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:22-12:46
+Unknown constant `Rat.nnratCast_surjective`
+Source line 12:
+  obtain ⟨q, rfl⟩ := Rat.nnratCast_surjective q
+                     ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: Rat.nnratCast_surjective
+
+ERROR .LspCheck.lean:12:10-12:18
+Tactic `rcases` failed: `x✝ : ?m.14` is not an inductive datatype
+Source line 12:
+  obtain ⟨q, rfl⟩ := Rat.nnratCast_surjective q
+         ^^^^^^^^
+Highlighted span: ⟨q, rfl⟩

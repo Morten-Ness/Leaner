@@ -1,0 +1,277 @@
+FILE: Finset.lcm_mono_fun.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: Finset.lcm_mono_fun.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {ι α β γ : Type*}
+
+variable [CommMonoidWithZero α] [NormalizedGCDMonoid α]
+
+variable {s s₁ s₂ : Finset β} {f : β → α}
+
+theorem lcm_mono_fun {g : β → α} (h : ∀ b ∈ s, f b ∣ g b) : s.lcm f ∣ s.lcm g := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι α β γ : Type*}
+
+variable [CommMonoidWithZero α] [NormalizedGCDMonoid α]
+
+variable {s s₁ s₂ : Finset β} {f : β → α}
+
+theorem lcm_mono_fun {g : β → α} (h : ∀ b ∈ s, f b ∣ g b) : s.lcm f ∣ s.lcm g := by
+  classical
+  refine Finset.induction_on s ?base ?step
+  · simp
+  · intro a s ha ih
+    simp only [Finset.mem_insert, forall_eq_or_imp] at h
+    rcases h with ⟨ha_div, hs_div⟩
+    simp [Finset.lcm_insert, ha, ih hs_div, ha_div]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:5-14:57
+`simp` made no progress
+Source line 14:
+    simp only [Finset.mem_insert, forall_eq_or_imp] at h
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simp only [Finset.mem_insert, forall_eq_or_imp] at h
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:5-14:57
+`simp` made no progress
+Source line 14:
+    simp only [Finset.mem_insert, forall_eq_or_imp] at h
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simp only [Finset.mem_insert, forall_eq_or_imp] at h
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι α β γ : Type*}
+
+variable [CommMonoidWithZero α] [NormalizedGCDMonoid α]
+
+variable {s s₁ s₂ : Finset β} {f : β → α}
+
+theorem lcm_mono_fun {g : β → α} (h : ∀ b ∈ s, f b ∣ g b) : s.lcm f ∣ s.lcm g := by
+  classical
+  induction s using Finset.induction_on with
+  | empty =>
+      simp
+  | @insert a s ha ih =>
+      have ha' : f a ∣ g a := h a (by simp)
+      have hs' : ∀ b ∈ s, f b ∣ g b := by
+        intro b hb
+        exact h b (by simp [hb])
+      simp [Finset.lcm_insert, ha, ha', ih hs']
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:23-15:1
+unsolved goals
+case insert
+α : Type u_2
+β : Type u_3
+inst✝¹ : CommMonoidWithZero α
+inst✝ : NormalizedGCDMonoid α
+s✝ : Finset β
+f g : β → α
+a : β
+s : Finset β
+ha : a ∉ s
+ih : (∀ b ∈ s, f b ∣ g b) → s.lcm f ∣ s.lcm g
+h : ∀ b ∈ insert a s, f b ∣ g b
+ha' : f a ∣ g a
+hs' : ∀ b ∈ s, f b ∣ g b
+⊢ lcm (f a) (s.lcm f) ∣ lcm (g a) (s.lcm g)
+Source line 14:
+  | @insert a s ha ih =>
+                      ^
+Highlighted span: =
+
+WARNING .LspCheck.lean:19:32-19:34
+This simp argument is unused:
+  ha
+
+Hint: Omit it from the simp argument list.
+  simp [Finset.lcm_insert, ha,̵ ̵h̵a̵', ih hs']
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 19:
+      simp [Finset.lcm_insert, ha, ha', ih hs']
+                               ^^
+Highlighted span: ha
+
+WARNING .LspCheck.lean:19:36-19:39
+This simp argument is unused:
+  ha'
+
+Hint: Omit it from the simp argument list.
+  simp [Finset.lcm_insert, ha, h̵a̵'̵,̵ ̵ih hs']
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 19:
+      simp [Finset.lcm_insert, ha, ha', ih hs']
+                                   ^^^
+Highlighted span: ha'
+
+WARNING .LspCheck.lean:19:41-19:47
+This simp argument is unused:
+  ih hs'
+
+Hint: Omit it from the simp argument list.
+  simp [Finset.lcm_insert, ha, ha',̵ ̵i̵h̵ ̵h̵s̵'̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 19:
+      simp [Finset.lcm_insert, ha, ha', ih hs']
+                                        ^^^^^^
+Highlighted span: ih hs'
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:23-15:1
+unsolved goals
+case insert
+α : Type u_2
+β : Type u_3
+inst✝¹ : CommMonoidWithZero α
+inst✝ : NormalizedGCDMonoid α
+s✝ : Finset β
+f g : β → α
+a : β
+s : Finset β
+ha : a ∉ s
+ih : (∀ b ∈ s, f b ∣ g b) → s.lcm f ∣ s.lcm g
+h : ∀ b ∈ insert a s, f b ∣ g b
+ha' : f a ∣ g a
+hs' : ∀ b ∈ s, f b ∣ g b
+⊢ lcm (f a) (s.lcm f) ∣ lcm (g a) (s.lcm g)
+Source line 14:
+  | @insert a s ha ih =>
+                      ^
+Highlighted span: =
+
+WARNING .LspCheck.lean:19:32-19:34
+This simp argument is unused:
+  ha
+
+Hint: Omit it from the simp argument list.
+  simp [Finset.lcm_insert, ha,̵ ̵h̵a̵', ih hs']
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 19:
+      simp [Finset.lcm_insert, ha, ha', ih hs']
+                               ^^
+Highlighted span: ha
+
+WARNING .LspCheck.lean:19:36-19:39
+This simp argument is unused:
+  ha'
+
+Hint: Omit it from the simp argument list.
+  simp [Finset.lcm_insert, ha, h̵a̵'̵,̵ ̵ih hs']
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 19:
+      simp [Finset.lcm_insert, ha, ha', ih hs']
+                                   ^^^
+Highlighted span: ha'
+
+WARNING .LspCheck.lean:19:41-19:47
+This simp argument is unused:
+  ih hs'
+
+Hint: Omit it from the simp argument list.
+  simp [Finset.lcm_insert, ha, ha',̵ ̵i̵h̵ ̵h̵s̵'̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Source line 19:
+      simp [Finset.lcm_insert, ha, ha', ih hs']
+                                        ^^^^^^
+Highlighted span: ih hs'
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι α β γ : Type*}
+
+variable [CommMonoidWithZero α] [NormalizedGCDMonoid α]
+
+variable {s s₁ s₂ : Finset β} {f : β → α}
+
+theorem lcm_mono_fun {g : β → α} (h : ∀ b ∈ s, f b ∣ g b) : s.lcm f ∣ s.lcm g := by
+  classical
+  induction s using Finset.induction_on with
+  | empty =>
+      simp
+  | @insert a s ha ih =>
+      have ha' : f a ∣ g a := h a (by simp)
+      have hs' : ∀ b ∈ s, f b ∣ g b := by
+        intro b hb
+        exact h b (by simp [hb])
+      rw [Finset.lcm_insert, Finset.lcm_insert]
+      · exact dvd_lcm ha' (ih hs')
+      · exact ha
+      · exact ha
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:20:15-20:22
+Unknown identifier `dvd_lcm`
+Source line 20:
+      · exact dvd_lcm ha' (ih hs')
+              ^^^^^^^
+Highlighted span: dvd_lcm
+
+ERROR .LspCheck.lean:21:7-21:17
+No goals to be solved
+Source line 21:
+      · exact ha
+      ^^^^^^^^^^
+Highlighted span: · exact ha
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:20:15-20:22
+Unknown identifier `dvd_lcm`
+Source line 20:
+      · exact dvd_lcm ha' (ih hs')
+              ^^^^^^^
+Highlighted span: dvd_lcm
+
+ERROR .LspCheck.lean:21:7-21:17
+No goals to be solved
+Source line 21:
+      · exact ha
+      ^^^^^^^^^^
+Highlighted span: · exact ha
