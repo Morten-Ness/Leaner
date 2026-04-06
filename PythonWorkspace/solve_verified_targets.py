@@ -18,9 +18,10 @@ from urllib.parse import unquote, urlparse
 REPO_ROOT = Path(__file__).resolve().parents[1]
 LEAN_WORKSPACE_ROOT = REPO_ROOT / "LeanWorkspace"
 VERIFIED_TARGETS_ROOT = LEAN_WORKSPACE_ROOT / "LeanWorkspace" / "VerifiedTargets"
-LLM_SOLUTIONS_ROOT = LEAN_WORKSPACE_ROOT / "LeanWorkspace" / "LLMsolutions"
-LLM_RESPONSES_TXT_ROOT = LEAN_WORKSPACE_ROOT / "LeanWorkspace" / "LLMresponsesTxt"
-ATTEMPT_LOG_PATH = LLM_SOLUTIONS_ROOT / "results.json"
+LLM_RESPONSES_ROOT = LEAN_WORKSPACE_ROOT / "LeanWorkspace" / "LLMresponses"
+LLM_SOLUTIONS_ROOT = LLM_RESPONSES_ROOT / "Lean"
+LLM_RESPONSES_TXT_ROOT = LLM_RESPONSES_ROOT / "Txt"
+ATTEMPT_LOG_PATH = LLM_RESPONSES_ROOT / "results.json"
 
 PARAM_MODEL = "gpt-5.4"
 PARAM_MAX_ATTEMPTS = 3
@@ -44,7 +45,7 @@ def parse_args() -> argparse.Namespace:
         description=(
             "Iterate over VerifiedTargets, ask the OpenAI API to replace `sorry` "
             "with a Lean proof, and save successful or final failed attempts to "
-            "LLMsolutions."
+            "LLMresponses."
         )
     )
     parser.add_argument(
