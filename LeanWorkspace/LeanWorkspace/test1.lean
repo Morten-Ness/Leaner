@@ -1,8 +1,11 @@
 import Mathlib
 
-theorem isComplement_singleton_left {G : Type*} [Group G] {S : Set G} {g : G} :
-  Subgroup.IsComplement ({g} : Set G) S ↔ S = Set.univ := by
-  refine ⟨fun ⟨_, h_surj⟩ => top_le_iff.mp ?_, fun h => h.symm ▸ Subgroup.isComplement_singleton_univ⟩
-  intro x _
-  obtain ⟨⟨⟨_, rfl⟩, ⟨s, hs⟩⟩, hmul⟩ := h_surj (g * x)
-  exact mul_left_cancel hmul ▸ hs
+variable {A B M N : Type*} [AddMonoid A] [AddMonoid B] [Monoid M] [Monoid N]
+
+theorem compAddMonoidHom_injective_left
+    (f : A →+ B) (hf : Function.Surjective f) :
+    Function.Injective (fun ψ : AddChar B M => ψ.compAddMonoidHom f) := by
+  intro ψ₁ ψ₂ h
+  ext b
+  obtain ⟨a, rfl⟩ := hf b
+  simpa using congrArg (fun χ : AddChar A M => χ a) h
