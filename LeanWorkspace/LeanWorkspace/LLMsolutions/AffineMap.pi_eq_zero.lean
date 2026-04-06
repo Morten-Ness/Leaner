@@ -16,8 +16,8 @@ theorem pi_eq_zero : AffineMap.pi fv = 0 ↔ ∀ i, fv i = 0 := by
   constructor
   · intro h i
     ext p
-    have := congrArg (fun f : P1 →ᵃ[k] (∀ i, φv i) => f p i) h
+    have := congrFun (congrArg (fun f => f p) h) i
     simpa using this
   · intro h
     ext p i
-    simp [h i]
+    simpa [h i]

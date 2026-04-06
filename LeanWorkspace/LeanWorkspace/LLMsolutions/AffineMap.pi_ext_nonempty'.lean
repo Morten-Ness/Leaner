@@ -17,17 +17,7 @@ variable [Finite ι] [DecidableEq ι] {f g : ((i : ι) → φv i) →ᵃ[k] P2}
 
 theorem pi_ext_nonempty' [Nonempty ι] (h : ∀ i, f.comp (LinearMap.single _ _ i).toAffineMap =
     g.comp (LinearMap.single _ _ i).toAffineMap) : f = g := by
-  let i0 : ι := Classical.choice ‹Nonempty ι›
-  have hconst : f 0 = g 0 := by
-    have h0 := congrArg (fun F => F 0) (h i0)
-    simpa using h0
-  have hlin : f.linear = g.linear := by
-    ext x i
-    have hi := congrArg (fun F => F (x i)) (h i)
-    simpa [AffineMap.comp_apply] using hi
-  ext x
-  rw [show f x = f.linear x +ᵥ f 0 by
-    simpa using (AffineMap.apply_eq_lineMap_vadd (f := f) x 0)]
-  rw [show g x = g.linear x +ᵥ g 0 by
-    simpa using (AffineMap.apply_eq_lineMap_vadd (f := g) x 0)]
-  rw [hlin, hconst]
+  letI := Fintype.ofFinite ι
+  ext x i
+  have hi := congrArg (fun q => q (x i)) (h i)
+  simpa [LinearMap.single_apply] using hi

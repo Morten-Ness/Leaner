@@ -9,5 +9,7 @@ variable {k P₁ P₂ P₃ P₄ V₁ V₂ V₃ V₄ : Type*} [Ring k]
 theorem lineMap_vsub (p₁ p₂ p₃ : P₁) (c : k) :
     AffineMap.lineMap p₁ p₂ c -ᵥ p₃ = AffineMap.lineMap (p₁ -ᵥ p₃) (p₂ -ᵥ p₃) c := by
   rw [AffineMap.lineMap_apply, AffineMap.lineMap_apply]
-  simp [AffineMap.lineMap_apply, lineMap_apply_module, sub_eq_add_neg, add_comm, add_left_comm,
-    add_assoc, smul_add, add_smul]
+  rw [vadd_vsub_assoc]
+  congr 1
+  rw [vsub_eq_sub_vsub]
+  abel

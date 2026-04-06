@@ -8,4 +8,4 @@ variable [Module k V1] [Module k V2]
 
 theorem homothety_zero (c : P1) : AffineMap.homothety c (0 : k) = AffineMap.const k P1 c := by
   ext p
-  simp [AffineMap.homothety, AffineMap.const]
+  simp [AffineMap.homothety_apply]

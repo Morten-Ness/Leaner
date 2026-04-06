@@ -1,0 +1,40 @@
+FILE: AddChar.ne_zero_iff.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: AddChar.ne_zero_iff.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {A B M N : Type*} [AddMonoid A] [AddMonoid B] [Monoid M] [Monoid N] {ψ : AddChar A M}
+
+theorem ne_zero_iff : ψ ≠ 0 ↔ ∃ x, ψ x ≠ 1 := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {A B M N : Type*} [AddMonoid A] [AddMonoid B] [Monoid M] [Monoid N] {ψ : AddChar A M}
+
+theorem ne_zero_iff : ψ ≠ 0 ↔ ∃ x, ψ x ≠ 1 := by
+  constructor
+  · intro h
+    by_contra h'
+    apply h
+    ext x
+    by_contra hx
+    exact h' ⟨x, hx⟩
+  · rintro ⟨x, hx⟩ hψ
+    apply hx
+    rw [hψ]
+    rfl
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+PASS

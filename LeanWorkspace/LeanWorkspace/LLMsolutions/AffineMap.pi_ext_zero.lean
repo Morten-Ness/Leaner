@@ -17,21 +17,19 @@ variable [Finite ι] [DecidableEq ι] {f g : ((i : ι) → φv i) →ᵃ[k] P2}
 
 theorem pi_ext_zero (h : ∀ i x, f (Pi.single i x) = g (Pi.single i x)) (h₂ : f 0 = g 0) :
     f = g := by
-  have hlin :
-      f.toLinearMap = g.toLinearMap := by
-    haveI : Fintype ι := Fintype.ofFinite ι
-    ext x
-    rw [show x = ∑ i, Pi.single i (x i) by
-      ext i
-      simp]
-    simp only [LinearMap.map_sum]
-    apply Finset.sum_congr rfl
-    intro i hi
-    have hi0 := h i (0 : φv i)
-    rw [AffineMap.linear_eq_zero_iff_eq_zero] at hi0
-    simpa using hi0
+  letI : Fintype ι := Fintype.ofFinite ι
+  have hlin : f.linear = g.linear := by
+    ext x i
+    have hs : Pi.single i x = x • (Pi.single i (1 : k)) := by
+      ext j
+      by_cases hij : j = i
+      · subst hij
+        simp
+      · simp [Pi.single, hij]
+    rw [hs, LinearMap.map_smul]
+    rw [hs, LinearMap.map_smul]
+    have h1 := h i (1 : k)
+    simpa using vsub_eq_sub (f (Pi.single i (1 : k))) (g (Pi.single i (1 : k))) ▸ h1
   ext x
-  rw [AffineMap.ext_iff]
-  constructor
-  · exact h₂
-  · exact hlin
+  rw [← AffineMap.linear_eq (f := f) (g := g) h₂]
+  simp [hlin]

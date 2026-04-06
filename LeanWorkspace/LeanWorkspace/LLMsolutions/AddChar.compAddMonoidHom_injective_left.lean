@@ -7,4 +7,4 @@ theorem compAddMonoidHom_injective_left (f : A →+ B) (hf : Function.Surjective
   intro ψ₁ ψ₂ h
   ext b
   rcases hf b with ⟨a, rfl⟩
-  exact congrArg (fun χ => χ a) h
+  exact congrArg (fun χ : AddChar A M => χ a) h

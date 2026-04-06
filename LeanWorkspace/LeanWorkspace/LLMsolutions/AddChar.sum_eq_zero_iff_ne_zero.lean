@@ -6,4 +6,4 @@ variable {A R : Type*} [AddGroup A] [Fintype A] [CommSemiring R] [IsDomain R]
 variable [CharZero R]
 
 theorem sum_eq_zero_iff_ne_zero : ∑ x, ψ x = 0 ↔ ψ ≠ 0 := by
-  simpa using AddChar.sum_eq_zero_iff_ne_zero (ψ := ψ)
+  simpa using AddChar.sum_eq_zero_iff_ne_zero (R := R) (ψ := ψ)

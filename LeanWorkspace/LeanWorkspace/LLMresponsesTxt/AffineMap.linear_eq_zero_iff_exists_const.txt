@@ -1,6 +1,9 @@
 FILE: AffineMap.linear_eq_zero_iff_exists_const.lean
 
-===== ATTEMPT 1 PROMPT =====
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
 Filename: AffineMap.linear_eq_zero_iff_exists_const.lean
 
 Fill in the Lean proof for this file.
@@ -23,7 +26,7 @@ variable {k P1}
 theorem linear_eq_zero_iff_exists_const (f : P1 →ᵃ[k] P2) :
     f.linear = 0 ↔ ∃ q, f = AffineMap.const k P1 q := sorry
 
-===== ATTEMPT 1 RESPONSE =====
+===== ASSISTANT =====
 import Mathlib
 
 variable {k : Type*} {V1 : Type*} {P1 : Type*} {V2 : Type*} {P2 : Type*} {V3 : Type*}
@@ -39,102 +42,258 @@ theorem linear_eq_zero_iff_exists_const (f : P1 →ᵃ[k] P2) :
     f.linear = 0 ↔ ∃ q, f = AffineMap.const k P1 q := by
   constructor
   · intro h
-    classical
-    refine ⟨f (Classical.choice ‹Nonempty P1›), ?_⟩
-    ext p
-    let p0 : P1 := Classical.choice ‹Nonempty P1›
-    have hp : f p = f p0 +ᵥ (f.linear (p0 -ᵥ p)) := by
-      rw [AffineMap.vadd_linear, vsub_vadd]
-    rw [h, LinearMap.zero_apply] at hp
-    simpa [AffineMap.const]
-      using hp
+    obtain ⟨p⟩ := Nonempty.exists (α := P1)
+    refine ⟨f p, ?_⟩
+    ext x
+    calc
+      f x = f p +ᵥ (f.linear (x -ᵥ p)) := by
+        rw [AffineMap.vadd_linear, vsub_vadd]
+      _ = f p +ᵥ (0 : V2) := by rw [h, LinearMap.zero_apply]
+      _ = AffineMap.const k P1 (f p) x := by simp [AffineMap.const]
   · rintro ⟨q, rfl⟩
     ext v
     rfl
 
 ===== ATTEMPT 1 LEAN OUTPUT =====
-ERROR .tmp_va35xmhk.AffineMap.linear_eq_zero_iff_exists_const.lean:17:32-17:45
-Tactic `assumption` failed
-
-k : Type u_1
-V1 : Type u_2
-P1 : Type u_3
-V2 : Type u_4
-P2 : Type u_5
-inst✝⁶ : Ring k
-inst✝⁵ : AddCommGroup V1
-inst✝⁴ : Module k V1
-inst✝³ : AddTorsor V1 P1
-inst✝² : AddCommGroup V2
-inst✝¹ : Module k V2
-inst✝ : AddTorsor V2 P2
-f : P1 →ᵃ[k] P2
-h : f.linear = 0
-⊢ Nonempty P1
+ERROR .LspCheck.lean:17:15-17:16
+Application type mismatch: The argument
+  p
+has type
+  (∃ (h : Nonempty P1), ?m.57 h) → ∃ a, ?m.57 ⋯
+of sort `Prop` but is expected to have type
+  P1
+of sort `Type u_3` in the application
+  f p
 Source line 17:
-    refine ⟨f (Classical.choice ‹Nonempty P1›), ?_⟩
-                               ^^^^^^^^^^^^^
-Highlighted span:  ‹Nonempty P1
+    refine ⟨f p, ?_⟩
+              ^
+Highlighted span: p
 
-ERROR .tmp_va35xmhk.AffineMap.linear_eq_zero_iff_exists_const.lean:19:36-19:49
-Tactic `assumption` failed
+ERROR .LspCheck.lean:20:15-20:16
+Application type mismatch: The argument
+  p
+has type
+  (∃ (h : Nonempty P1), ?m.57 h) → ∃ a, ?m.57 ⋯
+of sort `Prop` but is expected to have type
+  P1
+of sort `Type u_3` in the application
+  f p
+Source line 20:
+      f x = f p +ᵥ (f.linear (x -ᵥ p)) := by
+              ^
+Highlighted span: p
 
-k : Type u_1
-V1 : Type u_2
-P1 : Type u_3
-V2 : Type u_4
-P2 : Type u_5
-inst✝⁶ : Ring k
-inst✝⁵ : AddCommGroup V1
-inst✝⁴ : Module k V1
-inst✝³ : AddTorsor V1 P1
-inst✝² : AddCommGroup V2
-inst✝¹ : Module k V2
-inst✝ : AddTorsor V2 P2
-f : P1 →ᵃ[k] P2
-h : f.linear = 0
-p : P1
-⊢ Nonempty P1
-Source line 19:
-    let p0 : P1 := Classical.choice ‹Nonempty P1›
-                                   ^^^^^^^^^^^^^
-Highlighted span:  ‹Nonempty P1
+ERROR .LspCheck.lean:20:36-20:37
+Application type mismatch: The argument
+  p
+has type
+  (∃ (h : Nonempty P1), ?m.57 h) → ∃ a, ?m.57 ⋯
+of sort `Prop` but is expected to have type
+  P1
+of sort `Type u_3` in the application
+  x -ᵥ p
+Source line 20:
+      f x = f p +ᵥ (f.linear (x -ᵥ p)) := by
+                                   ^
+Highlighted span: p
 
-ERROR .tmp_va35xmhk.AffineMap.linear_eq_zero_iff_exists_const.lean:20:20-20:48
+ERROR .LspCheck.lean:20:13-20:39
 failed to synthesize instance of type class
-  HVAdd P2 V2 ?m.88
+  HVAdd P2 V2 ?m.92
 
 Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
 Source line 20:
-    have hp : f p = f p0 +ᵥ (f.linear (p0 -ᵥ p)) := by
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Highlighted span:  f p0 +ᵥ (f.linear (p0 -ᵥ p)
+      f x = f p +ᵥ (f.linear (x -ᵥ p)) := by
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: f p +ᵥ (f.linear (x -ᵥ p))
 
-===== ATTEMPT 2 PROMPT =====
-Filename: AffineMap.linear_eq_zero_iff_exists_const.lean
+ERROR .LspCheck.lean:22:13-22:14
+Application type mismatch: The argument
+  p
+has type
+  (∃ (h : Nonempty P1), ?m.57 h) → ∃ a, ?m.57 ⋯
+of sort `Prop` but is expected to have type
+  P1
+of sort `Type u_3` in the application
+  f p
+Source line 22:
+      _ = f p +ᵥ (0 : V2) := by rw [h, LinearMap.zero_apply]
+            ^
+Highlighted span: p
+
+ERROR .LspCheck.lean:22:11-22:26
+failed to synthesize instance of type class
+  HVAdd P2 V2 ?m.118
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 22:
+      _ = f p +ᵥ (0 : V2) := by rw [h, LinearMap.zero_apply]
+          ^^^^^^^^^^^^^^^
+Highlighted span: f p +ᵥ (0 : V2)
+
+ERROR .LspCheck.lean:23:35-23:36
+Application type mismatch: The argument
+  p
+has type
+  (∃ (h : Nonempty P1), ?m.57 h) → ∃ a, ?m.57 ⋯
+of sort `Prop` but is expected to have type
+  P1
+of sort `Type u_3` in the application
+  f p
+Source line 23:
+      _ = AffineMap.const k P1 (f p) x := by simp [AffineMap.const]
+                                  ^
+Highlighted span: p
+
+ERROR .LspCheck.lean:23:43-23:68
+unsolved goals
+k : Type u_1
+V1 : Type u_2
+P1 : Type u_3
+V2 : Type u_4
+P2 : Type u_5
+inst✝⁶ : Ring k
+inst✝⁵ : AddCommGroup V1
+inst✝⁴ : Module k V1
+inst✝³ : AddTorsor V1 P1
+inst✝² : AddCommGroup V2
+inst✝¹ : Module k V2
+inst✝ : AddTorsor V2 P2
+f : P1 →ᵃ[k] P2
+h : f.linear = 0
+p : (∃ (h : Nonempty P1), ?m.57 h) → ∃ a, ?m.57 ⋯
+mpr✝ : (∃ a, ?m.57 ⋯) → ∃ (h : Nonempty P1), ?m.57 h
+x : P1
+⊢ sorry () = f (sorry ())
+Source line 23:
+      _ = AffineMap.const k P1 (f p) x := by simp [AffineMap.const]
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: by simp [AffineMap.const]
+
+===== USER =====
 Retry attempt: 2
 
 The previous Lean solution did not compile.
-Return the complete corrected .lean file content only.
+Return a corrected complete .lean file content only.
 Do not use markdown fences.
-Keep the theorem statement and surrounding context unchanged if possible.
 
-Original target file with `sorry`:
-import Mathlib
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:17:15-17:16
+Application type mismatch: The argument
+  p
+has type
+  (∃ (h : Nonempty P1), ?m.57 h) → ∃ a, ?m.57 ⋯
+of sort `Prop` but is expected to have type
+  P1
+of sort `Type u_3` in the application
+  f p
+Source line 17:
+    refine ⟨f p, ?_⟩
+              ^
+Highlighted span: p
 
-variable {k : Type*} {V1 : Type*} {P1 : Type*} {V2 : Type*} {P2 : Type*} {V3 : Type*}
-  {P3 : Type*} {V4 : Type*} {P4 : Type*} [Ring k] [AddCommGroup V1] [Module k V1]
-  [AddTorsor V1 P1] [AddCommGroup V2] [Module k V2] [AddTorsor V2 P2] [AddCommGroup V3]
-  [Module k V3] [AddTorsor V3 P3] [AddCommGroup V4] [Module k V4] [AddTorsor V4 P4]
+ERROR .LspCheck.lean:20:15-20:16
+Application type mismatch: The argument
+  p
+has type
+  (∃ (h : Nonempty P1), ?m.57 h) → ∃ a, ?m.57 ⋯
+of sort `Prop` but is expected to have type
+  P1
+of sort `Type u_3` in the application
+  f p
+Source line 20:
+      f x = f p +ᵥ (f.linear (x -ᵥ p)) := by
+              ^
+Highlighted span: p
 
-variable (k P1)
+ERROR .LspCheck.lean:20:36-20:37
+Application type mismatch: The argument
+  p
+has type
+  (∃ (h : Nonempty P1), ?m.57 h) → ∃ a, ?m.57 ⋯
+of sort `Prop` but is expected to have type
+  P1
+of sort `Type u_3` in the application
+  x -ᵥ p
+Source line 20:
+      f x = f p +ᵥ (f.linear (x -ᵥ p)) := by
+                                   ^
+Highlighted span: p
 
-variable {k P1}
+ERROR .LspCheck.lean:20:13-20:39
+failed to synthesize instance of type class
+  HVAdd P2 V2 ?m.92
 
-theorem linear_eq_zero_iff_exists_const (f : P1 →ᵃ[k] P2) :
-    f.linear = 0 ↔ ∃ q, f = AffineMap.const k P1 q := sorry
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 20:
+      f x = f p +ᵥ (f.linear (x -ᵥ p)) := by
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: f p +ᵥ (f.linear (x -ᵥ p))
 
-Previous attempted solution:
+ERROR .LspCheck.lean:22:13-22:14
+Application type mismatch: The argument
+  p
+has type
+  (∃ (h : Nonempty P1), ?m.57 h) → ∃ a, ?m.57 ⋯
+of sort `Prop` but is expected to have type
+  P1
+of sort `Type u_3` in the application
+  f p
+Source line 22:
+      _ = f p +ᵥ (0 : V2) := by rw [h, LinearMap.zero_apply]
+            ^
+Highlighted span: p
+
+ERROR .LspCheck.lean:22:11-22:26
+failed to synthesize instance of type class
+  HVAdd P2 V2 ?m.118
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 22:
+      _ = f p +ᵥ (0 : V2) := by rw [h, LinearMap.zero_apply]
+          ^^^^^^^^^^^^^^^
+Highlighted span: f p +ᵥ (0 : V2)
+
+ERROR .LspCheck.lean:23:35-23:36
+Application type mismatch: The argument
+  p
+has type
+  (∃ (h : Nonempty P1), ?m.57 h) → ∃ a, ?m.57 ⋯
+of sort `Prop` but is expected to have type
+  P1
+of sort `Type u_3` in the application
+  f p
+Source line 23:
+      _ = AffineMap.const k P1 (f p) x := by simp [AffineMap.const]
+                                  ^
+Highlighted span: p
+
+ERROR .LspCheck.lean:23:43-23:68
+unsolved goals
+k : Type u_1
+V1 : Type u_2
+P1 : Type u_3
+V2 : Type u_4
+P2 : Type u_5
+inst✝⁶ : Ring k
+inst✝⁵ : AddCommGroup V1
+inst✝⁴ : Module k V1
+inst✝³ : AddTorsor V1 P1
+inst✝² : AddCommGroup V2
+inst✝¹ : Module k V2
+inst✝ : AddTorsor V2 P2
+f : P1 →ᵃ[k] P2
+h : f.linear = 0
+p : (∃ (h : Nonempty P1), ?m.57 h) → ∃ a, ?m.57 ⋯
+mpr✝ : (∃ a, ?m.57 ⋯) → ∃ (h : Nonempty P1), ?m.57 h
+x : P1
+⊢ sorry () = f (sorry ())
+Source line 23:
+      _ = AffineMap.const k P1 (f p) x := by simp [AffineMap.const]
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: by simp [AffineMap.const]
+
+===== ASSISTANT =====
 import Mathlib
 
 variable {k : Type*} {V1 : Type*} {P1 : Type*} {V2 : Type*} {P2 : Type*} {V3 : Type*}
@@ -150,273 +309,123 @@ theorem linear_eq_zero_iff_exists_const (f : P1 →ᵃ[k] P2) :
     f.linear = 0 ↔ ∃ q, f = AffineMap.const k P1 q := by
   constructor
   · intro h
-    classical
-    refine ⟨f (Classical.choice ‹Nonempty P1›), ?_⟩
-    ext p
-    let p0 : P1 := Classical.choice ‹Nonempty P1›
-    have hp : f p = f p0 +ᵥ (f.linear (p0 -ᵥ p)) := by
-      rw [AffineMap.vadd_linear, vsub_vadd]
-    rw [h, LinearMap.zero_apply] at hp
-    simpa [AffineMap.const]
-      using hp
+    let g : P1 → P2 := fun x => f x
+    have hg : Function.LeftInverse g fun y => Classical.choice (AddTorsor.nonempty_vadd k? sorry) := by
+      sorry
+    by_cases hP : Nonempty P1
+    · rcases hP with ⟨p⟩
+      refine ⟨f p, ?_⟩
+      ext x
+      have hx : f x = (x -ᵥ p) +ᵥ f p := by
+        simpa using (f.map_vadd (x -ᵥ p) p).symm
+      rw [hx, h, LinearMap.zero_apply, zero_vadd]
+    · exfalso
+      exact hP (AddTorsor.nonempty P1)
   · rintro ⟨q, rfl⟩
     ext v
     rfl
 
-Lean compiler output:
-ERROR .tmp_va35xmhk.AffineMap.linear_eq_zero_iff_exists_const.lean:17:32-17:45
-Tactic `assumption` failed
-
-k : Type u_1
-V1 : Type u_2
-P1 : Type u_3
-V2 : Type u_4
-P2 : Type u_5
-inst✝⁶ : Ring k
-inst✝⁵ : AddCommGroup V1
-inst✝⁴ : Module k V1
-inst✝³ : AddTorsor V1 P1
-inst✝² : AddCommGroup V2
-inst✝¹ : Module k V2
-inst✝ : AddTorsor V2 P2
-f : P1 →ᵃ[k] P2
-h : f.linear = 0
-⊢ Nonempty P1
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:17:65-17:88
+Unknown constant `AddTorsor.nonempty_vadd`
 Source line 17:
-    refine ⟨f (Classical.choice ‹Nonempty P1›), ?_⟩
-                               ^^^^^^^^^^^^^
-Highlighted span:  ‹Nonempty P1
+    have hg : Function.LeftInverse g fun y => Classical.choice (AddTorsor.nonempty_vadd k? sorry) := by
+                                                                ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AddTorsor.nonempty_vadd
 
-ERROR .tmp_va35xmhk.AffineMap.linear_eq_zero_iff_exists_const.lean:19:36-19:49
-Tactic `assumption` failed
-
-k : Type u_1
-V1 : Type u_2
-P1 : Type u_3
-V2 : Type u_4
-P2 : Type u_5
-inst✝⁶ : Ring k
-inst✝⁵ : AddCommGroup V1
-inst✝⁴ : Module k V1
-inst✝³ : AddTorsor V1 P1
-inst✝² : AddCommGroup V2
-inst✝¹ : Module k V2
-inst✝ : AddTorsor V2 P2
-f : P1 →ᵃ[k] P2
-h : f.linear = 0
-p : P1
-⊢ Nonempty P1
-Source line 19:
-    let p0 : P1 := Classical.choice ‹Nonempty P1›
-                                   ^^^^^^^^^^^^^
-Highlighted span:  ‹Nonempty P1
-
-ERROR .tmp_va35xmhk.AffineMap.linear_eq_zero_iff_exists_const.lean:20:20-20:48
+ERROR .LspCheck.lean:23:23-23:38
 failed to synthesize instance of type class
-  HVAdd P2 V2 ?m.88
+  HVAdd V1 P2 ?m.109
 
 Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
-Source line 20:
-    have hp : f p = f p0 +ᵥ (f.linear (p0 -ᵥ p)) := by
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Highlighted span:  f p0 +ᵥ (f.linear (p0 -ᵥ p)
+Source line 23:
+      have hx : f x = (x -ᵥ p) +ᵥ f p := by
+                      ^^^^^^^^^^^^^^^
+Highlighted span: (x -ᵥ p) +ᵥ f p
 
-===== ATTEMPT 2 RESPONSE =====
-import Mathlib
+ERROR .LspCheck.lean:24:33-24:41
+Application type mismatch: The argument
+  x -ᵥ p
+has type
+  V1
+of sort `outParam (Type u_2)` but is expected to have type
+  P1
+of sort `Type u_3` in the application
+  AffineMap.map_vadd f (x -ᵥ p)
+Source line 24:
+        simpa using (f.map_vadd (x -ᵥ p) p).symm
+                                ^^^^^^^^
+Highlighted span: (x -ᵥ p)
 
-variable {k : Type*} {V1 : Type*} {P1 : Type*} {V2 : Type*} {P2 : Type*} {V3 : Type*}
-  {P3 : Type*} {V4 : Type*} {P4 : Type*} [Ring k] [AddCommGroup V1] [Module k V1]
-  [AddTorsor V1 P1] [AddCommGroup V2] [Module k V2] [AddTorsor V2 P2] [AddCommGroup V3]
-  [Module k V3] [AddTorsor V3 P3] [AddCommGroup V4] [Module k V4] [AddTorsor V4 P4]
+ERROR .LspCheck.lean:27:17-27:38
+Function expected at
+  AddTorsor.nonempty
+but this term has type
+  Nonempty ?m.152
 
-variable (k P1)
+Note: Expected a function because this term is being applied to the argument
+  P1
+Source line 27:
+      exact hP (AddTorsor.nonempty P1)
+                ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AddTorsor.nonempty P1
 
-variable {k P1}
-
-theorem linear_eq_zero_iff_exists_const (f : P1 →ᵃ[k] P2) :
-    f.linear = 0 ↔ ∃ q, f = AffineMap.const k P1 q := by
-  constructor
-  · intro h
-    classical
-    let g : P1 → P2 := f
-    simp only [AffineMap.ext_iff] at *
-    by_cases hp : Nonempty P1
-    · let p0 : P1 := Classical.choice hp
-      refine ⟨f p0, ?_⟩
-      ext p
-      have h' := congrArg (fun e => e (p -ᵥ p0)) h
-      have hv : f.linear (p -ᵥ p0) = 0 := by simpa using h'
-      have hs := f.linear_vsub' p p0
-      simpa [hv] using hs
-    · exfalso
-      exact hp (Classical.inhabited_of_nonempty (by infer_instance) |> fun _ => by infer_instance)
-
-===== ATTEMPT 2 LEAN OUTPUT =====
-ERROR .tmp_fk0tynm8.AffineMap.linear_eq_zero_iff_exists_const.lean:22:6-22:11
-This extensionality tactic only applies to equalities, not
-  ∀ (p : P1), f p = (AffineMap.const k P1 (f p0)) p
-Source line 22:
-      ext p
-     ^^^^^
-Highlighted span:  ext 
-
-ERROR .tmp_fk0tynm8.AffineMap.linear_eq_zero_iff_exists_const.lean:28:49-28:66
-unsolved goals
-k : Type u_1
-V1 : Type u_2
-P1 : Type u_3
-V2 : Type u_4
-P2 : Type u_5
-inst✝⁶ : Ring k
-inst✝⁵ : AddCommGroup V1
-inst✝⁴ : Module k V1
-inst✝³ : AddTorsor V1 P1
-inst✝² : AddCommGroup V2
-inst✝¹ : Module k V2
-inst✝ : AddTorsor V2 P2
-f : P1 →ᵃ[k] P2
-h : f.linear = 0
-g : P1 → P2 := ⇑f
-hp : ¬Nonempty P1
-⊢ Nonempty ?m.86
-Source line 28:
-      exact hp (Classical.inhabited_of_nonempty (by infer_instance) |> fun _ => by infer_instance)
-                                                ^^^^^^^^^^^^^^^^^
-Highlighted span: (by infer_instanc
-
-ERROR .tmp_fk0tynm8.AffineMap.linear_eq_zero_iff_exists_const.lean:13:54-28:98
-unsolved goals
-case mpr
-k : Type u_1
-V1 : Type u_2
-P1 : Type u_3
-V2 : Type u_4
-P2 : Type u_5
-inst✝⁶ : Ring k
-inst✝⁵ : AddCommGroup V1
-inst✝⁴ : Module k V1
-inst✝³ : AddTorsor V1 P1
-inst✝² : AddCommGroup V2
-inst✝¹ : Module k V2
-inst✝ : AddTorsor V2 P2
-f : P1 →ᵃ[k] P2
-⊢ (∃ q, f = AffineMap.const k P1 q) → f.linear = 0
-Source line 13:
-    f.linear = 0 ↔ ∃ q, f = AffineMap.const k P1 q := by
-                                                     ^^^
-Highlighted span:  by
-
-===== ATTEMPT 3 PROMPT =====
-Filename: AffineMap.linear_eq_zero_iff_exists_const.lean
+===== USER =====
 Retry attempt: 3
 
 The previous Lean solution did not compile.
-Return the complete corrected .lean file content only.
+Return a corrected complete .lean file content only.
 Do not use markdown fences.
-Keep the theorem statement and surrounding context unchanged if possible.
 
-Original target file with `sorry`:
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:17:65-17:88
+Unknown constant `AddTorsor.nonempty_vadd`
+Source line 17:
+    have hg : Function.LeftInverse g fun y => Classical.choice (AddTorsor.nonempty_vadd k? sorry) := by
+                                                                ^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AddTorsor.nonempty_vadd
+
+ERROR .LspCheck.lean:23:23-23:38
+failed to synthesize instance of type class
+  HVAdd V1 P2 ?m.109
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 23:
+      have hx : f x = (x -ᵥ p) +ᵥ f p := by
+                      ^^^^^^^^^^^^^^^
+Highlighted span: (x -ᵥ p) +ᵥ f p
+
+ERROR .LspCheck.lean:24:33-24:41
+Application type mismatch: The argument
+  x -ᵥ p
+has type
+  V1
+of sort `outParam (Type u_2)` but is expected to have type
+  P1
+of sort `Type u_3` in the application
+  AffineMap.map_vadd f (x -ᵥ p)
+Source line 24:
+        simpa using (f.map_vadd (x -ᵥ p) p).symm
+                                ^^^^^^^^
+Highlighted span: (x -ᵥ p)
+
+ERROR .LspCheck.lean:27:17-27:38
+Function expected at
+  AddTorsor.nonempty
+but this term has type
+  Nonempty ?m.152
+
+Note: Expected a function because this term is being applied to the argument
+  P1
+Source line 27:
+      exact hP (AddTorsor.nonempty P1)
+                ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AddTorsor.nonempty P1
+
+===== ASSISTANT =====
 import Mathlib
 
-variable {k : Type*} {V1 : Type*} {P1 : Type*} {V2 : Type*} {P2 : Type*} {V3 : Type*}
-  {P3 : Type*} {V4 : Type*} {P4 : Type*} [Ring k] [AddCommGroup V1] [Module k V1]
-  [AddTorsor V1 P1] [AddCommGroup V2] [Module k V2] [AddTorsor V2 P2] [AddCommGroup V3]
-  [Module k V3] [AddTorsor V3 P3] [AddCommGroup V4] [Module k V4] [AddTorsor V4 P4]
-
-variable (k P1)
-
-variable {k P1}
-
-theorem linear_eq_zero_iff_exists_const (f : P1 →ᵃ[k] P2) :
-    f.linear = 0 ↔ ∃ q, f = AffineMap.const k P1 q := sorry
-
-Previous attempted solution:
-import Mathlib
-
-variable {k : Type*} {V1 : Type*} {P1 : Type*} {V2 : Type*} {P2 : Type*} {V3 : Type*}
-  {P3 : Type*} {V4 : Type*} {P4 : Type*} [Ring k] [AddCommGroup V1] [Module k V1]
-  [AddTorsor V1 P1] [AddCommGroup V2] [Module k V2] [AddTorsor V2 P2] [AddCommGroup V3]
-  [Module k V3] [AddTorsor V3 P3] [AddCommGroup V4] [Module k V4] [AddTorsor V4 P4]
-
-variable (k P1)
-
-variable {k P1}
-
-theorem linear_eq_zero_iff_exists_const (f : P1 →ᵃ[k] P2) :
-    f.linear = 0 ↔ ∃ q, f = AffineMap.const k P1 q := by
-  constructor
-  · intro h
-    classical
-    let g : P1 → P2 := f
-    simp only [AffineMap.ext_iff] at *
-    by_cases hp : Nonempty P1
-    · let p0 : P1 := Classical.choice hp
-      refine ⟨f p0, ?_⟩
-      ext p
-      have h' := congrArg (fun e => e (p -ᵥ p0)) h
-      have hv : f.linear (p -ᵥ p0) = 0 := by simpa using h'
-      have hs := f.linear_vsub' p p0
-      simpa [hv] using hs
-    · exfalso
-      exact hp (Classical.inhabited_of_nonempty (by infer_instance) |> fun _ => by infer_instance)
-
-Lean compiler output:
-ERROR .tmp_fk0tynm8.AffineMap.linear_eq_zero_iff_exists_const.lean:22:6-22:11
-This extensionality tactic only applies to equalities, not
-  ∀ (p : P1), f p = (AffineMap.const k P1 (f p0)) p
-Source line 22:
-      ext p
-     ^^^^^
-Highlighted span:  ext 
-
-ERROR .tmp_fk0tynm8.AffineMap.linear_eq_zero_iff_exists_const.lean:28:49-28:66
-unsolved goals
-k : Type u_1
-V1 : Type u_2
-P1 : Type u_3
-V2 : Type u_4
-P2 : Type u_5
-inst✝⁶ : Ring k
-inst✝⁵ : AddCommGroup V1
-inst✝⁴ : Module k V1
-inst✝³ : AddTorsor V1 P1
-inst✝² : AddCommGroup V2
-inst✝¹ : Module k V2
-inst✝ : AddTorsor V2 P2
-f : P1 →ᵃ[k] P2
-h : f.linear = 0
-g : P1 → P2 := ⇑f
-hp : ¬Nonempty P1
-⊢ Nonempty ?m.86
-Source line 28:
-      exact hp (Classical.inhabited_of_nonempty (by infer_instance) |> fun _ => by infer_instance)
-                                                ^^^^^^^^^^^^^^^^^
-Highlighted span: (by infer_instanc
-
-ERROR .tmp_fk0tynm8.AffineMap.linear_eq_zero_iff_exists_const.lean:13:54-28:98
-unsolved goals
-case mpr
-k : Type u_1
-V1 : Type u_2
-P1 : Type u_3
-V2 : Type u_4
-P2 : Type u_5
-inst✝⁶ : Ring k
-inst✝⁵ : AddCommGroup V1
-inst✝⁴ : Module k V1
-inst✝³ : AddTorsor V1 P1
-inst✝² : AddCommGroup V2
-inst✝¹ : Module k V2
-inst✝ : AddTorsor V2 P2
-f : P1 →ᵃ[k] P2
-⊢ (∃ q, f = AffineMap.const k P1 q) → f.linear = 0
-Source line 13:
-    f.linear = 0 ↔ ∃ q, f = AffineMap.const k P1 q := by
-                                                     ^^^
-Highlighted span:  by
-
-===== ATTEMPT 3 RESPONSE =====
-import Mathlib
+open scoped Classical
 
 variable {k : Type*} {V1 : Type*} {P1 : Type*} {V2 : Type*} {P2 : Type*} {V3 : Type*}
   {P3 : Type*} {V4 : Type*} {P4 : Type*} [Ring k] [AddCommGroup V1] [Module k V1]
@@ -431,38 +440,61 @@ theorem linear_eq_zero_iff_exists_const (f : P1 →ᵃ[k] P2) :
     f.linear = 0 ↔ ∃ q, f = AffineMap.const k P1 q := by
   constructor
   · intro h
-    by_cases hp : Nonempty P1
-    · rcases hp with ⟨p0⟩
-      refine ⟨f p0, ?_⟩
-      ext p
-      have hs := f.linear_vsub' p p0
-      rw [h] at hs
-      simpa using hs
-    · exfalso
-      exact hp <| AddTorsor.nonempty P1
+    let p : P1 := Classical.choice inferInstance
+    refine ⟨f p, ?_⟩
+    ext x
+    have hx := f.linear_map_vsub x p
+    rw [h, LinearMap.zero_apply] at hx
+    simpa using hx
   · rintro ⟨q, rfl⟩
     ext v
     rfl
 
 ===== ATTEMPT 3 LEAN OUTPUT =====
-ERROR .tmp_wolfby8k.AffineMap.linear_eq_zero_iff_exists_const.lean:20:19-20:31
-Invalid field `linear_vsub'`: The environment does not contain `AffineMap.linear_vsub'`, so it is not possible to project the field `linear_vsub'` from an expression
+WARNING .LspCheck.lean:3:13-3:22
+please avoid 'open (scoped) Classical' statements: this can hide theorem statements which would be better stated with explicit decidability statements.
+Instead, use `open Classical in` for definitions or instances, the `classical` tactic for proofs.
+For theorem statements, either add missing decidability assumptions or use `open Classical in`.
+
+Note: This linter can be disabled with `set_option linter.style.openClassical false`
+Source line 3:
+open scoped Classical
+            ^^^^^^^^^
+Highlighted span: Classical
+
+ERROR .LspCheck.lean:21:18-21:33
+Invalid field `linear_map_vsub`: The environment does not contain `AffineMap.linear_map_vsub`, so it is not possible to project the field `linear_map_vsub` from an expression
   f
 of type `P1 →ᵃ[k] P2`
-Source line 20:
-      have hs := f.linear_vsub' p p0
-                  ^^^^^^^^^^^^
-Highlighted span: .linear_vsub
+Source line 21:
+    have hx := f.linear_map_vsub x p
+                 ^^^^^^^^^^^^^^^
+Highlighted span: linear_map_vsub
 
-ERROR .tmp_wolfby8k.AffineMap.linear_eq_zero_iff_exists_const.lean:24:18-24:39
-Function expected at
-  AddTorsor.nonempty
-but this term has type
-  Nonempty ?m.101
+===== USER =====
+Retry attempt: 4
 
-Note: Expected a function because this term is being applied to the argument
-  P1
-Source line 24:
-      exact hp <| AddTorsor.nonempty P1
-                 ^^^^^^^^^^^^^^^^^^^^^
-Highlighted span:  AddTorsor.nonempty P
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+WARNING .LspCheck.lean:3:13-3:22
+please avoid 'open (scoped) Classical' statements: this can hide theorem statements which would be better stated with explicit decidability statements.
+Instead, use `open Classical in` for definitions or instances, the `classical` tactic for proofs.
+For theorem statements, either add missing decidability assumptions or use `open Classical in`.
+
+Note: This linter can be disabled with `set_option linter.style.openClassical false`
+Source line 3:
+open scoped Classical
+            ^^^^^^^^^
+Highlighted span: Classical
+
+ERROR .LspCheck.lean:21:18-21:33
+Invalid field `linear_map_vsub`: The environment does not contain `AffineMap.linear_map_vsub`, so it is not possible to project the field `linear_map_vsub` from an expression
+  f
+of type `P1 →ᵃ[k] P2`
+Source line 21:
+    have hx := f.linear_map_vsub x p
+                 ^^^^^^^^^^^^^^^
+Highlighted span: linear_map_vsub

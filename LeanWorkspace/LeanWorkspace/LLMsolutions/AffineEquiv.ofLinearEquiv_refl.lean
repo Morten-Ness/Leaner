@@ -11,4 +11,4 @@ variable [Ring k] [AddCommGroup V] [Module k V] [AddTorsor V P]
 
 theorem ofLinearEquiv_refl (p : P) :
     AffineEquiv.ofLinearEquiv (.refl k V) p p = .refl k P := by
-  ext q <;> simp [AffineEquiv.ofLinearEquiv]
+  ext q <;> simp [AffineEquiv.ofLinearEquiv, AffineEquiv.refl]

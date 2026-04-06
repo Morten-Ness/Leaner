@@ -15,7 +15,7 @@ theorem exists_mem_multiset_map_dvd (hp : Prime p) {s : Multiset ι} {f : ι →
   | @cons a s ih =>
       intro h
       simp only [Multiset.map_cons, Multiset.prod_cons] at h
-      rcases hp.2.2 _ _ h with hpa | hprod
+      rcases hp.dvd_or_dvd h with hpa | hps
       · exact ⟨a, by simp, hpa⟩
-      · rcases ih hprod with ⟨b, hb, hpb⟩
+      · rcases ih hps with ⟨b, hb, hpb⟩
         exact ⟨b, by simp [hb], hpb⟩

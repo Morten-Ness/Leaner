@@ -7,4 +7,5 @@ theorem compAddMonoidHom_injective_right (ψ : AddChar B M) (hψ : Function.Inje
   intro f g h
   ext a
   apply hψ
-  exact DFunLike.congr_fun h a
+  have := DFunLike.congr_fun h a
+  simpa using this

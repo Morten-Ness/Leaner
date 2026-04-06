@@ -1,3 +1,4 @@
+FAIL
 import Mathlib
 
 variable {k : Type*} {V1 : Type*} {P1 : Type*} {V2 : Type*} {P2 : Type*} {V3 : Type*}
@@ -9,10 +10,18 @@ theorem ext_linear_iff {f g : P1 →ᵃ[k] P2} : f = g ↔ (f.linear = g.linear)
   constructor
   · intro h
     subst h
-    exact ⟨rfl, ⟨Classical.choice (inferInstance : Nonempty P1), rfl⟩⟩
+    refine ⟨rfl, ?_⟩
+    rcases isEmpty_or_nonempty P1 with hP1 | hP1
+    · exfalso
+      exact hP1.false (by infer_instance)
+    · rcases hP1 with ⟨p⟩
+      exact ⟨p, rfl⟩
   · rintro ⟨hlin, ⟨p, hp⟩⟩
     ext q
     calc
-      f q = f.linear (q -ᵥ p) +ᵥ f p := by simpa using (f.apply_vadd' (q -ᵥ p) p).symm
-      _ = g.linear (q -ᵥ p) +ᵥ g p := by simpa [hlin, hp]
-      _ = g q := by simpa using (g.apply_vadd' (q -ᵥ p) p)
+      f q = f.linear (q -ᵥ p) +ᵥ f p := by
+        simp using (vadd_vsub_assoc (f p) q p)
+      _ = g.linear (q -ᵥ p) +ᵥ f p := by simp [hlin]
+      _ = g.linear (q -ᵥ p) +ᵥ g p := by rw [hp]
+      _ = g q := by
+        simp using (vadd_vsub_assoc (g p) q p).symm

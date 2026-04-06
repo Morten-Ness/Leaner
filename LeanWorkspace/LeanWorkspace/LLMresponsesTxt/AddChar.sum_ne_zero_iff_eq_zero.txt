@@ -1,0 +1,130 @@
+FILE: AddChar.sum_ne_zero_iff_eq_zero.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: AddChar.sum_ne_zero_iff_eq_zero.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {A R : Type*} [AddGroup A] [Fintype A] [CommSemiring R] [IsDomain R]
+  {ψ : AddChar A R}
+
+variable [CharZero R]
+
+theorem sum_ne_zero_iff_eq_zero : ∑ x, ψ x ≠ 0 ↔ ψ = 0 := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {A R : Type*} [AddGroup A] [Fintype A] [CommSemiring R] [IsDomain R]
+  {ψ : AddChar A R}
+
+variable [CharZero R]
+
+theorem sum_ne_zero_iff_eq_zero : ∑ x, ψ x ≠ 0 ↔ ψ = 0 := by
+  simpa [ne_eq, eq_comm] using AddChar.sum_eq_zero_iff_ne_zero (A := A) (R := R) (ψ := ψ)
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:9:3-9:90
+Type mismatch: After simplification, term
+  AddChar.sum_eq_zero_iff_ne_zero
+ has type
+  0 = ∑ x, ψ x ↔ ¬ψ = 0
+but is expected to have type
+  ¬0 = ∑ x, ψ x ↔ ψ = 0
+Source line 9:
+  simpa [ne_eq, eq_comm] using AddChar.sum_eq_zero_iff_ne_zero (A := A) (R := R) (ψ := ψ)
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [ne_eq, eq_comm] using AddChar.sum_eq_zero_iff_ne_zero (A := A) (R := R) (ψ := ψ)
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:9:3-9:90
+Type mismatch: After simplification, term
+  AddChar.sum_eq_zero_iff_ne_zero
+ has type
+  0 = ∑ x, ψ x ↔ ¬ψ = 0
+but is expected to have type
+  ¬0 = ∑ x, ψ x ↔ ψ = 0
+Source line 9:
+  simpa [ne_eq, eq_comm] using AddChar.sum_eq_zero_iff_ne_zero (A := A) (R := R) (ψ := ψ)
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [ne_eq, eq_comm] using AddChar.sum_eq_zero_iff_ne_zero (A := A) (R := R) (ψ := ψ)
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {A R : Type*} [AddGroup A] [Fintype A] [CommSemiring R] [IsDomain R]
+  {ψ : AddChar A R}
+
+variable [CharZero R]
+
+theorem sum_ne_zero_iff_eq_zero : ∑ x, ψ x ≠ 0 ↔ ψ = 0 := by
+  rw [ne_eq, AddChar.sum_eq_zero_iff_ne_zero]
+  exact not_not.symm
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:3-10:21
+Type mismatch
+  Iff.symm not_not
+has type
+  ?m.34 ↔ ¬¬?m.34
+but is expected to have type
+  ¬ψ ≠ 0 ↔ ψ = 0
+Source line 10:
+  exact not_not.symm
+  ^^^^^^^^^^^^^^^^^^
+Highlighted span: exact not_not.symm
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:3-10:21
+Type mismatch
+  Iff.symm not_not
+has type
+  ?m.34 ↔ ¬¬?m.34
+but is expected to have type
+  ¬ψ ≠ 0 ↔ ψ = 0
+Source line 10:
+  exact not_not.symm
+  ^^^^^^^^^^^^^^^^^^
+Highlighted span: exact not_not.symm
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {A R : Type*} [AddGroup A] [Fintype A] [CommSemiring R] [IsDomain R]
+  {ψ : AddChar A R}
+
+variable [CharZero R]
+
+theorem sum_ne_zero_iff_eq_zero : ∑ x, ψ x ≠ 0 ↔ ψ = 0 := by
+  rw [ne_eq, AddChar.sum_eq_zero_iff_ne_zero]
+  constructor
+  · intro h
+    exact by_contra h
+  · intro h
+    simpa [h] using h
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+PASS

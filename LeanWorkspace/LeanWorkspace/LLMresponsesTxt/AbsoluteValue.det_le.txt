@@ -1,0 +1,324 @@
+FILE: AbsoluteValue.det_le.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: AbsoluteValue.det_le.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+open scoped Nat
+
+variable {R S : Type*} [CommRing R] [Nontrivial R]
+  [CommRing S] [LinearOrder S] [IsStrictOrderedRing S]
+
+variable {n : Type*} [Fintype n] [DecidableEq n]
+
+theorem det_le {A : Matrix n n R} {abv : AbsoluteValue R S} {x : S} (hx : ∀ i j, abv (A i j) ≤ x) :
+    abv A.det ≤ (Fintype.card n)! • x ^ Fintype.card n := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Nat
+
+variable {R S : Type*} [CommRing R] [Nontrivial R]
+  [CommRing S] [LinearOrder S] [IsStrictOrderedRing S]
+
+variable {n : Type*} [Fintype n] [DecidableEq n]
+
+theorem det_le {A : Matrix n n R} {abv : AbsoluteValue R S} {x : S} (hx : ∀ i j, abv (A i j) ≤ x) :
+    abv A.det ≤ (Fintype.card n)! • x ^ Fintype.card n := by
+  simpa [Matrix.det_apply, Finset.sum_hom, Finset.card_univ, nsmul_eq_mul] using
+    AbsoluteValue.map_det_le (abv := abv) (A := A) hx
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:28-12:42
+Unknown constant `Finset.sum_hom`
+Source line 12:
+  simpa [Matrix.det_apply, Finset.sum_hom, Finset.card_univ, nsmul_eq_mul] using
+                           ^^^^^^^^^^^^^^
+Highlighted span: Finset.sum_hom
+
+ERROR .LspCheck.lean:13:5-13:29
+Unknown constant `AbsoluteValue.map_det_le`
+Source line 13:
+    AbsoluteValue.map_det_le (abv := abv) (A := A) hx
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AbsoluteValue.map_det_le
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:28-12:42
+Unknown constant `Finset.sum_hom`
+Source line 12:
+  simpa [Matrix.det_apply, Finset.sum_hom, Finset.card_univ, nsmul_eq_mul] using
+                           ^^^^^^^^^^^^^^
+Highlighted span: Finset.sum_hom
+
+ERROR .LspCheck.lean:13:5-13:29
+Unknown constant `AbsoluteValue.map_det_le`
+Source line 13:
+    AbsoluteValue.map_det_le (abv := abv) (A := A) hx
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AbsoluteValue.map_det_le
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Nat
+
+variable {R S : Type*} [CommRing R] [Nontrivial R]
+  [CommRing S] [LinearOrder S] [IsStrictOrderedRing S]
+
+variable {n : Type*} [Fintype n] [DecidableEq n]
+
+theorem det_le {A : Matrix n n R} {abv : AbsoluteValue R S} {x : S} (hx : ∀ i j, abv (A i j) ≤ x) :
+    abv A.det ≤ (Fintype.card n)! • x ^ Fintype.card n := by
+  classical
+  simpa [nsmul_eq_mul] using abv.map_det_le (A := A) (b := x) hx
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:34-13:44
+Invalid field `map_det_le`: The environment does not contain `AbsoluteValue.map_det_le`, so it is not possible to project the field `map_det_le` from an expression
+  abv
+of type `AbsoluteValue R S`
+Source line 13:
+  simpa [nsmul_eq_mul] using abv.map_det_le (A := A) (b := x) hx
+                                 ^^^^^^^^^^
+Highlighted span: map_det_le
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:34-13:44
+Invalid field `map_det_le`: The environment does not contain `AbsoluteValue.map_det_le`, so it is not possible to project the field `map_det_le` from an expression
+  abv
+of type `AbsoluteValue R S`
+Source line 13:
+  simpa [nsmul_eq_mul] using abv.map_det_le (A := A) (b := x) hx
+                                 ^^^^^^^^^^
+Highlighted span: map_det_le
+
+===== ASSISTANT =====
+import Mathlib
+
+open scoped Nat
+
+variable {R S : Type*} [CommRing R] [Nontrivial R]
+  [CommRing S] [LinearOrder S] [IsStrictOrderedRing S]
+
+variable {n : Type*} [Fintype n] [DecidableEq n]
+
+theorem det_le {A : Matrix n n R} {abv : AbsoluteValue R S} {x : S} (hx : ∀ i j, abv (A i j) ≤ x) :
+    abv A.det ≤ (Fintype.card n)! • x ^ Fintype.card n := by
+  classical
+  rw [Matrix.det_apply]
+  calc
+    abv (∑ σ : Equiv.Perm n, Equiv.Perm.sign σ • ∏ i, A (σ i) i)
+        ≤ ∑ σ : Equiv.Perm n, abv (Equiv.Perm.sign σ • ∏ i, A (σ i) i) := by
+          simpa using map_sum_le abv (fun σ : Equiv.Perm n => Equiv.Perm.sign σ • ∏ i, A (σ i) i)
+    _ ≤ ∑ σ : Equiv.Perm n, x ^ Fintype.card n := by
+          refine Finset.sum_le_sum ?_
+          intro σ hσ
+          calc
+            abv (Equiv.Perm.sign σ • ∏ i, A (σ i) i)
+                = abv (Equiv.Perm.sign σ) * abv (∏ i, A (σ i) i) := by
+                    simpa [smul_eq_mul] using map_mul abv (Equiv.Perm.sign σ) (∏ i, A (σ i) i)
+            _ ≤ 1 * abv (∏ i, A (σ i) i) := by
+                  gcongr
+                  simpa using abv.map_units_zpow_le_one (Equiv.Perm.sign σ)
+            _ = abv (∏ i, A (σ i) i) := by simp
+            _ ≤ ∏ i, x := by
+                  simpa using map_prod_le abv (fun i => A (σ i) i) (fun i => hx (σ i) i)
+            _ = x ^ Fintype.card n := by simp
+    _ = (Fintype.card n)! • x ^ Fintype.card n := by
+          rw [Finset.sum_const, Finset.card_univ, nsmul_eq_mul]
+          simp [Fintype.card_perm]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:17:23-17:33
+Unknown identifier `map_sum_le`
+Source line 17:
+          simpa using map_sum_le abv (fun σ : Equiv.Perm n => Equiv.Perm.sign σ • ∏ i, A (σ i) i)
+                      ^^^^^^^^^^
+Highlighted span: map_sum_le
+
+WARNING .LspCheck.lean:24:21-24:95
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 24:
+                    simpa [smul_eq_mul] using map_mul abv (Equiv.Perm.sign σ) (∏ i, A (σ i) i)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [smul_eq_mul] using map_mul abv (Equiv.Perm.sign σ) (∏ i, A (σ i) i)
+
+WARNING .LspCheck.lean:27:19-27:76
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 27:
+                  simpa using abv.map_units_zpow_le_one (Equiv.Perm.sign σ)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa using abv.map_units_zpow_le_one (Equiv.Perm.sign σ)
+
+ERROR .LspCheck.lean:30:31-30:42
+Unknown identifier `map_prod_le`
+Source line 30:
+                  simpa using map_prod_le abv (fun i => A (σ i) i) (fun i => hx (σ i) i)
+                              ^^^^^^^^^^^
+Highlighted span: map_prod_le
+
+ERROR .LspCheck.lean:31:39-31:46
+unsolved goals
+R : Type u_1
+S : Type u_2
+inst✝⁶ : CommRing R
+inst✝⁵ : Nontrivial R
+inst✝⁴ : CommRing S
+inst✝³ : LinearOrder S
+inst✝² : IsStrictOrderedRing S
+n : Type u_3
+inst✝¹ : Fintype n
+inst✝ : DecidableEq n
+A : Matrix n n R
+abv : AbsoluteValue R S
+x : S
+hx : ∀ (i j : n), abv (A i j) ≤ x
+σ : Equiv.Perm n
+hσ : σ ∈ Finset.univ
+⊢ x ^ Fintype.card ?m.210 = x ^ Fintype.card n
+Source line 31:
+            _ = x ^ Fintype.card n := by simp
+                                      ^^^^^^^
+Highlighted span: by simp
+
+ERROR .LspCheck.lean:18:51-19:1
+unsolved goals
+R : Type u_1
+S : Type u_2
+inst✝⁶ : CommRing R
+inst✝⁵ : Nontrivial R
+inst✝⁴ : CommRing S
+inst✝³ : LinearOrder S
+inst✝² : IsStrictOrderedRing S
+n : Type u_3
+inst✝¹ : Fintype n
+inst✝ : DecidableEq n
+A : Matrix n n R
+abv : AbsoluteValue R S
+x : S
+hx : ∀ (i j : n), abv (A i j) ≤ x
+σ : Equiv.Perm n
+hσ : σ ∈ Finset.univ
+⊢ abv (Equiv.Perm.sign σ • ∏ i, A (σ i) i) ≤ x ^ Fintype.card n
+Source line 18:
+    _ ≤ ∑ σ : Equiv.Perm n, x ^ Fintype.card n := by
+                                                  ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:17:23-17:33
+Unknown identifier `map_sum_le`
+Source line 17:
+          simpa using map_sum_le abv (fun σ : Equiv.Perm n => Equiv.Perm.sign σ • ∏ i, A (σ i) i)
+                      ^^^^^^^^^^
+Highlighted span: map_sum_le
+
+WARNING .LspCheck.lean:24:21-24:95
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 24:
+                    simpa [smul_eq_mul] using map_mul abv (Equiv.Perm.sign σ) (∏ i, A (σ i) i)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa [smul_eq_mul] using map_mul abv (Equiv.Perm.sign σ) (∏ i, A (σ i) i)
+
+WARNING .LspCheck.lean:27:19-27:76
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 27:
+                  simpa using abv.map_units_zpow_le_one (Equiv.Perm.sign σ)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa using abv.map_units_zpow_le_one (Equiv.Perm.sign σ)
+
+ERROR .LspCheck.lean:30:31-30:42
+Unknown identifier `map_prod_le`
+Source line 30:
+                  simpa using map_prod_le abv (fun i => A (σ i) i) (fun i => hx (σ i) i)
+                              ^^^^^^^^^^^
+Highlighted span: map_prod_le
+
+ERROR .LspCheck.lean:31:39-31:46
+unsolved goals
+R : Type u_1
+S : Type u_2
+inst✝⁶ : CommRing R
+inst✝⁵ : Nontrivial R
+inst✝⁴ : CommRing S
+inst✝³ : LinearOrder S
+inst✝² : IsStrictOrderedRing S
+n : Type u_3
+inst✝¹ : Fintype n
+inst✝ : DecidableEq n
+A : Matrix n n R
+abv : AbsoluteValue R S
+x : S
+hx : ∀ (i j : n), abv (A i j) ≤ x
+σ : Equiv.Perm n
+hσ : σ ∈ Finset.univ
+⊢ x ^ Fintype.card ?m.210 = x ^ Fintype.card n
+Source line 31:
+            _ = x ^ Fintype.card n := by simp
+                                      ^^^^^^^
+Highlighted span: by simp
+
+ERROR .LspCheck.lean:18:51-19:1
+unsolved goals
+R : Type u_1
+S : Type u_2
+inst✝⁶ : CommRing R
+inst✝⁵ : Nontrivial R
+inst✝⁴ : CommRing S
+inst✝³ : LinearOrder S
+inst✝² : IsStrictOrderedRing S
+n : Type u_3
+inst✝¹ : Fintype n
+inst✝ : DecidableEq n
+A : Matrix n n R
+abv : AbsoluteValue R S
+x : S
+hx : ∀ (i j : n), abv (A i j) ≤ x
+σ : Equiv.Perm n
+hσ : σ ∈ Finset.univ
+⊢ abv (Equiv.Perm.sign σ • ∏ i, A (σ i) i) ≤ x ^ Fintype.card n
+Source line 18:
+    _ ≤ ∑ σ : Equiv.Perm n, x ^ Fintype.card n := by
+                                                  ^
+Highlighted span: b

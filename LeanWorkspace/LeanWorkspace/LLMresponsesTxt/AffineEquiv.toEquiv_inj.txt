@@ -1,6 +1,9 @@
 FILE: AffineEquiv.toEquiv_inj.lean
 
-===== ATTEMPT 1 PROMPT =====
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
 Filename: AffineEquiv.toEquiv_inj.lean
 
 Fill in the Lean proof for this file.
@@ -18,90 +21,7 @@ variable {k P₁ P₂ P₃ P₄ V₁ V₂ V₃ V₄ : Type*} [Ring k]
 
 theorem toEquiv_inj {e e' : P₁ ≃ᵃ[k] P₂} : e.toEquiv = e'.toEquiv ↔ e = e' := sorry
 
-===== ATTEMPT 1 RESPONSE =====
-import Mathlib
-
-variable {k P₁ P₂ P₃ P₄ V₁ V₂ V₃ V₄ : Type*} [Ring k]
-  [AddCommGroup V₁] [AddCommGroup V₂] [AddCommGroup V₃] [AddCommGroup V₄]
-  [Module k V₁] [Module k V₂] [Module k V₃] [Module k V₄]
-  [AddTorsor V₁ P₁] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃] [AddTorsor V₄ P₄]
-
-theorem toEquiv_inj {e e' : P₁ ≃ᵃ[k] P₂} : e.toEquiv = e'.toEquiv ↔ e = e' := by
-  constructor
-  · intro h
-    ext p
-    exact congrFun h p
-  · intro h
-    cases h
-    rfl
-
-===== ATTEMPT 1 LEAN OUTPUT =====
-ERROR .tmp_kq6uz4vz.AffineEquiv.toEquiv_inj.lean:12:19-12:20
-Application type mismatch: The argument
-  h
-has type
-  e.toEquiv = e'.toEquiv
-but is expected to have type
-  ⇑e = ⇑e'
-in the application
-  congrFun h
-Source line 12:
-    exact congrFun h p
-                  ^
-Highlighted span:
-
-===== ATTEMPT 2 PROMPT =====
-Filename: AffineEquiv.toEquiv_inj.lean
-Retry attempt: 2
-
-The previous Lean solution did not compile.
-Return the complete corrected .lean file content only.
-Do not use markdown fences.
-Keep the theorem statement and surrounding context unchanged if possible.
-
-Original target file with `sorry`:
-import Mathlib
-
-variable {k P₁ P₂ P₃ P₄ V₁ V₂ V₃ V₄ : Type*} [Ring k]
-  [AddCommGroup V₁] [AddCommGroup V₂] [AddCommGroup V₃] [AddCommGroup V₄]
-  [Module k V₁] [Module k V₂] [Module k V₃] [Module k V₄]
-  [AddTorsor V₁ P₁] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃] [AddTorsor V₄ P₄]
-
-theorem toEquiv_inj {e e' : P₁ ≃ᵃ[k] P₂} : e.toEquiv = e'.toEquiv ↔ e = e' := sorry
-
-Previous attempted solution:
-import Mathlib
-
-variable {k P₁ P₂ P₃ P₄ V₁ V₂ V₃ V₄ : Type*} [Ring k]
-  [AddCommGroup V₁] [AddCommGroup V₂] [AddCommGroup V₃] [AddCommGroup V₄]
-  [Module k V₁] [Module k V₂] [Module k V₃] [Module k V₄]
-  [AddTorsor V₁ P₁] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃] [AddTorsor V₄ P₄]
-
-theorem toEquiv_inj {e e' : P₁ ≃ᵃ[k] P₂} : e.toEquiv = e'.toEquiv ↔ e = e' := by
-  constructor
-  · intro h
-    ext p
-    exact congrFun h p
-  · intro h
-    cases h
-    rfl
-
-Lean compiler output:
-ERROR .tmp_kq6uz4vz.AffineEquiv.toEquiv_inj.lean:12:19-12:20
-Application type mismatch: The argument
-  h
-has type
-  e.toEquiv = e'.toEquiv
-but is expected to have type
-  ⇑e = ⇑e'
-in the application
-  congrFun h
-Source line 12:
-    exact congrFun h p
-                  ^
-Highlighted span:
-
-===== ATTEMPT 2 RESPONSE =====
+===== ASSISTANT =====
 import Mathlib
 
 variable {k P₁ P₂ P₃ P₄ V₁ V₂ V₃ V₄ : Type*} [Ring k]
@@ -116,162 +36,114 @@ theorem toEquiv_inj {e e' : P₁ ≃ᵃ[k] P₂} : e.toEquiv = e'.toEquiv ↔ e 
     cases e'
     cases h
     rfl
+  · intro h
+    simpa [h]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:14:5-14:8
+Tactic `rfl` failed: The left-hand side
+  { toEquiv := toEquiv✝, linear := linear✝¹, map_vadd' := map_vadd'✝¹ }
+is not definitionally equal to the right-hand side
+  { toEquiv := toEquiv✝, linear := linear✝, map_vadd' := map_vadd'✝ }
+
+case mp.mk.mk.refl
+k : Type u_1
+P₁ : Type u_2
+P₂ : Type u_3
+V₁ : Type u_6
+V₂ : Type u_7
+inst✝⁶ : Ring k
+inst✝⁵ : AddCommGroup V₁
+inst✝⁴ : AddCommGroup V₂
+inst✝³ : Module k V₁
+inst✝² : Module k V₂
+inst✝¹ : AddTorsor V₁ P₁
+inst✝ : AddTorsor V₂ P₂
+toEquiv✝ : P₁ ≃ P₂
+linear✝¹ : V₁ ≃ₗ[k] V₂
+map_vadd'✝¹ : ∀ (p : P₁) (v : V₁), toEquiv✝ (v +ᵥ p) = linear✝¹ v +ᵥ toEquiv✝ p
+linear✝ : V₁ ≃ₗ[k] V₂
+map_vadd'✝ : ∀ (p : P₁) (v : V₁), toEquiv✝ (v +ᵥ p) = linear✝ v +ᵥ toEquiv✝ p
+⊢ { toEquiv := toEquiv✝, linear := linear✝¹, map_vadd' := map_vadd'✝¹ } =
+    { toEquiv := toEquiv✝, linear := linear✝, map_vadd' := map_vadd'✝ }
+Source line 14:
+    rfl
+    ^^^
+Highlighted span: rfl
+
+WARNING .LspCheck.lean:16:5-16:14
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 16:
+    simpa [h]
+    ^^^^^^^^^
+Highlighted span: simpa [h]
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:14:5-14:8
+Tactic `rfl` failed: The left-hand side
+  { toEquiv := toEquiv✝, linear := linear✝¹, map_vadd' := map_vadd'✝¹ }
+is not definitionally equal to the right-hand side
+  { toEquiv := toEquiv✝, linear := linear✝, map_vadd' := map_vadd'✝ }
+
+case mp.mk.mk.refl
+k : Type u_1
+P₁ : Type u_2
+P₂ : Type u_3
+V₁ : Type u_6
+V₂ : Type u_7
+inst✝⁶ : Ring k
+inst✝⁵ : AddCommGroup V₁
+inst✝⁴ : AddCommGroup V₂
+inst✝³ : Module k V₁
+inst✝² : Module k V₂
+inst✝¹ : AddTorsor V₁ P₁
+inst✝ : AddTorsor V₂ P₂
+toEquiv✝ : P₁ ≃ P₂
+linear✝¹ : V₁ ≃ₗ[k] V₂
+map_vadd'✝¹ : ∀ (p : P₁) (v : V₁), toEquiv✝ (v +ᵥ p) = linear✝¹ v +ᵥ toEquiv✝ p
+linear✝ : V₁ ≃ₗ[k] V₂
+map_vadd'✝ : ∀ (p : P₁) (v : V₁), toEquiv✝ (v +ᵥ p) = linear✝ v +ᵥ toEquiv✝ p
+⊢ { toEquiv := toEquiv✝, linear := linear✝¹, map_vadd' := map_vadd'✝¹ } =
+    { toEquiv := toEquiv✝, linear := linear✝, map_vadd' := map_vadd'✝ }
+Source line 14:
+    rfl
+    ^^^
+Highlighted span: rfl
+
+WARNING .LspCheck.lean:16:5-16:14
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 16:
+    simpa [h]
+    ^^^^^^^^^
+Highlighted span: simpa [h]
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k P₁ P₂ P₃ P₄ V₁ V₂ V₃ V₄ : Type*} [Ring k]
+  [AddCommGroup V₁] [AddCommGroup V₂] [AddCommGroup V₃] [AddCommGroup V₄]
+  [Module k V₁] [Module k V₂] [Module k V₃] [Module k V₄]
+  [AddTorsor V₁ P₁] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃] [AddTorsor V₄ P₄]
+
+theorem toEquiv_inj {e e' : P₁ ≃ᵃ[k] P₂} : e.toEquiv = e'.toEquiv ↔ e = e' := by
+  constructor
+  · intro h
+    ext p
+    exact Equiv.congr_fun h p
   · intro h
     cases h
     rfl
 
 ===== ATTEMPT 2 LEAN OUTPUT =====
-ERROR .tmp_dii_arxk.AffineEquiv.toEquiv_inj.lean:14:4-14:7
-Tactic `rfl` failed: The left-hand side
-  { toEquiv := toEquiv✝, linear := linear✝¹, map_vadd' := map_vadd'✝¹ }
-is not definitionally equal to the right-hand side
-  { toEquiv := toEquiv✝, linear := linear✝, map_vadd' := map_vadd'✝ }
-
-case mp.mk.mk.refl
-k : Type u_1
-P₁ : Type u_2
-P₂ : Type u_3
-V₁ : Type u_6
-V₂ : Type u_7
-inst✝⁶ : Ring k
-inst✝⁵ : AddCommGroup V₁
-inst✝⁴ : AddCommGroup V₂
-inst✝³ : Module k V₁
-inst✝² : Module k V₂
-inst✝¹ : AddTorsor V₁ P₁
-inst✝ : AddTorsor V₂ P₂
-toEquiv✝ : P₁ ≃ P₂
-linear✝¹ : V₁ ≃ₗ[k] V₂
-map_vadd'✝¹ : ∀ (p : P₁) (v : V₁), toEquiv✝ (v +ᵥ p) = linear✝¹ v +ᵥ toEquiv✝ p
-linear✝ : V₁ ≃ₗ[k] V₂
-map_vadd'✝ : ∀ (p : P₁) (v : V₁), toEquiv✝ (v +ᵥ p) = linear✝ v +ᵥ toEquiv✝ p
-⊢ { toEquiv := toEquiv✝, linear := linear✝¹, map_vadd' := map_vadd'✝¹ } =
-    { toEquiv := toEquiv✝, linear := linear✝, map_vadd' := map_vadd'✝ }
-Source line 14:
-    rfl
-   ^^^
-Highlighted span:  rf
-
-===== ATTEMPT 3 PROMPT =====
-Filename: AffineEquiv.toEquiv_inj.lean
-Retry attempt: 3
-
-The previous Lean solution did not compile.
-Return the complete corrected .lean file content only.
-Do not use markdown fences.
-Keep the theorem statement and surrounding context unchanged if possible.
-
-Original target file with `sorry`:
-import Mathlib
-
-variable {k P₁ P₂ P₃ P₄ V₁ V₂ V₃ V₄ : Type*} [Ring k]
-  [AddCommGroup V₁] [AddCommGroup V₂] [AddCommGroup V₃] [AddCommGroup V₄]
-  [Module k V₁] [Module k V₂] [Module k V₃] [Module k V₄]
-  [AddTorsor V₁ P₁] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃] [AddTorsor V₄ P₄]
-
-theorem toEquiv_inj {e e' : P₁ ≃ᵃ[k] P₂} : e.toEquiv = e'.toEquiv ↔ e = e' := sorry
-
-Previous attempted solution:
-import Mathlib
-
-variable {k P₁ P₂ P₃ P₄ V₁ V₂ V₃ V₄ : Type*} [Ring k]
-  [AddCommGroup V₁] [AddCommGroup V₂] [AddCommGroup V₃] [AddCommGroup V₄]
-  [Module k V₁] [Module k V₂] [Module k V₃] [Module k V₄]
-  [AddTorsor V₁ P₁] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃] [AddTorsor V₄ P₄]
-
-theorem toEquiv_inj {e e' : P₁ ≃ᵃ[k] P₂} : e.toEquiv = e'.toEquiv ↔ e = e' := by
-  constructor
-  · intro h
-    cases e
-    cases e'
-    cases h
-    rfl
-  · intro h
-    cases h
-    rfl
-
-Lean compiler output:
-ERROR .tmp_dii_arxk.AffineEquiv.toEquiv_inj.lean:14:4-14:7
-Tactic `rfl` failed: The left-hand side
-  { toEquiv := toEquiv✝, linear := linear✝¹, map_vadd' := map_vadd'✝¹ }
-is not definitionally equal to the right-hand side
-  { toEquiv := toEquiv✝, linear := linear✝, map_vadd' := map_vadd'✝ }
-
-case mp.mk.mk.refl
-k : Type u_1
-P₁ : Type u_2
-P₂ : Type u_3
-V₁ : Type u_6
-V₂ : Type u_7
-inst✝⁶ : Ring k
-inst✝⁵ : AddCommGroup V₁
-inst✝⁴ : AddCommGroup V₂
-inst✝³ : Module k V₁
-inst✝² : Module k V₂
-inst✝¹ : AddTorsor V₁ P₁
-inst✝ : AddTorsor V₂ P₂
-toEquiv✝ : P₁ ≃ P₂
-linear✝¹ : V₁ ≃ₗ[k] V₂
-map_vadd'✝¹ : ∀ (p : P₁) (v : V₁), toEquiv✝ (v +ᵥ p) = linear✝¹ v +ᵥ toEquiv✝ p
-linear✝ : V₁ ≃ₗ[k] V₂
-map_vadd'✝ : ∀ (p : P₁) (v : V₁), toEquiv✝ (v +ᵥ p) = linear✝ v +ᵥ toEquiv✝ p
-⊢ { toEquiv := toEquiv✝, linear := linear✝¹, map_vadd' := map_vadd'✝¹ } =
-    { toEquiv := toEquiv✝, linear := linear✝, map_vadd' := map_vadd'✝ }
-Source line 14:
-    rfl
-   ^^^
-Highlighted span:  rf
-
-===== ATTEMPT 3 RESPONSE =====
-import Mathlib
-
-variable {k P₁ P₂ P₃ P₄ V₁ V₂ V₃ V₄ : Type*} [Ring k]
-  [AddCommGroup V₁] [AddCommGroup V₂] [AddCommGroup V₃] [AddCommGroup V₄]
-  [Module k V₁] [Module k V₂] [Module k V₃] [Module k V₄]
-  [AddTorsor V₁ P₁] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃] [AddTorsor V₄ P₄]
-
-theorem toEquiv_inj {e e' : P₁ ≃ᵃ[k] P₂} : e.toEquiv = e'.toEquiv ↔ e = e' := by
-  constructor
-  · intro h
-    cases e with
-    | mk e le he =>
-      cases e' with
-      | mk e' le' he' =>
-        dsimp at h
-        subst h
-        have hle : le = le' := by
-          ext v
-          let p : P₁ := Classical.choice (AddTorsor.nonempty P₁)
-          have hp := he p v
-          have hp' := he' p v
-          dsimp at hp hp'
-          rw [← hp, ← hp']
-        subst hle
-        have hhe : he = he' := by
-          apply Subsingleton.elim
-        subst hhe
-        rfl
-  · intro h
-    subst h
-    rfl
-
-===== ATTEMPT 3 LEAN OUTPUT =====
-ERROR .tmp_d5i42lsc.AffineEquiv.toEquiv_inj.lean:19:42-19:63
-Function expected at
-  AddTorsor.nonempty
-but this term has type
-  Nonempty ?m.184
-
-Note: Expected a function because this term is being applied to the argument
-  P₁
-Source line 19:
-          let p : P₁ := Classical.choice (AddTorsor.nonempty P₁)
-                                         ^^^^^^^^^^^^^^^^^^^^^
-Highlighted span: (AddTorsor.nonempty P
-
-ERROR .tmp_d5i42lsc.AffineEquiv.toEquiv_inj.lean:22:10-22:25
-`dsimp` made no progress
-Source line 22:
-          dsimp at hp hp'
-         ^^^^^^^^^^^^^^^
-Highlighted span:  dsimp at hp hp
+PASS

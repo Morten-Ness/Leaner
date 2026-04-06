@@ -11,9 +11,16 @@ theorem homothety_eq_iff_of_mul_eq_one {c p q : P1} {r₁ r₂ : k} (h : r₁ * 
     AffineMap.homothety c r₁ p = q ↔ AffineMap.homothety c r₂ q = p := by
   constructor
   · intro hpq
-    rw [← hpq, AffineMap.homothety_apply, AffineMap.homothety_apply]
-    have hmul : r₂ * r₁ = 1 := by rw [mul_comm, h]
-    rw [vsub_vadd, smul_smul, hmul, one_smul]
+    rw [← hpq]
+    rw [AffineMap.homothety_apply, AffineMap.homothety_apply]
+    calc
+      r₂ • (r₁ • (p -ᵥ c)) +ᵥ c = (r₂ * r₁) • (p -ᵥ c) +ᵥ c := by rw [smul_smul]
+      _ = (1 : k) • (p -ᵥ c) +ᵥ c := by simpa [mul_comm] using congrArg (fun t => t • (p -ᵥ c) +ᵥ c) h
+      _ = p := by simp
   · intro hqp
-    rw [← hqp, AffineMap.homothety_apply, AffineMap.homothety_apply]
-    rw [vsub_vadd, smul_smul, h, one_smul]
+    rw [← hqp]
+    rw [AffineMap.homothety_apply, AffineMap.homothety_apply]
+    calc
+      r₁ • (r₂ • (q -ᵥ c)) +ᵥ c = (r₁ * r₂) • (q -ᵥ c) +ᵥ c := by rw [smul_smul]
+      _ = (1 : k) • (q -ᵥ c) +ᵥ c := by simpa using congrArg (fun t => t • (q -ᵥ c) +ᵥ c) h
+      _ = q := by simp

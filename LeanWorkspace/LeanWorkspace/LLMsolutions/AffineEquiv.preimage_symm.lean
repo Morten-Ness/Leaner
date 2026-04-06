@@ -9,6 +9,7 @@ theorem preimage_symm (f : P₁ ≃ᵃ[k] P₂) (s : Set P₁) : f.symm ⁻¹' s
   ext y
   constructor
   · intro hy
-    exact ⟨f.symm y, hy, by simp⟩
+    refine ⟨f.symm y, hy, ?_⟩
+    simp
   · rintro ⟨x, hx, rfl⟩
-    simpa using hx
+    simp [hx]

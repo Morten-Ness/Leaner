@@ -9,6 +9,6 @@ theorem toAffineMap_inj {e e' : P₁ ≃ᵃ[k] P₂} : e.toAffineMap = e'.toAffi
   constructor
   · intro h
     ext p
-    exact congrArg (fun f => f p) h
+    exact congrArg (fun f : P₁ →ᵃ[k] P₂ => f p) h
   · intro h
     simpa [h]

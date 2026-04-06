@@ -11,4 +11,6 @@ theorem ne_zero_iff : ψ ≠ 0 ↔ ∃ x, ψ x ≠ 1 := by
     by_contra hx
     exact h' ⟨x, hx⟩
   · rintro ⟨x, hx⟩ hψ
-    exact hx (by simpa [hψ])
+    apply hx
+    rw [hψ]
+    rfl

@@ -1,0 +1,37 @@
+FILE: AddChar.sum_apply.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: AddChar.sum_apply.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {ι A M : Type*} [AddMonoid A] [CommMonoid M]
+
+theorem sum_apply (s : Finset ι) (ψ : ι → AddChar A M) (a : A) :
+    (∑ i ∈ s, ψ i) a = ∏ i ∈ s, ψ i a := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {ι A M : Type*} [AddMonoid A] [CommMonoid M]
+
+theorem sum_apply (s : Finset ι) (ψ : ι → AddChar A M) (a : A) :
+    (∑ i ∈ s, ψ i) a = ∏ i ∈ s, ψ i a := by
+  classical
+  induction s using Finset.induction_on with
+  | empty =>
+      simp
+  | @insert i s hi ih =>
+      simp [hi, ih]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+PASS

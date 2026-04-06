@@ -1,6 +1,9 @@
 FILE: AffineEquiv.toAffineMap_inj.lean
 
-===== ATTEMPT 1 PROMPT =====
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
 Filename: AffineEquiv.toAffineMap_inj.lean
 
 Fill in the Lean proof for this file.
@@ -18,7 +21,53 @@ variable {k P₁ P₂ P₃ P₄ V₁ V₂ V₃ V₄ : Type*} [Ring k]
 
 theorem toAffineMap_inj {e e' : P₁ ≃ᵃ[k] P₂} : e.toAffineMap = e'.toAffineMap ↔ e = e' := sorry
 
-===== ATTEMPT 1 RESPONSE =====
+===== ASSISTANT =====
+import Mathlib
+
+variable {k P₁ P₂ P₃ P₄ V₁ V₂ V₃ V₄ : Type*} [Ring k]
+  [AddCommGroup V₁] [AddCommGroup V₂] [AddCommGroup V₃] [AddCommGroup V₄]
+  [Module k V₁] [Module k V₂] [Module k V₃] [Module k V₄]
+  [AddTorsor V₁ P₁] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃] [AddTorsor V₄ P₄]
+
+theorem toAffineMap_inj {e e' : P₁ ≃ᵃ[k] P₂} : e.toAffineMap = e'.toAffineMap ↔ e = e' := by
+  constructor
+  · intro h
+    cases e
+    cases e'
+    cases h
+    rfl
+  · intro h
+    cases h
+    rfl
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:5-13:10
+Dependent elimination failed: Failed to solve equation
+  { toEquiv := toEquiv✝, linear := linear✝, map_vadd' := map_vadd'✝ }.toEquiv.1 =
+    { toEquiv := toEquiv✝¹, linear := linear✝¹, map_vadd' := map_vadd'✝¹ }.toEquiv.1
+Source line 13:
+    cases h
+    ^^^^^
+Highlighted span: cases
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:5-13:10
+Dependent elimination failed: Failed to solve equation
+  { toEquiv := toEquiv✝, linear := linear✝, map_vadd' := map_vadd'✝ }.toEquiv.1 =
+    { toEquiv := toEquiv✝¹, linear := linear✝¹, map_vadd' := map_vadd'✝¹ }.toEquiv.1
+Source line 13:
+    cases h
+    ^^^^^
+Highlighted span: cases
+
+===== ASSISTANT =====
 import Mathlib
 
 variable {k P₁ P₂ P₃ P₄ V₁ V₂ V₃ V₄ : Type*} [Ring k]
@@ -30,9 +79,9 @@ theorem toAffineMap_inj {e e' : P₁ ≃ᵃ[k] P₂} : e.toAffineMap = e'.toAffi
   constructor
   · intro h
     ext p
-    exact congrArg (fun f => f p) h
+    exact congrArg (fun f : P₁ →ᵃ[k] P₂ => f p) h
   · intro h
     simpa [h]
 
-===== ATTEMPT 1 LEAN OUTPUT =====
+===== ATTEMPT 2 LEAN OUTPUT =====
 PASS

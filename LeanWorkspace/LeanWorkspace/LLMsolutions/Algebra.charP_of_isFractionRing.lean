@@ -8,4 +8,6 @@ variable (R : Type*) {K : Type*} [CommRing R] [Field K] [Algebra R K] [IsFractio
 variable (p : ℕ)
 
 theorem charP_of_isFractionRing [CharP R p] : CharP K p := by
-  infer_instance
+  classical
+  rw [← ringChar.of_eq p]
+  exact IsFractionRing.ringChar_eq R K

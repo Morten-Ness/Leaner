@@ -1,0 +1,343 @@
+FILE: AffineEquiv.injective_pointReflection_left_of_injective_two_nsmul.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: AffineEquiv.injective_pointReflection_left_of_injective_two_nsmul.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {k P₁ P₂ P₃ P₄ V₁ V₂ V₃ V₄ : Type*} [Ring k]
+  [AddCommGroup V₁] [AddCommGroup V₂] [AddCommGroup V₃] [AddCommGroup V₄]
+  [Module k V₁] [Module k V₂] [Module k V₃] [Module k V₄]
+  [AddTorsor V₁ P₁] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃] [AddTorsor V₄ P₄]
+
+theorem injective_pointReflection_left_of_injective_two_nsmul
+    (h : Function.Injective (2 • · : V₁ → V₁)) (y : P₁) :
+    Function.Injective fun x : P₁ => AffineEquiv.pointReflection k x y := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k P₁ P₂ P₃ P₄ V₁ V₂ V₃ V₄ : Type*} [Ring k]
+  [AddCommGroup V₁] [AddCommGroup V₂] [AddCommGroup V₃] [AddCommGroup V₄]
+  [Module k V₁] [Module k V₂] [Module k V₃] [Module k V₄]
+  [AddTorsor V₁ P₁] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃] [AddTorsor V₄ P₄]
+
+theorem injective_pointReflection_left_of_injective_two_nsmul
+    (h : Function.Injective (2 • · : V₁ → V₁)) (y : P₁) :
+    Function.Injective fun x : P₁ => AffineEquiv.pointReflection k x y := by
+  intro x₁ x₂ hxe
+  rw [AffineEquiv.pointReflection_apply, AffineEquiv.pointReflection_apply] at hxe
+  apply vsub_left_cancel y
+  apply h
+  simpa [two_nsmul] using congrArg (fun p : P₁ => y -ᵥ p) hxe
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:7-12:40
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (AffineEquiv.pointReflection ?k ?x) ?y
+in the target expression
+  (fun x ↦ (AffineEquiv.pointReflection k x) y) x₁ = (fun x ↦ (AffineEquiv.pointReflection k x) y) x₂
+
+k : Type u_1
+P₁ : Type u_2
+V₁ : Type u_6
+inst✝³ : Ring k
+inst✝² : AddCommGroup V₁
+inst✝¹ : Module k V₁
+inst✝ : AddTorsor V₁ P₁
+h : Function.Injective fun x ↦ 2 • x
+y x₁ x₂ : P₁
+hxe : (fun x ↦ (AffineEquiv.pointReflection k x) y) x₁ = (fun x ↦ (AffineEquiv.pointReflection k x) y) x₂
+⊢ x₁ = x₂
+Source line 12:
+  rw [AffineEquiv.pointReflection_apply, AffineEquiv.pointReflection_apply] at hxe
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineEquiv.pointReflection_apply
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:7-12:40
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (AffineEquiv.pointReflection ?k ?x) ?y
+in the target expression
+  (fun x ↦ (AffineEquiv.pointReflection k x) y) x₁ = (fun x ↦ (AffineEquiv.pointReflection k x) y) x₂
+
+k : Type u_1
+P₁ : Type u_2
+V₁ : Type u_6
+inst✝³ : Ring k
+inst✝² : AddCommGroup V₁
+inst✝¹ : Module k V₁
+inst✝ : AddTorsor V₁ P₁
+h : Function.Injective fun x ↦ 2 • x
+y x₁ x₂ : P₁
+hxe : (fun x ↦ (AffineEquiv.pointReflection k x) y) x₁ = (fun x ↦ (AffineEquiv.pointReflection k x) y) x₂
+⊢ x₁ = x₂
+Source line 12:
+  rw [AffineEquiv.pointReflection_apply, AffineEquiv.pointReflection_apply] at hxe
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: AffineEquiv.pointReflection_apply
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k P₁ P₂ P₃ P₄ V₁ V₂ V₃ V₄ : Type*} [Ring k]
+  [AddCommGroup V₁] [AddCommGroup V₂] [AddCommGroup V₃] [AddCommGroup V₄]
+  [Module k V₁] [Module k V₂] [Module k V₃] [Module k V₄]
+  [AddTorsor V₁ P₁] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃] [AddTorsor V₄ P₄]
+
+theorem injective_pointReflection_left_of_injective_two_nsmul
+    (h : Function.Injective (2 • · : V₁ → V₁)) (y : P₁) :
+    Function.Injective fun x : P₁ => AffineEquiv.pointReflection k x y := by
+  intro x₁ x₂ hxe
+  apply vsub_left_cancel y
+  apply h
+  simpa [AffineEquiv.pointReflection_apply, two_nsmul] using
+    congrArg (fun p : P₁ => y -ᵥ p) hxe
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:26-12:27
+Application type mismatch: The argument
+  y
+has type
+  P₁
+of sort `Type u_2` but is expected to have type
+  ?m.47 -ᵥ ?m.49 = ?m.48 -ᵥ ?m.49
+of sort `Prop` in the application
+  vsub_left_cancel y
+Source line 12:
+  apply vsub_left_cancel y
+                         ^
+Highlighted span: y
+
+ERROR .LspCheck.lean:13:3-13:10
+Tactic `apply` failed: could not unify the conclusion of `h`
+  ?a₁ = ?a₂
+with the goal
+  P₁
+
+Note: The full type of `h` is
+  Function.Injective fun x ↦ 2 • x
+
+k : Type u_1
+P₁ : Type u_2
+V₁ : Type u_6
+inst✝³ : Ring k
+inst✝² : AddCommGroup V₁
+inst✝¹ : Module k V₁
+inst✝ : AddTorsor V₁ P₁
+h : Function.Injective fun x ↦ 2 • x
+y x₁ x₂ : P₁
+hxe : (fun x ↦ (AffineEquiv.pointReflection k x) y) x₁ = (fun x ↦ (AffineEquiv.pointReflection k x) y) x₂
+⊢ P₁
+Source line 13:
+  apply h
+  ^^^^^^^
+Highlighted span: apply h
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:26-12:27
+Application type mismatch: The argument
+  y
+has type
+  P₁
+of sort `Type u_2` but is expected to have type
+  ?m.47 -ᵥ ?m.49 = ?m.48 -ᵥ ?m.49
+of sort `Prop` in the application
+  vsub_left_cancel y
+Source line 12:
+  apply vsub_left_cancel y
+                         ^
+Highlighted span: y
+
+ERROR .LspCheck.lean:13:3-13:10
+Tactic `apply` failed: could not unify the conclusion of `h`
+  ?a₁ = ?a₂
+with the goal
+  P₁
+
+Note: The full type of `h` is
+  Function.Injective fun x ↦ 2 • x
+
+k : Type u_1
+P₁ : Type u_2
+V₁ : Type u_6
+inst✝³ : Ring k
+inst✝² : AddCommGroup V₁
+inst✝¹ : Module k V₁
+inst✝ : AddTorsor V₁ P₁
+h : Function.Injective fun x ↦ 2 • x
+y x₁ x₂ : P₁
+hxe : (fun x ↦ (AffineEquiv.pointReflection k x) y) x₁ = (fun x ↦ (AffineEquiv.pointReflection k x) y) x₂
+⊢ P₁
+Source line 13:
+  apply h
+  ^^^^^^^
+Highlighted span: apply h
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k P₁ P₂ P₃ P₄ V₁ V₂ V₃ V₄ : Type*} [Ring k]
+  [AddCommGroup V₁] [AddCommGroup V₂] [AddCommGroup V₃] [AddCommGroup V₄]
+  [Module k V₁] [Module k V₂] [Module k V₃] [Module k V₄]
+  [AddTorsor V₁ P₁] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃] [AddTorsor V₄ P₄]
+
+theorem injective_pointReflection_left_of_injective_two_nsmul
+    (h : Function.Injective (2 • · : V₁ → V₁)) (y : P₁) :
+    Function.Injective fun x : P₁ => AffineEquiv.pointReflection k x y := by
+  intro x₁ x₂ hxe
+  let z : P₁ := AffineEquiv.pointReflection k x₁ y
+  have hz1 : z = AffineEquiv.pointReflection k x₁ y := rfl
+  have hz2 : z = AffineEquiv.pointReflection k x₂ y := by simpa [z] using hxe
+  have hv1 : (x₁ -ᵥ z) = (z -ᵥ y) := by
+    rw [hz1, AffineEquiv.pointReflection_apply]
+  have hv2 : (x₂ -ᵥ z) = (z -ᵥ y) := by
+    rw [hz2, AffineEquiv.pointReflection_apply]
+  have hv : x₁ -ᵥ z = x₂ -ᵥ z := hv1.trans hv2.symm
+  exact vsub_right_cancel hv
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:38-16:1
+unsolved goals
+k : Type u_1
+P₁ : Type u_2
+V₁ : Type u_6
+inst✝³ : Ring k
+inst✝² : AddCommGroup V₁
+inst✝¹ : Module k V₁
+inst✝ : AddTorsor V₁ P₁
+h : Function.Injective fun x ↦ 2 • x
+y x₁ x₂ : P₁
+hxe : (fun x ↦ (AffineEquiv.pointReflection k x) y) x₁ = (fun x ↦ (AffineEquiv.pointReflection k x) y) x₂
+z : P₁ := (AffineEquiv.pointReflection k x₁) y
+hz1 : z = (AffineEquiv.pointReflection k x₁) y
+hz2 : z = (AffineEquiv.pointReflection k x₂) y
+⊢ x₁ -ᵥ ((x₁ -ᵥ y) +ᵥ x₁) = ((x₁ -ᵥ y) +ᵥ x₁) -ᵥ y
+Source line 15:
+  have hv1 : (x₁ -ᵥ z) = (z -ᵥ y) := by
+                                     ^
+Highlighted span: b
+
+ERROR .LspCheck.lean:17:38-18:1
+unsolved goals
+k : Type u_1
+P₁ : Type u_2
+V₁ : Type u_6
+inst✝³ : Ring k
+inst✝² : AddCommGroup V₁
+inst✝¹ : Module k V₁
+inst✝ : AddTorsor V₁ P₁
+h : Function.Injective fun x ↦ 2 • x
+y x₁ x₂ : P₁
+hxe : (fun x ↦ (AffineEquiv.pointReflection k x) y) x₁ = (fun x ↦ (AffineEquiv.pointReflection k x) y) x₂
+z : P₁ := (AffineEquiv.pointReflection k x₁) y
+hz1 : z = (AffineEquiv.pointReflection k x₁) y
+hz2 : z = (AffineEquiv.pointReflection k x₂) y
+hv1 : x₁ -ᵥ z = z -ᵥ y
+⊢ x₂ -ᵥ ((x₂ -ᵥ y) +ᵥ x₂) = ((x₂ -ᵥ y) +ᵥ x₂) -ᵥ y
+Source line 17:
+  have hv2 : (x₂ -ᵥ z) = (z -ᵥ y) := by
+                                     ^
+Highlighted span: b
+
+ERROR .LspCheck.lean:20:27-20:29
+Application type mismatch: The argument
+  hv
+has type
+  x₁ -ᵥ z = x₂ -ᵥ z
+but is expected to have type
+  ?m.146 -ᵥ x₁ = ?m.146 -ᵥ x₂
+in the application
+  vsub_right_cancel hv
+Source line 20:
+  exact vsub_right_cancel hv
+                          ^^
+Highlighted span: hv
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:38-16:1
+unsolved goals
+k : Type u_1
+P₁ : Type u_2
+V₁ : Type u_6
+inst✝³ : Ring k
+inst✝² : AddCommGroup V₁
+inst✝¹ : Module k V₁
+inst✝ : AddTorsor V₁ P₁
+h : Function.Injective fun x ↦ 2 • x
+y x₁ x₂ : P₁
+hxe : (fun x ↦ (AffineEquiv.pointReflection k x) y) x₁ = (fun x ↦ (AffineEquiv.pointReflection k x) y) x₂
+z : P₁ := (AffineEquiv.pointReflection k x₁) y
+hz1 : z = (AffineEquiv.pointReflection k x₁) y
+hz2 : z = (AffineEquiv.pointReflection k x₂) y
+⊢ x₁ -ᵥ ((x₁ -ᵥ y) +ᵥ x₁) = ((x₁ -ᵥ y) +ᵥ x₁) -ᵥ y
+Source line 15:
+  have hv1 : (x₁ -ᵥ z) = (z -ᵥ y) := by
+                                     ^
+Highlighted span: b
+
+ERROR .LspCheck.lean:17:38-18:1
+unsolved goals
+k : Type u_1
+P₁ : Type u_2
+V₁ : Type u_6
+inst✝³ : Ring k
+inst✝² : AddCommGroup V₁
+inst✝¹ : Module k V₁
+inst✝ : AddTorsor V₁ P₁
+h : Function.Injective fun x ↦ 2 • x
+y x₁ x₂ : P₁
+hxe : (fun x ↦ (AffineEquiv.pointReflection k x) y) x₁ = (fun x ↦ (AffineEquiv.pointReflection k x) y) x₂
+z : P₁ := (AffineEquiv.pointReflection k x₁) y
+hz1 : z = (AffineEquiv.pointReflection k x₁) y
+hz2 : z = (AffineEquiv.pointReflection k x₂) y
+hv1 : x₁ -ᵥ z = z -ᵥ y
+⊢ x₂ -ᵥ ((x₂ -ᵥ y) +ᵥ x₂) = ((x₂ -ᵥ y) +ᵥ x₂) -ᵥ y
+Source line 17:
+  have hv2 : (x₂ -ᵥ z) = (z -ᵥ y) := by
+                                     ^
+Highlighted span: b
+
+ERROR .LspCheck.lean:20:27-20:29
+Application type mismatch: The argument
+  hv
+has type
+  x₁ -ᵥ z = x₂ -ᵥ z
+but is expected to have type
+  ?m.146 -ᵥ x₁ = ?m.146 -ᵥ x₂
+in the application
+  vsub_right_cancel hv
+Source line 20:
+  exact vsub_right_cancel hv
+                          ^^
+Highlighted span: hv

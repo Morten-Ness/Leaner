@@ -1,6 +1,9 @@
 FILE: Algebra.charZero_of_isFractionRing.lean
 
-===== ATTEMPT 1 PROMPT =====
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
 Filename: Algebra.charZero_of_isFractionRing.lean
 
 Fill in the Lean proof for this file.
@@ -19,7 +22,7 @@ variable (p : ℕ)
 
 theorem charZero_of_isFractionRing [CharZero R] : CharZero K := sorry
 
-===== ATTEMPT 1 RESPONSE =====
+===== ASSISTANT =====
 import Mathlib
 
 variable {R A : Type*}
@@ -32,60 +35,35 @@ theorem charZero_of_isFractionRing [CharZero R] : CharZero K := by
   infer_instance
 
 ===== ATTEMPT 1 LEAN OUTPUT =====
-ERROR .tmp_pl75_kp7.Algebra.charZero_of_isFractionRing.lean:10:2-10:16
+ERROR .LspCheck.lean:10:3-10:17
 failed to synthesize instance of type class
   CharZero K
 
 Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
 Source line 10:
   infer_instance
- ^^^^^^^^^^^^^^
-Highlighted span:  infer_instanc
+  ^^^^^^^^^^^^^^
+Highlighted span: infer_instance
 
-===== ATTEMPT 2 PROMPT =====
-Filename: Algebra.charZero_of_isFractionRing.lean
+===== USER =====
 Retry attempt: 2
 
 The previous Lean solution did not compile.
-Return the complete corrected .lean file content only.
+Return a corrected complete .lean file content only.
 Do not use markdown fences.
-Keep the theorem statement and surrounding context unchanged if possible.
 
-Original target file with `sorry`:
-import Mathlib
-
-variable {R A : Type*}
-
-variable (R : Type*) {K : Type*} [CommRing R] [Field K] [Algebra R K] [IsFractionRing R K]
-
-variable (p : ℕ)
-
-theorem charZero_of_isFractionRing [CharZero R] : CharZero K := sorry
-
-Previous attempted solution:
-import Mathlib
-
-variable {R A : Type*}
-
-variable (R : Type*) {K : Type*} [CommRing R] [Field K] [Algebra R K] [IsFractionRing R K]
-
-variable (p : ℕ)
-
-theorem charZero_of_isFractionRing [CharZero R] : CharZero K := by
-  infer_instance
-
-Lean compiler output:
-ERROR .tmp_pl75_kp7.Algebra.charZero_of_isFractionRing.lean:10:2-10:16
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:3-10:17
 failed to synthesize instance of type class
   CharZero K
 
 Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
 Source line 10:
   infer_instance
- ^^^^^^^^^^^^^^
-Highlighted span:  infer_instanc
+  ^^^^^^^^^^^^^^
+Highlighted span: infer_instance
 
-===== ATTEMPT 2 RESPONSE =====
+===== ASSISTANT =====
 import Mathlib
 
 variable {R A : Type*}
@@ -95,66 +73,47 @@ variable (R : Type*) {K : Type*} [CommRing R] [Field K] [Algebra R K] [IsFractio
 variable (p : ℕ)
 
 theorem charZero_of_isFractionRing [CharZero R] : CharZero K := by
-  classical
-  rw [charZero_iff]
-  intro m n h
-  by_contra hmn
-  have hne : (m : R) - n ≠ 0 := by
-    intro hz
-    apply hmn
-    exact_mod_cast sub_eq_zero.mp hz
-  have hmne : algebraMap R K ((m : R) - n) ≠ 0 :=
-    map_ne_zero_of_ne_zero hne
-  have hsub : ((m : K) - n) = 0 := by
-    norm_num [h]
-  have hmap : algebraMap R K ((m : R) - n) = ((m : K) - n) := by
-    simp
-  exact hmne (hmap.trans hsub)
+  letI : IsDomain R := IsFractionRing.to_isDomain R K
+  exact FractionRing.charZero R K
 
 ===== ATTEMPT 2 LEAN OUTPUT =====
-ERROR .tmp_g7kew_1u.Algebra.charZero_of_isFractionRing.lean:11:6-11:18
-Unknown identifier `charZero_iff`
+ERROR .LspCheck.lean:10:24-10:50
+Unknown constant `IsFractionRing.to_isDomain`
+Source line 10:
+  letI : IsDomain R := IsFractionRing.to_isDomain R K
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: IsFractionRing.to_isDomain
+
+ERROR .LspCheck.lean:11:9-11:30
+Unknown constant `FractionRing.charZero`
 Source line 11:
-  rw [charZero_iff]
-     ^^^^^^^^^^^^
-Highlighted span: [charZero_if
+  exact FractionRing.charZero R K
+        ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: FractionRing.charZero
 
-ERROR .tmp_g7kew_1u.Algebra.charZero_of_isFractionRing.lean:9:64-24:30
-unsolved goals
-R : Type u_3
-K : Type u_4
-inst✝⁴ : CommRing R
-inst✝³ : Field K
-inst✝² : Algebra R K
-inst✝¹ : IsFractionRing R K
-inst✝ : CharZero R
-⊢ CharZero K
-Source line 9:
-theorem charZero_of_isFractionRing [CharZero R] : CharZero K := by
-                                                               ^
-Highlighted span:
-
-===== ATTEMPT 3 PROMPT =====
-Filename: Algebra.charZero_of_isFractionRing.lean
+===== USER =====
 Retry attempt: 3
 
 The previous Lean solution did not compile.
-Return the complete corrected .lean file content only.
+Return a corrected complete .lean file content only.
 Do not use markdown fences.
-Keep the theorem statement and surrounding context unchanged if possible.
 
-Original target file with `sorry`:
-import Mathlib
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:24-10:50
+Unknown constant `IsFractionRing.to_isDomain`
+Source line 10:
+  letI : IsDomain R := IsFractionRing.to_isDomain R K
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: IsFractionRing.to_isDomain
 
-variable {R A : Type*}
+ERROR .LspCheck.lean:11:9-11:30
+Unknown constant `FractionRing.charZero`
+Source line 11:
+  exact FractionRing.charZero R K
+        ^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: FractionRing.charZero
 
-variable (R : Type*) {K : Type*} [CommRing R] [Field K] [Algebra R K] [IsFractionRing R K]
-
-variable (p : ℕ)
-
-theorem charZero_of_isFractionRing [CharZero R] : CharZero K := sorry
-
-Previous attempted solution:
+===== ASSISTANT =====
 import Mathlib
 
 variable {R A : Type*}
@@ -165,31 +124,22 @@ variable (p : ℕ)
 
 theorem charZero_of_isFractionRing [CharZero R] : CharZero K := by
   classical
-  rw [charZero_iff]
-  intro m n h
-  by_contra hmn
-  have hne : (m : R) - n ≠ 0 := by
-    intro hz
-    apply hmn
-    exact_mod_cast sub_eq_zero.mp hz
-  have hmne : algebraMap R K ((m : R) - n) ≠ 0 :=
-    map_ne_zero_of_ne_zero hne
-  have hsub : ((m : K) - n) = 0 := by
-    norm_num [h]
-  have hmap : algebraMap R K ((m : R) - n) = ((m : K) - n) := by
-    simp
-  exact hmne (hmap.trans hsub)
+  refine ⟨?_⟩
+  intro m n hmn
+  by_contra hne
+  wlog hlt : m < n := lt_of_le_of_ne (Nat.le_total m n).resolve_right (Ne.symm hne)
+  · exact this n m (by simpa [eq_comm] using hmn.symm) (Ne.symm hne) ((Nat.lt_total m n).resolve_left hlt)
+  have hsub : (n - m : R) = 0 := by
+    apply (Nat.cast_injective (R := R))
+    simpa [Nat.cast_sub hlt.le] using congrArg (fun x : K => x - m) hmn
+  have : (n - m : ℕ) = 0 := Nat.cast_injective (R := R) hsub
+  have : n - m = 0 := this
+  exact hlt.ne' (Nat.sub_eq_zero_iff_le.mp this)
 
-Lean compiler output:
-ERROR .tmp_g7kew_1u.Algebra.charZero_of_isFractionRing.lean:11:6-11:18
-Unknown identifier `charZero_iff`
-Source line 11:
-  rw [charZero_iff]
-     ^^^^^^^^^^^^
-Highlighted span: [charZero_if
-
-ERROR .tmp_g7kew_1u.Algebra.charZero_of_isFractionRing.lean:9:64-24:30
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:9:65-10:1
 unsolved goals
+case inr
 R : Type u_3
 K : Type u_4
 inst✝⁴ : CommRing R
@@ -197,31 +147,94 @@ inst✝³ : Field K
 inst✝² : Algebra R K
 inst✝¹ : IsFractionRing R K
 inst✝ : CharZero R
-⊢ CharZero K
+m n : ℕ
+hmn : ↑m = ↑n
+hne : ¬m = n
+this :
+  ∀ (R : Type u_3) {K : Type u_4} [inst : CommRing R] [inst_1 : Field K] [inst_2 : Algebra R K] [IsFractionRing R K]
+    [CharZero R] ⦃m n : ℕ⦄, ↑m = ↑n → ¬m = n → m < n → False
+hlt : ¬m < n
+⊢ False
+
+R✝ : Type u_3
+K✝ : Type u_4
+inst✝⁶ : CommRing R✝
+inst✝⁵ : Field K✝
+R : Type u_3
+K : Type u_4
+inst✝⁴ : CommRing R
+inst✝³ : Field K
+inst✝² : Algebra R K
+inst✝¹ : IsFractionRing R K
+inst✝ : CharZero R
+m n : ℕ
+hmn : ↑m = ↑n
+hne : ¬m = n
+hlt : m < n
+⊢ False
 Source line 9:
 theorem charZero_of_isFractionRing [CharZero R] : CharZero K := by
-                                                               ^
-Highlighted span:
+                                                                ^
+Highlighted span: b
 
-===== ATTEMPT 3 RESPONSE =====
-import Mathlib
+ERROR .LspCheck.lean:14:20-14:22
+unexpected token ':='; expected command
+Source line 14:
+  wlog hlt : m < n := lt_of_le_of_ne (Nat.le_total m n).resolve_right (Ne.symm hne)
+                   ^^
+Highlighted span: :=
 
-variable {R A : Type*}
+===== USER =====
+Retry attempt: 4
 
-variable (R : Type*) {K : Type*} [CommRing R] [Field K] [Algebra R K] [IsFractionRing R K]
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
 
-variable (p : ℕ)
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:9:65-10:1
+unsolved goals
+case inr
+R : Type u_3
+K : Type u_4
+inst✝⁴ : CommRing R
+inst✝³ : Field K
+inst✝² : Algebra R K
+inst✝¹ : IsFractionRing R K
+inst✝ : CharZero R
+m n : ℕ
+hmn : ↑m = ↑n
+hne : ¬m = n
+this :
+  ∀ (R : Type u_3) {K : Type u_4} [inst : CommRing R] [inst_1 : Field K] [inst_2 : Algebra R K] [IsFractionRing R K]
+    [CharZero R] ⦃m n : ℕ⦄, ↑m = ↑n → ¬m = n → m < n → False
+hlt : ¬m < n
+⊢ False
 
+R✝ : Type u_3
+K✝ : Type u_4
+inst✝⁶ : CommRing R✝
+inst✝⁵ : Field K✝
+R : Type u_3
+K : Type u_4
+inst✝⁴ : CommRing R
+inst✝³ : Field K
+inst✝² : Algebra R K
+inst✝¹ : IsFractionRing R K
+inst✝ : CharZero R
+m n : ℕ
+hmn : ↑m = ↑n
+hne : ¬m = n
+hlt : m < n
+⊢ False
+Source line 9:
 theorem charZero_of_isFractionRing [CharZero R] : CharZero K := by
-  infer_instance
+                                                                ^
+Highlighted span: b
 
-===== ATTEMPT 3 LEAN OUTPUT =====
-ERROR .tmp_psv2doxw.Algebra.charZero_of_isFractionRing.lean:10:2-10:16
-failed to synthesize instance of type class
-  CharZero K
-
-Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
-Source line 10:
-  infer_instance
- ^^^^^^^^^^^^^^
-Highlighted span:  infer_instanc
+ERROR .LspCheck.lean:14:20-14:22
+unexpected token ':='; expected command
+Source line 14:
+  wlog hlt : m < n := lt_of_le_of_ne (Nat.le_total m n).resolve_right (Ne.symm hne)
+                   ^^
+Highlighted span: :=

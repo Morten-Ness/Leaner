@@ -1,0 +1,259 @@
+FILE: AddChar.injective_iff.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: AddChar.injective_iff.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {A M : Type*} [AddCommGroup A] [DivisionCommMonoid M]
+
+theorem injective_iff {ψ : AddChar A M} : Function.Injective ψ ↔ ∀ ⦃x⦄, ψ x = 1 → x = 0 := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {A M : Type*} [AddCommGroup A] [DivisionCommMonoid M]
+
+theorem injective_iff {ψ : AddChar A M} : Function.Injective ψ ↔ ∀ ⦃x⦄, ψ x = 1 → x = 0 := by
+  constructor
+  · intro h x hx
+    apply h
+    simpa using hx
+  · intro h x y hxy
+    have h1 : ψ (x - y) = 1 := by
+      rw [map_sub, hxy, div_self]
+    have hxy0 : x - y = 0 := h h1
+    exact sub_eq_zero.mp hxy0
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:11-12:18
+failed to synthesize instance of type class
+  SubtractionMonoid M
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 12:
+      rw [map_sub, hxy, div_self]
+          ^^^^^^^
+Highlighted span: map_sub
+
+ERROR .LspCheck.lean:12:11-12:18
+failed to synthesize instance of type class
+  AddMonoidHomClass (AddChar A M) A M
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 12:
+      rw [map_sub, hxy, div_self]
+          ^^^^^^^
+Highlighted span: map_sub
+
+ERROR .LspCheck.lean:12:25-12:33
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.67 / ?m.67
+in the target expression
+  ψ y - ψ y = 1
+
+A : Type u_1
+M : Type u_2
+inst✝¹ : AddCommGroup A
+inst✝ : DivisionCommMonoid M
+ψ : AddChar A M
+h : ∀ ⦃x : A⦄, ψ x = 1 → x = 0
+x y : A
+hxy : ψ x = ψ y
+⊢ ψ y - ψ y = 1
+Source line 12:
+      rw [map_sub, hxy, div_self]
+                        ^^^^^^^^
+Highlighted span: div_self
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:11-12:18
+failed to synthesize instance of type class
+  SubtractionMonoid M
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 12:
+      rw [map_sub, hxy, div_self]
+          ^^^^^^^
+Highlighted span: map_sub
+
+ERROR .LspCheck.lean:12:11-12:18
+failed to synthesize instance of type class
+  AddMonoidHomClass (AddChar A M) A M
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 12:
+      rw [map_sub, hxy, div_self]
+          ^^^^^^^
+Highlighted span: map_sub
+
+ERROR .LspCheck.lean:12:25-12:33
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.67 / ?m.67
+in the target expression
+  ψ y - ψ y = 1
+
+A : Type u_1
+M : Type u_2
+inst✝¹ : AddCommGroup A
+inst✝ : DivisionCommMonoid M
+ψ : AddChar A M
+h : ∀ ⦃x : A⦄, ψ x = 1 → x = 0
+x y : A
+hxy : ψ x = ψ y
+⊢ ψ y - ψ y = 1
+Source line 12:
+      rw [map_sub, hxy, div_self]
+                        ^^^^^^^^
+Highlighted span: div_self
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {A M : Type*} [AddCommGroup A] [DivisionCommMonoid M]
+
+theorem injective_iff {ψ : AddChar A M} : Function.Injective ψ ↔ ∀ ⦃x⦄, ψ x = 1 → x = 0 := by
+  constructor
+  · intro h x hx
+    apply h
+    simpa using hx
+  · intro h x y hxy
+    have h1 : ψ (x - y) = 1 := by
+      calc
+        ψ (x - y) = ψ x / ψ y := by simpa [sub_eq_add_neg] using map_add ψ x (-y)
+        _ = ψ y / ψ y := by rw [hxy]
+        _ = 1 := div_self _
+    have hxy0 : x - y = 0 := h h1
+    exact sub_eq_zero.mp hxy0
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:66-13:82
+failed to synthesize instance of type class
+  AddHomClass (AddChar A M) A M
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 13:
+        ψ (x - y) = ψ x / ψ y := by simpa [sub_eq_add_neg] using map_add ψ x (-y)
+                                                                 ^^^^^^^^^^^^^^^^
+Highlighted span: map_add ψ x (-y)
+
+ERROR .LspCheck.lean:13:66-13:82
+failed to synthesize instance of type class
+  Add M
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 13:
+        ψ (x - y) = ψ x / ψ y := by simpa [sub_eq_add_neg] using map_add ψ x (-y)
+                                                                 ^^^^^^^^^^^^^^^^
+Highlighted span: map_add ψ x (-y)
+
+ERROR .LspCheck.lean:15:18-15:28
+Type mismatch
+  div_self ?m.85
+has type
+  @HDiv.hDiv ?m.82 ?m.82 ?m.82 (@instHDiv ?m.82 (@DivInvMonoid.toDiv ?m.82 GroupWithZero.toDivInvMonoid)) ?m.84 ?m.84 =
+    1
+but is expected to have type
+  @HDiv.hDiv M M M (@instHDiv M (@DivInvMonoid.toDiv M inst✝.toDivInvMonoid)) (ψ y) (ψ y) = 1
+Source line 15:
+        _ = 1 := div_self _
+                 ^^^^^^^^^^
+Highlighted span: div_self _
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:66-13:82
+failed to synthesize instance of type class
+  AddHomClass (AddChar A M) A M
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 13:
+        ψ (x - y) = ψ x / ψ y := by simpa [sub_eq_add_neg] using map_add ψ x (-y)
+                                                                 ^^^^^^^^^^^^^^^^
+Highlighted span: map_add ψ x (-y)
+
+ERROR .LspCheck.lean:13:66-13:82
+failed to synthesize instance of type class
+  Add M
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Source line 13:
+        ψ (x - y) = ψ x / ψ y := by simpa [sub_eq_add_neg] using map_add ψ x (-y)
+                                                                 ^^^^^^^^^^^^^^^^
+Highlighted span: map_add ψ x (-y)
+
+ERROR .LspCheck.lean:15:18-15:28
+Type mismatch
+  div_self ?m.85
+has type
+  @HDiv.hDiv ?m.82 ?m.82 ?m.82 (@instHDiv ?m.82 (@DivInvMonoid.toDiv ?m.82 GroupWithZero.toDivInvMonoid)) ?m.84 ?m.84 =
+    1
+but is expected to have type
+  @HDiv.hDiv M M M (@instHDiv M (@DivInvMonoid.toDiv M inst✝.toDivInvMonoid)) (ψ y) (ψ y) = 1
+Source line 15:
+        _ = 1 := div_self _
+                 ^^^^^^^^^^
+Highlighted span: div_self _
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {A M : Type*} [AddCommGroup A] [DivisionCommMonoid M]
+
+theorem injective_iff {ψ : AddChar A M} : Function.Injective ψ ↔ ∀ ⦃x⦄, ψ x = 1 → x = 0 := by
+  constructor
+  · intro h x hx
+    exact h <| by simpa using hx
+  · intro h x y hxy
+    have h0 : ψ (x - y) = 1 := by
+      rw [show x - y = x + (-y) by abel]
+      rw [AddChar.map_add]
+      rw [hxy]
+      exact div_self (ψ y)
+    have hsub : x - y = 0 := h h0
+    exact sub_eq_zero.mp hsub
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:11-12:26
+Unknown constant `AddChar.map_add`
+Source line 12:
+      rw [AddChar.map_add]
+          ^^^^^^^^^^^^^^^
+Highlighted span: AddChar.map_add
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:11-12:26
+Unknown constant `AddChar.map_add`
+Source line 12:
+      rw [AddChar.map_add]
+          ^^^^^^^^^^^^^^^
+Highlighted span: AddChar.map_add

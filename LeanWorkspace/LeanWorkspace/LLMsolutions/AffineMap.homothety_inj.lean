@@ -13,10 +13,13 @@ theorem homothety_inj [Module.IsTorsionFree k V1] [IsCancelMulZero k] (c : P1) {
   constructor
   · intro h
     have hv : r • (p -ᵥ c) = r • (q -ᵥ c) := by
-      rw [← AffineMap.lineMap_apply_module, ← AffineMap.lineMap_apply_module] at h
-      simpa [AffineMap.homothety, one_sub] using congrArg (fun x => x -ᵥ c) h
-    have hsub : p -ᵥ c = q -ᵥ c := by
-      exact eq_of_smul_eq_smul_of_ne_zero hr hv
-    exact vsub_left_cancel hsub
+      have h' := congrArg (fun x => x -ᵥ c) h
+      simpa [AffineMap.homothety_apply] using h'
+    have hzero : r • ((p -ᵥ c) - (q -ᵥ c)) = 0 := by
+      rw [smul_sub, hv, sub_self]
+    have hsub : (p -ᵥ c) - (q -ᵥ c) = 0 := by
+      exact eq_of_smul_eq_smul_of_ne_zero hr (by simpa using hzero)
+    have hvc : p -ᵥ c = q -ᵥ c := sub_eq_zero.mp hsub
+    exact vsub_left_cancel hvc
   · intro h
     simp [h]

@@ -6,10 +6,4 @@ variable {k P₁ P₂ P₃ P₄ V₁ V₂ V₃ V₄ : Type*} [Ring k]
   [AddTorsor V₁ P₁] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃] [AddTorsor V₄ P₄]
 
 theorem apply_eq_iff_eq_symm_apply (e : P₁ ≃ᵃ[k] P₂) {p₁ p₂} : e p₁ = p₂ ↔ p₁ = e.symm p₂ := by
-  constructor
-  · intro h
-    rw [← h]
-    exact (e.symm_apply_apply p₁).symm
-  · intro h
-    rw [h]
-    exact e.apply_symm_apply p₂
+  exact e.toEquiv.apply_eq_iff_eq_symm_apply

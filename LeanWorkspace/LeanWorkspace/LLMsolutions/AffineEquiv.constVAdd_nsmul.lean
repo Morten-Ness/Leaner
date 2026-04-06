@@ -9,8 +9,8 @@ theorem constVAdd_nsmul (n : ℕ) (v : V₁) : AffineEquiv.constVAdd k P₁ (n �
   induction n with
   | zero =>
       ext p
-      simp
+      simp [AffineEquiv.constVAdd]
   | succ n ih =>
       rw [pow_succ, ← ih]
       ext p
-      simp [succ_nsmul, add_vadd]
+      simp [AffineEquiv.constVAdd, add_nsmul, add_assoc]

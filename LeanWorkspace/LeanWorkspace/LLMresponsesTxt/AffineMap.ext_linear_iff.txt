@@ -1,6 +1,9 @@
 FILE: AffineMap.ext_linear_iff.lean
 
-===== ATTEMPT 1 PROMPT =====
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
 Filename: AffineMap.ext_linear_iff.lean
 
 Fill in the Lean proof for this file.
@@ -18,7 +21,7 @@ variable {k : Type*} {V1 : Type*} {P1 : Type*} {V2 : Type*} {P2 : Type*} {V3 : T
 
 theorem ext_linear_iff {f g : P1 →ᵃ[k] P2} : f = g ↔ (f.linear = g.linear) ∧ (∃ p, f p = g p) := sorry
 
-===== ATTEMPT 1 RESPONSE =====
+===== ASSISTANT =====
 import Mathlib
 
 variable {k : Type*} {V1 : Type*} {P1 : Type*} {V2 : Type*} {P2 : Type*} {V3 : Type*}
@@ -30,13 +33,345 @@ theorem ext_linear_iff {f g : P1 →ᵃ[k] P2} : f = g ↔ (f.linear = g.linear)
   constructor
   · intro h
     subst h
-    exact ⟨rfl, ⟨Classical.choice (inferInstance : Nonempty P1), rfl⟩⟩
+    exact ⟨rfl, ⟨Classical.choice (nonempty_P1), rfl⟩⟩
+  · rintro ⟨hlin, ⟨p, hp⟩⟩
+    ext q
+    rw [← hp]
+    calc
+      f q = f.linear (q -ᵥ p) +ᵥ f p := by simpa using (vadd_vsub_assoc (f p) q p)
+      _ = g.linear (q -ᵥ p) +ᵥ g p := by simpa [hlin, hp]
+      _ = g q := by simpa using (vadd_vsub_assoc (g p) q p).symm
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:12:36-12:47
+Unknown identifier `nonempty_P1`
+Source line 12:
+    exact ⟨rfl, ⟨Classical.choice (nonempty_P1), rfl⟩⟩
+                                   ^^^^^^^^^^^
+Highlighted span: nonempty_P1
+
+ERROR .LspCheck.lean:15:9-15:13
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  g p
+in the target expression
+  f q = g q
+
+case mpr.h
+k : Type u_1
+V1 : Type u_2
+P1 : Type u_3
+V2 : Type u_4
+P2 : Type u_5
+inst✝⁶ : Ring k
+inst✝⁵ : AddCommGroup V1
+inst✝⁴ : Module k V1
+inst✝³ : AddTorsor V1 P1
+inst✝² : AddCommGroup V2
+inst✝¹ : Module k V2
+inst✝ : AddTorsor V2 P2
+f g : P1 →ᵃ[k] P2
+hlin : f.linear = g.linear
+p : P1
+hp : f p = g p
+q : P1
+⊢ f q = g q
+Source line 15:
+    rw [← hp]
+        ^^^^
+Highlighted span: ← hp
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:12:36-12:47
+Unknown identifier `nonempty_P1`
+Source line 12:
+    exact ⟨rfl, ⟨Classical.choice (nonempty_P1), rfl⟩⟩
+                                   ^^^^^^^^^^^
+Highlighted span: nonempty_P1
+
+ERROR .LspCheck.lean:15:9-15:13
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  g p
+in the target expression
+  f q = g q
+
+case mpr.h
+k : Type u_1
+V1 : Type u_2
+P1 : Type u_3
+V2 : Type u_4
+P2 : Type u_5
+inst✝⁶ : Ring k
+inst✝⁵ : AddCommGroup V1
+inst✝⁴ : Module k V1
+inst✝³ : AddTorsor V1 P1
+inst✝² : AddCommGroup V2
+inst✝¹ : Module k V2
+inst✝ : AddTorsor V2 P2
+f g : P1 →ᵃ[k] P2
+hlin : f.linear = g.linear
+p : P1
+hp : f p = g p
+q : P1
+⊢ f q = g q
+Source line 15:
+    rw [← hp]
+        ^^^^
+Highlighted span: ← hp
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V1 : Type*} {P1 : Type*} {V2 : Type*} {P2 : Type*} {V3 : Type*}
+  {P3 : Type*} {V4 : Type*} {P4 : Type*} [Ring k] [AddCommGroup V1] [Module k V1]
+  [AddTorsor V1 P1] [AddCommGroup V2] [Module k V2] [AddTorsor V2 P2] [AddCommGroup V3]
+  [Module k V3] [AddTorsor V3 P3] [AddCommGroup V4] [Module k V4] [AddTorsor V4 P4]
+
+theorem ext_linear_iff {f g : P1 →ᵃ[k] P2} : f = g ↔ (f.linear = g.linear) ∧ (∃ p, f p = g p) := by
+  constructor
+  · intro h
+    subst h
+    classical
+    let p : P1 := Classical.choice ‹Nonempty P1›
+    exact ⟨rfl, ⟨p, rfl⟩⟩
   · rintro ⟨hlin, ⟨p, hp⟩⟩
     ext q
     calc
-      f q = f.linear (q -ᵥ p) +ᵥ f p := by simpa using (f.apply_vadd' (q -ᵥ p) p).symm
-      _ = g.linear (q -ᵥ p) +ᵥ g p := by simpa [hlin, hp]
-      _ = g q := by simpa using (g.apply_vadd' (q -ᵥ p) p)
+      f q = f.linear (q -ᵥ p) +ᵥ f p := by
+        simpa using (vadd_vsub_assoc (f p) q p)
+      _ = g.linear (q -ᵥ p) +ᵥ f p := by simpa [hlin]
+      _ = g.linear (q -ᵥ p) +ᵥ g p := by rw [hp]
+      _ = g q := by
+        simpa using (vadd_vsub_assoc (g p) q p).symm
 
-===== ATTEMPT 1 LEAN OUTPUT =====
-PASS
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:13:36-13:49
+Tactic `assumption` failed
+
+k : Type u_1
+V1 : Type u_2
+P1 : Type u_3
+V2 : Type u_4
+P2 : Type u_5
+inst✝⁶ : Ring k
+inst✝⁵ : AddCommGroup V1
+inst✝⁴ : Module k V1
+inst✝³ : AddTorsor V1 P1
+inst✝² : AddCommGroup V2
+inst✝¹ : Module k V2
+inst✝ : AddTorsor V2 P2
+f : P1 →ᵃ[k] P2
+⊢ Nonempty P1
+Source line 13:
+    let p : P1 := Classical.choice ‹Nonempty P1›
+                                   ^^^^^^^^^^^^^
+Highlighted span: ‹Nonempty P1›
+
+WARNING .LspCheck.lean:19:9-19:48
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 19:
+        simpa using (vadd_vsub_assoc (f p) q p)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa using (vadd_vsub_assoc (f p) q p)
+
+WARNING .LspCheck.lean:20:42-20:54
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 20:
+      _ = g.linear (q -ᵥ p) +ᵥ f p := by simpa [hlin]
+                                         ^^^^^^^^^^^^
+Highlighted span: simpa [hlin]
+
+WARNING .LspCheck.lean:23:9-23:53
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 23:
+        simpa using (vadd_vsub_assoc (g p) q p).symm
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa using (vadd_vsub_assoc (g p) q p).symm
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:13:36-13:49
+Tactic `assumption` failed
+
+k : Type u_1
+V1 : Type u_2
+P1 : Type u_3
+V2 : Type u_4
+P2 : Type u_5
+inst✝⁶ : Ring k
+inst✝⁵ : AddCommGroup V1
+inst✝⁴ : Module k V1
+inst✝³ : AddTorsor V1 P1
+inst✝² : AddCommGroup V2
+inst✝¹ : Module k V2
+inst✝ : AddTorsor V2 P2
+f : P1 →ᵃ[k] P2
+⊢ Nonempty P1
+Source line 13:
+    let p : P1 := Classical.choice ‹Nonempty P1›
+                                   ^^^^^^^^^^^^^
+Highlighted span: ‹Nonempty P1›
+
+WARNING .LspCheck.lean:19:9-19:48
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 19:
+        simpa using (vadd_vsub_assoc (f p) q p)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa using (vadd_vsub_assoc (f p) q p)
+
+WARNING .LspCheck.lean:20:42-20:54
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 20:
+      _ = g.linear (q -ᵥ p) +ᵥ f p := by simpa [hlin]
+                                         ^^^^^^^^^^^^
+Highlighted span: simpa [hlin]
+
+WARNING .LspCheck.lean:23:9-23:53
+try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Source line 23:
+        simpa using (vadd_vsub_assoc (g p) q p).symm
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Highlighted span: simpa using (vadd_vsub_assoc (g p) q p).symm
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k : Type*} {V1 : Type*} {P1 : Type*} {V2 : Type*} {P2 : Type*} {V3 : Type*}
+  {P3 : Type*} {V4 : Type*} {P4 : Type*} [Ring k] [AddCommGroup V1] [Module k V1]
+  [AddTorsor V1 P1] [AddCommGroup V2] [Module k V2] [AddTorsor V2 P2] [AddCommGroup V3]
+  [Module k V3] [AddTorsor V3 P3] [AddCommGroup V4] [Module k V4] [AddTorsor V4 P4]
+
+theorem ext_linear_iff {f g : P1 →ᵃ[k] P2} : f = g ↔ (f.linear = g.linear) ∧ (∃ p, f p = g p) := by
+  constructor
+  · intro h
+    subst h
+    refine ⟨rfl, ?_⟩
+    rcases isEmpty_or_nonempty P1 with hP1 | hP1
+    · exfalso
+      exact hP1.false (by infer_instance)
+    · rcases hP1 with ⟨p⟩
+      exact ⟨p, rfl⟩
+  · rintro ⟨hlin, ⟨p, hp⟩⟩
+    ext q
+    calc
+      f q = f.linear (q -ᵥ p) +ᵥ f p := by
+        simp using (vadd_vsub_assoc (f p) q p)
+      _ = g.linear (q -ᵥ p) +ᵥ f p := by simp [hlin]
+      _ = g.linear (q -ᵥ p) +ᵥ g p := by rw [hp]
+      _ = g q := by
+        simp using (vadd_vsub_assoc (g p) q p).symm
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:15:27-15:41
+type class instance expected
+  P1
+Source line 15:
+      exact hP1.false (by infer_instance)
+                          ^^^^^^^^^^^^^^
+Highlighted span: infer_instance
+
+ERROR .LspCheck.lean:18:3-19:1
+unsolved goals
+case mpr.h.calc.step
+k : Type u_1
+V1 : Type u_2
+P1 : Type u_3
+V2 : Type u_4
+P2 : Type u_5
+inst✝⁶ : Ring k
+inst✝⁵ : AddCommGroup V1
+inst✝⁴ : Module k V1
+inst✝³ : AddTorsor V1 P1
+inst✝² : AddCommGroup V2
+inst✝¹ : Module k V2
+inst✝ : AddTorsor V2 P2
+f g : P1 →ᵃ[k] P2
+hlin : f.linear = g.linear
+p : P1
+hp : f p = g p
+q : P1
+⊢ f.linear (q -ᵥ p) +ᵥ f p = g q
+Source line 18:
+  · rintro ⟨hlin, ⟨p, hp⟩⟩
+  ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:22:14-22:19
+unexpected token 'using'; expected command
+Source line 22:
+        simp using (vadd_vsub_assoc (f p) q p)
+             ^^^^^
+Highlighted span: using
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:15:27-15:41
+type class instance expected
+  P1
+Source line 15:
+      exact hP1.false (by infer_instance)
+                          ^^^^^^^^^^^^^^
+Highlighted span: infer_instance
+
+ERROR .LspCheck.lean:18:3-19:1
+unsolved goals
+case mpr.h.calc.step
+k : Type u_1
+V1 : Type u_2
+P1 : Type u_3
+V2 : Type u_4
+P2 : Type u_5
+inst✝⁶ : Ring k
+inst✝⁵ : AddCommGroup V1
+inst✝⁴ : Module k V1
+inst✝³ : AddTorsor V1 P1
+inst✝² : AddCommGroup V2
+inst✝¹ : Module k V2
+inst✝ : AddTorsor V2 P2
+f g : P1 →ᵃ[k] P2
+hlin : f.linear = g.linear
+p : P1
+hp : f p = g p
+q : P1
+⊢ f.linear (q -ᵥ p) +ᵥ f p = g q
+Source line 18:
+  · rintro ⟨hlin, ⟨p, hp⟩⟩
+  ^
+Highlighted span: ·
+
+ERROR .LspCheck.lean:22:14-22:19
+unexpected token 'using'; expected command
+Source line 22:
+        simp using (vadd_vsub_assoc (f p) q p)
+             ^^^^^
+Highlighted span: using

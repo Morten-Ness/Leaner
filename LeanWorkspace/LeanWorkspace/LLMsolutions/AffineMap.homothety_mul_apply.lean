@@ -8,4 +8,4 @@ variable [Module k V1] [Module k V2]
 
 theorem homothety_mul_apply (c : P1) (r₁ r₂ : k) (p : P1) :
     AffineMap.homothety c (r₁ * r₂) p = AffineMap.homothety c r₁ (AffineMap.homothety c r₂ p) := by
-  simp [AffineMap.homothety_apply, smul_smul, mul_comm, mul_left_comm, mul_assoc]
+  simp [AffineMap.homothety_apply, smul_smul, mul_comm]

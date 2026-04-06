@@ -6,6 +6,6 @@ variable {k P₁ P₂ P₃ P₄ V₁ V₂ V₃ V₄ : Type*} [Ring k]
   [AddTorsor V₁ P₁] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃] [AddTorsor V₄ P₄]
 
 theorem toEquiv_injective : Function.Injective (AffineEquiv.toEquiv : (P₁ ≃ᵃ[k] P₂) → P₁ ≃ P₂) := by
-  intro e f h
+  intro e₁ e₂ h
   ext p
   exact Equiv.ext_iff.mp h p

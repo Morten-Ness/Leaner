@@ -1,0 +1,225 @@
+FILE: AffineEquiv.constVAdd_zsmul.lean
+
+===== SYSTEM =====
+You are a precise Lean 4 and mathlib theorem prover. Return only the full .lean file content, with no markdown fences and no explanation.
+
+===== USER =====
+Filename: AffineEquiv.constVAdd_zsmul.lean
+
+Fill in the Lean proof for this file.
+Return the complete .lean file content only.
+Do not use markdown fences.
+Preserve the theorem statement and surrounding context exactly if possible.
+Replace `sorry` with a valid Lean proof that compiles with Mathlib.
+
+import Mathlib
+
+variable {k P₁ P₂ P₃ P₄ V₁ V₂ V₃ V₄ : Type*} [Ring k]
+  [AddCommGroup V₁] [AddCommGroup V₂] [AddCommGroup V₃] [AddCommGroup V₄]
+  [Module k V₁] [Module k V₂] [Module k V₃] [Module k V₄]
+  [AddTorsor V₁ P₁] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃] [AddTorsor V₄ P₄]
+
+theorem constVAdd_zsmul (z : ℤ) (v : V₁) : AffineEquiv.constVAdd k P₁ (z • v) = AffineEquiv.constVAdd k P₁ v ^ z := sorry
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k P₁ P₂ P₃ P₄ V₁ V₂ V₃ V₄ : Type*} [Ring k]
+  [AddCommGroup V₁] [AddCommGroup V₂] [AddCommGroup V₃] [AddCommGroup V₄]
+  [Module k V₁] [Module k V₂] [Module k V₃] [Module k V₄]
+  [AddTorsor V₁ P₁] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃] [AddTorsor V₄ P₄]
+
+theorem constVAdd_zsmul (z : ℤ) (v : V₁) : AffineEquiv.constVAdd k P₁ (z • v) = AffineEquiv.constVAdd k P₁ v ^ z := by
+  ext p
+  simp [AffineEquiv.constVAdd_apply]
+
+===== ATTEMPT 1 LEAN OUTPUT =====
+ERROR .LspCheck.lean:8:117-9:1
+unsolved goals
+case h
+k : Type u_1
+P₁ : Type u_2
+V₁ : Type u_6
+inst✝³ : Ring k
+inst✝² : AddCommGroup V₁
+inst✝¹ : Module k V₁
+inst✝ : AddTorsor V₁ P₁
+z : ℤ
+v : V₁
+p : P₁
+⊢ z • v +ᵥ p = (AffineEquiv.constVAdd k P₁ v ^ z) p
+Source line 8:
+theorem constVAdd_zsmul (z : ℤ) (v : V₁) : AffineEquiv.constVAdd k P₁ (z • v) = AffineEquiv.constVAdd k P₁ v ^ z := by
+                                                                                                                    ^
+Highlighted span: b
+
+===== USER =====
+Retry attempt: 2
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:8:117-9:1
+unsolved goals
+case h
+k : Type u_1
+P₁ : Type u_2
+V₁ : Type u_6
+inst✝³ : Ring k
+inst✝² : AddCommGroup V₁
+inst✝¹ : Module k V₁
+inst✝ : AddTorsor V₁ P₁
+z : ℤ
+v : V₁
+p : P₁
+⊢ z • v +ᵥ p = (AffineEquiv.constVAdd k P₁ v ^ z) p
+Source line 8:
+theorem constVAdd_zsmul (z : ℤ) (v : V₁) : AffineEquiv.constVAdd k P₁ (z • v) = AffineEquiv.constVAdd k P₁ v ^ z := by
+                                                                                                                    ^
+Highlighted span: b
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k P₁ P₂ P₃ P₄ V₁ V₂ V₃ V₄ : Type*} [Ring k]
+  [AddCommGroup V₁] [AddCommGroup V₂] [AddCommGroup V₃] [AddCommGroup V₄]
+  [Module k V₁] [Module k V₂] [Module k V₃] [Module k V₄]
+  [AddTorsor V₁ P₁] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃] [AddTorsor V₄ P₄]
+
+theorem constVAdd_zsmul (z : ℤ) (v : V₁) : AffineEquiv.constVAdd k P₁ (z • v) = AffineEquiv.constVAdd k P₁ v ^ z := by
+  ext p
+  induction z with
+  | ofNat n =>
+      induction n with
+      | zero =>
+          simp
+      | succ n ihn =>
+          simp [zpow_ofNat, pow_succ, ihn, add_vadd]
+  | negSucc n =>
+      induction n with
+      | zero =>
+          simp
+      | succ n ihn =>
+          simp [zpow_negSucc, pow_succ, ihn, sub_eq_add_neg, add_vadd, vsub_vadd_assoc]
+
+===== ATTEMPT 2 LEAN OUTPUT =====
+ERROR .LspCheck.lean:11:3-12:1
+Invalid alternative name `ofNat`: Expected `zero`, `succ`, or `pred`
+Source line 11:
+  | ofNat n =>
+  ^
+Highlighted span: |
+
+ERROR .LspCheck.lean:17:3-18:1
+Invalid alternative name `negSucc`: Expected `zero`, `succ`, or `pred`
+Source line 17:
+  | negSucc n =>
+  ^
+Highlighted span: |
+
+ERROR .LspCheck.lean:10:3-10:12
+Alternative `zero` has not been provided
+Source line 10:
+  induction z with
+  ^^^^^^^^^
+Highlighted span: induction
+
+ERROR .LspCheck.lean:10:3-10:12
+Alternative `succ` has not been provided
+Source line 10:
+  induction z with
+  ^^^^^^^^^
+Highlighted span: induction
+
+ERROR .LspCheck.lean:10:3-10:12
+Alternative `pred` has not been provided
+Source line 10:
+  induction z with
+  ^^^^^^^^^
+Highlighted span: induction
+
+===== USER =====
+Retry attempt: 3
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:11:3-12:1
+Invalid alternative name `ofNat`: Expected `zero`, `succ`, or `pred`
+Source line 11:
+  | ofNat n =>
+  ^
+Highlighted span: |
+
+ERROR .LspCheck.lean:17:3-18:1
+Invalid alternative name `negSucc`: Expected `zero`, `succ`, or `pred`
+Source line 17:
+  | negSucc n =>
+  ^
+Highlighted span: |
+
+ERROR .LspCheck.lean:10:3-10:12
+Alternative `zero` has not been provided
+Source line 10:
+  induction z with
+  ^^^^^^^^^
+Highlighted span: induction
+
+ERROR .LspCheck.lean:10:3-10:12
+Alternative `succ` has not been provided
+Source line 10:
+  induction z with
+  ^^^^^^^^^
+Highlighted span: induction
+
+ERROR .LspCheck.lean:10:3-10:12
+Alternative `pred` has not been provided
+Source line 10:
+  induction z with
+  ^^^^^^^^^
+Highlighted span: induction
+
+===== ASSISTANT =====
+import Mathlib
+
+variable {k P₁ P₂ P₃ P₄ V₁ V₂ V₃ V₄ : Type*} [Ring k]
+  [AddCommGroup V₁] [AddCommGroup V₂] [AddCommGroup V₃] [AddCommGroup V₄]
+  [Module k V₁] [Module k V₂] [Module k V₃] [Module k V₄]
+  [AddTorsor V₁ P₁] [AddTorsor V₂ P₂] [AddTorsor V₃ P₃] [AddTorsor V₄ P₄]
+
+theorem constVAdd_zsmul (z : ℤ) (v : V₁) : AffineEquiv.constVAdd k P₁ (z • v) = AffineEquiv.constVAdd k P₁ v ^ z := by
+  ext p
+  induction z using Int.inductionOn with
+  | hz =>
+      simp
+  | hp z ih =>
+      simp [Int.succ_zsmul, zpow_ofNat, pow_succ, ih, add_vadd_assoc]
+  | hn z ih =>
+      simp [Int.pred_zsmul, zpow_negSucc, mul_inv_rev₀, pow_succ, ih, sub_eq_add_neg, add_vadd_assoc]
+
+===== ATTEMPT 3 LEAN OUTPUT =====
+ERROR .LspCheck.lean:10:21-10:36
+Unknown constant `Int.inductionOn`
+Source line 10:
+  induction z using Int.inductionOn with
+                    ^^^^^^^^^^^^^^^
+Highlighted span: Int.inductionOn
+
+===== USER =====
+Retry attempt: 4
+
+The previous Lean solution did not compile.
+Return a corrected complete .lean file content only.
+Do not use markdown fences.
+
+Lean compiler output for your previous answer:
+ERROR .LspCheck.lean:10:21-10:36
+Unknown constant `Int.inductionOn`
+Source line 10:
+  induction z using Int.inductionOn with
+                    ^^^^^^^^^^^^^^^
+Highlighted span: Int.inductionOn
